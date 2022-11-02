@@ -5,8 +5,8 @@ github:
   homepage: https://pekko.apache.org/
   labels:
     - pekko
-    - pekko-stream
-    - pekko-stream-connnectors
+    - pekko-streams
+    - pekko-connnectors
     - integration
     - reactive
     - reactive-streams
