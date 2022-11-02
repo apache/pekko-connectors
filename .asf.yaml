@@ -1,0 +1,21 @@
+# https://cwiki.apache.org/confluence/display/INFRA/.asf.yaml+features+for+git+repositories
+
+github:
+  description: "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Apache Pekko."
+  homepage: https://pekko.apache.org/
+  labels:
+    - pekko
+    - pekko-stream
+    - pekko-stream-connnectors
+    - integration
+    - reactive
+    - reactive-streams
+    - messaging
+  
+  features:
+    # Enable wiki for documentation
+    wiki: false
+    # Enable issue management
+    issues: true
+    # Enable projects for project management boards
+    projects: false
