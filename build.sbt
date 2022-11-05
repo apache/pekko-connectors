@@ -1,4 +1,4 @@
-lazy val alpakka = project
+lazy val pekkoConnectors = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
@@ -55,7 +55,7 @@ lazy val alpakka = project
   .settings(
     onLoadMessage :=
       """
-        |** Welcome to the sbt build definition for Alpakka! **
+        |** Welcome to the sbt build definition for Pekko Connectors! **
         |
         |Useful sbt tasks:
         |
@@ -116,43 +116,43 @@ TaskKey[Unit]("verifyCodeFmt") := {
 
 addCommandAlias("verifyCodeStyle", "headerCheck; verifyCodeFmt")
 
-lazy val amqp = alpakkaProject("amqp", "amqp", Dependencies.Amqp)
+lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
 lazy val avroparquet =
-  alpakkaProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
+  pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
 
-lazy val awslambda = alpakkaProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
+lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
 
-lazy val azureStorageQueue = alpakkaProject(
+lazy val azureStorageQueue = pekkoConnectorProject(
   "azure-storage-queue",
   "azure.storagequeue",
   Dependencies.AzureStorageQueue
 )
 
 lazy val cassandra =
-  alpakkaProject("cassandra", "cassandra", Dependencies.Cassandra)
+  pekkoConnectorProject("cassandra", "cassandra", Dependencies.Cassandra)
 
 lazy val couchbase =
-  alpakkaProject("couchbase", "couchbase", Dependencies.Couchbase)
+  pekkoConnectorProject("couchbase", "couchbase", Dependencies.Couchbase)
 
-lazy val csv = alpakkaProject("csv", "csv")
+lazy val csv = pekkoConnectorProject("csv", "csv")
 
 lazy val csvBench = internalProject("csv-bench")
   .dependsOn(csv)
   .enablePlugins(JmhPlugin)
 
-lazy val dynamodb = alpakkaProject("dynamodb", "aws.dynamodb", Dependencies.DynamoDB)
+lazy val dynamodb = pekkoConnectorProject("dynamodb", "aws.dynamodb", Dependencies.DynamoDB)
 
-lazy val elasticsearch = alpakkaProject(
+lazy val elasticsearch = pekkoConnectorProject(
   "elasticsearch",
   "elasticsearch",
   Dependencies.Elasticsearch
 )
 
 // The name 'file' is taken by `sbt.file`, hence 'files'
-lazy val files = alpakkaProject("file", "file", Dependencies.File)
+lazy val files = pekkoConnectorProject("file", "file", Dependencies.File)
 
-lazy val ftp = alpakkaProject(
+lazy val ftp = pekkoConnectorProject(
   "ftp",
   "ftp",
   Dependencies.Ftp,
@@ -162,7 +162,7 @@ lazy val ftp = alpakkaProject(
 )
 
 lazy val geode =
-  alpakkaProject(
+  pekkoConnectorProject(
     "geode",
     "geode",
     Dependencies.Geode,
@@ -171,14 +171,14 @@ lazy val geode =
     Test / scalacOptions += "-Xlint:-byname-implicit"
   )
 
-lazy val googleCommon = alpakkaProject(
+lazy val googleCommon = pekkoConnectorProject(
   "google-common",
   "google.common",
   Dependencies.GoogleCommon,
   Test / fork := true
 )
 
-lazy val googleCloudBigQuery = alpakkaProject(
+lazy val googleCloudBigQuery = pekkoConnectorProject(
   "google-cloud-bigquery",
   "google.cloud.bigquery",
   Dependencies.GoogleBigQuery,
@@ -186,7 +186,7 @@ lazy val googleCloudBigQuery = alpakkaProject(
   Compile / scalacOptions += "-Wconf:src=src_managed/.+:s"
 ).dependsOn(googleCommon).enablePlugins(spray.boilerplate.BoilerplatePlugin)
 
-lazy val googleCloudBigQueryStorage = alpakkaProject(
+lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   "google-cloud-bigquery-storage",
   "google.cloud.bigquery.storage",
   Dependencies.GoogleBigQueryStorage,
@@ -203,7 +203,7 @@ lazy val googleCloudBigQueryStorage = alpakkaProject(
   compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")
 ).dependsOn(googleCommon).enablePlugins(AkkaGrpcPlugin)
 
-lazy val googleCloudPubSub = alpakkaProject(
+lazy val googleCloudPubSub = pekkoConnectorProject(
   "google-cloud-pub-sub",
   "google.cloud.pubsub",
   Dependencies.GooglePubSub,
@@ -212,7 +212,7 @@ lazy val googleCloudPubSub = alpakkaProject(
   Test / envVars := Map("PUBSUB_EMULATOR_HOST" -> "localhost", "PUBSUB_EMULATOR_PORT" -> "8538")
 ).dependsOn(googleCommon)
 
-lazy val googleCloudPubSubGrpc = alpakkaProject(
+lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   "google-cloud-pub-sub-grpc",
   "google.cloud.pubsub.grpc",
   Dependencies.GooglePubSubGrpc,
@@ -228,24 +228,24 @@ lazy val googleCloudPubSubGrpc = alpakkaProject(
   compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")
 ).enablePlugins(AkkaGrpcPlugin).dependsOn(googleCommon)
 
-lazy val googleCloudStorage = alpakkaProject(
+lazy val googleCloudStorage = pekkoConnectorProject(
   "google-cloud-storage",
   "google.cloud.storage",
   Test / fork := true,
   Dependencies.GoogleStorage
 ).dependsOn(googleCommon)
 
-lazy val googleFcm = alpakkaProject("google-fcm", "google.firebase.fcm", Dependencies.GoogleFcm, Test / fork := true)
+lazy val googleFcm = pekkoConnectorProject("google-fcm", "google.firebase.fcm", Dependencies.GoogleFcm, Test / fork := true)
   .dependsOn(googleCommon)
 
-lazy val hbase = alpakkaProject("hbase", "hbase", Dependencies.HBase, Test / fork := true)
+lazy val hbase = pekkoConnectorProject("hbase", "hbase", Dependencies.HBase, Test / fork := true)
 
-lazy val hdfs = alpakkaProject("hdfs", "hdfs", Dependencies.Hdfs)
+lazy val hdfs = pekkoConnectorProject("hdfs", "hdfs", Dependencies.Hdfs)
 
 lazy val huaweiPushKit =
-  alpakkaProject("huawei-push-kit", "huawei.pushkit", Dependencies.HuaweiPushKit)
+  pekkoConnectorProject("huawei-push-kit", "huawei.pushkit", Dependencies.HuaweiPushKit)
 
-lazy val influxdb = alpakkaProject(
+lazy val influxdb = pekkoConnectorProject(
   "influxdb",
   "influxdb",
   Dependencies.InfluxDB,
@@ -255,33 +255,33 @@ lazy val influxdb = alpakkaProject(
     )
 )
 
-lazy val ironmq = alpakkaProject(
+lazy val ironmq = pekkoConnectorProject(
   "ironmq",
   "ironmq",
   Dependencies.IronMq,
   Test / fork := true
 )
 
-lazy val jms = alpakkaProject("jms", "jms", Dependencies.Jms)
+lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 
-lazy val jsonStreaming = alpakkaProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
+lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
 
-lazy val kinesis = alpakkaProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
+lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
 
-lazy val kudu = alpakkaProject("kudu", "kudu", Dependencies.Kudu)
+lazy val kudu = pekkoConnectorProject("kudu", "kudu", Dependencies.Kudu)
 
-lazy val mongodb = alpakkaProject("mongodb", "mongodb", Dependencies.MongoDb)
+lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Dependencies.MongoDb)
 
-lazy val mqtt = alpakkaProject("mqtt", "mqtt", Dependencies.Mqtt)
+lazy val mqtt = pekkoConnectorProject("mqtt", "mqtt", Dependencies.Mqtt)
 
 lazy val mqttStreaming =
-  alpakkaProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming)
+  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming)
 lazy val mqttStreamingBench = internalProject("mqtt-streaming-bench")
   .enablePlugins(JmhPlugin)
   .dependsOn(mqtt, mqttStreaming)
 
 lazy val orientdb =
-  alpakkaProject(
+  pekkoConnectorProject(
     "orientdb",
     "orientdb",
     Dependencies.OrientDB,
@@ -293,44 +293,44 @@ lazy val orientdb =
 lazy val reference = internalProject("reference", Dependencies.Reference)
   .dependsOn(testkit % Test)
 
-lazy val s3 = alpakkaProject("s3", "aws.s3", Dependencies.S3)
+lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3)
 
-lazy val pravega = alpakkaProject(
+lazy val pravega = pekkoConnectorProject(
   "pravega",
   "pravega",
   Dependencies.Pravega,
   Test / fork := true
 )
 
-lazy val springWeb = alpakkaProject(
+lazy val springWeb = pekkoConnectorProject(
   "spring-web",
   "spring.web",
   Dependencies.SpringWeb
 )
 
-lazy val simpleCodecs = alpakkaProject("simple-codecs", "simplecodecs")
+lazy val simpleCodecs = pekkoConnectorProject("simple-codecs", "simplecodecs")
 
-lazy val slick = alpakkaProject("slick", "slick", Dependencies.Slick)
+lazy val slick = pekkoConnectorProject("slick", "slick", Dependencies.Slick)
 
 lazy val eventbridge =
-  alpakkaProject("aws-event-bridge", "aws.eventbridge", Dependencies.Eventbridge)
+  pekkoConnectorProject("aws-event-bridge", "aws.eventbridge", Dependencies.Eventbridge)
 
-lazy val sns = alpakkaProject("sns", "aws.sns", Dependencies.Sns)
+lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
 
-lazy val solr = alpakkaProject("solr", "solr", Dependencies.Solr)
+lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr)
 
-lazy val sqs = alpakkaProject("sqs", "aws.sqs", Dependencies.Sqs)
+lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
 
-lazy val sse = alpakkaProject("sse", "sse", Dependencies.Sse)
+lazy val sse = pekkoConnectorProject("sse", "sse", Dependencies.Sse)
 
-lazy val text = alpakkaProject("text", "text")
+lazy val text = pekkoConnectorProject("text", "text")
 
-lazy val udp = alpakkaProject("udp", "udp")
+lazy val udp = pekkoConnectorProject("udp", "udp")
 
 lazy val unixdomainsocket =
-  alpakkaProject("unix-domain-socket", "unixdomainsocket", Dependencies.UnixDomainSocket)
+  pekkoConnectorProject("unix-domain-socket", "unixdomainsocket", Dependencies.UnixDomainSocket)
 
-lazy val xml = alpakkaProject("xml", "xml", Dependencies.Xml)
+lazy val xml = pekkoConnectorProject("xml", "xml", Dependencies.Xml)
 
 lazy val docs = project
   .enablePlugins(AkkaParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
@@ -426,7 +426,7 @@ lazy val `doc-examples` = project
     Dependencies.`Doc-examples`
   )
 
-def alpakkaProject(projectId: String, moduleName: String, additionalSettings: sbt.Def.SettingsDefinition*): Project = {
+def pekkoConnectorProject(projectId: String, moduleName: String, additionalSettings: sbt.Def.SettingsDefinition*): Project = {
   import com.typesafe.tools.mima.core._
   Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin)

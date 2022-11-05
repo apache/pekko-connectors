@@ -1,2 +1,0 @@
-# Internal API now accepts ClassicActorSystemProvider
-ProblemFilters.exclude[IncompatibleMethTypeProblem]("akka.stream.alpakka.couchbase.scaladsl.DiscoverySupport.getNodes")

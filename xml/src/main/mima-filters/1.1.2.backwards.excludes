@@ -1,2 +1,0 @@
-# https://github.com/akka/alpakka/pull/1982
-ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.alpakka.xml.scaladsl.XmlParsing.parser")

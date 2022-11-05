@@ -1,2 +1,0 @@
-# Allow breaking changes
-ProblemFilters.exclude[Problem]("akka.stream.alpakka.dynamodb.*")

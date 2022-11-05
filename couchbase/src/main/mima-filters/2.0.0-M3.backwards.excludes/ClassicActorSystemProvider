@@ -1,2 +1,0 @@
-# Result type change CouchbaseSessionRegistry rather than akka.actor.Extension
-ProblemFilters.exclude[IncompatibleResultTypeProblem]("akka.stream.alpakka.couchbase.CouchbaseSessionRegistry.apply")
