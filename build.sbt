@@ -235,8 +235,9 @@ lazy val googleCloudStorage = pekkoConnectorProject(
   Dependencies.GoogleStorage
 ).dependsOn(googleCommon)
 
-lazy val googleFcm = pekkoConnectorProject("google-fcm", "google.firebase.fcm", Dependencies.GoogleFcm, Test / fork := true)
-  .dependsOn(googleCommon)
+lazy val googleFcm =
+  pekkoConnectorProject("google-fcm", "google.firebase.fcm", Dependencies.GoogleFcm, Test / fork := true)
+    .dependsOn(googleCommon)
 
 lazy val hbase = pekkoConnectorProject("hbase", "hbase", Dependencies.HBase, Test / fork := true)
 
@@ -426,7 +427,9 @@ lazy val `doc-examples` = project
     Dependencies.`Doc-examples`
   )
 
-def pekkoConnectorProject(projectId: String, moduleName: String, additionalSettings: sbt.Def.SettingsDefinition*): Project = {
+def pekkoConnectorProject(projectId: String,
+                          moduleName: String,
+                          additionalSettings: sbt.Def.SettingsDefinition*): Project = {
   import com.typesafe.tools.mima.core._
   Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin)
