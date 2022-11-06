@@ -437,7 +437,7 @@ def pekkoConnectorProject(projectId: String, moduleName: String, additionalSetti
       AutomaticModuleName.settings(s"akka.stream.alpakka.$moduleName"),
       mimaPreviousArtifacts := Set(
           organization.value %% name.value % previousStableVersion.value
-            .getOrElse(throw new Error("Unable to determine previous version"))
+            .getOrElse("0.0.0")
         ),
       mimaBinaryIssueFilters ++= Seq(
           ProblemFilters.exclude[Problem]("*.impl.*"),
