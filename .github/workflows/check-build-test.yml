@@ -24,11 +24,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with: # https://github.com/olafurpg/setup-scala#faster-checkout-of-big-repos
-          fetch-depth: 100
+      # temporarily do full checkout
+      #  with: # https://github.com/olafurpg/setup-scala#faster-checkout-of-big-repos
+      #    fetch-depth: 100
 
-      - name: Fetch tags
-        run: git fetch --depth=100 origin +refs/tags/*:refs/tags/*
+      #- name: Fetch tags
+      #  run: git fetch --depth=100 origin +refs/tags/*:refs/tags/*
 
       - name: Set up JDK 8
         uses: coursier/setup-action@v1.2.1
@@ -38,8 +39,9 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6.3.3
 
+      # temporarily remove mima checks
       - name: "Code style, compile tests, MiMa. Run locally with: sbt +~2.13 \"verifyCodeStyle; Test/compile; mimaReportBinaryIssues\""
-        run: sbt +~2.13 "verifyCodeStyle; Test/compile; mimaReportBinaryIssues"
+        run: sbt +~2.13 "verifyCodeStyle; Test/compile"
 
   documentation:
     name: ScalaDoc, Documentation with Paradox
@@ -50,11 +52,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with: # https://github.com/olafurpg/setup-scala#faster-checkout-of-big-repos
-          fetch-depth: 100
+      # temporarily do full checkout
+      #  with: # https://github.com/olafurpg/setup-scala#faster-checkout-of-big-repos
+      #    fetch-depth: 100
 
-      - name: Fetch tags
-        run: git fetch --depth=100 origin +refs/tags/*:refs/tags/*
+      #- name: Fetch tags
+      #  run: git fetch --depth=100 origin +refs/tags/*:refs/tags/*
 
       - name: Set up JDK 11
         uses: coursier/setup-action@v1.2.1
@@ -132,10 +135,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with: # gh-detect-changes.sh compares with the target branch
-          fetch-depth: 0
+      # temporarily do full checkout
+      #  with: # gh-detect-changes.sh compares with the target branch
+      #    fetch-depth: 0
 
-      - name: Detect changes in Alpakka ${{ matrix.connector }}
+      - name: Detect changes in Pekko Connector ${{ matrix.connector }}
         env:
           CONNECTOR: ${{ matrix.connector }}
         run: ./scripts/gh-detect-changes.sh "${CONNECTOR}"

@@ -1,3 +1,0 @@
-# PR #1746
-# new argument to private constructor
-ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.alpakka.couchbase.CouchbaseSessionSettings.this")

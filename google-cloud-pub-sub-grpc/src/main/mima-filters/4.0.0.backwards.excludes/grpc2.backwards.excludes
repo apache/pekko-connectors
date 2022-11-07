@@ -1,2 +1,0 @@
-# ScalaPB-generated classes
-ProblemFilters.exclude[Problem]("com.google.*")

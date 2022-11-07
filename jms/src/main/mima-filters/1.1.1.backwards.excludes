@@ -1,3 +1,0 @@
-# PR #1857
-# new field in settings
-ProblemFilters.exclude[DirectMissingMethodProblem]("akka.stream.alpakka.jms.JmsConsumerSettings.this")
