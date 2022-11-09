@@ -465,9 +465,10 @@ def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefin
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
+  val log = sLog.value
   if (dynverGitDescribeOutput.value.hasNoTags)
-    throw new MessageOnlyException(
-      s"Failed to derive version from git tags. Maybe run `git fetch --unshallow`? Derived version: $v"
+    log.error(
+      s"Failed to derive version from git tags. Maybe run `git fetch --unshallow` or `git fetch upstream` on a fresh git clone from a fork? Derived version: $v"
     )
   s
 }
