@@ -22,7 +22,7 @@ jobs:
           java-version: adopt@1.11.0-9
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v5
+        uses: coursier/cache-action@v6.4.0
 
       - name: sbt site
         run: sbt docs/makeSite
