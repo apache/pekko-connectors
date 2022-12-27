@@ -11,7 +11,7 @@ import akka.stream.alpakka.pravega.{
   TableWriterSettingsBuilder,
   WriterSettingsBuilder
 }
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import io.pravega.client.ClientConfig
 import io.pravega.client.stream.Serializer
 import io.pravega.client.stream.impl.UTF8StringSerializer
@@ -73,7 +73,7 @@ class PravegaReadWriteDocs {
   Using(Pravega.readerGroupManager("an_existing_scope", readerSettings.clientConfig)) { readerGroupManager =>
     readerGroupManager.createReaderGroup("myGroup", "stream1", "stream2")
   }
-  // #reader-group
+    // #reader-group
     .foreach { readerGroup =>
       // #reading
 

@@ -8,12 +8,12 @@ import akka.stream.KillSwitches
 
 import akka.stream.alpakka.pravega.scaladsl.Pravega
 import akka.stream.alpakka.testkit.scaladsl.Repeated
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 import com.typesafe.config.ConfigFactory
 import io.pravega.client.stream.impl.UTF8StringSerializer
 
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Promise}
+import scala.concurrent.{ Await, Promise }
 import scala.util.Using
 
 class PravegaGraphSpec extends PravegaBaseSpec with Repeated {
@@ -38,8 +38,7 @@ class PravegaGraphSpec extends PravegaBaseSpec with Repeated {
       val readerSettings = ReaderSettingsBuilder(
         system.settings.config
           .getConfig(ReaderSettingsBuilder.configPath)
-          .withFallback(ConfigFactory.parseString(s"group-name = ${newGroupName()}"))
-      ).withSerializer(serializer)
+          .withFallback(ConfigFactory.parseString(s"group-name = ${newGroupName()}"))).withSerializer(serializer)
 
       val writerSettings = WriterSettingsBuilder(system)
         .withSerializer(serializer)
@@ -52,9 +51,9 @@ class PravegaGraphSpec extends PravegaBaseSpec with Repeated {
 
       // #writing
       val done = time(s"Write $nEvent events",
-                      Source(1 to nEvent)
-                        .map(i => f"$i%02d_event")
-                        .runWith(Pravega.sink(scope, stream1, writerSettings)))
+        Source(1 to nEvent)
+          .map(i => f"$i%02d_event")
+          .runWith(Pravega.sink(scope, stream1, writerSettings)))
 
       time("Wait write", Await.ready(done, timeout))
 

@@ -4,18 +4,18 @@
 
 package akka.stream.alpakka.file.scaladsl
 
-import java.nio.file.{OpenOption, Path, StandardOpenOption}
+import java.nio.file.{ OpenOption, Path, StandardOpenOption }
 
 import akka.Done
 import akka.stream._
-import akka.stream.impl.fusing.MapAsync.{Holder, NotYetThere}
-import akka.stream.scaladsl.{FileIO, Sink, Source}
+import akka.stream.impl.fusing.MapAsync.{ Holder, NotYetThere }
+import akka.stream.scaladsl.{ FileIO, Sink, Source }
 import akka.stream.stage._
 import akka.util.ByteString
 
 import scala.collection.immutable
-import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.util.{Failure, Success}
+import scala.concurrent.{ ExecutionContext, Future, Promise }
+import scala.util.{ Failure, Success }
 
 /**
  * Scala API.
@@ -30,12 +30,11 @@ object LogRotatorSink {
    */
   def apply(
       triggerGeneratorCreator: () => ByteString => Option[Path],
-      fileOpenOptions: Set[OpenOption] = Set(StandardOpenOption.APPEND, StandardOpenOption.CREATE)
-  ): Sink[ByteString, Future[Done]] =
+      fileOpenOptions: Set[OpenOption] = Set(StandardOpenOption.APPEND, StandardOpenOption.CREATE))
+      : Sink[ByteString, Future[Done]] =
     Sink.fromGraph(
       new LogRotatorSink[ByteString, Path, IOResult](triggerGeneratorCreator,
-                                                     sinkFactory = FileIO.toPath(_, fileOpenOptions))
-    )
+        sinkFactory = FileIO.toPath(_, fileOpenOptions)))
 
   /**
    * Sink directing the incoming `ByteString`s to a new `Sink` created by `sinkFactory` whenever `triggerGenerator` returns a value.
@@ -44,11 +43,10 @@ object LogRotatorSink {
    * @param sinkFactory creates sinks for `ByteString`s from the value returned by `triggerGenerator`
    * @tparam C criterion type (for files a `Path`)
    * @tparam R result type in materialized futures of `sinkFactory`
-   **/
+   */
   def withSinkFactory[C, R](
       triggerGeneratorCreator: () => ByteString => Option[C],
-      sinkFactory: C => Sink[ByteString, Future[R]]
-  ): Sink[ByteString, Future[Done]] =
+      sinkFactory: C => Sink[ByteString, Future[R]]): Sink[ByteString, Future[Done]] =
     Sink.fromGraph(new LogRotatorSink[ByteString, C, R](triggerGeneratorCreator, sinkFactory))
 
   /**
@@ -59,11 +57,10 @@ object LogRotatorSink {
    * @tparam T stream and sink data type
    * @tparam C criterion type (for files a `Path`)
    * @tparam R result type in materialized futures of `sinkFactory`
-   **/
+   */
   def withTypedSinkFactory[T, C, R](
       triggerGeneratorCreator: () => T => Option[C],
-      sinkFactory: C => Sink[T, Future[R]]
-  ): Sink[T, Future[Done]] =
+      sinkFactory: C => Sink[T, Future[R]]): Sink[T, Future[Done]] =
     Sink.fromGraph(new LogRotatorSink[T, C, R](triggerGeneratorCreator, sinkFactory))
 }
 
@@ -76,7 +73,7 @@ object LogRotatorSink {
  * @tparam R result type in materialized futures of `sinkFactory`
  */
 final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => Option[C],
-                                            sinkFactory: C => Sink[T, Future[R]])
+    sinkFactory: C => Sink[T, Future[R]])
     extends GraphStageWithMaterializedValue[SinkShape[T], Future[Done]] {
 
   val in = Inlet[T]("LogRotatorSink.in")
@@ -132,14 +129,14 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
           failThisStage(ex)
       }
 
-    //init stage where we are waiting for the first path
+    // init stage where we are waiting for the first path
     setHandler(
       in,
       new InHandler {
         override def onPush(): Unit = {
           val data = grab(in)
           checkTrigger(data) match {
-            case None => if (!isClosed(in)) pull(in)
+            case None               => if (!isClosed(in)) pull(in)
             case Some(triggerValue) => rotate(triggerValue, data)
           }
         }
@@ -151,10 +148,9 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
 
         override def onUpstreamFailure(ex: Throwable): Unit =
           failThisStage(ex)
-      }
-    )
+      })
 
-    //we must pull the first element cos we are a sink
+    // we must pull the first element cos we are a sink
     override def preStart(): Unit = {
       super.preStart()
       pull(in)
@@ -171,7 +167,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
     def futureCB(newFuture: Future[R]) =
       getAsyncCallback[Holder[R]](sinkCompletionCallbackHandler(newFuture))
 
-    //we recreate the tail of the stream, and emit the data for the next req
+    // we recreate the tail of the stream, and emit the data for the next req
     def rotate(triggerValue: C, data: T): Unit = {
       val prevOut = Option(sourceOut)
 
@@ -192,13 +188,12 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
       val holder = new Holder[R](NotYetThere, futureCB(newFuture))
 
       newFuture.onComplete(holder)(
-        akka.dispatch.ExecutionContexts.parasitic
-      )
+        akka.dispatch.ExecutionContexts.parasitic)
 
       prevOut.foreach(_.complete())
     }
 
-    //we change path if needed or push the grabbed data
+    // we change path if needed or push the grabbed data
     def switchToNormalMode(): Unit = {
       if (isFinishing) {
         completeThisStage()
@@ -214,7 +209,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
       new InHandler {
         override def onPush(): Unit = {
           require(requirement = false,
-                  "No push should happen while we are waiting for the substream to grab the dangling data!")
+            "No push should happen while we are waiting for the substream to grab the dangling data!")
         }
         override def onUpstreamFinish(): Unit = {
           setKeepGoing(true)
@@ -227,7 +222,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
       override def onPush(): Unit = {
         val data = grab(in)
         checkTrigger(data) match {
-          case None => sourceOut.push(data)
+          case None               => sourceOut.push(data)
           case Some(triggerValue) => rotate(triggerValue, data)
         }
       }

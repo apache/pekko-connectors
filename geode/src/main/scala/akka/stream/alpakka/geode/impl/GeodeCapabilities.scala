@@ -7,7 +7,7 @@ package akka.stream.alpakka.geode.impl
 import akka.annotation.InternalApi
 import akka.stream.alpakka.geode.RegionSettings
 import akka.stream.stage.StageLogging
-import org.apache.geode.cache.client.{ClientCache, ClientRegionShortcut}
+import org.apache.geode.cache.client.{ ClientCache, ClientRegionShortcut }
 
 import scala.util.control.NonFatal
 @InternalApi

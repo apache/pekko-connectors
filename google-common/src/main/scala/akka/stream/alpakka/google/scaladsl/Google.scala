@@ -9,8 +9,8 @@ import akka.actor.ClassicActorSystemProvider
 import akka.http.scaladsl.model.HttpRequest
 import akka.http.scaladsl.unmarshalling.FromResponseUnmarshaller
 import akka.stream.alpakka.google.http.GoogleHttp
-import akka.stream.alpakka.google.{GoogleSettings, PaginatedRequest, ResumableUpload}
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.alpakka.google.{ GoogleSettings, PaginatedRequest, ResumableUpload }
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.util.ByteString
 
 import scala.concurrent.Future
@@ -31,8 +31,7 @@ private[alpakka] trait Google {
    * @return a [[scala.concurrent.Future]] containing the unmarshalled response
    */
   final def singleRequest[T: FromResponseUnmarshaller](
-      request: HttpRequest
-  )(implicit system: ClassicActorSystemProvider, settings: GoogleSettings): Future[T] =
+      request: HttpRequest)(implicit system: ClassicActorSystemProvider, settings: GoogleSettings): Future[T] =
     GoogleHttp().singleAuthenticatedRequest[T](request)
 
   /**

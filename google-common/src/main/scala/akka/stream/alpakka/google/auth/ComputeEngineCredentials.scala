@@ -26,7 +26,7 @@ private[auth] object ComputeEngineCredentials {
 private final class ComputeEngineCredentials(projectId: String)(implicit mat: Materializer)
     extends OAuth2Credentials(projectId) {
   override protected def getAccessToken()(implicit mat: Materializer,
-                                          settings: RequestSettings,
-                                          clock: Clock): Future[AccessToken] =
+      settings: RequestSettings,
+      clock: Clock): Future[AccessToken] =
     GoogleComputeMetadata.getAccessToken()
 }

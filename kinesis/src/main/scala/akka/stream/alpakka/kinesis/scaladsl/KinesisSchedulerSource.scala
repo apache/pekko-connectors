@@ -13,7 +13,7 @@ import akka.stream.alpakka.kinesis.{
   KinesisSchedulerCheckpointSettings,
   KinesisSchedulerSourceSettings
 }
-import akka.stream.scaladsl.{Flow, RunnableGraph, Sink, Source, SubFlow}
+import akka.stream.scaladsl.{ Flow, RunnableGraph, Sink, Source, SubFlow }
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 import software.amazon.kinesis.retrieval.KinesisClientRecord
@@ -34,8 +34,7 @@ object KinesisSchedulerSource {
    */
   def apply(
       schedulerBuilder: ShardRecordProcessorFactory => Scheduler,
-      settings: KinesisSchedulerSourceSettings
-  ): Source[CommittableRecord, Future[Scheduler]] =
+      settings: KinesisSchedulerSourceSettings): Source[CommittableRecord, Future[Scheduler]] =
     Source
       .fromMaterializer { (mat, _) =>
         import mat.executionContext
@@ -46,16 +45,14 @@ object KinesisSchedulerSource {
 
   def sharded(
       schedulerBuilder: ShardRecordProcessorFactory => Scheduler,
-      settings: KinesisSchedulerSourceSettings
-  ): SubFlow[CommittableRecord, Future[Scheduler], Source[CommittableRecord, Future[Scheduler]]#Repr, RunnableGraph[
-    Future[Scheduler]
-  ]] =
+      settings: KinesisSchedulerSourceSettings)
+      : SubFlow[CommittableRecord, Future[Scheduler], Source[CommittableRecord, Future[Scheduler]]#Repr, RunnableGraph[
+          Future[Scheduler]]] =
     apply(schedulerBuilder, settings)
       .groupBy(MAX_KINESIS_SHARDS, _.processorData.shardId)
 
   def checkpointRecordsFlow(
-      settings: KinesisSchedulerCheckpointSettings
-  ): Flow[CommittableRecord, KinesisClientRecord, NotUsed] =
+      settings: KinesisSchedulerCheckpointSettings): Flow[CommittableRecord, KinesisClientRecord, NotUsed] =
     Flow[CommittableRecord]
       .groupBy(MAX_KINESIS_SHARDS, _.processorData.shardId)
       .groupedWithin(settings.maxBatchSize, settings.maxBatchWait)
@@ -73,8 +70,7 @@ object KinesisSchedulerSource {
       .addAttributes(Attributes(ActorAttributes.IODispatcher))
 
   def checkpointRecordsSink(
-      settings: KinesisSchedulerCheckpointSettings
-  ): Sink[CommittableRecord, NotUsed] =
+      settings: KinesisSchedulerCheckpointSettings): Sink[CommittableRecord, NotUsed] =
     checkpointRecordsFlow(settings).to(Sink.ignore)
 
   // http://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html

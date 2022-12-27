@@ -8,12 +8,12 @@ import akka.Done
 import akka.annotation.InternalApi
 import akka.event.Logging
 import akka.stream.alpakka.amqp.impl.AbstractAmqpAsyncFlowStageLogic.DeliveryTag
-import akka.stream.alpakka.amqp.{AmqpWriteSettings, WriteMessage, WriteResult}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue}
+import akka.stream.alpakka.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
 import akka.stream._
 
 import scala.collection.immutable.TreeMap
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Internal API.
@@ -27,8 +27,8 @@ import scala.concurrent.{Future, Promise}
  * this delivery tag can be safely dequeued.
  */
 @InternalApi private[amqp] final class AmqpAsyncFlowStage[T](
-    settings: AmqpWriteSettings
-) extends GraphStageWithMaterializedValue[FlowShape[(WriteMessage, T), (WriteResult, T)], Future[Done]] {
+    settings: AmqpWriteSettings)
+    extends GraphStageWithMaterializedValue[FlowShape[(WriteMessage, T), (WriteResult, T)], Future[Done]] {
 
   val in: Inlet[(WriteMessage, T)] = Inlet(Logging.simpleName(this) + ".in")
   val out: Outlet[(WriteResult, T)] = Outlet(Logging.simpleName(this) + ".out")
@@ -42,41 +42,40 @@ import scala.concurrent.{Future, Promise}
     val streamCompletion = Promise[Done]()
     (new AbstractAmqpAsyncFlowStageLogic(settings, streamCompletion, shape) {
 
-      private var buffer = TreeMap[DeliveryTag, AwaitingMessage[T]]()
+        private var buffer = TreeMap[DeliveryTag, AwaitingMessage[T]]()
 
-      override def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit =
-        buffer += (tag -> AwaitingMessage(tag, passThrough))
+        override def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit =
+          buffer += (tag -> AwaitingMessage(tag, passThrough))
 
-      override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
-        if (multiple) {
-          dequeueWhile((t, _) => t <= tag)
-        } else {
-          setReady(tag)
-          if (isAtHead(tag)) {
-            dequeueWhile((_, message) => message.ready)
+        override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
+          if (multiple) {
+            dequeueWhile((t, _) => t <= tag)
           } else {
-            Seq.empty
+            setReady(tag)
+            if (isAtHead(tag)) {
+              dequeueWhile((_, message) => message.ready)
+            } else {
+              Seq.empty
+            }
           }
+
+        private def dequeueWhile(
+            predicate: (DeliveryTag, AwaitingMessage[T]) => Boolean): Iterable[AwaitingMessage[T]] = {
+          val dequeued = buffer.takeWhile { case (k, v) => predicate(k, v) }
+          buffer --= dequeued.keys
+          dequeued.values
         }
 
-      private def dequeueWhile(
-          predicate: (DeliveryTag, AwaitingMessage[T]) => Boolean
-      ): Iterable[AwaitingMessage[T]] = {
-        val dequeued = buffer.takeWhile { case (k, v) => predicate(k, v) }
-        buffer --= dequeued.keys
-        dequeued.values
-      }
+        private def isAtHead(tag: DeliveryTag): Boolean =
+          buffer.headOption.exists { case (tag, _) => tag == tag }
 
-      private def isAtHead(tag: DeliveryTag): Boolean =
-        buffer.headOption.exists { case (tag, _) => tag == tag }
+        private def setReady(tag: DeliveryTag): Unit =
+          buffer.get(tag).foreach(message => buffer += (tag -> message.copy(ready = true)))
 
-      private def setReady(tag: DeliveryTag): Unit =
-        buffer.get(tag).foreach(message => buffer += (tag -> message.copy(ready = true)))
+        override def messagesAwaitingDelivery: Int = buffer.size
 
-      override def messagesAwaitingDelivery: Int = buffer.size
+        override def noAwaitingMessages: Boolean = buffer.isEmpty
 
-      override def noAwaitingMessages: Boolean = buffer.isEmpty
-
-    }, streamCompletion.future)
+      }, streamCompletion.future)
   }
 }

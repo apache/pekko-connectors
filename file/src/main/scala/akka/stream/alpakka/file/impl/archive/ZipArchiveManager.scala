@@ -7,7 +7,7 @@ package akka.stream.alpakka.file.impl.archive
 import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.stream.alpakka.file.ArchiveMetadata
-import akka.stream.scaladsl.{Flow, Source}
+import akka.stream.scaladsl.{ Flow, Source }
 import akka.util.ByteString
 
 /**

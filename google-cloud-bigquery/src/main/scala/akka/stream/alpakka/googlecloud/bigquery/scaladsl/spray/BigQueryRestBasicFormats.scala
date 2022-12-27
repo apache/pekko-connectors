@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray
 
-import spray.json.{deserializationError, DefaultJsonProtocol, JsNumber, JsValue, JsonFormat}
+import spray.json.{ deserializationError, DefaultJsonProtocol, JsNumber, JsValue, JsonFormat }
 
-import scala.concurrent.duration.{DurationLong, FiniteDuration}
+import scala.concurrent.duration.{ DurationLong, FiniteDuration }
 
 /**
  * Provides the JsonFormats for the BigQuery REST API's representation of the most important Scala types.
@@ -29,18 +29,18 @@ trait BigQueryRestBasicFormats {
   implicit object BigQueryLongJsonFormat extends JsonFormat[Long] {
     def write(x: Long) = JsNumber(x)
     def read(value: JsValue) = value match {
-      case JsNumber(x) if x.isValidLong => x.longValue
+      case JsNumber(x) if x.isValidLong       => x.longValue
       case BigQueryNumber(x) if x.isValidLong => x.longValue
-      case x => deserializationError("Expected Long as JsNumber or JsString, but got " + x)
+      case x                                  => deserializationError("Expected Long as JsNumber or JsString, but got " + x)
     }
   }
 
   implicit object BigQueryFiniteDurationJsonFormat extends JsonFormat[FiniteDuration] {
     override def write(x: FiniteDuration): JsValue = JsNumber(x.toMillis)
     override def read(value: JsValue): FiniteDuration = value match {
-      case JsNumber(x) if x.isValidLong => x.longValue.millis
+      case JsNumber(x) if x.isValidLong       => x.longValue.millis
       case BigQueryNumber(x) if x.isValidLong => x.longValue.millis
-      case x => deserializationError("Expected FiniteDuration as JsNumber or JsString, but got " + x)
+      case x                                  => deserializationError("Expected FiniteDuration as JsNumber or JsString, but got " + x)
     }
   }
 }

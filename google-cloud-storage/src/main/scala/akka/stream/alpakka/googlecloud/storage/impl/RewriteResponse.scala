@@ -14,5 +14,4 @@ private[impl] final case class RewriteResponse(
     objectSize: Long,
     done: Boolean,
     rewriteToken: Option[String],
-    resource: Option[StorageObject]
-)
+    resource: Option[StorageObject])

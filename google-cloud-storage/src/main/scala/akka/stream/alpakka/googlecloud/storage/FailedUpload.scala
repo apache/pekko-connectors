@@ -8,8 +8,7 @@ import scala.collection.immutable.Seq
 import scala.jdk.CollectionConverters._
 
 final class FailedUpload private (
-    val reasons: Seq[Throwable]
-) extends Exception(reasons.map(_.getMessage).mkString(", ")) {
+    val reasons: Seq[Throwable]) extends Exception(reasons.map(_.getMessage).mkString(", ")) {
 
   /** Java API */
   def getReasons: java.util.List[Throwable] = reasons.asJava

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.storage
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
 
 import java.util.Objects

@@ -5,8 +5,8 @@
 package akka.stream.alpakka.s3
 
 import java.time.Instant
-import java.util.{Objects, Optional}
-import akka.http.scaladsl.model.{DateTime, HttpHeader, IllegalUriException, Uri}
+import java.util.{ Objects, Optional }
+import akka.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Uri }
 import akka.http.scaladsl.model.headers._
 import akka.stream.alpakka.s3.AccessStyle.PathAccessStyle
 
@@ -37,8 +37,7 @@ final class MultipartUpload private (val bucket: String, val key: String, val up
     new MultipartUpload(
       bucket,
       key,
-      uploadId
-    )
+      uploadId)
 
   override def toString: String =
     "MultipartUpload(" +
@@ -98,8 +97,8 @@ final class SuccessfulUploadPart private (val multipartUpload: MultipartUpload, 
   def withETag(value: String): SuccessfulUploadPart = copy(eTag = value)
 
   private def copy(multipartUpload: MultipartUpload = multipartUpload,
-                   partNumber: Int = partNumber,
-                   eTag: String = eTag): SuccessfulUploadPart =
+      partNumber: Int = partNumber,
+      eTag: String = eTag): SuccessfulUploadPart =
     new SuccessfulUploadPart(multipartUpload, partNumber, eTag)
 
   override def toString: String =
@@ -129,8 +128,7 @@ object SuccessfulUploadPart {
     new SuccessfulUploadPart(
       multipartUpload,
       partNumber,
-      eTag
-    )
+      eTag)
 
   /** Java API */
   def create(multipartUpload: MultipartUpload, partNumber: Int, eTag: String): SuccessfulUploadPart =
@@ -138,8 +136,8 @@ object SuccessfulUploadPart {
 }
 
 final class FailedUploadPart private (val multipartUpload: MultipartUpload,
-                                      val partNumber: Int,
-                                      val exception: Throwable)
+    val partNumber: Int,
+    val exception: Throwable)
     extends UploadPartResponse {
 
   /** Java API */
@@ -152,8 +150,8 @@ final class FailedUploadPart private (val multipartUpload: MultipartUpload,
   def withException(value: Throwable): FailedUploadPart = copy(exception = value)
 
   private def copy(multipartUpload: MultipartUpload = multipartUpload,
-                   partNumber: Int = partNumber,
-                   exception: Throwable = exception): FailedUploadPart =
+      partNumber: Int = partNumber,
+      exception: Throwable = exception): FailedUploadPart =
     new FailedUploadPart(multipartUpload, partNumber, exception)
 
   override def toString: String =
@@ -192,8 +190,7 @@ final class MultipartUploadResult private (
     val bucket: String,
     val key: String,
     val eTag: String,
-    val versionId: Option[String]
-) {
+    val versionId: Option[String]) {
 
   /** Java API */
   def getLocation: akka.http.javadsl.model.Uri = akka.http.javadsl.model.Uri.create(location)
@@ -227,14 +224,12 @@ final class MultipartUploadResult private (
       bucket: String = bucket,
       key: String = key,
       eTag: String = eTag,
-      versionId: Option[String] = versionId
-  ): MultipartUploadResult = new MultipartUploadResult(
+      versionId: Option[String] = versionId): MultipartUploadResult = new MultipartUploadResult(
     location = location,
     bucket = bucket,
     key = key,
     eTag = eTag,
-    versionId = versionId
-  )
+    versionId = versionId)
 
   override def toString: String =
     "MultipartUploadResult(" +
@@ -267,13 +262,12 @@ object MultipartUploadResult {
       bucket: String,
       key: String,
       eTag: String,
-      versionId: Option[String]
-  ): MultipartUploadResult = {
+      versionId: Option[String]): MultipartUploadResult = {
     // See https://docs.aws.amazon.com/AmazonS3/latest/userguide/AddingObjectstoVersionSuspendedBuckets.html for more
     // info.
     val finalVersionId = versionId match {
       case Some(s) if s.trim.toLowerCase == "null" => None
-      case rest => rest
+      case rest                                    => rest
     }
 
     new MultipartUploadResult(
@@ -281,8 +275,7 @@ object MultipartUploadResult {
       bucket,
       key,
       eTag,
-      finalVersionId
-    )
+      finalVersionId)
   }
 
   /** Java API */
@@ -291,14 +284,12 @@ object MultipartUploadResult {
       bucket: String,
       key: String,
       eTag: String,
-      versionId: java.util.Optional[String]
-  ): MultipartUploadResult = apply(
+      versionId: java.util.Optional[String]): MultipartUploadResult = apply(
     location.asScala(),
     bucket,
     key,
     eTag,
-    versionId.asScala
-  )
+    versionId.asScala)
 }
 
 final class AWSIdentity private (val id: String, val displayName: String) {
@@ -314,8 +305,7 @@ final class AWSIdentity private (val id: String, val displayName: String) {
 
   private def copy(id: String = id, displayName: String = displayName): AWSIdentity = new AWSIdentity(
     id,
-    displayName
-  )
+    displayName)
 
   override def toString: String =
     "AWSIdentity(" +
@@ -347,11 +337,11 @@ object AWSIdentity {
 }
 
 final class ListMultipartUploadResultUploads private (val key: String,
-                                                      val uploadId: String,
-                                                      val initiator: Option[AWSIdentity],
-                                                      val owner: Option[AWSIdentity],
-                                                      val storageClass: String,
-                                                      val initiated: Instant) {
+    val uploadId: String,
+    val initiator: Option[AWSIdentity],
+    val owner: Option[AWSIdentity],
+    val storageClass: String,
+    val initiated: Instant) {
 
   /** Java API */
   def getKey: String = key
@@ -379,19 +369,18 @@ final class ListMultipartUploadResultUploads private (val key: String,
   def withInitiated(value: Instant): ListMultipartUploadResultUploads = copy(initiated = value)
 
   private def copy(key: String = key,
-                   uploadId: String = uploadId,
-                   initiator: Option[AWSIdentity] = initiator,
-                   owner: Option[AWSIdentity] = owner,
-                   storageClass: String = storageClass,
-                   initiated: Instant = initiated): ListMultipartUploadResultUploads =
+      uploadId: String = uploadId,
+      initiator: Option[AWSIdentity] = initiator,
+      owner: Option[AWSIdentity] = owner,
+      storageClass: String = storageClass,
+      initiated: Instant = initiated): ListMultipartUploadResultUploads =
     new ListMultipartUploadResultUploads(
       key = key,
       uploadId = uploadId,
       initiator = initiator,
       owner = owner,
       storageClass = storageClass,
-      initiated = initiated
-    )
+      initiated = initiated)
 
   override def toString: String =
     "ListMultipartUploadResultUploads(" +
@@ -423,31 +412,31 @@ object ListMultipartUploadResultUploads {
 
   /** Scala API */
   def apply(key: String,
-            uploadId: String,
-            initiator: Option[AWSIdentity],
-            owner: Option[AWSIdentity],
-            storageClass: String,
-            initiated: Instant): ListMultipartUploadResultUploads =
+      uploadId: String,
+      initiator: Option[AWSIdentity],
+      owner: Option[AWSIdentity],
+      storageClass: String,
+      initiated: Instant): ListMultipartUploadResultUploads =
     new ListMultipartUploadResultUploads(key, uploadId, initiator, owner, storageClass, initiated)
 
   /** Java API */
   def create(key: String,
-             uploadId: String,
-             initiator: Optional[AWSIdentity],
-             owner: Optional[AWSIdentity],
-             storageClass: String,
-             initiated: Instant): ListMultipartUploadResultUploads =
+      uploadId: String,
+      initiator: Optional[AWSIdentity],
+      owner: Optional[AWSIdentity],
+      storageClass: String,
+      initiated: Instant): ListMultipartUploadResultUploads =
     apply(key, uploadId, initiator.asScala, owner.asScala, storageClass, initiated)
 }
 
 final class ListObjectVersionsResultVersions private (val eTag: String,
-                                                      val isLatest: Boolean,
-                                                      val key: String,
-                                                      val lastModified: Instant,
-                                                      val owner: Option[AWSIdentity],
-                                                      val size: Long,
-                                                      val storageClass: String,
-                                                      val versionId: Option[String]) {
+    val isLatest: Boolean,
+    val key: String,
+    val lastModified: Instant,
+    val owner: Option[AWSIdentity],
+    val size: Long,
+    val storageClass: String,
+    val versionId: Option[String]) {
 
   /** Java API */
   def getETag: String = eTag
@@ -496,13 +485,13 @@ final class ListObjectVersionsResultVersions private (val eTag: String,
       copy(versionId = Option(value))
 
   private def copy(eTag: String = eTag,
-                   isLatest: Boolean = isLatest,
-                   key: String = key,
-                   lastModified: Instant = lastModified,
-                   owner: Option[AWSIdentity] = owner,
-                   size: Long = size,
-                   storageClass: String = storageClass,
-                   versionId: Option[String] = versionId): ListObjectVersionsResultVersions =
+      isLatest: Boolean = isLatest,
+      key: String = key,
+      lastModified: Instant = lastModified,
+      owner: Option[AWSIdentity] = owner,
+      size: Long = size,
+      storageClass: String = storageClass,
+      versionId: Option[String] = versionId): ListObjectVersionsResultVersions =
     new ListObjectVersionsResultVersions(
       eTag = eTag,
       isLatest = isLatest,
@@ -511,8 +500,7 @@ final class ListObjectVersionsResultVersions private (val eTag: String,
       owner = owner,
       size = size,
       storageClass = storageClass,
-      versionId = versionId
-    )
+      versionId = versionId)
 
   override def toString: String =
     "ListObjectVersionsResultVersions(" +
@@ -548,18 +536,18 @@ object ListObjectVersionsResultVersions {
 
   /** Scala API */
   def apply(eTag: String,
-            isLatest: Boolean,
-            key: String,
-            lastModified: Instant,
-            owner: Option[AWSIdentity],
-            size: Long,
-            storageClass: String,
-            versionId: Option[String]): ListObjectVersionsResultVersions = {
+      isLatest: Boolean,
+      key: String,
+      lastModified: Instant,
+      owner: Option[AWSIdentity],
+      size: Long,
+      storageClass: String,
+      versionId: Option[String]): ListObjectVersionsResultVersions = {
     // See https://docs.aws.amazon.com/AmazonS3/latest/userguide/AddingObjectstoVersionSuspendedBuckets.html for more
     // info.
     val finalVersionId = versionId match {
       case Some(s) if s.trim.toLowerCase == "null" => None
-      case rest => rest
+      case rest                                    => rest
     }
 
     new ListObjectVersionsResultVersions(eTag, isLatest, key, lastModified, owner, size, storageClass, finalVersionId)
@@ -567,21 +555,21 @@ object ListObjectVersionsResultVersions {
 
   /** Java API */
   def create(eTag: String,
-             isLatest: Boolean,
-             key: String,
-             lastModified: Instant,
-             owner: Optional[AWSIdentity],
-             size: Long,
-             storageClass: String,
-             versionId: Optional[String]): ListObjectVersionsResultVersions =
+      isLatest: Boolean,
+      key: String,
+      lastModified: Instant,
+      owner: Optional[AWSIdentity],
+      size: Long,
+      storageClass: String,
+      versionId: Optional[String]): ListObjectVersionsResultVersions =
     apply(eTag, isLatest, key, lastModified, owner.asScala, size, storageClass, versionId.asScala)
 }
 
 final class DeleteMarkers private (val isLatest: Boolean,
-                                   val key: String,
-                                   val lastModified: Instant,
-                                   val owner: Option[AWSIdentity],
-                                   val versionId: Option[String]) {
+    val key: String,
+    val lastModified: Instant,
+    val owner: Option[AWSIdentity],
+    val versionId: Option[String]) {
 
   /** Java API */
   def getIsLatest: Boolean = isLatest
@@ -615,10 +603,10 @@ final class DeleteMarkers private (val isLatest: Boolean,
       copy(versionId = Option(value))
 
   private def copy(isLatest: Boolean = isLatest,
-                   key: String = key,
-                   lastModified: Instant = lastModified,
-                   owner: Option[AWSIdentity] = owner,
-                   versionId: Option[String] = versionId): DeleteMarkers =
+      key: String = key,
+      lastModified: Instant = lastModified,
+      owner: Option[AWSIdentity] = owner,
+      versionId: Option[String] = versionId): DeleteMarkers =
     new DeleteMarkers(isLatest, key, lastModified, owner, versionId)
 
   override def toString: String =
@@ -649,15 +637,15 @@ object DeleteMarkers {
 
   /** Scala API */
   def apply(isLatest: Boolean,
-            key: String,
-            lastModified: Instant,
-            owner: Option[AWSIdentity],
-            versionId: Option[String]): DeleteMarkers = {
+      key: String,
+      lastModified: Instant,
+      owner: Option[AWSIdentity],
+      versionId: Option[String]): DeleteMarkers = {
     // See https://docs.aws.amazon.com/AmazonS3/latest/userguide/AddingObjectstoVersionSuspendedBuckets.html for more
     // info.
     val finalVersionId = versionId match {
       case Some(s) if s.trim.toLowerCase == "null" => None
-      case rest => rest
+      case rest                                    => rest
     }
 
     new DeleteMarkers(isLatest, key, lastModified, owner, finalVersionId)
@@ -665,10 +653,10 @@ object DeleteMarkers {
 
   /** Java API */
   def create(isLatest: Boolean,
-             key: String,
-             lastModified: Instant,
-             owner: Optional[AWSIdentity],
-             versionId: Optional[String]): DeleteMarkers =
+      key: String,
+      lastModified: Instant,
+      owner: Optional[AWSIdentity],
+      versionId: Optional[String]): DeleteMarkers =
     apply(isLatest, key, lastModified, owner.asScala, versionId.asScala)
 }
 
@@ -731,15 +719,14 @@ final class ListPartsResultParts(val lastModified: Instant, val eTag: String, va
   def withSize(value: Long): ListPartsResultParts = copy(size = value)
 
   private def copy(lastModified: Instant = lastModified,
-                   eTag: String = eTag,
-                   partNumber: Int = partNumber,
-                   size: Long = size): ListPartsResultParts =
+      eTag: String = eTag,
+      partNumber: Int = partNumber,
+      size: Long = size): ListPartsResultParts =
     new ListPartsResultParts(
       lastModified,
       eTag,
       partNumber,
-      size
-    )
+      size)
 
   override def toString: String =
     "ListPartsResultParts(" +
@@ -822,8 +809,7 @@ object Part {
  * Thrown when multipart upload or multipart copy fails because of a server failure.
  */
 final class FailedUpload private (
-    val reasons: Seq[Throwable]
-) extends Exception(reasons.map(_.getMessage).mkString(", ")) {
+    val reasons: Seq[Throwable]) extends Exception(reasons.map(_.getMessage).mkString(", ")) {
 
   /** Java API */
   def getReasons: java.util.List[Throwable] = reasons.asJava
@@ -851,11 +837,9 @@ final class ListBucketsResultContents private (val creationDate: java.time.Insta
 
   private def copy(
       name: String = name,
-      creationDate: java.time.Instant = creationDate
-  ): ListBucketsResultContents = new ListBucketsResultContents(
+      creationDate: java.time.Instant = creationDate): ListBucketsResultContents = new ListBucketsResultContents(
     name = name,
-    creationDate = creationDate
-  )
+    creationDate = creationDate)
 
   override def toString: String =
     "ListBucketsResultContents(" +
@@ -879,20 +863,16 @@ object ListBucketsResultContents {
   /** Scala API */
   def apply(
       creationDate: java.time.Instant,
-      name: String
-  ): ListBucketsResultContents = new ListBucketsResultContents(
+      name: String): ListBucketsResultContents = new ListBucketsResultContents(
     creationDate,
-    name
-  )
+    name)
 
   /** Java API */
   def create(
       creationDate: java.time.Instant,
-      name: String
-  ): ListBucketsResultContents = apply(
+      name: String): ListBucketsResultContents = apply(
     creationDate,
-    name
-  )
+    name)
 }
 
 /**
@@ -909,8 +889,7 @@ final class ListBucketResultContents private (
     val eTag: String,
     val size: Long,
     val lastModified: java.time.Instant,
-    val storageClass: String
-) {
+    val storageClass: String) {
 
   /** Java API */
   def getBucketName: String = bucketName
@@ -943,15 +922,13 @@ final class ListBucketResultContents private (
       eTag: String = eTag,
       size: Long = size,
       lastModified: java.time.Instant = lastModified,
-      storageClass: String = storageClass
-  ): ListBucketResultContents = new ListBucketResultContents(
+      storageClass: String = storageClass): ListBucketResultContents = new ListBucketResultContents(
     bucketName = bucketName,
     key = key,
     eTag = eTag,
     size = size,
     lastModified = lastModified,
-    storageClass = storageClass
-  )
+    storageClass = storageClass)
 
   override def toString: String =
     "ListBucketResultContents(" +
@@ -987,15 +964,13 @@ object ListBucketResultContents {
       eTag: String,
       size: Long,
       lastModified: java.time.Instant,
-      storageClass: String
-  ): ListBucketResultContents = new ListBucketResultContents(
+      storageClass: String): ListBucketResultContents = new ListBucketResultContents(
     bucketName,
     key,
     eTag,
     size,
     lastModified,
-    storageClass
-  )
+    storageClass)
 
   /** Java API */
   def create(
@@ -1004,15 +979,13 @@ object ListBucketResultContents {
       eTag: String,
       size: Long,
       lastModified: java.time.Instant,
-      storageClass: String
-  ): ListBucketResultContents = apply(
+      storageClass: String): ListBucketResultContents = apply(
     bucketName,
     key,
     eTag,
     size,
     lastModified,
-    storageClass
-  )
+    storageClass)
 }
 
 /**
@@ -1021,8 +994,7 @@ object ListBucketResultContents {
  */
 final class ListBucketResultCommonPrefixes private (
     val bucketName: String,
-    val prefix: String
-) {
+    val prefix: String) {
 
   /** Java API */
   def getBucketName: String = bucketName
@@ -1035,11 +1007,9 @@ final class ListBucketResultCommonPrefixes private (
 
   private def copy(
       bucketName: String = bucketName,
-      prefix: String = prefix
-  ): ListBucketResultCommonPrefixes = new ListBucketResultCommonPrefixes(
+      prefix: String = prefix): ListBucketResultCommonPrefixes = new ListBucketResultCommonPrefixes(
     bucketName = bucketName,
-    prefix = prefix
-  )
+    prefix = prefix)
 
   override def toString: String =
     "ListBucketResultCommonPrefixes(" +
@@ -1063,20 +1033,16 @@ object ListBucketResultCommonPrefixes {
   /** Scala API */
   def apply(
       bucketName: String,
-      prefix: String
-  ): ListBucketResultCommonPrefixes = new ListBucketResultCommonPrefixes(
+      prefix: String): ListBucketResultCommonPrefixes = new ListBucketResultCommonPrefixes(
     bucketName,
-    prefix
-  )
+    prefix)
 
   /** Java API */
   def create(
       bucketName: String,
-      prefix: String
-  ): ListBucketResultCommonPrefixes = apply(
+      prefix: String): ListBucketResultCommonPrefixes = apply(
     bucketName,
-    prefix
-  )
+    prefix)
 }
 
 /**
@@ -1085,8 +1051,7 @@ object ListBucketResultCommonPrefixes {
  * @param metadata the raw http headers
  */
 final class ObjectMetadata private (
-    val metadata: Seq[HttpHeader]
-) {
+    val metadata: Seq[HttpHeader]) {
 
   /**
    * Java Api
@@ -1347,16 +1312,14 @@ object BucketAndKey {
       if (!pathStyleValid(bucket)) {
         throw IllegalUriException(
           "The bucket name contains sub-dir selection with `..`",
-          "Selecting sub-directories with `..` is forbidden (and won't work with non-path-style access)."
-        )
+          "Selecting sub-directories with `..` is forbidden (and won't work with non-path-style access).")
       }
     } else {
       bucketRegexDns.findFirstIn(bucket) match {
         case Some(illegalCharacter) =>
           throw IllegalUriException(
             "Bucket name contains non-LDH characters",
-            s"The following character is not allowed: $illegalCharacter"
-          )
+            s"The following character is not allowed: $illegalCharacter")
         case None => ()
       }
     }
@@ -1368,8 +1331,7 @@ object BucketAndKey {
     if (conf.validateObjectKey && !objectKeyValid(key))
       throw IllegalUriException(
         "The object key contains sub-dir selection with `..`",
-        "Selecting sub-directories with `..` is forbidden (see the `validate-object-key` setting)."
-      )
+        "Selecting sub-directories with `..` is forbidden (see the `validate-object-key` setting).")
 
   }
 

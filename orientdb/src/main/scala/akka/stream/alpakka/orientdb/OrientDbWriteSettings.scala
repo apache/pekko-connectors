@@ -7,18 +7,16 @@ package akka.stream.alpakka.orientdb
 import com.orientechnologies.orient.core.db.OPartitionedDatabasePool
 
 final class OrientDbWriteSettings private (
-    val oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool
-) {
+    val oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool) {
 
   def withOrientDBCredentials(
-      value: com.orientechnologies.orient.core.db.OPartitionedDatabasePool
-  ): OrientDbWriteSettings = copy(oDatabasePool = value)
+      value: com.orientechnologies.orient.core.db.OPartitionedDatabasePool): OrientDbWriteSettings =
+    copy(oDatabasePool = value)
 
   private def copy(
-      oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool
-  ): OrientDbWriteSettings = new OrientDbWriteSettings(
-    oDatabasePool = oDatabasePool
-  )
+      oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool): OrientDbWriteSettings =
+    new OrientDbWriteSettings(
+      oDatabasePool = oDatabasePool)
 
   override def toString =
     "OrientDBUpdateSettings(" +
@@ -31,8 +29,7 @@ object OrientDbWriteSettings {
   /** Scala API */
   def apply(oDatabasePool: OPartitionedDatabasePool): OrientDbWriteSettings =
     new OrientDbWriteSettings(
-      oDatabasePool: OPartitionedDatabasePool
-    )
+      oDatabasePool: OPartitionedDatabasePool)
 
   /** Java API */
   def create(oDatabasePool: OPartitionedDatabasePool): OrientDbWriteSettings = apply(oDatabasePool)

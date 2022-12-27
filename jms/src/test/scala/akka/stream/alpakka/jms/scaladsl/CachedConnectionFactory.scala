@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.jms.scaladsl
 
-import javax.jms.{Connection, ConnectionFactory}
+import javax.jms.{ Connection, ConnectionFactory }
 
 import org.apache.activemq.ActiveMQConnection
 

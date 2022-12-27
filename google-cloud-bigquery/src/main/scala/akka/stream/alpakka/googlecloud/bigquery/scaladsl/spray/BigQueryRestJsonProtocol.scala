@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray
 
-import spray.json.{AdditionalFormats, CollectionFormats, ProductFormats, StandardFormats}
+import spray.json.{ AdditionalFormats, CollectionFormats, ProductFormats, StandardFormats }
 
 /**
  * Provides all the predefined JsonFormats for the BigQuery REST API.

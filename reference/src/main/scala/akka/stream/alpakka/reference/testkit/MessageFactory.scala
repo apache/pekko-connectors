@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.reference.testkit
 import akka.annotation.ApiMayChange
-import akka.stream.alpakka.reference.{ReferenceReadResult, ReferenceWriteMessage, ReferenceWriteResult}
+import akka.stream.alpakka.reference.{ ReferenceReadResult, ReferenceWriteMessage, ReferenceWriteResult }
 import akka.util.ByteString
 
 import scala.collection.immutable
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 @ApiMayChange
 object MessageFactory {
@@ -41,8 +41,8 @@ object MessageFactory {
    */
   @ApiMayChange
   def createWriteResult(message: ReferenceWriteMessage,
-                        metrics: java.util.Map[String, java.lang.Long],
-                        status: Int): ReferenceWriteResult =
+      metrics: java.util.Map[String, java.lang.Long],
+      status: Int): ReferenceWriteResult =
     new ReferenceWriteResult(message, metrics.asScala.view.mapValues(Long.unbox).toMap, status)
 
 }

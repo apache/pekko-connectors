@@ -41,8 +41,7 @@ object AmqpSink {
    * either normally or because of an amqp failure.
    */
   def createReplyTo(
-      settings: AmqpReplyToSinkSettings
-  ): akka.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
+      settings: AmqpReplyToSinkSettings): akka.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpSink.replyTo(settings).mapMaterializedValue(f => f.toJava).asJava
 
 }

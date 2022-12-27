@@ -8,22 +8,22 @@ import java.net.URI
 
 import akka.NotUsed
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{FlowWithContext, SourceWithContext}
+import akka.stream.scaladsl.{ FlowWithContext, SourceWithContext }
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 //#init-client
 import akka.actor.ActorSystem
 
 //#init-client
 import akka.stream.alpakka.dynamodb.DynamoDbOp._
 import akka.stream.alpakka.dynamodb.scaladsl._
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.testkit.TestKit
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 //#init-client
 import com.github.matsluni.akkahttpspi.AkkaHttpClient
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
@@ -46,7 +46,7 @@ class ExampleSpec
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(5.seconds, 100.millis)
 
-  //#init-client
+  // #init-client
 
   // Don't encode credentials in your source code!
   // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
@@ -59,14 +59,14 @@ class ExampleSpec
     // Possibility to configure the retry policy
     // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
     // .overrideConfiguration(...)
-    //#init-client
+    // #init-client
     .endpointOverride(new URI("http://localhost:8001/"))
-    //#init-client
+    // #init-client
     .build()
 
   system.registerOnTermination(client.close())
 
-  //#init-client
+  // #init-client
 
   override def afterAll(): Unit = {
     client.close();
@@ -105,8 +105,7 @@ class ExampleSpec
       val source: SourceWithContext[PutItemRequest, SomeContext, NotUsed] = // ???
         // #withContext
         SourceWithContext.fromTuples(
-          Source.single(PutItemRequest.builder().build() -> SomeContext())
-        )
+          Source.single(PutItemRequest.builder().build() -> SomeContext()))
 
       // #withContext
 
@@ -116,7 +115,7 @@ class ExampleSpec
       val writtenSource: SourceWithContext[PutItemResponse, SomeContext, NotUsed] = source
         .via(flow)
         .map {
-          case Success(response) => response
+          case Success(response)  => response
           case Failure(exception) => throw exception
         }
       // #withContext
@@ -128,8 +127,7 @@ class ExampleSpec
       (for {
         create <- DynamoDb.single(CreateTableRequest.builder().tableName("testTable").build())
         describe <- DynamoDb.single(
-          DescribeTableRequest.builder().tableName(create.tableDescription.tableName).build()
-        )
+          DescribeTableRequest.builder().tableName(create.tableDescription.tableName).build())
       } yield describe.table.itemCount).failed.futureValue
     }
 

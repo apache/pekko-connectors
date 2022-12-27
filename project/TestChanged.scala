@@ -30,16 +30,14 @@ object TestChanged extends AutoPlugin {
 
       log.info("Detected changes in directories: " + changedDirectories.mkString("[", ", ", "]"))
       changedDirectories
-    }
-  )
+    })
 
   override lazy val projectSettings = Seq(
     testChanged := Def.taskDyn {
-        val skip = Def.setting { task(()) }
-        if (shouldBuild(name.value, changedDirectories.value)) Test / test
-        else skip
-      }.value
-  )
+      val skip = Def.setting { task(()) }
+      if (shouldBuild(name.value, changedDirectories.value)) Test / test
+      else skip
+    }.value)
 
   implicit class RegexHelper(val sc: StringContext) extends AnyVal {
     def re: scala.util.matching.Regex = sc.parts.mkString.r
@@ -49,7 +47,6 @@ object TestChanged extends AutoPlugin {
     case "alpakka" => false
     case re"akka-stream-alpakka-(.+)$subproject" =>
       changedDirectories.contains(subproject) || changedDirectories.contains("") || changedDirectories.contains(
-        "project"
-      )
+        "project")
   }
 }

@@ -15,7 +15,7 @@ import akka.stream._
 import akka.stream.alpakka.elasticsearch
 
 import scala.collection.immutable
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * INTERNAL API.
@@ -26,11 +26,10 @@ import scala.concurrent.{ExecutionContext, Future}
 private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     elasticsearchParams: ElasticsearchParams,
     settings: WriteSettingsBase[_, _],
-    writer: MessageWriter[T]
-)(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
+    writer: MessageWriter[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStage[
-      FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]), immutable.Seq[WriteResult[T, C]]]
-    ] {
+      FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]), immutable.Seq[WriteResult[T,
+          C]]]] {
 
   private val in =
     Inlet[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]])]("messagesAndResultPassthrough")
@@ -40,10 +39,10 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
   private val restApi: RestBulkApi[T, C] = settings.apiVersion match {
     case ApiVersion.V5 =>
       new RestBulkApiV5[T, C](elasticsearchParams.indexName,
-                              elasticsearchParams.typeName.get,
-                              settings.versionType,
-                              settings.allowExplicitIndex,
-                              writer)
+        elasticsearchParams.typeName.get,
+        settings.versionType,
+        settings.allowExplicitIndex,
+        writer)
     case ApiVersion.V7 =>
       new RestBulkApiV7[T, C](elasticsearchParams.indexName, settings.versionType, settings.allowExplicitIndex, writer)
 
@@ -88,8 +87,7 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
         ElasticsearchApi
           .executeRequest(
             request,
-            connectionSettings = settings.connection
-          )
+            connectionSettings = settings.connection)
           .map {
             case HttpResponse(StatusCodes.OK, _, responseEntity, _) =>
               Unmarshal(responseEntity)
@@ -99,8 +97,7 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
               Unmarshal(response.entity).to[String].map { body =>
                 failureHandler.invoke(
                   (resultsPassthrough,
-                   new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body"))
-                )
+                    new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body")))
               }
           }
           .recoverWith {
@@ -115,20 +112,18 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     }
 
     private def handleFailure(
-        args: (immutable.Seq[WriteResult[T, C]], Throwable)
-    ): Unit = {
+        args: (immutable.Seq[WriteResult[T, C]], Throwable)): Unit = {
       inflight = false
       val (resultsPassthrough, exception) = args
 
       log.error(s"Received error from elastic after having already processed {} documents. Error: {}",
-                resultsPassthrough.size,
-                exception)
+        resultsPassthrough.size,
+        exception)
       failStage(exception)
     }
 
     private def handleResponse(
-        args: (immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], String)
-    ): Unit = {
+        args: (immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], String)): Unit = {
       inflight = false
       val (messages, resultsPassthrough, response) = args
 
@@ -142,7 +137,7 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
         messageResults.filterNot(_.success).foreach { failure =>
           if (failure.getError.isPresent) {
             log.error(s"Received error from elastic when attempting to index documents. Error: {}",
-                      failure.getError.get)
+              failure.getError.get)
           }
         }
       }

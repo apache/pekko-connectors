@@ -8,7 +8,7 @@ import akka._
 import akka.stream._
 import akka.stream.alpakka.sqs.SqsSourceSettings
 import akka.stream.alpakka.sqs.impl.BalancingMapAsync
-import akka.stream.scaladsl.{Flow, Source}
+import akka.stream.scaladsl.{ Flow, Source }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
@@ -25,8 +25,8 @@ object SqsSource {
    */
   def apply(
       queueUrl: String,
-      settings: SqsSourceSettings = SqsSourceSettings.Defaults
-  )(implicit sqsClient: SqsAsyncClient): Source[Message, NotUsed] = {
+      settings: SqsSourceSettings = SqsSourceSettings.Defaults)(
+      implicit sqsClient: SqsAsyncClient): Source[Message, NotUsed] = {
     SqsAckFlow.checkClient(sqsClient)
     Source
       .repeat {
@@ -40,7 +40,7 @@ object SqsSource {
             .waitTimeSeconds(settings.waitTimeSeconds)
 
         settings.visibilityTimeout match {
-          case None => requestBuilder.build()
+          case None    => requestBuilder.build()
           case Some(t) => requestBuilder.visibilityTimeout(t.toSeconds.toInt).build()
         }
       }
@@ -58,7 +58,6 @@ object SqsSource {
       BalancingMapAsync[ReceiveMessageRequest, ReceiveMessageResponse](
         parallelism,
         sqsClient.receiveMessage(_).toScala,
-        (response, _) => if (response.messages().isEmpty) 1 else parallelism
-      )
+        (response, _) => if (response.messages().isEmpty) 1 else parallelism)
     }
 }

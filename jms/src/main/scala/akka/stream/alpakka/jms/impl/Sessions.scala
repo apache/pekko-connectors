@@ -7,12 +7,12 @@ package akka.stream.alpakka.jms.impl
 import java.util.concurrent.ArrayBlockingQueue
 
 import akka.annotation.InternalApi
-import akka.stream.alpakka.jms.{Destination, DurableTopic}
+import akka.stream.alpakka.jms.{ Destination, DurableTopic }
 import akka.util.OptionVal
 import javax.jms
 
 import scala.annotation.tailrec
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Internal API.
@@ -34,8 +34,8 @@ private[jms] sealed trait JmsSession {
  */
 @InternalApi
 private[jms] final class JmsProducerSession(val connection: jms.Connection,
-                                            val session: jms.Session,
-                                            val jmsDestination: jms.Destination)
+    val session: jms.Session,
+    val jmsDestination: jms.Destination)
     extends JmsSession
 
 /**
@@ -43,14 +43,13 @@ private[jms] final class JmsProducerSession(val connection: jms.Connection,
  */
 @InternalApi
 private[jms] class JmsConsumerSession(val connection: jms.Connection,
-                                      val session: jms.Session,
-                                      val jmsDestination: jms.Destination,
-                                      val settingsDestination: Destination)
+    val session: jms.Session,
+    val jmsDestination: jms.Destination,
+    val settingsDestination: Destination)
     extends JmsSession {
 
   private[jms] def createConsumer(
-      selector: Option[String]
-  )(implicit ec: ExecutionContext): Future[jms.MessageConsumer] =
+      selector: Option[String])(implicit ec: ExecutionContext): Future[jms.MessageConsumer] =
     Future {
       (selector, settingsDestination) match {
         case (None, t: DurableTopic) =>
@@ -75,10 +74,10 @@ case object SessionClosed
  */
 @InternalApi
 private[jms] final class JmsAckSession(override val connection: jms.Connection,
-                                       override val session: jms.Session,
-                                       override val jmsDestination: jms.Destination,
-                                       override val settingsDestination: Destination,
-                                       val maxPendingAcks: Int)
+    override val session: jms.Session,
+    override val jmsDestination: jms.Destination,
+    override val settingsDestination: Destination,
+    val maxPendingAcks: Int)
     extends JmsConsumerSession(connection, session, jmsDestination, settingsDestination) {
 
   private val ackQueue = new ArrayBlockingQueue[Either[SessionClosed.type, () => Unit]](maxPendingAcks + 1)
@@ -124,6 +123,6 @@ private[jms] final class JmsAckSession(override val connection: jms.Connection,
         pendingAck -= 1
         drainAcks()
       case OptionVal.None =>
-      case other => throw new MatchError(other)
+      case other          => throw new MatchError(other)
     }
 }

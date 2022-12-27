@@ -4,20 +4,19 @@
 
 package akka.stream.alpakka.file.impl.archive
 
-import java.util.zip.{ZipEntry, ZipOutputStream}
+import java.util.zip.{ ZipEntry, ZipOutputStream }
 
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.util.{ByteString, ByteStringBuilder}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.util.{ ByteString, ByteStringBuilder }
 
 /**
  * INTERNAL API
  */
 @InternalApi private[file] final class ZipArchiveFlowStage(
-    val shape: FlowShape[ByteString, ByteString]
-) extends GraphStageLogic(shape) {
+    val shape: FlowShape[ByteString, ByteString]) extends GraphStageLogic(shape) {
 
   private def in = shape.in
   private def out = shape.out
@@ -36,8 +35,7 @@ import akka.util.{ByteString, ByteStringBuilder}
         } else {
           pull(in)
         }
-    }
-  )
+    })
 
   setHandler(
     in,
@@ -74,8 +72,7 @@ import akka.util.{ByteString, ByteStringBuilder}
         super.onUpstreamFinish()
       }
 
-    }
-  )
+    })
 
 }
 

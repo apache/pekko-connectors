@@ -8,15 +8,15 @@ import java.util.concurrent.CompletableFuture
 
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.stage.{AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 
 import scala.util.control.NonFatal
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.stream.alpakka.pravega.TableSettings
 
-import scala.util.{Failure, Try}
+import scala.util.{ Failure, Try }
 import io.pravega.client.tables.KeyValueTable
 import io.pravega.client.KeyValueTableFactory
 
@@ -29,8 +29,7 @@ import scala.util.Success
     val shape: FlowShape[K, Option[V]],
     val scope: String,
     tableName: String,
-    tableSettings: TableSettings[K, V]
-) extends GraphStageLogic(shape)
+    tableSettings: TableSettings[K, V]) extends GraphStageLogic(shape)
     with StageLogging {
 
   private def in: Inlet[K] = shape.in
@@ -84,7 +83,7 @@ import scala.util.Success
 
   def handleSentEvent(completableFuture: CompletableFuture[TableEntry]): Unit =
     completableFuture.toScala.onComplete { t =>
-      asyncMessageSendCallback.invokeWithFeedback((t))
+      asyncMessageSendCallback.invokeWithFeedback(t)
     }
 
   setHandler(
@@ -102,8 +101,7 @@ import scala.util.Success
         upstreamEnded = true
       }
 
-    }
-  )
+    })
 
   setHandler(
     out,
@@ -111,8 +109,7 @@ import scala.util.Success
       override def onPull(): Unit = {
         pull(in)
       }
-    }
-  )
+    })
 
   /**
    * Cleanup logic
@@ -127,8 +124,7 @@ import scala.util.Success
 @InternalApi private[pravega] final class PravegaTableReadFlow[K, V](
     scope: String,
     streamName: String,
-    tableSettings: TableSettings[K, V]
-) extends GraphStage[FlowShape[K, Option[V]]] {
+    tableSettings: TableSettings[K, V]) extends GraphStage[FlowShape[K, Option[V]]] {
 
   val in: Inlet[K] = Inlet(Logging.simpleName(this) + ".in")
   val out: Outlet[Option[V]] = Outlet(Logging.simpleName(this) + ".out")

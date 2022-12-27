@@ -8,16 +8,16 @@ import java.util.concurrent.Semaphore
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.kinesis.KinesisSchedulerErrors.SchedulerUnexpectedShutdown
-import akka.stream.alpakka.kinesis.{CommittableRecord, KinesisSchedulerSourceSettings}
+import akka.stream.alpakka.kinesis.{ CommittableRecord, KinesisSchedulerSourceSettings }
 import akka.stream.stage._
-import akka.stream.{ActorAttributes, Attributes, Outlet, SourceShape}
+import akka.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import software.amazon.kinesis.coordinator.Scheduler
-import software.amazon.kinesis.processor.{ShardRecordProcessor, ShardRecordProcessorFactory}
+import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
 
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ ExecutionContext, Future, Promise }
+import scala.util.{ Failure, Success, Try }
 
 /**
  * Internal API
@@ -39,8 +39,7 @@ private[kinesis] object KinesisSchedulerSourceStage {
 @InternalApi
 private[kinesis] class KinesisSchedulerSourceStage(
     settings: KinesisSchedulerSourceSettings,
-    schedulerBuilder: ShardRecordProcessorFactory => Scheduler
-)(implicit ec: ExecutionContext)
+    schedulerBuilder: ShardRecordProcessorFactory => Scheduler)(implicit ec: ExecutionContext)
     extends GraphStageWithMaterializedValue[SourceShape[CommittableRecord], Future[Scheduler]] {
 
   private val out = Outlet[CommittableRecord]("Records")
@@ -50,8 +49,7 @@ private[kinesis] class KinesisSchedulerSourceStage(
     super.initialAttributes.and(ActorAttributes.IODispatcher)
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, Future[Scheduler]) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, Future[Scheduler]) = {
     val matValue = Promise[Scheduler]()
     new Logic(matValue) -> matValue.future
   }

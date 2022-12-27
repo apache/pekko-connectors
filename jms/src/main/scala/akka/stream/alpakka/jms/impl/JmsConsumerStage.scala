@@ -26,8 +26,7 @@ private[jms] final class JmsConsumerStage(settings: JmsConsumerSettings, destina
   override def shape: SourceShape[jms.Message] = SourceShape[jms.Message](out)
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, JmsConsumerMatValue) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, JmsConsumerMatValue) = {
     val logic = new JmsConsumerStageLogic(inheritedAttributes)
     (logic, logic.consumerControl)
   }
@@ -40,7 +39,7 @@ private[jms] final class JmsConsumerStage(settings: JmsConsumerSettings, destina
     private val backpressure = new Semaphore(bufferSize)
 
     protected def createSession(connection: jms.Connection,
-                                createDestination: jms.Session => javax.jms.Destination): JmsConsumerSession = {
+        createDestination: jms.Session => javax.jms.Destination): JmsConsumerSession = {
       val session =
         connection.createSession(false, settings.acknowledgeMode.getOrElse(AcknowledgeMode.AutoAcknowledge).mode)
       new JmsConsumerSession(connection, session, createDestination(session), destination)

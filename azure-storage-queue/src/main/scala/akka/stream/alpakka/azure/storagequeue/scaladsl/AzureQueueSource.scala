@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.azure.storagequeue.scaladsl
 
-import com.microsoft.azure.storage.queue.{CloudQueue, CloudQueueMessage}
+import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
 import akka.stream.alpakka.azure.storagequeue.AzureQueueSourceSettings
 import akka.stream.scaladsl.Source
 import akka.NotUsed
@@ -17,7 +17,6 @@ object AzureQueueSource {
    */
   def apply(
       cloudQueue: () => CloudQueue,
-      settings: AzureQueueSourceSettings = AzureQueueSourceSettings()
-  ): Source[CloudQueueMessage, NotUsed] =
+      settings: AzureQueueSourceSettings = AzureQueueSourceSettings()): Source[CloudQueueMessage, NotUsed] =
     Source.fromGraph(new AzureQueueSourceStage(cloudQueue, settings))
 }

@@ -4,24 +4,24 @@
 
 package docs.scaladsl
 
-import java.util.concurrent.{LinkedBlockingQueue, TimeUnit}
+import java.util.concurrent.{ LinkedBlockingQueue, TimeUnit }
 
 import akka.Done
 import akka.stream.alpakka.jms._
-import akka.stream.alpakka.jms.scaladsl.{JmsConsumer, JmsConsumerControl, JmsProducer}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.alpakka.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.stream.testkit.scaladsl.TestSink
-import akka.stream.{KillSwitches, ThrottleMode}
+import akka.stream.{ KillSwitches, ThrottleMode }
 import org.apache.activemq.ActiveMQSession
-import javax.jms.{JMSException, TextMessage}
+import javax.jms.{ JMSException, TextMessage }
 import org.scalatest.Inspectors._
 import org.scalatest.time.Span.convertSpanToDuration
 
 import scala.annotation.tailrec
-import scala.collection.{immutable, mutable}
+import scala.collection.{ immutable, mutable }
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
 
@@ -31,15 +31,13 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
     "publish and consume strings through a queue" in withConnectionFactory() { connectionFactory =>
       val queueName = createName("test")
       val jmsSink: Sink[String, Future[Done]] = JmsProducer.textSink(
-        JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName)
-      )
+        JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName))
 
-      val in = 0 to 25 map (i => ('a' + i).asInstanceOf[Char].toString)
+      val in = (0 to 25).map(i => ('a' + i).asInstanceOf[Char].toString)
       Source(in).runWith(jmsSink)
 
       val jmsSource: Source[AckEnvelope, JmsConsumerControl] = JmsConsumer.ackSource(
-        JmsConsumerSettings(system, connectionFactory).withSessionCount(5).withQueue(queueName)
-      )
+        JmsConsumerSettings(system, connectionFactory).withSessionCount(5).withQueue(queueName))
 
       val result = jmsSource
         .take(in.size)
@@ -54,10 +52,9 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
       connectionFactory =>
         val queueName = createName("numbers")
         val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
-          JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName)
-        )
+          JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName))
 
-        val msgsIn = 1 to 100 map { n =>
+        val msgsIn = (1 to 100).map { n =>
           JmsTextMessage(n.toString)
             .withProperty("Number", n)
             .withProperty("IsOdd", n % 2 == 1)
@@ -66,12 +63,11 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
 
         Source(msgsIn).runWith(jmsSink)
 
-        //#source
+        // #source
         val jmsSource: Source[AckEnvelope, JmsConsumerControl] = JmsConsumer.ackSource(
           JmsConsumerSettings(consumerConfig, connectionFactory)
             .withSessionCount(5)
-            .withQueue(queueName)
-        )
+            .withQueue(queueName))
 
         val result: Future[immutable.Seq[javax.jms.Message]] =
           jmsSource
@@ -81,7 +77,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
               ackEnvelope.message
             }
             .runWith(Sink.seq)
-        //#source
+        // #source
 
         // The sent message and the receiving one should have the same properties
         val sortedResult = result.futureValue.sortBy(msg => msg.getIntProperty("Number"))
@@ -97,10 +93,9 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
       server =>
         val connectionFactory = server.createConnectionFactory
         val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
-          JmsProducerSettings(producerConfig, connectionFactory).withQueue("numbers")
-        )
+          JmsProducerSettings(producerConfig, connectionFactory).withQueue("numbers"))
 
-        val msgsIn = 1 to 100 map { n =>
+        val msgsIn = (1 to 100).map { n =>
           JmsTextMessage(n.toString)
             .withProperty("Number", n)
             .withProperty("IsOdd", n % 2 == 1)
@@ -112,8 +107,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
           JmsConsumerSettings(consumerConfig, connectionFactory)
             .withSessionCount(5)
             .withQueue("numbers")
-            .withSelector("IsOdd = TRUE")
-        )
+            .withSelector("IsOdd = TRUE"))
 
         val oddMsgsIn = msgsIn.filter(msg => msg.body.toInt % 2 == 1)
         val result = jmsSource
@@ -139,14 +133,12 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
     "applying backpressure when the consumer is slower than the producer" in withConnectionFactory() {
       connectionFactory =>
         val queueName = createName("test")
-        val in = 0 to 25 map (i => ('a' + i).asInstanceOf[Char].toString)
+        val in = (0 to 25).map(i => ('a' + i).asInstanceOf[Char].toString)
         Source(in).runWith(
-          JmsProducer.textSink(JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName))
-        )
+          JmsProducer.textSink(JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName)))
 
         val jmsSource: Source[AckEnvelope, JmsConsumerControl] = JmsConsumer.ackSource(
-          JmsConsumerSettings(consumerConfig, connectionFactory).withSessionCount(5).withQueue(queueName)
-        )
+          JmsConsumerSettings(consumerConfig, connectionFactory).withSessionCount(5).withQueue(queueName))
 
         val result = jmsSource
           .throttle(10, 1.second, 1, ThrottleMode.shaping)
@@ -164,8 +156,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
         .ackSource(
           JmsConsumerSettings(consumerConfig, connectionFactory)
             .withQueue("test")
-            .withConnectionRetrySettings(ConnectionRetrySettings(system).withMaxRetries(3))
-        )
+            .withConnectionRetrySettings(ConnectionRetrySettings(system).withMaxRetries(3)))
         .runWith(Sink.seq)
       Thread.sleep(500)
       server.stop()
@@ -179,21 +170,17 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
 
       val topicName = createName("topic")
       val jmsTopicSink: Sink[String, Future[Done]] = JmsProducer.textSink(
-        JmsProducerSettings(producerConfig, connectionFactory).withTopic(topicName)
-      )
+        JmsProducerSettings(producerConfig, connectionFactory).withTopic(topicName))
       val jmsTopicSink2: Sink[String, Future[Done]] = JmsProducer.textSink(
-        JmsProducerSettings(producerConfig, connectionFactory).withTopic(topicName)
-      )
+        JmsProducerSettings(producerConfig, connectionFactory).withTopic(topicName))
 
       val in = List("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k")
       val inNumbers = (1 to 10).map(_.toString)
 
       val jmsTopicSource: Source[AckEnvelope, JmsConsumerControl] = JmsConsumer.ackSource(
-        JmsConsumerSettings(consumerConfig, connectionFactory).withSessionCount(1).withTopic(topicName)
-      )
+        JmsConsumerSettings(consumerConfig, connectionFactory).withSessionCount(1).withTopic(topicName))
       val jmsSource2: Source[AckEnvelope, JmsConsumerControl] = JmsConsumer.ackSource(
-        JmsConsumerSettings(consumerConfig, connectionFactory).withSessionCount(1).withTopic(topicName)
-      )
+        JmsConsumerSettings(consumerConfig, connectionFactory).withSessionCount(1).withTopic(topicName))
 
       val expectedSize = in.size + inNumbers.size
       val result1 = jmsTopicSource
@@ -209,7 +196,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
         .runWith(Sink.seq)
         .map(_.sorted)
 
-      //We wait a little to be sure that the source is connected
+      // We wait a little to be sure that the source is connected
       Thread.sleep(500)
 
       Source(in).runWith(jmsTopicSink)
@@ -223,8 +210,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
     "ensure no message loss when stopping a stream" in withConnectionFactory() { connectionFactory =>
       val queueName = createName("numbers")
       val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
-        JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName)
-      )
+        JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName))
 
       val (publishKillSwitch, publishedData) = Source
         .unfold(1)(n => Some(n + 1 -> n))
@@ -237,8 +223,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
       val jmsSource: Source[AckEnvelope, JmsConsumerControl] = JmsConsumer.ackSource(
         JmsConsumerSettings(consumerConfig, connectionFactory)
           .withSessionCount(5)
-          .withQueue(queueName)
-      )
+          .withQueue(queueName))
 
       val resultQueue = new LinkedBlockingQueue[String]()
 
@@ -248,8 +233,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
           Sink.foreach { env =>
             resultQueue.add(env.message.asInstanceOf[TextMessage].getText)
             env.acknowledge()
-          }
-        )(Keep.both)
+          })(Keep.both)
         .run()
 
       // Need to wait for the stream to have started and running for sometime
@@ -272,8 +256,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
           Sink.foreach { env =>
             resultQueue.add(env.message.asInstanceOf[TextMessage].getText)
             env.acknowledge()
-          }
-        )
+          })
         .run()
 
       val resultList = new mutable.ArrayBuffer[String](numsIn.size)
@@ -297,8 +280,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
     "ensure no message loss when aborting a stream" in withConnectionFactory() { connectionFactory =>
       val queueName = createName("numbers")
       val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
-        JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName)
-      )
+        JmsProducerSettings(producerConfig, connectionFactory).withQueue(queueName))
 
       val (publishKillSwitch, publishedData) = Source
         .unfold(1)(n => Some(n + 1 -> n))
@@ -315,8 +297,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
         JmsConsumerSettings(consumerConfig, connectionFactory)
           .withSessionCount(5)
           .withQueue(queueName)
-          .withAcknowledgeMode(individualAck)
-      )
+          .withAcknowledgeMode(individualAck))
 
       val resultQueue = new LinkedBlockingQueue[String]()
 
@@ -326,8 +307,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
           Sink.foreach { env =>
             resultQueue.add(env.message.asInstanceOf[TextMessage].getText)
             env.acknowledge()
-          }
-        )(Keep.both)
+          })(Keep.both)
         .run()
 
       // Need to wait for the stream to have started and running for sometime.
@@ -355,8 +335,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
           Sink.foreach { env =>
             resultQueue.add(env.message.asInstanceOf[TextMessage].getText)
             env.acknowledge()
-          }
-        )
+          })
         .run()
 
       val resultList = new mutable.ArrayBuffer[String](numsIn.size)
@@ -388,15 +367,14 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
         JmsConsumerSettings(system, connectionFactory)
           .withMaxPendingAcks(100)
           .withMaxAckInterval(maxAckInterval)
-          .withQueue(testQueue)
-      )
+          .withQueue(testQueue))
 
       val (consumerControl, probe) = source
         .map { env =>
           env.acknowledge()
           env.message match {
             case message: TextMessage => Some(message.getText)
-            case _ => None
+            case _                    => None
 
           }
         }

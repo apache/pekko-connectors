@@ -6,11 +6,11 @@ package akka.stream.alpakka.amqp.impl
 
 import akka.Done
 import akka.annotation.InternalApi
-import akka.stream.alpakka.amqp.{AmqpReplyToSinkSettings, WriteMessage}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, InHandler}
-import akka.stream.{ActorAttributes, Attributes, Inlet, SinkShape}
+import akka.stream.alpakka.amqp.{ AmqpReplyToSinkSettings, WriteMessage }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
+import akka.stream.{ ActorAttributes, Attributes, Inlet, SinkShape }
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Connects to an AMQP server upon materialization and sends write messages to the server.
@@ -31,58 +31,56 @@ private[amqp] final class AmqpReplyToSinkStage(settings: AmqpReplyToSinkSettings
   override def createLogicAndMaterializedValue(inheritedAttributes: Attributes): (GraphStageLogic, Future[Done]) = {
     val streamCompletion = Promise[Done]()
     (new GraphStageLogic(shape) with AmqpConnectorLogic {
-      override val settings = stage.settings
+        override val settings = stage.settings
 
-      override def whenConnected(): Unit = pull(in)
+        override def whenConnected(): Unit = pull(in)
 
-      override def postStop(): Unit = {
-        streamCompletion.tryFailure(new RuntimeException("stage stopped unexpectedly"))
-        super.postStop()
-      }
+        override def postStop(): Unit = {
+          streamCompletion.tryFailure(new RuntimeException("stage stopped unexpectedly"))
+          super.postStop()
+        }
 
-      override def onFailure(ex: Throwable): Unit = {
-        streamCompletion.tryFailure(ex)
-        super.onFailure(ex)
-      }
+        override def onFailure(ex: Throwable): Unit = {
+          streamCompletion.tryFailure(ex)
+          super.onFailure(ex)
+        }
 
-      setHandler(
-        in,
-        new InHandler {
+        setHandler(
+          in,
+          new InHandler {
 
-          override def onUpstreamFailure(ex: Throwable): Unit = {
-            streamCompletion.failure(ex)
-            super.onUpstreamFailure(ex)
-          }
-
-          override def onUpstreamFinish(): Unit = {
-            streamCompletion.success(Done)
-            super.onUpstreamFinish()
-          }
-
-          override def onPush(): Unit = {
-            val elem = grab(in)
-
-            val replyTo = elem.properties.flatMap(properties => Option(properties.getReplyTo))
-
-            if (replyTo.isDefined) {
-              channel.basicPublish(
-                elem.routingKey.getOrElse(""),
-                replyTo.get,
-                elem.mandatory,
-                elem.immediate,
-                elem.properties.orNull,
-                elem.bytes.toArray
-              )
-            } else if (settings.failIfReplyToMissing) {
-              onFailure(new RuntimeException("Reply-to header was not set"))
+            override def onUpstreamFailure(ex: Throwable): Unit = {
+              streamCompletion.failure(ex)
+              super.onUpstreamFailure(ex)
             }
 
-            tryPull(in)
-          }
-        }
-      )
+            override def onUpstreamFinish(): Unit = {
+              streamCompletion.success(Done)
+              super.onUpstreamFinish()
+            }
 
-    }, streamCompletion.future)
+            override def onPush(): Unit = {
+              val elem = grab(in)
+
+              val replyTo = elem.properties.flatMap(properties => Option(properties.getReplyTo))
+
+              if (replyTo.isDefined) {
+                channel.basicPublish(
+                  elem.routingKey.getOrElse(""),
+                  replyTo.get,
+                  elem.mandatory,
+                  elem.immediate,
+                  elem.properties.orNull,
+                  elem.bytes.toArray)
+              } else if (settings.failIfReplyToMissing) {
+                onFailure(new RuntimeException("Reply-to header was not set"))
+              }
+
+              tryPull(in)
+            }
+          })
+
+      }, streamCompletion.future)
   }
 
   override def toString: String = "AmqpReplyToSink"

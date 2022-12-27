@@ -6,12 +6,12 @@ package akka.stream.alpakka.google.auth
 import akka.annotation.InternalApi
 import akka.http.scaladsl.model.headers.OAuth2BearerToken
 import akka.stream.alpakka.google.RequestSettings
-import com.google.auth.{Credentials => GoogleCredentials}
+import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 
 import java.net.URI
 import java.util
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 @InternalApi
 private[alpakka] object NoCredentials {

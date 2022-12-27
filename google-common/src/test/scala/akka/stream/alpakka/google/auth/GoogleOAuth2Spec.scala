@@ -5,7 +5,7 @@
 package akka.stream.alpakka.google.auth
 
 import akka.actor.ActorSystem
-import akka.stream.alpakka.google.{GoogleSettings, HoverflySupport}
+import akka.stream.alpakka.google.{ GoogleSettings, HoverflySupport }
 import akka.testkit.TestKit
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.core.model.RequestFieldMatcher.newRegexMatcher
@@ -60,10 +60,8 @@ class GoogleOAuth2Spec
             .queryParam("prettyPrint", "false")
             .body(newRegexMatcher("grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=*"))
             .willReturn(
-              success("""{"access_token": "token", "token_type": "String", "expires_in": 3600}""", "application/json")
-            )
-        )
-      )
+              success("""{"access_token": "token", "token_type": "String", "expires_in": 3600}""",
+                "application/json"))))
 
       implicit val settings = GoogleSettings().requestSettings
       GoogleOAuth2.getAccessToken("email", privateKey, scopes).futureValue should matchPattern {

@@ -6,21 +6,21 @@ package akka.stream.alpakka.sse
 package scaladsl
 
 import akka.NotUsed
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.http.scaladsl.client.RequestBuilding.Get
 import akka.http.scaladsl.coding.Coders
 import akka.http.scaladsl.model.MediaTypes.`text/event-stream`
-import akka.http.scaladsl.model.headers.{`Last-Event-ID`, Accept}
+import akka.http.scaladsl.model.headers.{ `Last-Event-ID`, Accept }
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.model.sse.ServerSentEvent.heartbeat
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse, Uri}
+import akka.http.scaladsl.model.{ HttpRequest, HttpResponse, Uri }
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.http.scaladsl.unmarshalling.sse.EventStreamUnmarshalling
 import akka.stream.SourceShape
-import akka.stream.scaladsl.{Broadcast, Flow, GraphDSL, Merge, Source}
+import akka.stream.scaladsl.{ Broadcast, Flow, GraphDSL, Merge, Source }
 
 import scala.concurrent.Future
-import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.concurrent.duration.{ Duration, FiniteDuration }
 
 /**
  * This stream processing stage establishes a continuous source of server-sent events from the given URI.
@@ -32,7 +32,7 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
  * Progress (including termination) is controlled by the connected flow or sink, e.g. a retry delay can be implemented
  * by streaming the materialized values of the handler via a throttle.
  *
- *{{{
+ * {{{
  * + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
  *                                               +---------------------+
  * |                                             |       trigger       | |
@@ -63,7 +63,7 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
  *                     ServerSentEvent|          +---------------------+
  * |                                  v                                  |
  *  - - - - - - - - - - - - - - - - - o - - - - - - - - - - - - - - - - -
- *}}}
+ * }}}
  */
 object EventSource {
 
@@ -82,11 +82,10 @@ object EventSource {
    * @return continuous source of server-sent events
    */
   def apply(uri: Uri,
-            send: HttpRequest => Future[HttpResponse],
-            initialLastEventId: Option[String] = None,
-            retryDelay: FiniteDuration = Duration.Zero)(
-      implicit system: ClassicActorSystemProvider
-  ): EventSource = {
+      send: HttpRequest => Future[HttpResponse],
+      initialLastEventId: Option[String] = None,
+      retryDelay: FiniteDuration = Duration.Zero)(
+      implicit system: ClassicActorSystemProvider): EventSource = {
     import EventStreamUnmarshalling.fromEventsStream
     implicit val actorSystem: ActorSystem = system.classicSystem
     import actorSystem.dispatcher

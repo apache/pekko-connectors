@@ -4,7 +4,7 @@
 
 package docs.scaladsl
 
-import java.util.{Date, UUID}
+import java.util.{ Date, UUID }
 
 case class Person(id: Int, name: String, birthDate: Date)
 case class Animal(id: Int, name: String, owner: Int)

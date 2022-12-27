@@ -6,9 +6,9 @@ package akka.stream.alpakka.reference.impl
 
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.alpakka.reference.{ReferenceWriteMessage, ReferenceWriteResult}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.alpakka.reference.{ ReferenceWriteMessage, ReferenceWriteResult }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 /**
  * INTERNAL API
@@ -18,8 +18,7 @@ import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
  * line in scaladoc to communicate to Java developers that this is private API.
  */
 @InternalApi private[reference] final class ReferenceFlowStageLogic(
-    val shape: FlowShape[ReferenceWriteMessage, ReferenceWriteResult]
-) extends GraphStageLogic(shape) {
+    val shape: FlowShape[ReferenceWriteMessage, ReferenceWriteResult]) extends GraphStageLogic(shape) {
 
   private def in = shape.in
   private def out = shape.out
@@ -37,12 +36,12 @@ import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
         val total = msg.metrics.values.sum
         push(out, new ReferenceWriteResult(msg, msg.metrics + ("total" -> total), 400))
       }
-    }
-  )
+    })
 
-  setHandler(out, new OutHandler {
-    override def onPull(): Unit = pull(in)
-  })
+  setHandler(out,
+    new OutHandler {
+      override def onPull(): Unit = pull(in)
+    })
 
   /**
    * Cleanup logic

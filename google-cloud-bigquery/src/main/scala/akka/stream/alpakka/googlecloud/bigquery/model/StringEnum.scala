@@ -5,7 +5,7 @@
 package akka.stream.alpakka.googlecloud.bigquery.model
 
 import akka.annotation.InternalApi
-import spray.json.{deserializationError, JsString, JsValue, JsonFormat}
+import spray.json.{ deserializationError, JsString, JsValue, JsonFormat }
 
 import scala.reflect.ClassTag
 
@@ -21,7 +21,7 @@ private[model] object StringEnum {
     override def write(obj: T): JsValue = JsString(obj.value)
     override def read(json: JsValue): T = json match {
       case JsString(x) => f(x)
-      case x => deserializationError(s"Expected ${ct.runtimeClass.getSimpleName} as JsString, but got " + x)
+      case x           => deserializationError(s"Expected ${ct.runtimeClass.getSimpleName} as JsString, but got " + x)
     }
   }
 }

@@ -6,19 +6,19 @@ package docs.scaladsl
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.hdfs._
-import akka.stream.alpakka.hdfs.scaladsl.{HdfsFlow, HdfsSource}
+import akka.stream.alpakka.hdfs.scaladsl.{ HdfsFlow, HdfsSource }
 import akka.stream.alpakka.hdfs.util.ScalaTestUtils._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.hdfs.MiniDFSCluster
 import org.apache.hadoop.io.Text
 import org.apache.hadoop.io.compress.DefaultCodec
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContextExecutor, Future}
+import scala.concurrent.{ Await, ExecutionContextExecutor, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -48,8 +48,7 @@ class HdfsReaderSpec
         fs,
         SyncStrategy.count(500),
         RotationStrategy.size(0.5, FileUnit.KB),
-        HdfsWritingSettings()
-      )
+        HdfsWritingSettings())
 
       val content = generateFakeContent(1, FileUnit.KB.byteCount)
 
@@ -64,12 +63,11 @@ class HdfsReaderSpec
           .sequence(
             logs.map { log =>
               val path = new Path("/tmp/alpakka", log.path)
-              //#define-data-source
+              // #define-data-source
               val source = HdfsSource.data(fs, path)
-              //#define-data-source
+              // #define-data-source
               source.runWith(Sink.seq)
-            }
-          )
+            })
           .map(_.flatten)
       }
 
@@ -86,8 +84,7 @@ class HdfsReaderSpec
         SyncStrategy.count(1),
         RotationStrategy.size(0.1, FileUnit.MB),
         codec,
-        settings
-      )
+        settings)
 
       val content = generateFakeContentWithPartitions(1, FileUnit.MB.byteCount, 30)
 
@@ -102,12 +99,11 @@ class HdfsReaderSpec
           .sequence(
             logs.map { log =>
               val path = new Path("/tmp/alpakka", log.path)
-              //#define-compressed-source
+              // #define-compressed-source
               val source = HdfsSource.compressed(fs, path, codec)
-              //#define-compressed-source
+              // #define-compressed-source
               source.runWith(Sink.seq)
-            }
-          )
+            })
           .map(_.flatten)
       }
 
@@ -122,8 +118,7 @@ class HdfsReaderSpec
         RotationStrategy.size(1, FileUnit.MB),
         settings,
         classOf[Text],
-        classOf[Text]
-      )
+        classOf[Text])
 
       val content = generateFakeContentForSequence(0.5, FileUnit.MB.byteCount)
 
@@ -138,12 +133,11 @@ class HdfsReaderSpec
           .sequence(
             logs.map { log =>
               val path = new Path("/tmp/alpakka", log.path)
-              //#define-sequence-source
+              // #define-sequence-source
               val source = HdfsSource.sequence(fs, path, classOf[Text], classOf[Text])
-              //#define-sequence-source
+              // #define-sequence-source
               source.runWith(Sink.seq)
-            }
-          )
+            })
           .map(_.flatten)
       }
 

@@ -28,9 +28,9 @@ object MqttFlow {
    * @param defaultQos Quality of service level applied for messages not specifying a message specific value
    */
   def atMostOnce(settings: MqttConnectionSettings,
-                 subscriptions: MqttSubscriptions,
-                 bufferSize: Int,
-                 defaultQos: MqttQoS): Flow[MqttMessage, MqttMessage, CompletionStage[Done]] =
+      subscriptions: MqttSubscriptions,
+      bufferSize: Int,
+      defaultQos: MqttQoS): Flow[MqttMessage, MqttMessage, CompletionStage[Done]] =
     scaladsl.MqttFlow
       .atMostOnce(settings, subscriptions, bufferSize, defaultQos)
       .mapMaterializedValue(_.toJava)
@@ -48,8 +48,7 @@ object MqttFlow {
       settings: MqttConnectionSettings,
       subscriptions: MqttSubscriptions,
       bufferSize: Int,
-      defaultQos: MqttQoS
-  ): Flow[MqttMessage, MqttMessageWithAck, CompletionStage[Done]] =
+      defaultQos: MqttQoS): Flow[MqttMessage, MqttMessageWithAck, CompletionStage[Done]] =
     scaladsl.MqttFlow
       .atLeastOnce(settings, subscriptions, bufferSize, defaultQos)
       .map(MqttMessageWithAck.toJava)
@@ -68,8 +67,7 @@ object MqttFlow {
       settings: MqttConnectionSettings,
       subscriptions: MqttSubscriptions,
       bufferSize: Int,
-      defaultQos: MqttQoS
-  ): Flow[MqttMessageWithAck, MqttMessageWithAck, CompletionStage[Done]] =
+      defaultQos: MqttQoS): Flow[MqttMessageWithAck, MqttMessageWithAck, CompletionStage[Done]] =
     scaladsl.MqttFlow
       .atLeastOnceWithAckForJava(settings, subscriptions, bufferSize, defaultQos)
       .map(MqttMessageWithAck.toJava)

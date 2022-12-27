@@ -7,10 +7,10 @@ package docs.scaladsl
 import java.nio.file.Paths
 
 import akka.NotUsed
-import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
-import akka.stream.scaladsl.{FileIO, Flow, Keep, Sink, Source}
+import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+import akka.stream.scaladsl.{ FileIO, Flow, Keep, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.util.ByteString
 
 import scala.collection.immutable.Seq
@@ -111,8 +111,7 @@ class CsvParsingSpec extends CsvSpec {
       val input = Seq(
         "eins,zw",
         "ei,drei\nuno",
-        ",dos,tres\n"
-      ).map(ByteString(_))
+        ",dos,tres\n").map(ByteString(_))
       val fut = Source.apply(input).via(CsvParsing.lineScanner()).map(_.map(_.utf8String)).runWith(Sink.seq)
       val res = fut.futureValue
       res.head should be(List("eins", "zwei", "drei"))
@@ -189,18 +188,14 @@ class CsvParsingSpec extends CsvSpec {
           "Make" -> "Ford",
           "Model" -> "E350",
           "Description" -> "ac, abs, moon",
-          "Price" -> "3000.00"
-        )
-      )
+          "Price" -> "3000.00"))
       res(1) should contain allElementsOf (
         Map(
           "Year" -> "1999",
           "Make" -> "Chevy",
           "Model" -> "Venture \"Extended Edition\"",
           "Description" -> "",
-          "Price" -> "4900.00"
-        )
-      )
+          "Price" -> "4900.00"))
       res(2) should contain allElementsOf (
         Map(
           "Year" -> "1996",
@@ -208,45 +203,35 @@ class CsvParsingSpec extends CsvSpec {
           "Model" -> "Grand Cherokee",
           "Description" -> """MUST SELL!
                             |air, moon roof, loaded""".stripMargin,
-          "Price" -> "4799.00"
-        )
-      )
+          "Price" -> "4799.00"))
       res(3) should contain allElementsOf (
         Map(
           "Year" -> "1999",
           "Make" -> "Chevy",
           "Model" -> "Venture \"Extended Edition, Very Large\"",
           "Description" -> "",
-          "Price" -> "5000.00"
-        )
-      )
+          "Price" -> "5000.00"))
       res(4) should contain allElementsOf (
         Map(
           "Year" -> "",
           "Make" -> "",
           "Model" -> "Venture \"Extended Edition\"",
           "Description" -> "",
-          "Price" -> "4900.00"
-        )
-      )
+          "Price" -> "4900.00"))
       res(5) should contain allElementsOf (
         Map(
           "Year" -> "1995",
           "Make" -> "VW",
           "Model" -> "Golf \"GTE\"",
           "Description" -> "",
-          "Price" -> "5000.00"
-        )
-      )
+          "Price" -> "5000.00"))
       res(6) should contain allElementsOf (
         Map(
           "Year" -> "1996",
           "Make" -> "VW",
           "Model" -> "Golf GTE",
           "Description" -> "",
-          "Price" -> "5000.00"
-        )
-      )
+          "Price" -> "5000.00"))
     }
   }
 }

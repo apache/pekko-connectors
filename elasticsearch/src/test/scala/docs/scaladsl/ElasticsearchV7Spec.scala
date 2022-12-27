@@ -5,12 +5,12 @@
 package docs.scaladsl
 
 import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.model.{HttpMethods, HttpRequest, Uri}
-import akka.stream.alpakka.elasticsearch.scaladsl.{ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource}
+import akka.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
+import akka.stream.alpakka.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
 import akka.stream.alpakka.elasticsearch._
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.testkit.TestKit
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import spray.json.jsonReader
 
 import scala.collection.immutable
@@ -21,8 +21,7 @@ import spray.json._
 class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils {
 
   private val connectionSettings: ElasticsearchConnectionSettings = ElasticsearchConnectionSettings(
-    "http://localhost:9202"
-  )
+    "http://localhost:9202")
   private val baseSourceSettings = ElasticsearchSourceSettings(connectionSettings).withApiVersion(ApiVersion.V7)
   private val baseWriteSettings = ElasticsearchWriteSettings(connectionSettings).withApiVersion(ApiVersion.V7)
 
@@ -46,8 +45,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .create(
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[spray.json.JsObject] =>
           val book: Book = jsonReader[Book].read(message.source)
           WriteMessage.createIndexMessage(message.id, book)
@@ -55,9 +53,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(
           ElasticsearchSink.create[Book](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
 
       copy.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, indexName)
@@ -69,8 +65,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
@@ -82,17 +77,14 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .typed[Book](
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[Book] =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .runWith(
           ElasticsearchSink.create[Book](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
 
       copy.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, indexName)
@@ -104,8 +96,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
@@ -117,17 +108,14 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .typed[Book](
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[Book] =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .via(
           ElasticsearchFlow.create[Book](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .runWith(Sink.seq)
 
       // Assert no errors
@@ -141,8 +129,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "store properly formatted JSON from Strings" in {
@@ -152,15 +139,11 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         immutable.Seq(
           WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.toString()),
           WriteMessage.createIndexMessage("2", Book("Faust").toJson.toString()),
-          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.toString())
-        )
-      ).via(
-          ElasticsearchFlow.create(
-            constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings,
-            StringMessageWriter
-          )
-        )
+          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.toString()))).via(
+        ElasticsearchFlow.create(
+          constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
+          settings = baseWriteSettings,
+          StringMessageWriter))
         .runWith(Sink.seq)
 
       // Assert no errors
@@ -170,8 +153,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue.sorted shouldEqual Seq(
         "Das Parfum",
         "Die unendliche Geschichte",
-        "Faust"
-      )
+        "Faust")
     }
 
     "kafka-example - store documents and pass Responses with passThrough" in {
@@ -186,8 +168,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
         KafkaMessage(Book("Book 2"), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3"), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3"), KafkaOffset(2)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -206,9 +187,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .via( // write to elastic
           ElasticsearchFlow.createWithPassThrough[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -222,7 +201,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
-      readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+      readTitlesFrom(ApiVersion.V7, baseSourceSettings,
+        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
         .map(_.book.title)
     }
 
@@ -238,8 +218,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
         KafkaMessage(Book("Book 2"), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3"), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3"), KafkaOffset(2)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -259,9 +238,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .via( // write to elastic
           ElasticsearchFlow.createBulk[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map(_.map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -275,7 +252,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
-      readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+      readTitlesFrom(ApiVersion.V7, baseSourceSettings,
+        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
         .map(_.book.title)
     }
 
@@ -294,8 +272,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         KafkaMessage(Book("Book 2"), KafkaOffset(2)),
         KafkaMessage(Book("Book B", shouldSkip = Some(true)), KafkaOffset(3)),
         KafkaMessage(Book("Book 3"), KafkaOffset(4)),
-        KafkaMessage(Book("Book C", shouldSkip = Some(true)), KafkaOffset(5))
-      )
+        KafkaMessage(Book("Book C", shouldSkip = Some(true)), KafkaOffset(5)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -317,9 +294,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .via( // write to elastic
           ElasticsearchFlow.createWithPassThrough[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -333,7 +308,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2, 3, 4, 5)
-      readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+      readTitlesFrom(ApiVersion.V7, baseSourceSettings,
+        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
         .filterNot(_.book.shouldSkip.getOrElse(false))
         .map(_.book.title)
     }
@@ -350,8 +326,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1", shouldSkip = Some(true)), KafkaOffset(0)),
         KafkaMessage(Book("Book 2", shouldSkip = Some(true)), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3", shouldSkip = Some(true)), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3", shouldSkip = Some(true)), KafkaOffset(2)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -375,9 +350,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .via( // write to elastic
           ElasticsearchFlow.createWithPassThrough[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -402,16 +375,13 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         WriteMessage.createUpsertMessage(id = "00003", source = Book("Book 3")),
         WriteMessage.createUpdateMessage(id = "00004", source = Book("Book 4")),
         WriteMessage.createCreateMessage(id = "00005", source = Book("Book 5")),
-        WriteMessage.createDeleteMessage(id = "00002")
-      )
+        WriteMessage.createDeleteMessage(id = "00002"))
 
       val writeResults = Source(requests)
         .via(
           ElasticsearchFlow.create[Book](
             constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
-            baseWriteSettings
-          )
-        )
+            baseWriteSettings))
         .runWith(Sink.seq)
 
       val results = writeResults.futureValue
@@ -426,18 +396,16 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       val readBooks = ElasticsearchSource(
         constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
         """{"match_all": {}}""",
-        baseSourceSettings
-      ).map { message =>
-          message.source
-        }
+        baseSourceSettings).map { message =>
+        message.source
+      }
         .runWith(Sink.seq)
 
       // Docs should contain both columns
       readBooks.futureValue.sortBy(_.fields("title").compactPrint) shouldEqual Seq(
         Book("Book 1").toJson,
         Book("Book 3").toJson,
-        Book("Book 5").toJson
-      )
+        Book("Book 5").toJson)
     }
 
     "use indexName supplied in message if present" in {
@@ -449,8 +417,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .typed[Book](
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[Book] =>
           WriteMessage
             .createIndexMessage(message.id, message.source)
@@ -459,9 +426,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(
           ElasticsearchSink.create[Book](
             constructElasticsearchParams("this-is-not-the-index-we-are-using", "_doc", ApiVersion.V7),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
 
       writeCustomIndex.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, customIndexName)
@@ -472,8 +437,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
@@ -492,8 +456,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       val docs = List(
         TestDoc("1", "a1", Some("b1"), "c1"),
         TestDoc("2", "a2", Some("b2"), "c2"),
-        TestDoc("3", "a3", Some("b3"), "c3")
-      )
+        TestDoc("3", "a3", Some("b3"), "c3"))
 
       // insert new documents
       val writes = Source(docs)
@@ -503,9 +466,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .via(
           ElasticsearchFlow.create[TestDoc](
             constructElasticsearchParams(indexName, typeName, ApiVersion.V7),
-            baseWriteSettings.withBufferSize(5)
-          )
-        )
+            baseWriteSettings.withBufferSize(5)))
         .runWith(Sink.seq)
 
       writes.futureValue.filter(!_.success) shouldBe empty
@@ -518,10 +479,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams(indexName, typeName, ApiVersion.V7),
           searchParams = Map(
             "query" -> """ {"match_all": {}} """,
-            "_source" -> """ ["id", "a", "c"] """
-          ),
-          baseSourceSettings
-        )
+            "_source" -> """ ["id", "a", "c"] """),
+          baseSourceSettings)
         .map { message =>
           message.source
         }

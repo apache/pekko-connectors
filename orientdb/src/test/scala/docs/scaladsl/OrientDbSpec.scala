@@ -14,7 +14,7 @@ import akka.stream.alpakka.orientdb.{
   OrientDbWriteSettings
 }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.testkit.TestKit
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
@@ -41,14 +41,14 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
   implicit val system: ActorSystem = ActorSystem()
 
-  //#init-settings
+  // #init-settings
 
   val url = "remote:127.0.0.1:2424/"
   val dbName = "GratefulDeadConcertsScala"
   val dbUrl = s"$url$dbName"
   val username = "root"
   val password = "root"
-  //#init-settings
+  // #init-settings
 
   val sourceClass = "source1"
   val sinkClass2 = "sink2"
@@ -56,9 +56,9 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
   val sink5 = "sink5"
   val sink7 = "sink7"
 
-  //#define-class
+  // #define-class
   case class Book(title: String)
-  //#define-class
+  // #define-class
 
   var oServerAdmin: OServerAdmin = _
   var oDatabase: OPartitionedDatabasePool = _
@@ -70,13 +70,13 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       oServerAdmin.createDatabase(dbName, "document", "plocal")
     }
 
-    //#init-settings
+    // #init-settings
 
     val oDatabase: OPartitionedDatabasePool =
       new OPartitionedDatabasePool(dbUrl, username, password, Runtime.getRuntime.availableProcessors(), 10)
 
     system.registerOnTermination(() -> oDatabase.close())
-    //#init-settings
+    // #init-settings
     this.oDatabase = oDatabase
     client = oDatabase.acquire()
 
@@ -146,32 +146,28 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
   "OrientDB connector" should {
     "consume and publish documents as ODocument" in assertAllStagesStopped {
-      //Copy source to sink1 through ODocument stream
+      // Copy source to sink1 through ODocument stream
       val f1 = OrientDbSource(
         sourceClass,
-        OrientDbSourceSettings(oDatabase)
-      ).map { message: OrientDbReadResult[ODocument] =>
-          OrientDbWriteMessage(message.oDocument)
-        }
+        OrientDbSourceSettings(oDatabase)).map { message: OrientDbReadResult[ODocument] =>
+        OrientDbWriteMessage(message.oDocument)
+      }
         .groupedWithin(10, 50.millis)
         .runWith(
           OrientDbSink(
             sink4,
-            OrientDbWriteSettings(oDatabase)
-          )
-        )
+            OrientDbWriteSettings(oDatabase)))
 
       f1.futureValue shouldBe Done
 
-      //#run-odocument
+      // #run-odocument
       val result: Future[immutable.Seq[String]] = OrientDbSource(
         sink4,
-        OrientDbSourceSettings(oDatabase)
-      ).map { message: OrientDbReadResult[ODocument] =>
-          message.oDocument.field[String]("book_title")
-        }
+        OrientDbSourceSettings(oDatabase)).map { message: OrientDbReadResult[ODocument] =>
+        message.oDocument.field[String]("book_title")
+      }
         .runWith(Sink.seq)
-      //#run-odocument
+      // #run-odocument
 
       result.futureValue.sorted shouldEqual Seq(
         "Akka Concurrency",
@@ -180,40 +176,35 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
   "OrientDBFlow" should {
     "store ODocuments and pass ODocuments" in assertAllStagesStopped {
       // Copy source/book to sink3/book through ODocument stream
-      //#run-flow
+      // #run-flow
 
       val f1 = OrientDbSource(
         sourceClass,
-        OrientDbSourceSettings(oDatabase)
-      ).map { message: OrientDbReadResult[ODocument] =>
-          OrientDbWriteMessage(message.oDocument)
-        }
+        OrientDbSourceSettings(oDatabase)).map { message: OrientDbReadResult[ODocument] =>
+        OrientDbWriteMessage(message.oDocument)
+      }
         .groupedWithin(10, 50.millis)
         .via(
           OrientDbFlow.create(
             sink5,
-            OrientDbWriteSettings(oDatabase)
-          )
-        )
+            OrientDbWriteSettings(oDatabase)))
         .runWith(Sink.seq)
-      //#run-flow
+      // #run-flow
 
       f1.futureValue.flatten should have(size(7))
 
       val f2 = OrientDbSource(
         sink5,
-        OrientDbSourceSettings(oDatabase)
-      ).map { message =>
-          message.oDocument.field[String]("book_title")
-        }
+        OrientDbSourceSettings(oDatabase)).map { message =>
+        message.oDocument.field[String]("book_title")
+      }
         .runWith(Sink.seq)
 
       f2.futureValue.sorted shouldEqual Seq(
@@ -223,8 +214,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "support typed source and sink" in assertAllStagesStopped {
@@ -248,7 +238,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
     }
 
     "kafka-example - store documents and pass Responses with passThrough" in assertAllStagesStopped {
-      //#kafka-example
+      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // After we've written them to oRIENTdb, we want
       // to commit the offset to Kafka
@@ -259,8 +249,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
         KafkaMessage(Book("Book 2"), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3"), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3"), KafkaOffset(2)))
 
       var committedOffsets = List[KafkaOffset]()
 
@@ -279,9 +268,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
         .via(
           OrientDbFlow.createWithPassThrough(
             sink7,
-            OrientDbWriteSettings(oDatabase)
-          )
-        )
+            OrientDbWriteSettings(oDatabase)))
         .map { messages: Seq[OrientDbWriteMessage[ODocument, KafkaOffset]] =>
           messages.foreach { message =>
             commitToKafka(message.passThrough)
@@ -289,23 +276,21 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
         }
         .runWith(Sink.ignore)
 
-      //#kafka-example
+      // #kafka-example
       f1.futureValue shouldBe Done
       assert(List(0, 1, 2) == committedOffsets.map(_.offset))
 
       val f2 = OrientDbSource(
         sink7,
-        OrientDbSourceSettings(oDatabase)
-      ).map { message =>
-          message.oDocument.field[String]("book_title")
-        }
+        OrientDbSourceSettings(oDatabase)).map { message =>
+        message.oDocument.field[String]("book_title")
+      }
         .runWith(Sink.seq)
 
       f2.futureValue.sorted shouldEqual Seq(
         "Book 1",
         "Book 2",
-        "Book 3"
-      )
+        "Book 3")
     }
   }
 }

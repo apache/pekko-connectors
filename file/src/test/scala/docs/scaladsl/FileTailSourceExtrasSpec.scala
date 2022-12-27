@@ -10,13 +10,13 @@ import java.nio.file.Files
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.file.DirectoryChange
-import akka.stream.alpakka.file.scaladsl.{DirectoryChangesSource, FileTailSource}
+import akka.stream.alpakka.file.scaladsl.{ DirectoryChangesSource, FileTailSource }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Source}
+import akka.stream.scaladsl.{ Keep, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestKit
-import com.google.common.jimfs.{Configuration, Jimfs}
+import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
@@ -48,9 +48,10 @@ class FileTailSourceExtrasSpec
           case (p, DirectoryChange.Deletion) if path == p =>
             throw new FileNotFoundException(path.toString)
         }
-        .recoverWithRetries(1, {
-          case _: FileNotFoundException => Source.empty
-        })
+        .recoverWithRetries(1,
+          {
+            case _: FileNotFoundException => Source.empty
+          })
 
       val stream = FileTailSource
         .lines(path = path, maxLineSize = 8192, pollingInterval = 250.millis)
@@ -78,9 +79,10 @@ class FileTailSourceExtrasSpec
       val stream = FileTailSource
         .lines(path = path, maxLineSize = 8192, pollingInterval = 250.millis)
         .idleTimeout(5.seconds)
-        .recoverWithRetries(1, {
-          case _: TimeoutException => Source.empty
-        })
+        .recoverWithRetries(1,
+          {
+            case _: TimeoutException => Source.empty
+          })
 
       // #shutdown-on-idle-timeout
 

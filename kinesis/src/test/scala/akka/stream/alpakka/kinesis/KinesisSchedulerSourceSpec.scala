@@ -9,15 +9,15 @@ import java.time.Instant
 import java.util.concurrent.Semaphore
 
 import akka.stream.KillSwitches
-import akka.stream.alpakka.kinesis.CommittableRecord.{BatchData, ShardProcessorData}
+import akka.stream.alpakka.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
 import akka.stream.alpakka.kinesis.KinesisSchedulerErrors.SchedulerUnexpectedShutdown
-import akka.stream.alpakka.kinesis.SwitchMode.{Close, Open}
+import akka.stream.alpakka.kinesis.SwitchMode.{ Close, Open }
 import akka.stream.alpakka.kinesis.impl.ShardProcessor
 import akka.stream.alpakka.kinesis.scaladsl.KinesisSchedulerSource
 import akka.stream.alpakka.testkit.scaladsl.Repeated
 import akka.stream.scaladsl.Keep
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
@@ -28,7 +28,7 @@ import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.model.Record
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.lifecycle.ShutdownReason
-import software.amazon.kinesis.lifecycle.events.{InitializationInput, ProcessRecordsInput, ShardEndedInput}
+import software.amazon.kinesis.lifecycle.events.{ InitializationInput, ProcessRecordsInput, ShardEndedInput }
 import software.amazon.kinesis.processor.{
   RecordProcessorCheckpointer,
   ShardRecordProcessor,
@@ -96,8 +96,7 @@ class KinesisSchedulerSourceSpec
         for (_ <- 1 to 52) sinkProbe.requestNext()
         killSwitch.shutdown()
         sinkProbe.expectComplete()
-      }
-    )
+      })
 
     "publish records downstream using different IRecordProcessor incarnations" in assertAllStagesStopped(
       new KinesisSchedulerContext with TestData {
@@ -126,8 +125,7 @@ class KinesisSchedulerSourceSpec
         killSwitch.shutdown()
 
         sinkProbe.expectComplete()
-      }
-    )
+      })
 
     "call Scheduler shutdown on stage completion" in assertAllStagesStopped(new KinesisSchedulerContext {
       killSwitch.shutdown()
@@ -149,14 +147,12 @@ class KinesisSchedulerSourceSpec
 
     "complete the stage with error if the Scheduler fails" in assertAllStagesStopped(
       new KinesisSchedulerContext(
-        Some(SchedulerUnexpectedShutdown(new RuntimeException()))
-      ) {
+        Some(SchedulerUnexpectedShutdown(new RuntimeException()))) {
         sinkProbe.expectError() shouldBe a[SchedulerUnexpectedShutdown]
         eventually {
           verify(scheduler).run()
         }
-      }
-    )
+      })
 
     "not drop messages in case of back-pressure" in assertAllStagesStopped(
       new KinesisSchedulerContext(bufferSize = 10, backpressureTimeout = FiniteDuration(1, SECONDS)) with TestData {
@@ -176,14 +172,12 @@ class KinesisSchedulerSourceSpec
 
         killSwitch.shutdown()
         sinkProbe.expectComplete()
-      }
-    )
+      })
 
     "not drop messages in case of back-pressure with multiple shard schedulers" in assertAllStagesStopped(
       new KinesisSchedulerContext(
         bufferSize = 10,
-        backpressureTimeout = FiniteDuration(2, SECONDS)
-      ) with TestData {
+        backpressureTimeout = FiniteDuration(2, SECONDS)) with TestData {
         recordProcessor.initialize(randomInitializationInput())
         otherRecordProcessor.initialize(randomInitializationInput())
 
@@ -207,8 +201,7 @@ class KinesisSchedulerSourceSpec
 
         killSwitch.shutdown()
         sinkProbe.expectComplete()
-      }
-    )
+      })
 
     "not drop messages in case of Shard end" in assertAllStagesStopped(
       new KinesisSchedulerContext(bufferSize = 10) with TestData {
@@ -247,14 +240,13 @@ class KinesisSchedulerSourceSpec
 
         killSwitch.shutdown()
         sinkProbe.expectComplete()
-      }
-    )
+      })
   }
 
   private abstract class KinesisSchedulerContext(schedulerFailure: Option[Throwable] = None,
-                                                 bufferSize: Int = 100,
-                                                 backpressureTimeout: FiniteDuration = 1.minute,
-                                                 switchMode: SwitchMode = Open) {
+      bufferSize: Int = 100,
+      backpressureTimeout: FiniteDuration = 1.minute,
+      switchMode: SwitchMode = Open) {
     val scheduler: Scheduler = org.mockito.Mockito.mock(classOf[Scheduler])
 
     val lock = new Semaphore(0)
@@ -275,8 +267,8 @@ class KinesisSchedulerSourceSpec
     }
     val (((valve, killSwitch), watch), sinkProbe) =
       KinesisSchedulerSource(schedulerBuilder,
-                             KinesisSchedulerSourceSettings(bufferSize = bufferSize,
-                                                            backpressureTimeout = backpressureTimeout))
+        KinesisSchedulerSourceSettings(bufferSize = bufferSize,
+          backpressureTimeout = backpressureTimeout))
         .viaMat(Valve(switchMode))(Keep.right)
         .viaMat(KillSwitches.single)(Keep.both)
         .watchTermination()(Keep.both)
@@ -311,11 +303,10 @@ class KinesisSchedulerSourceSpec
           .partitionKey("partitionKey")
           .sequenceNumber("sequenceNum")
           .data(SdkBytes.fromByteBuffer(ByteBuffer.wrap(Array[Byte](1))))
-          .build()
-      )
+          .build())
 
     def sampleRecordsInput(records: Seq[KinesisClientRecord] = sampleRecord :: Nil,
-                           isShardEnd: Boolean = false): ProcessRecordsInput =
+        isShardEnd: Boolean = false): ProcessRecordsInput =
       ProcessRecordsInput
         .builder()
         .checkpointer(checkpointer)
@@ -343,14 +334,11 @@ class KinesisSchedulerSourceSpec
               new ShardProcessorData(
                 "shard-1",
                 null,
-                null
-              )
-            ) {
+                null)) {
               override def shutdownReason: Option[ShutdownReason] = None
 
               override def forceCheckpoint(): Unit = checkpointer(record)
-            }
-          )
+            })
           latestRecord = record
         }
       }
@@ -385,14 +373,11 @@ class KinesisSchedulerSourceSpec
               new ShardProcessorData(
                 "shard-1",
                 null,
-                null
-              )
-            ) {
+                null)) {
               override def shutdownReason: Option[ShutdownReason] = None
 
               override def forceCheckpoint(): Unit = checkpointerShard1(record)
-            }
-          )
+            })
           latestRecordShard1 = record
         }
         for (i <- 1 to 3) {
@@ -405,14 +390,11 @@ class KinesisSchedulerSourceSpec
               new ShardProcessorData(
                 "shard-2",
                 null,
-                null
-              )
-            ) {
+                null)) {
               override def shutdownReason: Option[ShutdownReason] = None
 
               override def forceCheckpoint(): Unit = checkpointerShard2(record)
-            }
-          )
+            })
           latestRecordShard2 = record
         }
       }
@@ -440,9 +422,7 @@ class KinesisSchedulerSourceSpec
         new ShardProcessorData(
           "shard-1",
           null,
-          null
-        )
-      ) {
+          null)) {
         override def shutdownReason: Option[ShutdownReason] = None
         override def forceCheckpoint(): Unit = checkpointer(record)
       }
@@ -464,9 +444,7 @@ class KinesisSchedulerSourceSpec
         .via(
           KinesisSchedulerSource
             .checkpointRecordsFlow(
-              KinesisSchedulerCheckpointSettings(maxBatchSize = 100, maxBatchWait = 500.millis)
-            )
-        )
+              KinesisSchedulerCheckpointSettings(maxBatchSize = 100, maxBatchWait = 500.millis)))
         .toMat(TestSink.probe)(Keep.both)
         .run()
     val recordProcessor = new ShardProcessor(_ => ())

@@ -7,8 +7,8 @@ package akka.stream.alpakka.text.impl
 import java.nio.charset.Charset
 
 import akka.annotation.InternalApi
-import akka.stream.stage.{GraphStage, GraphStageLogic}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.stage.{ GraphStage, GraphStageLogic }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.util.ByteString
 
 /**

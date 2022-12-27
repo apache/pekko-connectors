@@ -19,16 +19,14 @@ trait TestOps {
   def N(n: Int) = AttributeValue.builder().n(n.toString).build()
   def keyMap(hash: String, sort: Int): Map[String, AttributeValue] = Map(
     keyCol -> S(hash),
-    sortCol -> N(sort)
-  )
+    sortCol -> N(sort))
 
   def keyEQ(hash: String): Map[String, Condition] = Map(
     keyCol -> Condition
       .builder()
       .comparisonOperator(ComparisonOperator.EQ)
       .attributeValueList(S(hash))
-      .build()
-  )
+      .build())
 
   object common {
     val listTablesRequest = ListTablesRequest.builder().build()
@@ -38,15 +36,12 @@ trait TestOps {
       .tableName(tableName)
       .keySchema(
         KeySchemaElement.builder().attributeName(keyCol).keyType(KeyType.HASH).build(),
-        KeySchemaElement.builder().attributeName(sortCol).keyType(KeyType.RANGE).build()
-      )
+        KeySchemaElement.builder().attributeName(sortCol).keyType(KeyType.RANGE).build())
       .attributeDefinitions(
         AttributeDefinition.builder().attributeName(keyCol).attributeType(ScalarAttributeType.S).build(),
-        AttributeDefinition.builder().attributeName(sortCol).attributeType(ScalarAttributeType.N).build()
-      )
+        AttributeDefinition.builder().attributeName(sortCol).attributeType(ScalarAttributeType.N).build())
       .provisionedThroughput(
-        ProvisionedThroughput.builder().readCapacityUnits(10L).writeCapacityUnits(10L).build()
-      )
+        ProvisionedThroughput.builder().readCapacityUnits(10L).writeCapacityUnits(10L).build())
       .build()
 
     val describeTableRequest = DescribeTableRequest.builder().tableName(tableName).build()
@@ -93,10 +88,7 @@ abstract class ItemSpecOps extends TestOps {
           WriteRequest
             .builder()
             .putRequest(PutRequest.builder().item((keyMap("B", 1) + ("data" -> S(test5Data))).asJava).build())
-            .build()
-        ).asJava
-      ).asJava
-    )
+            .build()).asJava).asJava)
     .build()
 
   def batchWriteLargeItemRequest(from: Int, to: Int) =
@@ -110,12 +102,10 @@ abstract class ItemSpecOps extends TestOps {
             WriteRequest
               .builder()
               .putRequest(
-                PutRequest.builder().item((keyMap(i.toString, i) + ("data1" -> S("0123456789" * 39000))).asJava).build()
-              )
+                PutRequest.builder().item((keyMap(i.toString, i) + ("data1" -> S(
+                  "0123456789" * 39000))).asJava).build())
               .build()
-          }.asJava
-        ).asJava
-      )
+          }.asJava).asJava)
       .build()
 
   def batchGetLargeItemRequest(from: Int, to: Int) =
@@ -132,9 +122,7 @@ abstract class ItemSpecOps extends TestOps {
               }.asJava
             }
             .attributesToGet("data1")
-            .build()
-        ).asJava
-      )
+            .build()).asJava)
       .build()
 
   def batchGetItemRequest(items: java.util.Map[String, KeysAndAttributes]) =
@@ -177,9 +165,7 @@ abstract class ItemSpecOps extends TestOps {
         TransactWriteItem
           .builder()
           .put(Put.builder().tableName(tableName).item((keyMap("C", 1) + ("data" -> S(test8Data))).asJava).build())
-          .build()
-      ).asJava
-    )
+          .build()).asJava)
     .build()
 
   val transactGetItemsRequest = TransactGetItemsRequest
@@ -187,9 +173,8 @@ abstract class ItemSpecOps extends TestOps {
     .transactItems(
       List(
         TransactGetItem.builder().get(Get.builder().tableName(tableName).key(keyMap("C", 0).asJava).build()).build(),
-        TransactGetItem.builder().get(Get.builder().tableName(tableName).key(keyMap("C", 1).asJava).build()).build()
-      ).asJava
-    )
+        TransactGetItem.builder().get(Get.builder().tableName(tableName).key(keyMap("C",
+          1).asJava).build()).build()).asJava)
     .build()
 
   val transactDeleteItemsRequest = TransactWriteItemsRequest
@@ -203,9 +188,7 @@ abstract class ItemSpecOps extends TestOps {
         TransactWriteItem
           .builder()
           .delete(Delete.builder().tableName(tableName).key(keyMap("C", 1).asJava).build())
-          .build()
-      ).asJava
-    )
+          .build()).asJava)
     .build()
 
   val deleteTableRequest = common.deleteTableRequest
@@ -229,8 +212,7 @@ object TableSpecOps extends TestOps {
     .builder()
     .tableName(tableName)
     .provisionedThroughput(
-      ProvisionedThroughput.builder().writeCapacityUnits(newMaxLimit).readCapacityUnits(newMaxLimit).build()
-    )
+      ProvisionedThroughput.builder().writeCapacityUnits(newMaxLimit).readCapacityUnits(newMaxLimit).build())
     .build()
 
   val describeTimeToLiveRequest = DescribeTimeToLiveRequest.builder().build()

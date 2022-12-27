@@ -29,26 +29,25 @@ object MqttSessionSettings {
  * Configuration settings for client and server usage.
  */
 final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
-                                         val clientSendBufferSize: Int = 64,
-                                         val clientTerminationWatcherBufferSize: Int = 100,
-                                         val commandParallelism: Int = 50,
-                                         val eventParallelism: Int = 10,
-                                         val receiveConnectTimeout: FiniteDuration = 5.minutes,
-                                         val receiveConnAckTimeout: FiniteDuration = 30.seconds,
-                                         val producerPubAckRecTimeout: FiniteDuration = 0.seconds,
-                                         val producerPubCompTimeout: FiniteDuration = 0.seconds,
-                                         val consumerPubAckRecTimeout: FiniteDuration = 30.seconds,
-                                         val consumerPubCompTimeout: FiniteDuration = 30.seconds,
-                                         val consumerPubRelTimeout: FiniteDuration = 30.seconds,
-                                         val receiveSubAckTimeout: FiniteDuration = 30.seconds,
-                                         val receiveUnsubAckTimeout: FiniteDuration = 30.seconds,
-                                         val serverSendBufferSize: Int = 64) {
+    val clientSendBufferSize: Int = 64,
+    val clientTerminationWatcherBufferSize: Int = 100,
+    val commandParallelism: Int = 50,
+    val eventParallelism: Int = 10,
+    val receiveConnectTimeout: FiniteDuration = 5.minutes,
+    val receiveConnAckTimeout: FiniteDuration = 30.seconds,
+    val producerPubAckRecTimeout: FiniteDuration = 0.seconds,
+    val producerPubCompTimeout: FiniteDuration = 0.seconds,
+    val consumerPubAckRecTimeout: FiniteDuration = 30.seconds,
+    val consumerPubCompTimeout: FiniteDuration = 30.seconds,
+    val consumerPubRelTimeout: FiniteDuration = 30.seconds,
+    val receiveSubAckTimeout: FiniteDuration = 30.seconds,
+    val receiveUnsubAckTimeout: FiniteDuration = 30.seconds,
+    val serverSendBufferSize: Int = 64) {
   require(
     commandParallelism >= 2,
-    s"commandParallelism of $commandParallelism must be greater than or equal to 2 to support connection replies such as pinging"
-  )
+    s"commandParallelism of $commandParallelism must be greater than or equal to 2 to support connection replies such as pinging")
   require(maxPacketSize >= 0 && maxPacketSize <= (1 << 28),
-          s"maxPacketSize of $maxPacketSize must be positive and less than ${1 << 28}")
+    s"maxPacketSize of $maxPacketSize must be positive and less than ${1 << 28}")
 
   import akka.util.JavaDurationConverters._
 
@@ -237,20 +236,20 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
     copy(serverSendBufferSize = serverSendBufferSize)
 
   private def copy(maxPacketSize: Int = maxPacketSize,
-                   clientSendBufferSize: Int = clientSendBufferSize,
-                   clientTerminationWatcherBufferSize: Int = clientTerminationWatcherBufferSize,
-                   commandParallelism: Int = commandParallelism,
-                   eventParallelism: Int = eventParallelism,
-                   receiveConnectTimeout: FiniteDuration = receiveConnectTimeout,
-                   receiveConnAckTimeout: FiniteDuration = receiveConnAckTimeout,
-                   producerPubAckRecTimeout: FiniteDuration = producerPubAckRecTimeout,
-                   producerPubCompTimeout: FiniteDuration = producerPubCompTimeout,
-                   consumerPubAckRecTimeout: FiniteDuration = consumerPubAckRecTimeout,
-                   consumerPubCompTimeout: FiniteDuration = consumerPubCompTimeout,
-                   consumerPubRelTimeout: FiniteDuration = consumerPubRelTimeout,
-                   receiveSubAckTimeout: FiniteDuration = receiveSubAckTimeout,
-                   receiveUnsubAckTimeout: FiniteDuration = receiveUnsubAckTimeout,
-                   serverSendBufferSize: Int = serverSendBufferSize) =
+      clientSendBufferSize: Int = clientSendBufferSize,
+      clientTerminationWatcherBufferSize: Int = clientTerminationWatcherBufferSize,
+      commandParallelism: Int = commandParallelism,
+      eventParallelism: Int = eventParallelism,
+      receiveConnectTimeout: FiniteDuration = receiveConnectTimeout,
+      receiveConnAckTimeout: FiniteDuration = receiveConnAckTimeout,
+      producerPubAckRecTimeout: FiniteDuration = producerPubAckRecTimeout,
+      producerPubCompTimeout: FiniteDuration = producerPubCompTimeout,
+      consumerPubAckRecTimeout: FiniteDuration = consumerPubAckRecTimeout,
+      consumerPubCompTimeout: FiniteDuration = consumerPubCompTimeout,
+      consumerPubRelTimeout: FiniteDuration = consumerPubRelTimeout,
+      receiveSubAckTimeout: FiniteDuration = receiveSubAckTimeout,
+      receiveUnsubAckTimeout: FiniteDuration = receiveUnsubAckTimeout,
+      serverSendBufferSize: Int = serverSendBufferSize) =
     new MqttSessionSettings(
       maxPacketSize,
       clientSendBufferSize,
@@ -266,8 +265,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
       consumerPubRelTimeout,
       receiveSubAckTimeout,
       receiveUnsubAckTimeout,
-      serverSendBufferSize
-    )
+      serverSendBufferSize)
 
   override def toString: String =
     "MqttSessionSettings(" +

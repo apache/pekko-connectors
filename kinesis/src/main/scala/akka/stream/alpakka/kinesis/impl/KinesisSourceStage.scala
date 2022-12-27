@@ -7,16 +7,16 @@ package akka.stream.alpakka.kinesis.impl
 import akka.actor.ActorRef
 import akka.annotation.InternalApi
 import akka.dispatch.ExecutionContexts.parasitic
-import akka.stream.alpakka.kinesis.{ShardSettings, KinesisErrors => Errors}
+import akka.stream.alpakka.kinesis.{ KinesisErrors => Errors, ShardSettings }
 import akka.stream.stage.GraphStageLogic.StageActor
 import akka.stream.stage._
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model._
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 import scala.compat.java8.FutureConverters._
 
@@ -137,14 +137,13 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
 
       private[this] val handleGetRecords: Try[GetRecordsResponse] => Unit = {
         case Failure(exception) => self.ref ! GetRecordsFailure(exception)
-        case Success(result) => self.ref ! GetRecordsSuccess(result)
+        case Success(result)    => self.ref ! GetRecordsSuccess(result)
       }
 
       private[this] def requestRecords(): Unit =
         amazonKinesisAsync
           .getRecords(
-            GetRecordsRequest.builder().limit(limit).shardIterator(currentShardIterator).build()
-          )
+            GetRecordsRequest.builder().limit(limit).shardIterator(currentShardIterator).build())
           .toScala
           .onComplete(handleGetRecords)(parasitic)
 
@@ -153,19 +152,16 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
           .chain[GetShardIteratorRequest.Builder](
             Seq(
               r => startingSequenceNumber.fold(r)(r.startingSequenceNumber),
-              r => atTimestamp.fold(r)(instant => r.timestamp(instant))
-            )
-          )(
+              r => atTimestamp.fold(r)(instant => r.timestamp(instant))))(
             GetShardIteratorRequest
               .builder()
               .streamName(streamName)
               .shardId(shardId)
-              .shardIteratorType(shardIteratorType)
-          )
+              .shardIteratorType(shardIteratorType))
           .build()
 
         val handleGetShardIterator: Try[GetShardIteratorResponse] => Unit = {
-          case Success(result) => self.ref ! GetShardIteratorSuccess(result)
+          case Success(result)    => self.ref ! GetShardIteratorSuccess(result)
           case Failure(exception) => self.ref ! GetShardIteratorFailure(exception)
         }
 

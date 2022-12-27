@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.s3.impl.auth
 
-import java.time.{ZoneId, ZonedDateTime}
+import java.time.{ ZoneId, ZonedDateTime }
 
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
@@ -12,11 +12,10 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class SigningKeySpec extends AnyFlatSpec with Matchers {
-  behavior of "A Signing Key"
+  behavior.of("A Signing Key")
 
   val credentials = StaticCredentialsProvider.create(
-    AwsBasicCredentials.create("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY")
-  )
+    AwsBasicCredentials.create("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY"))
 
   val signingKey = {
     val requestDate = ZonedDateTime.of(2015, 8, 30, 1, 2, 3, 4, ZoneId.of("UTC"))
@@ -34,7 +33,6 @@ class SigningKeySpec extends AnyFlatSpec with Matchers {
     val sts =
       "AWS4-HMAC-SHA256\n20150830T123600Z\n20150830/us-east-1/iam/aws4_request\nf536975d06c0309214f805bb90ccff089219ecd68b2577efef23edd43b7e1a59"
     signingKey.hexEncodedSignature(sts.getBytes) should equal(
-      "5d672d79c15b13162d9279b0855cfba6789a8edb4c82c400e06b5924a6f2b5d7"
-    )
+      "5d672d79c15b13162d9279b0855cfba6789a8edb4c82c400e06b5924a6f2b5d7")
   }
 }

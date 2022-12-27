@@ -9,7 +9,7 @@ import akka.stream.alpakka.mqtt.MqttConnectionSettings
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
-import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -28,8 +28,7 @@ abstract class MqttSpecBase(name: String)
   val connectionSettings = MqttConnectionSettings(
     "tcp://localhost:1883",
     "test-client",
-    new MemoryPersistence
-  )
+    new MemoryPersistence)
 
   val timeout = 5.seconds
 

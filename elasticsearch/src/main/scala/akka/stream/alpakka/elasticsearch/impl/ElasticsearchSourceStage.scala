@@ -16,13 +16,13 @@ import akka.stream.alpakka.elasticsearch.{
   ReadResult,
   SourceSettingsBase
 }
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler, StageLogging}
-import akka.stream.{Attributes, Materializer, Outlet, SourceShape}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
+import akka.stream.{ Attributes, Materializer, Outlet, SourceShape }
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 
 import scala.concurrent.ExecutionContext
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 /**
  * INTERNAL API
@@ -52,8 +52,7 @@ private[elasticsearch] final class ElasticsearchSourceStage[T](
     elasticsearchParams: ElasticsearchParams,
     searchParams: Map[String, String],
     settings: SourceSettingsBase[_, _],
-    reader: MessageReader[T]
-)(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
+    reader: MessageReader[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStage[SourceShape[ReadResult[T]]] {
 
   val out: Outlet[ReadResult[T]] = Outlet("ElasticsearchSource.out")
@@ -80,8 +79,7 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
     settings: SourceSettingsBase[_, _],
     out: Outlet[ReadResult[T]],
     shape: SourceShape[ReadResult[T]],
-    reader: MessageReader[T]
-)(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
+    reader: MessageReader[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStageLogic(shape)
     with OutHandler
     with StageLogging {
@@ -110,7 +108,7 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           // Add extra params to search
           val extraParams = Seq(
             if (!searchParams.contains("size")) {
-              Some(("size" -> settings.bufferSize.toString))
+              Some("size" -> settings.bufferSize.toString)
             } else {
               None
             },
@@ -118,11 +116,10 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
             // http://nocf-www.elastic.co/guide/en/elasticsearch/reference/current/search-request-version.html
             // https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
             if (!searchParams.contains("version") && settings.includeDocumentVersion) {
-              Some(("version" -> "true"))
+              Some("version" -> "true")
             } else {
               None
-            }
-          )
+            })
 
           val baseMap = Map("scroll" -> settings.scroll)
 
@@ -139,17 +136,17 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           val completeParams = searchParams ++ extraParams.flatten - "routing"
 
           val searchBody = "{" + completeParams
-              .map {
-                case (name, json) =>
-                  "\"" + name + "\":" + json
-              }
-              .mkString(",") + "}"
+            .map {
+              case (name, json) =>
+                "\"" + name + "\":" + json
+            }
+            .mkString(",") + "}"
 
           val endpoint: String = settings.apiVersion match {
-            case ApiVersion.V5 => s"/${elasticsearchParams.indexName}/${elasticsearchParams.typeName.get}/_search"
-            case ApiVersion.V7 => s"/${elasticsearchParams.indexName}/_search"
+            case ApiVersion.V5           => s"/${elasticsearchParams.indexName}/${elasticsearchParams.typeName.get}/_search"
+            case ApiVersion.V7           => s"/${elasticsearchParams.indexName}/_search"
             case OpensearchApiVersion.V1 => s"/${elasticsearchParams.indexName}/_search"
-            case other => throw new IllegalArgumentException(s"API version $other is not supported")
+            case other                   => throw new IllegalArgumentException(s"API version $other is not supported")
           }
 
           val uri = prepareUri(Path(endpoint))
@@ -158,15 +155,13 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           val request = HttpRequest(HttpMethods.POST)
             .withUri(uri)
             .withEntity(
-              HttpEntity(ContentTypes.`application/json`, searchBody)
-            )
+              HttpEntity(ContentTypes.`application/json`, searchBody))
             .withHeaders(settings.connection.headers)
 
           ElasticsearchApi
             .executeRequest(
               request,
-              settings.connection
-            )
+              settings.connection)
             .flatMap {
               case HttpResponse(StatusCodes.OK, _, responseEntity, _) =>
                 Unmarshal(responseEntity)
@@ -176,8 +171,7 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
                 Unmarshal(response.entity).to[String].map { body =>
                   failureHandler
                     .invoke(
-                      new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body")
-                    )
+                      new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body"))
                 }
             }
             .recover {
@@ -194,15 +188,13 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
             .withUri(uri)
             .withEntity(
               HttpEntity(ContentTypes.`application/json`,
-                         Map("scroll" -> settings.scroll, "scroll_id" -> actualScrollId).toJson.compactPrint)
-            )
+                Map("scroll" -> settings.scroll, "scroll_id" -> actualScrollId).toJson.compactPrint))
             .withHeaders(settings.connection.headers)
 
           ElasticsearchApi
             .executeRequest(
               request,
-              settings.connection
-            )
+              settings.connection)
             .flatMap {
               case HttpResponse(StatusCodes.OK, _, responseEntity, _) =>
                 Unmarshal(responseEntity)
@@ -213,8 +205,7 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
                   .to[String]
                   .map { body =>
                     failureHandler.invoke(
-                      new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body")
-                    )
+                      new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body"))
                   }
             }
             .recover {
@@ -343,9 +334,7 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
                 clearScrollAsyncHandler
                   .invoke(
                     Failure(
-                      new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body")
-                    )
-                  )
+                      new RuntimeException(s"Request failed for POST $uri, got ${response.status} with body: $body")))
               }
           }
           .recover {
@@ -355,12 +344,12 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
     }
   }
 
-  private val clearScrollAsyncHandler = getAsyncCallback[Try[String]]({ result =>
+  private val clearScrollAsyncHandler = getAsyncCallback[Try[String]] { result =>
     {
       // Note: the scroll will expire, so there is no reason to consider a failed
       // clear as a reason to fail the stream.
       log.debug("Result of clearing the scroll: {}", result)
       completeStage()
     }
-  })
+  }
 }

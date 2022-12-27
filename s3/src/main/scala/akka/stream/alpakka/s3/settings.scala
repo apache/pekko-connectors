@@ -4,14 +4,14 @@
 
 package akka.stream.alpakka.s3
 
-import java.nio.file.{Path, Paths}
-import java.time.{Duration => JavaDuration}
+import java.nio.file.{ Path, Paths }
+import java.time.{ Duration => JavaDuration }
 import java.util.concurrent.TimeUnit
-import java.util.{Objects, Optional}
+import java.util.{ Objects, Optional }
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.http.scaladsl.model.Uri
-import akka.stream.alpakka.s3.AccessStyle.{PathAccessStyle, VirtualHostAccessStyle}
+import akka.stream.alpakka.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
 import com.typesafe.config.Config
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.auth.credentials._
@@ -25,8 +25,7 @@ import scala.util.Try
 final class Proxy private (
     val host: String,
     val port: Int,
-    val scheme: String
-) {
+    val scheme: String) {
 
   /** Java API */
   def getHost: String = host
@@ -119,9 +118,9 @@ object ForwardProxyCredentials {
 }
 
 final class ForwardProxy private (val scheme: String,
-                                  val host: String,
-                                  val port: Int,
-                                  val credentials: Option[ForwardProxyCredentials]) {
+    val host: String,
+    val port: Int,
+    val credentials: Option[ForwardProxyCredentials]) {
 
   require(scheme == "http" || scheme == "https", "scheme must be either `http` or `https`")
 
@@ -143,9 +142,9 @@ final class ForwardProxy private (val scheme: String,
   def withCredentials(credentials: ForwardProxyCredentials): ForwardProxy = copy(credentials = Option(credentials))
 
   private def copy(scheme: String = scheme,
-                   host: String = host,
-                   port: Int = port,
-                   credentials: Option[ForwardProxyCredentials] = credentials) =
+      host: String = host,
+      port: Int = port,
+      credentials: Option[ForwardProxyCredentials] = credentials) =
     new ForwardProxy(scheme, host, port, credentials)
 
   override def toString: String =
@@ -226,9 +225,9 @@ object AccessStyle {
 }
 
 final class RetrySettings private (val maxRetries: Int,
-                                   val minBackoff: FiniteDuration,
-                                   val maxBackoff: FiniteDuration,
-                                   val randomFactor: Double) {
+    val minBackoff: FiniteDuration,
+    val maxBackoff: FiniteDuration,
+    val randomFactor: Double) {
 
   /** Java API */
   def getMaxRetries: Int = maxRetries
@@ -259,9 +258,9 @@ final class RetrySettings private (val maxRetries: Int,
   def withRandomFactor(value: Double): RetrySettings = copy(randomFactor = value)
 
   private def copy(maxRetries: Int = maxRetries,
-                   minBackoff: FiniteDuration = minBackoff,
-                   maxBackoff: FiniteDuration = maxBackoff,
-                   randomFactor: Double = randomFactor) =
+      minBackoff: FiniteDuration = minBackoff,
+      maxBackoff: FiniteDuration = maxBackoff,
+      randomFactor: Double = randomFactor) =
     new RetrySettings(maxRetries, minBackoff, maxBackoff, randomFactor)
 
   override def toString: String =
@@ -289,25 +288,24 @@ object RetrySettings {
 
   /** Scala API */
   def apply(maxRetries: Int,
-            minBackoff: FiniteDuration,
-            maxBackoff: FiniteDuration,
-            randomFactor: Double): RetrySettings =
+      minBackoff: FiniteDuration,
+      maxBackoff: FiniteDuration,
+      randomFactor: Double): RetrySettings =
     new RetrySettings(maxRetries, minBackoff, maxBackoff, randomFactor)
 
   /** Java API */
   def create(maxRetries: Int, minBackoff: JavaDuration, maxBackoff: JavaDuration, randomFactor: Double): RetrySettings =
     apply(maxRetries,
-          FiniteDuration(minBackoff.toNanos, TimeUnit.NANOSECONDS),
-          FiniteDuration(maxBackoff.toNanos, TimeUnit.NANOSECONDS),
-          randomFactor)
+      FiniteDuration(minBackoff.toNanos, TimeUnit.NANOSECONDS),
+      FiniteDuration(maxBackoff.toNanos, TimeUnit.NANOSECONDS),
+      randomFactor)
 
   def apply(config: Config): RetrySettings = {
     RetrySettings(
       config.getInt("max-retries"),
       FiniteDuration(config.getDuration("min-backoff").toNanos, TimeUnit.NANOSECONDS),
       FiniteDuration(config.getDuration("max-backoff").toNanos, TimeUnit.NANOSECONDS),
-      config.getDouble("random-factor")
-    )
+      config.getDouble("random-factor"))
   }
 }
 
@@ -323,7 +321,7 @@ final class MultipartUploadSettings private (val retrySettings: RetrySettings) {
 
   override def equals(other: Any): Boolean = other match {
     case that: MultipartUploadSettings => Objects.equals(this.retrySettings, that.retrySettings)
-    case _ => false
+    case _                             => false
   }
 
   override def hashCode(): Int = Objects.hash(retrySettings)
@@ -351,8 +349,7 @@ final class S3Settings private (
     val validateObjectKey: Boolean,
     val retrySettings: RetrySettings,
     val multipartUploadSettings: MultipartUploadSettings,
-    val signAnonymousRequests: Boolean
-) {
+    val signAnonymousRequests: Boolean) {
 
   /** Java API */
   def getBufferType: BufferType = bufferType
@@ -424,8 +421,7 @@ final class S3Settings private (
       validateObjectKey: Boolean = validateObjectKey,
       retrySettings: RetrySettings = retrySettings,
       multipartUploadSettings: MultipartUploadSettings = multipartUploadSettings,
-      signAnonymousRequests: Boolean = signAnonymousRequests
-  ): S3Settings = new S3Settings(
+      signAnonymousRequests: Boolean = signAnonymousRequests): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
@@ -436,8 +432,7 @@ final class S3Settings private (
     validateObjectKey,
     retrySettings,
     multipartUploadSettings,
-    signAnonymousRequests
-  )
+    signAnonymousRequests)
 
   override def toString: String =
     "S3Settings(" +
@@ -481,8 +476,7 @@ final class S3Settings private (
       Boolean.box(validateObjectKey),
       retrySettings,
       multipartUploadSettings,
-      Boolean.box(signAnonymousRequests)
-    )
+      Boolean.box(signAnonymousRequests))
 }
 
 object S3Settings {
@@ -512,8 +506,7 @@ object S3Settings {
       Proxy(
         host,
         c.getInt("proxy.port"),
-        Uri.httpScheme(c.getBoolean("proxy.secure"))
-      )
+        Uri.httpScheme(c.getBoolean("proxy.secure")))
     }
 
     val maybeForwardProxy =
@@ -523,8 +516,7 @@ object S3Settings {
 
     if (c.hasPath("path-style-access"))
       log.warn(
-        "The deprecated 'path-style-access' property was used to specify access style. Please use 'access-style' instead."
-      )
+        "The deprecated 'path-style-access' property was used to specify access style. Please use 'access-style' instead.")
 
     val deprecatedPathAccessStyleSetting = Try(c.getString("path-style-access")).toOption
 
@@ -532,16 +524,15 @@ object S3Settings {
       case None | Some("") =>
         c.getString("access-style") match {
           case "virtual" => VirtualHostAccessStyle
-          case "path" => PathAccessStyle
+          case "path"    => PathAccessStyle
           case other =>
             throw new IllegalArgumentException(s"'access-style' must be 'virtual' or 'path'. Got: [$other]")
         }
       case Some("true") | Some("force") => PathAccessStyle
-      case Some("false") => VirtualHostAccessStyle
+      case Some("false")                => VirtualHostAccessStyle
       case Some(other) =>
         throw new IllegalArgumentException(
-          s"'path-style-access' must be 'false', 'true' or 'force'. Got: [$other]. Prefer using access-style instead."
-        )
+          s"'path-style-access' must be 'false', 'true' or 'force'. Got: [$other]. Prefer using access-style instead.")
     }
 
     val endpointUrl = if (c.hasPath("endpoint-url")) {
@@ -561,8 +552,7 @@ object S3Settings {
           |Enable virtual host-style access by unsetting `$ConfigPath.path-style-access`,
           |and leaving `$ConfigPath.access-style` on the default `virtual`.
           |
-          |If your S3 provider is not AWS, you need to set `$ConfigPath.endpoint-url`.""".stripMargin
-      )
+          |If your S3 provider is not AWS, you need to set `$ConfigPath.endpoint-url`.""".stripMargin)
 
     val regionProvider = {
       val regionProviderPath = "aws.region.provider"
@@ -624,8 +614,7 @@ object S3Settings {
 
     val multipartUploadConfig = c.getConfig("multipart-upload")
     val multipartUploadSettings = MultipartUploadSettings(
-      RetrySettings(multipartUploadConfig.getConfig("retry-settings"))
-    )
+      RetrySettings(multipartUploadConfig.getConfig("retry-settings")))
 
     val signAnonymousRequests = c.getBoolean("sign-anonymous-requests")
 
@@ -640,8 +629,7 @@ object S3Settings {
       validateObjectKey,
       retrySettings,
       multipartUploadSettings,
-      signAnonymousRequests
-    )
+      signAnonymousRequests)
   }
 
   /**
@@ -654,8 +642,7 @@ object S3Settings {
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
-      listBucketApiVersion: ApiVersion
-  ): S3Settings = new S3Settings(
+      listBucketApiVersion: ApiVersion): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
@@ -666,21 +653,18 @@ object S3Settings {
     validateObjectKey = true,
     RetrySettings.default,
     MultipartUploadSettings(RetrySettings.default),
-    signAnonymousRequests = true
-  )
+    signAnonymousRequests = true)
 
   /** Java API */
   def create(
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
-      listBucketApiVersion: ApiVersion
-  ): S3Settings = apply(
+      listBucketApiVersion: ApiVersion): S3Settings = apply(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
-    listBucketApiVersion
-  )
+    listBucketApiVersion)
 
   /**
    * Scala API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.

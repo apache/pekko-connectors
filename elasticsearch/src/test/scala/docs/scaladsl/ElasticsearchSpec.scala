@@ -5,13 +5,13 @@
 package docs.scaladsl
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.{Http, HttpExt}
+import akka.http.scaladsl.{ Http, HttpExt }
 import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.model.{HttpMethods, HttpRequest, Uri}
+import akka.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import akka.stream.alpakka.elasticsearch._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
-import org.scalatest.{BeforeAndAfterAll, Inspectors}
+import org.scalatest.{ BeforeAndAfterAll, Inspectors }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -47,11 +47,11 @@ class ElasticsearchSpec
   }
 
   "Connector with ApiVersion 5 running against Elasticsearch v6.8.0" should {
-    behave like elasticsearchConnector(ApiVersion.V5, clientV5)
+    behave.like(elasticsearchConnector(ApiVersion.V5, clientV5))
   }
 
   "Connector with ApiVersion 7 running against Elasticsearch v7.6.0" should {
-    behave like elasticsearchConnector(ApiVersion.V7, clientV7)
+    behave.like(elasticsearchConnector(ApiVersion.V7, clientV7))
   }
 
 }

@@ -5,23 +5,23 @@
 package docs.scaladsl
 
 import java.io._
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{ Files, Path, Paths }
 import akka.actor.ActorSystem
 import akka.stream.alpakka.file.ArchiveMetadata
 import akka.stream.alpakka.file.scaladsl.Archive
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{FileIO, Sink, Source}
+import akka.stream.scaladsl.{ FileIO, Sink, Source }
 import akka.testkit.TestKit
 import akka.util.ByteString
 import akka.NotUsed
 import docs.javadsl.ArchiveHelper
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.jdk.CollectionConverters._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class ArchiveSpec
     extends TestKit(ActorSystem("ArchiveSpec"))
@@ -68,9 +68,7 @@ class ArchiveSpec
         val filesStream = Source(
           List(
             (ArchiveMetadata("akka_full_color.svg"), fileStream1),
-            (ArchiveMetadata("akka_icon_reverse.svg"), fileStream2)
-          )
-        )
+            (ArchiveMetadata("akka_icon_reverse.svg"), fileStream2)))
 
         val result = filesStream
           .via(Archive.zip())
@@ -96,7 +94,7 @@ class ArchiveSpec
         unzipResultMap("akka_full_color.svg") shouldBe refFile1
         unzipResultMap("akka_icon_reverse.svg") shouldBe refFile2
 
-        //cleanup
+        // cleanup
         new File("result.zip").delete()
       }
 
@@ -147,7 +145,7 @@ class ArchiveSpec
           .mapAsyncUnordered(4) {
             case (metadata, source) =>
               val targetFile = target.resolve(metadata.name)
-              targetFile.toFile.getParentFile.mkdirs() //missing error handler
+              targetFile.toFile.getParentFile.mkdirs() // missing error handler
               source.runWith(FileIO.toPath(targetFile))
           }
         // #zip-reader
@@ -166,8 +164,7 @@ class ArchiveSpec
   }
 
   private def filesToStream(
-      files: Map[String, ByteString]
-  ): Source[(ArchiveMetadata, Source[ByteString, NotUsed]), NotUsed] = {
+      files: Map[String, ByteString]): Source[(ArchiveMetadata, Source[ByteString, NotUsed]), NotUsed] = {
     val sourceFiles = files.toList.map {
       case (title, content) =>
         (ArchiveMetadata(title), Source(content.grouped(10).toList))

@@ -4,14 +4,14 @@
 
 package akka.stream.alpakka.pravega
 
-import akka.stream.{KillSwitches, SourceShape}
+import akka.stream.{ KillSwitches, SourceShape }
 
-import akka.stream.scaladsl.{Broadcast, GraphDSL, Keep, Sink, Source, Zip}
+import akka.stream.scaladsl.{ Broadcast, GraphDSL, Keep, Sink, Source, Zip }
 
 import akka.stream.alpakka.testkit.scaladsl.Repeated
-import akka.stream.alpakka.pravega.scaladsl.{Pravega, PravegaTable}
+import akka.stream.alpakka.pravega.scaladsl.{ Pravega, PravegaTable }
 
-import scala.concurrent.{Await, Promise}
+import scala.concurrent.{ Await, Promise }
 import scala.util.Using
 import io.pravega.client.tables.TableKey
 
@@ -34,8 +34,7 @@ class PravegaStreamAndTableSpec extends PravegaBaseSpec with Repeated {
       .readFlow[String, Int](
         scope,
         tableName,
-        tableSettings
-      )
+        tableSettings)
     // #table-reading-flow
 
   }
@@ -48,8 +47,7 @@ class PravegaStreamAndTableSpec extends PravegaBaseSpec with Repeated {
     PravegaTable.writeFlow(
       scope,
       tableName,
-      tableWriterSettings
-    )
+      tableWriterSettings)
   }
 
   "Pravega table" must {
@@ -77,7 +75,7 @@ class PravegaStreamAndTableSpec extends PravegaBaseSpec with Repeated {
 
           val lookup = readTableFlow(scope, tableName)
             .map {
-              case None => 1
+              case None        => 1
               case Some(value) => value + 1
             }
           val writeFlow = writeTableFlow(scope, tableName)

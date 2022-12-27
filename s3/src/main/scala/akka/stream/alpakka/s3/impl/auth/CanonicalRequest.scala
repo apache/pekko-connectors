@@ -5,9 +5,9 @@
 package akka.stream.alpakka.s3.impl.auth
 
 import akka.annotation.InternalApi
-import akka.http.scaladsl.model.Uri.{Path, Query}
-import akka.http.scaladsl.model.headers.{`Raw-Request-URI`, `Timeout-Access`, `Tls-Session-Info`, `X-Forwarded-For`}
-import akka.http.scaladsl.model.{HttpHeader, HttpRequest}
+import akka.http.scaladsl.model.Uri.{ Path, Query }
+import akka.http.scaladsl.model.headers.{ `Raw-Request-URI`, `Timeout-Access`, `Tls-Session-Info`, `X-Forwarded-For` }
+import akka.http.scaladsl.model.{ HttpHeader, HttpRequest }
 
 // Documentation: http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 @InternalApi private[impl] final case class CanonicalRequest(
@@ -16,8 +16,7 @@ import akka.http.scaladsl.model.{HttpHeader, HttpRequest}
     queryString: String,
     headerString: String,
     signedHeaders: String,
-    hashedPayload: String
-) {
+    hashedPayload: String) {
   def canonicalString: String =
     s"$method\n$uri\n$queryString\n$headerString\n\n$signedHeaders\n$hashedPayload"
 }
@@ -27,8 +26,7 @@ import akka.http.scaladsl.model.{HttpHeader, HttpRequest}
     `Raw-Request-URI`.lowercaseName,
     `X-Forwarded-For`.lowercaseName,
     `Timeout-Access`.lowercaseName,
-    `Tls-Session-Info`.lowercaseName
-  )
+    `Tls-Session-Info`.lowercaseName)
 
   def from(request: HttpRequest): CanonicalRequest = {
     val hashedBody =
@@ -44,8 +42,7 @@ import akka.http.scaladsl.model.{HttpHeader, HttpRequest}
       canonicalQueryString(request.uri.query()),
       canonicalHeaderString(signedHeaders),
       signedHeadersString(signedHeaders),
-      hashedBody
-    )
+      hashedBody)
   }
 
   // https://tools.ietf.org/html/rfc3986#section-2.3
@@ -62,7 +59,7 @@ import akka.http.scaladsl.model.{HttpHeader, HttpRequest}
   def canonicalQueryString(query: Query): String = {
     def uriEncode(s: String): String = s.flatMap {
       case c if isUnreservedCharacter(c) => c.toString
-      case c => "%" + c.toHexString.toUpperCase
+      case c                             => "%" + c.toHexString.toUpperCase
     }
 
     query
@@ -93,7 +90,7 @@ import akka.http.scaladsl.model.{HttpHeader, HttpRequest}
     else {
       path.toString.flatMap {
         case c if isReservedCharacter(c) => "%" + c.toHexString.toUpperCase
-        case c => c.toString
+        case c                           => c.toString
       }
     }
 }

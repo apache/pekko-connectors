@@ -9,8 +9,7 @@ import java.time.temporal.ChronoField
 import java.util.Objects
 
 final class ArchiveMetadata private (
-    val filePath: String
-)
+    val filePath: String)
 
 object ArchiveMetadata {
   def apply(filePath: String): ArchiveMetadata = new ArchiveMetadata(filePath)
@@ -32,10 +31,9 @@ final class TarArchiveMetadata private (
     /**
      * See constants `TarchiveMetadata.linkIndicatorNormal`
      */
-    val linkIndicatorByte: Byte
-) {
+    val linkIndicatorByte: Byte) {
   val filePath = filePathPrefix match {
-    case None => filePathName
+    case None         => filePathName
     case Some(prefix) => prefix + "/" + filePathName
   }
 
@@ -92,47 +90,46 @@ object TarArchiveMetadata {
 
   def apply(filePathPrefix: String, filePathName: String, size: Long, lastModification: Instant): TarArchiveMetadata = {
     apply(if (filePathPrefix.isEmpty) None else Some(filePathPrefix),
-          filePathName,
-          size,
-          lastModification,
-          linkIndicatorNormal)
+      filePathName,
+      size,
+      lastModification,
+      linkIndicatorNormal)
   }
 
   /**
    * @param linkIndicatorByte See constants eg. `TarchiveMetadata.linkIndicatorNormal`
    */
   def apply(filePathPrefix: String,
-            filePathName: String,
-            size: Long,
-            lastModification: Instant,
-            linkIndicatorByte: Byte): TarArchiveMetadata = {
+      filePathName: String,
+      size: Long,
+      lastModification: Instant,
+      linkIndicatorByte: Byte): TarArchiveMetadata = {
     apply(if (filePathPrefix.isEmpty) None else Some(filePathPrefix),
-          filePathName,
-          size,
-          lastModification,
-          linkIndicatorByte)
+      filePathName,
+      size,
+      lastModification,
+      linkIndicatorByte)
   }
 
   private def apply(filePathPrefix: Option[String],
-                    filePathName: String,
-                    size: Long,
-                    lastModification: Instant,
-                    linkIndicatorByte: Byte): TarArchiveMetadata = {
+      filePathName: String,
+      size: Long,
+      lastModification: Instant,
+      linkIndicatorByte: Byte): TarArchiveMetadata = {
     filePathPrefix.foreach { value =>
       require(
         value.length <= 154,
-        "File path prefix must be between 1 and 154 characters long"
-      )
+        "File path prefix must be between 1 and 154 characters long")
     }
     require(filePathName.length >= 0 && filePathName.length <= 99,
-            s"File path name must be between 0 and 99 characters long, was ${filePathName.length}")
+      s"File path name must be between 0 and 99 characters long, was ${filePathName.length}")
 
     new TarArchiveMetadata(filePathPrefix,
-                           filePathName,
-                           size,
-                           // tar timestamp granularity is in seconds
-                           lastModification.`with`(ChronoField.NANO_OF_SECOND, 0L),
-                           linkIndicatorByte)
+      filePathName,
+      size,
+      // tar timestamp granularity is in seconds
+      lastModification.`with`(ChronoField.NANO_OF_SECOND, 0L),
+      linkIndicatorByte)
   }
 
   def create(filePath: String, size: Long): TarArchiveMetadata = apply(filePath, size, Instant.now)
@@ -145,10 +142,10 @@ object TarArchiveMetadata {
    * @param linkIndicatorByte See constants eg. `TarchiveMetadata.linkIndicatorNormal`
    */
   def create(filePathPrefix: String,
-             filePathName: String,
-             size: Long,
-             lastModification: Instant,
-             linkIndicatorByte: Byte): TarArchiveMetadata =
+      filePathName: String,
+      size: Long,
+      lastModification: Instant,
+      linkIndicatorByte: Byte): TarArchiveMetadata =
     apply(filePathPrefix, filePathName, size, lastModification, linkIndicatorByte)
 
   /**

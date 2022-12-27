@@ -6,11 +6,11 @@ package akka.stream.alpakka.ftp
 package impl
 
 import net.schmizz.sshj.SSHClient
-import org.apache.commons.net.ftp.{FTPClient, FTPSClient}
+import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
 import scala.collection.immutable
 import scala.util.Try
-import java.io.{InputStream, OutputStream}
+import java.io.{ InputStream, OutputStream }
 
 import akka.annotation.InternalApi
 

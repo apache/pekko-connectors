@@ -10,7 +10,7 @@ import akka.testkit.TestKit
 import java.net.URI
 import java.util.UUID
 import io.pravega.client.admin.StreamManager
-import io.pravega.client.stream.{ScalingPolicy, StreamConfiguration}
+import io.pravega.client.stream.{ ScalingPolicy, StreamConfiguration }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike

@@ -7,8 +7,8 @@ package akka.stream.alpakka.cassandra.scaladsl
 import akka.NotUsed
 import akka.dispatch.ExecutionContexts
 import akka.stream.alpakka.cassandra.CassandraWriteSettings
-import akka.stream.scaladsl.{Flow, FlowWithContext}
-import com.datastax.oss.driver.api.core.cql.{BatchStatement, BoundStatement, PreparedStatement}
+import akka.stream.scaladsl.{ Flow, FlowWithContext }
+import com.datastax.oss.driver.api.core.cql.{ BatchStatement, BoundStatement, PreparedStatement }
 
 import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
@@ -31,8 +31,8 @@ object CassandraFlow {
   def create[T](
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: (T, PreparedStatement) => BoundStatement
-  )(implicit session: CassandraSession): Flow[T, T, NotUsed] = {
+      statementBinder: (T, PreparedStatement) => BoundStatement)(
+      implicit session: CassandraSession): Flow[T, T, NotUsed] = {
     Flow
       .lazyFutureFlow { () =>
         val prepare = session.prepare(cqlStatement)
@@ -61,8 +61,8 @@ object CassandraFlow {
   def withContext[T, Ctx](
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: (T, PreparedStatement) => BoundStatement
-  )(implicit session: CassandraSession): FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
+      statementBinder: (T, PreparedStatement) => BoundStatement)(
+      implicit session: CassandraSession): FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
     FlowWithContext.fromTuples {
       Flow
         .lazyFutureFlow { () =>
@@ -102,9 +102,9 @@ object CassandraFlow {
    * @tparam K extracted key type for grouping into batches
    */
   def createBatch[T, K](writeSettings: CassandraWriteSettings,
-                        cqlStatement: String,
-                        statementBinder: (T, PreparedStatement) => BoundStatement,
-                        groupingKey: T => K)(implicit session: CassandraSession): Flow[T, T, NotUsed] = {
+      cqlStatement: String,
+      statementBinder: (T, PreparedStatement) => BoundStatement,
+      groupingKey: T => K)(implicit session: CassandraSession): Flow[T, T, NotUsed] = {
     Flow
       .lazyFutureFlow { () =>
         val prepareStatement: Future[PreparedStatement] = session.prepare(cqlStatement)

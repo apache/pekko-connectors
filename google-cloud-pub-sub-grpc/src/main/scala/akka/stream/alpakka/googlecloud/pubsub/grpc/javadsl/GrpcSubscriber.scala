@@ -16,7 +16,7 @@ import akka.annotation.ApiMayChange
 import akka.stream.alpakka.google.GoogleSettings
 import akka.stream.alpakka.googlecloud.pubsub.grpc.PubSubSettings
 import akka.stream.alpakka.googlecloud.pubsub.grpc.impl.AkkaGrpcSettings
-import com.google.pubsub.v1.{SubscriberClient => JavaSubscriberClient}
+import com.google.pubsub.v1.{ SubscriberClient => JavaSubscriberClient }
 
 /**
  * Holds the gRPC java subscriber client instance.
@@ -36,8 +36,8 @@ object GrpcSubscriber {
    * Creates a publisher with the new actors API.
    */
   def create(settings: PubSubSettings,
-             googleSettings: GoogleSettings,
-             sys: ClassicActorSystemProvider): GrpcSubscriber =
+      googleSettings: GoogleSettings,
+      sys: ClassicActorSystemProvider): GrpcSubscriber =
     create(settings, googleSettings, sys.classicSystem)
 
   def create(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber =

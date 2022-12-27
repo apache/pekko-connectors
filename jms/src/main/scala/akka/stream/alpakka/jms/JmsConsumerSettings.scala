@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.jms
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.util.JavaDurationConverters._
-import com.typesafe.config.{Config, ConfigValueType}
+import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 
@@ -26,8 +26,8 @@ final class JmsConsumerSettings private (
     val maxAckInterval: Option[scala.concurrent.duration.FiniteDuration],
     val maxPendingAcks: Int,
     val failStreamOnAckTimeout: Boolean,
-    val connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration
-) extends akka.stream.alpakka.jms.JmsSettings {
+    val connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration)
+    extends akka.stream.alpakka.jms.JmsSettings {
 
   /** Factory to use for creating JMS connections. */
   def withConnectionFactory(value: javax.jms.ConnectionFactory): JmsConsumerSettings = copy(connectionFactory = value)
@@ -115,8 +115,7 @@ final class JmsConsumerSettings private (
       maxPendingAcks: Int = maxPendingAcks,
       failStreamOnAckTimeout: Boolean = failStreamOnAckTimeout,
       connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration =
-        connectionStatusSubscriptionTimeout
-  ): JmsConsumerSettings = new JmsConsumerSettings(
+        connectionStatusSubscriptionTimeout): JmsConsumerSettings = new JmsConsumerSettings(
     connectionFactory = connectionFactory,
     connectionRetrySettings = connectionRetrySettings,
     destination = destination,
@@ -129,8 +128,7 @@ final class JmsConsumerSettings private (
     maxAckInterval = maxAckInterval,
     maxPendingAcks = maxPendingAcks,
     failStreamOnAckTimeout = failStreamOnAckTimeout,
-    connectionStatusSubscriptionTimeout = connectionStatusSubscriptionTimeout
-  )
+    connectionStatusSubscriptionTimeout = connectionStatusSubscriptionTimeout)
 
   override def toString =
     "JmsConsumerSettings(" +
@@ -195,8 +193,7 @@ object JmsConsumerSettings {
       maxAckInterval,
       maxPendingAcks,
       failStreamOnAckTimeout,
-      connectionStatusSubscriptionTimeout
-    )
+      connectionStatusSubscriptionTimeout)
   }
 
   /**
@@ -215,7 +212,7 @@ object JmsConsumerSettings {
    * @param connectionFactory Factory to use for creating JMS connections.
    */
   def apply(actorSystem: ClassicActorSystemProvider,
-            connectionFactory: javax.jms.ConnectionFactory): JmsConsumerSettings =
+      connectionFactory: javax.jms.ConnectionFactory): JmsConsumerSettings =
     apply(actorSystem.classicSystem, connectionFactory)
 
   /**
@@ -243,6 +240,6 @@ object JmsConsumerSettings {
    * @param connectionFactory Factory to use for creating JMS connections.
    */
   def create(actorSystem: ClassicActorSystemProvider,
-             connectionFactory: javax.jms.ConnectionFactory): JmsConsumerSettings =
+      connectionFactory: javax.jms.ConnectionFactory): JmsConsumerSettings =
     apply(actorSystem.classicSystem, connectionFactory)
 }

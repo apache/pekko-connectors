@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.reference
 
-import java.util.{Optional, OptionalInt}
+import java.util.{ Optional, OptionalInt }
 
 import akka.annotation.InternalApi
 import akka.util.ByteString
@@ -12,7 +12,7 @@ import akka.util.ByteString
 import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.compat.java8.OptionConverters._
-import scala.util.{Success, Try}
+import scala.util.{ Success, Try }
 
 /**
  * Use "Read" in message data types to signify that the message was read from outside.
@@ -22,8 +22,7 @@ import scala.util.{Success, Try}
  */
 final class ReferenceReadResult @InternalApi private[reference] (
     val data: immutable.Seq[ByteString] = immutable.Seq.empty,
-    val bytesRead: Try[Int] = Success(0)
-) {
+    val bytesRead: Try[Int] = Success(0)) {
 
   /**
    * Java API
@@ -64,8 +63,7 @@ final class ReferenceReadResult @InternalApi private[reference] (
  */
 final class ReferenceWriteMessage private (
     val data: immutable.Seq[ByteString] = immutable.Seq.empty,
-    val metrics: Map[String, Long] = Map.empty
-) {
+    val metrics: Map[String, Long] = Map.empty) {
   def withData(data: immutable.Seq[ByteString]): ReferenceWriteMessage =
     copy(data = data)
 
@@ -132,8 +130,8 @@ object ReferenceWriteMessage {
  * [[akka.stream.alpakka.reference.testkit.MessageFactory]].
  */
 final class ReferenceWriteResult @InternalApi private[reference] (val message: ReferenceWriteMessage,
-                                                                  val metrics: Map[String, Long],
-                                                                  val status: Int) {
+    val metrics: Map[String, Long],
+    val status: Int) {
 
   /** Java API */
   def getMessage: ReferenceWriteMessage = message

@@ -5,8 +5,8 @@
 package akka.stream.alpakka.google.auth
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.model.{ErrorInfo, ExceptionWithErrorInfo, HttpResponse}
-import akka.http.scaladsl.unmarshalling.{FromResponseUnmarshaller, PredefinedFromEntityUnmarshallers, Unmarshaller}
+import akka.http.scaladsl.model.{ ErrorInfo, ExceptionWithErrorInfo, HttpResponse }
+import akka.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, PredefinedFromEntityUnmarshallers, Unmarshaller }
 import akka.stream.alpakka.google.implicits._
 import akka.stream.alpakka.google.util.Retry
 import spray.json.DefaultJsonProtocol._
@@ -27,15 +27,12 @@ private[google] object GoogleOAuth2Exception {
       .andThen(
         Unmarshaller.firstOf(
           sprayJsonUnmarshaller[OAuth2ErrorResponse],
-          PredefinedFromEntityUnmarshallers.stringUnmarshaller.map(s => OAuth2ErrorResponse(None, Some(s)))
-        )
-      )
+          PredefinedFromEntityUnmarshallers.stringUnmarshaller.map(s => OAuth2ErrorResponse(None, Some(s)))))
       .mapWithInput {
         case (response, OAuth2ErrorResponse(error, error_description)) =>
           val ex = GoogleOAuth2Exception(
             ErrorInfo(error.getOrElse(response.status.value),
-                      error_description.getOrElse(response.status.defaultMessage))
-          )
+              error_description.getOrElse(response.status.defaultMessage)))
           // https://github.com/googleapis/google-auth-library-python/blob/master/google/oauth2/_client.py
           if (ex.info.summary == internalFailure || ex.info.detail == internalFailure)
             Retry(ex): Throwable

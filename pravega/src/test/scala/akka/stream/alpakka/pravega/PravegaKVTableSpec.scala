@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.pravega
 
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 
 import scala.concurrent.Await
 

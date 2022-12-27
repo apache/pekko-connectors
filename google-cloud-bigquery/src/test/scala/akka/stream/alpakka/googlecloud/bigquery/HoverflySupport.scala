@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.googlecloud.bigquery
 
-import io.specto.hoverfly.junit.core.{Hoverfly, HoverflyConfig, HoverflyMode}
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import io.specto.hoverfly.junit.core.{ Hoverfly, HoverflyConfig, HoverflyMode }
+import org.scalatest.{ BeforeAndAfterAll, Suite }
 
 trait HoverflySupport extends BeforeAndAfterAll { this: Suite =>
 
@@ -30,7 +30,6 @@ object BigQueryHoverfly
         .adminPort(8888)
         .captureHeaders("Content-Range", "X-Upload-Content-Type")
         .enableStatefulCapture(),
-      HoverflyMode.SIMULATE
-    ) {
+      HoverflyMode.SIMULATE) {
   def getInstance = this
 }

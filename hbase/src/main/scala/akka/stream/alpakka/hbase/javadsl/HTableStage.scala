@@ -7,10 +7,10 @@ package akka.stream.alpakka.hbase.javadsl
 import java.util.concurrent.CompletionStage
 
 import akka.stream.alpakka.hbase.HTableSettings
-import akka.stream.alpakka.hbase.impl.{HBaseFlowStage, HBaseSourceStage}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
-import org.apache.hadoop.hbase.client.{Result, Scan}
+import akka.stream.alpakka.hbase.impl.{ HBaseFlowStage, HBaseSourceStage }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import akka.{ Done, NotUsed }
+import org.apache.hadoop.hbase.client.{ Result, Scan }
 
 import scala.compat.java8.FutureConverters._
 

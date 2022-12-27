@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.storage
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
 
 /**
@@ -19,8 +19,7 @@ final class GCStorageSettings private (
     val baseUrl: String,
     val basePath: String,
     val tokenUrl: String,
-    val tokenScope: String
-) {
+    val tokenScope: String) {
 
   /** Java API */
   def getProjectId: String = projectId
@@ -58,16 +57,14 @@ final class GCStorageSettings private (
       baseUrl: String = baseUrl,
       basePath: String = basePath,
       tokenUrl: String = tokenUrl,
-      tokenScope: String = tokenScope
-  ): GCStorageSettings = new GCStorageSettings(
+      tokenScope: String = tokenScope): GCStorageSettings = new GCStorageSettings(
     projectId = projectId,
     clientEmail = clientEmail,
     privateKey = privateKey,
     baseUrl = baseUrl,
     basePath = basePath,
     tokenUrl = tokenUrl,
-    tokenScope = tokenScope
-  )
+    tokenScope = tokenScope)
 
   override def toString =
     "GCStorageSettings(" +
@@ -128,8 +125,7 @@ object GCStorageSettings {
       baseUrl,
       basePath,
       tokenUrl,
-      tokenScope
-    )
+      tokenScope)
   }
 
   /**
@@ -153,31 +149,27 @@ object GCStorageSettings {
   def apply(
       projectId: String,
       clientEmail: String,
-      privateKey: String
-  ): GCStorageSettings = new GCStorageSettings(
+      privateKey: String): GCStorageSettings = new GCStorageSettings(
     projectId,
     clientEmail,
     privateKey,
     defaultBaseUrl,
     defaultBasePath,
     defaultTokenUrl,
-    defaultTokenScope
-  )
+    defaultTokenScope)
 
   /** Java API */
   def create(
       projectId: String,
       clientEmail: String,
-      privateKey: String
-  ): GCStorageSettings = new GCStorageSettings(
+      privateKey: String): GCStorageSettings = new GCStorageSettings(
     projectId,
     clientEmail,
     privateKey,
     defaultBaseUrl,
     defaultBasePath,
     defaultTokenUrl,
-    defaultTokenScope
-  )
+    defaultTokenScope)
 
   /**
    * Scala API: Creates [[GCStorageSettings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.

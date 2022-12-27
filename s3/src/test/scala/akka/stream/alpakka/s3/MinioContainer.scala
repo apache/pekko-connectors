@@ -18,9 +18,7 @@ class MinioContainer(accessKey: String, secretKey: String, domain: String)
       env = Map(
         "MINIO_ACCESS_KEY" -> accessKey,
         "MINIO_SECRET_KEY" -> secretKey,
-        "MINIO_DOMAIN" -> domain
-      )
-    ) {
+        "MINIO_DOMAIN" -> domain)) {
 
   def getHostAddress: String =
     s"http://${container.getContainerIpAddress}:${container.getMappedPort(9000)}"

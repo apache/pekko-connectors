@@ -6,9 +6,9 @@ package akka.stream.alpakka.google.firebase.fcm.javadsl
 
 import akka.japi.Pair
 import akka.stream.alpakka.google.firebase.fcm.impl.FcmFlows
-import akka.stream.alpakka.google.firebase.fcm.{FcmNotification, FcmResponse, FcmSettings}
-import akka.stream.{javadsl, scaladsl}
-import akka.{Done, NotUsed}
+import akka.stream.alpakka.google.firebase.fcm.{ FcmNotification, FcmResponse, FcmSettings }
+import akka.stream.{ javadsl, scaladsl }
+import akka.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 

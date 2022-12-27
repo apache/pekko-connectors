@@ -40,7 +40,7 @@ final class AES256 private[headers] () extends ServerSideEncryption {
 
   @InternalApi private[s3] override def headersFor(request: S3Request): immutable.Seq[HttpHeader] = request match {
     case PutObject | InitiateMultipartUpload => headers
-    case _ => Nil
+    case _                                   => Nil
   }
 
   override def toString: String =
@@ -49,7 +49,7 @@ final class AES256 private[headers] () extends ServerSideEncryption {
 
   override def equals(other: Any): Boolean = other match {
     case that: AES256 => true
-    case _ => false
+    case _            => false
   }
 
   override def hashCode(): Int =
@@ -75,7 +75,7 @@ final class KMS private[headers] (val keyId: String, val context: Option[String]
 
   @InternalApi private[s3] override def headersFor(request: S3Request): immutable.Seq[HttpHeader] = request match {
     case PutObject | InitiateMultipartUpload => headers
-    case _ => Nil
+    case _                                   => Nil
   }
 
   def withKeyId(keyId: String): KMS = copy(keyId = keyId)
@@ -83,11 +83,9 @@ final class KMS private[headers] (val keyId: String, val context: Option[String]
 
   private def copy(
       keyId: String = keyId,
-      context: Option[String] = context
-  ): KMS = new KMS(
+      context: Option[String] = context): KMS = new KMS(
     keyId = keyId,
-    context = context
-  )
+    context = context)
 
   override def toString: String =
     "ServerSideEncryption.KMS(" +
@@ -118,11 +116,12 @@ final class CustomerKeys private[headers] (val key: String, val md5: Option[Stri
   @InternalApi private[s3] override def headers: immutable.Seq[HttpHeader] =
     RawHeader("x-amz-server-side-encryption-customer-algorithm", "AES256") ::
     RawHeader("x-amz-server-side-encryption-customer-key", key) ::
-    RawHeader("x-amz-server-side-encryption-customer-key-MD5", md5.getOrElse({
-      val decodedKey = BinaryUtils.fromBase64(key)
-      val md5 = Md5Utils.md5AsBase64(decodedKey)
-      md5
-    })) :: Nil
+    RawHeader("x-amz-server-side-encryption-customer-key-MD5",
+      md5.getOrElse {
+        val decodedKey = BinaryUtils.fromBase64(key)
+        val md5 = Md5Utils.md5AsBase64(decodedKey)
+        md5
+      }) :: Nil
 
   @InternalApi private[s3] override def headersFor(request: S3Request): immutable.Seq[HttpHeader] = request match {
     case GetObject | HeadObject | PutObject | InitiateMultipartUpload | UploadPart =>
@@ -133,12 +132,11 @@ final class CustomerKeys private[headers] (val key: String, val md5: Option[Stri
         RawHeader("x-amz-copy-source-server-side-encryption-customer-key", key) ::
         RawHeader(
           "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-          md5.getOrElse({
+          md5.getOrElse {
             val decodedKey = BinaryUtils.fromBase64(key)
             val md5 = Md5Utils.md5AsBase64(decodedKey)
             md5
-          })
-        ) :: Nil
+          }) :: Nil
       headers ++: copyHeaders
     case _ => Nil
   }
@@ -148,11 +146,9 @@ final class CustomerKeys private[headers] (val key: String, val md5: Option[Stri
 
   private def copy(
       key: String = key,
-      md5: Option[String] = md5
-  ): CustomerKeys = new CustomerKeys(
+      md5: Option[String] = md5): CustomerKeys = new CustomerKeys(
     key = key,
-    md5 = md5
-  )
+    md5 = md5)
 
   override def toString: String =
     "ServerSideEncryption.CustomerKeys(" +

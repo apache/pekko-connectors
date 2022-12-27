@@ -5,8 +5,8 @@
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema
 
 import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaType.Record
-import akka.stream.alpakka.googlecloud.bigquery.model.{TableFieldSchema, TableFieldSchemaMode, TableSchema}
-import spray.json.{AdditionalFormats, ProductFormats, StandardFormats}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ TableFieldSchema, TableFieldSchemaMode, TableSchema }
+import spray.json.{ AdditionalFormats, ProductFormats, StandardFormats }
 
 import scala.collection.immutable.Seq
 import scala.reflect.ClassTag

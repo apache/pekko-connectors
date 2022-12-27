@@ -15,11 +15,10 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
   it should "correctly build a canonicalString for eu-central-1" in {
     val req = HttpRequest(
       HttpMethods.GET,
-      Uri("https://s3.eu-central-1.amazonaws.com/my.test.bucket/test%20folder/test%20file%20(1).txt?uploads")
-    ).withHeaders(
+      Uri(
+        "https://s3.eu-central-1.amazonaws.com/my.test.bucket/test%20folder/test%20file%20(1).txt?uploads")).withHeaders(
       RawHeader("x-amz-content-sha256", "testhash"),
-      `Content-Type`(ContentTypes.`application/json`)
-    )
+      `Content-Type`(ContentTypes.`application/json`))
     val canonical = CanonicalRequest.from(req)
     canonical.canonicalString should equal(
       """GET
@@ -29,19 +28,16 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
         |x-amz-content-sha256:testhash
         |
         |content-type;x-amz-content-sha256
-        |testhash""".stripMargin
-    )
+        |testhash""".stripMargin)
   }
 
   it should "correctly build a canonicalString for us-east-1" in {
     val req = HttpRequest(
       HttpMethods.GET,
       Uri("https://mytestbucket.s3.us-east-1.amazonaws.com/test%20folder/test%20file%20(1):.txt")
-        .withQuery(Query("partNumber" -> "2", "uploadId" -> "testUploadId"))
-    ).withHeaders(
+        .withQuery(Query("partNumber" -> "2", "uploadId" -> "testUploadId"))).withHeaders(
       RawHeader("x-amz-content-sha256", "testhash"),
-      `Content-Type`(ContentTypes.`application/json`)
-    )
+      `Content-Type`(ContentTypes.`application/json`))
     val canonical = CanonicalRequest.from(req)
     canonical.canonicalString should equal(
       """GET
@@ -51,18 +47,15 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
         |x-amz-content-sha256:testhash
         |
         |content-type;x-amz-content-sha256
-        |testhash""".stripMargin
-    )
+        |testhash""".stripMargin)
   }
 
   it should "correctly build a canonicalString for us-east-1 with empty path" in {
     val req = HttpRequest(
       HttpMethods.GET,
-      Uri("https://mytestbucket.s3.us-east-1.amazonaws.com")
-    ).withHeaders(
+      Uri("https://mytestbucket.s3.us-east-1.amazonaws.com")).withHeaders(
       RawHeader("x-amz-content-sha256", "testhash"),
-      `Content-Type`(ContentTypes.`application/json`)
-    )
+      `Content-Type`(ContentTypes.`application/json`))
     val canonical = CanonicalRequest.from(req)
     canonical.canonicalString should equal(
       """GET
@@ -72,19 +65,16 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
         |x-amz-content-sha256:testhash
         |
         |content-type;x-amz-content-sha256
-        |testhash""".stripMargin
-    )
+        |testhash""".stripMargin)
   }
 
   it should "correctly build a canonicalString with special characters in the path" in {
     // this corresponds with not encode path: /føldęrü/1234()[]><!? .TXT
     val req = HttpRequest(
       HttpMethods.GET,
-      Uri("https://mytestbucket.s3.us-east-1.amazonaws.com/f%C3%B8ld%C4%99r%C3%BC/1234()%5B%5D%3E%3C!%3F%20.TXT")
-    ).withHeaders(
+      Uri("https://mytestbucket.s3.us-east-1.amazonaws.com/f%C3%B8ld%C4%99r%C3%BC/1234()%5B%5D%3E%3C!%3F%20.TXT")).withHeaders(
       RawHeader("x-amz-content-sha256", "testhash"),
-      `Content-Type`(ContentTypes.`application/json`)
-    )
+      `Content-Type`(ContentTypes.`application/json`))
     val canonical = CanonicalRequest.from(req)
     canonical.canonicalString should equal(
       """GET
@@ -94,8 +84,7 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
         |x-amz-content-sha256:testhash
         |
         |content-type;x-amz-content-sha256
-        |testhash""".stripMargin
-    )
+        |testhash""".stripMargin)
   }
 
   // https://tools.ietf.org/html/rfc3986#section-2.3
@@ -107,11 +96,9 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
       HttpRequest(
         HttpMethods.GET,
         Uri(s"https://mytestbucket.s3.us-east-1.amazonaws.com/test")
-          .withQuery(Uri.Query(name.toString -> value.toString))
-      ).withHeaders(
+          .withQuery(Uri.Query(name.toString -> value.toString))).withHeaders(
         RawHeader("x-amz-content-sha256", "testhash"),
-        `Content-Type`(ContentTypes.`application/json`)
-      )
+        `Content-Type`(ContentTypes.`application/json`))
 
     val canonicalRequest = CanonicalRequest.from(request)
     canonicalRequest.canonicalString should equal {
@@ -137,11 +124,9 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
           HttpRequest(
             HttpMethods.GET,
             Uri(s"https://mytestbucket.s3.us-east-1.amazonaws.com")
-              .withPath(Uri.Path.Empty / s"file-$char.txt")
-          ).withHeaders(
+              .withPath(Uri.Path.Empty / s"file-$char.txt")).withHeaders(
             RawHeader("x-amz-content-sha256", "testhash"),
-            `Content-Type`(ContentTypes.`application/json`)
-          )
+            `Content-Type`(ContentTypes.`application/json`))
 
         val canonicalRequest = CanonicalRequest.from(request)
         canonicalRequest.canonicalString should equal {
@@ -161,13 +146,11 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
   it should "correctly build a canonicalString when synthetic headers are present" in {
     val req = HttpRequest(
       HttpMethods.GET,
-      Uri("https://s3.eu-central-1.amazonaws.com/my.test.bucket/file+name.txt")
-    ).withHeaders(
+      Uri("https://s3.eu-central-1.amazonaws.com/my.test.bucket/file+name.txt")).withHeaders(
       RawHeader("x-amz-content-sha256", "testhash"),
       `Content-Type`(ContentTypes.`application/json`),
       `Raw-Request-URI`("/my.test.bucket/file%2Bname.txt"),
-      `X-Forwarded-For`(RemoteAddress.Unknown)
-    )
+      `X-Forwarded-For`(RemoteAddress.Unknown))
     val canonical = CanonicalRequest.from(req)
     canonical.canonicalString should equal(
       """GET
@@ -177,7 +160,6 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
         |x-amz-content-sha256:testhash
         |
         |content-type;x-amz-content-sha256
-        |testhash""".stripMargin
-    )
+        |testhash""".stripMargin)
   }
 }

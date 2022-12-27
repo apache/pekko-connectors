@@ -5,10 +5,10 @@
 package akka.stream.alpakka.jms.scaladsl
 
 import akka.stream.alpakka.jms._
-import akka.stream.alpakka.jms.impl.{JmsProducerMatValue, JmsProducerStage}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.alpakka.jms.impl.{ JmsProducerMatValue, JmsProducerStage }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -35,14 +35,14 @@ object JmsProducer {
    * a JMS broker to support pass-through of data.
    */
   def flexiFlow[PassThrough](
-      settings: JmsProducerSettings
-  ): Flow[JmsEnvelope[PassThrough], JmsEnvelope[PassThrough], JmsProducerStatus] = settings.destination match {
-    case None => throw new IllegalArgumentException(noProducerDestination(settings))
-    case Some(destination) =>
-      Flow
-        .fromGraph(new JmsProducerStage[JmsEnvelope[PassThrough], PassThrough](settings, destination))
-        .mapMaterializedValue(toProducerStatus)
-  }
+      settings: JmsProducerSettings): Flow[JmsEnvelope[PassThrough], JmsEnvelope[PassThrough], JmsProducerStatus] =
+    settings.destination match {
+      case None => throw new IllegalArgumentException(noProducerDestination(settings))
+      case Some(destination) =>
+        Flow
+          .fromGraph(new JmsProducerStage[JmsEnvelope[PassThrough], PassThrough](settings, destination))
+          .mapMaterializedValue(toProducerStatus)
+    }
 
   /**
    * Create a sink to send [[akka.stream.alpakka.jms.JmsMessage JmsMessage]] sub-classes to

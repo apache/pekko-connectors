@@ -8,7 +8,7 @@ import akka.annotation.InternalApi
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.Uri.Query
-import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, FromResponseUnmarshaller, Unmarshal, Unmarshaller}
+import akka.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller, Unmarshal, Unmarshaller }
 import akka.http.scaladsl.util.FastFuture.EnhancedFuture
 import akka.stream.alpakka.google.util.Retry
 
@@ -53,7 +53,7 @@ private[alpakka] object implicits {
           case ex =>
             response.status match {
               case TooManyRequests | InternalServerError | BadGateway | ServiceUnavailable | GatewayTimeout => Retry(ex)
-              case _ => ex
+              case _                                                                                        => ex
             }
         }
       }
@@ -64,8 +64,7 @@ private[alpakka] object implicits {
    */
   implicit def responseUnmarshallerWithExceptions[T](
       implicit um: FromEntityUnmarshaller[T],
-      exUm: FromResponseUnmarshaller[Throwable]
-  ): FromResponseUnmarshaller[T] =
+      exUm: FromResponseUnmarshaller[Throwable]): FromResponseUnmarshaller[T] =
     Unmarshaller.withMaterializer { implicit ec => implicit mat => response =>
       if (response.status.isSuccess())
         Unmarshal(response.entity).to[T]

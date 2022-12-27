@@ -11,8 +11,8 @@ import akka.stream.Materializer
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.alpakka.udp.Datagram
 import akka.stream.alpakka.udp.scaladsl.Udp
-import akka.stream.scaladsl.{Flow, Keep, Source}
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.scaladsl.{ Flow, Keep, Source }
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.testkit.TestKit
 import akka.util.ByteString
 import org.scalatest.concurrent.ScalaFutures

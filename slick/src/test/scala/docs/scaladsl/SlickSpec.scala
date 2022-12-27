@@ -6,7 +6,7 @@ package docs.scaladsl
 
 import akka.Done
 import akka.actor.ActorSystem
-import akka.stream.alpakka.slick.scaladsl.{Slick, SlickSession}
+import akka.stream.alpakka.slick.scaladsl.{ Slick, SlickSession }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl._
 import akka.testkit.TestKit
@@ -14,10 +14,10 @@ import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import slick.basic.DatabaseConfig
 import slick.dbio.DBIOAction
-import slick.jdbc.{GetResult, JdbcProfile}
+import slick.jdbc.{ GetResult, JdbcProfile }
 
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -32,13 +32,13 @@ class SlickSpec
     with BeforeAndAfterAll
     with Matchers
     with LogCapturing {
-  //#init-mat
+  // #init-mat
   implicit val system = ActorSystem()
-  //#init-mat
+  // #init-mat
 
-  //#init-session
+  // #init-session
   implicit val session: SlickSession = SlickSession.forConfig("slick-h2")
-  //#init-session
+  // #init-session
 
   import session.profile.api._
 
@@ -77,20 +77,20 @@ class SlickSpec
   override def afterEach(): Unit = session.db.run(dropTable).futureValue
 
   override def afterAll(): Unit = {
-    //#close-session
+    // #close-session
     system.registerOnTermination(() => session.close())
-    //#close-session
+    // #close-session
 
     TestKit.shutdownActorSystem(system)
   }
 
   "SlickSession.forDbAndProfile" must {
     "create a slick session able to talk to the db" in {
-      //#init-session-from-db-and-profile
+      // #init-session-from-db-and-profile
       val db = Database.forConfig("slick-h2.db")
       val profile = slick.jdbc.H2Profile
       val slickSessionCreatedForDbAndProfile: SlickSession = SlickSession.forDbAndProfile(db, profile)
-      //#init-session-from-db-and-profile
+      // #init-session-from-db-and-profile
       try {
         val q = sql"select true".as[Boolean]
         val result = Slick
@@ -152,10 +152,10 @@ class SlickSpec
 
   "Slick.flow(..)" must {
     "insert 40 records into a table (no parallelism)" in {
-      //#init-db-config-session
+      // #init-db-config-session
       val databaseConfig = DatabaseConfig.forConfig[JdbcProfile]("slick-h2")
       implicit val session = SlickSession.forConfig(databaseConfig)
-      //#init-db-config-session
+      // #init-db-config-session
 
       val inserted = Source(users)
         .via(Slick.flow(insertUser))
@@ -184,12 +184,11 @@ class SlickSpec
       val inserted = Source(users)
         .grouped(10)
         .via(
-          Slick.flow(parallelism = 4, (group: Seq[User]) => group.map(insertUser(_)).reduceLeft(_.andThen(_)))
-        )
+          Slick.flow(parallelism = 4, (group: Seq[User]) => group.map(insertUser(_)).reduceLeft(_.andThen(_))))
         .runWith(Sink.seq)
         .futureValue
 
-      inserted must have size (4)
+      inserted must have size 4
       // we do single inserts without auto-commit but it only returns the result of the last insert
       inserted.toSet mustBe Set(1)
 
@@ -207,7 +206,7 @@ class SlickSpec
         .futureValue
 
       inserted must have size (users.size)
-      inserted.map(_._1).toSet mustBe (users)
+      inserted.map(_._1).toSet mustBe users
       inserted.map(_._2).toSet mustBe Set(1)
 
       getAllUsersFromDb.futureValue mustBe users
@@ -215,14 +214,15 @@ class SlickSpec
 
     "insert 40 records into a table (parallelism = 4)" in {
       val inserted = Source(users)
-        .via(Slick.flowWithPassThrough(parallelism = 4, user => {
-          insertUser(user).map(insertCount => (user, insertCount))
-        }))
+        .via(Slick.flowWithPassThrough(parallelism = 4,
+          user => {
+            insertUser(user).map(insertCount => (user, insertCount))
+          }))
         .runWith(Sink.seq)
         .futureValue
 
       inserted must have size (users.size)
-      inserted.map(_._1).toSet mustBe (users)
+      inserted.map(_._1).toSet mustBe users
       inserted.map(_._2).toSet mustBe Set(1)
 
       getAllUsersFromDb.futureValue mustBe users
@@ -237,14 +237,12 @@ class SlickSpec
             (group: Seq[User]) => {
               val groupedDbActions = group.map(user => insertUser(user).map(insertCount => Seq((user, insertCount))))
               DBIOAction.fold(groupedDbActions, Seq.empty[(User, Int)])(_ ++ _)
-            }
-          )
-        )
+            }))
         .runWith(Sink.fold(Seq.empty[(User, Int)])((a, b) => a ++ b))
         .futureValue
 
       inserted must have size (users.size)
-      inserted.map(_._1).toSet mustBe (users)
+      inserted.map(_._1).toSet mustBe users
       inserted.map(_._2).toSet mustBe Set(1)
 
       getAllUsersFromDb.futureValue mustBe users
@@ -252,7 +250,7 @@ class SlickSpec
 
     "kafka-example - store documents and pass Responses with passThrough" in {
 
-      //#kafka-example
+      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // After we've written them to a db with Slick, we want
       // to commit the offset to Kafka
@@ -276,8 +274,7 @@ class SlickSpec
         .via( // write to db with Slick
           Slick.flowWithPassThrough { kafkaMessage =>
             insertUser(kafkaMessage.msg).map(insertCount => kafkaMessage.map(_ => insertCount))
-          }
-        )
+          })
         .mapAsync(1) { kafkaMessage =>
           if (kafkaMessage.msg == 0) throw new Exception("Failed to write message to db")
           // Commit to kafka
@@ -316,8 +313,7 @@ class SlickSpec
       Source(users)
         .grouped(10)
         .runWith(
-          Slick.sink(parallelism = 4, (group: Seq[User]) => group.map(insertUser(_)).reduceLeft(_.andThen(_)))
-        )
+          Slick.sink(parallelism = 4, (group: Seq[User]) => group.map(insertUser(_)).reduceLeft(_.andThen(_))))
         .futureValue
 
       getAllUsersFromDb.futureValue mustBe users

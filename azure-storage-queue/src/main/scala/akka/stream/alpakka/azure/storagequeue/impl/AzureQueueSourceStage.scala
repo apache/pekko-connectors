@@ -8,9 +8,9 @@ import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.stream.alpakka.azure.storagequeue.AzureQueueSourceSettings
 import akka.stream.impl.Stages.DefaultAttributes.IODispatcher
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler, TimerGraphStageLogic}
-import akka.stream.{Attributes, Outlet, SourceShape}
-import com.microsoft.azure.storage.queue.{CloudQueue, CloudQueueMessage}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, TimerGraphStageLogic }
+import akka.stream.{ Attributes, Outlet, SourceShape }
+import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
 
 import scala.collection.mutable.Queue
 
@@ -18,7 +18,7 @@ import scala.collection.mutable.Queue
  * INTERNAL API
  */
 @InternalApi private[storagequeue] final class AzureQueueSourceStage(cloudQueue: () => CloudQueue,
-                                                                     settings: AzureQueueSourceSettings)
+    settings: AzureQueueSourceSettings)
     extends GraphStage[SourceShape[CloudQueueMessage]] {
   val out: Outlet[CloudQueueMessage] = Outlet("AzureCloudQueue.out")
   override val shape: SourceShape[CloudQueueMessage] = SourceShape(out)
@@ -64,7 +64,6 @@ import scala.collection.mutable.Queue
           } else {
             retrieveMessages()
           }
-      }
-    )
+      })
   }
 }

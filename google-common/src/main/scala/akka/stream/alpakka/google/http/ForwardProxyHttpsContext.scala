@@ -5,12 +5,12 @@
 package akka.stream.alpakka.google.http
 
 import akka.annotation.InternalApi
-import akka.http.scaladsl.{ConnectionContext, HttpsConnectionContext}
+import akka.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 
 import java.io.FileInputStream
 import java.security.KeyStore
-import java.security.cert.{CertificateFactory, X509Certificate}
-import javax.net.ssl.{SSLContext, TrustManagerFactory}
+import java.security.cert.{ CertificateFactory, X509Certificate }
+import javax.net.ssl.{ SSLContext, TrustManagerFactory }
 
 @InternalApi
 private[google] object ForwardProxyHttpsContext {

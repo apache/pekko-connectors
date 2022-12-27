@@ -6,8 +6,8 @@ package akka.stream.alpakka.mqtt.scaladsl
 
 import akka.Done
 import akka.stream.alpakka.mqtt._
-import akka.stream.alpakka.mqtt.impl.{MqttFlowStage, MqttFlowStageWithAck}
-import akka.stream.scaladsl.{Flow, Keep}
+import akka.stream.alpakka.mqtt.impl.{ MqttFlowStage, MqttFlowStageWithAck }
+import akka.stream.scaladsl.{ Flow, Keep }
 
 import scala.concurrent.Future
 
@@ -27,13 +27,12 @@ object MqttFlow {
    * @param defaultQos Quality of service level applied for messages not specifying a message specific value
    */
   def atMostOnce(connectionSettings: MqttConnectionSettings,
-                 subscriptions: MqttSubscriptions,
-                 bufferSize: Int,
-                 defaultQos: MqttQoS): Flow[MqttMessage, MqttMessage, Future[Done]] =
+      subscriptions: MqttSubscriptions,
+      bufferSize: Int,
+      defaultQos: MqttQoS): Flow[MqttMessage, MqttMessage, Future[Done]] =
     Flow
       .fromGraph(
-        new MqttFlowStage(connectionSettings, subscriptions.subscriptions, bufferSize, defaultQos)
-      )
+        new MqttFlowStage(connectionSettings, subscriptions.subscriptions, bufferSize, defaultQos))
       .map(_.message)
 
   /**
@@ -45,12 +44,11 @@ object MqttFlow {
    * @param defaultQos Quality of service level applied for messages not specifying a message specific value
    */
   def atLeastOnce(connectionSettings: MqttConnectionSettings,
-                  subscriptions: MqttSubscriptions,
-                  bufferSize: Int,
-                  defaultQos: MqttQoS): Flow[MqttMessage, MqttMessageWithAck, Future[Done]] =
+      subscriptions: MqttSubscriptions,
+      bufferSize: Int,
+      defaultQos: MqttQoS): Flow[MqttMessage, MqttMessageWithAck, Future[Done]] =
     Flow.fromGraph(
-      new MqttFlowStage(connectionSettings, subscriptions.subscriptions, bufferSize, defaultQos, manualAcks = true)
-    )
+      new MqttFlowStage(connectionSettings, subscriptions.subscriptions, bufferSize, defaultQos, manualAcks = true))
 
   /**
    * Create a flow to send messages to MQTT AND subscribe to MQTT messages with a commit handle to acknowledge message reception.
@@ -61,23 +59,21 @@ object MqttFlow {
    * @param defaultQos Quality of service level applied for messages not specifying a message specific value
    */
   def atLeastOnceWithAck(connectionSettings: MqttConnectionSettings,
-                         subscriptions: MqttSubscriptions,
-                         bufferSize: Int,
-                         defaultQos: MqttQoS): Flow[MqttMessageWithAck, MqttMessageWithAck, Future[Done]] =
+      subscriptions: MqttSubscriptions,
+      bufferSize: Int,
+      defaultQos: MqttQoS): Flow[MqttMessageWithAck, MqttMessageWithAck, Future[Done]] =
     Flow.fromGraph(
       new MqttFlowStageWithAck(connectionSettings,
-                               subscriptions.subscriptions,
-                               bufferSize,
-                               defaultQos,
-                               manualAcks = true)
-    )
+        subscriptions.subscriptions,
+        bufferSize,
+        defaultQos,
+        manualAcks = true))
 
   def atLeastOnceWithAckForJava(
       connectionSettings: MqttConnectionSettings,
       subscriptions: MqttSubscriptions,
       bufferSize: Int,
-      defaultQos: MqttQoS
-  ): Flow[javadsl.MqttMessageWithAck, MqttMessageWithAck, Future[Done]] =
+      defaultQos: MqttQoS): Flow[javadsl.MqttMessageWithAck, MqttMessageWithAck, Future[Done]] =
     Flow
       .fromFunction(MqttMessageWithAck.fromJava)
       .viaMat(atLeastOnceWithAck(connectionSettings, subscriptions, bufferSize, defaultQos))(Keep.right)

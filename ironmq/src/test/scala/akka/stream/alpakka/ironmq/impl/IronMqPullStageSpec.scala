@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.ironmq.impl
 
-import akka.stream.alpakka.ironmq.{IronMqSettings, IronMqSpec, PushMessage}
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.alpakka.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.concurrent.ExecutionContext.Implicits.global

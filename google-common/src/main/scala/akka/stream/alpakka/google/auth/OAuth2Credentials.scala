@@ -8,13 +8,13 @@ import akka.annotation.InternalApi
 import akka.dispatch.ExecutionContexts
 import akka.http.scaladsl.model.headers.OAuth2BearerToken
 import akka.stream.alpakka.google.RequestSettings
-import akka.stream.alpakka.google.auth.OAuth2Credentials.{ForceRefresh, TokenRequest}
-import akka.stream.scaladsl.{Sink, Source}
-import akka.stream.{CompletionStrategy, Materializer, OverflowStrategy}
-import com.google.auth.{Credentials => GoogleCredentials}
+import akka.stream.alpakka.google.auth.OAuth2Credentials.{ ForceRefresh, TokenRequest }
+import akka.stream.scaladsl.{ Sink, Source }
+import akka.stream.{ CompletionStrategy, Materializer, OverflowStrategy }
+import com.google.auth.{ Credentials => GoogleCredentials }
 
 import java.time.Clock
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ ExecutionContext, Future, Promise }
 
 @InternalApi
 private[auth] object OAuth2Credentials {
@@ -40,8 +40,8 @@ private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit m
     new GoogleOAuth2Credentials(this)(ec, settings)
 
   protected def getAccessToken()(implicit mat: Materializer,
-                                 settings: RequestSettings,
-                                 clock: Clock): Future[AccessToken]
+      settings: RequestSettings,
+      clock: Clock): Future[AccessToken]
 
   private def stream =
     Source
@@ -49,8 +49,7 @@ private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit m
         PartialFunction.empty[Any, CompletionStrategy],
         PartialFunction.empty[Any, Throwable],
         Int.MaxValue,
-        OverflowStrategy.fail
-      )
+        OverflowStrategy.fail)
       .to(
         Sink.fromMaterializer { (mat, attr) =>
           Sink.foldAsync(Option.empty[AccessToken]) {
@@ -68,6 +67,5 @@ private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit m
             case (_, ForceRefresh) =>
               Future.successful(None)
           }
-        }
-      )
+        })
 }

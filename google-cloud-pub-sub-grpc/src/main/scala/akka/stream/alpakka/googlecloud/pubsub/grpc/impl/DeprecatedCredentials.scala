@@ -16,8 +16,8 @@ import java.util.concurrent.Executor
 private[grpc] final case class DeprecatedCredentials(underlying: CallCredentials) extends CallCredentials {
 
   override def applyRequestMetadata(requestInfo: CallCredentials.RequestInfo,
-                                    appExecutor: Executor,
-                                    applier: CallCredentials.MetadataApplier): Unit =
+      appExecutor: Executor,
+      applier: CallCredentials.MetadataApplier): Unit =
     underlying.applyRequestMetadata(requestInfo, appExecutor, applier)
 
   override def thisUsesUnstableApi(): Unit = underlying.thisUsesUnstableApi()

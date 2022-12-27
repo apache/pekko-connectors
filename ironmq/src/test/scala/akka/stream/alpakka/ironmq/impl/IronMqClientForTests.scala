@@ -9,7 +9,7 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.ironmq.IronMqSettings
 import akka.stream.Materializer
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.hashing.MurmurHash3
 
 trait IronMqClientForTests {

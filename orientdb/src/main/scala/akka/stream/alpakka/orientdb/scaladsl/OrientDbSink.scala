@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.orientdb.scaladsl
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.stream.alpakka.orientdb._
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{ Keep, Sink }
 import com.orientechnologies.orient.core.record.impl.ODocument
 
 import scala.concurrent.Future
@@ -22,8 +22,7 @@ object OrientDbSink {
    */
   def apply(
       className: String,
-      settings: OrientDbWriteSettings
-  ): Sink[immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]], Future[Done]] =
+      settings: OrientDbWriteSettings): Sink[immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]], Future[Done]] =
     OrientDbFlow.create(className, settings).toMat(Sink.ignore)(Keep.right)
 
   /**
@@ -32,8 +31,7 @@ object OrientDbSink {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]
-  ): Sink[immutable.Seq[OrientDbWriteMessage[T, NotUsed]], Future[Done]] =
+      clazz: Class[T]): Sink[immutable.Seq[OrientDbWriteMessage[T, NotUsed]], Future[Done]] =
     OrientDbFlow
       .typed(className, settings, clazz)
       .toMat(Sink.ignore)(Keep.right)

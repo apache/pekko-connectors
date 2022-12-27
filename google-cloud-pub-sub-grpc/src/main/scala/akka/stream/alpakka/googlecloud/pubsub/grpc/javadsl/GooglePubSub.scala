@@ -5,11 +5,11 @@
 package akka.stream.alpakka.googlecloud.pubsub.grpc.javadsl
 
 import java.time.Duration
-import java.util.concurrent.{CompletableFuture, CompletionStage}
+import java.util.concurrent.{ CompletableFuture, CompletionStage }
 import akka.actor.Cancellable
-import akka.stream.{Attributes, Materializer}
-import akka.stream.javadsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
+import akka.stream.{ Attributes, Materializer }
+import akka.stream.javadsl.{ Flow, Keep, Sink, Source }
+import akka.{ Done, NotUsed }
 import com.google.pubsub.v1._
 
 /**
@@ -41,7 +41,7 @@ object GooglePubSub {
    * @param pollInterval time between StreamingPullRequest messages are being sent
    */
   def subscribe(request: StreamingPullRequest,
-                pollInterval: Duration): Source[ReceivedMessage, CompletableFuture[Cancellable]] =
+      pollInterval: Duration): Source[ReceivedMessage, CompletableFuture[Cancellable]] =
     Source
       .fromMaterializer { (mat, attr) =>
         val cancellable = new CompletableFuture[Cancellable]()
@@ -58,9 +58,7 @@ object GooglePubSub {
               .concat(
                 Source
                   .tick(Duration.ZERO, pollInterval, subsequentRequest)
-                  .mapMaterializedValue(cancellable.complete(_))
-              )
-          )
+                  .mapMaterializedValue(cancellable.complete(_))))
           .mapConcat(_.getReceivedMessagesList)
           .mapMaterializedValue(_ => cancellable)
       }
@@ -77,8 +75,7 @@ object GooglePubSub {
    */
   def subscribePolling(
       request: PullRequest,
-      pollInterval: Duration
-  ): Source[ReceivedMessage, CompletableFuture[Cancellable]] =
+      pollInterval: Duration): Source[ReceivedMessage, CompletableFuture[Cancellable]] =
     Source
       .fromMaterializer { (mat, attr) =>
         val cancellable = new CompletableFuture[Cancellable]()
@@ -104,8 +101,8 @@ object GooglePubSub {
         Flow
           .create[AcknowledgeRequest]()
           .mapAsyncUnordered(1,
-                             req =>
-                               subscriber(mat, attr).client.acknowledge(req).thenApply[AcknowledgeRequest](_ => req))
+            req =>
+              subscriber(mat, attr).client.acknowledge(req).thenApply[AcknowledgeRequest](_ => req))
       }
       .mapMaterializedValue(_ => NotUsed)
 

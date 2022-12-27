@@ -4,11 +4,11 @@
 
 package akka.stream.alpakka.kudu.scaladsl
 
-import akka.stream.{Attributes, Materializer}
-import akka.stream.alpakka.kudu.{KuduAttributes, KuduClientExt, KuduTableSettings}
+import akka.stream.{ Attributes, Materializer }
+import akka.stream.alpakka.kudu.{ KuduAttributes, KuduClientExt, KuduTableSettings }
 import akka.stream.alpakka.kudu.impl.KuduFlowStage
-import akka.stream.scaladsl.{Flow, Keep, Sink}
-import akka.{Done, NotUsed}
+import akka.stream.scaladsl.{ Flow, Keep, Sink }
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

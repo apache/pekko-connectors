@@ -8,7 +8,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.ErrorInfo
 import akka.http.scaladsl.model.headers.OAuth2BearerToken
 import akka.stream.Materializer
-import akka.stream.alpakka.google.{GoogleSettings, RequestSettings}
+import akka.stream.alpakka.google.{ GoogleSettings, RequestSettings }
 import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
@@ -18,7 +18,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import pdi.jwt.JwtTime
 
 import java.time.Clock
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 class OAuth2CredentialsSpec
     extends TestKit(ActorSystem("OAuth2CredentialsSpec"))
@@ -42,8 +42,8 @@ class OAuth2CredentialsSpec
 
   val testableCredentials = new OAuth2Credentials("dummyProject") {
     override protected def getAccessToken()(implicit mat: Materializer,
-                                            settings: RequestSettings,
-                                            clock: Clock): Future[AccessToken] =
+        settings: RequestSettings,
+        clock: Clock): Future[AccessToken] =
       AccessTokenProvider.accessTokenPromise.future
   }
 

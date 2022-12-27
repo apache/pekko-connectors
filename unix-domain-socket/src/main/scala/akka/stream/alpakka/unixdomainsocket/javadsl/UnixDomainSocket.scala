@@ -12,8 +12,8 @@ import java.util.concurrent.CompletionStage
 import scala.compat.java8.OptionConverters._
 import scala.compat.java8.FutureConverters._
 import akka.NotUsed
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
-import akka.stream.javadsl.{Flow, Source}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import akka.stream.javadsl.{ Flow, Source }
 import akka.stream.Materializer
 import akka.util.ByteString
 
@@ -136,8 +136,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends akka.actor.Ext
       delegate
         .bind(path, backlog, halfClose)
         .map(new IncomingConnection(_))
-        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).toJava)
-    )
+        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).toJava))
 
   /**
    * Creates a [[UnixDomainSocket.ServerBinding]] without specifying options.
@@ -152,8 +151,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends akka.actor.Ext
       delegate
         .bind(path)
         .map(new IncomingConnection(_))
-        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).toJava)
-    )
+        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).toJava))
 
   /**
    * Creates an [[UnixDomainSocket.OutgoingConnection]] instance representing a prospective UnixDomainSocket client connection to the given endpoint.
@@ -177,14 +175,13 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends akka.actor.Ext
    *                  independently whether the server is still attempting to write.
    */
   def outgoingConnection(remoteAddress: UnixSocketAddress,
-                         localAddress: Optional[UnixSocketAddress],
-                         halfClose: Boolean,
-                         connectTimeout: Duration): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
+      localAddress: Optional[UnixSocketAddress],
+      halfClose: Boolean,
+      connectTimeout: Duration): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
     Flow.fromGraph(
       delegate
         .outgoingConnection(remoteAddress, localAddress.asScala, halfClose, connectTimeout)
-        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).toJava)
-    )
+        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).toJava))
 
   /**
    * Creates an [[UnixDomainSocket.OutgoingConnection]] without specifying options.
@@ -200,7 +197,6 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends akka.actor.Ext
     Flow.fromGraph(
       delegate
         .outgoingConnection(new UnixSocketAddress(path))
-        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).toJava)
-    )
+        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).toJava))
 
 }

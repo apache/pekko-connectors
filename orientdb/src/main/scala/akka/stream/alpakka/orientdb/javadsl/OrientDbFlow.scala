@@ -21,10 +21,8 @@ object OrientDbFlow {
    */
   def create(
       className: String,
-      settings: OrientDbWriteSettings
-  ): Flow[java.util.List[OrientDbWriteMessage[ODocument, NotUsed]],
-          java.util.List[OrientDbWriteMessage[ODocument, NotUsed]],
-          NotUsed] =
+      settings: OrientDbWriteSettings): Flow[java.util.List[OrientDbWriteMessage[ODocument, NotUsed]],
+    java.util.List[OrientDbWriteMessage[ODocument, NotUsed]], NotUsed] =
     akka.stream.scaladsl
       .Flow[java.util.List[OrientDbWriteMessage[ODocument, NotUsed]]]
       .map(_.asScala.toList)
@@ -38,10 +36,8 @@ object OrientDbFlow {
    */
   def createWithPassThrough[C](
       className: String,
-      settings: OrientDbWriteSettings
-  ): Flow[java.util.List[OrientDbWriteMessage[ODocument, C]],
-          java.util.List[OrientDbWriteMessage[ODocument, C]],
-          NotUsed] =
+      settings: OrientDbWriteSettings): Flow[java.util.List[OrientDbWriteMessage[ODocument, C]],
+    java.util.List[OrientDbWriteMessage[ODocument, C]], NotUsed] =
     akka.stream.scaladsl
       .Flow[java.util.List[OrientDbWriteMessage[ODocument, C]]]
       .map(_.asScala.toList)
@@ -55,8 +51,8 @@ object OrientDbFlow {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]
-  ): Flow[java.util.List[OrientDbWriteMessage[T, NotUsed]], java.util.List[OrientDbWriteMessage[T, NotUsed]], NotUsed] =
+      clazz: Class[T]): Flow[java.util.List[OrientDbWriteMessage[T, NotUsed]], java.util.List[OrientDbWriteMessage[T,
+      NotUsed]], NotUsed] =
     akka.stream.scaladsl
       .Flow[java.util.List[OrientDbWriteMessage[T, NotUsed]]]
       .map(_.asScala.toList)
@@ -71,8 +67,8 @@ object OrientDbFlow {
   def typedWithPassThrough[T, C](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]
-  ): Flow[java.util.List[OrientDbWriteMessage[T, C]], java.util.List[OrientDbWriteMessage[T, C]], NotUsed] =
+      clazz: Class[T])
+      : Flow[java.util.List[OrientDbWriteMessage[T, C]], java.util.List[OrientDbWriteMessage[T, C]], NotUsed] =
     akka.stream.scaladsl
       .Flow[java.util.List[OrientDbWriteMessage[T, C]]]
       .map(_.asScala.toList)

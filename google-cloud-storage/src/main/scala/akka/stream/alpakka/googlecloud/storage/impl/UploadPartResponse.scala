@@ -18,6 +18,6 @@ private[impl] final case class FailedUploadPart(multiPartUpload: MultiPartUpload
     extends UploadPartResponse
 @InternalApi
 private[impl] final case class SuccessfulUpload(multiPartUpload: MultiPartUpload,
-                                                index: Int,
-                                                storageObject: StorageObject)
+    index: Int,
+    storageObject: StorageObject)
     extends UploadPartResponse

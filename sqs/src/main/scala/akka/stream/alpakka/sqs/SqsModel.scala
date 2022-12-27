@@ -29,7 +29,7 @@ object MessageAction {
 
     override def equals(other: Any): Boolean = other match {
       case that: Delete => java.util.Objects.equals(this.message, that.message)
-      case _ => false
+      case _            => false
     }
 
     override def hashCode(): Int = java.util.Objects.hash(message)
@@ -47,7 +47,7 @@ object MessageAction {
 
     override def equals(other: Any): Boolean = other match {
       case that: Ignore => java.util.Objects.equals(this.message, that.message)
-      case _ => false
+      case _            => false
     }
 
     override def hashCode(): Int = java.util.Objects.hash(message)
@@ -69,8 +69,7 @@ object MessageAction {
     // SQS requirements
     require(
       0 <= visibilityTimeout && visibilityTimeout <= 43200,
-      s"Invalid value ($visibilityTimeout) for visibilityTimeout. Requirement: 0 <= visibilityTimeout <= 43200"
-    )
+      s"Invalid value ($visibilityTimeout) for visibilityTimeout. Requirement: 0 <= visibilityTimeout <= 43200")
 
     /** Java API */
     def getVisibilityTimeout: Int = visibilityTimeout
@@ -127,7 +126,6 @@ object MessageAction {
 
 /**
  * Result contained in a Sqs Response.
- *
  */
 sealed abstract class SqsResult {
 
@@ -149,8 +147,7 @@ sealed abstract class SqsResult {
 
 object SqsResult {
   private[sqs] val EmptySqsResponseMetadata: SqsResponseMetadata = SqsResponseMetadata.create(
-    DefaultAwsResponseMetadata.create(java.util.Collections.emptyMap())
-  )
+    DefaultAwsResponseMetadata.create(java.util.Collections.emptyMap()))
 }
 
 /**
@@ -158,8 +155,7 @@ object SqsResult {
  */
 final class SqsPublishResult @InternalApi private[sqs] (
     val request: SendMessageRequest,
-    response: SendMessageResponse
-) extends SqsResult {
+    response: SendMessageResponse) extends SqsResult {
 
   override type Result = SendMessageResponse
 
@@ -186,8 +182,7 @@ final class SqsPublishResult @InternalApi private[sqs] (
 final class SqsPublishResultEntry @InternalApi private[sqs] (
     val request: SendMessageRequest,
     override val result: SendMessageBatchResultEntry,
-    override val responseMetadata: SqsResponseMetadata
-) extends SqsResult {
+    override val responseMetadata: SqsResponseMetadata) extends SqsResult {
 
   override type Result = SendMessageBatchResultEntry
 
@@ -206,7 +201,6 @@ final class SqsPublishResultEntry @InternalApi private[sqs] (
 
 /**
  * Messages returned by a SqsAckFlow
- *
  */
 sealed abstract class SqsAckResult extends SqsResult {
 
@@ -226,8 +220,7 @@ object SqsAckResult {
    */
   final class SqsDeleteResult @InternalApi private[sqs] (
       override val messageAction: MessageAction.Delete,
-      override val result: DeleteMessageResponse
-  ) extends SqsAckResult {
+      override val result: DeleteMessageResponse) extends SqsAckResult {
 
     override type Result = DeleteMessageResponse
 
@@ -253,8 +246,7 @@ object SqsAckResult {
    * @param messageAction the ignore message action
    */
   final class SqsIgnoreResult @InternalApi private[sqs] (
-      override val messageAction: MessageAction.Ignore
-  ) extends SqsAckResult {
+      override val messageAction: MessageAction.Ignore) extends SqsAckResult {
 
     override type Result = NotUsed.type
 
@@ -281,8 +273,7 @@ object SqsAckResult {
    */
   final class SqsChangeMessageVisibilityResult @InternalApi private[sqs] (
       override val messageAction: MessageAction.ChangeMessageVisibility,
-      override val result: ChangeMessageVisibilityResponse
-  ) extends SqsAckResult {
+      override val result: ChangeMessageVisibilityResponse) extends SqsAckResult {
 
     override type Result = ChangeMessageVisibilityResponse
 
@@ -305,7 +296,6 @@ object SqsAckResult {
 
 /**
  * Messages returned by a SqsAckFlow.
- *
  */
 sealed abstract class SqsAckResultEntry extends SqsResult {
 
@@ -324,8 +314,8 @@ object SqsAckResultEntry {
    * @param result the sqs DeleteMessageBatchResultEntry
    */
   final class SqsDeleteResultEntry(override val messageAction: MessageAction.Delete,
-                                   override val result: DeleteMessageBatchResultEntry,
-                                   override val responseMetadata: SqsResponseMetadata)
+      override val result: DeleteMessageBatchResultEntry,
+      override val responseMetadata: SqsResponseMetadata)
       extends SqsAckResultEntry {
 
     override type Result = DeleteMessageBatchResultEntry
@@ -351,8 +341,7 @@ object SqsAckResultEntry {
    * @param messageAction the ignore message action
    */
   final class SqsIgnoreResultEntry @InternalApi private[sqs] (
-      override val messageAction: MessageAction.Ignore
-  ) extends SqsAckResultEntry {
+      override val messageAction: MessageAction.Ignore) extends SqsAckResultEntry {
 
     override type Result = NotUsed.type
 
@@ -378,8 +367,8 @@ object SqsAckResultEntry {
    * @param result the sqs ChangeMessageVisibilityBatchResultEntry
    */
   final class SqsChangeMessageVisibilityResultEntry(override val messageAction: MessageAction.ChangeMessageVisibility,
-                                                    override val result: ChangeMessageVisibilityBatchResultEntry,
-                                                    override val responseMetadata: SqsResponseMetadata)
+      override val result: ChangeMessageVisibilityBatchResultEntry,
+      override val responseMetadata: SqsResponseMetadata)
       extends SqsAckResultEntry {
 
     override type Result = ChangeMessageVisibilityBatchResultEntry

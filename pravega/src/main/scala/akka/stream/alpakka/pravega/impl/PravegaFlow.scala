@@ -4,11 +4,11 @@
 
 package akka.stream.alpakka.pravega.impl
 
-import java.util.concurrent.{CompletableFuture, Semaphore}
+import java.util.concurrent.{ CompletableFuture, Semaphore }
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.stage.{AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import io.pravega.client.stream.EventStreamWriter
 
 import scala.util.control.NonFatal
@@ -16,11 +16,11 @@ import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.stream.alpakka.pravega.WriterSettings
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 @InternalApi private final class PravegaFlowStageLogic[A](val shape: FlowShape[A, A],
-                                                          val scope: String,
-                                                          streamName: String,
-                                                          writerSettings: WriterSettings[A])
+    val scope: String,
+    streamName: String,
+    writerSettings: WriterSettings[A])
     extends GraphStageLogic(shape)
     with PravegaWriter
     with StageLogging {
@@ -69,8 +69,7 @@ import scala.util.{Failure, Success, Try}
             val msg = grab(in)
             handleSentEvent(writer.writeEvent(keyExtractor(msg), msg), msg)
           }
-        }
-      )
+        })
 
     case None =>
       setHandler(
@@ -80,8 +79,7 @@ import scala.util.{Failure, Success, Try}
             val msg = grab(in)
             handleSentEvent(writer.writeEvent(msg), msg)
           }
-        }
-      )
+        })
 
   }
 
@@ -91,8 +89,7 @@ import scala.util.{Failure, Success, Try}
       override def onPull(): Unit = {
         pull(in)
       }
-    }
-  )
+    })
 
   /**
    * Cleanup logic
@@ -110,8 +107,8 @@ import scala.util.{Failure, Success, Try}
 
 }
 @InternalApi private[pravega] final class PravegaFlow[A](scope: String,
-                                                         streamName: String,
-                                                         writerSettings: WriterSettings[A])
+    streamName: String,
+    writerSettings: WriterSettings[A])
     extends GraphStage[FlowShape[A, A]] {
 
   val in: Inlet[A] = Inlet(Logging.simpleName(this) + ".in")

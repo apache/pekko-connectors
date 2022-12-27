@@ -6,7 +6,7 @@ package docs.scaladsl
 
 import java.nio.charset.StandardCharsets
 
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.util.ByteString
 
@@ -16,7 +16,7 @@ class CsvFormattingSpec extends CsvSpec {
 
   def documentation(): Unit = {
     // #flow-type
-    import akka.stream.alpakka.csv.scaladsl.{CsvFormatting, CsvQuotingStyle}
+    import akka.stream.alpakka.csv.scaladsl.{ CsvFormatting, CsvQuotingStyle }
 
     // #flow-type
     import CsvFormatting._
@@ -59,7 +59,7 @@ class CsvFormattingSpec extends CsvSpec {
 
     "include Byte Order Mark" in assertAllStagesStopped {
       // #formatting-bom
-      import akka.stream.alpakka.csv.scaladsl.{ByteOrderMark, CsvFormatting}
+      import akka.stream.alpakka.csv.scaladsl.{ ByteOrderMark, CsvFormatting }
 
       // #formatting-bom
       val fut =
@@ -72,8 +72,7 @@ class CsvFormattingSpec extends CsvSpec {
       // #formatting-bom
       // format: on
       fut.futureValue should be(
-        List(ByteOrderMark.UTF_8, ByteString("eins,zwei,drei\r\n"), ByteString("uno,dos,tres\r\n"))
-      )
+        List(ByteOrderMark.UTF_8, ByteString("eins,zwei,drei\r\n"), ByteString("uno,dos,tres\r\n")))
     }
 
   }

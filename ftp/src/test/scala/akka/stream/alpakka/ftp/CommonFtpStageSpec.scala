@@ -7,20 +7,20 @@ package akka.stream.alpakka.ftp
 import java.io.IOException
 import java.net.InetAddress
 import java.nio.file.attribute.PosixFilePermission
-import java.nio.file.{Files, Paths}
+import java.nio.file.{ Files, Paths }
 import java.time.Instant
 import java.util.concurrent.TimeUnit
-import akka.stream.{IOOperationIncompleteException, IOResult}
-import BaseSftpSupport.{CLIENT_PRIVATE_KEY_PASSPHRASE => ClientPrivateKeyPassphrase}
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.{ IOOperationIncompleteException, IOResult }
+import BaseSftpSupport.{ CLIENT_PRIVATE_KEY_PASSPHRASE => ClientPrivateKeyPassphrase }
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.stream.testkit.scaladsl.TestSink
 import akka.util.ByteString
 import org.scalatest.concurrent.Eventually
-import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatest.time.{ Millis, Seconds, Span }
 
 import scala.collection.immutable
-import scala.concurrent.{Await, ExecutionContextExecutor}
+import scala.concurrent.{ Await, ExecutionContextExecutor }
 import scala.concurrent.duration._
 import scala.util.Random
 
@@ -30,55 +30,46 @@ final class SftpStageSpec extends BaseSftpSpec with CommonFtpStageSpec
 
 final class RawKeySftpSourceSpec extends BaseSftpSpec with CommonFtpStageSpec {
   override val settings = SftpSettings(
-    InetAddress.getByName(HOSTNAME)
-  ).withPort(PORT)
+    InetAddress.getByName(HOSTNAME)).withPort(PORT)
     .withCredentials(FtpCredentials.create("username", "wrong password"))
     .withStrictHostKeyChecking(false)
     .withSftpIdentity(
       SftpIdentity.createRawSftpIdentity(
         Files.readAllBytes(Paths.get(getClientPrivateKeyFile.getPath)),
-        ClientPrivateKeyPassphrase
-      )
-    )
+        ClientPrivateKeyPassphrase))
 }
 
 final class KeyFileSftpSourceSpec extends BaseSftpSpec with CommonFtpStageSpec {
 
   override val settings = SftpSettings(
-    InetAddress.getByName(HOSTNAME)
-  ).withPort(PORT)
+    InetAddress.getByName(HOSTNAME)).withPort(PORT)
     .withCredentials(FtpCredentials.create("username", "wrong password"))
     .withStrictHostKeyChecking(false)
     .withSftpIdentity(
       SftpIdentity
-        .createFileSftpIdentity(getClientPrivateKeyFile.getPath, ClientPrivateKeyPassphrase)
-    )
+        .createFileSftpIdentity(getClientPrivateKeyFile.getPath, ClientPrivateKeyPassphrase))
 }
 
 final class StrictHostCheckingSftpSourceSpec extends BaseSftpSpec with CommonFtpStageSpec {
   override val settings = SftpSettings(
-    InetAddress.getByName(HOSTNAME)
-  ).withPort(PORT)
+    InetAddress.getByName(HOSTNAME)).withPort(PORT)
     .withCredentials(FtpCredentials.create("username", "wrong password"))
     .withStrictHostKeyChecking(true)
     .withKnownHosts(getKnownHostsFile.getPath)
     .withSftpIdentity(
       SftpIdentity
-        .createFileSftpIdentity(getClientPrivateKeyFile.getPath, ClientPrivateKeyPassphrase)
-    )
+        .createFileSftpIdentity(getClientPrivateKeyFile.getPath, ClientPrivateKeyPassphrase))
 }
 
 final class UnconfirmedReadsSftpSourceSpec extends BaseSftpSpec with CommonFtpStageSpec {
   override val settings = SftpSettings(
-    InetAddress.getByName(HOSTNAME)
-  ).withPort(PORT)
+    InetAddress.getByName(HOSTNAME)).withPort(PORT)
     .withCredentials(FtpCredentials.create("username", "wrong password"))
     .withStrictHostKeyChecking(true)
     .withKnownHosts(getKnownHostsFile.getPath)
     .withSftpIdentity(
       SftpIdentity
-        .createFileSftpIdentity(getClientPrivateKeyFile.getPath, ClientPrivateKeyPassphrase)
-    )
+        .createFileSftpIdentity(getClientPrivateKeyFile.getPath, ClientPrivateKeyPassphrase))
     .withMaxUnconfirmedReads(8)
 }
 
@@ -403,8 +394,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         isDirectory = false,
         size = 999,
         lastModified = 0,
-        permissions = Set.empty
-      )
+        permissions = Set.empty)
 
       val ex = Source
         .single(file)
@@ -413,7 +403,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         .futureValue
 
       ex shouldBe an[IOException]
-      ex should (have message s"Could not delete /$fileName" or have message "No such file")
+      ex should (have.message(s"Could not delete /$fileName").or(have).message("No such file"))
     }
   }
 
@@ -449,8 +439,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         isDirectory = false,
         size = 999,
         lastModified = 0,
-        permissions = Set.empty
-      )
+        permissions = Set.empty)
 
       val ex = Source
         .single(file)
@@ -459,7 +448,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         .futureValue
 
       ex shouldBe an[IOException]
-      ex should (have message s"Could not move /$fileName" or have message "No such file")
+      ex should (have.message(s"Could not move /$fileName").or(have).message("No such file"))
     }
   }
 
@@ -477,8 +466,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
       val listing = listFilesWithFilter(
         basePath = "/",
         branchSelector = _ => true,
-        emitTraversedDirectories = true
-      ).runWith(Sink.seq)
+        emitTraversedDirectories = true).runWith(Sink.seq)
 
       val listingRes: immutable.Seq[FtpFile] = Await.result(listing, Duration(1, TimeUnit.MINUTES))
 
@@ -506,8 +494,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
       val listing = listFilesWithFilter(
         basePath = "/",
         branchSelector = _ => true,
-        emitTraversedDirectories = true
-      ).runWith(Sink.seq)
+        emitTraversedDirectories = true).runWith(Sink.seq)
 
       val listingRes: immutable.Seq[FtpFile] = Await.result(listing, Duration(1, TimeUnit.MINUTES))
 
@@ -516,8 +503,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
       val listingOnlyInnerDir = listFilesWithFilter(
         basePath = innerDirPath,
         branchSelector = _ => true,
-        emitTraversedDirectories = true
-      ).runWith(Sink.seq)
+        emitTraversedDirectories = true).runWith(Sink.seq)
 
       val listingInnerDirRes: immutable.Seq[FtpFile] =
         Await.result(listingOnlyInnerDir, Duration(1, TimeUnit.MINUTES))

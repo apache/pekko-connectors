@@ -10,11 +10,11 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.ironmq.impl.IronMqClient
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.Materializer
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach
 
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.{ Await, ExecutionContext }
 import scala.concurrent.duration._
 import scala.util.hashing.MurmurHash3
 import org.scalatest.matchers.should.Matchers

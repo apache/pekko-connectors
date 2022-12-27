@@ -19,6 +19,5 @@ object BigQueryStorageAttributes {
   def reader(client: GrpcBigQueryStorageReader): Attributes = Attributes(new BigQueryStorageReader(client))
 
   final class BigQueryStorageReader @InternalApi private[BigQueryStorageAttributes] (
-      val client: GrpcBigQueryStorageReader
-  ) extends Attribute
+      val client: GrpcBigQueryStorageReader) extends Attribute
 }

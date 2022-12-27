@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.google.scaladsl
 
-import akka.http.javadsl.{model => jm}
-import akka.http.scaladsl.model.headers.{ModeledCustomHeader, ModeledCustomHeaderCompanion}
-import akka.http.scaladsl.model.{ContentType, ErrorInfo, IllegalHeaderException}
+import akka.http.javadsl.{ model => jm }
+import akka.http.scaladsl.model.headers.{ ModeledCustomHeader, ModeledCustomHeaderCompanion }
+import akka.http.scaladsl.model.{ ContentType, ErrorInfo, IllegalHeaderException }
 import akka.stream.alpakka.google.javadsl.XUploadContentType
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 /**
  * Models the `X-Upload-Content-Type` header for resumable uploads.
@@ -21,8 +21,7 @@ object `X-Upload-Content-Type` extends ModeledCustomHeaderCompanion[`X-Upload-Co
       .parse(value)
       .fold(
         errorInfos => Failure(new IllegalHeaderException(errorInfos.headOption.getOrElse(ErrorInfo()))),
-        contentType => Success(`X-Upload-Content-Type`(contentType))
-      )
+        contentType => Success(`X-Upload-Content-Type`(contentType)))
 }
 
 final case class `X-Upload-Content-Type` private (contentType: ContentType)

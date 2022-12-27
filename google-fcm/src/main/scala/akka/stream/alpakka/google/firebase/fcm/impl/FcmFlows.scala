@@ -6,9 +6,9 @@ package akka.stream.alpakka.google.firebase.fcm.impl
 import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.http.scaladsl.Http
-import akka.stream.alpakka.google.auth.{Credentials, ServiceAccountCredentials}
-import akka.stream.alpakka.google.{GoogleAttributes, GoogleSettings}
-import akka.stream.{Attributes, Materializer}
+import akka.stream.alpakka.google.auth.{ Credentials, ServiceAccountCredentials }
+import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
+import akka.stream.{ Attributes, Materializer }
 import akka.stream.alpakka.google.firebase.fcm._
 import akka.stream.scaladsl.Flow
 
@@ -65,14 +65,12 @@ private[fcm] object FcmFlows {
             conf.projectId,
             conf.clientEmail,
             conf.privateKey,
-            scopes
-          )(mat.system)
+            scopes)(mat.system)
         }
     val forwardProxy =
       conf.forwardProxy.map(_.toCommonForwardProxy(mat.system)).orElse(settings.requestSettings.forwardProxy)
     settings.copy(
       credentials = credentials,
-      requestSettings = settings.requestSettings.copy(forwardProxy = forwardProxy)
-    )
+      requestSettings = settings.requestSettings.copy(forwardProxy = forwardProxy))
   }
 }

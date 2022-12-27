@@ -7,7 +7,7 @@ package akka.stream.alpakka.hdfs.javadsl
 import akka.NotUsed
 import akka.japi.Pair
 import akka.stream.alpakka.hdfs._
-import akka.stream.alpakka.hdfs.scaladsl.{HdfsFlow => ScalaHdfsFlow}
+import akka.stream.alpakka.hdfs.scaladsl.{ HdfsFlow => ScalaHdfsFlow }
 import akka.stream.javadsl
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
@@ -30,8 +30,7 @@ object HdfsFlow {
       fs: FileSystem,
       syncStrategy: SyncStrategy,
       rotationStrategy: RotationStrategy,
-      settings: HdfsWritingSettings
-  ): javadsl.Flow[HdfsWriteMessage[ByteString, NotUsed], RotationMessage, NotUsed] =
+      settings: HdfsWritingSettings): javadsl.Flow[HdfsWriteMessage[ByteString, NotUsed], RotationMessage, NotUsed] =
     ScalaHdfsFlow.data(fs, syncStrategy, rotationStrategy, settings).asJava
 
   /**
@@ -47,15 +46,13 @@ object HdfsFlow {
       fs: FileSystem,
       syncStrategy: SyncStrategy,
       rotationStrategy: RotationStrategy,
-      settings: HdfsWritingSettings
-  ): javadsl.Flow[HdfsWriteMessage[ByteString, P], OutgoingMessage[P], NotUsed] =
+      settings: HdfsWritingSettings): javadsl.Flow[HdfsWriteMessage[ByteString, P], OutgoingMessage[P], NotUsed] =
     ScalaHdfsFlow
       .dataWithPassThrough[P](
         fs,
         syncStrategy,
         rotationStrategy,
-        settings
-      )
+        settings)
       .asJava
 
   /**
@@ -72,8 +69,7 @@ object HdfsFlow {
       syncStrategy: SyncStrategy,
       rotationStrategy: RotationStrategy,
       compressionCodec: CompressionCodec,
-      settings: HdfsWritingSettings
-  ): javadsl.Flow[HdfsWriteMessage[ByteString, NotUsed], RotationMessage, NotUsed] =
+      settings: HdfsWritingSettings): javadsl.Flow[HdfsWriteMessage[ByteString, NotUsed], RotationMessage, NotUsed] =
     ScalaHdfsFlow.compressed(fs, syncStrategy, rotationStrategy, compressionCodec, settings).asJava
 
   /**
@@ -91,16 +87,14 @@ object HdfsFlow {
       syncStrategy: SyncStrategy,
       rotationStrategy: RotationStrategy,
       compressionCodec: CompressionCodec,
-      settings: HdfsWritingSettings
-  ): javadsl.Flow[HdfsWriteMessage[ByteString, P], OutgoingMessage[P], NotUsed] =
+      settings: HdfsWritingSettings): javadsl.Flow[HdfsWriteMessage[ByteString, P], OutgoingMessage[P], NotUsed] =
     ScalaHdfsFlow
       .compressedWithPassThrough[P](
         fs,
         syncStrategy,
         rotationStrategy,
         compressionCodec,
-        settings
-      )
+        settings)
       .asJava
 
   /**
@@ -120,8 +114,7 @@ object HdfsFlow {
       rotationStrategy: RotationStrategy,
       settings: HdfsWritingSettings,
       classK: Class[K],
-      classV: Class[V]
-  ): javadsl.Flow[HdfsWriteMessage[Pair[K, V], NotUsed], RotationMessage, NotUsed] =
+      classV: Class[V]): javadsl.Flow[HdfsWriteMessage[Pair[K, V], NotUsed], RotationMessage, NotUsed] =
     sequenceWithPassThrough[K, V, NotUsed](fs, syncStrategy, rotationStrategy, settings, classK, classV)
       .collect(ScalaHdfsFlow.OnlyRotationMessage)
 
@@ -146,8 +139,7 @@ object HdfsFlow {
       compressionCodec: CompressionCodec,
       settings: HdfsWritingSettings,
       classK: Class[K],
-      classV: Class[V]
-  ): javadsl.Flow[HdfsWriteMessage[Pair[K, V], NotUsed], RotationMessage, NotUsed] =
+      classV: Class[V]): javadsl.Flow[HdfsWriteMessage[Pair[K, V], NotUsed], RotationMessage, NotUsed] =
     sequenceWithPassThrough[K, V, NotUsed](
       fs,
       syncStrategy,
@@ -156,8 +148,7 @@ object HdfsFlow {
       compressionCodec,
       settings,
       classK,
-      classV
-    ).collect(ScalaHdfsFlow.OnlyRotationMessage)
+      classV).collect(ScalaHdfsFlow.OnlyRotationMessage)
 
   /**
    * Java API: creates a flow for [[org.apache.hadoop.io.SequenceFile.Writer]]
@@ -176,8 +167,7 @@ object HdfsFlow {
       rotationStrategy: RotationStrategy,
       settings: HdfsWritingSettings,
       classK: Class[K],
-      classV: Class[V]
-  ): javadsl.Flow[HdfsWriteMessage[Pair[K, V], P], OutgoingMessage[P], NotUsed] =
+      classV: Class[V]): javadsl.Flow[HdfsWriteMessage[Pair[K, V], P], OutgoingMessage[P], NotUsed] =
     Flow[HdfsWriteMessage[Pair[K, V], P]]
       .map(message => message.copy(source = message.source.toScala))
       .via(
@@ -188,9 +178,7 @@ object HdfsFlow {
             rotationStrategy,
             settings,
             classK,
-            classV
-          )
-      )
+            classV))
       .asJava
 
   /**
@@ -214,8 +202,7 @@ object HdfsFlow {
       compressionCodec: CompressionCodec,
       settings: HdfsWritingSettings,
       classK: Class[K],
-      classV: Class[V]
-  ): javadsl.Flow[HdfsWriteMessage[Pair[K, V], P], OutgoingMessage[P], NotUsed] =
+      classV: Class[V]): javadsl.Flow[HdfsWriteMessage[Pair[K, V], P], OutgoingMessage[P], NotUsed] =
     Flow[HdfsWriteMessage[Pair[K, V], P]]
       .map(message => message.copy(source = message.source.toScala))
       .via(
@@ -228,9 +215,7 @@ object HdfsFlow {
             compressionCodec,
             settings,
             classK,
-            classV
-          )
-      )
+            classV))
       .asJava
 
 }

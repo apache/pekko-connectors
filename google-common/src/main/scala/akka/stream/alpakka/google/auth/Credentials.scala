@@ -10,12 +10,12 @@ import akka.event.Logging
 import akka.http.scaladsl.model.headers.HttpCredentials
 import akka.stream.alpakka.google.RequestSettings
 import akka.util.JavaDurationConverters._
-import com.google.auth.{Credentials => GoogleCredentials}
+import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 
 import java.util.concurrent.Executor
 import scala.collection.immutable.ListMap
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
 
 object Credentials {
@@ -54,9 +54,9 @@ object Credentials {
           }
       }
     case "service-account" => parseServiceAccount(c)
-    case "compute-engine" => parseComputeEngine(c)
-    case "user-access" => parseUserAccess(c)
-    case "none" => parseNone(c)
+    case "compute-engine"  => parseComputeEngine(c)
+    case "user-access"     => parseUserAccess(c)
+    case "none"            => parseNone(c)
   }
 
   private def parseServiceAccount(c: Config)(implicit system: ClassicActorSystemProvider) =
@@ -74,10 +74,10 @@ object Credentials {
   @deprecated("Intended only to help with migration", "3.0.0")
   private[alpakka] def cache(key: Any)(default: => Credentials) =
     _cache.getOrElse(key, {
-      val credentials = default
-      _cache += (key -> credentials)
-      credentials
-    })
+        val credentials = default
+        _cache += (key -> credentials)
+        credentials
+      })
 
 }
 

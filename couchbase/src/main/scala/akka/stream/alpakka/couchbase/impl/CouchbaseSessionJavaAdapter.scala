@@ -14,17 +14,17 @@ import akka.stream.alpakka.couchbase.CouchbaseWriteSettings
 import akka.stream.alpakka.couchbase.javadsl
 import akka.stream.alpakka.couchbase.scaladsl
 import akka.stream.javadsl.Source
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import com.couchbase.client.java.AsyncBucket
 import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.document.{Document, JsonDocument}
+import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
-import com.couchbase.client.java.query.{N1qlQuery, Statement}
+import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration.FiniteDuration
-import scala.concurrent.{duration, Future}
+import scala.concurrent.{ duration, Future }
 
 /**
  * INTERNAL API
@@ -43,13 +43,12 @@ private[couchbase] final class CouchbaseSessionJavaAdapter(delegate: scaladsl.Co
 
   override def insert(
       document: JsonDocument,
-      writeSettings: CouchbaseWriteSettings
-  ): CompletionStage[JsonDocument] = delegate.insert(document, writeSettings).toJava
+      writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument] =
+    delegate.insert(document, writeSettings).toJava
 
   override def insertDoc[T <: Document[_]](
       document: T,
-      writeSettings: CouchbaseWriteSettings
-  ): CompletionStage[T] = delegate.insertDoc(document, writeSettings).toJava
+      writeSettings: CouchbaseWriteSettings): CompletionStage[T] = delegate.insertDoc(document, writeSettings).toJava
 
   override def get(id: String): CompletionStage[Optional[JsonDocument]] =
     futureOptToJava(delegate.get(id))
@@ -107,8 +106,8 @@ private[couchbase] final class CouchbaseSessionJavaAdapter(delegate: scaladsl.Co
       id: String,
       delta: Long,
       initial: Long,
-      writeSettings: CouchbaseWriteSettings
-  ): CompletionStage[Long] = delegate.counter(id, delta, initial, writeSettings).toJava
+      writeSettings: CouchbaseWriteSettings): CompletionStage[Long] =
+    delegate.counter(id, delta, initial, writeSettings).toJava
 
   override def close(): CompletionStage[Done] = delegate.close().toJava
 

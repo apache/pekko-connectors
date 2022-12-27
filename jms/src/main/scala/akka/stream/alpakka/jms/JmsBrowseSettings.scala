@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.jms
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
-import com.typesafe.config.{Config, ConfigValueType}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
+import com.typesafe.config.{ Config, ConfigValueType }
 
 /**
  * Settings for [[akka.stream.alpakka.jms.scaladsl.JmsConsumer.browse]] and [[akka.stream.alpakka.jms.javadsl.JmsConsumer.browse]].
@@ -16,8 +16,7 @@ final class JmsBrowseSettings private (
     val destination: Option[Destination],
     val credentials: Option[Credentials],
     val selector: Option[String],
-    val acknowledgeMode: AcknowledgeMode
-) {
+    val acknowledgeMode: AcknowledgeMode) {
 
   /** Factory to use for creating JMS connections. */
   def withConnectionFactory(value: javax.jms.ConnectionFactory): JmsBrowseSettings = copy(connectionFactory = value)
@@ -51,15 +50,13 @@ final class JmsBrowseSettings private (
       destination: Option[Destination] = destination,
       credentials: Option[Credentials] = credentials,
       selector: Option[String] = selector,
-      acknowledgeMode: AcknowledgeMode = acknowledgeMode
-  ): JmsBrowseSettings = new JmsBrowseSettings(
+      acknowledgeMode: AcknowledgeMode = acknowledgeMode): JmsBrowseSettings = new JmsBrowseSettings(
     connectionFactory = connectionFactory,
     connectionRetrySettings = connectionRetrySettings,
     destination = destination,
     credentials = credentials,
     selector = selector,
-    acknowledgeMode = acknowledgeMode
-  )
+    acknowledgeMode = acknowledgeMode)
 
   override def toString =
     "JmsBrowseSettings(" +
@@ -101,8 +98,7 @@ object JmsBrowseSettings {
       destination,
       credentials,
       selector,
-      acknowledgeMode
-    )
+      acknowledgeMode)
   }
 
   /**
@@ -129,7 +125,7 @@ object JmsBrowseSettings {
    * @param connectionFactory Factory to use for creating JMS connections.
    */
   def apply(actorSystem: ClassicActorSystemProvider,
-            connectionFactory: javax.jms.ConnectionFactory): JmsBrowseSettings =
+      connectionFactory: javax.jms.ConnectionFactory): JmsBrowseSettings =
     apply(actorSystem.classicSystem, connectionFactory)
 
   /**
@@ -148,7 +144,7 @@ object JmsBrowseSettings {
    * @param connectionFactory Factory to use for creating JMS connections.
    */
   def create(actorSystem: ClassicActorSystemProvider,
-             connectionFactory: javax.jms.ConnectionFactory): JmsBrowseSettings =
+      connectionFactory: javax.jms.ConnectionFactory): JmsBrowseSettings =
     apply(actorSystem.classicSystem, connectionFactory)
 
 }

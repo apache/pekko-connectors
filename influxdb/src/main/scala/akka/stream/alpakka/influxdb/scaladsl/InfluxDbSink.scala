@@ -5,9 +5,9 @@
 package akka.stream.alpakka.influxdb.scaladsl
 
 import akka.annotation.ApiMayChange
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.stream.alpakka.influxdb.InfluxDbWriteMessage
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{ Keep, Sink }
 import org.influxdb.InfluxDB
 import org.influxdb.dto.Point
 
@@ -24,8 +24,8 @@ object InfluxDbSink {
     InfluxDbFlow.create().toMat(Sink.ignore)(Keep.right)
 
   def typed[T](
-      clazz: Class[T]
-  )(implicit influxDB: InfluxDB): Sink[immutable.Seq[InfluxDbWriteMessage[T, NotUsed]], Future[Done]] =
+      clazz: Class[T])(
+      implicit influxDB: InfluxDB): Sink[immutable.Seq[InfluxDbWriteMessage[T, NotUsed]], Future[Done]] =
     InfluxDbFlow
       .typed(clazz)
       .toMat(Sink.ignore)(Keep.right)

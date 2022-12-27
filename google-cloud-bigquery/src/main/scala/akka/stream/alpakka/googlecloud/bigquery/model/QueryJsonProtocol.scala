@@ -8,11 +8,11 @@ import akka.stream.alpakka.google.scaladsl.Paginated
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonReader
 import akka.util.JavaDurationConverters._
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonIgnoreProperties, JsonProperty}
-import spray.json.{RootJsonFormat, RootJsonReader}
+import com.fasterxml.jackson.annotation.{ JsonCreator, JsonIgnoreProperties, JsonProperty }
+import spray.json.{ RootJsonFormat, RootJsonReader }
 
 import java.time.Duration
-import java.{lang, util}
+import java.{ lang, util }
 
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
@@ -37,15 +37,15 @@ import scala.concurrent.duration.FiniteDuration
  * @param requestId a unique user provided identifier to ensure idempotent behavior for queries
  */
 final case class QueryRequest private (query: String,
-                                       maxResults: Option[Int],
-                                       defaultDataset: Option[DatasetReference],
-                                       timeout: Option[FiniteDuration],
-                                       dryRun: Option[Boolean],
-                                       useLegacySql: Option[Boolean],
-                                       location: Option[String],
-                                       labels: Option[Map[String, String]],
-                                       maximumBytesBilled: Option[Long],
-                                       requestId: Option[String]) {
+    maxResults: Option[Int],
+    defaultDataset: Option[DatasetReference],
+    timeout: Option[FiniteDuration],
+    dryRun: Option[Boolean],
+    useLegacySql: Option[Boolean],
+    location: Option[String],
+    labels: Option[Map[String, String]],
+    maximumBytesBilled: Option[Long],
+    requestId: Option[String]) {
 
   def getQuery = query
   def getMaxResults = maxResults.asPrimitive
@@ -110,12 +110,12 @@ final case class QueryRequest private (query: String,
 object QueryRequest {
 
   def apply(query: String,
-            maxResults: Option[Int],
-            defaultDataset: Option[DatasetReference],
-            timeout: Option[FiniteDuration],
-            dryRun: Option[Boolean],
-            useLegacySql: Option[Boolean],
-            requestId: Option[String]): QueryRequest =
+      maxResults: Option[Int],
+      defaultDataset: Option[DatasetReference],
+      timeout: Option[FiniteDuration],
+      dryRun: Option[Boolean],
+      useLegacySql: Option[Boolean],
+      requestId: Option[String]): QueryRequest =
     QueryRequest(query, maxResults, defaultDataset, timeout, dryRun, useLegacySql, None, None, None, requestId)
 
   /**
@@ -132,12 +132,12 @@ object QueryRequest {
    * @return a [[QueryRequest]]
    */
   def create(query: String,
-             maxResults: util.OptionalInt,
-             defaultDataset: util.Optional[DatasetReference],
-             timeout: util.Optional[Duration],
-             dryRun: util.Optional[lang.Boolean],
-             useLegacySql: util.Optional[lang.Boolean],
-             requestId: util.Optional[String]) =
+      maxResults: util.OptionalInt,
+      defaultDataset: util.Optional[DatasetReference],
+      timeout: util.Optional[Duration],
+      dryRun: util.Optional[lang.Boolean],
+      useLegacySql: util.Optional[lang.Boolean],
+      requestId: util.Optional[String]) =
     QueryRequest(
       query,
       maxResults.asScala,
@@ -148,8 +148,7 @@ object QueryRequest {
       None,
       None,
       None,
-      requestId.asScala
-    )
+      requestId.asScala)
 
   implicit val format: RootJsonFormat[QueryRequest] = jsonFormat(
     apply,
@@ -162,8 +161,7 @@ object QueryRequest {
     "location",
     "labels",
     "maximumBytesBilled",
-    "requestId"
-  )
+    "requestId")
 }
 
 /**
@@ -185,28 +183,28 @@ object QueryRequest {
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 final case class QueryResponse[+T] private (schema: Option[TableSchema],
-                                            jobReference: JobReference,
-                                            totalRows: Option[Long],
-                                            pageToken: Option[String],
-                                            rows: Option[Seq[T]],
-                                            totalBytesProcessed: Option[Long],
-                                            jobComplete: Boolean,
-                                            errors: Option[Seq[ErrorProto]],
-                                            cacheHit: Option[Boolean],
-                                            numDmlAffectedRows: Option[Long]) {
+    jobReference: JobReference,
+    totalRows: Option[Long],
+    pageToken: Option[String],
+    rows: Option[Seq[T]],
+    totalBytesProcessed: Option[Long],
+    jobComplete: Boolean,
+    errors: Option[Seq[ErrorProto]],
+    cacheHit: Option[Boolean],
+    numDmlAffectedRows: Option[Long]) {
 
   @nowarn("msg=never used")
   @JsonCreator
   private def this(@JsonProperty("schema") schema: TableSchema,
-                   @JsonProperty(value = "jobReference", required = true) jobReference: JobReference,
-                   @JsonProperty("totalRows") totalRows: String,
-                   @JsonProperty("pageToken") pageToken: String,
-                   @JsonProperty("rows") rows: util.List[T],
-                   @JsonProperty("totalBytesProcessed") totalBytesProcessed: String,
-                   @JsonProperty(value = "jobComplete", required = true) jobComplete: Boolean,
-                   @JsonProperty("errors") errors: util.List[ErrorProto],
-                   @JsonProperty("cacheHit") cacheHit: lang.Boolean,
-                   @JsonProperty("numDmlAffectedRows") numDmlAffectedRows: String) =
+      @JsonProperty(value = "jobReference", required = true) jobReference: JobReference,
+      @JsonProperty("totalRows") totalRows: String,
+      @JsonProperty("pageToken") pageToken: String,
+      @JsonProperty("rows") rows: util.List[T],
+      @JsonProperty("totalBytesProcessed") totalBytesProcessed: String,
+      @JsonProperty(value = "jobComplete", required = true) jobComplete: Boolean,
+      @JsonProperty("errors") errors: util.List[ErrorProto],
+      @JsonProperty("cacheHit") cacheHit: lang.Boolean,
+      @JsonProperty("numDmlAffectedRows") numDmlAffectedRows: String) =
     this(
       Option(schema),
       jobReference,
@@ -217,8 +215,7 @@ final case class QueryResponse[+T] private (schema: Option[TableSchema],
       jobComplete,
       Option(errors).map(_.asScala.toList),
       Option(cacheHit).map(_.booleanValue),
-      Option(numDmlAffectedRows).map(_.toLong)
-    )
+      Option(numDmlAffectedRows).map(_.toLong))
 
   def getSchema = schema.asJava
   def getJobReference = jobReference
@@ -299,15 +296,15 @@ object QueryResponse {
    * @return a [[QueryResponse]]
    */
   def create[T](schema: util.Optional[TableSchema],
-                jobReference: JobReference,
-                totalRows: util.OptionalLong,
-                pageToken: util.Optional[String],
-                rows: util.Optional[util.List[T]],
-                totalBytesProcessed: util.OptionalLong,
-                jobComplete: Boolean,
-                errors: util.Optional[util.List[ErrorProto]],
-                cacheHit: util.Optional[lang.Boolean],
-                numDmlAffectedRows: util.OptionalLong) =
+      jobReference: JobReference,
+      totalRows: util.OptionalLong,
+      pageToken: util.Optional[String],
+      rows: util.Optional[util.List[T]],
+      totalBytesProcessed: util.OptionalLong,
+      jobComplete: Boolean,
+      errors: util.Optional[util.List[ErrorProto]],
+      cacheHit: util.Optional[lang.Boolean],
+      numDmlAffectedRows: util.OptionalLong) =
     QueryResponse[T](
       schema.asScala,
       jobReference,
@@ -318,12 +315,10 @@ object QueryResponse {
       jobComplete,
       errors.asScala.map(_.asScala.toList),
       cacheHit.asScala.map(_.booleanValue),
-      numDmlAffectedRows.asScala
-    )
+      numDmlAffectedRows.asScala)
 
   implicit def reader[T <: AnyRef](
-      implicit reader: BigQueryRootJsonReader[T]
-  ): RootJsonReader[QueryResponse[T]] = {
+      implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[QueryResponse[T]] = {
     implicit val format = lift(reader)
     jsonFormat10(QueryResponse[T])
   }

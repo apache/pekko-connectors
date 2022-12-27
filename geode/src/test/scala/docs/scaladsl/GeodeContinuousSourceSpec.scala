@@ -5,8 +5,8 @@
 package docs.scaladsl
 
 import akka.NotUsed
-import akka.stream.alpakka.geode.scaladsl.{Geode, PoolSubscription}
-import akka.stream.scaladsl.{Flow, Sink}
+import akka.stream.alpakka.geode.scaladsl.{ Geode, PoolSubscription }
+import akka.stream.scaladsl.{ Flow, Sink }
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
@@ -21,14 +21,14 @@ class GeodeContinuousSourceSpec extends GeodeBaseSpec {
     it { geodeSettings =>
       "retrieves continuously elements from geode" in {
 
-        //#connection-with-pool
+        // #connection-with-pool
         val geode = new Geode(geodeSettings) with PoolSubscription
         system.registerOnTermination(geode.close())
-        //#connection-with-pool
+        // #connection-with-pool
 
         val flow: Flow[Person, Person, NotUsed] = geode.flow(personsRegionSettings)
 
-        //#continuousQuery
+        // #continuousQuery
         val source =
           geode
             .continuousQuery[Person](Symbol("test"), s"select * from /persons")
@@ -42,10 +42,10 @@ class GeodeContinuousSourceSpec extends GeodeBaseSpec {
               }
               c + 1
             })
-        //#continuousQuery
+        // #continuousQuery
 
         val f = buildPersonsSource(1 to 20)
-          .via(flow) //geode flow
+          .via(flow) // geode flow
           .runWith(Sink.ignore)
 
         Await.result(f, 10 seconds)

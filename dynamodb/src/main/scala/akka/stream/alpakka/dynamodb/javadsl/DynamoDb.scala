@@ -10,11 +10,11 @@ import akka.NotUsed
 import akka.actor.ClassicActorSystemProvider
 import akka.annotation.ApiMayChange
 import akka.stream.Materializer
-import akka.stream.alpakka.dynamodb.{scaladsl, DynamoDbOp, DynamoDbPaginatedOp}
-import akka.stream.javadsl.{Flow, FlowWithContext, Sink, Source}
+import akka.stream.alpakka.dynamodb.{ scaladsl, DynamoDbOp, DynamoDbPaginatedOp }
+import akka.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
 import software.amazon.awssdk.core.async.SdkPublisher
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-import software.amazon.awssdk.services.dynamodb.model.{DynamoDbRequest, DynamoDbResponse}
+import software.amazon.awssdk.services.dynamodb.model.{ DynamoDbRequest, DynamoDbResponse }
 
 import scala.util.Try
 
@@ -29,8 +29,8 @@ object DynamoDb {
    * @param parallelism maximum number of in-flight requests at any given time
    */
   def flow[In <: DynamoDbRequest, Out <: DynamoDbResponse](client: DynamoDbAsyncClient,
-                                                           operation: DynamoDbOp[In, Out],
-                                                           parallelism: Int): Flow[In, Out, NotUsed] =
+      operation: DynamoDbOp[In, Out],
+      parallelism: Int): Flow[In, Out, NotUsed] =
     scaladsl.DynamoDb.flow(parallelism)(client, operation).asJava
 
   /**
@@ -47,19 +47,16 @@ object DynamoDb {
   def flowWithContext[In <: DynamoDbRequest, Out <: DynamoDbResponse, Ctx](
       client: DynamoDbAsyncClient,
       operation: DynamoDbOp[In, Out],
-      parallelism: Int
-  ): FlowWithContext[In, Ctx, Try[Out], Ctx, NotUsed] =
+      parallelism: Int): FlowWithContext[In, Ctx, Try[Out], Ctx, NotUsed] =
     scaladsl.DynamoDb.flowWithContext[In, Out, Ctx](parallelism)(client, operation).asJava
 
   /**
    * Create a Source that will emit potentially multiple responses for a given request.
-   *
    */
   def source[In <: DynamoDbRequest, Out <: DynamoDbResponse, Pub <: SdkPublisher[Out]](
       client: DynamoDbAsyncClient,
       operation: DynamoDbPaginatedOp[In, Out, Pub],
-      request: In
-  ): Source[Out, NotUsed] =
+      request: In): Source[Out, NotUsed] =
     scaladsl.DynamoDb.source(request)(client, operation).asJava
 
   /**
@@ -69,8 +66,7 @@ object DynamoDb {
    */
   def flowPaginated[In <: DynamoDbRequest, Out <: DynamoDbResponse](
       client: DynamoDbAsyncClient,
-      operation: DynamoDbPaginatedOp[In, Out, _]
-  ): Flow[In, Out, NotUsed] =
+      operation: DynamoDbPaginatedOp[In, Out, _]): Flow[In, Out, NotUsed] =
     scaladsl.DynamoDb.flowPaginated()(client, operation).asJava
 
   /**
@@ -79,9 +75,9 @@ object DynamoDb {
    */
   @deprecated("pass in the actor system instead of the materializer", "3.0.0")
   def single[In <: DynamoDbRequest, Out <: DynamoDbResponse](client: DynamoDbAsyncClient,
-                                                             operation: DynamoDbOp[In, Out],
-                                                             request: In,
-                                                             mat: Materializer): CompletionStage[Out] =
+      operation: DynamoDbOp[In, Out],
+      request: In,
+      mat: Materializer): CompletionStage[Out] =
     single(client, operation, request, mat.system)
 
   /**
@@ -91,8 +87,7 @@ object DynamoDb {
       client: DynamoDbAsyncClient,
       operation: DynamoDbOp[In, Out],
       request: In,
-      system: ClassicActorSystemProvider
-  ): CompletionStage[Out] = {
+      system: ClassicActorSystemProvider): CompletionStage[Out] = {
     val sink: Sink[Out, CompletionStage[Out]] = Sink.head()
     Source.single(request).via(flow(client, operation, 1)).runWith(sink, system)
   }

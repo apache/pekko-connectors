@@ -9,10 +9,10 @@ import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
 import javax.jms._
 import jmstestkit.JmsBroker
-import org.mockito.ArgumentMatchers.{any, anyBoolean, anyInt}
+import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito.when
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-import org.scalatest.concurrent.{Eventually, ScalaFutures}
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
+import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
@@ -56,10 +56,10 @@ abstract class JmsSpec
   def withMockedProducer(test: ProducerMock => Unit): Unit = test(ProducerMock())
 
   case class ProducerMock(factory: ConnectionFactory = mock[ConnectionFactory],
-                          connection: Connection = mock[Connection],
-                          session: Session = mock[Session],
-                          producer: MessageProducer = mock[MessageProducer],
-                          queue: javax.jms.Queue = mock[javax.jms.Queue]) {
+      connection: Connection = mock[Connection],
+      session: Session = mock[Session],
+      producer: MessageProducer = mock[MessageProducer],
+      queue: javax.jms.Queue = mock[javax.jms.Queue]) {
     when(factory.createConnection()).thenReturn(connection)
     when(connection.createSession(anyBoolean(), anyInt())).thenReturn(session)
     when(session.createProducer(any[javax.jms.Destination])).thenReturn(producer)
@@ -67,10 +67,10 @@ abstract class JmsSpec
   }
 
   case class ConsumerMock(factory: ConnectionFactory = mock[ConnectionFactory],
-                          connection: Connection = mock[Connection],
-                          session: Session = mock[Session],
-                          consumer: MessageConsumer = mock[MessageConsumer],
-                          queue: javax.jms.Queue = mock[javax.jms.Queue]) {
+      connection: Connection = mock[Connection],
+      session: Session = mock[Session],
+      consumer: MessageConsumer = mock[MessageConsumer],
+      queue: javax.jms.Queue = mock[javax.jms.Queue]) {
     when(factory.createConnection()).thenReturn(connection)
     when(connection.createSession(anyBoolean(), anyInt())).thenReturn(session)
     when(session.createConsumer(any[javax.jms.Destination])).thenReturn(consumer)

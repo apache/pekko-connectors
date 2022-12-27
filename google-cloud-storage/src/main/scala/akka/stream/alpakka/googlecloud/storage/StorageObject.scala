@@ -84,8 +84,7 @@ final class StorageObject private (
     val kmsKeyName: Option[String],
     val customerEncryption: Option[CustomerEncryption],
     val owner: Option[Owner],
-    val acl: Option[List[ObjectAccessControls]]
-) {
+    val acl: Option[List[ObjectAccessControls]]) {
 
   /** Java API */
   def getContentType: akka.http.javadsl.model.ContentType = contentType.asInstanceOf[ContentType]
@@ -183,8 +182,7 @@ final class StorageObject private (
       kmsKeyName: Option[String] = kmsKeyName,
       customerEncryption: Option[CustomerEncryption] = customerEncryption,
       owner: Option[Owner] = owner,
-      acl: Option[List[ObjectAccessControls]] = acl
-  ): StorageObject = new StorageObject(
+      acl: Option[List[ObjectAccessControls]] = acl): StorageObject = new StorageObject(
     kind = kind,
     id = id,
     name = name,
@@ -220,8 +218,7 @@ final class StorageObject private (
     kmsKeyName = kmsKeyName,
     customerEncryption = customerEncryption,
     owner = owner,
-    acl = acl
-  )
+    acl = acl)
 
   override def toString =
     "StorageObject(" +
@@ -329,8 +326,7 @@ final class StorageObject private (
       kmsKeyName,
       customerEncryption,
       owner,
-      acl
-    )
+      acl)
 }
 
 object StorageObject {
@@ -371,8 +367,7 @@ object StorageObject {
       kmsKeyName: Option[String],
       customerEncryption: Option[CustomerEncryption],
       owner: Option[Owner],
-      acl: Option[List[ObjectAccessControls]]
-  ): StorageObject = new StorageObject(
+      acl: Option[List[ObjectAccessControls]]): StorageObject = new StorageObject(
     kind,
     id,
     name,
@@ -408,8 +403,7 @@ object StorageObject {
     kmsKeyName,
     customerEncryption,
     owner,
-    acl
-  )
+    acl)
 
   /** Java API */
   def create(
@@ -444,8 +438,7 @@ object StorageObject {
       kmsKeyName: Optional[String],
       customerEncryption: Optional[CustomerEncryption],
       owner: Optional[Owner],
-      acl: Optional[List[ObjectAccessControls]]
-  ): StorageObject = new StorageObject(
+      acl: Optional[List[ObjectAccessControls]]): StorageObject = new StorageObject(
     kind,
     id,
     name,
@@ -481,6 +474,5 @@ object StorageObject {
     kmsKeyName.asScala,
     customerEncryption.asScala,
     owner.asScala,
-    acl.asScala
-  )
+    acl.asScala)
 }

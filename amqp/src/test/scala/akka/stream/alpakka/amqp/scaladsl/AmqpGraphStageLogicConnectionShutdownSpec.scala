@@ -19,7 +19,7 @@ import akka.stream.alpakka.amqp.{
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
-import com.rabbitmq.client.{AddressResolver, Connection, ConnectionFactory, ShutdownListener}
+import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, ShutdownListener }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach
 
@@ -82,8 +82,7 @@ class AmqpGraphStageLogicConnectionShutdownSpec
     val amqpSink = AmqpSink.simple(
       AmqpWriteSettings(reusableConnectionProvider)
         .withRoutingKey(queueName)
-        .withDeclaration(queueDeclaration)
-    )
+        .withDeclaration(queueDeclaration))
 
     val input = Vector("one", "two", "three", "four")
 

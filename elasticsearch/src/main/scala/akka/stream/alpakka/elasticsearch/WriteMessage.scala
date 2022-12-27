@@ -32,23 +32,23 @@ private[elasticsearch] object Operation {
 }
 
 final class WriteMessage[T, PT] private (val operation: Operation,
-                                         val id: Option[String],
-                                         val source: Option[T],
-                                         val passThrough: PT = NotUsed,
-                                         val version: Option[Long] = None,
-                                         val indexName: Option[String] = None,
-                                         val customMetadata: Map[String, java.lang.String] = Map.empty) {
+    val id: Option[String],
+    val source: Option[T],
+    val passThrough: PT = NotUsed,
+    val version: Option[Long] = None,
+    val indexName: Option[String] = None,
+    val customMetadata: Map[String, java.lang.String] = Map.empty) {
 
   def withSource(value: T): WriteMessage[T, PT] = copy(source = Option(value))
 
   def withPassThrough[PT2](value: PT2): WriteMessage[T, PT2] =
     new WriteMessage[T, PT2](operation = operation,
-                             id = id,
-                             source = source,
-                             value,
-                             version = version,
-                             indexName = indexName,
-                             customMetadata = customMetadata)
+      id = id,
+      source = source,
+      value,
+      version = version,
+      indexName = indexName,
+      customMetadata = customMetadata)
 
   def withVersion(value: Long): WriteMessage[T, PT] = copy(version = Option(value))
   def withIndexName(value: String): WriteMessage[T, PT] = copy(indexName = Option(value))
@@ -67,19 +67,19 @@ final class WriteMessage[T, PT] private (val operation: Operation,
     this.copy(customMetadata = metadata.asScala.toMap)
 
   private def copy(operation: Operation = operation,
-                   id: Option[String] = id,
-                   source: Option[T] = source,
-                   passThrough: PT = passThrough,
-                   version: Option[Long] = version,
-                   indexName: Option[String] = indexName,
-                   customMetadata: Map[String, String] = customMetadata): WriteMessage[T, PT] =
+      id: Option[String] = id,
+      source: Option[T] = source,
+      passThrough: PT = passThrough,
+      version: Option[Long] = version,
+      indexName: Option[String] = indexName,
+      customMetadata: Map[String, String] = customMetadata): WriteMessage[T, PT] =
     new WriteMessage[T, PT](operation = operation,
-                            id = id,
-                            source = source,
-                            passThrough = passThrough,
-                            version = version,
-                            indexName = indexName,
-                            customMetadata = customMetadata)
+      id = id,
+      source = source,
+      passThrough = passThrough,
+      version = version,
+      indexName = indexName,
+      customMetadata = customMetadata)
 
   override def toString =
     s"""WriteMessage(operation=$operation,id=$id,source=$source,passThrough=$passThrough,version=$version,indexName=$indexName,customMetadata=$customMetadata)"""
@@ -138,8 +138,8 @@ object WriteMessage {
  * [[akka.stream.alpakka.elasticsearch.testkit.MessageFactory]].
  */
 final class WriteResult[T2, C2] @InternalApi private[elasticsearch] (val message: WriteMessage[T2, C2],
-                                                                     /** JSON structure of the Elasticsearch error. */
-                                                                     val error: Option[String]) {
+    /** JSON structure of the Elasticsearch error. */
+    val error: Option[String]) {
   val success: Boolean = error.isEmpty
 
   /** Java API: JSON structure of the Elasticsearch error. */

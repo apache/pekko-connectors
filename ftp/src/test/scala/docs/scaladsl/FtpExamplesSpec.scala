@@ -7,7 +7,7 @@ import java.io.PrintWriter
 import java.net.InetAddress
 
 import akka.stream.Materializer
-import akka.stream.alpakka.ftp.{BaseFtpSupport, FtpSettings}
+import akka.stream.alpakka.ftp.{ BaseFtpSupport, FtpSettings }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Source
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
@@ -15,7 +15,7 @@ import akka.testkit.TestKit
 import org.apache.commons.net.PrintCommandListener
 import org.apache.commons.net.ftp.FTPClient
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Seconds, Span}
+import org.scalatest.time.{ Seconds, Span }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -38,7 +38,7 @@ class FtpExamplesSpec
   }
 
   def ftpSettings = {
-    //#create-settings
+    // #create-settings
     val ftpSettings = FtpSettings
       .create(InetAddress.getByName(HOSTNAME))
       .withPort(PORT)
@@ -49,13 +49,13 @@ class FtpExamplesSpec
       .withConfigureConnection((ftpClient: FTPClient) => {
         ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true))
       })
-    //#create-settings
+    // #create-settings
     ftpSettings
   }
 
   "a file" should {
     "be stored" in assertAllStagesStopped {
-      //#storing
+      // #storing
       import akka.stream.IOResult
       import akka.stream.alpakka.ftp.scaladsl.Ftp
       import akka.util.ByteString
@@ -64,7 +64,7 @@ class FtpExamplesSpec
       val result: Future[IOResult] = Source
         .single(ByteString("this is the file contents"))
         .runWith(Ftp.toPath("file.txt", ftpSettings))
-      //#storing
+      // #storing
 
       val ioResult = result.futureValue(timeout(Span(1, Seconds)))
       ioResult should be(IOResult.createSuccessful(25))
@@ -80,7 +80,7 @@ class FtpExamplesSpec
       import akka.util.ByteString
       import scala.concurrent.Future
 
-      //#storing
+      // #storing
 
       // Create a gzipped target file
       import akka.stream.scaladsl.Compression
@@ -88,7 +88,7 @@ class FtpExamplesSpec
         .single(ByteString("this is the file contents" * 50))
         .via(Compression.gzip)
         .runWith(Ftp.toPath("file.txt.gz", ftpSettings))
-      //#storing
+      // #storing
 
       val ioResult = result.futureValue(timeout(Span(1, Seconds)))
       ioResult should be(IOResult.createSuccessful(61))

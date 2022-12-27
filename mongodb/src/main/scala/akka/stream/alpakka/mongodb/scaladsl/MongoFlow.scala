@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.mongodb.scaladsl
 
-import akka.stream.scaladsl.{Flow, Source}
+import akka.stream.scaladsl.{ Flow, Source }
 import akka.NotUsed
 import akka.annotation.InternalApi
-import akka.stream.alpakka.mongodb.{DocumentReplace, DocumentUpdate}
-import com.mongodb.client.model.{DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions}
-import com.mongodb.client.result.{DeleteResult, UpdateResult}
+import akka.stream.alpakka.mongodb.{ DocumentReplace, DocumentUpdate }
+import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
+import com.mongodb.client.result.{ DeleteResult, UpdateResult }
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.conversions.Bson
 
@@ -39,7 +39,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def insertOne[T](collection: MongoCollection[T],
-                   options: InsertOneOptions = DefaultInsertOneOptions): Flow[T, T, NotUsed] =
+      options: InsertOneOptions = DefaultInsertOneOptions): Flow[T, T, NotUsed] =
     Flow[T]
       .flatMapConcat(doc => Source.fromPublisher(collection.insertOne(doc, options)).map(_ => doc))
 
@@ -50,7 +50,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def insertMany[T](collection: MongoCollection[T],
-                    options: InsertManyOptions = DefaultInsertManyOptions): Flow[Seq[T], Seq[T], NotUsed] =
+      options: InsertManyOptions = DefaultInsertManyOptions): Flow[Seq[T], Seq[T], NotUsed] =
     Flow[Seq[T]].flatMapConcat(docs => Source.fromPublisher(collection.insertMany(docs.asJava, options)).map(_ => docs))
 
   /**
@@ -61,14 +61,11 @@ object MongoFlow {
    */
   def updateOne[T](
       collection: MongoCollection[T],
-      options: UpdateOptions = DefaultUpdateOptions
-  ): Flow[DocumentUpdate, (UpdateResult, DocumentUpdate), NotUsed] =
-    Flow[DocumentUpdate].flatMapConcat(
-      documentUpdate =>
-        Source
-          .fromPublisher(collection.updateOne(documentUpdate.filter, documentUpdate.update, options))
-          .map(_ -> documentUpdate)
-    )
+      options: UpdateOptions = DefaultUpdateOptions): Flow[DocumentUpdate, (UpdateResult, DocumentUpdate), NotUsed] =
+    Flow[DocumentUpdate].flatMapConcat(documentUpdate =>
+      Source
+        .fromPublisher(collection.updateOne(documentUpdate.filter, documentUpdate.update, options))
+        .map(_ -> documentUpdate))
 
   /**
    * A [[akka.stream.scaladsl.Flow Flow]] that will update many documents as defined by a [[DocumentUpdate]].
@@ -78,14 +75,11 @@ object MongoFlow {
    */
   def updateMany[T](
       collection: MongoCollection[T],
-      options: UpdateOptions = DefaultUpdateOptions
-  ): Flow[DocumentUpdate, (UpdateResult, DocumentUpdate), NotUsed] =
-    Flow[DocumentUpdate].flatMapConcat(
-      documentUpdate =>
-        Source
-          .fromPublisher(collection.updateMany(documentUpdate.filter, documentUpdate.update, options))
-          .map(_ -> documentUpdate)
-    )
+      options: UpdateOptions = DefaultUpdateOptions): Flow[DocumentUpdate, (UpdateResult, DocumentUpdate), NotUsed] =
+    Flow[DocumentUpdate].flatMapConcat(documentUpdate =>
+      Source
+        .fromPublisher(collection.updateMany(documentUpdate.filter, documentUpdate.update, options))
+        .map(_ -> documentUpdate))
 
   /**
    * A [[akka.stream.scaladsl.Flow Flow]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
@@ -94,7 +88,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def deleteOne[T](collection: MongoCollection[T],
-                   options: DeleteOptions = DefaultDeleteOptions): Flow[Bson, (DeleteResult, Bson), NotUsed] =
+      options: DeleteOptions = DefaultDeleteOptions): Flow[Bson, (DeleteResult, Bson), NotUsed] =
     Flow[Bson].flatMapConcat(bson => Source.fromPublisher(collection.deleteOne(bson, options)).map(_ -> bson))
 
   /**
@@ -104,7 +98,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def deleteMany[T](collection: MongoCollection[T],
-                    options: DeleteOptions = DefaultDeleteOptions): Flow[Bson, (DeleteResult, Bson), NotUsed] =
+      options: DeleteOptions = DefaultDeleteOptions): Flow[Bson, (DeleteResult, Bson), NotUsed] =
     Flow[Bson].flatMapConcat(bson => Source.fromPublisher(collection.deleteMany(bson, options)).map(_ -> bson))
 
   /**
@@ -115,12 +109,10 @@ object MongoFlow {
    */
   def replaceOne[T](
       collection: MongoCollection[T],
-      options: ReplaceOptions = DefaultReplaceOptions
-  ): Flow[DocumentReplace[T], (UpdateResult, DocumentReplace[T]), NotUsed] =
-    Flow[DocumentReplace[T]].flatMapConcat(
-      documentReplace =>
-        Source
-          .fromPublisher(collection.replaceOne(documentReplace.filter, documentReplace.replacement, options))
-          .map(_ -> documentReplace)
-    )
+      options: ReplaceOptions = DefaultReplaceOptions)
+      : Flow[DocumentReplace[T], (UpdateResult, DocumentReplace[T]), NotUsed] =
+    Flow[DocumentReplace[T]].flatMapConcat(documentReplace =>
+      Source
+        .fromPublisher(collection.replaceOne(documentReplace.filter, documentReplace.replacement, options))
+        .map(_ -> documentReplace))
 }

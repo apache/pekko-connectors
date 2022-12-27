@@ -6,9 +6,9 @@ package akka.stream.alpakka.google.firebase.fcm.v1.scaladsl
 
 import akka.stream.alpakka.google.firebase.fcm.FcmSettings
 import akka.stream.alpakka.google.firebase.fcm.v1.impl.FcmFlows
-import akka.stream.alpakka.google.firebase.fcm.v1.models.{FcmNotification, FcmResponse}
-import akka.stream.scaladsl.{Flow, Keep, Sink}
-import akka.{Done, NotUsed}
+import akka.stream.alpakka.google.firebase.fcm.v1.models.{ FcmNotification, FcmResponse }
+import akka.stream.scaladsl.{ Flow, Keep, Sink }
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

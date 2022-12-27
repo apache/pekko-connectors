@@ -7,7 +7,7 @@ package docs.scaladsl
 import akka.NotUsed
 import akka.stream.alpakka.geode.GeodeSettings
 import akka.stream.alpakka.geode.scaladsl.Geode
-import akka.stream.scaladsl.{Flow, Sink}
+import akka.stream.scaladsl.{ Flow, Sink }
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
@@ -19,28 +19,28 @@ class GeodeFlowSpec extends GeodeBaseSpec {
     "create settings" in {
       {
         val hostname = "localhost"
-        //#connection
+        // #connection
         val geodeSettings = GeodeSettings(hostname, port = 10334)
           .withConfiguration(c => c.setPoolIdleTimeout(10))
-        //#connection
+        // #connection
         geodeSettings.toString should include("port=10334")
       }
     }
 
     it { geodeSettings =>
       "flow with shapeless pdx serializer" in {
-        //#connection
+        // #connection
         val geode = new Geode(geodeSettings)
         system.registerOnTermination(geode.close())
-        //#connection
+        // #connection
 
         val source = buildPersonsSource(1 to 10)
 
-        //#flow
+        // #flow
         val flow: Flow[Person, Person, NotUsed] = geode.flow(personsRegionSettings)
 
         val fut = source.via(flow).runWith(Sink.ignore)
-        //#flow
+        // #flow
         Await.ready(fut, 10 seconds)
 
         geode.close()

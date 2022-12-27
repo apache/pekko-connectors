@@ -13,7 +13,7 @@ import akka.stream.stage._
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 
 import scala.collection.mutable
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * INTERNAL API
@@ -21,10 +21,10 @@ import scala.concurrent.{Future, Promise}
 
 @InternalApi
 private[mqtt] final class MqttFlowStageWithAck(connectionSettings: MqttConnectionSettings,
-                                               subscriptions: Map[String, MqttQoS],
-                                               bufferSize: Int,
-                                               defaultQoS: MqttQoS,
-                                               manualAcks: Boolean = false)
+    subscriptions: Map[String, MqttQoS],
+    bufferSize: Int,
+    defaultQoS: MqttQoS,
+    manualAcks: Boolean = false)
     extends GraphStageWithMaterializedValue[FlowShape[MqttMessageWithAck, MqttMessageWithAck], Future[Done]] {
 
   private val in = Inlet[MqttMessageWithAck]("MqttFlow.in")
@@ -37,37 +37,37 @@ private[mqtt] final class MqttFlowStageWithAck(connectionSettings: MqttConnectio
     val subscriptionPromise = Promise[Done]()
 
     val logic = new MqttFlowWithAckStageLogic(in,
-                                              out,
-                                              shape,
-                                              subscriptionPromise,
-                                              connectionSettings,
-                                              subscriptions,
-                                              bufferSize,
-                                              defaultQoS,
-                                              manualAcks)
+      out,
+      shape,
+      subscriptionPromise,
+      connectionSettings,
+      subscriptions,
+      bufferSize,
+      defaultQoS,
+      manualAcks)
     (logic, subscriptionPromise.future)
   }
 
 }
 
 class MqttFlowWithAckStageLogic(in: Inlet[MqttMessageWithAck],
-                                out: Outlet[MqttMessageWithAck],
-                                shape: Shape,
-                                subscriptionPromise: Promise[Done],
-                                connectionSettings: MqttConnectionSettings,
-                                subscriptions: Map[String, MqttQoS],
-                                bufferSize: Int,
-                                defaultQoS: MqttQoS,
-                                manualAcks: Boolean)
+    out: Outlet[MqttMessageWithAck],
+    shape: Shape,
+    subscriptionPromise: Promise[Done],
+    connectionSettings: MqttConnectionSettings,
+    subscriptions: Map[String, MqttQoS],
+    bufferSize: Int,
+    defaultQoS: MqttQoS,
+    manualAcks: Boolean)
     extends MqttFlowStageLogic[MqttMessageWithAck](in,
-                                                   out,
-                                                   shape,
-                                                   subscriptionPromise,
-                                                   connectionSettings,
-                                                   subscriptions,
-                                                   bufferSize,
-                                                   defaultQoS,
-                                                   manualAcks) {
+      out,
+      shape,
+      subscriptionPromise,
+      connectionSettings,
+      subscriptions,
+      bufferSize,
+      defaultQoS,
+      manualAcks) {
 
   private val messagesToAck: mutable.HashMap[Int, MqttMessageWithAck] = mutable.HashMap()
 

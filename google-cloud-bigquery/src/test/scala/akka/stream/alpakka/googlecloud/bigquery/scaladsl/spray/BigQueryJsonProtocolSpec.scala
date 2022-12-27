@@ -6,7 +6,7 @@ package akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import spray.json.{JsonParser, ParserInput}
+import spray.json.{ JsonParser, ParserInput }
 
 class BigQueryJsonProtocolSpec extends BigQueryJsonProtocol with AnyWordSpecLike with Matchers {
 
@@ -57,8 +57,8 @@ class BigQueryJsonProtocolSpec extends BigQueryJsonProtocol with AnyWordSpecLike
 
     "parse nested case classes" in {
       recordFormat.read(JsonParser(ParserInput(json))) shouldEqual Record(Some("Peter"),
-                                                                          Seq(Address(Some("street1"), Some("city1")),
-                                                                              Address(Some("street2"), Some("city2"))))
+        Seq(Address(Some("street1"), Some("city1")),
+          Address(Some("street2"), Some("city2"))))
     }
 
   }

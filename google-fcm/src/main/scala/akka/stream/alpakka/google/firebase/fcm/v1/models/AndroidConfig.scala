@@ -16,8 +16,7 @@ case class AndroidConfig(
     data: Option[Map[String, String]] = None,
     notification: Option[AndroidNotification] = None,
     fcm_options: Option[FcmOption] = None,
-    direct_boot_ok: Option[Boolean] = None
-) {
+    direct_boot_ok: Option[Boolean] = None) {
   def withCollapseKey(value: String): AndroidConfig = this.copy(collapse_key = Option(value))
 
   def withPriority(value: AndroidMessagePriority): AndroidConfig = this.copy(priority = Option(value))
@@ -70,8 +69,7 @@ case class AndroidNotification(
     visibility: Option[Visibility] = None,
     notification_count: Option[Int] = None,
     light_settings: Option[LightSettings] = None,
-    image: Option[String] = None
-) {
+    image: Option[String] = None) {
   def withTitle(value: String): AndroidNotification = this.copy(title = Option(value))
 
   def withBody(value: String): AndroidNotification = this.copy(body = Option(value))
@@ -177,8 +175,7 @@ case object Secret extends Visibility
 case class LightSettings(
     color: Option[Color] = None,
     light_on_duration: Option[String] = None,
-    light_off_duration: Option[String] = None
-) {
+    light_off_duration: Option[String] = None) {
   def withColor(value: Color): LightSettings = this.copy(color = Option(value))
 
   def withLightOnDuration(value: String): LightSettings = this.copy(light_on_duration = Option(value))

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl
 
-import akka.stream.alpakka.googlecloud.bigquery.storage.impl.{AvroDecoder, SimpleRowReader}
+import akka.stream.alpakka.googlecloud.bigquery.storage.impl.{ AvroDecoder, SimpleRowReader }
 import akka.stream.alpakka.googlecloud.bigquery.storage.{
   BigQueryRecord,
   BigQueryStorageSettings,
@@ -12,11 +12,11 @@ import akka.stream.alpakka.googlecloud.bigquery.storage.{
 }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Sink
-import com.google.cloud.bigquery.storage.v1.arrow.{ArrowRecordBatch, ArrowSchema}
+import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.avro.AvroSchema
 import com.google.cloud.bigquery.storage.v1.DataFormat
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
-import io.grpc.{Status, StatusRuntimeException}
+import io.grpc.{ Status, StatusRuntimeException }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -34,10 +34,10 @@ class BigQueryStorageSpec
 
       BigQueryStorage
         .createMergedStreams[List[BigQueryRecord]](Project,
-                                                   Dataset,
-                                                   Table,
-                                                   DataFormat.AVRO,
-                                                   Some(TableReadOptions(rowRestriction = "true = false")))
+          Dataset,
+          Table,
+          DataFormat.AVRO,
+          Some(TableReadOptions(rowRestriction = "true = false")))
         .withAttributes(mockBQReader())
         .runWith(Sink.seq)
         .futureValue shouldBe empty
@@ -83,10 +83,10 @@ class BigQueryStorageSpec
 
       BigQueryStorage
         .createMergedStreams[List[BigQueryRecord]](Project,
-                                                   Dataset,
-                                                   Table,
-                                                   DataFormat.AVRO,
-                                                   Some(TableReadOptions(List("col1"))))
+          Dataset,
+          Table,
+          DataFormat.AVRO,
+          Some(TableReadOptions(List("col1"))))
         .withAttributes(mockBQReader())
         .runWith(Sink.seq)
         .futureValue shouldBe List.fill(DefaultNumStreams * ResponsesPerStream)(records)
@@ -117,7 +117,7 @@ class BigQueryStorageSpec
 
       error match {
         case sre: StatusRuntimeException => sre.getStatus.getCode shouldBe Status.Code.UNAVAILABLE
-        case other => fail(s"Expected a StatusRuntimeException, got $other")
+        case other                       => fail(s"Expected a StatusRuntimeException, got $other")
       }
     }
 
@@ -131,7 +131,7 @@ class BigQueryStorageSpec
 
       error match {
         case sre: StatusRuntimeException => sre.getStatus.getCode shouldBe Status.Code.INVALID_ARGUMENT
-        case other => fail(s"Expected a StatusRuntimeException, got $other")
+        case other                       => fail(s"Expected a StatusRuntimeException, got $other")
       }
     }
 
@@ -145,7 +145,7 @@ class BigQueryStorageSpec
 
       error match {
         case sre: StatusRuntimeException => sre.getStatus.getCode shouldBe Status.Code.INVALID_ARGUMENT
-        case other => fail(s"Expected a StatusRuntimeException, got $other")
+        case other                       => fail(s"Expected a StatusRuntimeException, got $other")
       }
     }
 
@@ -159,7 +159,7 @@ class BigQueryStorageSpec
 
       error match {
         case sre: StatusRuntimeException => sre.getStatus.getCode shouldBe Status.Code.INVALID_ARGUMENT
-        case other => fail(s"Expected a StatusRuntimeException, got $other")
+        case other                       => fail(s"Expected a StatusRuntimeException, got $other")
       }
     }
 

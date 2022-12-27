@@ -4,14 +4,14 @@
 
 package akka.stream.alpakka.ftp.impl
 
-import java.io.{IOException, InputStream, OutputStream}
+import java.io.{ IOException, InputStream, OutputStream }
 import java.nio.file.Paths
 import java.nio.file.attribute.PosixFilePermission
 import java.util.TimeZone
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.ftp.FtpFile
-import org.apache.commons.net.ftp.{FTPClient, FTPFile}
+import org.apache.commons.net.ftp.{ FTPClient, FTPFile }
 
 import scala.collection.immutable
 import scala.util.Try
@@ -40,8 +40,7 @@ private[ftp] trait CommonFtpOperations {
             file.isDirectory,
             file.getSize,
             calendar.getTimeInMillis,
-            getPosixFilePermissions(file)
-          )
+            getPosixFilePermissions(file))
       }
       .toVector
   }
@@ -56,8 +55,8 @@ private[ftp] trait CommonFtpOperations {
       PosixFilePermission.GROUP_EXECUTE -> file.hasPermission(FTPFile.GROUP_ACCESS, FTPFile.EXECUTE_PERMISSION),
       PosixFilePermission.OTHERS_READ -> file.hasPermission(FTPFile.WORLD_ACCESS, FTPFile.READ_PERMISSION),
       PosixFilePermission.OTHERS_WRITE -> file.hasPermission(FTPFile.WORLD_ACCESS, FTPFile.WRITE_PERMISSION),
-      PosixFilePermission.OTHERS_EXECUTE -> file.hasPermission(FTPFile.WORLD_ACCESS, FTPFile.EXECUTE_PERMISSION)
-    ).collect {
+      PosixFilePermission.OTHERS_EXECUTE -> file.hasPermission(FTPFile.WORLD_ACCESS,
+        FTPFile.EXECUTE_PERMISSION)).collect {
       case (perm, true) => perm
     }.toSet
 

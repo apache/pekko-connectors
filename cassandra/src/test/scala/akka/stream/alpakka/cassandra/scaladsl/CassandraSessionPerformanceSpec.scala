@@ -8,8 +8,8 @@ import scala.concurrent.Await
 
 import akka.actor.ActorSystem
 import akka.event.Logging
-import akka.stream.alpakka.cassandra.{CassandraSessionSettings, CassandraWriteSettings}
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.alpakka.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import scala.concurrent.duration._
 
@@ -51,8 +51,7 @@ final class CassandraSessionPerformanceSpec extends CassandraSpecBase(ActorSyste
               CassandraWriteSettings.create().withMaxBatchSize(10000),
               s"INSERT INTO $dataTable(partition_id, id, value, seq_nr) VALUES (?, ?, ?, ?)",
               (d: Int, ps) => ps.bind(Long.box(partitionId), id, Long.box(d), Long.box(d)),
-              (_: Int) => partitionId
-            )(lifecycleSession)
+              (_: Int) => partitionId)(lifecycleSession)
           }
           .runWith(Sink.ignore)
       }

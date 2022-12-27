@@ -19,8 +19,7 @@ final class SqsPublishBatchSettings private (val concurrentRequests: Int) {
 object SqsPublishBatchSettings {
 
   val Defaults = new SqsPublishBatchSettings(
-    concurrentRequests = 1
-  )
+    concurrentRequests = 1)
 
   /** Scala API */
   def apply(): SqsPublishBatchSettings = Defaults

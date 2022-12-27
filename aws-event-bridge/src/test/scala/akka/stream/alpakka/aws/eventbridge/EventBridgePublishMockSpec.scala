@@ -7,9 +7,9 @@ package akka.stream.alpakka.aws.eventbridge
 import java.util.concurrent.CompletableFuture
 
 import akka.stream.alpakka.aws.eventbridge.scaladsl.EventBridgePublisher
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{ Keep, Sink }
 import akka.stream.testkit.scaladsl.TestSource
-import org.mockito.ArgumentMatchers.{any, eq => meq}
+import org.mockito.ArgumentMatchers.{ any, eq => meq }
 import org.mockito.Mockito._
 import org.scalatest.flatspec._
 import org.scalatest.matchers.must.Matchers
@@ -30,8 +30,7 @@ class EventBridgePublishMockSpec extends AnyFlatSpec with DefaultTestContext wit
     PutEventsRequest
       .builder()
       .entries(
-        details.map(detail => entryDetail(detail, eventBusName)): _*
-      )
+        details.map(detail => entryDetail(detail, eventBusName)): _*)
       .build()
 
   private def resultResponse(eventId: String): PutEventsResponse = {

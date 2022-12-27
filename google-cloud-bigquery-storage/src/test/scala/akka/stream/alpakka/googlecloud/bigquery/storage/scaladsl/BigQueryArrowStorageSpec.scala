@@ -5,10 +5,10 @@
 package akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl
 
 import akka.stream.alpakka.googlecloud.bigquery.storage.impl.SimpleRowReader
-import akka.stream.alpakka.googlecloud.bigquery.storage.{BigQueryStorageSettings, BigQueryStorageSpecBase}
+import akka.stream.alpakka.googlecloud.bigquery.storage.{ BigQueryStorageSettings, BigQueryStorageSpecBase }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Sink
-import com.google.cloud.bigquery.storage.v1.arrow.{ArrowRecordBatch, ArrowSchema}
+import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -52,8 +52,7 @@ class BigQueryArrowStorageSpec
         .runWith(Sink.seq)
         .futureValue shouldBe Vector.fill(DefaultNumStreams * ResponsesPerStream)(
         (ArrowSchema(serializedSchema = GCPSerializedArrowSchema),
-         ArrowRecordBatch(GCPSerializedArrowTenRecordBatch, 10))
-      )
+          ArrowRecordBatch(GCPSerializedArrowTenRecordBatch, 10)))
     }
 
     "stream the results for a query" in {

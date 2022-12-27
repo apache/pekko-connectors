@@ -8,7 +8,7 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.alpakka.xml._
 import akka.stream.alpakka.xml.scaladsl.XmlWriting
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import javax.xml.stream.XMLOutputFactory
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.concurrent.ScalaFutures
@@ -42,8 +42,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         Characters("elem2"),
         EndElement("elem"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
 
       val doc = "<?xml version='1.0' encoding='UTF-8'?><doc><elem>elem1</elem><elem>elem2</elem></doc>"
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
@@ -58,8 +57,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         StartElement("doc"),
         Comment("comment"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
 
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
 
@@ -73,8 +71,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         ProcessingInstruction(Some("target"), Some("content")),
         StartElement("doc"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
 
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
 
@@ -92,8 +89,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         Characters("elem1"),
         EndElement("elem"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
 
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
 
@@ -108,8 +104,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         StartElement("doc"),
         CData("<not>even</valid>"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
 
       resultFuture.futureValue(Timeout(3.seconds)) should ===(doc)
@@ -129,8 +124,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         Characters("elem2"),
         EndElement("elem"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
 
       resultFuture.futureValue(Timeout(3.seconds)) should ===(doc)
@@ -142,12 +136,11 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
       val listEl = List(
         StartDocument,
         StartElement("x",
-                     namespace = None,
-                     prefix = None,
-                     namespaceCtx = List(Namespace("http://ecommerce.example.org/schema", prefix = Some("edi")))),
+          namespace = None,
+          prefix = None,
+          namespaceCtx = List(Namespace("http://ecommerce.example.org/schema", prefix = Some("edi")))),
         EndElement("x"),
-        EndDocument
-      )
+        EndDocument)
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
 
       resultFuture.futureValue(Timeout(3.seconds)) should ===(doc)
@@ -162,25 +155,21 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
           namespace = Some("urn:loc.gov:books"),
           prefix = Some("bk"),
           namespaceCtx = List(Namespace("urn:loc.gov:books", prefix = Some("bk")),
-                              Namespace("urn:ISBN:0-395-36341-6", prefix = Some("isbn")))
-        ),
+            Namespace("urn:ISBN:0-395-36341-6", prefix = Some("isbn")))),
         StartElement(
           "title",
           namespace = Some("urn:loc.gov:books"),
-          prefix = Some("bk")
-        ),
+          prefix = Some("bk")),
         Characters("Cheaper by the Dozen"),
         EndElement("title"),
         StartElement(
           "number",
           namespace = Some("urn:ISBN:0-395-36341-6"),
-          prefix = Some("isbn")
-        ),
+          prefix = Some("isbn")),
         Characters("1568491379"),
         EndElement("number"),
         EndElement("book"),
-        EndDocument
-      )
+        EndDocument)
 
       val doc =
         """<?xml version='1.0' encoding='UTF-8'?><bk:book xmlns:bk="urn:loc.gov:books" xmlns:isbn="urn:ISBN:0-395-36341-6"><bk:title>Cheaper by the Dozen</bk:title><isbn:number>1568491379</isbn:number></bk:book>"""
@@ -198,8 +187,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         StartElement("elem"),
         Characters("elem2"),
         EndElement("elem"),
-        EndElement("doc")
-      )
+        EndElement("doc"))
 
       val doc = "<doc><elem>elem1</elem><elem>elem2</elem></doc>"
       val resultFuture: Future[String] = Source.fromIterator[ParseEvent](() => listEl.iterator).runWith(writer)
@@ -218,8 +206,7 @@ class XmlWritingSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         Characters("elem2"),
         EndElement("elem"),
         EndElement("doc"),
-        EndDocument
-      )
+        EndDocument)
 
       val doc = "<?xml version='1.0' encoding='UTF-8'?><doc><elem>elem1</elem><elem>elem2</elem></doc>"
       val outputFactory = XMLOutputFactory.newInstance()

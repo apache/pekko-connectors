@@ -8,10 +8,10 @@ import java.util.concurrent.CompletionStage
 
 import akka.NotUsed
 import akka.japi.Pair
-import akka.stream.alpakka.hdfs.scaladsl.{HdfsSource => ScalaHdfsSource}
-import akka.stream.{javadsl, IOResult}
+import akka.stream.alpakka.hdfs.scaladsl.{ HdfsSource => ScalaHdfsSource }
+import akka.stream.{ javadsl, IOResult }
 import akka.util.ByteString
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.io.Writable
 import org.apache.hadoop.io.compress.CompressionCodec
 
@@ -27,8 +27,7 @@ object HdfsSource {
    */
   def data(
       fs: FileSystem,
-      path: Path
-  ): javadsl.Source[ByteString, CompletionStage[IOResult]] =
+      path: Path): javadsl.Source[ByteString, CompletionStage[IOResult]] =
     ScalaHdfsSource.data(fs, path).mapMaterializedValue(_.toJava).asJava
 
   /**
@@ -41,8 +40,7 @@ object HdfsSource {
   def data(
       fs: FileSystem,
       path: Path,
-      chunkSize: Int
-  ): javadsl.Source[ByteString, CompletionStage[IOResult]] =
+      chunkSize: Int): javadsl.Source[ByteString, CompletionStage[IOResult]] =
     ScalaHdfsSource.data(fs, path, chunkSize).mapMaterializedValue(_.toJava).asJava
 
   /**
@@ -55,8 +53,7 @@ object HdfsSource {
   def compressed(
       fs: FileSystem,
       path: Path,
-      codec: CompressionCodec
-  ): javadsl.Source[ByteString, CompletionStage[IOResult]] =
+      codec: CompressionCodec): javadsl.Source[ByteString, CompletionStage[IOResult]] =
     ScalaHdfsSource.compressed(fs, path, codec).mapMaterializedValue(_.toJava).asJava
 
   /**
@@ -71,8 +68,7 @@ object HdfsSource {
       fs: FileSystem,
       path: Path,
       codec: CompressionCodec,
-      chunkSize: Int = 8192
-  ): javadsl.Source[ByteString, CompletionStage[IOResult]] =
+      chunkSize: Int = 8192): javadsl.Source[ByteString, CompletionStage[IOResult]] =
     ScalaHdfsSource.compressed(fs, path, codec, chunkSize).mapMaterializedValue(_.toJava).asJava
 
   /**
@@ -87,8 +83,7 @@ object HdfsSource {
       fs: FileSystem,
       path: Path,
       classK: Class[K],
-      classV: Class[V]
-  ): javadsl.Source[Pair[K, V], NotUsed] =
+      classV: Class[V]): javadsl.Source[Pair[K, V], NotUsed] =
     ScalaHdfsSource.sequence(fs, path, classK, classV).map { case (k, v) => new Pair(k, v) }.asJava
 
 }

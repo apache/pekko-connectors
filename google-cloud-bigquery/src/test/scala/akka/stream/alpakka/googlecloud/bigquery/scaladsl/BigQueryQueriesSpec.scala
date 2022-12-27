@@ -8,10 +8,10 @@ import _root_.spray.json._
 import akka.actor.ActorSystem
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.stream.alpakka.google.auth.NoCredentials
-import akka.stream.alpakka.google.{GoogleAttributes, GoogleSettings}
+import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
 import akka.stream.alpakka.googlecloud.bigquery.model.JobReference
 import akka.stream.alpakka.googlecloud.bigquery.model.QueryResponse
-import akka.stream.alpakka.googlecloud.bigquery.{BigQueryEndpoints, HoverflySupport}
+import akka.stream.alpakka.googlecloud.bigquery.{ BigQueryEndpoints, HoverflySupport }
 import akka.stream.scaladsl.Sink
 import akka.testkit.TestKit
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
@@ -55,25 +55,20 @@ class BigQueryQueriesSpec
     false,
     None,
     None,
-    None
-  )
+    None)
 
   val completeQuery = incompleteQuery.copy[JsValue](
     jobComplete = true,
-    rows = Some(JsString("firstPage") :: Nil)
-  )
+    rows = Some(JsString("firstPage") :: Nil))
 
   val completeQueryWith2ndPage = completeQuery.copy[JsValue](
-    pageToken = Some(pageToken)
-  )
+    pageToken = Some(pageToken))
 
   val query2ndPage = completeQuery.copy[JsValue](
-    rows = Some(JsString("secondPage") :: Nil)
-  )
+    rows = Some(JsString("secondPage") :: Nil))
 
   val completeQueryWithoutJobId = completeQuery.copy[JsValue](
-    jobReference = JobReference(None, None, None)
-  )
+    jobReference = JobReference(None, None, None))
 
   "BigQueryQueries" should {
 
@@ -89,9 +84,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQuery.toJson.toString(), "application/json"))
-          )
-        )
+              .willReturn(success(completeQuery.toJson.toString(), "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -112,9 +105,7 @@ class BigQueryQueriesSpec
               .get(BigQueryEndpoints.query(settings.projectId, jobId).path.toString)
               .queryParam("pageToken", pageToken)
               .queryParam("prettyPrint", "false")
-              .willReturn(success(query2ndPage.toJson.toString, "application/json"))
-          )
-        )
+              .willReturn(success(query2ndPage.toJson.toString, "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -134,9 +125,7 @@ class BigQueryQueriesSpec
               .willReturn(success(incompleteQuery.toJson.toString(), "application/json"))
               .get(BigQueryEndpoints.query(settings.projectId, jobId).path.toString)
               .queryParam("prettyPrint", "false")
-              .willReturn(success(completeQuery.toJson.toString, "application/json"))
-          )
-        )
+              .willReturn(success(completeQuery.toJson.toString, "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -160,9 +149,7 @@ class BigQueryQueriesSpec
               .get(BigQueryEndpoints.query(settings.projectId, jobId).path.toString)
               .queryParam("pageToken", pageToken)
               .queryParam("prettyPrint", "false")
-              .willReturn(success(query2ndPage.toJson.toString, "application/json"))
-          )
-        )
+              .willReturn(success(query2ndPage.toJson.toString, "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -179,9 +166,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQueryWithoutJobId.toJson.toString(), "application/json"))
-          )
-        )
+              .willReturn(success(completeQueryWithoutJobId.toJson.toString(), "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -209,9 +194,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQuery.toJson.toString(), "application/json"))
-          )
-        )
+              .willReturn(success(completeQuery.toJson.toString(), "application/json"))))
 
         recoverToSucceededIf[BrokenParserException] {
           query[JsValue]("SQL")

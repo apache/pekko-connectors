@@ -9,7 +9,7 @@ import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryRecord
 import com.google.protobuf.ByteString
 import org.apache.avro.Schema
 import org.apache.avro.file.SeekableByteArrayInput
-import org.apache.avro.generic.{GenericDatumReader, GenericRecord}
+import org.apache.avro.generic.{ GenericDatumReader, GenericRecord }
 import org.apache.avro.io.DecoderFactory
 
 import scala.collection.mutable

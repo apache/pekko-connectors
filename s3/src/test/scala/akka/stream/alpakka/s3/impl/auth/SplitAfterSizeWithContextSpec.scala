@@ -7,7 +7,7 @@ package akka.stream.alpakka.s3.impl.auth
 import akka.actor.ActorSystem
 import akka.stream.alpakka.s3.impl.SplitAfterSizeWithContext
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.testkit.TestKit
 import akka.util.ByteString
@@ -36,8 +36,7 @@ class SplitAfterSizeWithContextSpec(_system: ActorSystem)
     Source
       .empty[(ByteString, Int)]
       .via(
-        SplitAfterSizeWithContext(10)(Flow[(ByteString, Int)]).concatSubstreams
-      )
+        SplitAfterSizeWithContext(10)(Flow[(ByteString, Int)]).concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(Seq.empty)
   }
@@ -48,15 +47,12 @@ class SplitAfterSizeWithContextSpec(_system: ActorSystem)
         SplitAfterSizeWithContext(10)(Flow[(ByteString, Int)])
           .prefixAndTail(10)
           .map { case (prefix, tail) => prefix }
-          .concatSubstreams
-      )
+          .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(
       Seq(
         Seq((ByteString(1, 2, 3, 4, 5), 1), (ByteString(6, 7, 8, 9, 10, 11, 12), 2)),
-        Seq((ByteString(13, 14), 3))
-      )
-    )
+        Seq((ByteString(13, 14), 3))))
   }
 
   it should "not split large elements (unlike SplitAfterSize)" in assertAllStagesStopped {
@@ -65,15 +61,12 @@ class SplitAfterSizeWithContextSpec(_system: ActorSystem)
         SplitAfterSizeWithContext(10)(Flow[(ByteString, Int)])
           .prefixAndTail(10)
           .map { case (prefix, tail) => prefix }
-          .concatSubstreams
-      )
+          .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(
       Seq(
         Seq((ByteString(bytes(1, 16)), 1)),
-        Seq((ByteString(17, 18), 2))
-      )
-    )
+        Seq((ByteString(17, 18), 2))))
   }
 
   def bytes(start: Byte, end: Byte): Array[Byte] = (start to end).map(_.toByte).toArray[Byte]

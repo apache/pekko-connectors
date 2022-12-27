@@ -7,7 +7,7 @@ package docs.scaladsl
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.alpakka.cassandra.CassandraSessionSettings
-import akka.stream.alpakka.cassandra.scaladsl.{CassandraSession, CassandraSessionRegistry, CassandraSpecBase}
+import akka.stream.alpakka.cassandra.scaladsl.{ CassandraSession, CassandraSessionRegistry, CassandraSpecBase }
 import akka.stream.scaladsl.Sink
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 

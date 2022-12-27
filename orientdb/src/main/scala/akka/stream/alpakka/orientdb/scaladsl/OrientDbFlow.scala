@@ -21,18 +21,14 @@ object OrientDbFlow {
    */
   def create(
       className: String,
-      settings: OrientDbWriteSettings
-  ): Flow[immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]],
-          immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]],
-          NotUsed] =
+      settings: OrientDbWriteSettings): Flow[immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]],
+    immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[ODocument, NotUsed](
           className,
           settings,
-          None
-        )
-      )
+          None))
 
   /**
    * Flow to write `ODocument`s to OrientDB, elements within one sequence are stored within one transaction.
@@ -40,18 +36,14 @@ object OrientDbFlow {
    */
   def createWithPassThrough[C](
       className: String,
-      settings: OrientDbWriteSettings
-  ): Flow[immutable.Seq[OrientDbWriteMessage[ODocument, C]],
-          immutable.Seq[OrientDbWriteMessage[ODocument, C]],
-          NotUsed] =
+      settings: OrientDbWriteSettings): Flow[immutable.Seq[OrientDbWriteMessage[ODocument, C]],
+    immutable.Seq[OrientDbWriteMessage[ODocument, C]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[ODocument, C](
           className,
           settings,
-          None
-        )
-      )
+          None))
 
   /**
    * Flow to write elements of type `T` to OrientDB, elements within one sequence are stored within one transaction.
@@ -59,16 +51,14 @@ object OrientDbFlow {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]
-  ): Flow[immutable.Seq[OrientDbWriteMessage[T, NotUsed]], immutable.Seq[OrientDbWriteMessage[T, NotUsed]], NotUsed] =
+      clazz: Class[T]): Flow[immutable.Seq[OrientDbWriteMessage[T, NotUsed]], immutable.Seq[OrientDbWriteMessage[T,
+      NotUsed]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[T, NotUsed](
           className,
           settings,
-          Some(clazz)
-        )
-      )
+          Some(clazz)))
 
   /**
    * Flow to write elements of type `T` to OrientDB, elements within one sequence are stored within one transaction.
@@ -77,14 +67,12 @@ object OrientDbFlow {
   def typedWithPassThrough[T, C](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]
-  ): Flow[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T, C]], NotUsed] =
+      clazz: Class[T])
+      : Flow[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T, C]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[T, C](
           className,
           settings,
-          Some(clazz)
-        )
-      )
+          Some(clazz)))
 }

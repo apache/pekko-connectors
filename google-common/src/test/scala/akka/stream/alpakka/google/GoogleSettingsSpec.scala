@@ -38,10 +38,8 @@ class GoogleSettingsSpec
              |  random-factor = 0.2
              |}
              |$more
-        """.stripMargin
-        )
-        .resolve
-    )
+        """.stripMargin)
+        .resolve)
 
   it should "skip parsing forward-proxy when optional environment overrides exist but aren't set" in {
     @nowarn("msg=possible missing interpolator: detected an interpolated expression")

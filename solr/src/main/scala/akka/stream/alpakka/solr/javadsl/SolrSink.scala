@@ -7,13 +7,13 @@ package akka.stream.alpakka.solr.javadsl
 import java.util.concurrent.CompletionStage
 import java.util.function.Function
 
-import akka.stream.alpakka.solr.{SolrUpdateSettings, WriteMessage, WriteResult}
+import akka.stream.alpakka.solr.{ SolrUpdateSettings, WriteMessage, WriteResult }
 import akka.stream.javadsl
 import akka.stream.javadsl.Sink
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
-import java.util.{List => JavaList}
+import java.util.{ List => JavaList }
 
 /**
  * Java API
@@ -26,12 +26,11 @@ object SolrSink {
   def documents(
       collection: String,
       settings: SolrUpdateSettings,
-      client: SolrClient
-  ): javadsl.Sink[JavaList[WriteMessage[SolrInputDocument, NotUsed]], CompletionStage[Done]] =
+      client: SolrClient): javadsl.Sink[JavaList[WriteMessage[SolrInputDocument, NotUsed]], CompletionStage[Done]] =
     SolrFlow
       .documents(collection, settings, client)
       .toMat(javadsl.Sink.ignore[java.util.List[WriteResult[SolrInputDocument, NotUsed]]](),
-             javadsl.Keep.right[NotUsed, CompletionStage[Done]])
+        javadsl.Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
    * Write Java bean stream elements to Solr.
@@ -41,12 +40,11 @@ object SolrSink {
       collection: String,
       settings: SolrUpdateSettings,
       client: SolrClient,
-      clazz: Class[T]
-  ): Sink[JavaList[WriteMessage[T, NotUsed]], CompletionStage[Done]] =
+      clazz: Class[T]): Sink[JavaList[WriteMessage[T, NotUsed]], CompletionStage[Done]] =
     SolrFlow
       .beans[T](collection, settings, client, clazz)
       .toMat(javadsl.Sink.ignore[java.util.List[WriteResult[T, NotUsed]]](),
-             javadsl.Keep.right[NotUsed, CompletionStage[Done]])
+        javadsl.Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
    * Write stream elements to Solr.
@@ -58,10 +56,9 @@ object SolrSink {
       settings: SolrUpdateSettings,
       binder: Function[T, SolrInputDocument],
       client: SolrClient,
-      clazz: Class[T]
-  ): javadsl.Sink[JavaList[WriteMessage[T, NotUsed]], CompletionStage[Done]] =
+      clazz: Class[T]): javadsl.Sink[JavaList[WriteMessage[T, NotUsed]], CompletionStage[Done]] =
     SolrFlow
       .typeds[T](collection, settings, binder, client, clazz)
       .toMat(javadsl.Sink.ignore[java.util.List[WriteResult[T, NotUsed]]](),
-             javadsl.Keep.right[NotUsed, CompletionStage[Done]])
+        javadsl.Keep.right[NotUsed, CompletionStage[Done]])
 }

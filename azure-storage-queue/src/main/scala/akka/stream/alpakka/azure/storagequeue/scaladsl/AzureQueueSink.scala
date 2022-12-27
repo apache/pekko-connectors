@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.azure.storagequeue.scaladsl
 
-import com.microsoft.azure.storage.queue.{CloudQueue, CloudQueueMessage}
+import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
 import akka.stream.alpakka.azure.storagequeue.impl.AzureQueueSinkFunctions
-import akka.stream.scaladsl.{Flow, Keep, Sink}
+import akka.stream.scaladsl.{ Flow, Keep, Sink }
 import akka.Done
 
 import scala.concurrent.Future
@@ -41,11 +41,8 @@ object AzureQueueWithTimeoutsSink {
    * with (CouldQueueMessage, timeToLive, initialVisibilityTimeout).
    */
   def apply(
-      cloudQueue: () => CloudQueue
-  ): Sink[(CloudQueueMessage, Int, Int), Future[Done]] =
-    AzureQueueSink.fromFunction(
-      tup => AzureQueueSinkFunctions.addMessage(cloudQueue)(tup._1, tup._2, tup._3)
-    )
+      cloudQueue: () => CloudQueue): Sink[(CloudQueueMessage, Int, Int), Future[Done]] =
+    AzureQueueSink.fromFunction(tup => AzureQueueSinkFunctions.addMessage(cloudQueue)(tup._1, tup._2, tup._3))
 }
 
 object AzureQueueDeleteSink {
@@ -64,9 +61,6 @@ object AzureQueueDeleteOrUpdateSink {
    * in an Azure Storage Queue.
    */
   def apply(
-      cloudQueue: () => CloudQueue
-  ): Sink[(CloudQueueMessage, DeleteOrUpdateMessage), Future[Done]] =
-    AzureQueueSink.fromFunction(
-      input => AzureQueueSinkFunctions.deleteOrUpdateMessage(cloudQueue)(input._1, input._2)
-    )
+      cloudQueue: () => CloudQueue): Sink[(CloudQueueMessage, DeleteOrUpdateMessage), Future[Done]] =
+    AzureQueueSink.fromFunction(input => AzureQueueSinkFunctions.deleteOrUpdateMessage(cloudQueue)(input._1, input._2))
 }

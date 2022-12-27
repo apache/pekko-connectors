@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.Done
 import akka.annotation.InternalApi
-import akka.stream.{Shape, _}
+import akka.stream.{ Shape, _ }
 import akka.stream.alpakka.mqtt._
 import akka.stream.alpakka.mqtt.scaladsl.MqttMessageWithAck
 import akka.stream.stage._
@@ -28,9 +28,9 @@ import org.eclipse.paho.client.mqttv3.{
 }
 
 import scala.collection.mutable
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 import scala.util.control.NonFatal
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions
 import akka.stream.alpakka.mqtt.MqttOfflinePersistenceSettings
 
@@ -39,10 +39,10 @@ import akka.stream.alpakka.mqtt.MqttOfflinePersistenceSettings
  */
 @InternalApi
 private[mqtt] final class MqttFlowStage(connectionSettings: MqttConnectionSettings,
-                                        subscriptions: Map[String, MqttQoS],
-                                        bufferSize: Int,
-                                        defaultQoS: MqttQoS,
-                                        manualAcks: Boolean = false)
+    subscriptions: Map[String, MqttQoS],
+    bufferSize: Int,
+    defaultQoS: MqttQoS,
+    manualAcks: Boolean = false)
     extends GraphStageWithMaterializedValue[FlowShape[MqttMessage, MqttMessageWithAck], Future[Done]] {
 
   private val in = Inlet[MqttMessage]("MqttFlow.in")
@@ -54,14 +54,14 @@ private[mqtt] final class MqttFlowStage(connectionSettings: MqttConnectionSettin
   override def createLogicAndMaterializedValue(inheritedAttributes: Attributes): (GraphStageLogic, Future[Done]) = {
     val subscriptionPromise = Promise[Done]()
     val logic = new MqttFlowStageLogic[MqttMessage](in,
-                                                    out,
-                                                    shape,
-                                                    subscriptionPromise,
-                                                    connectionSettings,
-                                                    subscriptions,
-                                                    bufferSize,
-                                                    defaultQoS,
-                                                    manualAcks) {
+      out,
+      shape,
+      subscriptionPromise,
+      connectionSettings,
+      subscriptions,
+      bufferSize,
+      defaultQoS,
+      manualAcks) {
 
       override def publishPending(msg: MqttMessage): Unit = super.publishToMqtt(msg)
 
@@ -71,14 +71,14 @@ private[mqtt] final class MqttFlowStage(connectionSettings: MqttConnectionSettin
 }
 
 abstract class MqttFlowStageLogic[I](in: Inlet[I],
-                                     out: Outlet[MqttMessageWithAck],
-                                     shape: Shape,
-                                     subscriptionPromise: Promise[Done],
-                                     connectionSettings: MqttConnectionSettings,
-                                     subscriptions: Map[String, MqttQoS],
-                                     bufferSize: Int,
-                                     defaultQoS: MqttQoS,
-                                     manualAcks: Boolean)
+    out: Outlet[MqttMessageWithAck],
+    shape: Shape,
+    subscriptionPromise: Promise[Done],
+    connectionSettings: MqttConnectionSettings,
+    subscriptions: Map[String, MqttQoS],
+    bufferSize: Int,
+    defaultQoS: MqttQoS,
+    manualAcks: Boolean)
     extends GraphStageLogic(shape)
     with StageLogging
     with InHandler
@@ -132,7 +132,7 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
     }
 
   private val onPublished: AsyncCallback[Try[IMqttToken]] = getAsyncCallback[Try[IMqttToken]] {
-    case Success(_) => if (!hasBeenPulled(in)) pull(in)
+    case Success(_)  => if (!hasBeenPulled(in)) pull(in)
     case Failure(ex) => failStageWith(ex)
   }
 
@@ -151,8 +151,7 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
   private val client = new MqttAsyncClient(
     connectionSettings.broker,
     connectionSettings.clientId,
-    connectionSettings.persistence
-  )
+    connectionSettings.persistence)
 
   private def mqttClient =
     connectionSettings.offlinePersistenceSettings match {
@@ -164,17 +163,15 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
     }
 
   private val commitCallback: AsyncCallback[CommitCallbackArguments] =
-    getAsyncCallback[CommitCallbackArguments](
-      (args: CommitCallbackArguments) =>
-        try {
-          mqttClient.messageArrivedComplete(args.messageId, args.qos.value)
-          if (unackedMessages.decrementAndGet() == 0 && (isClosed(out) || (isClosed(in) && queue.isEmpty)))
-            completeStage()
-          args.promise.complete(SuccessfullyDone)
-        } catch {
-          case e: Throwable => args.promise.failure(e)
-        }
-    )
+    getAsyncCallback[CommitCallbackArguments]((args: CommitCallbackArguments) =>
+      try {
+        mqttClient.messageArrivedComplete(args.messageId, args.qos.value)
+        if (unackedMessages.decrementAndGet() == 0 && (isClosed(out) || (isClosed(in) && queue.isEmpty)))
+          completeStage()
+        args.promise.complete(SuccessfullyDone)
+      } catch {
+        case e: Throwable => args.promise.failure(e)
+      })
 
   mqttClient.setCallback(new MqttCallbackExtended {
     override def messageArrived(topic: String, pahoMessage: PahoMqttMessage): Unit = {
@@ -222,7 +219,7 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
       publishPending(msg)
     } catch {
       case _: MqttException if connectionSettings.automaticReconnect => pendingMsg = Some(msg)
-      case NonFatal(e) => throw e
+      case NonFatal(e)                                               => throw e
     }
   }
 
@@ -273,14 +270,12 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
   override def preStart(): Unit =
     try {
       mqttClient.connect(
-        asConnectOptions(connectionSettings),
-        (),
+        asConnectOptions(connectionSettings), (),
         new IMqttActionListener {
           override def onSuccess(v: IMqttToken): Unit = onConnect.invoke(v.getClient)
 
           override def onFailure(asyncActionToken: IMqttToken, ex: Throwable): Unit = onConnectionLost.invoke(ex)
-        }
-      )
+        })
     } catch {
       case e: Throwable => failStageWith(e)
     }
@@ -289,8 +284,7 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
     if (!subscriptionPromise.isCompleted)
       subscriptionPromise
         .tryFailure(
-          new IllegalStateException("Cannot complete subscription because the stage is about to stop or fail")
-        )
+          new IllegalStateException("Cannot complete subscription because the stage is about to stop or fail"))
 
     try {
       log.debug("stage stopped, disconnecting")
@@ -306,8 +300,7 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
             // Only disconnected client can be closed
             mqttClient.close()
           }
-        }
-      )
+        })
     } catch {
       // Not to worry - disconnect is best effort - don't worry if already disconnected
       case _: MqttException =>
@@ -342,8 +335,7 @@ private[mqtt] object MqttFlowStageLogic {
         will.topic,
         will.payload.toArray,
         will.qos.getOrElse(MqttQoS.atLeastOnce).value,
-        will.retained
-      )
+        will.retained)
     }
     options.setCleanSession(connectionSettings.cleanSession)
     options.setAutomaticReconnect(connectionSettings.automaticReconnect)

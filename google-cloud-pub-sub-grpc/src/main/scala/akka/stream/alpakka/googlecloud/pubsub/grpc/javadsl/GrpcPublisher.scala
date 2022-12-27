@@ -16,7 +16,7 @@ import akka.annotation.ApiMayChange
 import akka.stream.alpakka.google.GoogleSettings
 import akka.stream.alpakka.googlecloud.pubsub.grpc.PubSubSettings
 import akka.stream.alpakka.googlecloud.pubsub.grpc.impl.AkkaGrpcSettings
-import com.google.pubsub.v1.{PublisherClient => JavaPublisherClient}
+import com.google.pubsub.v1.{ PublisherClient => JavaPublisherClient }
 
 /**
  * Holds the gRPC java publisher client instance.

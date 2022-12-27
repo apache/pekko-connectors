@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.solr.scaladsl
 
-import akka.stream.alpakka.solr.{SolrUpdateSettings, WriteMessage}
-import akka.stream.scaladsl.{Keep, Sink}
-import akka.{Done, NotUsed}
+import akka.stream.alpakka.solr.{ SolrUpdateSettings, WriteMessage }
+import akka.stream.scaladsl.{ Keep, Sink }
+import akka.{ Done, NotUsed }
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
 
@@ -22,8 +22,7 @@ object SolrSink {
    * Write `SolrInputDocument`s to Solr.
    */
   def documents[T](collection: String, settings: SolrUpdateSettings)(
-      implicit client: SolrClient
-  ): Sink[immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]], Future[Done]] =
+      implicit client: SolrClient): Sink[immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]], Future[Done]] =
     SolrFlow
       .documents(collection, settings)
       .toMat(Sink.ignore)(Keep.right)
@@ -33,8 +32,7 @@ object SolrSink {
    * The stream element classes must be annotated for use with [[org.apache.solr.client.solrj.beans.DocumentObjectBinder]] for conversion.
    */
   def beans[T](collection: String, settings: SolrUpdateSettings)(
-      implicit client: SolrClient
-  ): Sink[immutable.Seq[WriteMessage[T, NotUsed]], Future[Done]] =
+      implicit client: SolrClient): Sink[immutable.Seq[WriteMessage[T, NotUsed]], Future[Done]] =
     SolrFlow
       .beans[T](collection, settings)
       .toMat(Sink.ignore)(Keep.right)
@@ -47,8 +45,8 @@ object SolrSink {
   def typeds[T](
       collection: String,
       settings: SolrUpdateSettings,
-      binder: T => SolrInputDocument
-  )(implicit client: SolrClient): Sink[immutable.Seq[WriteMessage[T, NotUsed]], Future[Done]] =
+      binder: T => SolrInputDocument)(
+      implicit client: SolrClient): Sink[immutable.Seq[WriteMessage[T, NotUsed]], Future[Done]] =
     SolrFlow
       .typeds[T](collection, settings, binder)
       .toMat(Sink.ignore)(Keep.right)

@@ -6,7 +6,7 @@ package akka.stream.alpakka.googlecloud.bigquery.storage.impl
 
 import akka.NotUsed
 import akka.stream.scaladsl.Source
-import com.google.cloud.bigquery.storage.v1.storage.{BigQueryReadClient, ReadRowsRequest, ReadRowsResponse}
+import com.google.cloud.bigquery.storage.v1.storage.{ BigQueryReadClient, ReadRowsRequest, ReadRowsResponse }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 
 object SDKClientSource {

@@ -4,24 +4,24 @@
 
 package akka.stream.alpakka.text.scaladsl
 
-import java.nio.charset.{Charset, StandardCharsets, UnmappableCharacterException}
+import java.nio.charset.{ Charset, StandardCharsets, UnmappableCharacterException }
 import java.nio.file.Paths
 
 import akka.actor.ActorSystem
 import akka.stream.IOResult
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink, Source}
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.testkit.TestKit
 import akka.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{BeforeAndAfterAll, RecoverMethods}
+import org.scalatest.{ BeforeAndAfterAll, RecoverMethods }
 
 import scala.collection.immutable
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.{ExecutionContextExecutor, Future}
+import scala.concurrent.{ ExecutionContextExecutor, Future }
 
 class CharsetCodingFlowsSpec
     extends TestKit(ActorSystem("charset"))

@@ -39,7 +39,7 @@ private class JmsMessageProducer(jmsProducer: jms.MessageProducer, jmsSession: J
 
     val destination = elem.destination match {
       case Some(messageDestination) => lookup(messageDestination)
-      case None => defaultDestination
+      case None                     => defaultDestination
     }
     jmsProducer.send(destination, message, deliveryMode, priority, timeToLive)
   }
@@ -77,17 +77,17 @@ private class JmsMessageProducer(jmsProducer: jms.MessageProducer, jmsSession: J
     jmsMessage.properties.foreach {
       case (key, v) =>
         v match {
-          case v: String => message.setStringProperty(key, v)
-          case v: Int => message.setIntProperty(key, v)
-          case v: Boolean => message.setBooleanProperty(key, v)
-          case v: Byte => message.setByteProperty(key, v)
-          case v: Short => message.setShortProperty(key, v)
-          case v: Float => message.setFloatProperty(key, v)
-          case v: Long => message.setLongProperty(key, v)
-          case v: Double => message.setDoubleProperty(key, v)
+          case v: String      => message.setStringProperty(key, v)
+          case v: Int         => message.setIntProperty(key, v)
+          case v: Boolean     => message.setBooleanProperty(key, v)
+          case v: Byte        => message.setByteProperty(key, v)
+          case v: Short       => message.setShortProperty(key, v)
+          case v: Float       => message.setFloatProperty(key, v)
+          case v: Long        => message.setLongProperty(key, v)
+          case v: Double      => message.setDoubleProperty(key, v)
           case v: Array[Byte] => message.setObjectProperty(key, v)
-          case null => message.setObjectProperty(key, null)
-          case _ => throw UnsupportedMessagePropertyType(key, v, jmsMessage)
+          case null           => message.setObjectProperty(key, null)
+          case _              => throw UnsupportedMessagePropertyType(key, v, jmsMessage)
         }
     }
 
@@ -95,26 +95,26 @@ private class JmsMessageProducer(jmsProducer: jms.MessageProducer, jmsSession: J
     jmsMessage.body.foreach {
       case (key, v) =>
         v match {
-          case v: String => message.setString(key, v)
-          case v: Int => message.setInt(key, v)
-          case v: Boolean => message.setBoolean(key, v)
-          case v: Byte => message.setByte(key, v)
-          case v: Short => message.setShort(key, v)
-          case v: Float => message.setFloat(key, v)
-          case v: Long => message.setLong(key, v)
-          case v: Double => message.setDouble(key, v)
+          case v: String      => message.setString(key, v)
+          case v: Int         => message.setInt(key, v)
+          case v: Boolean     => message.setBoolean(key, v)
+          case v: Byte        => message.setByte(key, v)
+          case v: Short       => message.setShort(key, v)
+          case v: Float       => message.setFloat(key, v)
+          case v: Long        => message.setLong(key, v)
+          case v: Double      => message.setDouble(key, v)
           case v: Array[Byte] => message.setBytes(key, v)
-          case null => message.setObject(key, v)
-          case _ => throw UnsupportedMapMessageEntryType(key, v, jmsMessage)
+          case null           => message.setObject(key, v)
+          case _              => throw UnsupportedMapMessageEntryType(key, v, jmsMessage)
         }
     }
 
   private def populateMessageHeader(message: javax.jms.Message, headers: Set[JmsHeader]): Unit =
     headers.foreach {
-      case JmsType(jmsType) => message.setJMSType(jmsType)
-      case JmsReplyTo(destination) => message.setJMSReplyTo(destination.create(jmsSession.session))
+      case JmsType(jmsType)                   => message.setJMSType(jmsType)
+      case JmsReplyTo(destination)            => message.setJMSReplyTo(destination.create(jmsSession.session))
       case JmsCorrelationId(jmsCorrelationId) => message.setJMSCorrelationID(jmsCorrelationId)
-      case JmsExpiration(jmsExpiration) => message.setJMSExpiration(jmsExpiration)
+      case JmsExpiration(jmsExpiration)       => message.setJMSExpiration(jmsExpiration)
       case JmsDeliveryMode(_) | JmsPriority(_) | JmsTimeToLive(_) | JmsTimestamp(_) | JmsRedelivered(_) |
           JmsMessageId(_) => // see #send(JmsMessage)
     }

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.kudu
 
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import org.apache.kudu.client.KuduClient
 
 /**

@@ -4,13 +4,13 @@
 
 package akka.stream.alpakka.couchbase
 
-import java.util.concurrent.{CompletionStage, TimeUnit}
+import java.util.concurrent.{ CompletionStage, TimeUnit }
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.annotation.InternalApi
 import com.couchbase.client.java.document.Document
 import com.couchbase.client.java.env.CouchbaseEnvironment
-import com.couchbase.client.java.{PersistTo, ReplicateTo}
+import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 import com.typesafe.config.Config
 
 import scala.jdk.CollectionConverters._
@@ -32,21 +32,21 @@ object CouchbaseWriteSettings {
   def apply(): CouchbaseWriteSettings = inMemory
 
   def apply(parallelism: Int,
-            replicateTo: ReplicateTo,
-            persistTo: PersistTo,
-            timeout: FiniteDuration): CouchbaseWriteSettings =
+      replicateTo: ReplicateTo,
+      persistTo: PersistTo,
+      timeout: FiniteDuration): CouchbaseWriteSettings =
     new CouchbaseWriteSettings(parallelism, replicateTo, persistTo, timeout)
 
   def create(): CouchbaseWriteSettings = inMemory
 
   def create(parallelism: Int,
-             replicateTo: ReplicateTo,
-             persistTo: PersistTo,
-             timeout: java.time.Duration): CouchbaseWriteSettings =
+      replicateTo: ReplicateTo,
+      persistTo: PersistTo,
+      timeout: java.time.Duration): CouchbaseWriteSettings =
     new CouchbaseWriteSettings(parallelism,
-                               replicateTo,
-                               persistTo,
-                               FiniteDuration(timeout.toMillis, TimeUnit.MILLISECONDS))
+      replicateTo,
+      persistTo,
+      FiniteDuration(timeout.toMillis, TimeUnit.MILLISECONDS))
 
 }
 
@@ -54,9 +54,9 @@ object CouchbaseWriteSettings {
  * Configure Couchbase writes.
  */
 final class CouchbaseWriteSettings private (val parallelism: Int,
-                                            val replicateTo: ReplicateTo,
-                                            val persistTo: PersistTo,
-                                            val timeout: FiniteDuration) {
+    val replicateTo: ReplicateTo,
+    val persistTo: PersistTo,
+    val timeout: FiniteDuration) {
 
   def withParallelism(parallelism: Int): CouchbaseWriteSettings = copy(parallelism = parallelism)
 
@@ -76,9 +76,9 @@ final class CouchbaseWriteSettings private (val parallelism: Int,
   def withTimeout(timeout: FiniteDuration): CouchbaseWriteSettings = copy(timeout = timeout)
 
   private[this] def copy(parallelism: Int = parallelism,
-                         replicateTo: ReplicateTo = replicateTo,
-                         persistTo: PersistTo = persistTo,
-                         timeout: FiniteDuration = timeout) =
+      replicateTo: ReplicateTo = replicateTo,
+      persistTo: PersistTo = persistTo,
+      timeout: FiniteDuration = timeout) =
     new CouchbaseWriteSettings(parallelism, replicateTo, persistTo, timeout)
 
   override def equals(other: Any): Boolean = other match {
@@ -174,8 +174,7 @@ final class CouchbaseSessionSettings private (
     val password: String,
     val nodes: immutable.Seq[String],
     val environment: Option[CouchbaseEnvironment],
-    val enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]
-) {
+    val enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]) {
 
   def withUsername(username: String): CouchbaseSessionSettings =
     copy(username = username)
@@ -193,18 +192,20 @@ final class CouchbaseSessionSettings private (
   def withNodes(nodes: java.util.List[String]): CouchbaseSessionSettings =
     copy(nodes = nodes.asScala.toList)
 
-  /** Scala API:
+  /**
+   * Scala API:
    * Allows to provide an asynchronous method to update the settings.
    */
   def withEnrichAsync(value: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]): CouchbaseSessionSettings =
     copy(enrichAsync = value)
 
-  /** Java API:
+  /**
+   * Java API:
    * Allows to provide an asynchronous method to update the settings.
    */
   def withEnrichAsyncCs(
-      value: java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]]
-  ): CouchbaseSessionSettings =
+      value: java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]])
+      : CouchbaseSessionSettings =
     copy(enrichAsync = (s: CouchbaseSessionSettings) => value.apply(s).toScala)
 
   def withEnvironment(environment: CouchbaseEnvironment): CouchbaseSessionSettings =
@@ -222,8 +223,8 @@ final class CouchbaseSessionSettings private (
       password: String = password,
       nodes: immutable.Seq[String] = nodes,
       environment: Option[CouchbaseEnvironment] = environment,
-      enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync
-  ): CouchbaseSessionSettings =
+      enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync)
+      : CouchbaseSessionSettings =
     new CouchbaseSessionSettings(username, password, nodes, environment, enrichAsync)
 
   override def equals(other: Any): Boolean = other match {

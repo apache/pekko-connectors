@@ -9,7 +9,7 @@ import akka.actor.typed.scaladsl.Behaviors
 import akka.stream.QueueOfferResult
 import scala.collection.immutable.Seq
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 private[mqtt] object QueueOfferState {
 
@@ -27,9 +27,9 @@ private[mqtt] object QueueOfferState {
    * This is to be used only with SourceQueues that use backpressure.
    */
   def waitForQueueOfferCompleted[T](result: Future[QueueOfferResult],
-                                    f: Try[QueueOfferResult] => T with QueueOfferCompleted,
-                                    behavior: Behavior[T],
-                                    stash: Seq[T]): Behavior[T] = Behaviors.setup { context =>
+      f: Try[QueueOfferResult] => T with QueueOfferCompleted,
+      behavior: Behavior[T],
+      stash: Seq[T]): Behavior[T] = Behaviors.setup { context =>
     import context.executionContext
 
     val s = stash.map(BehaviorRunner.StoredMessage.apply)

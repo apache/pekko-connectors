@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.ironmq.impl
 
-import akka.stream.alpakka.ironmq.{IronMqSpec, PushMessage}
+import akka.stream.alpakka.ironmq.{ IronMqSpec, PushMessage }
 import org.scalatest.concurrent.Eventually
 
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -8,7 +8,7 @@ import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.http.scaladsl.Http
 import akka.stream.alpakka.google.firebase.fcm.FcmSettings
-import akka.stream.alpakka.google.firebase.fcm.v1.models.{FcmNotification, FcmResponse}
+import akka.stream.alpakka.google.firebase.fcm.v1.models.{ FcmNotification, FcmResponse }
 import akka.stream.scaladsl.Flow
 import akka.stream.alpakka.google.GoogleAttributes
 

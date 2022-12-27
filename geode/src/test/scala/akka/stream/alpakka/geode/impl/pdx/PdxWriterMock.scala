@@ -6,7 +6,7 @@ package akka.stream.alpakka.geode.impl.pdx
 
 import java.util.Date
 
-import org.apache.geode.pdx.{PdxUnreadFields, PdxWriter}
+import org.apache.geode.pdx.{ PdxUnreadFields, PdxWriter }
 
 object PdxMocks {
 
@@ -42,9 +42,9 @@ object PdxMocks {
     }
 
     override def writeField[CT, VT <: CT](fieldName: String,
-                                          fieldValue: VT,
-                                          fieldType: Class[CT],
-                                          checkPortability: Boolean) = { println(s"Write $fieldName"); this }
+        fieldValue: VT,
+        fieldType: Class[CT],
+        checkPortability: Boolean) = { println(s"Write $fieldName"); this }
 
     override def writeInt(fieldName: String, value: Int) = { println(s"Write $value"); this }
 

@@ -8,7 +8,7 @@ package javadsl
 import akka.NotUsed
 import akka.stream.alpakka.mqtt.streaming.MqttCodec.DecodeError
 import akka.stream.javadsl.BidiFlow
-import akka.stream.scaladsl.{BidiFlow => ScalaBidiFlow}
+import akka.stream.scaladsl.{ BidiFlow => ScalaBidiFlow }
 import akka.util.ByteString
 
 object Mqtt {
@@ -26,8 +26,7 @@ object Mqtt {
    */
   def clientSessionFlow[A](
       session: MqttClientSession,
-      connectionId: ByteString
-  ): BidiFlow[Command[A], ByteString, ByteString, DecodeErrorOrEvent[A], NotUsed] =
+      connectionId: ByteString): BidiFlow[Command[A], ByteString, ByteString, DecodeErrorOrEvent[A], NotUsed] =
     inputOutputConverter
       .atop(scaladsl.Mqtt.clientSessionFlow[A](session.underlying, connectionId))
       .asJava
@@ -45,8 +44,7 @@ object Mqtt {
    */
   def serverSessionFlow[A](
       session: MqttServerSession,
-      connectionId: ByteString
-  ): BidiFlow[Command[A], ByteString, ByteString, DecodeErrorOrEvent[A], NotUsed] =
+      connectionId: ByteString): BidiFlow[Command[A], ByteString, ByteString, DecodeErrorOrEvent[A], NotUsed] =
     inputOutputConverter
       .atop(scaladsl.Mqtt.serverSessionFlow[A](session.underlying, connectionId))
       .asJava
@@ -58,6 +56,5 @@ object Mqtt {
     ScalaBidiFlow
       .fromFunctions[Command[A], Command[A], Either[DecodeError, Event[A]], DecodeErrorOrEvent[A]](
         identity,
-        DecodeErrorOrEvent.apply
-      )
+        DecodeErrorOrEvent.apply)
 }

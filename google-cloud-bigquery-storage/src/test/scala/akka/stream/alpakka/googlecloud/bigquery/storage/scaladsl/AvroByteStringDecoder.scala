@@ -10,18 +10,18 @@ import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryRecord
 import akka.util.ByteString
 import org.apache.avro.Schema
 import org.apache.avro.file.SeekableByteArrayInput
-import org.apache.avro.generic.{GenericDatumReader, GenericRecord}
+import org.apache.avro.generic.{ GenericDatumReader, GenericRecord }
 import org.apache.avro.io.DecoderFactory
 
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class AvroByteStringDecoder(schema: Schema) extends FromByteStringUnmarshaller[List[BigQueryRecord]] {
 
   val datumReader = new GenericDatumReader[GenericRecord](schema)
 
   override def apply(value: ByteString)(implicit ec: ExecutionContext,
-                                        materializer: Materializer): Future[List[BigQueryRecord]] = {
+      materializer: Materializer): Future[List[BigQueryRecord]] = {
 
     val result = ListBuffer[BigQueryRecord]()
 

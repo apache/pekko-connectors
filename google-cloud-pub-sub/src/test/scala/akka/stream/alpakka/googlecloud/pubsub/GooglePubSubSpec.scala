@@ -11,9 +11,9 @@ import akka.http.scaladsl.HttpExt
 import akka.stream.alpakka.googlecloud.pubsub.impl.PubSubApi
 import akka.stream.alpakka.googlecloud.pubsub.scaladsl.GooglePubSub
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Flow, FlowWithContext, Sink, Source}
+import akka.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
 import akka.testkit.TestKit
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
@@ -68,8 +68,7 @@ class GooglePubSubSpec
 
     val flow = googlePubSub.publish(
       topic = "topic1",
-      config = config
-    )
+      config = config)
     val result = source.via(flow).runWith(Sink.seq)
 
     result.futureValue shouldBe Seq(Seq("id1"))
@@ -87,8 +86,7 @@ class GooglePubSubSpec
 
     val flow = googlePubSub.publishWithContext[String](
       topic = "topic1",
-      config = config
-    )
+      config = config)
     val result = source.via(flow).runWith(Sink.seq)
 
     result.futureValue shouldBe Seq((Seq("id1"), "correlationId"))
@@ -103,14 +101,13 @@ class GooglePubSubSpec
       override def isEmulated: Boolean = true
 
       override def publish[T](topic: String,
-                              parallelism: Int): FlowWithContext[PublishRequest, T, PublishResponse, T, NotUsed] =
+          parallelism: Int): FlowWithContext[PublishRequest, T, PublishResponse, T, NotUsed] =
         FlowWithContext[PublishRequest, T].map(_ => PublishResponse(Seq("id2")))
     }
 
     val flow = googlePubSub.publishWithContext[Unit](
       topic = "topic2",
-      config = config
-    )
+      config = config)
 
     val request = PublishRequest(Seq(PublishMessage(data = base64String("Hello Google!"))))
 
@@ -124,8 +121,7 @@ class GooglePubSubSpec
     val message =
       ReceivedMessage(
         ackId = "1",
-        message = PubSubMessage(messageId = "1", data = Some(base64String("Hello Google!")), publishTime = publishTime)
-      )
+        message = PubSubMessage(messageId = "1", data = Some(base64String("Hello Google!")), publishTime = publishTime))
     private def flow(messages: Seq[ReceivedMessage]): Flow[Done, PullResponse, NotUsed] =
       Flow[Done].map(_ => PullResponse(receivedMessages = Some(messages)))
 
@@ -134,8 +130,7 @@ class GooglePubSubSpec
 
     val source = googlePubSub.subscribe(
       subscription = "sub1",
-      config = config
-    )
+      config = config)
 
     val result = source.take(1).runWith(Sink.seq)
 
@@ -147,8 +142,7 @@ class GooglePubSubSpec
 
     val sink = googlePubSub.acknowledge(
       subscription = "sub1",
-      config = config
-    )
+      config = config)
 
     val source = Source(List(AcknowledgeRequest("a1")))
 
@@ -171,8 +165,7 @@ class GooglePubSubSpec
 
     val sink = googlePubSub.acknowledge(
       subscription = "sub1",
-      config = config
-    )
+      config = config)
 
     val source = Source(List(AcknowledgeRequest("a1")))
 

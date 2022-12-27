@@ -8,10 +8,10 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.reference._
 import akka.stream.alpakka.reference.scaladsl.Reference
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Sink, Source }
 import akka.testkit.TestKit
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -86,18 +86,12 @@ class ReferenceSpec extends AnyWordSpec with BeforeAndAfterAll with ScalaFutures
             immutable.Seq(
               ByteString("two"),
               ByteString("three"),
-              ByteString("four")
-            )
-          ),
+              ByteString("four"))),
           ReferenceWriteMessage().withData(
             immutable.Seq(
               ByteString("five"),
               ByteString("six"),
-              ByteString("seven")
-            )
-          )
-        )
-      )
+              ByteString("seven")))))
 
       val result = source.via(flow).runWith(Sink.seq).futureValue
 
@@ -108,8 +102,7 @@ class ReferenceSpec extends AnyWordSpec with BeforeAndAfterAll with ScalaFutures
         "four",
         "five",
         "six",
-        "seven"
-      ).map(ByteString.apply)
+        "seven").map(ByteString.apply)
 
       result.head.metrics.get("total") should contain(50L)
     }

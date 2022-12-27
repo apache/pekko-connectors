@@ -37,8 +37,8 @@ object RetryAtFixedRate {
 }
 
 final class RetryWithBackoff(_maxRetries: Int,
-                             _minBackoff: scala.concurrent.duration.FiniteDuration,
-                             _maxBackoff: scala.concurrent.duration.FiniteDuration)
+    _minBackoff: scala.concurrent.duration.FiniteDuration,
+    _maxBackoff: scala.concurrent.duration.FiniteDuration)
     extends RetryLogic {
   override val maxRetries: Int = _maxRetries
   override val minBackoff: scala.concurrent.duration.FiniteDuration = _minBackoff
@@ -48,8 +48,8 @@ final class RetryWithBackoff(_maxRetries: Int,
 object RetryWithBackoff {
 
   def apply(maxRetries: Int,
-            minBackoff: scala.concurrent.duration.FiniteDuration,
-            maxBackoff: scala.concurrent.duration.FiniteDuration): RetryWithBackoff =
+      minBackoff: scala.concurrent.duration.FiniteDuration,
+      maxBackoff: scala.concurrent.duration.FiniteDuration): RetryWithBackoff =
     new RetryWithBackoff(maxRetries, minBackoff, maxBackoff)
 
   def create(maxRetries: Int, minBackoff: java.time.Duration, maxBackoff: java.time.Duration): RetryWithBackoff =
@@ -60,24 +60,24 @@ object RetryWithBackoff {
  * Configure Elasticsearch sinks and flows.
  */
 final class ElasticsearchWriteSettings private (connection: ElasticsearchConnectionSettings,
-                                                bufferSize: Int,
-                                                retryLogic: RetryLogic,
-                                                versionType: Option[String],
-                                                apiVersion: ApiVersion,
-                                                allowExplicitIndex: Boolean)
+    bufferSize: Int,
+    retryLogic: RetryLogic,
+    versionType: Option[String],
+    apiVersion: ApiVersion,
+    allowExplicitIndex: Boolean)
     extends WriteSettingsBase[ApiVersion, ElasticsearchWriteSettings](connection,
-                                                                      bufferSize,
-                                                                      retryLogic,
-                                                                      versionType,
-                                                                      apiVersion,
-                                                                      allowExplicitIndex) {
+      bufferSize,
+      retryLogic,
+      versionType,
+      apiVersion,
+      allowExplicitIndex) {
 
   protected override def copy(connection: ElasticsearchConnectionSettings,
-                              bufferSize: Int,
-                              retryLogic: RetryLogic,
-                              versionType: Option[String],
-                              apiVersion: ApiVersion,
-                              allowExplicitIndex: Boolean): ElasticsearchWriteSettings =
+      bufferSize: Int,
+      retryLogic: RetryLogic,
+      versionType: Option[String],
+      apiVersion: ApiVersion,
+      allowExplicitIndex: Boolean): ElasticsearchWriteSettings =
     new ElasticsearchWriteSettings(connection, bufferSize, retryLogic, versionType, apiVersion, allowExplicitIndex)
 
   override def toString: String =

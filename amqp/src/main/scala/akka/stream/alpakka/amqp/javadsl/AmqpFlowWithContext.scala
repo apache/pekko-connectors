@@ -19,8 +19,8 @@ object AmqpFlowWithContext {
    * @see [[AmqpFlow.create]]
    */
   def create[T](
-      settings: AmqpWriteSettings
-  ): akka.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
+      settings: AmqpWriteSettings)
+      : akka.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpFlowWithContext
       .apply(settings)
       .mapMaterializedValue(_.toJava)
@@ -36,8 +36,8 @@ object AmqpFlowWithContext {
    * supposed to be used with another AMQP brokers.
    */
   def createWithConfirm[T](
-      settings: AmqpWriteSettings
-  ): akka.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
+      settings: AmqpWriteSettings)
+      : akka.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpFlowWithContext
       .withConfirm(settings)
       .mapMaterializedValue(_.toJava)

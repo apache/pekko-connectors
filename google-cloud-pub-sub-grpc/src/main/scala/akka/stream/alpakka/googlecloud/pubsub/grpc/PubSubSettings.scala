@@ -23,13 +23,11 @@ final class PubSubSettings private (
     val port: Int,
     val useTls: Boolean,
     val rootCa: Option[String],
-    /** @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]] */ @deprecated(
+    /** @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]] */
+    @deprecated(
       "Use akka.stream.alpakka.google.GoogleSettings",
-      "3.0.0"
-    ) @Deprecated val callCredentials: Option[
-      CallCredentials
-    ]
-) {
+      "3.0.0") @Deprecated val callCredentials: Option[
+      CallCredentials]) {
 
   /**
    * Endpoint hostname where the gRPC connection is made.
@@ -58,10 +56,10 @@ final class PubSubSettings private (
     copy(callCredentials = Some(callCredentials))
 
   private def copy(host: String = host,
-                   port: Int = port,
-                   useTls: Boolean = useTls,
-                   rootCa: Option[String] = rootCa,
-                   callCredentials: Option[CallCredentials] = callCredentials: @nowarn("msg=deprecated")) =
+      port: Int = port,
+      useTls: Boolean = useTls,
+      rootCa: Option[String] = rootCa,
+      callCredentials: Option[CallCredentials] = callCredentials: @nowarn("msg=deprecated")) =
     new PubSubSettings(host, port, useTls, rootCa, callCredentials)
 }
 
@@ -86,12 +84,10 @@ object PubSubSettings {
       config.getString("callCredentials") match {
         case "google-application-default" | "deprecated" =>
           val googleCredentials = GoogleCredentials.getApplicationDefault.createScoped(
-            Collections.singletonList("https://www.googleapis.com/auth/pubsub")
-          )
+            Collections.singletonList("https://www.googleapis.com/auth/pubsub"))
           Some(DeprecatedCredentials(MoreCallCredentials.from(googleCredentials)))
         case _ => None
-      }
-    )
+      })
 
   /**
    * Create settings from the new actor API's ActorSystem config.

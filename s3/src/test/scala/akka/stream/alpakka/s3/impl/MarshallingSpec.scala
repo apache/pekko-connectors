@@ -7,8 +7,8 @@ package akka.stream.alpakka.s3.impl
 import java.time.Instant
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.model.{MediaTypes, _}
-import akka.stream.alpakka.s3.{ListBucketResultCommonPrefixes, ListBucketResultContents}
+import akka.http.scaladsl.model.{ MediaTypes, _ }
+import akka.stream.alpakka.s3.{ ListBucketResultCommonPrefixes, ListBucketResultContents }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
@@ -63,7 +63,7 @@ class MarshallingSpec(_system: ActorSystem)
                     |</ListBucketResult>""".stripMargin
 
   it should "initiate multipart upload when the region is us-east-1" in {
-    val entity = HttpEntity(MediaTypes.`application/xml` withCharset HttpCharsets.`UTF-8`, xmlString)
+    val entity = HttpEntity(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`), xmlString)
 
     val result = Marshalling.listBucketResultUnmarshaller(entity)
 
@@ -72,23 +72,20 @@ class MarshallingSpec(_system: ActorSystem)
       None,
       Seq(
         ListBucketResultContents("bucket",
-                                 "my-image.jpg",
-                                 "fba9dede5f27731c9771645a39863328",
-                                 434234,
-                                 Instant.parse("2009-10-12T17:50:30Z"),
-                                 "STANDARD"),
+          "my-image.jpg",
+          "fba9dede5f27731c9771645a39863328",
+          434234,
+          Instant.parse("2009-10-12T17:50:30Z"),
+          "STANDARD"),
         ListBucketResultContents("bucket",
-                                 "my-image2.jpg",
-                                 "599bab3ed2c697f1d26842727561fd94",
-                                 1234,
-                                 Instant.parse("2009-10-12T17:50:31Z"),
-                                 "REDUCED_REDUNDANCY")
-      ),
+          "my-image2.jpg",
+          "599bab3ed2c697f1d26842727561fd94",
+          1234,
+          Instant.parse("2009-10-12T17:50:31Z"),
+          "REDUCED_REDUNDANCY")),
       Seq(
         ListBucketResultCommonPrefixes("bucket", "prefix1/"),
-        ListBucketResultCommonPrefixes("bucket", "prefix2/")
-      )
-    )
+        ListBucketResultCommonPrefixes("bucket", "prefix2/")))
   }
 
   val listBucketV2TruncatedResponse = """<?xml version="1.0" encoding="UTF-8"?>
@@ -116,7 +113,7 @@ class MarshallingSpec(_system: ActorSystem)
                                         |</ListBucketResult>""".stripMargin
   it should "Use the value of the `NextContinuationToken` element as the continuation token of a truncated API V1 response" in {
     val entity =
-      HttpEntity(MediaTypes.`application/xml` withCharset HttpCharsets.`UTF-8`, listBucketV2TruncatedResponse)
+      HttpEntity(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`), listBucketV2TruncatedResponse)
 
     val result = Marshalling.listBucketResultUnmarshaller(entity)
 
@@ -125,20 +122,18 @@ class MarshallingSpec(_system: ActorSystem)
       Some("dummy/continuation/token"),
       Seq(
         ListBucketResultContents("bucket",
-                                 "my-image.jpg",
-                                 "fba9dede5f27731c9771645a39863328",
-                                 434234,
-                                 Instant.parse("2009-10-12T17:50:30Z"),
-                                 "STANDARD"),
+          "my-image.jpg",
+          "fba9dede5f27731c9771645a39863328",
+          434234,
+          Instant.parse("2009-10-12T17:50:30Z"),
+          "STANDARD"),
         ListBucketResultContents("bucket",
-                                 "my-image2.jpg",
-                                 "599bab3ed2c697f1d26842727561fd94",
-                                 1234,
-                                 Instant.parse("2009-10-12T17:50:31Z"),
-                                 "REDUCED_REDUNDANCY")
-      ),
-      Nil
-    )
+          "my-image2.jpg",
+          "599bab3ed2c697f1d26842727561fd94",
+          1234,
+          Instant.parse("2009-10-12T17:50:31Z"),
+          "REDUCED_REDUNDANCY")),
+      Nil)
   }
 
   val listBucketV1TruncatedResponse = """<?xml version="1.0" encoding="UTF-8"?>
@@ -165,7 +160,7 @@ class MarshallingSpec(_system: ActorSystem)
                                         |</ListBucketResult>""".stripMargin
   it should "Use the value of the last `Key` element as the continuation token of a truncated API V1 response" in {
     val entity =
-      HttpEntity(MediaTypes.`application/xml` withCharset HttpCharsets.`UTF-8`, listBucketV1TruncatedResponse)
+      HttpEntity(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`), listBucketV1TruncatedResponse)
 
     val result = Marshalling.listBucketResultUnmarshaller(entity)
 
@@ -174,20 +169,18 @@ class MarshallingSpec(_system: ActorSystem)
       Some("my-image2.jpg"),
       Seq(
         ListBucketResultContents("bucket",
-                                 "my-image.jpg",
-                                 "fba9dede5f27731c9771645a39863328",
-                                 434234,
-                                 Instant.parse("2009-10-12T17:50:30Z"),
-                                 "STANDARD"),
+          "my-image.jpg",
+          "fba9dede5f27731c9771645a39863328",
+          434234,
+          Instant.parse("2009-10-12T17:50:30Z"),
+          "STANDARD"),
         ListBucketResultContents("bucket",
-                                 "my-image2.jpg",
-                                 "599bab3ed2c697f1d26842727561fd94",
-                                 1234,
-                                 Instant.parse("2009-10-12T17:50:31Z"),
-                                 "REDUCED_REDUNDANCY")
-      ),
-      Nil
-    )
+          "my-image2.jpg",
+          "599bab3ed2c697f1d26842727561fd94",
+          1234,
+          Instant.parse("2009-10-12T17:50:31Z"),
+          "REDUCED_REDUNDANCY")),
+      Nil)
   }
 
   it should "parse CopyPartResult" in {
@@ -199,12 +192,12 @@ class MarshallingSpec(_system: ActorSystem)
         |</CopyPartResult>
       """.stripMargin
 
-    val entity = HttpEntity(MediaTypes.`application/xml` withCharset HttpCharsets.`UTF-8`, xmlString)
+    val entity = HttpEntity(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`), xmlString)
 
     val result = Marshalling.copyPartResultUnmarshaller(entity)
 
     result.futureValue shouldEqual CopyPartResult(Instant.parse("2009-10-28T22:32:00.000Z"),
-                                                  "5b27a21a97fcf8a7004dd1d906e7a5ba")
+      "5b27a21a97fcf8a7004dd1d906e7a5ba")
   }
 
   it should "parse CompleteMultipartUpload in event-stream" in {
@@ -223,9 +216,9 @@ class MarshallingSpec(_system: ActorSystem)
     val result = Marshalling.completeMultipartUploadResultUnmarshaller(entity)
 
     result.futureValue shouldEqual CompleteMultipartUploadResult("some-location",
-                                                                 "some-bucket",
-                                                                 "some/key",
-                                                                 "5b27a21a97fcf8a7004dd1d906e7a5ba")
+      "some-bucket",
+      "some/key",
+      "5b27a21a97fcf8a7004dd1d906e7a5ba")
   }
 
 }

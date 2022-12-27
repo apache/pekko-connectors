@@ -8,7 +8,7 @@ import akka.stream.stage.StageLogging
 import io.pravega.client.ClientConfig
 import io.pravega.client.EventStreamClientFactory
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 @InternalApi private[pravega] trait PravegaCapabilities {
   this: StageLogging =>

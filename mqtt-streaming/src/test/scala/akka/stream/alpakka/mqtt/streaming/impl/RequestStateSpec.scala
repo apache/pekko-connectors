@@ -58,24 +58,20 @@ class RequestStateSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll 
     "calculate the next packet id correctly" in {
       LocalPacketRouter.findNextPacketId(
         Map.empty,
-        PacketId(1)
-      ) shouldBe Some(PacketId(2))
+        PacketId(1)) shouldBe Some(PacketId(2))
     }
 
     "calculate the next packet id correctly, accounting for wrap around" in {
       LocalPacketRouter.findNextPacketId(
         Map.empty,
-        LocalPacketRouter.MaxPacketId
-      ) shouldBe Some(LocalPacketRouter.MinPacketId)
+        LocalPacketRouter.MaxPacketId) shouldBe Some(LocalPacketRouter.MinPacketId)
     }
 
     "calculate the next packet id correctly, accounting for used ids" in {
       LocalPacketRouter.findNextPacketId(
         Map(
-          PacketId(2) -> LocalPacketRouter.Registration(testKit.spawn(LocalPacketRouter[String]), List.empty)
-        ),
-        PacketId(1)
-      ) shouldBe Some(PacketId(3))
+          PacketId(2) -> LocalPacketRouter.Registration(testKit.spawn(LocalPacketRouter[String]), List.empty)),
+        PacketId(1)) shouldBe Some(PacketId(3))
     }
 
     "acquire a packet id" in {

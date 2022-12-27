@@ -8,7 +8,7 @@ import java.util.UUID
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.kinesis.scaladsl.KinesisSchedulerSource
-import akka.stream.alpakka.kinesis.{KinesisSchedulerCheckpointSettings, KinesisSchedulerSourceSettings}
+import akka.stream.alpakka.kinesis.{ KinesisSchedulerCheckpointSettings, KinesisSchedulerSourceSettings }
 import akka.stream.scaladsl.Sink
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
@@ -22,18 +22,18 @@ import scala.concurrent.duration._
 
 class KclSnippets {
 
-  //#init-system
+  // #init-system
   implicit val system: ActorSystem = ActorSystem()
-  //#init-system
+  // #init-system
 
-  //#init-clients
+  // #init-clients
   val region: Region = Region.EU_WEST_1
   val kinesisClient: KinesisAsyncClient = KinesisAsyncClient.builder.region(region).build
   val dynamoClient: DynamoDbAsyncClient = DynamoDbAsyncClient.builder.region(region).build
   val cloudWatchClient: CloudWatchAsyncClient = CloudWatchAsyncClient.builder.region(region).build
-  //#init-clients
+  // #init-clients
 
-  //#scheduler-settings
+  // #scheduler-settings
   val schedulerSourceSettings = KinesisSchedulerSourceSettings(bufferSize = 1000, backpressureTimeout = 1.minute)
 
   val builder: ShardRecordProcessorFactory => Scheduler =
@@ -48,11 +48,10 @@ class KclSnippets {
         dynamoClient,
         cloudWatchClient,
         s"${
-          import scala.sys.process._
-          "hostname".!!.trim()
-        }:${UUID.randomUUID()}",
-        recordProcessorFactory
-      )
+            import scala.sys.process._
+            "hostname".!!.trim()
+          }:${UUID.randomUUID()}",
+        recordProcessorFactory)
 
       new Scheduler(
         configsBuilder.checkpointConfig,
@@ -61,17 +60,16 @@ class KclSnippets {
         configsBuilder.lifecycleConfig,
         configsBuilder.metricsConfig,
         configsBuilder.processorConfig,
-        configsBuilder.retrievalConfig
-      )
+        configsBuilder.retrievalConfig)
     }
-  //#scheduler-settings
+  // #scheduler-settings
 
-  //#scheduler-source
+  // #scheduler-source
   val source = KinesisSchedulerSource(builder, schedulerSourceSettings)
     .log("kinesis-records", "Consumed record " + _.sequenceNumber)
-  //#scheduler-source
+  // #scheduler-source
 
-  //#checkpoint
+  // #checkpoint
   val checkpointSettings = KinesisSchedulerCheckpointSettings(100, 30.seconds)
 
   source
@@ -79,6 +77,6 @@ class KclSnippets {
     .to(Sink.ignore)
   source
     .to(KinesisSchedulerSource.checkpointRecordsSink(checkpointSettings))
-  //#checkpoint
+  // #checkpoint
 
 }

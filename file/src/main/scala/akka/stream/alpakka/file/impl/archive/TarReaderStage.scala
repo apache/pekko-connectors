@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.stream.ActorAttributes.StreamSubscriptionTimeout
-import akka.stream.alpakka.file.{TarArchiveMetadata, TarReaderException}
+import akka.stream.alpakka.file.{ TarArchiveMetadata, TarReaderException }
 import akka.stream.scaladsl.Source
 import akka.stream.stage._
 import akka.stream._
@@ -86,8 +86,8 @@ private[file] class TarReaderStage
       }
 
       def readTrailer(metadata: TarArchiveMetadata,
-                      buffer: ByteString,
-                      subSource: Option[SubSourceOutlet[ByteString]]): Unit = {
+          buffer: ByteString,
+          subSource: Option[SubSourceOutlet[ByteString]]): Unit = {
         val trailerLength = TarArchiveEntry.trailerLength(metadata)
         if (buffer.length >= trailerLength) {
           subSource.foreach(_.complete())
@@ -111,14 +111,11 @@ private[file] class TarReaderStage
                 subSource.timeout(timeout)
                 failStage(
                   new TarReaderException(
-                    s"The tar content source was not subscribed to within $timeout, it must be subscribed to to progress tar file reading."
-                  )
-                )
+                    s"The tar content source was not subscribed to within $timeout, it must be subscribed to to progress tar file reading."))
               case WarnTermination =>
                 log.warning(
                   "The tar content source was not subscribed to within {}, it must be subscribed to to progress tar file reading.",
-                  timeout.toCoarsest
-                )
+                  timeout.toCoarsest)
               case NoopTermination =>
             }
           case other =>
@@ -169,9 +166,7 @@ private[file] class TarReaderStage
           else
             failStage(
               new TarReaderException(
-                s"incomplete tar header: received ${buffer.length} bytes, expected ${TarArchiveEntry.headerLength} bytes"
-              )
-            )
+                s"incomplete tar header: received ${buffer.length} bytes, expected ${TarArchiveEntry.headerLength} bytes"))
         }
       }
 
@@ -227,9 +222,7 @@ private[file] class TarReaderStage
           if (buffer.isEmpty) {
             failStage(
               new TarReaderException(
-                s"incomplete tar file contents for [${metadata.filePath}] expected ${metadata.size} bytes, received $emitted bytes"
-              )
-            )
+                s"incomplete tar file contents for [${metadata.filePath}] expected ${metadata.size} bytes, received $emitted bytes"))
           } else setKeepGoing(true)
         }
 
@@ -239,8 +232,8 @@ private[file] class TarReaderStage
        * Handler to read past the padding trailer.
        */
       private final class ReadPastTrailer(metadata: TarArchiveMetadata,
-                                          var buffer: ByteString,
-                                          subSource: Option[SubSourceOutlet[ByteString]])
+          var buffer: ByteString,
+          subSource: Option[SubSourceOutlet[ByteString]])
           extends InHandler
           with ExpectDownstreamPull {
         private val trailerLength = TarArchiveEntry.trailerLength(metadata)
@@ -266,9 +259,7 @@ private[file] class TarReaderStage
           else
             failStage(
               new TarReaderException(
-                s"incomplete tar file trailer for [${metadata.filePath}] expected ${trailerLength} bytes, received ${buffer.length} bytes"
-              )
-            )
+                s"incomplete tar file trailer for [${metadata.filePath}] expected ${trailerLength} bytes, received ${buffer.length} bytes"))
         }
       }
 

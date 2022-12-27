@@ -7,11 +7,11 @@ package akka.stream.alpakka.couchbase.impl
 import akka.annotation.InternalApi
 import akka.stream.alpakka.couchbase.CouchbaseResponseException
 import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.query.{AsyncN1qlQueryResult, AsyncN1qlQueryRow}
+import com.couchbase.client.java.query.{ AsyncN1qlQueryResult, AsyncN1qlQueryRow }
 import rx.functions.Func1
-import rx.{Observable, Subscriber}
+import rx.{ Observable, Subscriber }
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * INTERNAL API

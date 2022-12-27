@@ -31,9 +31,7 @@ class GCStorageExtSpec extends AnyFlatSpec with Matchers with LogCapturing {
         "alpakka.google.cloud.storage.base-url" -> baseUrl,
         "alpakka.google.cloud.storage.base-path" -> basePath,
         "alpakka.google.cloud.storage.token-url" -> tokenUrl,
-        "alpakka.google.cloud.storage.token-scope" -> tokenScope
-      ).asJava
-    )
+        "alpakka.google.cloud.storage.token-scope" -> tokenScope).asJava)
     implicit val system = ActorSystem.create("gcStorage", config)
     @nowarn("msg=deprecated")
     val ext = GCStorageExt(system)

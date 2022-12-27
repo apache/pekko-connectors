@@ -7,11 +7,11 @@ package akka.stream.alpakka.googlecloud.bigquery.storage.impl
 import akka.NotUsed
 import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryRecord
 import akka.stream.scaladsl.Source
-import com.google.cloud.bigquery.storage.v1.arrow.{ArrowRecordBatch, ArrowSchema}
+import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 import org.apache.arrow.memory.RootAllocator
-import org.apache.arrow.vector.{VectorLoader, VectorSchemaRoot}
+import org.apache.arrow.vector.{ VectorLoader, VectorSchemaRoot }
 import org.apache.arrow.vector.ipc.ReadChannel
 import org.apache.arrow.vector.ipc.message.MessageSerializer
 import org.apache.arrow.vector.util.ByteArrayReadableSeekableByteChannel
@@ -24,9 +24,7 @@ object ArrowSource {
 
   def readRecordsMerged(client: BigQueryReadClient, readSession: ReadSession): Source[List[BigQueryRecord], NotUsed] =
     readMerged(client, readSession)
-      .map(
-        a => new SimpleRowReader(readSession.schema.arrowSchema.get).read(a)
-      )
+      .map(a => new SimpleRowReader(readSession.schema.arrowSchema.get).read(a))
 
   def readMerged(client: BigQueryReadClient, session: ReadSession): Source[ArrowRecordBatch, NotUsed] =
     read(client, session)
@@ -55,10 +53,7 @@ final class SimpleRowReader(val schema: ArrowSchema) extends AutoCloseable {
   val sd = MessageSerializer.deserializeSchema(
     new ReadChannel(
       new ByteArrayReadableSeekableByteChannel(
-        schema.serializedSchema.toByteArray
-      )
-    )
-  )
+        schema.serializedSchema.toByteArray)))
 
   val vec = sd.getFields.asScala.map(_.createVector(allocator))
   var root = new VectorSchemaRoot(vec.asJava)
@@ -66,11 +61,9 @@ final class SimpleRowReader(val schema: ArrowSchema) extends AutoCloseable {
 
   def read(batch: ArrowRecordBatch): List[BigQueryRecord] = {
     val deserializedBatch = MessageSerializer.deserializeRecordBatch(new ReadChannel(
-                                                                       new ByteArrayReadableSeekableByteChannel(
-                                                                         batch.serializedRecordBatch.toByteArray
-                                                                       )
-                                                                     ),
-                                                                     allocator);
+        new ByteArrayReadableSeekableByteChannel(
+          batch.serializedRecordBatch.toByteArray)),
+      allocator);
     loader.load(deserializedBatch)
     deserializedBatch.close()
 

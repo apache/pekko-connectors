@@ -5,7 +5,7 @@
 package docs.scaladsl
 
 import akka.actor.ActorSystem
-import akka.stream.alpakka.azure.storagequeue.DeleteOrUpdateMessage.{Delete, UpdateVisibility}
+import akka.stream.alpakka.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
 import akka.stream.alpakka.azure.storagequeue._
 import akka.stream.alpakka.azure.storagequeue.scaladsl._
 import akka.stream.scaladsl._
@@ -70,10 +70,8 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
 
     AzureQueueSource(queueFactory)
       .runWith(Sink.seq)
-      .map(
-        dequeuedMsgs =>
-          assert(msgs.map(_.getMessageContentAsString).toSet == dequeuedMsgs.map(_.getMessageContentAsString).toSet)
-      )
+      .map(dequeuedMsgs =>
+        assert(msgs.map(_.getMessageContentAsString).toSet == dequeuedMsgs.map(_.getMessageContentAsString).toSet))
   }
 
   it should "observe retrieveRetryTimeout and retrieve messages queued later" in assertAllStagesStopped {
@@ -83,10 +81,8 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
       AzureQueueSource(queueFactory, AzureQueueSourceSettings().withRetrieveRetryTimeout(1.seconds))
         .take(10)
         .runWith(Sink.seq)
-        .map(
-          dequeuedMsgs =>
-            assert(msgs.map(_.getMessageContentAsString).toSet == dequeuedMsgs.map(_.getMessageContentAsString).toSet)
-        )
+        .map(dequeuedMsgs =>
+          assert(msgs.map(_.getMessageContentAsString).toSet == dequeuedMsgs.map(_.getMessageContentAsString).toSet))
     Thread.sleep(3000)
     msgs.foreach(m => queue.addMessage(m))
 
@@ -98,9 +94,9 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
     msgs.foreach(m => queue.addMessage(m))
 
     Await.result(AzureQueueSource(queueFactory, AzureQueueSourceSettings().withBatchSize(2))
-                   .take(1)
-                   .runWith(Sink.seq),
-                 timeout)
+        .take(1)
+        .runWith(Sink.seq),
+      timeout)
 
     assert(queue.retrieveMessage() != null, "There should be a 11th message on queue")
   }
@@ -158,8 +154,7 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
         .take(10)
         .map(msg => (msg, UpdateVisibility(120)))
         .runWith(AzureQueueDeleteOrUpdateSink(queueFactory)),
-      timeout
-    )
+      timeout)
 
     // Now we should not be able to get another one
     assertCannotGetMessageFromQueue
@@ -176,8 +171,7 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
         .take(10)
         .map(msg => (msg, Delete))
         .runWith(AzureQueueDeleteOrUpdateSink(queueFactory)),
-      timeout
-    )
+      timeout)
 
     // Now we should not be able to get another one
     assertCannotGetMessageFromQueue

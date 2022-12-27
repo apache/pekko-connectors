@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.azure.storagequeue.javadsl
 
-import com.microsoft.azure.storage.queue.{CloudQueue, CloudQueueMessage}
+import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
 import akka.stream.alpakka.azure.storagequeue.AzureQueueSourceSettings
 import akka.stream.javadsl.Source
 import akka.NotUsed

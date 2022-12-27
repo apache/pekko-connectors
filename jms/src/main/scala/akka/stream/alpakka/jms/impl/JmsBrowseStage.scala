@@ -5,9 +5,9 @@
 package akka.stream.alpakka.jms.impl
 
 import akka.annotation.InternalApi
-import akka.stream.alpakka.jms.{Destination, JmsBrowseSettings}
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler}
-import akka.stream.{ActorAttributes, Attributes, Outlet, SourceShape}
+import akka.stream.alpakka.jms.{ Destination, JmsBrowseSettings }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import akka.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import javax.jms
 
 /**
