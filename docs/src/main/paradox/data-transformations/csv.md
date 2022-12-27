@@ -23,7 +23,7 @@ Lines are separated by either Line Feed (`\n` = ASCII 10) or Carriage Return and
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-csv_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

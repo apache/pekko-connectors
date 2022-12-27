@@ -9,7 +9,7 @@ For more information about Apache Parquet please visit the [official documentati
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-avroparquet_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

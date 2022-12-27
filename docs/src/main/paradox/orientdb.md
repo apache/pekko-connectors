@@ -17,7 +17,7 @@ The Alpakka OrientDB connector provides Akka Stream sources and sinks for Orient
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-orientdb_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

@@ -12,7 +12,7 @@ about the technology the connector is using.
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-reference_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

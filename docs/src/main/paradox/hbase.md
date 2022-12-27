@@ -10,7 +10,7 @@ For more information about HBase, please visit the [HBase documentation](https:/
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-hbase_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

@@ -7,7 +7,7 @@ The Slick connector provides Scala and Java DSLs to create a `Source` to stream 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-slick_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

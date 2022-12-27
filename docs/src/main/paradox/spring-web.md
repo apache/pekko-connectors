@@ -15,7 +15,7 @@ This Alpakka module makes it possible to directly return a `Source` in your Spri
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-spring-web_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

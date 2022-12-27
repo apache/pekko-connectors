@@ -64,7 +64,7 @@ even: only the `doc` inside each element of the array.
 ### Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-json-streaming_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

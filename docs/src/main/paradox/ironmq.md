@@ -11,7 +11,7 @@ queue and set other queue as subscribers. More information about that could be f
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-ironmq_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
