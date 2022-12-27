@@ -65,12 +65,10 @@ trait LogCapturing extends BeforeAndAfterAll { self: TestSuite =>
 
     if (!(res.isSucceeded || res.isPending)) {
       println(
-        s"--> [${Console.BLUE}${self.getClass.getName}: ${test.name}${Console.RESET}] Start of log messages of test that [$res]"
-      )
+        s"--> [${Console.BLUE}${self.getClass.getName}: ${test.name}${Console.RESET}] Start of log messages of test that [$res]")
       capturingAppender.flush(sourceActorSytem)
       println(
-        s"<-- [${Console.BLUE}${self.getClass.getName}: ${test.name}${Console.RESET}] End of log messages of test that [$res]"
-      )
+        s"<-- [${Console.BLUE}${self.getClass.getName}: ${test.name}${Console.RESET}] End of log messages of test that [$res]")
     }
 
     res
