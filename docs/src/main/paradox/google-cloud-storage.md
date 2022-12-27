@@ -10,7 +10,7 @@ This connector communicates to Cloud Storage via HTTP requests.
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-google-cloud-storage_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

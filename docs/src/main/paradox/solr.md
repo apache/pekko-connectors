@@ -17,7 +17,7 @@ For more information about Solr please visit the [Solr documentation](https://lu
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-solr_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

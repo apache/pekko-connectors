@@ -23,7 +23,7 @@ is parsed into frames:
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-simple-codecs_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

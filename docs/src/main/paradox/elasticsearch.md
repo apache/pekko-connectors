@@ -9,7 +9,7 @@ For more information about Elasticsearch, please visit the [Elasticsearch docume
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-elasticsearch_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

@@ -27,7 +27,7 @@ Please read more about it at [GitHub 500px/kinesis-stream](https://github.com/50
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
+  group=org.pekko
   artifact=pekko-connectors-kinesis_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
