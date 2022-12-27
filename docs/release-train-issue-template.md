@@ -44,7 +44,7 @@ Key links:
 
 - [ ] Check [API](https://doc.akka.io/api/alpakka/$VERSION$/) documentation
 - [ ] Check [reference](https://doc.akka.io/docs/alpakka/$VERSION$/) documentation
-- [ ] Check the release on [Maven central](https://repo1.maven.org/maven2/com/lightbend/akka/akka-stream-alpakka-xml_2.12/$VERSION$/)
+- [ ] Check the release on [Maven central](https://repo1.maven.org/maven2/org/pekko/akka-stream-alpakka-xml_2.13/$VERSION$/)
 
 ### When everything is on maven central
   - [ ] Log into `gustav.akka.io` as `akkarepo` 

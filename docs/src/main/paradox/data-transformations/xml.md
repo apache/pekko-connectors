@@ -9,7 +9,7 @@ XML parsing module offers Flows for parsing, processing and writing XML document
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-xml_$scala.binary.version$
+  artifact=pekko-connectors-xml_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

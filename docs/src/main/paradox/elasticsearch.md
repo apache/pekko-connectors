@@ -10,7 +10,7 @@ For more information about Elasticsearch, please visit the [Elasticsearch docume
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-elasticsearch_$scala.binary.version$
+  artifact=pekko-connectors-elasticsearch_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

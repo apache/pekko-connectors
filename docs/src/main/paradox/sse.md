@@ -8,7 +8,7 @@ The SSE connector provides a continuous source of server-sent events recovering 
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-sse_$scala.binary.version$
+  artifact=pekko-connectors-sse_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$
