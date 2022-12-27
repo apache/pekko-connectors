@@ -16,7 +16,7 @@ This Alpakka module makes it possible to directly return a `Source` in your Spri
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-spring-web_$scala.binary.version$
+  artifact=pekko-connectors-spring-web_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$
@@ -35,7 +35,7 @@ The table below shows direct dependencies of this module and the second tab show
 Using Akka Streams in Spring Web (or Boot for that matter) is very simple, as Alpakka provides autoconfiguration to the
 framework, which means that Spring is made aware of Sources and Sinks etc. 
 
-All you need to do is include the above dependency (`akka-stream-alpakka-spring-web`), start your app as usual:
+All you need to do is include the above dependency (`pekko-connectors-spring-web`), start your app as usual:
 
 Java
 : @@snip [snip](/spring-web/src/test/java/docs/javadsl/DemoApplication.java) { #use }

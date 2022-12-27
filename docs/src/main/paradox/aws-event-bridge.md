@@ -34,7 +34,7 @@ The Alpakka AWS EventBridge connector provides Akka Stream flows and sinks to pu
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-aws-event-bridge_$scala.binary.version$
+  artifact=pekko-connectors-aws-event-bridge_$scala.binary.version$
   version=$project.version$
 }
 

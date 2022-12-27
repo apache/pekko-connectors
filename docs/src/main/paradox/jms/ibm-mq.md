@@ -13,7 +13,7 @@ MQ settings for this image are shown here: https://github.com/ibm-messaging/mq-d
 
 @@dependency [sbt,Maven,Gradle] {
   group1=com.lightbend.akka
-  artifact1=akka-stream-alpakka-jms_$scala.binary.version$
+  artifact1=pekko-connectors-jms_$scala.binary.version$
   version1=$project.version$
   group2=javax.jms
   artifact2=jms

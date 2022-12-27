@@ -15,7 +15,7 @@ Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with t
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-google-cloud-bigquery-storage_$scala.binary.version$
+  artifact=pekko-connectors-google-cloud-bigquery-storage_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

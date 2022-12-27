@@ -20,7 +20,7 @@ Please read more about it in the [ReactiveMongo documentation](http://reactivemo
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-mongodb_$scala.binary.version$
+  artifact=pekko-connectors-mongodb_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

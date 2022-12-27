@@ -16,7 +16,7 @@ Alpakka Cassandra offers an @extref:[Akka Streams](akka:/stream/index.html) API 
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-cassandra_$scala.binary.version$
+  artifact=pekko-connectors-cassandra_$scala.binary.version$
   version=$project.version$
 }
 

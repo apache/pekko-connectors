@@ -10,7 +10,7 @@ Streams provide exactly-once semantics, and atomicity for groups of events using
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-pravega_$scala.binary.version$
+  artifact=pekko-connectors-pravega_$scala.binary.version$
   version=$project.version$
 }
 

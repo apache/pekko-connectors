@@ -19,7 +19,7 @@ The binding and connecting APIs are extremely similar to the `Tcp` Akka Streams 
 
 @@dependency [sbt,Maven,Gradle] {
   group=com.lightbend.akka
-  artifact=akka-stream-alpakka-unix-domain-socket_$scala.binary.version$
+  artifact=pekko-connectors-unix-domain-socket_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$
