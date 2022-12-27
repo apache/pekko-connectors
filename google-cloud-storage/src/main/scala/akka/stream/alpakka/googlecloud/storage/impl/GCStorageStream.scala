@@ -146,17 +146,18 @@ import scala.concurrent.Future
           metadata.fold(HttpEntity.Empty)(m => HttpEntity(ContentTypes.`application/json`, m.toJson.toString))
         val request = HttpRequest(POST, uri, headers, entity)
 
-        implicit val um: Unmarshaller[HttpResponse, StorageObject] = Unmarshaller.withMaterializer {
-          implicit ec => implicit mat =>
-            {
-              case HttpResponse(status, _, entity, _) if status.isSuccess() =>
-                Unmarshal(entity).to[StorageObject]
-              case HttpResponse(status, _, entity, _) =>
-                Unmarshal(entity).to[String].flatMap { errorString =>
-                  Future.failed(new RuntimeException(s"Uploading part failed with status $status: $errorString"))
-                }
-            }: PartialFunction[HttpResponse, Future[StorageObject]]
-        }.withDefaultRetry
+        implicit val um: Unmarshaller[HttpResponse, StorageObject] =
+          Unmarshaller.withMaterializer[HttpResponse, StorageObject] {
+            implicit ec => implicit mat =>
+              {
+                case HttpResponse(status, _, entity, _) if status.isSuccess() =>
+                  Unmarshal(entity).to[StorageObject]
+                case HttpResponse(status, _, entity, _) =>
+                  Unmarshal(entity).to[String].flatMap[StorageObject] { errorString =>
+                    Future.failed(new RuntimeException(s"Uploading part failed with status $status: $errorString"))
+                  }
+              }
+          }.withDefaultRetry
 
         ResumableUpload[StorageObject](request).addAttributes(GoogleAttributes.settings(settings))
       }
