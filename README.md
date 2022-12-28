@@ -1,8 +1,8 @@
-Alpakka [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/akka/alpakka/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/akka/alpakka/actions/workflows/check-build-test.yml)
+Alpakka [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)
 =======
 
-[scaladex]:              https://index.scala-lang.org/akka/alpakka
-[scaladex-badge]:        https://index.scala-lang.org/akka/alpakka/latest.svg
+[scaladex]:              https://index.scala-lang.org/apache/incubator-pekko-connectors
+[scaladex-badge]:        https://index.scala-lang.org/apache/incubator-pekko-connectors/latest.svg
 [maven-central]:         https://search.maven.org/#search%7Cga%7C1%7Cpekko-connectors
 [maven-central-badge]:   https://maven-badges.herokuapp.com/maven-central/org.pekko/pekko-connectors-file_2.13/badge.svg
 

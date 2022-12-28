@@ -99,7 +99,7 @@ categories:
   - title: 'XML'
     label: 'p:xml'
 
-change-template: '- $TITLE [#$NUMBER](https://github.com/akka/alpakka/issues/$NUMBER) by [@$AUTHOR](https://github.com/$AUTHOR)'
+change-template: '- $TITLE [#$NUMBER](https://github.com/apache/incubator-pekko-connectors/issues/$NUMBER) by [@$AUTHOR](https://github.com/$AUTHOR)'
 template: |
   # :mega: Alpakka $NEXT_PATCH_VERSION released!
 

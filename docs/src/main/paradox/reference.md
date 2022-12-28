@@ -7,7 +7,7 @@ about the technology the connector is using.
 
 ### Reported issues
 
-[Tagged issues at Github](https://github.com/akka/alpakka/labels/p%3Areference)
+[Tagged issues at Github](https://github.com/apache/incubator-pekko-connectors/labels/p%3Areference)
 
 ## Artifacts
 
