@@ -39,6 +39,7 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         run: sbt ci-release
 
+# TODO: fix after documentation deploy
 #      - name: Publish API and reference documentation
 #        env:
 #          GUSTAV_KEY: ${{ secrets.GUSTAV_KEY }}
