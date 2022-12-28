@@ -148,11 +148,13 @@ import scala.concurrent.Future
 
         implicit val um: Unmarshaller[HttpResponse, StorageObject] =
           Unmarshaller.withMaterializer[HttpResponse, StorageObject] {
-            implicit ec => implicit mat =>
+            implicit ec => implicit mat => response =>
               {
-                case HttpResponse(status, _, entity, _) if status.isSuccess() =>
+                val status = response.status
+                val entity = response.entity
+                if (status.isSuccess())
                   Unmarshal(entity).to[StorageObject]
-                case HttpResponse(status, _, entity, _) =>
+                else
                   Unmarshal(entity).to[String].flatMap[StorageObject] { errorString =>
                     Future.failed(new RuntimeException(s"Uploading part failed with status $status: $errorString"))
                   }
