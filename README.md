@@ -22,7 +22,7 @@ To keep up with the latest Alpakka releases check out [Pekko connectors releases
 Community
 ---------
 
-You can join these forums and chats to discuss and ask Akka and Alpakka related questions:
+You can join these forums and chats to discuss and ask Pekko and Pekko connector related questions:
 
 - [GitHub discussions](https://github.com/apache/incubator-pekko/discussions): for questions and general discussion.
 - [Pekko dev mailing list](https://lists.apache.org/list.html?dev@pekko.apache.org): for Pekko connectors development discussions.
