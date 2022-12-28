@@ -150,7 +150,8 @@ import scala.concurrent.Future
           Unmarshaller.withMaterializer[HttpResponse, StorageObject] {
             implicit ec => implicit mat => response =>
               {
-                val HttpResponse(status, _, entity, _) = response
+                val status = response.status
+                val entity = response.entity
                 if (status.isSuccess())
                   Unmarshal(entity).to[StorageObject]
                 else
