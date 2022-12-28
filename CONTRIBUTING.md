@@ -14,9 +14,7 @@ You may also check out these [other resources](https://akka.io/get-involved/).
 
 ## General Workflow
 
-This is the process for committing code into master.
-
-1. Make sure you have signed the Lightbend CLA, if not, [sign it online](http://www.lightbend.com/contribute/cla).
+This is the process for committing code into main.
 
 1. To avoid duplicated effort, it might be good to check the [issue tracker](https://github.com/apache/incubator-pekko-connectors/issues) and [existing pull requests](https://github.com/apache/incubator-pekko-connectors/pulls) for existing work.
    - If there is no ticket yet, feel free to [create one](https://github.com/apache/incubator-pekko-connectors/issues/new) to discuss the problem and the approach you want to take to solve it.
@@ -25,14 +23,11 @@ This is the process for committing code into master.
 
 1. When the feature or fix is completed you should open a [Pull Request](https://help.github.com/articles/using-pull-requests) on [GitHub](https://github.com/apache/incubator-pekko-connectors/pulls). Prefix your PR title with a marker to show which module it affects (eg. "JMS", or "AWS S3").
 
-1. The Pull Request should be reviewed by other maintainers (as many as feasible/practical). Note that the maintainers can consist of outside contributors, both within and outside Lightbend. Outside contributors are encouraged to participate in the review process, it is not a closed process.
+1. The Pull Request should be reviewed by other maintainers (as many as feasible/practical). Outside contributors are encouraged to participate in the review process, it is not a closed process.
 
 1. After the review you should fix the issues (review comments, CI failures, compiler warnings) by pushing a new commit for new review, iterating until the reviewers give their thumbs up and CI tests pass.
 
 1. If the branch merge conflicts with its target, rebase your branch onto the target branch.
-
-In case of questions about the contribution process or for discussion of specific issues please visit the [akka/dev gitter chat](https://gitter.im/akka/dev).
-
 
 ## Alpakka specific advice
 

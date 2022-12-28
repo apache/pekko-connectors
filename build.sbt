@@ -1,4 +1,4 @@
-lazy val pekkoConnectors = project
+lazy val `pekko-connectors` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
