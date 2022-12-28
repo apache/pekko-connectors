@@ -3,7 +3,7 @@
 Use this command to create a release issue of [Pekko Connectors Release Train Issue Template](docs/release-train-issue-template.md) and follow the steps.
 
 ```bash
-~/pekkoConnectors> scripts/create-release-issue.sh `version-to-be-released`
+~/pekko-connectors> scripts/create-release-issue.sh `version-to-be-released`
 ```
 
 ### Releasing only updated docs
