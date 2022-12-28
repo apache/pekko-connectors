@@ -22,7 +22,7 @@ jobs:
       - name: Fetch tags
         run: git fetch --depth=100 origin +refs/tags/*:refs/tags/*
       - name: FOSSA policy check
-        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == 'akka/alpakka' }}
+        if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == 'apache/incubator-pekko-connectors' }}
         run: |-
           curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/spectrometer/master/install.sh | bash
           fossa analyze && fossa test
