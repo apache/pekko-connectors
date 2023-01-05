@@ -21,7 +21,7 @@ object Common extends AutoPlugin {
   override def requires = JvmPlugin && HeaderPlugin
 
   override def globalSettings = Seq(
-    organization := "org.pekko",
+    organization := "org.apache.pekko",
     organizationName := "Lightbend Inc.",
     organizationHomepage := Some(url("https://www.lightbend.com/")),
     homepage := Some(url("https://doc.akka.io/docs/alpakka/current")),
