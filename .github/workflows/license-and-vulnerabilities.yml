@@ -11,7 +11,7 @@ on:
 jobs:
   license-and-vulnerabilities-scanning:
     name: Analyse
-    if: github.repository == 'akka/alpakka'
+    if: github.repository == 'apache/incubator-pekko-connectors'
     runs-on: ubuntu-latest
 
     steps:
