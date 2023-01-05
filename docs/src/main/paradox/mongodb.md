@@ -19,7 +19,7 @@ Please read more about it in the [ReactiveMongo documentation](http://reactivemo
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-mongodb_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

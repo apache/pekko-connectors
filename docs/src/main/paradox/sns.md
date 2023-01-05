@@ -9,7 +9,7 @@ For more information about AWS SNS please visit the [official documentation](htt
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-sns_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

@@ -10,7 +10,7 @@ The FTP connector provides Akka Stream sources to connect to FTP, FTPs and SFTP 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-ftp_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

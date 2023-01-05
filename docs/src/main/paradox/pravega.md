@@ -9,7 +9,7 @@ Streams provide exactly-once semantics, and atomicity for groups of events using
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-pravega_$scala.binary.version$
   version=$project.version$
 }

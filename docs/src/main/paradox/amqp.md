@@ -9,7 +9,7 @@ AMQP 1.0 is currently not supported (Qpid, ActiveMQ, Solace, etc.).
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-amqp_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

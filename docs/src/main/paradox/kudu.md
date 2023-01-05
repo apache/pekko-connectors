@@ -10,7 +10,7 @@ Apache Kudu is a free and open source column-oriented data store in the Apache H
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-kudu_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

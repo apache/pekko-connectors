@@ -17,7 +17,7 @@ look at the alternative @ref[Alpakka Google Cloud Pub/Sub](google-cloud-pub-sub.
 Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with the same Akka version that the application uses.
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-google-cloud-pub-sub-grpc_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

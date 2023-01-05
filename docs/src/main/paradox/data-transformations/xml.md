@@ -8,7 +8,7 @@ XML parsing module offers Flows for parsing, processing and writing XML document
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-xml_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

@@ -21,7 +21,7 @@ The Couchbase connector supports all document formats which are supported by the
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-couchbase_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

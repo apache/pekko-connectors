@@ -7,7 +7,7 @@ The SSE connector provides a continuous source of server-sent events recovering 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-sse_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

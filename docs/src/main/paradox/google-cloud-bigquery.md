@@ -15,7 +15,7 @@ Alpakka Google Cloud BigQuery was added in Alpakka 2.0.2 in July 2020 and is mar
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-google-cloud-bigquery_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

@@ -29,7 +29,7 @@ Furthermore, the major InfluxDB update to [version 2.0](https://www.influxdata.c
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-influxdb_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

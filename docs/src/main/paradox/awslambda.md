@@ -9,7 +9,7 @@ For more information about AWS Lambda please visit the [AWS lambda documentation
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-awslambda_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

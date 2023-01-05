@@ -13,7 +13,7 @@ The Alpakka Huawei Push Kit connector provides a way to send notifications with 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-group=org.pekko
+group=org.apache.pekko
 artifact=pekko-connectors-huawei-push-kit_$scala.binary.version$
 version=$project.version$
 symbol2=AkkaVersion

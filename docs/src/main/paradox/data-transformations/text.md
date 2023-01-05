@@ -15,7 +15,7 @@ parser does only support UTF-8.
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-text_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

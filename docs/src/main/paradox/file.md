@@ -9,7 +9,7 @@ the sources and sinks for files already included in core Akka Streams
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-file_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion

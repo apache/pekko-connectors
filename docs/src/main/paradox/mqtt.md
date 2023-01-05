@@ -21,7 +21,7 @@ The Alpakka MQTT connector provides an Akka Stream source, sink and flow to conn
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=org.pekko
+  group=org.apache.pekko
   artifact=pekko-connectors-mqtt_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
