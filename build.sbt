@@ -457,9 +457,7 @@ def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefin
   Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin)
     .disablePlugins(SitePlugin, MimaPlugin)
-    .settings(
-      name := s"pekko-connectors-$projectId",
-      publish / skip := true)
+    .settings(name := s"pekko-connectors-$projectId", publish / skip := true)
     .settings(additionalSettings: _*)
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>
