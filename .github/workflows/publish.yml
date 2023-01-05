@@ -13,7 +13,7 @@ on:
 jobs:
   release:
     # runs on main repo only
-    if: github.repository == 'apache/incubator-pekko-connectors'
+    if: github.repository == 'akka/alpakka'
     name: Release
     environment: release
     runs-on: ubuntu-20.04
@@ -39,13 +39,12 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         run: sbt ci-release
 
-# TODO: fix after documentation deploy
-#      - name: Publish API and reference documentation
-#        env:
-#          GUSTAV_KEY: ${{ secrets.GUSTAV_KEY }}
-#        run: |+
-#          eval "$(ssh-agent -s)"
-#          echo $GUSTAV_KEY | base64 -di > .github/id_rsa
-#          chmod 600 .github/id_rsa
-#          ssh-add .github/id_rsa
-#          sbt +~2.13 docs/publishRsync
+      - name: Publish API and reference documentation
+        env:
+          GUSTAV_KEY: ${{ secrets.GUSTAV_KEY }}
+        run: |+
+          eval "$(ssh-agent -s)"
+          echo $GUSTAV_KEY | base64 -di > .github/id_rsa
+          chmod 600 .github/id_rsa
+          ssh-add .github/id_rsa
+          sbt +~2.13 docs/publishRsync
