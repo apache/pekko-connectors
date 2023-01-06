@@ -5,20 +5,20 @@
 package akka.stream.alpakka.s3.impl.auth
 
 import java.nio.charset.StandardCharsets._
-import java.nio.file.{Files, Path}
-import java.security.{DigestInputStream, MessageDigest}
+import java.nio.file.{ Files, Path }
+import java.security.{ DigestInputStream, MessageDigest }
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source, StreamConverters}
+import akka.stream.scaladsl.{ Sink, Source, StreamConverters }
 import akka.testkit.TestKit
 import akka.util.ByteString
-import com.google.common.jimfs.{Configuration, Jimfs}
+import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatest.time.{ Millis, Seconds, Span }
 
 class StreamUtilsSpec(_system: ActorSystem)
     extends TestKit(_system)

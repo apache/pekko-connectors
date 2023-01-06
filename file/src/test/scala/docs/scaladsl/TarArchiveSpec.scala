@@ -5,26 +5,26 @@
 package docs.scaladsl
 
 import java.io._
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{ Files, Path, Paths }
 import java.time.Instant
 import java.util.Comparator
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.actor.ActorSystem
-import akka.stream.alpakka.file.scaladsl.{Archive, Directory}
-import akka.stream.alpakka.file.{TarArchiveMetadata, TarReaderException}
+import akka.stream.alpakka.file.scaladsl.{ Archive, Directory }
+import akka.stream.alpakka.file.{ TarArchiveMetadata, TarReaderException }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{FileIO, Flow, Sink, Source}
+import akka.stream.scaladsl.{ FileIO, Flow, Sink, Source }
 import akka.testkit.TestKit
 import akka.util.ByteString
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.annotation.nowarn
 import scala.jdk.CollectionConverters._
 import scala.collection.immutable
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class TarArchiveSpec
     extends TestKit(ActorSystem("TarArchiveSpec"))
@@ -79,9 +79,7 @@ class TarArchiveSpec
         List(
           (TarArchiveMetadata.directory("subdir", lastModification), Source.empty),
           (TarArchiveMetadata("subdir", "akka_full_color.svg", fileSize1, lastModification), fileStream1),
-          (TarArchiveMetadata("akka_icon_reverse.svg", fileSize2, lastModification), fileStream2)
-        )
-      )
+          (TarArchiveMetadata("akka_icon_reverse.svg", fileSize2, lastModification), fileStream2)))
 
       val result = filesStream
         .via(Archive.tar())
@@ -100,17 +98,13 @@ class TarArchiveSpec
       untar(Paths.get("result.tar").toRealPath(), "xf").foreach(
         _ shouldBe Map(
           "subdir/akka_full_color.svg" -> fileContent1,
-          "akka_icon_reverse.svg" -> fileContent2
-        )
-      )
+          "akka_icon_reverse.svg" -> fileContent2))
       untar(Paths.get("result.tar.gz").toRealPath(), "xfz").foreach(
         _ shouldBe Map(
           "subdir/akka_full_color.svg" -> fileContent1,
-          "akka_icon_reverse.svg" -> fileContent2
-        )
-      )
+          "akka_icon_reverse.svg" -> fileContent2))
 
-      //cleanup
+      // cleanup
       new File("result.tar").delete()
       new File("result.tar.gz").delete()
     }
@@ -128,7 +122,7 @@ class TarArchiveSpec
 
       untar(Paths.get("result.tar").toRealPath(), "xf").foreach(_ shouldBe Map(fileName -> fileBytes))
 
-      //cleanup
+      // cleanup
       new File("result.tar").delete()
     }
 
@@ -233,16 +227,14 @@ class TarArchiveSpec
       val tar = Source(
         immutable.Seq(
           metadata1 -> Source.single(file1),
-          metadata2 -> Source.single(file2)
-        )
-      ).via(Archive.tar())
+          metadata2 -> Source.single(file2))).via(Archive.tar())
         // emit in short byte strings
         .mapConcat(_.sliding(2, 2).toList)
         .via(Archive.tarReader())
         .mapAsync(1) {
           case (metadata, source) =>
             source.runWith(collectByteString).map { bs =>
-              (metadata -> bs)
+              metadata -> bs
             }
         }
         .runWith(Sink.seq)
@@ -257,9 +249,7 @@ class TarArchiveSpec
       val tarFile = Source(
         immutable.Seq(
           metadata1 -> Source.single(ByteString.empty),
-          metadata2 -> Source.single(tenDigits)
-        )
-      ).via(Archive.tar())
+          metadata2 -> Source.single(tenDigits))).via(Archive.tar())
         // swallow the whole input as one ByteString
         .runWith(collectByteString)
 
@@ -411,8 +401,7 @@ class TarArchiveSpec
             .asScala
             .filter(path => Files.isRegularFile(path))
             .map(path => tmpDir.relativize(path).toString -> ByteString(Files.readAllBytes(path)))
-            .toMap
-        )
+            .toMap)
       } finally {
         Files.walk(tmpDir).sorted(Comparator.reverseOrder()).iterator().asScala.foreach(p => Files.delete(p))
       }

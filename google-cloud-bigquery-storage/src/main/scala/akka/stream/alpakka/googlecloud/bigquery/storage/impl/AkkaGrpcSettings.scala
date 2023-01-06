@@ -10,7 +10,7 @@ import akka.grpc.GrpcClientSettings
 import akka.stream.alpakka.google.RequestSettings
 import akka.stream.alpakka.google.auth.Credentials
 import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryStorageSettings
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import io.grpc.auth.MoreCallCredentials
 
 import java.util.concurrent.Executor
@@ -21,8 +21,7 @@ import java.util.concurrent.Executor
 @InternalApi private[bigquery] object AkkaGrpcSettings {
 
   def fromBigQuerySettings(
-      config: BigQueryStorageSettings
-  )(implicit system: ClassicActorSystemProvider): GrpcClientSettings = {
+      config: BigQueryStorageSettings)(implicit system: ClassicActorSystemProvider): GrpcClientSettings = {
     val sslConfig = config.rootCa.fold("") { rootCa =>
       s"""
       |ssl-config {
@@ -46,8 +45,7 @@ import java.util.concurrent.Executor
       GrpcClientSettings.fromConfig(
         ConfigFactory
           .parseString(akkaGrpcConfig)
-          .withFallback(system.classicSystem.settings.config.getConfig("akka.grpc.client.\"*\""))
-      )
+          .withFallback(system.classicSystem.settings.config.getConfig("akka.grpc.client.\"*\"")))
 
     val setTls = (settings: GrpcClientSettings) =>
       config.rootCa

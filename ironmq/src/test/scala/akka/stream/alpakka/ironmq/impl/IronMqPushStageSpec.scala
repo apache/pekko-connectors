@@ -5,7 +5,7 @@
 package akka.stream.alpakka.ironmq.impl
 
 import akka.dispatch.ExecutionContexts
-import akka.stream.alpakka.ironmq.{IronMqSettings, IronMqSpec, PushMessage}
+import akka.stream.alpakka.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
 import akka.stream.scaladsl._
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 

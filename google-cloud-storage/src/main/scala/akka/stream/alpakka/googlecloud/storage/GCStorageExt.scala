@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.storage
 
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 
 /**
  * Manages one [[GCStorageSettings]] per `ActorSystem`.

@@ -8,14 +8,14 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.alpakka.xml._
 import akka.stream.alpakka.xml.scaladsl.XmlParsing
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -53,9 +53,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           Characters("elem2"),
           EndElement("elem"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly parse simple XML and read it" in {
@@ -101,9 +99,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           StartElement("doc"),
           Comment("comment"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly process parse instructions" in {
@@ -118,9 +114,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           ProcessingInstruction(Some("target"), Some("content")),
           StartElement("doc"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
 
     }
 
@@ -138,9 +132,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           Characters("elem1"),
           EndElement("elem"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly process default namespace" in {
@@ -153,9 +145,9 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
         List(
           StartDocument,
           StartElement("doc",
-                       namespace = Some("test:xml:0.1"),
-                       prefix = None,
-                       namespaceCtx = List(Namespace("test:xml:0.1"))),
+            namespace = Some("test:xml:0.1"),
+            prefix = None,
+            namespaceCtx = List(Namespace("test:xml:0.1"))),
           StartElement("elem", namespace = Some("test:xml:0.1")),
           Characters("elem1"),
           EndElement("elem"),
@@ -163,9 +155,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           Characters("elem2"),
           EndElement("elem"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly process prefixed  namespace" in {
@@ -178,13 +168,11 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
         List(
           StartDocument,
           StartElement("x",
-                       namespace = None,
-                       prefix = None,
-                       namespaceCtx = List(Namespace("http://ecommerce.example.org/schema", prefix = Some("edi")))),
+            namespace = None,
+            prefix = None,
+            namespaceCtx = List(Namespace("http://ecommerce.example.org/schema", prefix = Some("edi")))),
           EndElement("x"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
     "properly process multiple namespaces" in {
       val doc =
@@ -201,26 +189,21 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
             namespace = Some("urn:loc.gov:books"),
             prefix = Some("bk"),
             namespaceCtx = List(Namespace("urn:loc.gov:books", prefix = Some("bk")),
-                                Namespace("urn:ISBN:0-395-36341-6", prefix = Some("isbn")))
-          ),
+              Namespace("urn:ISBN:0-395-36341-6", prefix = Some("isbn")))),
           StartElement(
             "title",
             namespace = Some("urn:loc.gov:books"),
-            prefix = Some("bk")
-          ),
+            prefix = Some("bk")),
           Characters("Cheaper by the Dozen"),
           EndElement("title"),
           StartElement(
             "number",
             namespace = Some("urn:ISBN:0-395-36341-6"),
-            prefix = Some("isbn")
-          ),
+            prefix = Some("isbn")),
           Characters("1568491379"),
           EndElement("number"),
           EndElement("book"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly process attributes with prefix and namespace" in {
@@ -233,17 +216,14 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
         List(
           StartDocument,
           StartElement("x",
-                       namespaceCtx = List(Namespace("http://ecommerce.example.org/schema", prefix = Some("edi")))),
+            namespaceCtx = List(Namespace("http://ecommerce.example.org/schema", prefix = Some("edi")))),
           StartElement(
             "lineItem",
-            List(Attribute("taxClass", "exempt", Some("edi"), Some("http://ecommerce.example.org/schema")))
-          ),
+            List(Attribute("taxClass", "exempt", Some("edi"), Some("http://ecommerce.example.org/schema")))),
           Characters("Baby food"),
           EndElement("lineItem"),
           EndElement("x"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly process CData blocks" in {
@@ -258,9 +238,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           StartElement("doc"),
           CData("<not>even</valid>"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly parse large XML" in {
@@ -276,18 +254,18 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
         .map(ByteString(_))
         .via(XmlParsing.parser)
         .filter {
-          case EndDocument => false
-          case StartDocument => false
+          case EndDocument        => false
+          case StartDocument      => false
           case EndElement("elem") => false
-          case _ => true
+          case _                  => true
         }
         .splitWhen(_ match {
           case StartElement("elem", _, _, _, _) => true
-          case _ => false
+          case _                                => false
         })
-        .collect({
+        .collect {
           case Characters(s) => s
-        })
+        }
         .concatSubstreams
         .runWith(Sink.seq)
 
@@ -312,8 +290,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           Flow[String]
             .map(ByteString(_))
             .via(XmlParsing.parser(true))
-            .toMat(Sink.seq)(Keep.right)
-        )
+            .toMat(Sink.seq)(Keep.right))
 
       val result = Await.result(resultFuture, 3.seconds)
       result.toList should ===(
@@ -322,9 +299,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           StartElement("doc"),
           Characters("text\ntext"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "accept and use a provided input factory configuration function" in {
@@ -336,8 +311,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           Flow[String]
             .map(ByteString(_))
             .via(XmlParsing.parser(false, _ => configWasCalled = true))
-            .toMat(Sink.seq)(Keep.right)
-        )
+            .toMat(Sink.seq)(Keep.right))
 
       resultFuture.futureValue should ===(
         List(
@@ -350,9 +324,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           Characters("elem2"),
           EndElement("elem"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
       configWasCalled shouldBe true
     }
 

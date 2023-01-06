@@ -10,8 +10,8 @@ import akka.stream.alpakka.influxdb.scaladsl.InfluxDbSource
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Sink
 import akka.testkit.TestKit
-import org.influxdb.{InfluxDB, InfluxDBException}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.influxdb.{ InfluxDB, InfluxDBException }
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import docs.javadsl.TestUtils._
@@ -60,7 +60,7 @@ class InfluxDbSourceSpec
   "exception on source" in assertAllStagesStopped {
     val query = new Query("SELECT man() FROM invalid", DatabaseName);
 
-    val result = InfluxDbSource(influxDB, query) //.runWith(Sink.seq)
+    val result = InfluxDbSource(influxDB, query) // .runWith(Sink.seq)
       .recover {
         case e: InfluxDBException => e.getMessage
       }
@@ -87,7 +87,7 @@ class InfluxDbSourceSpec
     val query = new Query("SELECT man() FROM invalid", DatabaseName);
 
     val result = InfluxDbSource
-      .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) //.runWith(Sink.seq)
+      .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) // .runWith(Sink.seq)
       .recover {
         case e: InfluxDBException => e.getMessage
       }
@@ -101,7 +101,7 @@ class InfluxDbSourceSpec
     val query = new Query("SELECT*FROM cpu;SELECT man() FROM invalid; SELECT*FROM cpu;", DatabaseName);
 
     val result = InfluxDbSource
-      .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) //.runWith(Sink.seq)
+      .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) // .runWith(Sink.seq)
       .recover {
         case e: InfluxDBException => e.getMessage
       }

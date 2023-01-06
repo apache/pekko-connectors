@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.s3
 
-import akka.stream.alpakka.s3.AccessStyle.{PathAccessStyle, VirtualHostAccessStyle}
-import akka.stream.alpakka.s3.scaladsl.{S3ClientIntegrationSpec, S3WireMockBase}
+import akka.stream.alpakka.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import akka.stream.alpakka.s3.scaladsl.{ S3ClientIntegrationSpec, S3WireMockBase }
 import com.typesafe.config.ConfigFactory
 import org.scalatest.OptionValues
 import software.amazon.awssdk.auth.credentials._
@@ -32,10 +32,8 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
           |multipart-upload.retry-settings = $${retry-settings}
           |sign-anonymous-requests = true
           |$more
-        """.stripMargin
-        )
-        .resolve
-    )
+        """.stripMargin)
+        .resolve)
 
   "S3Settings" should "correctly parse config with anonymous credentials" in {
     val settings: S3Settings = mkSettings("aws.credentials.provider = anon")
@@ -53,8 +51,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
         | access-key-id = $testKi
         | secret-access-key = $testSk
         |}
-      """.stripMargin
-    )
+      """.stripMargin)
     settings.credentialsProvider.resolveCredentials() shouldBe a[AwsBasicCredentials]
     settings.credentialsProvider.resolveCredentials().accessKeyId shouldBe testKi
     settings.credentialsProvider.resolveCredentials().secretAccessKey shouldBe testSk
@@ -72,8 +69,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
          | secret-access-key = $testSk
          | token = $testTok
          |}
-      """.stripMargin
-    )
+      """.stripMargin)
     settings.credentialsProvider.resolveCredentials() shouldBe a[AwsSessionCredentials]
     val creds: AwsSessionCredentials =
       settings.credentialsProvider.resolveCredentials().asInstanceOf[AwsSessionCredentials]
@@ -85,8 +81,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
 
   it should "correctly parse config with default credentials" in {
     val settings: S3Settings = mkSettings(
-      "aws.credentials.provider = default"
-    )
+      "aws.credentials.provider = default")
     settings.credentialsProvider shouldBe a[DefaultCredentialsProvider]
     settings.endpointUrl shouldBe empty
   }
@@ -112,8 +107,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
       s"""
          |aws.region.provider = static
          |aws.region.default-region = $otherRegion
-         |""".stripMargin
-    )
+         |""".stripMargin)
     settings.s3RegionProvider.getRegion shouldBe otherRegion
   }
 
@@ -133,8 +127,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
     val settings: S3Settings = mkSettings(
       s"""
          |endpoint-url = null
-        """.stripMargin
-    )
+        """.stripMargin)
     settings.endpointUrl shouldBe empty
   }
 
@@ -144,8 +137,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
     val settings: S3Settings = mkSettings(
       s"""
            |endpoint-url = "$endpointUrl"
-        """.stripMargin
-    )
+        """.stripMargin)
     settings.endpointUrl.value shouldEqual endpointUrl
   }
 
@@ -161,8 +153,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
       s"""
            |path-style-access = true
            |access-style = virtual
-        """
-    )
+        """)
 
     settings.accessStyle shouldBe PathAccessStyle
     settings.isPathStyleAccess shouldBe true
@@ -179,8 +170,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
            |buffer = memory
            |path-style-access = true
            |endpoint-url = "$endpointUrl"
-        """
-    )
+        """)
 
     settings.isPathStyleAccess shouldBe true
     settings.accessStyle shouldBe PathAccessStyle
@@ -195,8 +185,7 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
       s"""
            |path-style-access = force
            |endpoint-url = "$endpointUrl"
-        """
-    )
+        """)
 
     settings.isPathStyleAccess shouldBe true
     settings.accessStyle shouldBe PathAccessStyle

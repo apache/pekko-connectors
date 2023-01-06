@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.xml.impl
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.alpakka.xml.{Characters, ParseEvent, TextEvent}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.alpakka.xml.{ Characters, ParseEvent, TextEvent }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 /**
  * INTERNAL API
@@ -29,9 +29,7 @@ import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
             failStage(
               new IllegalStateException(
                 s"Too long character sequence, maximum is $maximumTextLength but got " +
-                s"${t.text.length + buffer.length - maximumTextLength} more "
-              )
-            )
+                s"${t.text.length + buffer.length - maximumTextLength} more "))
           else {
             buffer.append(t.text)
             isBuffering = true

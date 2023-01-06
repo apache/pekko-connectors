@@ -5,7 +5,7 @@
 package akka.stream.alpakka.avroparquet.impl
 import akka.annotation.InternalApi
 import akka.stream._
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetWriter
 
@@ -30,7 +30,7 @@ private[avroparquet] class AvroParquetFlow[T <: GenericRecord](writer: ParquetWr
         new InHandler {
 
           override def onUpstreamFinish(): Unit =
-            //super.onUpstreamFinish()
+            // super.onUpstreamFinish()
             completeStage()
 
           override def onUpstreamFailure(ex: Throwable): Unit = {
@@ -43,13 +43,13 @@ private[avroparquet] class AvroParquetFlow[T <: GenericRecord](writer: ParquetWr
             writer.write(obtainedValue)
             push(out, obtainedValue)
           }
-        }
-      )
+        })
 
-      setHandler(out, new OutHandler {
-        override def onPull(): Unit =
-          pull(in)
-      })
+      setHandler(out,
+        new OutHandler {
+          override def onPull(): Unit =
+            pull(in)
+        })
 
       override def postStop(): Unit = writer.close()
     }

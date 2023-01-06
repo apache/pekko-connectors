@@ -3,7 +3,7 @@
  */
 
 package akka.stream.alpakka.s3
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 
 /**
  * Manages one [[S3Settings]] per `ActorSystem`.

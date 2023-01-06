@@ -13,13 +13,13 @@ private[impl] final case class BucketListResult(
     kind: String,
     nextPageToken: Option[String],
     prefixes: Option[List[String]],
-    items: List[StorageObject]
-) {
+    items: List[StorageObject]) {
   def merge(other: BucketListResult): BucketListResult =
-    copy(nextPageToken = None, items = this.items ++ other.items, prefixes = for {
-      source <- this.prefixes
-      other <- other.prefixes
-    } yield source ++ other)
+    copy(nextPageToken = None, items = this.items ++ other.items,
+      prefixes = for {
+        source <- this.prefixes
+        other <- other.prefixes
+      } yield source ++ other)
 }
 
 @InternalApi

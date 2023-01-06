@@ -11,13 +11,13 @@ import akka.util.ByteString
 import com.google.cloud.bigquery.storage.v1.arrow.ArrowSchema
 import org.apache.arrow.memory.RootAllocator
 import org.apache.arrow.vector.ipc.ReadChannel
-import org.apache.arrow.vector.{VectorLoader, VectorSchemaRoot}
+import org.apache.arrow.vector.{ VectorLoader, VectorSchemaRoot }
 import org.apache.arrow.vector.ipc.message.MessageSerializer
 import org.apache.arrow.vector.util.ByteArrayReadableSeekableByteChannel
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 
 class ArrowByteStringDecoder(val schema: ArrowSchema) extends FromByteStringUnmarshaller[List[BigQueryRecord]] {
@@ -25,25 +25,20 @@ class ArrowByteStringDecoder(val schema: ArrowSchema) extends FromByteStringUnma
   val allocator = new RootAllocator(Long.MaxValue)
 
   override def apply(batch: ByteString)(implicit ec: ExecutionContext,
-                                        materializer: Materializer): Future[List[BigQueryRecord]] = {
+      materializer: Materializer): Future[List[BigQueryRecord]] = {
     val sd = MessageSerializer.deserializeSchema(
       new ReadChannel(
         new ByteArrayReadableSeekableByteChannel(
-          schema.serializedSchema.toByteArray
-        )
-      )
-    )
+          schema.serializedSchema.toByteArray)))
 
     val vec = sd.getFields.asScala.map(_.createVector(allocator))
     val root = new VectorSchemaRoot(vec.asJava)
     val loader = new VectorLoader(root)
 
     val deserializedBatch = MessageSerializer.deserializeRecordBatch(new ReadChannel(
-                                                                       new ByteArrayReadableSeekableByteChannel(
-                                                                         batch.toByteBuffer.array()
-                                                                       )
-                                                                     ),
-                                                                     allocator);
+        new ByteArrayReadableSeekableByteChannel(
+          batch.toByteBuffer.array())),
+      allocator);
     loader.load(deserializedBatch)
     deserializedBatch.close()
 

@@ -58,9 +58,9 @@ object Namespace {
 }
 
 final case class Attribute(name: String,
-                           value: String,
-                           prefix: Option[String] = None,
-                           namespace: Option[String] = None) {
+    value: String,
+    prefix: Option[String] = None,
+    namespace: Option[String] = None) {
 
   /** Java API */
   def getPrefix(): java.util.Optional[String] = prefix.asJava
@@ -84,10 +84,10 @@ object Attribute {
 }
 
 final case class StartElement(localName: String,
-                              attributesList: List[Attribute] = List.empty[Attribute],
-                              prefix: Option[String] = None,
-                              namespace: Option[String] = None,
-                              namespaceCtx: List[Namespace] = List.empty[Namespace])
+    attributesList: List[Attribute] = List.empty[Attribute],
+    prefix: Option[String] = None,
+    namespace: Option[String] = None,
+    namespaceCtx: List[Namespace] = List.empty[Namespace])
     extends ParseEvent {
 
   val marker = ParseEventMarker.XMLStartElement
@@ -114,7 +114,7 @@ final case class StartElement(localName: String,
 object StartElement {
 
   def fromMapToAttributeList(prefix: Option[String] = None,
-                             namespace: Option[String] = None)(attributes: Map[String, String]): List[Attribute] =
+      namespace: Option[String] = None)(attributes: Map[String, String]): List[Attribute] =
     attributes.toList.map {
       case (name, value) => Attribute(name, value, prefix, namespace)
     }
@@ -128,23 +128,23 @@ object StartElement {
    * Java API
    */
   def create(localName: String,
-             attributesList: java.util.List[Attribute],
-             prefix: Optional[String],
-             namespace: Optional[String],
-             namespaceCtx: java.util.List[Namespace]): StartElement =
+      attributesList: java.util.List[Attribute],
+      prefix: Optional[String],
+      namespace: Optional[String],
+      namespaceCtx: java.util.List[Namespace]): StartElement =
     new StartElement(localName,
-                     attributesList.asScala.toList,
-                     prefix.asScala,
-                     namespace.asScala,
-                     namespaceCtx.asScala.toList)
+      attributesList.asScala.toList,
+      prefix.asScala,
+      namespace.asScala,
+      namespaceCtx.asScala.toList)
 
   /**
    * Java API
    */
   def create(localName: String,
-             attributesList: java.util.List[Attribute],
-             prefix: Optional[String],
-             namespace: Optional[String]): StartElement =
+      attributesList: java.util.List[Attribute],
+      prefix: Optional[String],
+      namespace: Optional[String]): StartElement =
     new StartElement(localName, attributesList.asScala.toList, prefix.asScala, namespace.asScala, List.empty[Namespace])
 
   /**
@@ -152,10 +152,10 @@ object StartElement {
    */
   def create(localName: String, attributesList: java.util.List[Attribute], namespace: String): StartElement =
     new StartElement(localName,
-                     attributesList.asScala.toList,
-                     prefix = None,
-                     namespace = Some(namespace),
-                     namespaceCtx = List(Namespace(namespace)))
+      attributesList.asScala.toList,
+      prefix = None,
+      namespace = Some(namespace),
+      namespaceCtx = List(Namespace(namespace)))
 
   /**
    * Java API

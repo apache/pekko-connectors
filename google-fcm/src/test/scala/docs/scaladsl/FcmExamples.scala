@@ -11,7 +11,7 @@ import akka.stream.alpakka.google.firebase.fcm.v1.models._
 import akka.stream.alpakka.google.firebase.fcm.v1.scaladsl.GoogleFcm
 
 //#imports
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -20,15 +20,15 @@ class FcmExamples {
 
   implicit val system = ActorSystem()
 
-  //#simple-send
+  // #simple-send
   val fcmConfig = FcmSettings()
   val notification = FcmNotification("Test", "This is a test notification!", Token("token"))
   Source
     .single(notification)
     .runWith(GoogleFcm.fireAndForget(fcmConfig))
-  //#simple-send
+  // #simple-send
 
-  //#asFlow-send
+  // #asFlow-send
   val result1: Future[immutable.Seq[FcmResponse]] =
     Source
       .single(notification)
@@ -42,37 +42,35 @@ class FcmExamples {
           res
       }
       .runWith(Sink.seq)
-  //#asFlow-send
+  // #asFlow-send
 
-  //#withData-send
+  // #withData-send
   val result2: Future[immutable.Seq[(FcmResponse, String)]] =
     Source
       .single((notification, "superData"))
       .via(GoogleFcm.sendWithPassThrough(fcmConfig))
       .runWith(Sink.seq)
-  //#withData-send
+  // #withData-send
 
-  //#noti-create
+  // #noti-create
   val buildedNotification = FcmNotification.empty
     .withTarget(Topic("testers"))
     .withBasicNotification("title", "body")
-    //.withAndroidConfig(AndroidConfig(...))
-    //.withApnsConfig(ApnsConfig(...))
+    // .withAndroidConfig(AndroidConfig(...))
+    // .withApnsConfig(ApnsConfig(...))
     .withWebPushConfig(
       WebPushConfig(
         headers = Option(Map.empty),
         data = Option(Map.empty),
         notification =
-          Option("{\"title\": \"web-title\", \"body\": \"web-body\", \"icon\": \"http://example.com/icon.png\"}")
-      )
-    )
+          Option("{\"title\": \"web-title\", \"body\": \"web-body\", \"icon\": \"http://example.com/icon.png\"}")))
   val sendable = buildedNotification.isSendable
-  //#noti-create
+  // #noti-create
 
-  //#condition-builder
-  import Condition.{Topic => CTopic}
+  // #condition-builder
+  import Condition.{ Topic => CTopic }
   val condition = Condition(CTopic("TopicA") && (CTopic("TopicB") || (CTopic("TopicC") && !CTopic("TopicD"))))
   val conditioneddNotification = FcmNotification("Test", "This is a test notification!", condition)
-  //#condition-builder
+  // #condition-builder
 
 }

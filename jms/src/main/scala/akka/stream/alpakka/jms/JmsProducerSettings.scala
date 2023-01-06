@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.jms
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.util.JavaDurationConverters._
-import com.typesafe.config.{Config, ConfigValueType}
+import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 
@@ -21,8 +21,8 @@ final class JmsProducerSettings private (
     val credentials: Option[Credentials],
     val sessionCount: Int,
     val timeToLive: Option[scala.concurrent.duration.Duration],
-    val connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration
-) extends akka.stream.alpakka.jms.JmsSettings {
+    val connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration)
+    extends akka.stream.alpakka.jms.JmsSettings {
 
   /** Factory to use for creating JMS connections. */
   def withConnectionFactory(value: javax.jms.ConnectionFactory): JmsProducerSettings = copy(connectionFactory = value)
@@ -66,7 +66,7 @@ final class JmsProducerSettings private (
    */
   def withTimeToLive(value: java.time.Duration): JmsProducerSettings = copy(timeToLive = Option(value).map(_.asScala))
 
-  /**  Timeout for connection status subscriber */
+  /** Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: FiniteDuration): JmsProducerSettings =
     copy(connectionStatusSubscriptionTimeout = value)
 
@@ -83,8 +83,7 @@ final class JmsProducerSettings private (
       sessionCount: Int = sessionCount,
       timeToLive: Option[scala.concurrent.duration.Duration] = timeToLive,
       connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration =
-        connectionStatusSubscriptionTimeout
-  ): JmsProducerSettings = new JmsProducerSettings(
+        connectionStatusSubscriptionTimeout): JmsProducerSettings = new JmsProducerSettings(
     connectionFactory = connectionFactory,
     connectionRetrySettings = connectionRetrySettings,
     sendRetrySettings = sendRetrySettings,
@@ -92,8 +91,7 @@ final class JmsProducerSettings private (
     credentials = credentials,
     sessionCount = sessionCount,
     timeToLive = timeToLive,
-    connectionStatusSubscriptionTimeout = connectionStatusSubscriptionTimeout
-  )
+    connectionStatusSubscriptionTimeout = connectionStatusSubscriptionTimeout)
 
   override def toString =
     "JmsProducerSettings(" +
@@ -138,8 +136,7 @@ object JmsProducerSettings {
       credentials,
       sessionCount,
       timeToLive,
-      connectionStatusSubscriptionTimeout
-    )
+      connectionStatusSubscriptionTimeout)
   }
 
   /**
@@ -158,7 +155,7 @@ object JmsProducerSettings {
    * @param connectionFactory Factory to use for creating JMS connections.
    */
   def apply(actorSystem: ClassicActorSystemProvider,
-            connectionFactory: javax.jms.ConnectionFactory): JmsProducerSettings =
+      connectionFactory: javax.jms.ConnectionFactory): JmsProducerSettings =
     apply(actorSystem.classicSystem, connectionFactory)
 
   /**
@@ -186,7 +183,7 @@ object JmsProducerSettings {
    * @param connectionFactory Factory to use for creating JMS connections.
    */
   def create(actorSystem: ClassicActorSystemProvider,
-             connectionFactory: javax.jms.ConnectionFactory): JmsProducerSettings =
+      connectionFactory: javax.jms.ConnectionFactory): JmsProducerSettings =
     apply(actorSystem.classicSystem, connectionFactory)
 
 }

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.cassandra
 
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import akka.annotation.InternalApi
 import com.codahale.metrics.MetricRegistry
 

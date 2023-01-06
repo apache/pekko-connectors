@@ -7,7 +7,7 @@ package docs.scaladsl
 import akka.actor.ActorSystem
 import akka.http.scaladsl.HttpExt
 import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.model.{ContentTypes, HttpMethods, HttpRequest, Uri}
+import akka.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
 import akka.stream.alpakka.elasticsearch.scaladsl.ElasticsearchSource
 import akka.stream.alpakka.elasticsearch.{
   ApiVersionBase,
@@ -29,19 +29,19 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
 
   def http: HttpExt
 
-  //#define-class
+  // #define-class
   import spray.json._
   import DefaultJsonProtocol._
 
   case class Book(title: String, shouldSkip: Option[Boolean] = None, price: Int = 10)
 
   implicit val format: JsonFormat[Book] = jsonFormat3(Book)
-  //#define-class
+  // #define-class
 
   def register(connectionSettings: ElasticsearchConnectionSettings,
-               indexName: String,
-               title: String,
-               price: Int): Unit = {
+      indexName: String,
+      title: String,
+      price: Int): Unit = {
     val request = HttpRequest(HttpMethods.POST)
       .withUri(Uri(connectionSettings.baseUrl).withPath(Path(s"/$indexName/_doc")))
       .withEntity(ContentTypes.`application/json`, s"""{"title": "$title", "price": $price}""")
@@ -59,14 +59,13 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
   }
 
   def readTitlesFrom(apiVersion: ApiVersionBase,
-                     sourceSettings: SourceSettingsBase[_, _],
-                     indexName: String): Future[immutable.Seq[String]] =
+      sourceSettings: SourceSettingsBase[_, _],
+      indexName: String): Future[immutable.Seq[String]] =
     ElasticsearchSource
       .typed[Book](
         constructElasticsearchParams(indexName, "_doc", apiVersion),
         query = """{"match_all": {}}""",
-        settings = sourceSettings
-      )
+        settings = sourceSettings)
       .map { message =>
         message.source.title
       }
@@ -84,8 +83,8 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
   }
 
   def constructElasticsearchParams(indexName: String,
-                                   typeName: String,
-                                   apiVersion: ApiVersionBase): ElasticsearchParams = {
+      typeName: String,
+      apiVersion: ApiVersionBase): ElasticsearchParams = {
     if (apiVersion == akka.stream.alpakka.elasticsearch.ApiVersion.V5) {
       ElasticsearchParams.V5(indexName, typeName)
     } else if (apiVersion == akka.stream.alpakka.elasticsearch.ApiVersion.V7) {

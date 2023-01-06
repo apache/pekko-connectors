@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema
 
-import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaType.{Date, DateTime, Time, Timestamp}
+import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaType.{ Date, DateTime, Time, Timestamp }
 
-import java.time.{Instant, LocalDate, LocalDateTime, LocalTime}
+import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
 
 /**
  * Provides BigQuery schemas for [[java.time]] classes.

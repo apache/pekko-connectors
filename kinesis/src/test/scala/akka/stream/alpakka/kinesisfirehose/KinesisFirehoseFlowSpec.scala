@@ -11,7 +11,7 @@ import akka.stream.alpakka.kinesisfirehose.scaladsl.KinesisFirehoseFlow
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Keep
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.util.ByteString
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when

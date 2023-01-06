@@ -23,7 +23,7 @@ object Destination {
   def apply(destination: jms.Destination): Destination = destination match {
     case queue: jms.Queue => Queue(queue.getQueueName)
     case topic: jms.Topic => Topic(topic.getTopicName)
-    case _ => CustomDestination(destination.toString, _ => destination)
+    case _                => CustomDestination(destination.toString, _ => destination)
   }
 
   /**

@@ -9,7 +9,7 @@ import akka.stream._
 import akka.stream.alpakka.ironmq._
 import akka.stream.stage._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Internal API.
@@ -72,18 +72,18 @@ private[ironmq] class IronMqPushStage(queueName: String, settings: IronMqSetting
             exceptionFromUpstream = Some(ex)
             checkForCompletion()
           }
-        }
-      )
+        })
 
-      setHandler(out, new OutHandler {
-        override def onPull(): Unit =
-          tryPull(in)
-      })
+      setHandler(out,
+        new OutHandler {
+          override def onPull(): Unit =
+            tryPull(in)
+        })
 
       private def checkForCompletion() =
         if (isClosed(in) && runningFutures <= 0) {
           exceptionFromUpstream match {
-            case None => completeStage()
+            case None     => completeStage()
             case Some(ex) => failStage(ex)
           }
         }

@@ -8,7 +8,7 @@ import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.http.scaladsl.Http
 import akka.stream.alpakka.huawei.pushkit.HmsSettings
-import akka.stream.alpakka.huawei.pushkit.models.{PushKitNotification, Response}
+import akka.stream.alpakka.huawei.pushkit.models.{ PushKitNotification, Response }
 import akka.stream.scaladsl.Flow
 
 /**
@@ -26,12 +26,10 @@ private[pushkit] object PushKitFlows {
           new HmsSession(conf, new HmsTokenApi(http, materializer.system, conf.forwardProxy))
         val sender: PushKitSender = new PushKitSender()
         Flow[PushKitNotification]
-          .mapAsync(conf.maxConcurrentConnections)(
-            in =>
-              session.getToken()(materializer).flatMap { token =>
-                sender.send(conf, token, http, PushKitSend(conf.test, in), materializer.system)(materializer)
-              }
-          )
+          .mapAsync(conf.maxConcurrentConnections)(in =>
+            session.getToken()(materializer).flatMap { token =>
+              sender.send(conf, token, http, PushKitSend(conf.test, in), materializer.system)(materializer)
+            })
       }
       .mapMaterializedValue(_ => NotUsed)
 }

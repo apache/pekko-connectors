@@ -20,14 +20,13 @@ final class SqsSourceSettings private (
     val attributeNames: immutable.Seq[MessageSystemAttributeName],
     val messageAttributeNames: immutable.Seq[MessageAttributeName],
     val closeOnEmptyReceive: Boolean,
-    val visibilityTimeout: Option[FiniteDuration]
-) {
+    val visibilityTimeout: Option[FiniteDuration]) {
   require(maxBatchSize <= maxBufferSize, "maxBatchSize must be lower or equal than maxBufferSize")
   // SQS requirements
   require(0 <= waitTimeSeconds && waitTimeSeconds <= 20,
-          s"Invalid value ($waitTimeSeconds) for waitTimeSeconds. Requirement: 0 <= waitTimeSeconds <= 20 ")
+    s"Invalid value ($waitTimeSeconds) for waitTimeSeconds. Requirement: 0 <= waitTimeSeconds <= 20 ")
   require(1 <= maxBatchSize && maxBatchSize <= 10,
-          s"Invalid value ($maxBatchSize) for maxBatchSize. Requirement: 1 <= maxBatchSize <= 10 ")
+    s"Invalid value ($maxBatchSize) for maxBatchSize. Requirement: 1 <= maxBatchSize <= 10 ")
 
   /**
    * The duration in seconds for which the call waits for a message to arrive in the queue before returning.
@@ -114,8 +113,7 @@ final class SqsSourceSettings private (
       attributeNames: immutable.Seq[MessageSystemAttributeName] = attributeNames,
       messageAttributeNames: immutable.Seq[MessageAttributeName] = messageAttributeNames,
       closeOnEmptyReceive: Boolean = closeOnEmptyReceive,
-      visibilityTimeout: Option[FiniteDuration] = visibilityTimeout
-  ): SqsSourceSettings = new SqsSourceSettings(
+      visibilityTimeout: Option[FiniteDuration] = visibilityTimeout): SqsSourceSettings = new SqsSourceSettings(
     waitTimeSeconds,
     maxBufferSize,
     parallelRequests,
@@ -123,8 +121,7 @@ final class SqsSourceSettings private (
     attributeNames,
     messageAttributeNames,
     closeOnEmptyReceive,
-    visibilityTimeout
-  )
+    visibilityTimeout)
 
   override def toString: String =
     "SqsSourceSettings(" +
@@ -148,8 +145,7 @@ object SqsSourceSettings {
     attributeNames = immutable.Seq.empty,
     messageAttributeNames = immutable.Seq.empty,
     closeOnEmptyReceive = false,
-    visibilityTimeout = None
-  )
+    visibilityTimeout = None)
 
   /**
    * Scala API
@@ -169,13 +165,11 @@ object SqsSourceSettings {
 final class MessageAttributeName private (val name: String) {
   require(
     name.matches("[0-9a-zA-Z_\\-.*]+"),
-    "MessageAttributeNames may only contain alphanumeric characters and the underscore (_), hyphen (-), period (.), or star (*)"
-  )
+    "MessageAttributeNames may only contain alphanumeric characters and the underscore (_), hyphen (-), period (.), or star (*)")
 
   require(
     !name.matches("(^\\.[^*].*)|(.*\\.\\..*)|(.*\\.$)"),
-    "MessageAttributeNames cannot start or end with a period (.) or have multiple periods in succession (..)"
-  )
+    "MessageAttributeNames cannot start or end with a period (.) or have multiple periods in succession (..)")
 
   require(name.length <= 256, "MessageAttributeNames may not be longer than 256 characters")
 

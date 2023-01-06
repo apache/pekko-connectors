@@ -6,7 +6,7 @@ package akka.stream.alpakka.kinesis
 
 import akka.actor.ActorSystem
 import org.mockito.Mockito.reset
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach, Suite }
 import org.scalatestplus.mockito.MockitoSugar
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 

@@ -10,14 +10,14 @@ import akka.stream.alpakka.sqs.SqsSourceSettings
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.testkit.scaladsl.TestSink
 import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito.{atMost => atMostTimes, _}
+import org.mockito.Mockito.{ atMost => atMostTimes, _ }
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar.mock
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
-import software.amazon.awssdk.services.sqs.model.{Message, ReceiveMessageRequest, ReceiveMessageResponse}
+import software.amazon.awssdk.services.sqs.model.{ Message, ReceiveMessageRequest, ReceiveMessageResponse }
 
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
@@ -39,14 +39,11 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
           ReceiveMessageResponse
             .builder()
             .messages(defaultMessages: _*)
-            .build()
-        )
-      )
+            .build()))
 
     val probe = SqsSource(
       "url",
-      SqsSourceSettings.Defaults.withMaxBufferSize(10)
-    ).runWith(TestSink.probe[Message])
+      SqsSourceSettings.Defaults.withMaxBufferSize(10)).runWith(TestSink.probe[Message])
 
     defaultMessages.foreach(probe.requestNext)
 
@@ -74,8 +71,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
                 ReceiveMessageResponse
                   .builder()
                   .messages(defaultMessages: _*)
-                  .build()
-              )
+                  .build())
             }(system.dispatcher)
             .toJava
             .toCompletableFuture
@@ -83,8 +79,8 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
 
     val probe = SqsSource(
       "url",
-      SqsSourceSettings.Defaults.withMaxBufferSize(SqsSourceSettings.Defaults.maxBatchSize * bufferToBatchRatio)
-    ).runWith(TestSink.probe[Message])
+      SqsSourceSettings.Defaults.withMaxBufferSize(
+        SqsSourceSettings.Defaults.maxBatchSize * bufferToBatchRatio)).runWith(TestSink.probe[Message])
 
     Thread.sleep(timeout.toMillis * (bufferToBatchRatio + 1))
 
@@ -116,8 +112,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
                   ReceiveMessageResponse
                     .builder()
                     .messages(List.empty[Message]: _*)
-                    .build()
-                )
+                    .build())
               }(system.dispatcher)
               .toJava
               .toCompletableFuture
@@ -126,8 +121,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
               ReceiveMessageResponse
                 .builder()
                 .messages(defaultMessages: _*)
-                .build()
-            )
+                .build())
           }
         }
       })
@@ -137,8 +131,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
       SqsSourceSettings.Defaults
         .withMaxBufferSize(10)
         .withParallelRequests(10)
-        .withWaitTime(timeout)
-    ).runWith(TestSink.probe[Message])
+        .withWaitTime(timeout)).runWith(TestSink.probe[Message])
 
     (1 to firstWithDataCount * 10).foreach(_ => probe.requestNext())
 

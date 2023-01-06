@@ -9,11 +9,11 @@ import akka.annotation.InternalApi
 import akka.dispatch.ExecutionContexts
 import akka.pattern
 import akka.stream.alpakka.google.RetrySettings
-import akka.stream.scaladsl.{Flow, RetryFlow}
+import akka.stream.scaladsl.{ Flow, RetryFlow }
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.control.{NoStackTrace, NonFatal}
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ ExecutionContext, Future }
+import scala.util.control.{ NoStackTrace, NonFatal }
+import scala.util.{ Failure, Success, Try }
 
 /**
  * A wrapper for a [[java.lang.Throwable]] indicating that it should be retried.
@@ -28,8 +28,8 @@ object Retry {
    */
   def apply(ex: Throwable): Throwable = ex match {
     case retry @ Retry(_) => retry
-    case NonFatal(ex) => new Retry(ex)
-    case ex => ex
+    case NonFatal(ex)     => new Retry(ex)
+    case ex               => ex
   }
 
   /**
@@ -45,14 +45,14 @@ object Retry {
    */
   @InternalApi
   private[alpakka] def apply[T](settings: RetrySettings)(future: => Future[T])(implicit ec: ExecutionContext,
-                                                                               scheduler: Scheduler): Future[T] = {
+      scheduler: Scheduler): Future[T] = {
     import settings._
     val futureBuilder = () =>
       future
         .map(Success(_))(ExecutionContexts.parasitic)
         .recover {
           case Retry(ex) => throw ex
-          case ex => Failure(ex)
+          case ex        => Failure(ex)
         }(ExecutionContexts.parasitic)
     pattern
       .retry(futureBuilder, maxRetries, minBackoff, maxBackoff, randomFactor)
@@ -68,7 +68,7 @@ object Retry {
     import retrySettings._
     RetryFlow.withBackoff(minBackoff, maxBackoff, randomFactor, maxRetries, flow) {
       case (in, Failure(Retry(_))) => Some(in)
-      case _ => None
+      case _                       => None
     }
   }
 

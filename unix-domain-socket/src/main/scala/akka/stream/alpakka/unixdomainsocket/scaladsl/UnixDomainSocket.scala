@@ -8,10 +8,10 @@ package scaladsl
 import java.nio.file.Path
 
 import akka.NotUsed
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import akka.stream._
 import akka.stream.alpakka.unixdomainsocket.impl.UnixDomainSocketImpl
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.util.ByteString
 
 import scala.concurrent.Future
@@ -46,8 +46,8 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
    * Represents an accepted incoming connection.
    */
   final case class IncomingConnection(localAddress: UnixSocketAddress,
-                                      remoteAddress: UnixSocketAddress,
-                                      flow: Flow[ByteString, ByteString, NotUsed]) {
+      remoteAddress: UnixSocketAddress,
+      flow: Flow[ByteString, ByteString, NotUsed]) {
 
     /**
      * Handles the connection using the given flow, which is materialized exactly once and the respective
@@ -98,8 +98,8 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    *                  for servers, and therefore it is the default setting.
    */
   override def bind(path: Path,
-                    backlog: Int = 128,
-                    halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] =
+      backlog: Int = 128,
+      halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] =
     super.bind(path, backlog, halfClose)
 
   /**
@@ -126,9 +126,9 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    *                  for servers, and therefore it is the default setting.
    */
   def bindAndHandle(handler: Flow[ByteString, ByteString, _],
-                    path: Path,
-                    backlog: Int = 128,
-                    halfClose: Boolean = false): Future[ServerBinding] =
+      path: Path,
+      backlog: Int = 128,
+      halfClose: Boolean = false): Future[ServerBinding] =
     bind(path, backlog, halfClose)
       .to(Sink.foreach { conn: IncomingConnection =>
         conn.flow.join(handler).run()
@@ -160,8 +160,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
       remoteAddress: UnixSocketAddress,
       localAddress: Option[UnixSocketAddress] = None,
       halfClose: Boolean = true,
-      connectTimeout: Duration = Duration.Inf
-  ): Flow[ByteString, ByteString, Future[OutgoingConnection]] =
+      connectTimeout: Duration = Duration.Inf): Flow[ByteString, ByteString, Future[OutgoingConnection]] =
     super.outgoingConnection(remoteAddress, localAddress, halfClose, connectTimeout)
 
   /**

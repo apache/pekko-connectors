@@ -6,12 +6,12 @@ package akka.stream.alpakka.elasticsearch.impl
 
 import akka.NotUsed
 import akka.actor.ActorSystem
-import akka.http.scaladsl.{Http, HttpExt}
+import akka.http.scaladsl.{ Http, HttpExt }
 import akka.stream.Materializer
-import akka.stream.alpakka.elasticsearch.{StringMessageWriter, _}
+import akka.stream.alpakka.elasticsearch.{ StringMessageWriter, _ }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Keep
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -30,16 +30,13 @@ class ElasticsearchSimpleFlowStageTest
 
   val writer: StringMessageWriter = StringMessageWriter.getInstance
   val settings: ElasticsearchWriteSettings = ElasticsearchWriteSettings(
-    ElasticsearchConnectionSettings("http://localhost:9202")
-  )
+    ElasticsearchConnectionSettings("http://localhost:9202"))
   val dummyMessages: (immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]]) = (
     immutable.Seq(
       WriteMessage.createIndexMessage("1", """{"foo": "bar"}"""),
       WriteMessage.createIndexMessage("2", """{"foo2": "bar2"}"""),
-      WriteMessage.createIndexMessage("3", """{"foo3": "bar3"}""")
-    ),
-    immutable.Seq[WriteResult[String, NotUsed]]()
-  )
+      WriteMessage.createIndexMessage("3", """{"foo3": "bar3"}""")),
+    immutable.Seq[WriteResult[String, NotUsed]]())
 
   "ElasticsearchSimpleFlowStage" when {
     "stream ends" should {
@@ -51,9 +48,7 @@ class ElasticsearchSimpleFlowStageTest
               new impl.ElasticsearchSimpleFlowStage[String, NotUsed](
                 ElasticsearchParams.V7("es-simple-flow-index"),
                 settings,
-                writer
-              )
-            )
+                writer))
             .toMat(TestSink.probe)(Keep.both)
             .run()
 
@@ -78,9 +73,7 @@ class ElasticsearchSimpleFlowStageTest
               new impl.ElasticsearchSimpleFlowStage[String, NotUsed](
                 ElasticsearchParams.V7("es-simple-flow-index"),
                 settings.withConnection(ElasticsearchConnectionSettings("http://wololo:9202")),
-                writer
-              )
-            )
+                writer))
             .toMat(TestSink.probe)(Keep.both)
             .run()
 

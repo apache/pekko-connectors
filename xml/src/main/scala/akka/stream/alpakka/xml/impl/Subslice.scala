@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.xml.impl
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.alpakka.xml.{EndElement, ParseEvent, StartElement}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.alpakka.xml.{ EndElement, ParseEvent, StartElement }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 import scala.collection.immutable
 

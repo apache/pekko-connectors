@@ -6,8 +6,8 @@ package akka.stream.alpakka.googlecloud.bigquery.model
 
 import akka.stream.alpakka.google.scaladsl.Paginated
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
-import spray.json.{JsonFormat, RootJsonFormat}
+import com.fasterxml.jackson.annotation.{ JsonCreator, JsonProperty }
+import spray.json.{ JsonFormat, RootJsonFormat }
 
 import java.util
 
@@ -28,10 +28,10 @@ import scala.jdk.CollectionConverters._
  * @param location the geographic location where the table resides
  */
 final case class Table private (tableReference: TableReference,
-                                labels: Option[Map[String, String]],
-                                schema: Option[TableSchema],
-                                numRows: Option[Long],
-                                location: Option[String]) {
+    labels: Option[Map[String, String]],
+    schema: Option[TableSchema],
+    numRows: Option[Long],
+    location: Option[String]) {
 
   def getTableReference = tableReference
   def getLabels = labels.map(_.asJava).asJava
@@ -77,17 +77,16 @@ object Table {
    * @return a [[Table]]
    */
   def create(tableReference: TableReference,
-             labels: util.Optional[util.Map[String, String]],
-             schema: util.Optional[TableSchema],
-             numRows: util.OptionalLong,
-             location: util.Optional[String]) =
+      labels: util.Optional[util.Map[String, String]],
+      schema: util.Optional[TableSchema],
+      numRows: util.OptionalLong,
+      location: util.Optional[String]) =
     Table(
       tableReference,
       labels.asScala.map(_.asScala.toMap),
       schema.asScala,
       numRows.asScala,
-      location.asScala
-    )
+      location.asScala)
 
   implicit val format: RootJsonFormat[Table] = jsonFormat5(apply)
 }
@@ -192,22 +191,21 @@ object TableSchema {
  * @param fields describes the nested schema fields if the type property is set to `RECORD`
  */
 final case class TableFieldSchema private (name: String,
-                                           `type`: TableFieldSchemaType,
-                                           mode: Option[TableFieldSchemaMode],
-                                           fields: Option[Seq[TableFieldSchema]]) {
+    `type`: TableFieldSchemaType,
+    mode: Option[TableFieldSchemaMode],
+    fields: Option[Seq[TableFieldSchema]]) {
 
   @nowarn("msg=never used")
   @JsonCreator
   private def this(@JsonProperty(value = "name", required = true) name: String,
-                   @JsonProperty(value = "type", required = true) `type`: String,
-                   @JsonProperty("mode") mode: String,
-                   @JsonProperty("fields") fields: util.List[TableFieldSchema]) =
+      @JsonProperty(value = "type", required = true) `type`: String,
+      @JsonProperty("mode") mode: String,
+      @JsonProperty("fields") fields: util.List[TableFieldSchema]) =
     this(
       name,
       TableFieldSchemaType(`type`),
       Option(mode).map(TableFieldSchemaMode.apply),
-      Option(fields).map(_.asScala.toList)
-    )
+      Option(fields).map(_.asScala.toList))
 
   def getName = name
   def getType = `type`
@@ -244,9 +242,9 @@ object TableFieldSchema {
    * @return a [[TableFieldSchema]]
    */
   def create(name: String,
-             `type`: TableFieldSchemaType,
-             mode: util.Optional[TableFieldSchemaMode],
-             fields: util.Optional[util.List[TableFieldSchema]]) =
+      `type`: TableFieldSchemaType,
+      mode: util.Optional[TableFieldSchemaMode],
+      fields: util.Optional[util.List[TableFieldSchema]]) =
     TableFieldSchema(name, `type`, mode.asScala, fields.asScala.map(_.asScala.toList))
 
   /**
@@ -261,14 +259,13 @@ object TableFieldSchema {
    */
   @varargs
   def create(name: String,
-             `type`: TableFieldSchemaType,
-             mode: util.Optional[TableFieldSchemaMode],
-             fields: TableFieldSchema*) =
+      `type`: TableFieldSchemaType,
+      mode: util.Optional[TableFieldSchemaMode],
+      fields: TableFieldSchema*) =
     TableFieldSchema(name, `type`, mode.asScala, if (fields.nonEmpty) Some(fields.toList) else None)
 
   implicit val format: JsonFormat[TableFieldSchema] = lazyFormat(
-    jsonFormat(apply, "name", "type", "mode", "fields")
-  )
+    jsonFormat(apply, "name", "type", "mode", "fields"))
 }
 
 final case class TableFieldSchemaType private (value: String) extends StringEnum
@@ -350,8 +347,8 @@ object TableFieldSchemaMode {
  * @param totalItems the total number of tables in the dataset
  */
 final case class TableListResponse private (nextPageToken: Option[String],
-                                            tables: Option[Seq[Table]],
-                                            totalItems: Option[Int]) {
+    tables: Option[Seq[Table]],
+    totalItems: Option[Int]) {
 
   def getNextPageToken = nextPageToken.asJava
   def getTables = tables.map(_.asJava).asJava
@@ -377,8 +374,8 @@ object TableListResponse {
    * @return a [[TableListResponse]]
    */
   def createTableListResponse(nextPageToken: util.Optional[String],
-                              tables: util.Optional[util.List[Table]],
-                              totalItems: util.OptionalInt) =
+      tables: util.Optional[util.List[Table]],
+      totalItems: util.OptionalInt) =
     TableListResponse(nextPageToken.asScala, tables.asScala.map(_.asScala.toList), totalItems.asScala)
 
   implicit val format: RootJsonFormat[TableListResponse] = jsonFormat3(apply)

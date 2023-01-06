@@ -7,7 +7,7 @@ package akka.stream.alpakka.ftp.impl
 import akka.stream.alpakka.ftp.RemoteFileSettings
 import akka.stream.impl.Stages.DefaultAttributes.IODispatcher
 import akka.stream.stage.GraphStage
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.{ Attributes, Outlet, SourceShape }
 
 trait FtpGraphStage[FtpClient, S <: RemoteFileSettings, T] extends GraphStage[SourceShape[T]] {
   def name: String

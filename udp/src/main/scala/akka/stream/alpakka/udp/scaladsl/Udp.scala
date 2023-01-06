@@ -7,10 +7,10 @@ package akka.stream.alpakka.udp.scaladsl
 import java.net.InetSocketAddress
 
 import akka.NotUsed
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.io.Inet.SocketOption
 import akka.stream.alpakka.udp.Datagram
-import akka.stream.alpakka.udp.impl.{UdpBindFlow, UdpSendFlow}
+import akka.stream.alpakka.udp.impl.{ UdpBindFlow, UdpSendFlow }
 import akka.stream.scaladsl.Sink
 import akka.stream.scaladsl.Flow
 
@@ -48,8 +48,7 @@ object Udp {
    * @param system implicit actor system
    */
   def sendFlow(
-      options: Iterable[SocketOption]
-  )(implicit system: ClassicActorSystemProvider): Flow[Datagram, Datagram, NotUsed] =
+      options: Iterable[SocketOption])(implicit system: ClassicActorSystemProvider): Flow[Datagram, Datagram, NotUsed] =
     sendFlow(options, system.classicSystem)
 
   /**
@@ -87,8 +86,7 @@ object Udp {
    * @param system implicit actor system
    */
   def sendSink(options: Iterable[SocketOption])(
-      implicit system: ClassicActorSystemProvider
-  ): Sink[Datagram, NotUsed] = sendFlow(options).to(Sink.ignore)
+      implicit system: ClassicActorSystemProvider): Sink[Datagram, NotUsed] = sendFlow(options).to(Sink.ignore)
 
   /**
    * Creates a sink that will send all incoming [UdpMessage] messages to the remote address
@@ -109,8 +107,8 @@ object Udp {
    * @param system implicit actor system
    */
   def bindFlow(
-      localAddress: InetSocketAddress
-  )(implicit system: ClassicActorSystemProvider): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
+      localAddress: InetSocketAddress)(
+      implicit system: ClassicActorSystemProvider): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
     bindFlow(localAddress, system.classicSystem)
 
   /**
@@ -122,7 +120,7 @@ object Udp {
    * @param system the actor system
    */
   def bindFlow(localAddress: InetSocketAddress,
-               system: ActorSystem): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
+      system: ActorSystem): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
     Flow.fromGraph(new UdpBindFlow(localAddress)(system))
 
   /**
@@ -136,8 +134,8 @@ object Udp {
    */
   def bindFlow(
       localAddress: InetSocketAddress,
-      options: Iterable[SocketOption]
-  )(implicit system: ClassicActorSystemProvider): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
+      options: Iterable[SocketOption])(
+      implicit system: ClassicActorSystemProvider): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
     bindFlow(localAddress, options, system.classicSystem)
 
   /**
@@ -150,7 +148,7 @@ object Udp {
    * @param system the actor system
    */
   def bindFlow(localAddress: InetSocketAddress,
-               options: Iterable[SocketOption],
-               system: ActorSystem): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
+      options: Iterable[SocketOption],
+      system: ActorSystem): Flow[Datagram, Datagram, Future[InetSocketAddress]] =
     Flow.fromGraph(new UdpBindFlow(localAddress, options)(system))
 }

@@ -4,16 +4,17 @@
 
 package akka.stream.alpakka.csv.scaladsl
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.{ Charset, StandardCharsets }
 
 import akka.NotUsed
 import akka.stream.alpakka.csv.impl.CsvFormatter
-import akka.stream.scaladsl.{Flow, Source}
+import akka.stream.scaladsl.{ Flow, Source }
 import akka.util.ByteString
 
 import scala.collection.immutable
 
-/** Provides CSV formatting flows that convert a sequence of String into their CSV representation
+/**
+ * Provides CSV formatting flows that convert a sequence of String into their CSV representation
  * in [[akka.util.ByteString]].
  */
 object CsvFormatting {
@@ -39,8 +40,7 @@ object CsvFormatting {
       endOfLine: String = "\r\n",
       quotingStyle: CsvQuotingStyle = CsvQuotingStyle.Required,
       charset: Charset = StandardCharsets.UTF_8,
-      byteOrderMark: Option[ByteString] = None
-  ): Flow[T, ByteString, NotUsed] = {
+      byteOrderMark: Option[ByteString] = None): Flow[T, ByteString, NotUsed] = {
     val formatter =
       new CsvFormatter(delimiter, quoteChar, escapeChar, endOfLine, quotingStyle, charset)
     byteOrderMark.fold {

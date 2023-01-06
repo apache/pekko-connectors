@@ -29,8 +29,7 @@ private[auth] object GoogleComputeMetadata {
 
   def getAccessToken()(
       implicit mat: Materializer,
-      clock: Clock
-  ): Future[AccessToken] = {
+      clock: Clock): Future[AccessToken] = {
     import SprayJsonSupport._
     import mat.executionContext
     implicit val system = mat.system
@@ -41,8 +40,7 @@ private[auth] object GoogleComputeMetadata {
   }
 
   def getProjectId()(
-      implicit mat: Materializer
-  ): Future[String] = {
+      implicit mat: Materializer): Future[String] = {
     import mat.executionContext
     implicit val system = mat.system
     for {

@@ -30,8 +30,7 @@ final class NamedQueueSourceSettings private (
     val exclusive: Boolean = false,
     val ackRequired: Boolean = true,
     val consumerTag: String = "default",
-    val arguments: Map[String, AnyRef] = Map.empty
-) extends AmqpSourceSettings {
+    val arguments: Map[String, AnyRef] = Map.empty) extends AmqpSourceSettings {
 
   def withDeclaration(declaration: Declaration): NamedQueueSourceSettings =
     copy(declarations = immutable.Seq(declaration))
@@ -71,11 +70,11 @@ final class NamedQueueSourceSettings private (
     copy(arguments = arguments.asScala.toMap)
 
   private def copy(declarations: immutable.Seq[Declaration] = declarations,
-                   noLocal: Boolean = noLocal,
-                   exclusive: Boolean = exclusive,
-                   ackRequired: Boolean = ackRequired,
-                   consumerTag: String = consumerTag,
-                   arguments: Map[String, AnyRef] = arguments) =
+      noLocal: Boolean = noLocal,
+      exclusive: Boolean = exclusive,
+      ackRequired: Boolean = ackRequired,
+      consumerTag: String = consumerTag,
+      arguments: Map[String, AnyRef] = arguments) =
     new NamedQueueSourceSettings(
       connectionProvider,
       queue,
@@ -84,8 +83,7 @@ final class NamedQueueSourceSettings private (
       exclusive = exclusive,
       ackRequired = ackRequired,
       consumerTag = consumerTag,
-      arguments = arguments
-    )
+      arguments = arguments)
 
   override def toString: String =
     "NamedQueueSourceSettings(" +
@@ -115,8 +113,7 @@ final class TemporaryQueueSourceSettings private (
     val connectionProvider: AmqpConnectionProvider,
     val exchange: String,
     val declarations: immutable.Seq[Declaration] = Nil,
-    val routingKey: Option[String] = None
-) extends AmqpSourceSettings {
+    val routingKey: Option[String] = None) extends AmqpSourceSettings {
 
   def withDeclaration(declaration: Declaration): TemporaryQueueSourceSettings =
     copy(declarations = immutable.Seq(declaration))
@@ -157,8 +154,7 @@ object TemporaryQueueSourceSettings {
 
 final class AmqpReplyToSinkSettings private (
     val connectionProvider: AmqpConnectionProvider,
-    val failIfReplyToMissing: Boolean = true
-) extends AmqpConnectorSettings {
+    val failIfReplyToMissing: Boolean = true) extends AmqpConnectorSettings {
   override final val declarations = Nil
 
   def withFailIfReplyToMissing(failIfReplyToMissing: Boolean): AmqpReplyToSinkSettings =
@@ -191,8 +187,7 @@ final class AmqpWriteSettings private (
     val routingKey: Option[String] = None,
     val declarations: immutable.Seq[Declaration] = Nil,
     val bufferSize: Int = 10,
-    val confirmationTimeout: FiniteDuration = 100.millis
-) extends AmqpConnectorSettings {
+    val confirmationTimeout: FiniteDuration = 100.millis) extends AmqpConnectorSettings {
 
   def withExchange(exchange: String): AmqpWriteSettings =
     copy(exchange = Some(exchange))
@@ -225,11 +220,11 @@ final class AmqpWriteSettings private (
     copy(confirmationTimeout = confirmationTimeout.asScala)
 
   private def copy(connectionProvider: AmqpConnectionProvider = connectionProvider,
-                   exchange: Option[String] = exchange,
-                   routingKey: Option[String] = routingKey,
-                   declarations: immutable.Seq[Declaration] = declarations,
-                   bufferSize: Int = bufferSize,
-                   confirmationTimeout: FiniteDuration = confirmationTimeout) =
+      exchange: Option[String] = exchange,
+      routingKey: Option[String] = routingKey,
+      declarations: immutable.Seq[Declaration] = declarations,
+      bufferSize: Int = bufferSize,
+      confirmationTimeout: FiniteDuration = confirmationTimeout) =
     new AmqpWriteSettings(connectionProvider, exchange, routingKey, declarations, bufferSize, confirmationTimeout)
 
   override def toString: String =
@@ -261,8 +256,7 @@ final class QueueDeclaration private (
     val durable: Boolean = false,
     val exclusive: Boolean = false,
     val autoDelete: Boolean = false,
-    val arguments: Map[String, AnyRef] = Map.empty
-) extends Declaration {
+    val arguments: Map[String, AnyRef] = Map.empty) extends Declaration {
 
   def withDurable(durable: Boolean): QueueDeclaration =
     copy(durable = durable)
@@ -283,10 +277,10 @@ final class QueueDeclaration private (
     copy(arguments = arguments.asScala.toMap)
 
   private def copy(name: String = name,
-                   durable: Boolean = durable,
-                   exclusive: Boolean = exclusive,
-                   autoDelete: Boolean = autoDelete,
-                   arguments: Map[String, AnyRef] = arguments) =
+      durable: Boolean = durable,
+      exclusive: Boolean = exclusive,
+      autoDelete: Boolean = autoDelete,
+      arguments: Map[String, AnyRef] = arguments) =
     new QueueDeclaration(name, durable, exclusive, autoDelete, arguments)
 
   override def toString: String =
@@ -312,8 +306,7 @@ final class BindingDeclaration private (
     val queue: String,
     val exchange: String,
     val routingKey: Option[String] = None,
-    val arguments: Map[String, AnyRef] = Map.empty
-) extends Declaration {
+    val arguments: Map[String, AnyRef] = Map.empty) extends Declaration {
 
   def withRoutingKey(routingKey: String): BindingDeclaration = copy(routingKey = Some(routingKey))
 
@@ -355,8 +348,7 @@ final class ExchangeDeclaration private (
     val durable: Boolean = false,
     val autoDelete: Boolean = false,
     val internal: Boolean = false,
-    val arguments: Map[String, AnyRef] = Map.empty
-) extends Declaration {
+    val arguments: Map[String, AnyRef] = Map.empty) extends Declaration {
 
   def withDurable(durable: Boolean): ExchangeDeclaration = copy(durable = durable)
 
@@ -374,9 +366,9 @@ final class ExchangeDeclaration private (
     copy(arguments = arguments.asScala.toMap)
 
   private def copy(durable: Boolean = durable,
-                   autoDelete: Boolean = autoDelete,
-                   internal: Boolean = internal,
-                   arguments: Map[String, AnyRef] = arguments) =
+      autoDelete: Boolean = autoDelete,
+      internal: Boolean = internal,
+      arguments: Map[String, AnyRef] = arguments) =
     new ExchangeDeclaration(name, exchangeType, durable, autoDelete, internal, arguments)
 
   override def toString: String =

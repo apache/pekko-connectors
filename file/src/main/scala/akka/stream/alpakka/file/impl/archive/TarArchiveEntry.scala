@@ -68,8 +68,7 @@ import akka.util.ByteString
       // [100, 108)
       ownerIdLength +
       // [116, 124)
-      groupIdLength
-    )
+      groupIdLength)
   }
 
   private val fixedData2 = {
@@ -83,8 +82,7 @@ import akka.util.ByteString
   private val fixedData3 = {
     empty(
       // [157, 257)
-      linkFileNameLength
-    ) ++
+      linkFileNameLength) ++
     // [257, 263)
     ByteString("ustar") ++
     empty(
@@ -98,13 +96,12 @@ import akka.util.ByteString
       // [329, 337)
       deviceMajorNumberLength +
       // [337, 345)
-      deviceMinorNumberLength
-    )
+      deviceMinorNumberLength)
   }
 
   private def padded(bytes: ByteString, targetSize: Int): ByteString = {
     require(bytes.size <= targetSize,
-            s"the padded data is ${bytes.size} bytes, which does not fit into  $targetSize bytes")
+      s"the padded data is ${bytes.size} bytes, which does not fit into  $targetSize bytes")
     if (bytes.size < targetSize) bytes ++ empty(targetSize - bytes.size)
     else bytes
   }
@@ -122,22 +119,20 @@ import akka.util.ByteString
     val size = parseUnsignedLong(fileSizeString, 8)
     val lastModificationString =
       getString(bs,
-                fileNameLength + fileModeLength + ownerIdLength + groupIdLength + fileSizeLength,
-                lastModificationLength)
+        fileNameLength + fileModeLength + ownerIdLength + groupIdLength + fileSizeLength,
+        lastModificationLength)
     val lastModification = Instant.ofEpochSecond(parseUnsignedLong(lastModificationString, 8))
     val linkIndicatorByte = {
       val tmp = bs(
         fileNameLength + fileModeLength + ownerIdLength + groupIdLength + fileSizeLength +
-        lastModificationLength + headerChecksumLength
-      )
+        lastModificationLength + headerChecksumLength)
       if (tmp == 0) TarArchiveMetadata.linkIndicatorNormal else tmp
     }
     val fileNamePrefix = getString(
       bs,
       fileNameLength + fileModeLength + ownerIdLength + groupIdLength + fileSizeLength +
       lastModificationLength + headerChecksumLength + linkIndicatorLength + linkFileNameLength + ustarIndicatorLength + ustarVersionLength + ownerNameLength + groupNameLength + deviceMajorNumberLength + deviceMinorNumberLength,
-      fileNamePrefixLength
-    )
+      fileNamePrefixLength)
     TarArchiveMetadata(fileNamePrefix, filename, size, lastModification, linkIndicatorByte)
   }
 
@@ -163,8 +158,7 @@ import akka.util.ByteString
     val withoutChecksum = headerBytesWithoutChecksum
     val checksumLong = withoutChecksum.foldLeft(0L)((sum, byte) => sum + byte)
     val checksumBytes = ByteString(toOctalString(checksumLong).reverse.padTo(6, '0').take(6).reverse) ++ ByteString(
-        new Array[Byte](1) ++ ByteString(" ")
-      )
+      new Array[Byte](1) ++ ByteString(" "))
     val withChecksum = withoutChecksum.take(148) ++ checksumBytes ++ withoutChecksum.drop(148 + 8)
     withChecksum.compact
   }
@@ -186,8 +180,7 @@ import akka.util.ByteString
     padded(
       fileNameBytes ++ fixedData1 ++ fileSizeBytes ++ lastModificationBytes ++ fixedData2 ++
       ByteString(metadata.linkIndicatorByte) ++ fixedData3 ++ fileNamePrefixBytes,
-      headerLength
-    )
+      headerLength)
   }
 
 }

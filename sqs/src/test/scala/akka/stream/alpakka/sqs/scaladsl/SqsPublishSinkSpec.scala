@@ -5,7 +5,7 @@
 package akka.stream.alpakka.sqs.scaladsl
 
 import java.util.UUID
-import java.util.concurrent.{CompletableFuture, TimeUnit}
+import java.util.concurrent.{ CompletableFuture, TimeUnit }
 import java.util.function.Supplier
 
 import akka.Done
@@ -46,8 +46,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
       .thenReturn(
         CompletableFuture.supplyAsync[SendMessageResponse](new Supplier[SendMessageResponse] {
           override def get(): SendMessageResponse = throw new RuntimeException("Fake client error")
-        })
-      )
+        }))
 
     val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink("notused"))(Keep.both).run()
     probe.sendNext("notused").sendComplete()
@@ -126,19 +125,15 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
           SendMessageBatchResponse
             .builder()
             .successful(
-              SendMessageBatchResultEntry.builder().id("0").messageId(UUID.randomUUID().toString).build()
-            )
-            .build()
-        )
-      )
+              SendMessageBatchResultEntry.builder().id("0").messageId(UUID.randomUUID().toString).build())
+            .build()))
 
     val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused"))(Keep.both).run()
     probe.sendNext("notused").sendComplete()
     Await.result(future, 1.second) shouldBe Done
 
     verify(sqsClient, times(1)).sendMessageBatch(
-      any[SendMessageBatchRequest]()
-    )
+      any[SendMessageBatchRequest]())
   }
 
   it should "send all messages in batches of given size" in {
@@ -154,11 +149,8 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
               SendMessageBatchResultEntry.builder().id("1").messageId(UUID.randomUUID().toString).build(),
               SendMessageBatchResultEntry.builder().id("2").messageId(UUID.randomUUID().toString).build(),
               SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build(),
-              SendMessageBatchResultEntry.builder().id("4").messageId(UUID.randomUUID().toString).build()
-            )
-            .build()
-        )
-      )
+              SendMessageBatchResultEntry.builder().id("4").messageId(UUID.randomUUID().toString).build())
+            .build()))
 
     val settings = SqsPublishGroupedSettings.create().withMaxBatchSize(5)
 
@@ -179,8 +171,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     Await.result(future, 1.second) shouldBe Done
 
     verify(sqsClient, times(2)).sendMessageBatch(
-      any[SendMessageBatchRequest]()
-    )
+      any[SendMessageBatchRequest]())
   }
 
   it should "fail if any of the messages in batch failed" in {
@@ -195,12 +186,9 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
               SendMessageBatchResultEntry.builder().id("0").messageId(UUID.randomUUID().toString).build(),
               SendMessageBatchResultEntry.builder().id("1").messageId(UUID.randomUUID().toString).build(),
               SendMessageBatchResultEntry.builder().id("2").messageId(UUID.randomUUID().toString).build(),
-              SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build()
-            )
+              SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build())
             .failed(BatchResultErrorEntry.builder().id("4").message("a very weird error just happened").build())
-            .build()
-        )
-      )
+            .build()))
 
     val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused"))(Keep.both).run()
     probe
@@ -216,19 +204,16 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     }
 
     verify(sqsClient, times(1)).sendMessageBatch(
-      any[SendMessageBatchRequest]()
-    )
+      any[SendMessageBatchRequest]())
   }
 
   it should "fail if whole batch is failed" in {
     implicit val sqsClient: SqsAsyncClient = mock[SqsAsyncClient]
     when(
-      sqsClient.sendMessageBatch(any[SendMessageBatchRequest]())
-    ).thenReturn(
+      sqsClient.sendMessageBatch(any[SendMessageBatchRequest]())).thenReturn(
       CompletableFuture.supplyAsync[SendMessageBatchResponse](new Supplier[SendMessageBatchResponse] {
         override def get(): SendMessageBatchResponse = throw new RuntimeException("Fake client error")
-      })
-    )
+      }))
 
     val settings = SqsPublishGroupedSettings().withMaxBatchSize(5)
     val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused", settings))(Keep.both).run()
@@ -245,8 +230,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     }
 
     verify(sqsClient, times(1)).sendMessageBatch(
-      any[SendMessageBatchRequest]()
-    )
+      any[SendMessageBatchRequest]())
   }
 
   it should "send all batches of messages" in {
@@ -261,11 +245,8 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
               SendMessageBatchResultEntry.builder().id("0").messageId(UUID.randomUUID().toString).build(),
               SendMessageBatchResultEntry.builder().id("1").messageId(UUID.randomUUID().toString).build(),
               SendMessageBatchResultEntry.builder().id("2").messageId(UUID.randomUUID().toString).build(),
-              SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build()
-            )
-            .build()
-        )
-      )
+              SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build())
+            .build()))
 
     val (probe, future) = TestSource.probe[Seq[String]].toMat(SqsPublishSink.batch("notused"))(Keep.both).run()
     probe
@@ -274,22 +255,17 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
           "notused - 0",
           "notused - 1",
           "notused - 2",
-          "notused - 3"
-        )
-      )
+          "notused - 3"))
       .sendNext(
         Seq(
           "notused - 4",
           "notused - 5",
           "notused - 6",
-          "notused - 7"
-        )
-      )
+          "notused - 7"))
       .sendComplete()
     Await.result(future, 1.second) shouldBe Done
 
     verify(sqsClient, times(2)).sendMessageBatch(
-      any[SendMessageBatchRequest]()
-    )
+      any[SendMessageBatchRequest]())
   }
 }

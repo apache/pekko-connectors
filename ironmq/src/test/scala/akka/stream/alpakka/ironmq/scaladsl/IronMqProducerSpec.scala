@@ -5,12 +5,12 @@
 package akka.stream.alpakka.ironmq.scaladsl
 
 import akka.dispatch.ExecutionContexts
-import akka.stream.alpakka.ironmq.{IronMqSettings, IronMqSpec, PushMessage}
-import akka.stream.scaladsl.{Flow, Sink, Source}
-import akka.{Done, NotUsed}
+import akka.stream.alpakka.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
+import akka.stream.scaladsl.{ Flow, Sink, Source }
+import akka.{ Done, NotUsed }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 class IronMqProducerSpec extends IronMqSpec {
 
@@ -68,15 +68,13 @@ class IronMqProducerSpec extends IronMqSpec {
       val committables = List(
         new MockCommittable,
         new MockCommittable,
-        new MockCommittable
-      )
+        new MockCommittable)
 
       whenReady(
         messages
           .zip(Source(committables))
           .via(atLeastOnceFlow(queue, settings, Flow[Committable].mapAsync(1)(_.commit())))
-          .runWith(Sink.ignore)
-      ) { _ =>
+          .runWith(Sink.ignore)) { _ =>
         committables.forall(_.committed) shouldBe true
       }
     }

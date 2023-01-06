@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.udp.impl
 
-import akka.actor.{ActorRef, ActorSystem, PoisonPill}
+import akka.actor.{ ActorRef, ActorSystem, PoisonPill }
 import akka.annotation.InternalApi
-import akka.io.{IO, Udp}
+import akka.io.{ IO, Udp }
 import akka.io.Inet.SocketOption
 import akka.stream.alpakka.udp.Datagram
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.stream._
 
 import scala.collection.immutable.Iterable
@@ -20,9 +20,8 @@ import scala.collection.immutable.Iterable
  * is passed-through to the output for possible further processing.
  */
 @InternalApi private[udp] final class UdpSendLogic(val shape: FlowShape[Datagram, Datagram],
-                                                   options: Iterable[SocketOption])(
-    implicit val system: ActorSystem
-) extends GraphStageLogic(shape) {
+    options: Iterable[SocketOption])(
+    implicit val system: ActorSystem) extends GraphStageLogic(shape) {
 
   implicit def self: ActorRef = stageActor.ref
 
@@ -59,20 +58,17 @@ import scala.collection.immutable.Iterable
         simpleSender ! Udp.Send(msg.data, msg.remote)
         push(out, msg)
       }
-    }
-  )
+    })
 
   setHandler(
     out,
     new OutHandler {
       override def onPull(): Unit = if (simpleSender != null) pull(in)
-    }
-  )
+    })
 }
 
 @InternalApi private[udp] final class UdpSendFlow(options: Iterable[SocketOption] = Nil)(
-    implicit val system: ActorSystem
-) extends GraphStage[FlowShape[Datagram, Datagram]] {
+    implicit val system: ActorSystem) extends GraphStage[FlowShape[Datagram, Datagram]] {
 
   val in: Inlet[Datagram] = Inlet("UdpSendFlow.in")
   val out: Outlet[Datagram] = Outlet("UdpSendFlow.in")

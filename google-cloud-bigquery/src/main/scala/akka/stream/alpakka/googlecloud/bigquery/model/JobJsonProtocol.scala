@@ -5,8 +5,8 @@
 package akka.stream.alpakka.googlecloud.bigquery.model
 
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
-import spray.json.{JsonFormat, RootJsonFormat}
+import com.fasterxml.jackson.annotation.{ JsonCreator, JsonProperty }
+import spray.json.{ JsonFormat, RootJsonFormat }
 
 import java.util
 
@@ -24,8 +24,8 @@ import scala.compat.java8.OptionConverters._
  * @param status the status of this job
  */
 final case class Job private (configuration: Option[JobConfiguration],
-                              jobReference: Option[JobReference],
-                              status: Option[JobStatus]) {
+    jobReference: Option[JobReference],
+    status: Option[JobStatus]) {
 
   def getConfiguration = configuration.asJava
   def getJobReference = jobReference.asJava
@@ -59,8 +59,8 @@ object Job {
    * @return a [[Job]]
    */
   def create(configuration: util.Optional[JobConfiguration],
-             jobReference: util.Optional[JobReference],
-             status: util.Optional[JobStatus]) =
+      jobReference: util.Optional[JobReference],
+      status: util.Optional[JobStatus]) =
     Job(configuration.asScala, jobReference.asScala, status.asScala)
 
   implicit val format: RootJsonFormat[Job] = jsonFormat3(apply)
@@ -135,10 +135,10 @@ object JobConfiguration {
  * @param sourceFormat the format of the data files
  */
 final case class JobConfigurationLoad private (schema: Option[TableSchema],
-                                               destinationTable: Option[TableReference],
-                                               createDisposition: Option[CreateDisposition],
-                                               writeDisposition: Option[WriteDisposition],
-                                               sourceFormat: Option[SourceFormat]) {
+    destinationTable: Option[TableReference],
+    createDisposition: Option[CreateDisposition],
+    writeDisposition: Option[WriteDisposition],
+    sourceFormat: Option[SourceFormat]) {
 
   def getSchema = schema.asJava
   def getDestinationTable = destinationTable.asJava
@@ -186,17 +186,16 @@ object JobConfigurationLoad {
    * @return a [[JobConfigurationLoad]]
    */
   def create(schema: util.Optional[TableSchema],
-             destinationTable: util.Optional[TableReference],
-             createDisposition: util.Optional[CreateDisposition],
-             writeDisposition: util.Optional[WriteDisposition],
-             sourceFormat: util.Optional[SourceFormat]) =
+      destinationTable: util.Optional[TableReference],
+      createDisposition: util.Optional[CreateDisposition],
+      writeDisposition: util.Optional[WriteDisposition],
+      sourceFormat: util.Optional[SourceFormat]) =
     JobConfigurationLoad(
       schema.asScala,
       destinationTable.asScala,
       createDisposition.asScala,
       writeDisposition.asScala,
-      sourceFormat.asScala
-    )
+      sourceFormat.asScala)
 
   implicit val configurationLoadFormat: JsonFormat[JobConfigurationLoad] = jsonFormat5(apply)
 }
@@ -265,8 +264,8 @@ final case class JobReference private (projectId: Option[String], jobId: Option[
   @nowarn("msg=never used")
   @JsonCreator
   private def this(@JsonProperty("projectId") projectId: String,
-                   @JsonProperty("jobId") jobId: String,
-                   @JsonProperty("location") location: String) =
+      @JsonProperty("jobId") jobId: String,
+      @JsonProperty("location") location: String) =
     this(Option(projectId), Option(jobId), Option(location))
 
   def getProjectId = projectId.asJava

@@ -8,17 +8,17 @@ import java.nio.ByteBuffer
 
 import akka.NotUsed
 import akka.actor.ActorSystem
-import akka.stream.alpakka.kinesis.scaladsl.{KinesisFlow, KinesisSink, KinesisSource}
-import akka.stream.alpakka.kinesis.{KinesisFlowSettings, ShardIterator, ShardSettings}
-import akka.stream.scaladsl.{Flow, FlowWithContext, Sink, Source}
+import akka.stream.alpakka.kinesis.scaladsl.{ KinesisFlow, KinesisSink, KinesisSource }
+import akka.stream.alpakka.kinesis.{ KinesisFlowSettings, ShardIterator, ShardSettings }
+import akka.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
 import akka.util.ByteString
-import software.amazon.awssdk.services.kinesis.model.{PutRecordsRequestEntry, PutRecordsResultEntry, Record}
+import software.amazon.awssdk.services.kinesis.model.{ PutRecordsRequestEntry, PutRecordsResultEntry, Record }
 
 import scala.concurrent.duration._
 
 object KinesisSnippets {
 
-  //#init-client
+  // #init-client
   import com.github.matsluni.akkahttpspi.AkkaHttpClient
   import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 
@@ -34,31 +34,30 @@ object KinesisSnippets {
       .build()
 
   system.registerOnTermination(amazonKinesisAsync.close())
-  //#init-client
+  // #init-client
 
-  //#source-settings
+  // #source-settings
 
   val settings =
     ShardSettings(streamName = "myStreamName", shardId = "shard-id")
       .withRefreshInterval(1.second)
       .withLimit(500)
       .withShardIterator(ShardIterator.TrimHorizon)
-  //#source-settings
+  // #source-settings
 
-  //#source-single
+  // #source-single
   val source: Source[software.amazon.awssdk.services.kinesis.model.Record, NotUsed] =
     KinesisSource.basic(settings, amazonKinesisAsync)
-  //#source-single
+  // #source-single
 
-  //#source-list
+  // #source-list
   val mergeSettings = List(
     ShardSettings("myStreamName", "shard-id-1"),
-    ShardSettings("myStreamName", "shard-id-2")
-  )
+    ShardSettings("myStreamName", "shard-id-2"))
   val mergedSource: Source[Record, NotUsed] = KinesisSource.basicMerge(mergeSettings, amazonKinesisAsync)
-  //#source-list
+  // #source-list
 
-  //#flow-settings
+  // #flow-settings
   val flowSettings = KinesisFlowSettings
     .create()
     .withParallelism(1)
@@ -69,9 +68,9 @@ object KinesisSnippets {
   val defaultFlowSettings = KinesisFlowSettings.Defaults
 
   val fourShardFlowSettings = KinesisFlowSettings.byNumberOfShards(4)
-  //#flow-settings
+  // #flow-settings
 
-  //#flow-sink
+  // #flow-sink
   val flow1: Flow[PutRecordsRequestEntry, PutRecordsResultEntry, NotUsed] = KinesisFlow("myStreamName")
 
   val flow2: Flow[PutRecordsRequestEntry, PutRecordsResultEntry, NotUsed] = KinesisFlow("myStreamName", flowSettings)
@@ -92,9 +91,9 @@ object KinesisSnippets {
   val sink2: Sink[PutRecordsRequestEntry, NotUsed] = KinesisSink("myStreamName", flowSettings)
   val sink3: Sink[(String, ByteString), NotUsed] = KinesisSink.byPartitionAndBytes("myStreamName")
   val sink4: Sink[(String, ByteBuffer), NotUsed] = KinesisSink.byPartitionAndData("myStreamName")
-  //#flow-sink
+  // #flow-sink
 
-  //#error-handling
+  // #error-handling
   val flowWithErrors: Flow[PutRecordsRequestEntry, PutRecordsResultEntry, NotUsed] = KinesisFlow("myStreamName")
     .map { response =>
       if (response.errorCode() ne null) {
@@ -103,6 +102,6 @@ object KinesisSnippets {
 
       response
     }
-  //#error-handling
+  // #error-handling
 
 }

@@ -16,18 +16,15 @@ final class ShardSettings private (
     val startingSequenceNumber: Option[String],
     val atTimestamp: Option[java.time.Instant],
     val refreshInterval: scala.concurrent.duration.FiniteDuration,
-    val limit: Int
-) {
+    val limit: Int) {
   require(
     limit >= 1 && limit <= 10000,
-    "Limit must be between 0 and 10000. See: http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html"
-  )
+    "Limit must be between 0 and 10000. See: http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html")
   shardIteratorType match {
     case ShardIteratorType.AFTER_SEQUENCE_NUMBER | ShardIteratorType.AT_SEQUENCE_NUMBER =>
       require(
         startingSequenceNumber.nonEmpty,
-        "a starting sequence number must be set (try using just `withStartingSequenceNumber` or `withStartingAfterSequenceNumber`)"
-      )
+        "a starting sequence number must be set (try using just `withStartingSequenceNumber` or `withStartingAfterSequenceNumber`)")
     case ShardIteratorType.AT_TIMESTAMP =>
       require(atTimestamp.nonEmpty, "a timestamp must be set (try using just `withAtTimestamp`)")
     case _ => ()
@@ -39,8 +36,7 @@ final class ShardSettings private (
   def withShardIterator(shardIterator: ShardIterator): ShardSettings = copy(
     shardIteratorType = shardIterator.shardIteratorType,
     atTimestamp = shardIterator.timestamp,
-    startingSequenceNumber = shardIterator.startingSequenceNumber
-  )
+    startingSequenceNumber = shardIterator.startingSequenceNumber)
 
   /** Scala API */
   def withRefreshInterval(value: scala.concurrent.duration.FiniteDuration): ShardSettings =
@@ -57,16 +53,14 @@ final class ShardSettings private (
       startingSequenceNumber: Option[String] = startingSequenceNumber,
       atTimestamp: Option[java.time.Instant] = atTimestamp,
       refreshInterval: scala.concurrent.duration.FiniteDuration = refreshInterval,
-      limit: Int = limit
-  ): ShardSettings = new ShardSettings(
+      limit: Int = limit): ShardSettings = new ShardSettings(
     streamName = streamName,
     shardId = shardId,
     shardIteratorType = shardIteratorType,
     startingSequenceNumber = startingSequenceNumber,
     atTimestamp = atTimestamp,
     refreshInterval = refreshInterval,
-    limit = limit
-  )
+    limit = limit)
 
   override def toString =
     "ShardSettings(" +
@@ -96,8 +90,7 @@ object ShardSettings {
       startingSequenceNumber = shardIterator.startingSequenceNumber,
       atTimestamp = shardIterator.timestamp,
       refreshInterval = 1.second,
-      limit = 500
-    )
+      limit = 500)
 
   /**
    * Java API: Create settings using the default configuration

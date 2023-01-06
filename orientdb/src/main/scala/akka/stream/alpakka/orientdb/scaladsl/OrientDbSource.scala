@@ -19,30 +19,26 @@ object OrientDbSource {
    * Read `ODocument`s from `className` or by `query`.
    */
   def apply(className: String,
-            settings: OrientDbSourceSettings,
-            query: Option[String] = None): Source[OrientDbReadResult[ODocument], NotUsed] =
+      settings: OrientDbSourceSettings,
+      query: Option[String] = None): Source[OrientDbReadResult[ODocument], NotUsed] =
     Source.fromGraph(
       new OrientDbSourceStage(
         className,
         query,
-        settings
-      )
-    )
+        settings))
 
   /**
    * Read elements of `T` from `className` or by `query`.
    */
   def typed[T](className: String,
-               settings: OrientDbSourceSettings,
-               clazz: Class[T],
-               query: String = null): Source[OrientDbReadResult[T], NotUsed] =
+      settings: OrientDbSourceSettings,
+      clazz: Class[T],
+      query: String = null): Source[OrientDbReadResult[T], NotUsed] =
     Source.fromGraph(
       new OrientDbSourceStage[T](
         className,
         Option(query),
         settings,
-        clazz = Some(clazz)
-      )
-    )
+        clazz = Some(clazz)))
 
 }

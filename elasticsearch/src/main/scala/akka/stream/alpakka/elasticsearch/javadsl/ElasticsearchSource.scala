@@ -6,12 +6,12 @@ package akka.stream.alpakka.elasticsearch.javadsl
 
 import akka.NotUsed
 import akka.actor.ActorSystem
-import akka.http.scaladsl.{Http, HttpExt}
-import akka.stream.alpakka.elasticsearch.{impl, _}
+import akka.http.scaladsl.{ Http, HttpExt }
+import akka.stream.alpakka.elasticsearch.{ impl, _ }
 import akka.stream.javadsl.Source
-import akka.stream.{Attributes, Materializer}
+import akka.stream.{ Attributes, Materializer }
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.{ArrayNode, NumericNode}
+import com.fasterxml.jackson.databind.node.{ ArrayNode, NumericNode }
 
 import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
@@ -26,8 +26,8 @@ object ElasticsearchSource {
    * Using default objectMapper
    */
   def create(elasticsearchParams: ElasticsearchParams,
-             query: String,
-             settings: SourceSettingsBase[_, _]): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
+      query: String,
+      settings: SourceSettingsBase[_, _]): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
     create(elasticsearchParams, query, settings, new ObjectMapper())
 
   /**
@@ -35,9 +35,9 @@ object ElasticsearchSource {
    * Using custom objectMapper
    */
   def create(elasticsearchParams: ElasticsearchParams,
-             query: String,
-             settings: SourceSettingsBase[_, _],
-             objectMapper: ObjectMapper): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
+      query: String,
+      settings: SourceSettingsBase[_, _],
+      objectMapper: ObjectMapper): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
         {
@@ -51,9 +51,7 @@ object ElasticsearchSource {
                 elasticsearchParams,
                 Map("query" -> query),
                 settings,
-                new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])
-              )
-            )
+                new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])))
         }
       }
       .mapMaterializedValue(_ => NotUsed)
@@ -69,9 +67,9 @@ object ElasticsearchSource {
    * searchParams.put("_source", "[\"fieldToInclude\", \"anotherFieldToInclude\"]");
    */
   def create(elasticsearchParams: ElasticsearchParams,
-             searchParams: java.util.Map[String, String],
-             settings: SourceSettingsBase[_, _],
-             objectMapper: ObjectMapper): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
+      searchParams: java.util.Map[String, String],
+      settings: SourceSettingsBase[_, _],
+      objectMapper: ObjectMapper): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
         {
@@ -84,9 +82,7 @@ object ElasticsearchSource {
               elasticsearchParams,
               searchParams.asScala.toMap,
               settings,
-              new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])
-            )
-          )
+              new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])))
         }
       }
       .mapMaterializedValue(_ => NotUsed)
@@ -96,9 +92,9 @@ object ElasticsearchSource {
    * Using default objectMapper
    */
   def typed[T](elasticsearchParams: ElasticsearchParams,
-               query: String,
-               settings: SourceSettingsBase[_, _],
-               clazz: Class[T]): Source[ReadResult[T], NotUsed] =
+      query: String,
+      settings: SourceSettingsBase[_, _],
+      clazz: Class[T]): Source[ReadResult[T], NotUsed] =
     typed[T](elasticsearchParams, query, settings, clazz, new ObjectMapper())
 
   /**
@@ -106,10 +102,10 @@ object ElasticsearchSource {
    * Using custom objectMapper
    */
   def typed[T](elasticsearchParams: ElasticsearchParams,
-               query: String,
-               settings: SourceSettingsBase[_, _],
-               clazz: Class[T],
-               objectMapper: ObjectMapper): Source[ReadResult[T], NotUsed] =
+      query: String,
+      settings: SourceSettingsBase[_, _],
+      clazz: Class[T],
+      objectMapper: ObjectMapper): Source[ReadResult[T], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
         {
@@ -122,9 +118,7 @@ object ElasticsearchSource {
               elasticsearchParams,
               Map("query" -> query),
               settings,
-              new JacksonReader[T](objectMapper, clazz)
-            )
-          )
+              new JacksonReader[T](objectMapper, clazz)))
         }
       }
       .mapMaterializedValue(_ => NotUsed)
@@ -140,10 +134,10 @@ object ElasticsearchSource {
    * searchParams.put("_source", "[\"fieldToInclude\", \"anotherFieldToInclude\"]");
    */
   def typed[T](elasticsearchParams: ElasticsearchParams,
-               searchParams: java.util.Map[String, String],
-               settings: SourceSettingsBase[_, _],
-               clazz: Class[T],
-               objectMapper: ObjectMapper): Source[ReadResult[T], NotUsed] =
+      searchParams: java.util.Map[String, String],
+      settings: SourceSettingsBase[_, _],
+      clazz: Class[T],
+      objectMapper: ObjectMapper): Source[ReadResult[T], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
         {
@@ -156,9 +150,7 @@ object ElasticsearchSource {
               elasticsearchParams,
               searchParams.asScala.toMap,
               settings,
-              new JacksonReader[T](objectMapper, clazz)
-            )
-          )
+              new JacksonReader[T](objectMapper, clazz)))
         }
       }
       .mapMaterializedValue(_ => NotUsed)
@@ -179,7 +171,7 @@ object ElasticsearchSource {
           val source = element.get("_source")
           val version: Option[Long] = element.get("_version") match {
             case n: NumericNode => Some(n.asLong())
-            case _ => None
+            case _              => None
           }
 
           new ReadResult[T](id, mapper.treeToValue(source, clazz), version)

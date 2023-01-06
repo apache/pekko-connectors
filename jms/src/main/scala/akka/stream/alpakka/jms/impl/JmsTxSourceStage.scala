@@ -5,12 +5,12 @@
 package akka.stream.alpakka.jms.impl
 
 import akka.annotation.InternalApi
-import akka.stream.alpakka.jms.{AcknowledgeMode, Destination, JmsConsumerSettings, JmsTxAckTimeout, TxEnvelope}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue}
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.alpakka.jms.{ AcknowledgeMode, Destination, JmsConsumerSettings, JmsTxAckTimeout, TxEnvelope }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import javax.jms
 
-import scala.concurrent.{Await, TimeoutException}
+import scala.concurrent.{ Await, TimeoutException }
 
 /**
  * Internal API.
@@ -26,8 +26,7 @@ private[jms] final class JmsTxSourceStage(settings: JmsConsumerSettings, destina
   override protected def initialAttributes: Attributes = Attributes.name("JmsTxConsumer")
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, JmsConsumerMatValue) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, JmsConsumerMatValue) = {
     val logic = new JmsTxSourceStageLogic(inheritedAttributes)
     (logic, logic.consumerControl)
   }
@@ -72,7 +71,7 @@ private[jms] final class JmsTxSourceStage(settings: JmsConsumerSettings, destina
                     }
                   } catch {
                     case e: IllegalArgumentException => handleError.invoke(e) // Invalid envelope. Fail the stage.
-                    case e: jms.JMSException => handleError.invoke(e)
+                    case e: jms.JMSException         => handleError.invoke(e)
                   }
               })
             }
@@ -81,8 +80,7 @@ private[jms] final class JmsTxSourceStage(settings: JmsConsumerSettings, destina
         case _ =>
           throw new IllegalArgumentException(
             "Session must be of type JmsSession, it is a " +
-            jmsSession.getClass.getName
-          )
+            jmsSession.getClass.getName)
       }
   }
 

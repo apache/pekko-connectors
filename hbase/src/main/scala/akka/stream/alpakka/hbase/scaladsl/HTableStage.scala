@@ -5,10 +5,10 @@
 package akka.stream.alpakka.hbase.scaladsl
 
 import akka.stream.alpakka.hbase.HTableSettings
-import akka.stream.alpakka.hbase.impl.{HBaseFlowStage, HBaseSourceStage}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
-import org.apache.hadoop.hbase.client.{Result, Scan}
+import akka.stream.alpakka.hbase.impl.{ HBaseFlowStage, HBaseSourceStage }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import akka.{ Done, NotUsed }
+import org.apache.hadoop.hbase.client.{ Result, Scan }
 
 import scala.concurrent.Future
 

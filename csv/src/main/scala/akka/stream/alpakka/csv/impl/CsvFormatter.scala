@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.csv.impl
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.{ Charset, StandardCharsets }
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.csv.scaladsl.CsvQuotingStyle
@@ -16,11 +16,11 @@ import scala.collection.immutable
  * Internal API
  */
 @InternalApi private[csv] class CsvFormatter(delimiter: Char,
-                                             quoteChar: Char,
-                                             escapeChar: Char,
-                                             endOfLine: String,
-                                             quotingStyle: CsvQuotingStyle,
-                                             charset: Charset = StandardCharsets.UTF_8) {
+    quoteChar: Char,
+    escapeChar: Char,
+    endOfLine: String,
+    quotingStyle: CsvQuotingStyle,
+    charset: Charset = StandardCharsets.UTF_8) {
 
   private[this] val charsetName = charset.name()
 

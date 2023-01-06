@@ -7,8 +7,8 @@ package docs.scaladsl
 import java.nio.charset.StandardCharsets
 
 import akka.NotUsed
-import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+import akka.stream.scaladsl.{ Flow, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.util.ByteString
 
@@ -54,7 +54,7 @@ class CsvToMapSpec extends CsvSpec {
   "CSV to Map" should {
     "parse header line and data line into map" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -77,9 +77,7 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> ByteString("11"), "zwei" -> ByteString("12"), "drei" -> ByteString("13")),
-          Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "drei" -> ByteString("23"))
-        )
-      )
+          Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "drei" -> ByteString("23"))))
       // #header-line
     }
 
@@ -105,8 +103,7 @@ class CsvToMapSpec extends CsvSpec {
           .via(CsvToMap.toMap())
           .runWith(Sink.head)
       future.futureValue should be(
-        Map("eins" -> ByteString("1"), "zwei" -> ByteString("2"), "drei" -> ByteString("3"))
-      )
+        Map("eins" -> ByteString("1"), "zwei" -> ByteString("2"), "drei" -> ByteString("3")))
     }
 
     "parse header line and decode data line" in assertAllStagesStopped {
@@ -131,15 +128,13 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> "11", "zwei" -> "12", "drei" -> "13"),
-          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23")
-        )
-      )
+          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23")))
       // #header-line
     }
 
     "use column names and data line into map" in assertAllStagesStopped {
       // #column-names
-      import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #column-names
       val future =
@@ -162,9 +157,7 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> ByteString("11"), "zwei" -> ByteString("12"), "drei" -> ByteString("13")),
-          Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "drei" -> ByteString("23"))
-        )
-      )
+          Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "drei" -> ByteString("23"))))
       // #column-names
     }
 
@@ -189,15 +182,13 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> "11", "zwei" -> "12", "drei" -> "13"),
-          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23")
-        )
-      )
+          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23")))
       // #column-names
     }
 
     "parse header and decode data line. Be OK with more headers column than data (including the header in the result)" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -220,15 +211,13 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> "11", "zwei" -> "12", "drei" -> "13", "vier" -> "", "fünt" -> ""),
-          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23", "vier" -> "", "fünt" -> "")
-        )
-      )
+          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23", "vier" -> "", "fünt" -> "")))
       // #header-line
     }
 
     "parse header and decode data line. Be OK when there are more data than header column, set a default header in the result" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -251,15 +240,13 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> "11", "zwei" -> "12", "drei" -> "13", "MissingHeader0" -> "14"),
-          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23")
-        )
-      )
+          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23")))
       // #header-line
     }
 
     "parse header and decode data line. Be OK when there are more data than header column, set the user configured header in the result" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -282,15 +269,13 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> "11", "zwei" -> "12", "MyCustomHeader0" -> "13"),
-          Map("eins" -> "21", "zwei" -> "22", "MyCustomHeader0" -> "")
-        )
-      )
+          Map("eins" -> "21", "zwei" -> "22", "MyCustomHeader0" -> "")))
       // #header-line
     }
 
     "parse header and decode data line. Be OK when there are more headers than data column, set the user configured field value in the result" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -313,16 +298,14 @@ class CsvToMapSpec extends CsvSpec {
       result should be(
         Seq(
           Map("eins" -> "11", "zwei" -> "12", "drei" -> "13", "fünt" -> "missing"),
-          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23", "fünt" -> "missing")
-        )
-      )
+          Map("eins" -> "21", "zwei" -> "22", "drei" -> "23", "fünt" -> "missing")))
       // #header-line
     }
   }
 
   "be OK with more headers column than data (including the header in the result)" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -345,23 +328,21 @@ class CsvToMapSpec extends CsvSpec {
     result should be(
       Seq(
         Map("eins" -> ByteString("11"),
-            "zwei" -> ByteString("12"),
-            "drei" -> ByteString("13"),
-            "vier" -> ByteString(""),
-            "fünt" -> ByteString("")),
+          "zwei" -> ByteString("12"),
+          "drei" -> ByteString("13"),
+          "vier" -> ByteString(""),
+          "fünt" -> ByteString("")),
         Map("eins" -> ByteString("21"),
-            "zwei" -> ByteString("22"),
-            "drei" -> ByteString("23"),
-            "vier" -> ByteString(""),
-            "fünt" -> ByteString(""))
-      )
-    )
+          "zwei" -> ByteString("22"),
+          "drei" -> ByteString("23"),
+          "vier" -> ByteString(""),
+          "fünt" -> ByteString(""))))
     // #header-line
   }
 
   "be OK when there are more data than header column, set a default header in the result" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -384,19 +365,17 @@ class CsvToMapSpec extends CsvSpec {
     result should be(
       Seq(
         Map("eins" -> ByteString("11"),
-            "zwei" -> ByteString("12"),
-            "drei" -> ByteString("13"),
-            "MissingHeader0" -> ByteString("14"),
-            "MissingHeader1" -> ByteString("15")),
-        Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "drei" -> ByteString("23"))
-      )
-    )
+          "zwei" -> ByteString("12"),
+          "drei" -> ByteString("13"),
+          "MissingHeader0" -> ByteString("14"),
+          "MissingHeader1" -> ByteString("15")),
+        Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "drei" -> ByteString("23"))))
     // #header-line
   }
 
   "be OK when there are more data than header column, set the user configured header in the result" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -419,15 +398,13 @@ class CsvToMapSpec extends CsvSpec {
     result should be(
       Seq(
         Map("eins" -> ByteString("11"), "zwei" -> ByteString("12"), "MyCustomHeader0" -> ByteString("13")),
-        Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "MyCustomHeader0" -> ByteString(""))
-      )
-    )
+        Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "MyCustomHeader0" -> ByteString(""))))
     // #header-line
   }
 
   "be OK when there are more headers than data column, set the user configured field value in the result" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{CsvParsing, CsvToMap}
+    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -450,15 +427,13 @@ class CsvToMapSpec extends CsvSpec {
     result should be(
       Seq(
         Map("eins" -> ByteString("11"),
-            "zwei" -> ByteString("12"),
-            "drei" -> ByteString("13"),
-            "fünt" -> ByteString("missing")),
+          "zwei" -> ByteString("12"),
+          "drei" -> ByteString("13"),
+          "fünt" -> ByteString("missing")),
         Map("eins" -> ByteString("21"),
-            "zwei" -> ByteString("22"),
-            "drei" -> ByteString(""),
-            "fünt" -> ByteString("missing"))
-      )
-    )
+          "zwei" -> ByteString("22"),
+          "drei" -> ByteString(""),
+          "fünt" -> ByteString("missing"))))
     // #header-line
   }
 }

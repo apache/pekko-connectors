@@ -7,7 +7,7 @@ package akka.stream.alpakka.hdfs.impl.writer
 import akka.annotation.InternalApi
 import akka.stream.alpakka.hdfs.FilePathGenerator
 import akka.stream.alpakka.hdfs.impl.writer.HdfsWriter._
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.fs.{ FileSystem, Path }
 
 /**
  * Internal API

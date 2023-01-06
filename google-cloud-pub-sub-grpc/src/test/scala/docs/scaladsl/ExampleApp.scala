@@ -3,19 +3,19 @@
  */
 
 package docs.scaladsl
-import java.util.logging.{Level, Logger}
-import akka.actor.{ActorSystem, Cancellable}
+import java.util.logging.{ Level, Logger }
+import akka.actor.{ ActorSystem, Cancellable }
 import akka.stream.DelayOverflowStrategy
 import akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import com.google.protobuf.ByteString
-import com.google.pubsub.v1.pubsub.{PublishRequest, PubsubMessage, StreamingPullRequest}
+import com.google.pubsub.v1.pubsub.{ PublishRequest, PubsubMessage, StreamingPullRequest }
 import com.typesafe.config.ConfigFactory
 
 import scala.annotation.nowarn
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 object ExampleApp {
 
@@ -34,8 +34,8 @@ object ExampleApp {
     val result = args.toList match {
       case "publish-single" :: rest => publishSingle(rest)
       case "publish-stream" :: rest => publishStream(rest)
-      case "subscribe" :: rest => subscribeStream(rest)
-      case other => Future.failed(new Error(s"unknown arguments: $other"))
+      case "subscribe" :: rest      => subscribeStream(rest)
+      case other                    => Future.failed(new Error(s"unknown arguments: $other"))
     }
 
     result.onComplete { res =>

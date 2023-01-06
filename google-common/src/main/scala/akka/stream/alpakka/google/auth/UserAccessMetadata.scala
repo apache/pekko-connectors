@@ -9,7 +9,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.HttpMethods.POST
 import akka.http.scaladsl.model.headers.RawHeader
-import akka.http.scaladsl.model.{FormData, HttpRequest}
+import akka.http.scaladsl.model.{ FormData, HttpRequest }
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.Materializer
 
@@ -26,15 +26,13 @@ private[auth] object UserAccessMetadata {
       "client_id" -> clientId,
       "client_secret" -> clientSecret,
       "refresh_token" -> refreshToken,
-      "grant_type" -> "refresh_token"
-    ).toEntity
+      "grant_type" -> "refresh_token").toEntity
     HttpRequest(method = POST, uri = tokenUrl, entity = entity).addHeader(`Metadata-Flavor`)
   }
 
   def getAccessToken(clientId: String, clientSecret: String, refreshToken: String)(
       implicit mat: Materializer,
-      clock: Clock
-  ): Future[AccessToken] = {
+      clock: Clock): Future[AccessToken] = {
     import SprayJsonSupport._
     import mat.executionContext
     implicit val system = mat.system

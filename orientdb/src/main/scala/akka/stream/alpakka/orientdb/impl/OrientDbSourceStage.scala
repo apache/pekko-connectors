@@ -7,9 +7,9 @@ package akka.stream.alpakka.orientdb.impl
 import java.util
 
 import akka.annotation.InternalApi
-import akka.stream.alpakka.orientdb.{OrientDbReadResult, OrientDbSourceSettings}
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler}
-import akka.stream.{ActorAttributes, Attributes, Outlet, SourceShape}
+import akka.stream.alpakka.orientdb.{ OrientDbReadResult, OrientDbSourceSettings }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import akka.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
@@ -21,9 +21,9 @@ import scala.jdk.CollectionConverters._
  */
 @InternalApi
 private[orientdb] final class OrientDbSourceStage[T](className: String,
-                                                     query: Option[String],
-                                                     settings: OrientDbSourceSettings,
-                                                     clazz: Option[Class[T]] = None)
+    query: Option[String],
+    settings: OrientDbSourceSettings,
+    clazz: Option[Class[T]] = None)
     extends GraphStage[SourceShape[OrientDbReadResult[T]]] {
 
   val out: Outlet[OrientDbReadResult[T]] = Outlet("OrientDBSource.out")
@@ -46,8 +46,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
             new Logic {
               override protected def runQuery(): util.List[T] =
                 client.query[util.List[T]](
-                  new OSQLSynchQuery[T](s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}")
-                )
+                  new OSQLSynchQuery[T](s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"))
             }
         }
 
@@ -77,9 +76,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
                 oObjectClient
                   .query[util.List[T]](
                     new OSQLSynchQuery[T](
-                      s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"
-                    )
-                  )
+                      s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"))
             }
         }
 

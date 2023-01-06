@@ -7,20 +7,20 @@ package akka.stream.alpakka.pravega
 import io.pravega.client.ClientConfig
 import io.pravega.client.admin.ReaderGroupManager
 import io.pravega.client.stream.ReaderGroupConfig.ReaderGroupConfigBuilder
-import io.pravega.client.stream.{ReaderGroup, ReaderGroupConfig, Stream => PravegaStream}
+import io.pravega.client.stream.{ ReaderGroup, ReaderGroupConfig, Stream => PravegaStream }
 
 import scala.annotation.varargs
 
 final class PravegaReaderGroupManager(scope: String,
-                                      clientConfig: ClientConfig,
-                                      readerGroupConfigBuilder: ReaderGroupConfigBuilder)
+    clientConfig: ClientConfig,
+    readerGroupConfigBuilder: ReaderGroupConfigBuilder)
     extends AutoCloseable {
 
   def this(scope: String, clientConfig: ClientConfig) =
     this(scope,
-         clientConfig,
-         ReaderGroupConfig
-           .builder())
+      clientConfig,
+      ReaderGroupConfig
+        .builder())
 
   private lazy val readerGroupManager = ReaderGroupManager.withScope(scope, clientConfig)
 

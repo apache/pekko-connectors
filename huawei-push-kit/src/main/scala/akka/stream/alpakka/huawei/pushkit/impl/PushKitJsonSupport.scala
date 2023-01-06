@@ -6,7 +6,7 @@ package akka.stream.alpakka.huawei.pushkit.impl
 
 import akka.annotation.InternalApi
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.stream.alpakka.huawei.pushkit.models.{ErrorResponse, PushKitResponse, Response}
+import akka.stream.alpakka.huawei.pushkit.models.{ ErrorResponse, PushKitResponse, Response }
 import akka.stream.alpakka.huawei.pushkit.models._
 import akka.stream.alpakka.huawei.pushkit.impl.HmsTokenApi.OAuthResponse
 import spray.json._
@@ -23,14 +23,14 @@ private[pushkit] case class PushKitSend(validate_only: Boolean, message: PushKit
 @InternalApi
 private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
 
-  //custom formatters
+  // custom formatters
   implicit object OAuthResponseJsonFormat extends RootJsonFormat[OAuthResponse] {
     override def write(c: OAuthResponse): JsValue = c.toJson(this)
     override def read(value: JsValue): OAuthResponse = value match {
       case JsObject(fields) if fields.contains("access_token") =>
         OAuthResponse(fields("access_token").convertTo[String],
-                      fields("token_type").convertTo[String],
-                      fields("expires_in").convertTo[Int])
+          fields("token_type").convertTo[String],
+          fields("expires_in").convertTo[Int])
       case other => throw DeserializationException(s"object containing `access_token` expected, but we get $other")
     }
   }
@@ -43,8 +43,7 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
         PushKitResponse(
           requestId = if (fields.contains("requestId")) fields("requestId").convertTo[String] else null,
           code = fields("code").convertTo[String],
-          msg = fields("msg").convertTo[String]
-        )
+          msg = fields("msg").convertTo[String])
       case other => throw DeserializationException(s"object containing `code`, `msg` expected, but we get $other")
     }
   }
@@ -58,11 +57,11 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
     def read(value: JsValue): Response = value match {
       case JsObject(fields) if fields.keys.exists(_ == "code") => value.convertTo[PushKitResponse]
       case JsObject(fields) if fields.keys.exists(_ != "code") => value.convertTo[ErrorResponse]
-      case other => throw DeserializationException(s"Response expected, but we get $other")
+      case other                                               => throw DeserializationException(s"Response expected, but we get $other")
     }
   }
 
-  //android -> huawei push kit
+  // android -> huawei push kit
   implicit object AndroidNotificationJsonFormat extends RootJsonFormat[AndroidNotification] {
     override def write(obj: AndroidNotification): JsObject = {
       val fields = scala.collection.mutable.Map[String, JsValue]()
@@ -161,12 +160,11 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
         inbox_content =
           if (map.fields.contains("inbox_content")) Option(map.fields("inbox_content").convertTo[Seq[String]])
           else None,
-        buttons = if (map.fields.contains("buttons")) Option(map.fields("buttons").convertTo[Seq[Button]]) else None
-      )
+        buttons = if (map.fields.contains("buttons")) Option(map.fields("buttons").convertTo[Seq[Button]]) else None)
     }
   }
 
-  //apns -> huawei push kit
+  // apns -> huawei push kit
   implicit object ApnsConfigResponseJsonFormat extends RootJsonFormat[ApnsConfig] {
     def write(obj: ApnsConfig): JsObject = {
       val fields = scala.collection.mutable.Map[String, JsValue]()
@@ -181,12 +179,11 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
       ApnsConfig(
         hms_options = if (map.fields.contains("hms_options")) Option(map.fields("hms_options").toString) else None,
         headers = if (map.fields.contains("headers")) Option(map.fields("headers").toString) else None,
-        payload = if (map.fields.contains("payload")) Option(map.fields("payload").toString) else None
-      )
+        payload = if (map.fields.contains("payload")) Option(map.fields("payload").toString) else None)
     }
   }
 
-  //web -> huawei push kit
+  // web -> huawei push kit
   implicit object WebPushConfigJsonFormat extends RootJsonFormat[WebConfig] {
     override def write(obj: WebConfig): JsObject = {
       val fields = scala.collection.mutable.Map[String, JsValue]()
@@ -204,12 +201,11 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
           if (map.fields.contains("headers")) Option(map.fields("headers").convertTo[Map[String, String]]) else None,
         notification =
           if (map.fields.contains("notification")) Option(map.fields("notification").convertTo[WebNotification])
-          else None
-      )
+          else None)
     }
   }
 
-  //app -> huawei push kit
+  // app -> huawei push kit
   implicit val androidConfigJsonFormat: RootJsonFormat[AndroidConfig] = jsonFormat7(AndroidConfig.apply)
   implicit val clickActionJsonFormat: RootJsonFormat[ClickAction] = jsonFormat4(ClickAction.apply)
   implicit val badgeNotificationJsonFormat: RootJsonFormat[BadgeNotification] = jsonFormat3(BadgeNotification.apply)
@@ -220,7 +216,6 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
   implicit val webActionsJsonFormat: RootJsonFormat[WebActions] = jsonFormat3(WebActions.apply)
   implicit val webNotificationJsonFormat: RootJsonFormat[WebNotification] = jsonFormat14(WebNotification.apply)
   implicit val pushKitNotificationJsonFormat: RootJsonFormat[PushKitNotification] = jsonFormat8(
-    PushKitNotification.apply
-  )
+    PushKitNotification.apply)
   implicit val pushKitSendJsonFormat: RootJsonFormat[PushKitSend] = jsonFormat2(PushKitSend)
 }

@@ -36,8 +36,7 @@ object HmsSettings {
       appSecret = config.getString("app-secret"),
       isTest = isTest,
       maxConcurrentConnections = maxConcurrentConnections,
-      maybeForwardProxy
-    )
+      maybeForwardProxy)
   }
 
   /**
@@ -67,8 +66,7 @@ object HmsSettings {
       appSecret: String,
       isTest: Boolean = IsTest,
       maxConcurrentConnections: Int = MaxConcurrentConnections,
-      forwardProxy: Option[ForwardProxy]
-  ): HmsSettings =
+      forwardProxy: Option[ForwardProxy]): HmsSettings =
     new HmsSettings(appId, appSecret, isTest, maxConcurrentConnections, forwardProxy)
 
   /**
@@ -79,8 +77,7 @@ object HmsSettings {
       appSecret: String,
       isTest: Boolean,
       maxConcurrentConnections: Int,
-      forwardProxy: ForwardProxy
-  ): HmsSettings = {
+      forwardProxy: ForwardProxy): HmsSettings = {
     apply(appId, appSecret, isTest, maxConcurrentConnections, Option(forwardProxy))
   }
 
@@ -88,8 +85,8 @@ object HmsSettings {
       appId: String,
       appSecret: String,
       isTest: Boolean,
-      maxConcurrentConnections: Int
-  ): HmsSettings = apply(appId, appSecret, isTest, maxConcurrentConnections, Option.empty)
+      maxConcurrentConnections: Int): HmsSettings =
+    apply(appId, appSecret, isTest, maxConcurrentConnections, Option.empty)
 
   /**
    * Java API.
@@ -98,29 +95,25 @@ object HmsSettings {
       appId: String,
       appSecret: String,
       isTest: Boolean,
-      maxConcurrentConnections: Int
-  ) = apply(appId, appSecret, isTest, maxConcurrentConnections)
+      maxConcurrentConnections: Int) = apply(appId, appSecret, isTest, maxConcurrentConnections)
 
   def apply(
       appId: String,
-      appSecret: String
-  ): HmsSettings = apply(appId, appSecret, Option.empty)
+      appSecret: String): HmsSettings = apply(appId, appSecret, Option.empty)
 
   /**
    * Java API.
    */
   def create(
       appId: String,
-      appSecret: String
-  ) = {
+      appSecret: String) = {
     apply(appId, appSecret)
   }
 
   def apply(
       appId: String,
       appSecret: String,
-      forwardProxy: Option[ForwardProxy]
-  ): HmsSettings = apply(appId, appSecret, forwardProxy)
+      forwardProxy: Option[ForwardProxy]): HmsSettings = apply(appId, appSecret, forwardProxy)
 
   /**
    * Java API.
@@ -128,8 +121,7 @@ object HmsSettings {
   def create(
       appId: String,
       appSecret: String,
-      forwardProxy: ForwardProxy
-  ) = apply(appId, appSecret, Option(forwardProxy))
+      forwardProxy: ForwardProxy) = apply(appId, appSecret, Option(forwardProxy))
 
 }
 
@@ -138,8 +130,7 @@ final case class HmsSettings @InternalApi private (
     appSecret: String,
     test: Boolean,
     maxConcurrentConnections: Int,
-    forwardProxy: Option[ForwardProxy]
-) {
+    forwardProxy: Option[ForwardProxy]) {
 
   def getAppId = appId
   def getAppSecret = appSecret
@@ -178,18 +169,18 @@ object ForwardProxy {
   def create(config: Config): ForwardProxy = apply(config)
 
   def apply(host: String,
-            port: Int,
-            credentials: Option[ForwardProxyCredentials],
-            trustPem: Option[ForwardProxyTrustPem]) =
+      port: Int,
+      credentials: Option[ForwardProxyCredentials],
+      trustPem: Option[ForwardProxyTrustPem]) =
     new ForwardProxy(host, port, credentials, trustPem)
 
   /**
    * Java API.
    */
   def create(host: String,
-             port: Int,
-             credentials: Option[ForwardProxyCredentials],
-             trustPem: Option[ForwardProxyTrustPem]) =
+      port: Int,
+      credentials: Option[ForwardProxyCredentials],
+      trustPem: Option[ForwardProxyTrustPem]) =
     apply(host, port, credentials, trustPem)
 
   def apply(host: String, port: Int) =
@@ -212,9 +203,9 @@ object ForwardProxy {
 }
 
 final case class ForwardProxy @InternalApi private (host: String,
-                                                    port: Int,
-                                                    credentials: Option[ForwardProxyCredentials],
-                                                    trustPem: Option[ForwardProxyTrustPem]) {
+    port: Int,
+    credentials: Option[ForwardProxyCredentials],
+    trustPem: Option[ForwardProxyTrustPem]) {
 
   def getHost = host
   def getPort = port

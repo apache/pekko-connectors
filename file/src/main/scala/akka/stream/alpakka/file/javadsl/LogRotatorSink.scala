@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.file.javadsl
 
-import java.nio.file.{Path, StandardOpenOption}
+import java.nio.file.{ Path, StandardOpenOption }
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 
@@ -32,13 +32,12 @@ object LogRotatorSink {
    * @param triggerGeneratorCreator creates a function that triggers rotation by returning a value
    */
   def createFromFunction(
-      triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[Path]]]
-  ): javadsl.Sink[ByteString, CompletionStage[Done]] =
+      triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[Path]]])
+      : javadsl.Sink[ByteString, CompletionStage[Done]] =
     new Sink(
       akka.stream.alpakka.file.scaladsl
         .LogRotatorSink(asScala(triggerGeneratorCreator))
-        .toCompletionStage()
-    )
+        .toCompletionStage())
 
   /**
    * Sink directing the incoming `ByteString`s to new files whenever `triggerGenerator` returns a value.
@@ -48,13 +47,11 @@ object LogRotatorSink {
    */
   def createFromFunctionAndOptions(
       triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[Path]]],
-      fileOpenOptions: java.util.Set[StandardOpenOption]
-  ): javadsl.Sink[ByteString, CompletionStage[Done]] =
+      fileOpenOptions: java.util.Set[StandardOpenOption]): javadsl.Sink[ByteString, CompletionStage[Done]] =
     new Sink(
       akka.stream.alpakka.file.scaladsl
         .LogRotatorSink(asScala(triggerGeneratorCreator), fileOpenOptions.asScala.toSet)
-        .toCompletionStage()
-    )
+        .toCompletionStage())
 
   /**
    * Sink directing the incoming `ByteString`s to a new `Sink` created by `sinkFactory` whenever `triggerGenerator` returns a value.
@@ -63,23 +60,21 @@ object LogRotatorSink {
    * @param sinkFactory creates sinks for `ByteString`s from the value returned by `triggerGenerator`
    * @tparam C criterion type (for files a `Path`)
    * @tparam R result type in materialized futures of `sinkFactory`
-    **/
+   */
   def withSinkFactory[C, R](
       triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[C]]],
-      sinkFactory: function.Function[C, Sink[ByteString, CompletionStage[R]]]
-  ): javadsl.Sink[ByteString, CompletionStage[Done]] = {
+      sinkFactory: function.Function[C, Sink[ByteString, CompletionStage[R]]])
+      : javadsl.Sink[ByteString, CompletionStage[Done]] = {
     val t: C => scaladsl.Sink[ByteString, Future[R]] = path =>
       sinkFactory.apply(path).asScala.mapMaterializedValue(_.toScala)
     new Sink(
       akka.stream.alpakka.file.scaladsl.LogRotatorSink
         .withSinkFactory(asScala[C](triggerGeneratorCreator), t)
-        .toCompletionStage()
-    )
+        .toCompletionStage())
   }
 
   private def asScala[C](
-      f: function.Creator[function.Function[ByteString, Optional[C]]]
-  ): () => ByteString => Option[C] = () => {
+      f: function.Creator[function.Function[ByteString, Optional[C]]]): () => ByteString => Option[C] = () => {
     val fun = f.create()
     elem => fun(elem).asScala
   }

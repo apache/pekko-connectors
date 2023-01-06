@@ -4,17 +4,17 @@
 
 package akka.stream.alpakka.hdfs.util
 
-import java.io.{File, InputStream, StringWriter}
+import java.io.{ File, InputStream, StringWriter }
 import java.nio.ByteBuffer
 import java.util
 
 import akka.stream.alpakka.hdfs.RotationMessage
 import akka.util.ByteString
 import org.apache.commons.io.IOUtils
-import org.apache.hadoop.fs.{FileStatus, FileSystem, Path}
-import org.apache.hadoop.hdfs.{HdfsConfiguration, MiniDFSCluster}
+import org.apache.hadoop.fs.{ FileStatus, FileSystem, Path }
+import org.apache.hadoop.hdfs.{ HdfsConfiguration, MiniDFSCluster }
 import org.apache.hadoop.io.compress.CompressionCodec
-import org.apache.hadoop.io.{SequenceFile, Text}
+import org.apache.hadoop.io.{ SequenceFile, Text }
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
@@ -66,8 +66,8 @@ sealed trait TestUtils {
   def readSequenceFile(fs: FileSystem, log: RotationMessage): Sequence[Pair[Text, Text]]
 
   def verifySequenceFile(fs: FileSystem,
-                         content: Sequence[Pair[Text, Text]],
-                         logs: Sequence[RotationMessage]): Assertion
+      content: Sequence[Pair[Text, Text]],
+      logs: Sequence[RotationMessage]): Assertion
 
   def generateFakeContentForSequence(count: Double, bytes: Long): Sequence[Pair[Text, Text]]
 
@@ -80,9 +80,9 @@ sealed trait TestUtils {
   def readLogsWithCodec(fs: FileSystem, logs: Sequence[RotationMessage], codec: CompressionCodec): Sequence[String]
 
   def verifyLogsWithCodec(fs: FileSystem,
-                          content: Sequence[ByteString],
-                          logs: Sequence[RotationMessage],
-                          codec: CompressionCodec): Assertion
+      content: Sequence[ByteString],
+      logs: Sequence[RotationMessage],
+      codec: CompressionCodec): Assertion
 }
 
 object ScalaTestUtils extends TestUtils with Matchers {
@@ -95,8 +95,7 @@ object ScalaTestUtils extends TestUtils with Matchers {
     "Akka in Action",
     "Effective Akka",
     "Learning Scala",
-    "Programming in Scala Programming"
-  ).map(ByteString(_))
+    "Programming in Scala Programming").map(ByteString(_))
 
   val booksForSequenceWriter: Sequence[(Text, Text)] = books.zipWithIndex.map {
     case (data, index) =>
@@ -137,9 +136,9 @@ object ScalaTestUtils extends TestUtils with Matchers {
     }
 
   def verifyLogsWithCodec(fs: FileSystem,
-                          content: Sequence[ByteString],
-                          logs: Sequence[RotationMessage],
-                          codec: CompressionCodec): Assertion = {
+      content: Sequence[ByteString],
+      logs: Sequence[RotationMessage],
+      codec: CompressionCodec): Assertion = {
     val pureContent: String = content.map(_.utf8String).mkString
     val contentFromHdfsWithCodec: String = readLogsWithCodec(fs, logs, codec).mkString
     val contentFromHdfs: String = readLogs(fs, logs).mkString
@@ -204,9 +203,9 @@ object JavaTestUtils extends TestUtils {
     ScalaTestUtils.generateFakeContentWithPartitions(count, bytes, partition).asJava
 
   def verifyLogsWithCodec(fs: FileSystem,
-                          content: Sequence[ByteString],
-                          logs: Sequence[RotationMessage],
-                          codec: CompressionCodec): Assertion = {
+      content: Sequence[ByteString],
+      logs: Sequence[RotationMessage],
+      codec: CompressionCodec): Assertion = {
     val pureContent: String = content.asScala.map(_.utf8String).mkString
     val contentFromHdfsWithCodec: String =
       ScalaTestUtils.readLogsWithCodec(fs, logs.asScala.toIndexedSeq, codec).mkString

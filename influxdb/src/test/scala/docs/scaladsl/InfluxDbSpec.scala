@@ -5,21 +5,21 @@
 package docs.scaladsl
 
 import akka.actor.ActorSystem
-import org.influxdb.{InfluxDB, InfluxDBFactory}
-import org.influxdb.dto.{Point, Query, QueryResult}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.influxdb.{ InfluxDB, InfluxDBFactory }
+import org.influxdb.dto.{ Point, Query, QueryResult }
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.{Done, NotUsed}
-import akka.stream.alpakka.influxdb.{InfluxDbReadSettings, InfluxDbWriteMessage}
-import akka.stream.alpakka.influxdb.scaladsl.{InfluxDbSink, InfluxDbSource}
+import akka.{ Done, NotUsed }
+import akka.stream.alpakka.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMessage }
+import akka.stream.alpakka.influxdb.scaladsl.{ InfluxDbSink, InfluxDbSource }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
 import docs.javadsl.TestUtils._
 import akka.stream.scaladsl.Sink
 
 import scala.jdk.CollectionConverters._
-import docs.javadsl.TestConstants.{INFLUXDB_URL, PASSWORD, USERNAME}
+import docs.javadsl.TestConstants.{ INFLUXDB_URL, PASSWORD, USERNAME }
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -37,13 +37,13 @@ class InfluxDbSpec
 
   implicit var influxDB: InfluxDB = _
 
-  //#define-class
+  // #define-class
   override protected def beforeAll(): Unit = {
-    //#init-client
+    // #init-client
     influxDB = InfluxDBFactory.connect(INFLUXDB_URL, USERNAME, PASSWORD);
     influxDB.setDatabase(DatabaseName);
     influxDB.query(new Query("CREATE DATABASE " + DatabaseName, DatabaseName));
-    //#init-client
+    // #init-client
   }
 
   override protected def afterAll(): Unit =
@@ -68,7 +68,7 @@ class InfluxDbSpec
     "consume and publish measurements using typed" in assertAllStagesStopped {
       val query = new Query("SELECT * FROM cpu", DatabaseName);
 
-      //#run-typed
+      // #run-typed
       val f1 = InfluxDbSource
         .typed(classOf[InfluxDbSpecCpu], InfluxDbReadSettings(), influxDB, query)
         .map { cpu: InfluxDbSpecCpu =>
@@ -78,7 +78,7 @@ class InfluxDbSpec
           }
         }
         .runWith(InfluxDbSink.typed(classOf[InfluxDbSpecCpu]))
-      //#run-typed
+      // #run-typed
 
       f1.futureValue mustBe Done
 
@@ -89,13 +89,13 @@ class InfluxDbSpec
     }
 
     "consume and publish measurements" in assertAllStagesStopped {
-      //#run-query-result
+      // #run-query-result
       val query = new Query("SELECT * FROM cpu", DatabaseName);
 
       val f1 = InfluxDbSource(influxDB, query)
         .map(resultToPoints)
         .runWith(InfluxDbSink.create())
-      //#run-query-result
+      // #run-query-result
 
       f1.futureValue mustBe Done
 
@@ -110,9 +110,7 @@ class InfluxDbSpec
         results <- queryResult.getResults.asScala
         series <- results.getSeries.asScala
         values <- series.getValues.asScala
-      } yield (
-        InfluxDbWriteMessage(resultToPoint(series, values))
-      )
+      } yield InfluxDbWriteMessage(resultToPoint(series, values))
       points.toList
     }
 

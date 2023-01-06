@@ -6,8 +6,8 @@ package akka.stream.alpakka.mongodb.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import akka.{Done, NotUsed}
-import akka.stream.alpakka.mongodb.{DocumentReplace, DocumentUpdate}
+import akka.{ Done, NotUsed }
+import akka.stream.alpakka.mongodb.{ DocumentReplace, DocumentUpdate }
 import akka.stream.alpakka.mongodb.scaladsl.MongoFlow.{
   DefaultDeleteOptions,
   DefaultInsertManyOptions,
@@ -15,8 +15,8 @@ import akka.stream.alpakka.mongodb.scaladsl.MongoFlow.{
   DefaultReplaceOptions,
   DefaultUpdateOptions
 }
-import akka.stream.javadsl.{Keep, Sink}
-import com.mongodb.client.model.{DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions}
+import akka.stream.javadsl.{ Keep, Sink }
+import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.conversions.Bson
 
@@ -54,7 +54,7 @@ object MongoSink {
    * @param options options to apply to the operation
    */
   def insertMany[T](collection: MongoCollection[T],
-                    options: InsertManyOptions): Sink[java.util.List[T], CompletionStage[Done]] =
+      options: InsertManyOptions): Sink[java.util.List[T], CompletionStage[Done]] =
     MongoFlow.insertMany(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
@@ -72,7 +72,7 @@ object MongoSink {
    * @param options options to apply to the operation
    */
   def updateOne[T](collection: MongoCollection[T],
-                   options: UpdateOptions): Sink[DocumentUpdate, CompletionStage[Done]] =
+      options: UpdateOptions): Sink[DocumentUpdate, CompletionStage[Done]] =
     MongoFlow.updateOne(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
@@ -90,7 +90,7 @@ object MongoSink {
    * @param options options to apply to the operation
    */
   def updateMany[T](collection: MongoCollection[T],
-                    options: UpdateOptions): Sink[DocumentUpdate, CompletionStage[Done]] =
+      options: UpdateOptions): Sink[DocumentUpdate, CompletionStage[Done]] =
     MongoFlow.updateMany(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
@@ -143,8 +143,7 @@ object MongoSink {
    */
   def replaceOne[T](
       collection: MongoCollection[T],
-      options: ReplaceOptions
-  ): Sink[DocumentReplace[T], CompletionStage[Done]] =
+      options: ReplaceOptions): Sink[DocumentReplace[T], CompletionStage[Done]] =
     MongoFlow.replaceOne(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
 }

@@ -5,9 +5,9 @@
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl
 
 import akka.Done
-import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, Unmarshaller}
+import akka.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
 import akka.stream.alpakka.google.scaladsl.Google
-import akka.stream.alpakka.google.{GoogleAttributes, GoogleSettings}
+import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
 import akka.stream.scaladsl.Source
 
 import scala.concurrent.Future

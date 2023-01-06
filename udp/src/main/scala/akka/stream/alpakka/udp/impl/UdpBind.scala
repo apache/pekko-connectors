@@ -6,25 +6,24 @@ package akka.stream.alpakka.udp.impl
 
 import java.net.InetSocketAddress
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.{ ActorRef, ActorSystem }
 import akka.annotation.InternalApi
-import akka.io.{IO, Udp}
+import akka.io.{ IO, Udp }
 import akka.io.Inet.SocketOption
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.stream.alpakka.udp.Datagram
 import akka.stream.stage._
 
 import scala.collection.immutable.Iterable
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Binds to the given local address using UDP manager actor.
  */
 @InternalApi private[udp] final class UdpBindLogic(localAddress: InetSocketAddress,
-                                                   options: Iterable[SocketOption],
-                                                   boundPromise: Promise[InetSocketAddress])(
-    val shape: FlowShape[Datagram, Datagram]
-)(implicit val system: ActorSystem)
+    options: Iterable[SocketOption],
+    boundPromise: Promise[InetSocketAddress])(
+    val shape: FlowShape[Datagram, Datagram])(implicit val system: ActorSystem)
     extends GraphStageLogic(shape) {
 
   private def in = shape.in
@@ -69,21 +68,19 @@ import scala.concurrent.{Future, Promise}
         listener ! Udp.Send(msg.data, msg.remote)
         pull(in)
       }
-    }
-  )
+    })
 
   setHandler(
     out,
     new OutHandler {
       override def onPull(): Unit = ()
-    }
-  )
+    })
 }
 
 @InternalApi private[udp] final class UdpBindFlow(localAddress: InetSocketAddress,
-                                                  options: Iterable[SocketOption] = Nil)(
-    implicit val system: ActorSystem
-) extends GraphStageWithMaterializedValue[FlowShape[Datagram, Datagram], Future[InetSocketAddress]] {
+    options: Iterable[SocketOption] = Nil)(
+    implicit val system: ActorSystem)
+    extends GraphStageWithMaterializedValue[FlowShape[Datagram, Datagram], Future[InetSocketAddress]] {
 
   val in: Inlet[Datagram] = Inlet("UdpBindFlow.in")
   val out: Outlet[Datagram] = Outlet("UdpBindFlow.in")

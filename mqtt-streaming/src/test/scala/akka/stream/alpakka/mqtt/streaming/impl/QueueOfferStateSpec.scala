@@ -5,7 +5,7 @@
 package akka.stream.alpakka.mqtt.streaming.impl
 
 import akka.actor.ActorSystem
-import akka.actor.testkit.typed.scaladsl.{ActorTestKit, BehaviorTestKit, TestInbox}
+import akka.actor.testkit.typed.scaladsl.{ ActorTestKit, BehaviorTestKit, TestInbox }
 import akka.actor.typed.ActorRef
 import akka.actor.typed.scaladsl.Behaviors
 import akka.stream.alpakka.mqtt.streaming.impl.QueueOfferState.QueueOfferCompleted
@@ -14,7 +14,7 @@ import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -47,8 +47,7 @@ class QueueOfferStateSpec
         Future.successful(QueueOfferResult.Enqueued),
         r => Done(r.toEither),
         baseBehavior,
-        Vector.empty
-      )
+        Vector.empty)
 
       val testKit = BehaviorTestKit(behavior)
 
@@ -66,8 +65,7 @@ class QueueOfferStateSpec
         done.future,
         r => Done(r.toEither),
         baseBehavior,
-        Vector.empty
-      )
+        Vector.empty)
 
       val testKit = ActorTestKit()
       val actor = testKit.spawn(behavior)
@@ -89,8 +87,7 @@ class QueueOfferStateSpec
         done.future,
         r => Done(r.toEither),
         baseBehavior,
-        Vector.empty
-      )
+        Vector.empty)
 
       val testKit = ActorTestKit()
       val actor = testKit.spawn(behavior)

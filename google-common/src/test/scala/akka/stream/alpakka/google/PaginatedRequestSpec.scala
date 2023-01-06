@@ -18,7 +18,7 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import spray.json.{JsObject, JsString, JsValue}
+import spray.json.{ JsObject, JsString, JsValue }
 
 class PaginatedRequestSpec
     extends TestKit(ActorSystem("PaginatedRequestSpec"))
@@ -36,7 +36,7 @@ class PaginatedRequestSpec
   implicit val patience = PatienceConfig(remainingOrDefault)
   implicit val paginated: Paginated[JsValue] = _.asJsObject.fields.get("pageToken").flatMap {
     case JsString(value) => Some(value)
-    case _ => None
+    case _               => None
   }
 
   "PaginatedRequest" should {
@@ -49,9 +49,7 @@ class PaginatedRequestSpec
             .get("/")
             .queryParam("prettyPrint", "false")
             .header("Authorization", "Bearer yyyy.c.an-access-token")
-            .willReturn(success("{}", "application/json"))
-        )
-      )
+            .willReturn(success("{}", "application/json"))))
 
       val result = PaginatedRequest[JsValue](HttpRequest(GET, "https://example.com")).runWith(Sink.head)
 
@@ -68,15 +66,12 @@ class PaginatedRequestSpec
             .queryParam("prettyPrint", "false")
             .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(
-              success("""{ "pageToken": "nextPage" }""", "application/json")
-            )
+              success("""{ "pageToken": "nextPage" }""", "application/json"))
             .get("/")
             .queryParam("pageToken", "nextPage")
             .queryParam("prettyPrint", "false")
             .header("Authorization", "Bearer yyyy.c.an-access-token")
-            .willReturn(success("{}", "application/json"))
-        )
-      )
+            .willReturn(success("{}", "application/json"))))
 
       val result = PaginatedRequest[JsValue](HttpRequest(GET, "https://example.com")).runWith(Sink.seq)
 
@@ -93,15 +88,12 @@ class PaginatedRequestSpec
             .queryParam("prettyPrint", "false")
             .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(
-              success("""{ "pageToken": "===" }""", "application/json")
-            )
+              success("""{ "pageToken": "===" }""", "application/json"))
             .get("/")
             .queryParam("pageToken", "===")
             .queryParam("prettyPrint", "false")
             .header("Authorization", "Bearer yyyy.c.an-access-token")
-            .willReturn(success("{}", "application/json"))
-        )
-      )
+            .willReturn(success("{}", "application/json"))))
 
       val result = PaginatedRequest[JsValue](HttpRequest(GET, "https://example.com")).runWith(Sink.seq)
 

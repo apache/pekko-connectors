@@ -53,9 +53,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('A', 'c', 3);",
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('A', 'd', 4);",
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('B', 'e', 5);",
-            s"INSERT INTO $dataTable (partition, key, count) VALUES ('B', 'f', 6);"
-          )
-        )
+            s"INSERT INTO $dataTable (partition, key, count) VALUES ('B', 'f', 6);"))
       } yield Done
     }.futureValue mustBe Done
   }
@@ -138,15 +136,13 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
 
     "create indexes" in {
       withSchemaMetadataDisabled(
-        lifecycleSession.executeDDL(s"CREATE INDEX IF NOT EXISTS count_idx ON $dataTable(count)")
-      ).futureValue mustBe Done
+        lifecycleSession.executeDDL(
+          s"CREATE INDEX IF NOT EXISTS count_idx ON $dataTable(count)")).futureValue mustBe Done
       val row =
         await(
-          session.selectOne("SELECT * FROM system_schema.indexes WHERE table_name = ? ALLOW FILTERING", dataTableName)
-        )
+          session.selectOne("SELECT * FROM system_schema.indexes WHERE table_name = ? ALLOW FILTERING", dataTableName))
       row.asScala.map(index => index.getString("table_name") -> index.getString("index_name")) mustBe Some(
-        dataTableName -> "count_idx"
-      )
+        dataTableName -> "count_idx")
     }
 
   }

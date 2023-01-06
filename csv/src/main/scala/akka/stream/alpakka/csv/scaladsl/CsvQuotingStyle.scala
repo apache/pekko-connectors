@@ -21,7 +21,7 @@ object CsvQuotingStyle {
 
   /** Java to Scala conversion helper */
   def asScala(qs: javadsl.CsvQuotingStyle): CsvQuotingStyle = qs match {
-    case javadsl.CsvQuotingStyle.ALWAYS => CsvQuotingStyle.Always
+    case javadsl.CsvQuotingStyle.ALWAYS   => CsvQuotingStyle.Always
     case javadsl.CsvQuotingStyle.REQUIRED => CsvQuotingStyle.Required
   }
 

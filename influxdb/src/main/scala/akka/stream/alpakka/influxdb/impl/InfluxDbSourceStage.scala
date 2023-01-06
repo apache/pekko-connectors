@@ -5,11 +5,11 @@
 package akka.stream.alpakka.influxdb.impl
 
 import akka.annotation.InternalApi
-import akka.stream.alpakka.influxdb.{InfluxDbReadSettings}
-import akka.stream.{ActorAttributes, Attributes, Outlet, SourceShape}
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler}
-import org.influxdb.{InfluxDB, InfluxDBException}
-import org.influxdb.dto.{Query, QueryResult}
+import akka.stream.alpakka.influxdb.InfluxDbReadSettings
+import akka.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import org.influxdb.{ InfluxDB, InfluxDBException }
+import org.influxdb.dto.{ Query, QueryResult }
 
 import scala.jdk.CollectionConverters._
 
@@ -18,9 +18,9 @@ import scala.jdk.CollectionConverters._
  */
 @InternalApi
 private[influxdb] final class InfluxDbSourceStage[T](clazz: Class[T],
-                                                     settings: InfluxDbReadSettings,
-                                                     influxDB: InfluxDB,
-                                                     query: Query)
+    settings: InfluxDbReadSettings,
+    influxDB: InfluxDB,
+    query: Query)
     extends GraphStage[SourceShape[T]] {
 
   val out: Outlet[T] = Outlet("InfluxDb.out")
@@ -39,11 +39,11 @@ private[influxdb] final class InfluxDbSourceStage[T](clazz: Class[T],
  */
 @InternalApi
 private[influxdb] final class InfluxDbSourceLogic[T](clazz: Class[T],
-                                                     settings: InfluxDbReadSettings,
-                                                     influxDB: InfluxDB,
-                                                     query: Query,
-                                                     outlet: Outlet[T],
-                                                     shape: SourceShape[T])
+    settings: InfluxDbReadSettings,
+    influxDB: InfluxDB,
+    query: Query,
+    outlet: Outlet[T],
+    shape: SourceShape[T])
     extends InfluxDbBaseSourceLogic[T](influxDB, query, outlet, shape) {
 
   var resultMapperHelper: AlpakkaResultMapperHelper = _
@@ -95,9 +95,9 @@ private[influxdb] final class InfluxDbRawSourceStage(query: Query, influxDB: Inf
  */
 @InternalApi
 private[influxdb] final class InfluxDbSourceRawLogic(query: Query,
-                                                     influxDB: InfluxDB,
-                                                     outlet: Outlet[QueryResult],
-                                                     shape: SourceShape[QueryResult])
+    influxDB: InfluxDB,
+    outlet: Outlet[QueryResult],
+    shape: SourceShape[QueryResult])
     extends InfluxDbBaseSourceLogic[QueryResult](influxDB, query, outlet, shape) {
 
   override def onPull(): Unit =
@@ -117,9 +117,9 @@ private[influxdb] final class InfluxDbSourceRawLogic(query: Query,
  */
 @InternalApi
 private[impl] sealed abstract class InfluxDbBaseSourceLogic[T](influxDB: InfluxDB,
-                                                               query: Query,
-                                                               outlet: Outlet[T],
-                                                               shape: SourceShape[T])
+    query: Query,
+    outlet: Outlet[T],
+    shape: SourceShape[T])
     extends GraphStageLogic(shape)
     with OutHandler {
 

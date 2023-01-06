@@ -5,8 +5,8 @@
 package akka.stream.alpakka.file.impl.archive
 
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
 
 /**
@@ -36,13 +36,13 @@ import akka.util.ByteString
           if (currentSize == expectedSize) super.onUpstreamFinish()
           else failStage(new IllegalStateException(s"Expected ${expectedSize} bytes but got ${currentSize} bytes"))
         }
-      }
-    )
-    setHandler(out, new OutHandler {
-      override def onPull(): Unit = {
-        pull(in)
-      }
-    })
+      })
+    setHandler(out,
+      new OutHandler {
+        override def onPull(): Unit = {
+          pull(in)
+        }
+      })
   }
 
 }

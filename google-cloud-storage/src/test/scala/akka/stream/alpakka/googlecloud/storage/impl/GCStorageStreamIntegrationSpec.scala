@@ -7,7 +7,7 @@ package akka.stream.alpakka.googlecloud.storage.impl
 import java.util.UUID
 import akka.http.scaladsl.model.ContentTypes
 import akka.stream.alpakka.googlecloud.storage.WithMaterializerGlobal
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.util.ByteString
 import org.scalatest.BeforeAndAfter
 import org.scalatest.wordspec.AnyWordSpec
@@ -113,15 +113,15 @@ class GCStorageStreamIntegrationSpec
       val listing = for {
         _ <- GCStorageStream
           .putObject(bucket,
-                     testFileName("testa.txt"),
-                     Source.single(ByteString("testa")),
-                     ContentTypes.`text/plain(UTF-8)`)
+            testFileName("testa.txt"),
+            Source.single(ByteString("testa")),
+            ContentTypes.`text/plain(UTF-8)`)
           .runWith(Sink.head)
         _ <- GCStorageStream
           .putObject(bucket,
-                     testFileName("testb.txt"),
-                     Source.single(ByteString("testa")),
-                     ContentTypes.`text/plain(UTF-8)`)
+            testFileName("testb.txt"),
+            Source.single(ByteString("testa")),
+            ContentTypes.`text/plain(UTF-8)`)
           .runWith(Sink.head)
         listing <- GCStorageStream.listBucket(bucket, Some(folderName)).runWith(Sink.seq)
       } yield {
@@ -160,8 +160,7 @@ class GCStorageStreamIntegrationSpec
             bucket,
             fileName,
             Source.single(ByteString(Random.alphanumeric.take(50000).map(c => c.toByte).toArray)),
-            ContentTypes.`text/plain(UTF-8)`
-          )
+            ContentTypes.`text/plain(UTF-8)`)
           .runWith(Sink.head)
         listing <- GCStorageStream.listBucket(bucket, Some(folderName)).runWith(Sink.seq)
       } yield (so, listing)
@@ -184,8 +183,7 @@ class GCStorageStreamIntegrationSpec
           .download(bucket, fileName)
           .runWith(Sink.head)
           .flatMap(
-            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty))
-          )
+            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
       } yield bs
       bs.futureValue shouldBe content
     }
@@ -210,8 +208,7 @@ class GCStorageStreamIntegrationSpec
           .download(bucket, fileName)
           .runWith(Sink.head)
           .flatMap(
-            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty))
-          )
+            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
       } yield res
       res.futureValue shouldBe ByteString.empty
     }
@@ -220,9 +217,9 @@ class GCStorageStreamIntegrationSpec
       val result = for {
         _ <- GCStorageStream
           .putObject(bucket,
-                     testFileName("fileToDelete"),
-                     Source.single(ByteString("File content")),
-                     ContentTypes.`text/plain(UTF-8)`)
+            testFileName("fileToDelete"),
+            Source.single(ByteString("File content")),
+            ContentTypes.`text/plain(UTF-8)`)
           .runWith(Sink.head)
         result <- GCStorageStream.deleteObjectSource(bucket, testFileName("fileToDelete")).runWith(Sink.head)
       } yield result
@@ -243,12 +240,10 @@ class GCStorageStreamIntegrationSpec
         GCStorageStream.resumableUpload(bucket, fileName, ContentTypes.`text/plain(UTF-8)`, 4 * 256 * 1024, Some(meta))
 
       val res = Source
-        .fromIterator(
-          () =>
-            Iterator.fill[ByteString](10) {
-              ByteString(Random.alphanumeric.take(1234567).map(c => c.toByte).toArray)
-            }
-        )
+        .fromIterator(() =>
+          Iterator.fill[ByteString](10) {
+            ByteString(Random.alphanumeric.take(1234567).map(c => c.toByte).toArray)
+          })
         .runWith(sink)
 
       val so = res.futureValue
@@ -264,12 +259,10 @@ class GCStorageStreamIntegrationSpec
         GCStorageStream.resumableUpload(bucket, fileName, ContentTypes.`text/plain(UTF-8)`, 4 * 256 * 1024)
 
       val uploadResult = Source
-        .fromIterator(
-          () =>
-            Iterator.fill[ByteString](10) {
-              ByteString(Random.alphanumeric.take(1234567).map(c => c.toByte).toArray)
-            }
-        )
+        .fromIterator(() =>
+          Iterator.fill[ByteString](10) {
+            ByteString(Random.alphanumeric.take(1234567).map(c => c.toByte).toArray)
+          })
         .runWith(sink)
 
       val res = for {

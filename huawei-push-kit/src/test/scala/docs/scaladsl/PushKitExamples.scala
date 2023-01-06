@@ -30,33 +30,29 @@ class PushKitExamples {
 
   implicit val system = ActorSystem()
 
-  //#simple-send
+  // #simple-send
   val config = HmsSettings()
   val notification: PushKitNotification =
     PushKitNotification.empty
       .withNotification(
         BasicNotification.empty
           .withTitle("title")
-          .withBody("body")
-      )
+          .withBody("body"))
       .withAndroidConfig(
         AndroidConfig.empty
           .withNotification(
             AndroidNotification.empty
               .withClickAction(
                 ClickAction.empty
-                  .withType(3)
-              )
-          )
-      )
+                  .withType(3))))
       .withTarget(Tokens(Set[String]("token").toSeq))
 
   Source
     .single(notification)
     .runWith(HmsPushKit.fireAndForget(config))
-  //#simple-send
+  // #simple-send
 
-  //#asFlow-send
+  // #asFlow-send
   val result1: Future[immutable.Seq[Response]] =
     Source
       .single(notification)
@@ -70,10 +66,10 @@ class PushKitExamples {
           res
       }
       .runWith(Sink.seq)
-  //#asFlow-send
+  // #asFlow-send
 
-  //#condition-builder
-  import akka.stream.alpakka.huawei.pushkit.models.Condition.{Topic => CTopic}
+  // #condition-builder
+  import akka.stream.alpakka.huawei.pushkit.models.Condition.{ Topic => CTopic }
   val condition = Condition(CTopic("TopicA") && (CTopic("TopicB") || (CTopic("TopicC") && !CTopic("TopicD"))))
-  //#condition-builder
+  // #condition-builder
 }

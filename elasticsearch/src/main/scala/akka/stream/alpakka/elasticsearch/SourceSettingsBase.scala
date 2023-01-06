@@ -13,15 +13,13 @@ import scala.concurrent.duration.FiniteDuration
 
 /**
  * Configure Elastiscsearch/OpenSearch sources.
- *
  */
 abstract class SourceSettingsBase[Version <: ApiVersionBase, S <: SourceSettingsBase[Version, S]] private[alpakka] (
     val connection: ElasticsearchConnectionSettings,
     val bufferSize: Int,
     val includeDocumentVersion: Boolean,
     val scrollDuration: FiniteDuration,
-    val apiVersion: Version
-) { this: S =>
+    val apiVersion: Version) { this: S =>
   def withConnection(value: ElasticsearchConnectionSettings): S = copy(connection = value)
 
   def withBufferSize(value: Int): S = copy(bufferSize = value)
@@ -43,22 +41,22 @@ abstract class SourceSettingsBase[Version <: ApiVersionBase, S <: SourceSettings
 
   def scroll: String = {
     val scrollString = scrollDuration.unit match {
-      case TimeUnit.DAYS => "d"
-      case TimeUnit.HOURS => "h"
-      case TimeUnit.MINUTES => "m"
-      case TimeUnit.SECONDS => "s"
+      case TimeUnit.DAYS         => "d"
+      case TimeUnit.HOURS        => "h"
+      case TimeUnit.MINUTES      => "m"
+      case TimeUnit.SECONDS      => "s"
       case TimeUnit.MILLISECONDS => "ms"
       case TimeUnit.MICROSECONDS => "micros"
-      case TimeUnit.NANOSECONDS => "nanos"
+      case TimeUnit.NANOSECONDS  => "nanos"
     }
 
     s"${scrollDuration.length}$scrollString"
   }
 
   protected def copy(connection: ElasticsearchConnectionSettings = connection,
-                     bufferSize: Int = bufferSize,
-                     includeDocumentVersion: Boolean = includeDocumentVersion,
-                     scrollDuration: FiniteDuration = scrollDuration,
-                     apiVersion: Version = apiVersion): S;
+      bufferSize: Int = bufferSize,
+      includeDocumentVersion: Boolean = includeDocumentVersion,
+      scrollDuration: FiniteDuration = scrollDuration,
+      apiVersion: Version = apiVersion): S;
 
 }

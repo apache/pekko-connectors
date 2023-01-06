@@ -4,10 +4,10 @@
 
 package akka.stream.alpakka.pravega.scaladsl
 import akka.annotation.ApiMayChange
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
-import akka.stream.alpakka.pravega.impl.{PravegaFlow, PravegaSource}
-import akka.stream.alpakka.pravega.{PravegaEvent, PravegaReaderGroupManager, ReaderSettings, WriterSettings}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import akka.{ Done, NotUsed }
+import akka.stream.alpakka.pravega.impl.{ PravegaFlow, PravegaSource }
+import akka.stream.alpakka.pravega.{ PravegaEvent, PravegaReaderGroupManager, ReaderSettings, WriterSettings }
 import io.pravega.client.ClientConfig
 import io.pravega.client.stream.ReaderGroup
 

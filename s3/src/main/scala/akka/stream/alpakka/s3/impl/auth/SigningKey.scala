@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.s3.impl.auth
 
-import java.time.{LocalDate, ZonedDateTime}
+import java.time.{ LocalDate, ZonedDateTime }
 import java.time.format.DateTimeFormatter
 
 import akka.annotation.InternalApi
@@ -20,9 +20,9 @@ import software.amazon.awssdk.regions.Region
 }
 
 @InternalApi private[impl] final case class SigningKey(requestDate: ZonedDateTime,
-                                                       credProvider: AwsCredentialsProvider,
-                                                       scope: CredentialScope,
-                                                       algorithm: String = "HmacSHA256") {
+    credProvider: AwsCredentialsProvider,
+    scope: CredentialScope,
+    algorithm: String = "HmacSHA256") {
 
   private val credentials: AwsCredentials = credProvider.resolveCredentials
 
@@ -32,7 +32,7 @@ import software.amazon.awssdk.regions.Region
 
   val sessionToken: Option[String] = credentials match {
     case c: AwsSessionCredentials => Some(c.sessionToken)
-    case _ => None
+    case _                        => None
   }
 
   def signature(message: Array[Byte]): Array[Byte] = signWithKey(key, message)

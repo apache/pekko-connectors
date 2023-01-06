@@ -9,14 +9,14 @@ import akka.annotation.InternalApi
 import akka.stream.alpakka.amqp._
 import akka.stream.alpakka.amqp.impl.AmqpSourceStage.AutoAckedReadResult
 import akka.stream.alpakka.amqp.scaladsl.CommittableReadResult
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler, StageLogging}
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import akka.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
-import com.rabbitmq.client.{DefaultConsumer, Envelope, ShutdownSignalException}
+import com.rabbitmq.client.{ DefaultConsumer, Envelope, ShutdownSignalException }
 
 import scala.collection.mutable
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 import scala.util.Success
 
 private final case class AckArguments(deliveryTag: Long, multiple: Boolean, promise: Promise[Done])
@@ -80,9 +80,9 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
 
         val amqpSourceConsumer = new DefaultConsumer(channel) {
           override def handleDelivery(consumerTag: String,
-                                      envelope: Envelope,
-                                      properties: BasicProperties,
-                                      body: Array[Byte]): Unit = {
+              envelope: Envelope,
+              properties: BasicProperties,
+              body: Array[Byte]): Unit = {
             val message = if (ackRequired) {
 
               new CommittableReadResult {
@@ -107,14 +107,12 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
           override def handleCancel(consumerTag: String): Unit =
             // non consumer initiated cancel, for example happens when the queue has been deleted.
             shutdownCallback.invoke(
-              new RuntimeException(s"Consumer with consumerTag $consumerTag shut down unexpectedly")
-            )
+              new RuntimeException(s"Consumer with consumerTag $consumerTag shut down unexpectedly"))
 
           override def handleShutdownSignal(consumerTag: String, sig: ShutdownSignalException): Unit =
             // "Called when either the channel or the underlying connection has been shut down."
             shutdownCallback.invoke(
-              new RuntimeException(s"Consumer with consumerTag $consumerTag shut down unexpectedly", sig)
-            )
+              new RuntimeException(s"Consumer with consumerTag $consumerTag shut down unexpectedly", sig))
         }
 
         def setupNamedQueue(settings: NamedQueueSourceSettings): Unit =
@@ -125,8 +123,7 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
             settings.noLocal,
             settings.exclusive,
             settings.arguments.asJava,
-            amqpSourceConsumer
-          )
+            amqpSourceConsumer)
 
         def setupTemporaryQueue(settings: TemporaryQueueSourceSettings): Unit = {
           // this is a weird case that required dynamic declaration, the queue name is not known
@@ -135,8 +132,7 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
           channel.queueBind(queueName, settings.exchange, settings.routingKey.getOrElse(""))
           channel.basicConsume(
             queueName,
-            amqpSourceConsumer
-          )
+            amqpSourceConsumer)
         }
 
         settings match {
@@ -171,8 +167,7 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
               setKeepGoing(true)
               log.debug("Awaiting {} acks before finishing.", unackedMessages)
             }
-        }
-      )
+        })
 
       def pushMessage(message: CommittableReadResult): Unit = {
         push(out, message)

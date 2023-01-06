@@ -5,8 +5,8 @@
 package akka.stream.alpakka.aws.eventbridge.scaladsl
 
 import akka.stream.alpakka.aws.eventbridge.EventBridgePublishSettings
-import akka.stream.scaladsl.{Flow, Keep, Sink}
-import akka.{Done, NotUsed}
+import akka.stream.scaladsl.{ Flow, Keep, Sink }
+import akka.{ Done, NotUsed }
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient
 import software.amazon.awssdk.services.eventbridge.model._
 
@@ -26,8 +26,7 @@ object EventBridgePublisher {
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def flow(settings: EventBridgePublishSettings = EventBridgePublishSettings())(
-      implicit eventBridgeClient: EventBridgeAsyncClient
-  ): Flow[PutEventsRequestEntry, PutEventsResponse, NotUsed] =
+      implicit eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequestEntry, PutEventsResponse, NotUsed] =
     Flow
       .fromFunction((message: PutEventsRequestEntry) => PutEventsRequest.builder().entries(message).build())
       .via(publishFlow(settings))
@@ -39,8 +38,8 @@ object EventBridgePublisher {
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def flowSeq(settings: EventBridgePublishSettings = EventBridgePublishSettings())(
-      implicit eventBridgeClient: EventBridgeAsyncClient
-  ): Flow[Seq[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
+      implicit eventBridgeClient: EventBridgeAsyncClient)
+      : Flow[Seq[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
     Flow
       .fromFunction((messages: Seq[PutEventsRequestEntry]) => PutEventsRequest.builder().entries(messages: _*).build())
       .via(publishFlow(settings))
@@ -52,8 +51,8 @@ object EventBridgePublisher {
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def publishFlow(
-      settings: EventBridgePublishSettings
-  )(implicit eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
+      settings: EventBridgePublishSettings)(
+      implicit eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
     Flow[PutEventsRequest]
       .mapAsync(settings.concurrency)(eventBridgeClient.putEvents(_).toScala)
 
@@ -63,8 +62,7 @@ object EventBridgePublisher {
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def publishFlow()(
-      implicit eventBridgeClient: EventBridgeAsyncClient
-  ): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
+      implicit eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
     publishFlow(EventBridgePublishSettings())
 
   /**
@@ -74,8 +72,7 @@ object EventBridgePublisher {
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def sink(settings: EventBridgePublishSettings = EventBridgePublishSettings())(
-      implicit eventBridgeClient: EventBridgeAsyncClient
-  ): Sink[PutEventsRequestEntry, Future[Done]] =
+      implicit eventBridgeClient: EventBridgeAsyncClient): Sink[PutEventsRequestEntry, Future[Done]] =
     flow(settings).toMat(Sink.ignore)(Keep.right)
 
   /**
@@ -85,8 +82,8 @@ object EventBridgePublisher {
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def publishSink(
-      settings: EventBridgePublishSettings = EventBridgePublishSettings()
-  )(implicit eventBridgeClient: EventBridgeAsyncClient): Sink[PutEventsRequest, Future[Done]] =
+      settings: EventBridgePublishSettings = EventBridgePublishSettings())(
+      implicit eventBridgeClient: EventBridgeAsyncClient): Sink[PutEventsRequest, Future[Done]] =
     publishFlow(settings).toMat(Sink.ignore)(Keep.right)
 
   /**

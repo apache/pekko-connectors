@@ -19,9 +19,7 @@ class GCSSettingsSpec extends AnyFlatSpec with Matchers with LogCapturing {
     val config = ConfigFactory.parseMap(
       Map(
         "endpoint-url" -> endpointUrl,
-        "base-path" -> basePath
-      ).asJava
-    )
+        "base-path" -> basePath).asJava)
 
     val settings = GCSSettings(config)
 

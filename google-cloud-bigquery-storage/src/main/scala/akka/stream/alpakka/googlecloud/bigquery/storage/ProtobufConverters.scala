@@ -21,8 +21,7 @@ import scala.jdk.CollectionConverters._
       ReadSession.TableReadOptions(
         selectedFields = selectedFields(),
         rowRestriction = readOption.getRowRestriction,
-        unknownFields = unknownFields()
-      )
+        unknownFields = unknownFields())
     }
 
     private final def selectedFields(): Seq[String] = {
@@ -43,8 +42,7 @@ import scala.jdk.CollectionConverters._
         varint = field.getVarintList.asScala.map(_.asInstanceOf[Long]).toSeq,
         fixed64 = field.getFixed64List.asScala.map(_.asInstanceOf[Long]).toSeq,
         fixed32 = field.getFixed32List.asScala.map(_.asInstanceOf[Int]).toSeq,
-        lengthDelimited = field.getLengthDelimitedList.asScala.toSeq
-      )
+        lengthDelimited = field.getLengthDelimitedList.asScala.toSeq)
     }
 
   }

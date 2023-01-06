@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.avroparquet.scaladsl
 import akka.Done
-import akka.stream.scaladsl.{Flow, Keep, Sink}
+import akka.stream.scaladsl.{ Flow, Keep, Sink }
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetWriter
 

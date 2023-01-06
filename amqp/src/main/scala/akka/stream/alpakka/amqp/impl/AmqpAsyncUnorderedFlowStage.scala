@@ -8,12 +8,12 @@ import akka.Done
 import akka.annotation.InternalApi
 import akka.event.Logging
 import akka.stream.alpakka.amqp.impl.AbstractAmqpAsyncFlowStageLogic.DeliveryTag
-import akka.stream.alpakka.amqp.{AmqpWriteSettings, WriteMessage, WriteResult}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue}
+import akka.stream.alpakka.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
 import akka.stream._
 
 import scala.collection.mutable
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Internal API.
@@ -24,8 +24,8 @@ import scala.concurrent.{Future, Promise}
  * given delivery tag, which means that so all messages up to (and including) this delivery tag can be safely dequeued.
  */
 @InternalApi private[amqp] final class AmqpAsyncUnorderedFlowStage[T](
-    settings: AmqpWriteSettings
-) extends GraphStageWithMaterializedValue[FlowShape[(WriteMessage, T), (WriteResult, T)], Future[Done]] {
+    settings: AmqpWriteSettings)
+    extends GraphStageWithMaterializedValue[FlowShape[(WriteMessage, T), (WriteResult, T)], Future[Done]] {
 
   private val in: Inlet[(WriteMessage, T)] = Inlet(Logging.simpleName(this) + ".in")
   private val out: Outlet[(WriteResult, T)] = Outlet(Logging.simpleName(this) + ".out")
@@ -39,23 +39,23 @@ import scala.concurrent.{Future, Promise}
     val streamCompletion = Promise[Done]()
     (new AbstractAmqpAsyncFlowStageLogic(settings, streamCompletion, shape) {
 
-      private val buffer = mutable.Queue.empty[AwaitingMessage[T]]
+        private val buffer = mutable.Queue.empty[AwaitingMessage[T]]
 
-      override def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit =
-        buffer += AwaitingMessage(tag, passThrough)
+        override def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit =
+          buffer += AwaitingMessage(tag, passThrough)
 
-      override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
-        if (multiple)
-          buffer.dequeueAll(_.tag <= tag)
-        else
-          buffer
-            .dequeueFirst(_.tag == tag)
-            .fold(Seq.empty[AwaitingMessage[T]])(Seq(_))
+        override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
+          if (multiple)
+            buffer.dequeueAll(_.tag <= tag)
+          else
+            buffer
+              .dequeueFirst(_.tag == tag)
+              .fold(Seq.empty[AwaitingMessage[T]])(Seq(_))
 
-      override def messagesAwaitingDelivery: Int = buffer.length
+        override def messagesAwaitingDelivery: Int = buffer.length
 
-      override def noAwaitingMessages: Boolean = buffer.isEmpty
+        override def noAwaitingMessages: Boolean = buffer.isEmpty
 
-    }, streamCompletion.future)
+      }, streamCompletion.future)
   }
 }

@@ -7,8 +7,8 @@ package akka.stream.alpakka.cassandra.javadsl
 import akka.NotUsed
 import akka.stream.alpakka.cassandra.CassandraWriteSettings
 import akka.stream.alpakka.cassandra.scaladsl
-import akka.stream.javadsl.{Flow, FlowWithContext}
-import com.datastax.oss.driver.api.core.cql.{BoundStatement, PreparedStatement}
+import akka.stream.javadsl.{ Flow, FlowWithContext }
+import com.datastax.oss.driver.api.core.cql.{ BoundStatement, PreparedStatement }
 
 /**
  * Java API to create Cassandra flows.
@@ -26,13 +26,12 @@ object CassandraFlow {
    * @tparam T stream element type
    */
   def create[T](session: CassandraSession,
-                writeSettings: CassandraWriteSettings,
-                cqlStatement: String,
-                statementBinder: akka.japi.Function2[T, PreparedStatement, BoundStatement]): Flow[T, T, NotUsed] =
+      writeSettings: CassandraWriteSettings,
+      cqlStatement: String,
+      statementBinder: akka.japi.Function2[T, PreparedStatement, BoundStatement]): Flow[T, T, NotUsed] =
     scaladsl.CassandraFlow
       .create(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
-        session.delegate
-      )
+        session.delegate)
       .asJava
 
   /**
@@ -50,12 +49,11 @@ object CassandraFlow {
       session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: akka.japi.Function2[T, PreparedStatement, BoundStatement]
-  ): FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
+      statementBinder: akka.japi.Function2[T, PreparedStatement, BoundStatement])
+      : FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
     scaladsl.CassandraFlow
       .withContext(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
-        session.delegate
-      )
+        session.delegate)
       .asJava
   }
 
@@ -81,15 +79,15 @@ object CassandraFlow {
    * @tparam K extracted key type for grouping into batches
    */
   def createUnloggedBatch[T, K](session: CassandraSession,
-                                writeSettings: CassandraWriteSettings,
-                                cqlStatement: String,
-                                statementBinder: (T, PreparedStatement) => BoundStatement,
-                                groupingKey: akka.japi.Function[T, K]): Flow[T, T, NotUsed] = {
+      writeSettings: CassandraWriteSettings,
+      cqlStatement: String,
+      statementBinder: (T, PreparedStatement) => BoundStatement,
+      groupingKey: akka.japi.Function[T, K]): Flow[T, T, NotUsed] = {
     scaladsl.CassandraFlow
       .createBatch(writeSettings,
-                   cqlStatement,
-                   (t, preparedStatement) => statementBinder.apply(t, preparedStatement),
-                   t => groupingKey.apply(t))(session.delegate)
+        cqlStatement,
+        (t, preparedStatement) => statementBinder.apply(t, preparedStatement),
+        t => groupingKey.apply(t))(session.delegate)
       .asJava
   }
 

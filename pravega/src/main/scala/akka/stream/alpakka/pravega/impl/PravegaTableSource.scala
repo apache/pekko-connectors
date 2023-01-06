@@ -5,13 +5,13 @@
 package akka.stream.alpakka.pravega.impl
 
 import java.util.function.Consumer
-import akka.stream.stage.{AsyncCallback, GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging}
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.stage.{ AsyncCallback, GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import akka.Done
 import akka.annotation.InternalApi
 import akka.event.Logging
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 import scala.util.control.NonFatal
 import akka.stream.ActorAttributes
 
@@ -34,8 +34,7 @@ import io.pravega.common.util.AsyncIterator
     val scope: String,
     tableName: String,
     tableReaderSettings: TableReaderSettings[K, V],
-    startupPromise: Promise[Done]
-) extends GraphStageLogic(shape)
+    startupPromise: Promise[Done]) extends GraphStageLogic(shape)
     with StageLogging {
 
   override protected def logSource = classOf[PravegaTableSourceStageLogic[K, V]]
@@ -84,8 +83,7 @@ import io.pravega.common.util.AsyncIterator
         if (closing && queue.isEmpty)
           completeStage()
       }
-    }
-  )
+    })
 
   def nextIteration(iterator: AsyncIterator[IteratorItem[JTableEntry]]): Unit =
     iterator.getNext
@@ -98,8 +96,8 @@ import io.pravega.common.util.AsyncIterator
               semaphore.acquire()
 
               val entry = new TableEntry(tableEntry.getKey(),
-                                         tableEntry.getVersion(),
-                                         tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
+                tableEntry.getVersion(),
+                tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
               onElement.invoke(entry)
             }
             nextIteration(iterator)
@@ -141,8 +139,8 @@ import io.pravega.common.util.AsyncIterator
 @InternalApi private[pravega] final class PravegaTableSource[K, V](
     scope: String,
     tableName: String,
-    tableReaderSettings: TableReaderSettings[K, V]
-) extends GraphStageWithMaterializedValue[SourceShape[TableEntry[V]], Future[Done]] {
+    tableReaderSettings: TableReaderSettings[K, V])
+    extends GraphStageWithMaterializedValue[SourceShape[TableEntry[V]], Future[Done]] {
 
   private val out: Outlet[TableEntry[V]] = Outlet(Logging.simpleName(this) + ".out")
 
@@ -152,8 +150,7 @@ import io.pravega.common.util.AsyncIterator
     super.initialAttributes and Attributes.name(Logging.simpleName(this)) and ActorAttributes.IODispatcher
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, Future[Done]) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, Future[Done]) = {
     val startupPromise = Promise[Done]()
 
     val logic = new PravegaTableSourceStageLogic[K, V](
@@ -161,8 +158,7 @@ import io.pravega.common.util.AsyncIterator
       scope,
       tableName,
       tableReaderSettings,
-      startupPromise
-    )
+      startupPromise)
 
     (logic, startupPromise.future)
 

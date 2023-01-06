@@ -6,20 +6,19 @@ package akka.stream.alpakka.google.auth
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.google.RequestSettings
-import com.google.auth.{RequestMetadataCallback, Credentials => GoogleCredentials}
+import com.google.auth.{ Credentials => GoogleCredentials, RequestMetadataCallback }
 
 import java.net.URI
 import java.util
 import java.util.concurrent.Executor
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.util.{ Failure, Success }
 
 @InternalApi
 private[auth] final class GoogleOAuth2Credentials(credentials: OAuth2Credentials)(
     implicit ec: ExecutionContext,
-    settings: RequestSettings
-) extends GoogleCredentials {
+    settings: RequestSettings) extends GoogleCredentials {
 
   override def getAuthenticationType: String = "OAuth2"
   override def hasRequestMetadata: Boolean = true
@@ -32,7 +31,7 @@ private[auth] final class GoogleOAuth2Credentials(credentials: OAuth2Credentials
     implicit val ec = ExecutionContext.fromExecutor(executor)
     requestMetadata.onComplete {
       case Success(metadata) => callback.onSuccess(metadata)
-      case Failure(ex) => callback.onFailure(ex)
+      case Failure(ex)       => callback.onFailure(ex)
     }
   }
 

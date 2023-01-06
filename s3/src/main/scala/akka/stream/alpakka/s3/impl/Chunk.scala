@@ -7,7 +7,7 @@ package akka.stream.alpakka.s3.impl
 import akka.stream.scaladsl.Source
 import akka.NotUsed
 import akka.annotation.InternalApi
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, RequestEntity}
+import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, RequestEntity }
 import akka.util.ByteString
 
 /**

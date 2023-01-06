@@ -20,8 +20,7 @@ final class Bucket private (
     val kind: String,
     val id: String,
     val selfLink: String,
-    val etag: String
-) {
+    val etag: String) {
 
   /** Java API */
   def getName: String = name
@@ -54,15 +53,13 @@ final class Bucket private (
       kind: String = kind,
       id: String = id,
       selfLink: String = selfLink,
-      etag: String = etag
-  ): Bucket = new Bucket(
+      etag: String = etag): Bucket = new Bucket(
     name = name,
     location = location,
     kind = kind,
     id = id,
     selfLink = selfLink,
-    etag = etag
-  )
+    etag = etag)
 
   override def toString =
     "BucketInfo(" +
@@ -97,15 +94,13 @@ object Bucket {
       kind: String,
       id: String,
       selfLink: String,
-      etag: String
-  ): Bucket = new Bucket(
+      etag: String): Bucket = new Bucket(
     name,
     location,
     kind,
     id,
     selfLink,
-    etag
-  )
+    etag)
 
   /** Java API */
   def create(
@@ -114,13 +109,11 @@ object Bucket {
       kind: String,
       id: String,
       selfLink: String,
-      etag: String
-  ): Bucket = new Bucket(
+      etag: String): Bucket = new Bucket(
     name,
     location,
     kind,
     id,
     selfLink,
-    etag
-  )
+    etag)
 }

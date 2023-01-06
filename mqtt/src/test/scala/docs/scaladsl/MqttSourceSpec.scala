@@ -6,11 +6,11 @@ package docs.scaladsl
 
 import akka.stream._
 import akka.stream.alpakka.mqtt._
-import akka.stream.alpakka.mqtt.scaladsl.{MqttMessageWithAck, MqttSink, MqttSource}
+import akka.stream.alpakka.mqtt.scaladsl.{ MqttMessageWithAck, MqttSink, MqttSource }
 import akka.stream.scaladsl._
 import akka.stream.testkit.scaladsl.TestSink
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import javax.net.ssl.SSLContext
 import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 
 import scala.collection.immutable.Seq
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future, Promise}
+import scala.concurrent.{ Await, ExecutionContext, Future, Promise }
 
 class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
 
@@ -29,18 +29,17 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
   val sourceSettings = connectionSettings.withClientId(clientId = "source-spec/source")
   val sinkSettings = connectionSettings.withClientId(clientId = "source-spec/sink")
 
-  /** Wrap a source with restart logic and exposes an equivalent materialized value.
+  /**
+   * Wrap a source with restart logic and exposes an equivalent materialized value.
    * Could be simplified when https://github.com/akka/akka/issues/24771 is solved.
    */
   def wrapWithRestart[M](
-      source: => Source[M, Future[Done]]
-  )(implicit ec: ExecutionContext): Source[M, Future[Done]] = {
+      source: => Source[M, Future[Done]])(implicit ec: ExecutionContext): Source[M, Future[Done]] = {
     val subscribed = Promise[Done]()
     RestartSource
       .withBackoff(
         RestartSettings(minBackoff = 100.millis, maxBackoff = 3.seconds, randomFactor = 0.2).withMaxRestarts(5,
-                                                                                                             1.second)
-      ) { () =>
+          1.second)) { () =>
         source
           .mapMaterializedValue { f =>
             f.onComplete(res => subscribed.complete(res))
@@ -51,44 +50,40 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
 
   "MQTT connection settings" should {
     "accept standard things" in {
-      //#create-connection-settings
+      // #create-connection-settings
       val connectionSettings = MqttConnectionSettings(
         "tcp://localhost:1883", // (1)
         "test-scala-client", // (2)
         new MemoryPersistence // (3)
       )
-      //#create-connection-settings
+      // #create-connection-settings
       connectionSettings.toString should include("tcp://localhost:1883")
     }
 
     "allow SSL" in {
-      //#ssl-settings
+      // #ssl-settings
       val connectionSettings = MqttConnectionSettings(
         "ssl://localhost:1885",
         "ssl-client",
-        new MemoryPersistence
-      ).withAuth("mqttUser", "mqttPassword")
+        new MemoryPersistence).withAuth("mqttUser", "mqttPassword")
         .withSocketFactory(SSLContext.getDefault.getSocketFactory)
-      //#ssl-settings
+      // #ssl-settings
       connectionSettings.toString should include("ssl://localhost:1885")
       connectionSettings.toString should include("auth(username)=Some(mqttUser)")
     }
 
     "allow MQTT buffering offline support persistence" in {
-      //#OfflinePersistenceSettings
+      // #OfflinePersistenceSettings
       val bufferedConnectionSettings = MqttConnectionSettings(
         "ssl://localhost:1885",
         "ssl-client",
-        new MemoryPersistence
-      ).withOfflinePersistenceSettings(
+        new MemoryPersistence).withOfflinePersistenceSettings(
         bufferSize = 1234,
         deleteOldestMessage = true,
-        persistBuffer = false
-      )
+        persistBuffer = false)
 
       bufferedConnectionSettings.toString should include(
-        "offlinePersistenceSettings=Some(MqttOfflinePersistenceSettings(1234,true,false))"
-      )
+        "offlinePersistenceSettings=Some(MqttOfflinePersistenceSettings(1234,true,false))")
     }
   }
 
@@ -99,16 +94,15 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       val topic = "source-spec/manualacks"
       val input = Vector("one", "two", "three", "four", "five")
 
-      //#create-source-with-manualacks
+      // #create-source-with-manualacks
       val mqttSource: Source[MqttMessageWithAck, Future[Done]] =
         MqttSource.atLeastOnce(
           connectionSettings
             .withClientId(clientId = "source-spec/source1")
             .withCleanSession(false),
           MqttSubscriptions(topic, MqttQoS.AtLeastOnce),
-          bufferSize = 8
-        )
-      //#create-source-with-manualacks
+          bufferSize = 8)
+      // #create-source-with-manualacks
 
       val (subscribed, unackedResult) = mqttSource.take(input.size).toMat(Sink.seq)(Keep.both).run()
       val mqttSink = MqttSink(sinkSettings, MqttQoS.AtLeastOnce)
@@ -120,13 +114,13 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
 
       val businessLogic: Flow[MqttMessageWithAck, MqttMessageWithAck, NotUsed] = Flow[MqttMessageWithAck]
 
-      //#run-source-with-manualacks
+      // #run-source-with-manualacks
       val result = mqttSource
         .via(businessLogic)
         .mapAsync(1)(messageWithAck => messageWithAck.ack().map(_ => messageWithAck.message))
         .take(input.size)
         .runWith(Sink.seq)
-      //#run-source-with-manualacks
+      // #run-source-with-manualacks
       result.futureValue.map(message => message.payload.utf8String) should equal(input)
     }
 
@@ -167,34 +161,30 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
     "receive messages from multiple topics" in {
       val topic2 = "source-spec/topic2"
       val messages = (0 until 7)
-        .flatMap(
-          i =>
-            Seq(
-              MqttMessage(topic1, ByteString(s"ohi_$i")),
-              MqttMessage(topic2, ByteString(s"ohi_$i"))
-            )
-        )
+        .flatMap(i =>
+          Seq(
+            MqttMessage(topic1, ByteString(s"ohi_$i")),
+            MqttMessage(topic2, ByteString(s"ohi_$i"))))
 
-      //#create-source
+      // #create-source
       val mqttSource: Source[MqttMessage, Future[Done]] =
         MqttSource.atMostOnce(
           connectionSettings.withClientId(clientId = "source-spec/source"),
           MqttSubscriptions(Map(topic1 -> MqttQoS.AtLeastOnce, topic2 -> MqttQoS.AtLeastOnce)),
-          bufferSize = 8
-        )
+          bufferSize = 8)
 
       val (subscribed, streamResult) = mqttSource
         .take(messages.size)
         .toMat(Sink.seq)(Keep.both)
         .run()
-      //#create-source
+      // #create-source
 
       Await.ready(subscribed, timeout)
-      //#run-sink
+      // #run-sink
       val sink: Sink[MqttMessage, Future[Done]] =
         MqttSink(connectionSettings, MqttQoS.AtLeastOnce)
       Source(messages).runWith(sink)
-      //#run-sink
+      // #run-sink
 
       streamResult.futureValue shouldBe messages
     }
@@ -214,13 +204,13 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       val secureTopic = "source-spec/secure-topic1"
       val first = MqttSource
         .atMostOnce(sourceSettings.withAuth("username1", "bad_password"),
-                    MqttSubscriptions(secureTopic, MqttQoS.AtLeastOnce),
-                    8)
+          MqttSubscriptions(secureTopic, MqttQoS.AtLeastOnce),
+          8)
         .runWith(Sink.head)
 
       whenReady(first.failed) {
         case e: MqttException => e.getMessage should be("Not authorized to connect")
-        case e => throw e
+        case e                => throw e
       }
     }
 
@@ -230,8 +220,8 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
 
       val (subscribed, result) = MqttSource
         .atMostOnce(sourceSettings.withAuth("username1", "password1"),
-                    MqttSubscriptions(secureTopic, MqttQoS.AtLeastOnce),
-                    8)
+          MqttSubscriptions(secureTopic, MqttQoS.AtLeastOnce),
+          8)
         .toMat(Sink.head)(Keep.both)
         .run()
 
@@ -309,8 +299,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
         c.handleWith(
           Tcp()
             .outgoingConnection("localhost", 1883)
-            .viaMat(KillSwitches.single)(Keep.right)
-        )
+            .viaMat(KillSwitches.single)(Keep.right))
       }
       Await.ready(proxyBinding, timeout)
 
@@ -321,8 +310,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
             .withCleanSession(false)
             .withBroker(s"tcp://localhost:$proxyPort"),
           MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
-          8
-        )
+          8)
         .toMat(TestSink.probe)(Keep.both)
         .run()
 
@@ -345,8 +333,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
         c.handleWith(
           Tcp()
             .outgoingConnection("localhost", 1883)
-            .viaMat(KillSwitches.single)(Keep.right)
-        )
+            .viaMat(KillSwitches.single)(Keep.right))
       }
       Await.ready(proxyBinding2, timeout)
 
@@ -361,11 +348,11 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       val willTopic = "source-spec/will"
       val msg = MqttMessage(topic1, ByteString("ohi"))
 
-      //#will-message
+      // #will-message
       val lastWill = MqttMessage(willTopic, ByteString("ohi"))
         .withQos(MqttQoS.AtLeastOnce)
         .withRetained(true)
-      //#will-message
+      // #will-message
 
       // Create a proxy on an available port so it can be shut down
       val (proxyBinding, connection) = Tcp().bind("localhost", 0).toMat(Sink.head)(Keep.both).run()
@@ -374,8 +361,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
         c.handleWith(
           Tcp()
             .outgoingConnection("localhost", 1883)
-            .viaMat(KillSwitches.single)(Keep.right)
-        )
+            .viaMat(KillSwitches.single)(Keep.right))
       }
       Await.ready(proxyBinding, timeout)
 
@@ -387,9 +373,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
               .withBroker(s"tcp://localhost:$proxyPort")
               .withWill(lastWill),
             MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
-            8
-          )
-      )
+            8))
 
       val (subscribed, probe) = source1.toMat(TestSink.probe)(Keep.both).run()
 
@@ -407,8 +391,8 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       Await.result(proxyKs, timeout).shutdown()
 
       val source2 = MqttSource.atMostOnce(sourceSettings.withClientId("source-spec/executor"),
-                                          MqttSubscriptions(willTopic, MqttQoS.AtLeastOnce),
-                                          8)
+        MqttSubscriptions(willTopic, MqttQoS.AtLeastOnce),
+        8)
 
       val elem = source2.runWith(Sink.head)
       elem.futureValue shouldBe MqttMessage(willTopic, ByteString("ohi"))
@@ -428,8 +412,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
         c.handleWith(
           Tcp()
             .outgoingConnection("localhost", 1883)
-            .via(sharedKillSwitch.flow)
-        )
+            .via(sharedKillSwitch.flow))
       }
       Await.ready(proxyBinding, timeout)
 
@@ -440,8 +423,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
             .withBroker(s"tcp://localhost:$proxyPort")
             .withOfflinePersistenceSettings(bufferSize = 1234),
           MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
-          8
-        )
+          8)
         .via(sharedKillSwitch.flow)
         .toMat(TestSink.probe)(Keep.both)
         .run()
@@ -466,8 +448,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
         c.handleWith(
           Tcp()
             .outgoingConnection("localhost", 1883)
-            .viaMat(KillSwitches.single)(Keep.right)
-        )
+            .viaMat(KillSwitches.single)(Keep.right))
       }
       Await.ready(proxyBinding2, timeout)
 
@@ -479,8 +460,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
             .withBroker(s"tcp://localhost:$proxyPort")
             .withOfflinePersistenceSettings(bufferSize = 1234),
           MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
-          8
-        )
+          8)
         .toMat(TestSink.probe)(Keep.both)
         .run()
 

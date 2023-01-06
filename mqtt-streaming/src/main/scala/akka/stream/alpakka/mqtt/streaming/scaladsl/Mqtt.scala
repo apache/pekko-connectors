@@ -6,9 +6,9 @@ package akka.stream.alpakka.mqtt.streaming
 package scaladsl
 
 import akka.NotUsed
-import akka.stream.{Attributes, BidiShape, Inlet, Outlet}
+import akka.stream.{ Attributes, BidiShape, Inlet, Outlet }
 import akka.stream.scaladsl.BidiFlow
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
 
 object Mqtt {
@@ -26,15 +26,13 @@ object Mqtt {
    */
   def clientSessionFlow[A](
       session: MqttClientSession,
-      connectionId: ByteString
-  ): BidiFlow[Command[A], ByteString, ByteString, Either[MqttCodec.DecodeError, Event[A]], NotUsed] =
+      connectionId: ByteString)
+      : BidiFlow[Command[A], ByteString, ByteString, Either[MqttCodec.DecodeError, Event[A]], NotUsed] =
     BidiFlow
       .fromFlows(session.commandFlow[A](connectionId), session.eventFlow[A](connectionId))
       .atop(
         BidiFlow.fromGraph(
-          new CoupledTerminationBidi
-        )
-      )
+          new CoupledTerminationBidi))
 
   /**
    * Create a bidirectional flow that maintains server session state with an MQTT endpoint.
@@ -49,15 +47,13 @@ object Mqtt {
    */
   def serverSessionFlow[A](
       session: MqttServerSession,
-      connectionId: ByteString
-  ): BidiFlow[Command[A], ByteString, ByteString, Either[MqttCodec.DecodeError, Event[A]], NotUsed] =
+      connectionId: ByteString)
+      : BidiFlow[Command[A], ByteString, ByteString, Either[MqttCodec.DecodeError, Event[A]], NotUsed] =
     BidiFlow
       .fromFlows(session.commandFlow[A](connectionId), session.eventFlow[A](connectionId))
       .atop(
         BidiFlow.fromGraph(
-          new CoupledTerminationBidi
-        )
-      )
+          new CoupledTerminationBidi))
 }
 
 /** INTERNAL API - taken from Akka streams - perhaps it should be made public */

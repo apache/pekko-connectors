@@ -9,21 +9,21 @@ import akka.dispatch.ExecutionContexts
 import akka.dispatch.ExecutionContexts.parasitic
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.Marshal
-import akka.http.scaladsl.model.HttpMethods.{DELETE, POST}
-import akka.http.scaladsl.model.Uri.{Path, Query}
+import akka.http.scaladsl.model.HttpMethods.{ DELETE, POST }
+import akka.http.scaladsl.model.Uri.{ Path, Query }
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, FromResponseUnmarshaller, Unmarshal, Unmarshaller}
+import akka.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller, Unmarshal, Unmarshaller }
 import akka.stream.alpakka.google._
-import akka.stream.alpakka.google.auth.{Credentials, ServiceAccountCredentials}
+import akka.stream.alpakka.google.auth.{ Credentials, ServiceAccountCredentials }
 import akka.stream.alpakka.google.http.GoogleHttp
 import akka.stream.alpakka.google.implicits._
-import akka.stream.alpakka.google.scaladsl.{`X-Upload-Content-Type`, Paginated}
+import akka.stream.alpakka.google.scaladsl.{ `X-Upload-Content-Type`, Paginated }
 import akka.stream.alpakka.googlecloud.storage._
 import akka.stream.alpakka.googlecloud.storage.impl.Formats._
-import akka.stream.scaladsl.{Keep, RunnableGraph, Sink, Source}
-import akka.stream.{Attributes, Materializer}
+import akka.stream.scaladsl.{ Keep, RunnableGraph, Sink, Source }
+import akka.stream.{ Attributes, Materializer }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import spray.json._
 
 import scala.annotation.nowarn
@@ -76,8 +76,8 @@ import scala.concurrent.Future
     }
 
   def getObject(bucket: String,
-                objectName: String,
-                generation: Option[Long] = None): Source[Option[StorageObject], NotUsed] = sourceGCS { settings =>
+      objectName: String,
+      generation: Option[Long] = None): Source[Option[StorageObject], NotUsed] = sourceGCS { settings =>
     val uri = Uri(settings.endpointUrl)
       .withPath(Path(settings.basePath) ++ getObjectPath(bucket, objectName))
       .withQuery(Query(generation.map("generation" -> _.toString).toMap))
@@ -86,8 +86,8 @@ import scala.concurrent.Future
   }
 
   def deleteObjectSource(bucket: String,
-                         objectName: String,
-                         generation: Option[Long] = None): Source[Boolean, NotUsed] = sourceGCS { settings =>
+      objectName: String,
+      generation: Option[Long] = None): Source[Boolean, NotUsed] = sourceGCS { settings =>
     val uri = Uri(settings.endpointUrl)
       .withPath(Path(settings.basePath) ++ getObjectPath(bucket, objectName))
       .withQuery(Query(generation.map("generation" -> _.toString).toMap))
@@ -100,9 +100,9 @@ import scala.concurrent.Future
       .flatMapConcat(listBucketResult => deleteObjectSource(bucket, listBucketResult.name))
 
   def putObject(bucket: String,
-                objectName: String,
-                data: Source[ByteString, _],
-                contentType: ContentType): Source[StorageObject, NotUsed] = sourceGCS { settings =>
+      objectName: String,
+      data: Source[ByteString, _],
+      contentType: ContentType): Source[StorageObject, NotUsed] = sourceGCS { settings =>
     val uri = Uri(settings.endpointUrl)
       .withPath(Path("/upload" + settings.basePath) ++ getBucketPath(bucket) / "o")
       .withQuery(Query("uploadType" -> "media", "name" -> objectName))
@@ -112,8 +112,8 @@ import scala.concurrent.Future
   }
 
   def download(bucket: String,
-               objectName: String,
-               generation: Option[Long] = None): Source[Option[Source[ByteString, NotUsed]], NotUsed] = sourceGCS {
+      objectName: String,
+      generation: Option[Long] = None): Source[Option[Source[ByteString, NotUsed]], NotUsed] = sourceGCS {
     settings =>
       val query = ("alt" -> "media") +: ("generation" -> generation.map(_.toString)) ?+: Query.Empty
       val uri = Uri(settings.endpointUrl)
@@ -126,10 +126,10 @@ import scala.concurrent.Future
   }
 
   def resumableUpload(bucket: String,
-                      objectName: String,
-                      contentType: ContentType,
-                      chunkSize: Int = 5 * 1024 * 1024,
-                      metadata: Option[Map[String, String]] = None): Sink[ByteString, Future[StorageObject]] =
+      objectName: String,
+      contentType: ContentType,
+      chunkSize: Int = 5 * 1024 * 1024,
+      metadata: Option[Map[String, String]] = None): Sink[ByteString, Future[StorageObject]] =
     Sink
       .fromMaterializer { (mat, attr) =>
         implicit val settings = {
@@ -167,9 +167,9 @@ import scala.concurrent.Future
       .mapMaterializedValue(_.flatten)
 
   def rewrite(sourceBucket: String,
-              sourceObjectName: String,
-              destinationBucket: String,
-              destinationObjectName: String): RunnableGraph[Future[StorageObject]] = {
+      sourceObjectName: String,
+      destinationBucket: String,
+      destinationObjectName: String): RunnableGraph[Future[StorageObject]] = {
 
     sealed trait RewriteState
     case object Starting extends RewriteState
@@ -180,8 +180,8 @@ import scala.concurrent.Future
     val destinationPath = getObjectPath(destinationBucket, destinationObjectName)
 
     def rewriteRequest(
-        rewriteToken: Option[String]
-    )(implicit conf: GCSSettings): Source[Option[(RewriteState, RewriteResponse)], NotUsed] = {
+        rewriteToken: Option[String])(
+        implicit conf: GCSSettings): Source[Option[(RewriteState, RewriteResponse)], NotUsed] = {
       val query = ("rewriteToken" -> rewriteToken) ?+: Query.Empty
       val uri = Uri(conf.endpointUrl)
         .withPath(Path(conf.basePath) ++ sourcePath / "rewriteTo" ++ destinationPath)
@@ -190,10 +190,8 @@ import scala.concurrent.Future
       val request = HttpRequest(POST, uri, entity = entity)
       makeRequestSource[RewriteResponse](request).map { rewriteResponse =>
         Some(
-          rewriteResponse.rewriteToken.fold[(RewriteState, RewriteResponse)]((Finished, rewriteResponse))(
-            token => (Running(token), rewriteResponse)
-          )
-        )
+          rewriteResponse.rewriteToken.fold[(RewriteState, RewriteResponse)]((Finished, rewriteResponse))(token =>
+            (Running(token), rewriteResponse)))
       }
     }
 
@@ -202,8 +200,8 @@ import scala.concurrent.Future
         implicit val conf: GCSSettings = resolveGCSSettings(mat, attr)
         Source
           .unfoldAsync[RewriteState, RewriteResponse](Starting) {
-            case Finished => Future.successful(None)
-            case Starting => rewriteRequest(None).withAttributes(attr).runWith(Sink.head)(mat)
+            case Finished       => Future.successful(None)
+            case Starting       => rewriteRequest(None).withAttributes(attr).runWith(Sink.head)(mat)
             case Running(token) => rewriteRequest(Some(token)).withAttributes(attr).runWith(Sink.head)(mat)
           }
       }
@@ -212,10 +210,8 @@ import scala.concurrent.Future
         _.flatMap(
           _.resource match {
             case Some(resource) => Future.successful(resource)
-            case None => Future.failed(new RuntimeException("Storage object is missing"))
-          }
-        )(ExecutionContexts.parasitic)
-      )
+            case None           => Future.failed(new RuntimeException("Storage object is missing"))
+          })(ExecutionContexts.parasitic))
   }
 
   private def makeRequestSource[T: FromResponseUnmarshaller](request: HttpRequest): Source[T, NotUsed] =
@@ -307,8 +303,7 @@ import scala.concurrent.Future
         (legacySettings.baseUrl.contains("googleapis.com") || legacySettings.baseUrl == "unsupported")
         && (legacySettings.basePath.contains("storage/v1") || legacySettings.basePath == "unsupported")
         && (legacySettings.tokenUrl.contains("googleapis.com") || legacySettings.tokenUrl == "unsupported"),
-        "Non-default base-url/base-path/token-url no longer supported, use config path alpakka.google.forward-proxy"
-      )
+        "Non-default base-url/base-path/token-url no longer supported, use config path alpakka.google.forward-proxy")
 
       val legacyScopes = legacySettings.tokenScope.split(" ").toList
       val credentials = Credentials.cache(
@@ -317,22 +312,18 @@ import scala.concurrent.Future
           legacySettings.clientEmail,
           legacySettings.privateKey,
           legacyScopes,
-          mat.system.name
-        )
-      ) {
+          mat.system.name)) {
         ServiceAccountCredentials(
           legacySettings.projectId,
           legacySettings.clientEmail,
           legacySettings.privateKey,
-          legacyScopes
-        )
+          legacyScopes)
       }
 
       GoogleSettings(
         legacySettings.projectId,
         credentials,
-        settings.requestSettings
-      )
+        settings.requestSettings)
     }
   }
 

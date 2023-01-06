@@ -12,8 +12,8 @@ import akka.stream.alpakka.ironmq._
 import akka.stream.alpakka.ironmq.scaladsl.CommittableMessage
 import akka.stream.stage._
 
-import scala.concurrent.{ExecutionContextExecutor, Future}
-import scala.util.{Failure, Success}
+import scala.concurrent.{ ExecutionContextExecutor, Future }
+import scala.util.{ Failure, Success }
 
 @InternalApi
 private[ironmq] object IronMqPullStage {
@@ -73,8 +73,7 @@ private[ironmq] final class IronMqPullStage(queueName: String, settings: IronMqS
             }
             deliveryMessages()
           }
-        }
-      )
+        })
 
       override protected def onTimer(timerKey: Any): Unit = timerKey match {
         case FetchMessagesTimerKey =>
@@ -91,8 +90,7 @@ private[ironmq] final class IronMqPullStage(queueName: String, settings: IronMqS
               queueName,
               bufferMaxSize - buffer.size,
               watch = pollTimeout,
-              timeout = reservationTimeout
-            )
+              timeout = reservationTimeout)
             .onComplete {
               case Success(xs) =>
                 updateBuffer.invoke(xs.toList)

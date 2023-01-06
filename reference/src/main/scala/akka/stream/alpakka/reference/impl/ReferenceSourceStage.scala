@@ -8,12 +8,12 @@ import akka.Done
 import akka.annotation.InternalApi
 import akka.event.Logging
 import akka.stream._
-import akka.stream.alpakka.reference.{ReferenceReadResult, SourceSettings}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, OutHandler}
+import akka.stream.alpakka.reference.{ ReferenceReadResult, SourceSettings }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler }
 import akka.util.ByteString
 
 import scala.collection.immutable
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 import scala.util.Success
 
 /**
@@ -26,8 +26,7 @@ import scala.util.Success
 @InternalApi private[reference] final class ReferenceSourceStageLogic(
     val settings: SourceSettings,
     val startupPromise: Promise[Done],
-    val shape: SourceShape[ReferenceReadResult]
-) extends GraphStageLogic(shape) {
+    val shape: SourceShape[ReferenceReadResult]) extends GraphStageLogic(shape) {
 
   private def out = shape.out
 
@@ -37,12 +36,12 @@ import scala.util.Success
   override def preStart(): Unit =
     startupPromise.success(Done)
 
-  setHandler(out, new OutHandler {
-    override def onPull(): Unit = push(
-      out,
-      new ReferenceReadResult(immutable.Seq(ByteString("one")), Success(100))
-    )
-  })
+  setHandler(out,
+    new OutHandler {
+      override def onPull(): Unit = push(
+        out,
+        new ReferenceReadResult(immutable.Seq(ByteString("one")), Success(100)))
+    })
 
   /**
    * Cleanup logic

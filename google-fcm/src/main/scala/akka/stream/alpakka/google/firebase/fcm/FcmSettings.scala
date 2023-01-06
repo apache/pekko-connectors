@@ -6,7 +6,7 @@ package akka.stream.alpakka.google.firebase.fcm
 
 import akka.actor.ClassicActorSystemProvider
 import akka.http.scaladsl.model.headers.BasicHttpCredentials
-import akka.stream.alpakka.google.{ForwardProxy => CommonForwardProxy}
+import akka.stream.alpakka.google.{ ForwardProxy => CommonForwardProxy }
 
 import java.util.Objects
 import scala.annotation.nowarn
@@ -14,25 +14,24 @@ import scala.compat.java8.OptionConverters._
 
 @nowarn("msg=deprecated")
 final class FcmSettings private (
-    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */ @deprecated(
+    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */
+    @deprecated(
       "Use akka.stream.alpakka.google.GoogleSettings",
-      "3.0.0"
-    ) @Deprecated val clientEmail: String,
-    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */ @deprecated(
+      "3.0.0") @Deprecated val clientEmail: String,
+    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */
+    @deprecated(
       "Use akka.stream.alpakka.google.GoogleSettings",
-      "3.0.0"
-    ) @Deprecated val privateKey: String,
-    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */ @deprecated(
+      "3.0.0") @Deprecated val privateKey: String,
+    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */
+    @deprecated(
       "Use akka.stream.alpakka.google.GoogleSettings",
-      "3.0.0"
-    ) @Deprecated val projectId: String,
+      "3.0.0") @Deprecated val projectId: String,
     val isTest: Boolean,
     val maxConcurrentConnections: Int,
-    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */ @deprecated(
+    /** Use [[akka.stream.alpakka.google.GoogleSettings]] */
+    @deprecated(
       "Use akka.stream.alpakka.google.GoogleSettings",
-      "3.0.0"
-    ) @Deprecated val forwardProxy: Option[ForwardProxy] = Option.empty
-) {
+      "3.0.0") @Deprecated val forwardProxy: Option[ForwardProxy] = Option.empty) {
 
   /**
    * @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]]
@@ -72,14 +71,13 @@ final class FcmSettings private (
       projectId: String = projectId,
       isTest: Boolean = isTest,
       maxConcurrentConnections: Int = maxConcurrentConnections,
-      forwardProxy: Option[ForwardProxy] = forwardProxy
-  ): FcmSettings =
+      forwardProxy: Option[ForwardProxy] = forwardProxy): FcmSettings =
     new FcmSettings(clientEmail = clientEmail,
-                    privateKey = privateKey,
-                    projectId = projectId,
-                    isTest = isTest,
-                    maxConcurrentConnections = maxConcurrentConnections,
-                    forwardProxy = forwardProxy)
+      privateKey = privateKey,
+      projectId = projectId,
+      isTest = isTest,
+      maxConcurrentConnections = maxConcurrentConnections,
+      forwardProxy = forwardProxy)
 
   override def toString =
     s"""FcmFlowConfig(clientEmail=$clientEmail,projectId=$projectId,isTest=$isTest,maxConcurrentConnections=$maxConcurrentConnections,forwardProxy=$forwardProxy)"""
@@ -197,9 +195,9 @@ object ForwardProxy {
     new ForwardProxy(host, port, credentials, Option.empty)
 
   def apply(host: String,
-            port: Int,
-            credentials: Option[ForwardProxyCredentials],
-            trustPem: Option[ForwardProxyTrustPem]) =
+      port: Int,
+      credentials: Option[ForwardProxyCredentials],
+      trustPem: Option[ForwardProxyTrustPem]) =
     new ForwardProxy(host, port, credentials, trustPem)
 
   /** Java API */
@@ -210,9 +208,9 @@ object ForwardProxy {
     apply(host, port, credentials)
 
   def create(host: String,
-             port: Int,
-             credentials: Option[ForwardProxyCredentials],
-             trustPem: Option[ForwardProxyTrustPem]) =
+      port: Int,
+      credentials: Option[ForwardProxyCredentials],
+      trustPem: Option[ForwardProxyTrustPem]) =
     apply(host, port, credentials, trustPem)
 
 }
@@ -223,9 +221,9 @@ object ForwardProxy {
 @deprecated("Use akka.stream.alpakka.google.ForwardProxy", "3.0.0")
 @Deprecated
 final class ForwardProxy private (val host: String,
-                                  val port: Int,
-                                  val credentials: Option[ForwardProxyCredentials],
-                                  val trustPem: Option[ForwardProxyTrustPem]) {
+    val port: Int,
+    val credentials: Option[ForwardProxyCredentials],
+    val trustPem: Option[ForwardProxyTrustPem]) {
 
   /** Java API */
   def getHost: String = host
@@ -243,9 +241,9 @@ final class ForwardProxy private (val host: String,
   def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
 
   private def copy(host: String = host,
-                   port: Int = port,
-                   credentials: Option[ForwardProxyCredentials] = credentials,
-                   trustPem: Option[ForwardProxyTrustPem] = trustPem) =
+      port: Int = port,
+      credentials: Option[ForwardProxyCredentials] = credentials,
+      trustPem: Option[ForwardProxyTrustPem] = trustPem) =
     new ForwardProxy(host, port, credentials, trustPem)
 
   override def toString =
@@ -274,8 +272,7 @@ final class ForwardProxy private (val host: String,
       host,
       port,
       credentials.map(c => BasicHttpCredentials(c.username, c.password)),
-      trustPem.map(_.pemPath)
-    )
+      trustPem.map(_.pemPath))
 }
 
 object FcmSettings {
@@ -296,14 +293,12 @@ object FcmSettings {
   def apply(
       clientEmail: String,
       privateKey: String,
-      projectId: String
-  ): FcmSettings = new FcmSettings(
+      projectId: String): FcmSettings = new FcmSettings(
     clientEmail,
     privateKey,
     projectId,
     isTest = false,
-    maxConcurrentConnections = 100
-  )
+    maxConcurrentConnections = 100)
 
   /**
    * @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]]
@@ -314,15 +309,13 @@ object FcmSettings {
       clientEmail: String,
       privateKey: String,
       projectId: String,
-      forwardProxy: ForwardProxy
-  ): FcmSettings = new FcmSettings(
+      forwardProxy: ForwardProxy): FcmSettings = new FcmSettings(
     clientEmail,
     privateKey,
     projectId,
     isTest = false,
     maxConcurrentConnections = 100,
-    forwardProxy = Option(forwardProxy)
-  )
+    forwardProxy = Option(forwardProxy))
 
   /**
    * Java API

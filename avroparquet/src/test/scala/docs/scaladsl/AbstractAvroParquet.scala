@@ -9,14 +9,14 @@ import java.io.File
 import akka.testkit.TestKit
 import com.sksamuel.avro4s.RecordFormat
 import org.apache.avro.Schema
-import org.apache.avro.generic.{GenericRecord, GenericRecordBuilder}
+import org.apache.avro.generic.{ GenericRecord, GenericRecordBuilder }
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
-import org.apache.parquet.avro.{AvroParquetReader, AvroParquetWriter, AvroReadSupport}
-import org.apache.parquet.hadoop.{ParquetReader, ParquetWriter}
+import org.apache.parquet.avro.{ AvroParquetReader, AvroParquetWriter, AvroReadSupport }
+import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
 import org.apache.parquet.hadoop.util.HadoopInputFile
 import org.scalacheck.Gen
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.scalatest.{ BeforeAndAfterAll, Suite }
 
 import scala.reflect.io.Directory
 import scala.util.Random
@@ -27,8 +27,7 @@ trait AbstractAvroParquet extends BeforeAndAfterAll {
   case class Document(id: String, body: String)
 
   val schema: Schema = new Schema.Parser().parse(
-    "{\"type\":\"record\",\"name\":\"Document\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"body\",\"type\":\"string\"}]}"
-  )
+    "{\"type\":\"record\",\"name\":\"Document\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"body\",\"type\":\"string\"}]}")
 
   val genDocument: Gen[Document] =
     Gen.oneOf(Seq(Document(id = Gen.alphaStr.sample.get, body = Gen.alphaLowerStr.sample.get)))

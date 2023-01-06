@@ -6,13 +6,13 @@ package akka.stream.alpakka.googlecloud.bigquery
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes.Forbidden
-import akka.http.scaladsl.model.{ErrorInfo, ExceptionWithErrorInfo, HttpResponse}
-import akka.http.scaladsl.unmarshalling.{FromResponseUnmarshaller, PredefinedFromEntityUnmarshallers, Unmarshaller}
+import akka.http.scaladsl.model.{ ErrorInfo, ExceptionWithErrorInfo, HttpResponse }
+import akka.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, PredefinedFromEntityUnmarshallers, Unmarshaller }
 import akka.stream.alpakka.google.implicits._
 import akka.stream.alpakka.google.util.Retry
 import akka.stream.alpakka.googlecloud.bigquery.model.ErrorProto
 import spray.json.DefaultJsonProtocol._
-import spray.json.{enrichAny, RootJsonFormat}
+import spray.json.{ enrichAny, RootJsonFormat }
 
 import scala.annotation.nowarn
 
@@ -47,8 +47,7 @@ object BigQueryException {
             },
             PredefinedFromEntityUnmarshallers.stringUnmarshaller.map { error =>
               BigQueryException(ErrorInfo(status.value, error), error): Throwable
-            }
-          )
+            })
           .apply(entity)
       }
       .withDefaultRetry

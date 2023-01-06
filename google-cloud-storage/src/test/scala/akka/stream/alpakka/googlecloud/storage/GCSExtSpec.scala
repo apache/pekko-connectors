@@ -20,9 +20,7 @@ class GCSExtSpec extends AnyFlatSpec with Matchers with LogCapturing {
     val config = ConfigFactory.parseMap(
       Map(
         "alpakka.google.cloud-storage.endpoint-url" -> endpointUrl,
-        "alpakka.google.cloud-storage.base-path" -> basePath
-      ).asJava
-    )
+        "alpakka.google.cloud-storage.base-path" -> basePath).asJava)
 
     implicit val system = ActorSystem.create("gcs", config)
     val ext = GCSExt(system)

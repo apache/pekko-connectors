@@ -6,10 +6,10 @@ package akka.stream.alpakka.jms
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-import akka.stream.alpakka.jms.impl.{JmsAckSession, JmsSession}
+import akka.stream.alpakka.jms.impl.{ JmsAckSession, JmsSession }
 import javax.jms
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 case class AckEnvelope private[jms] (message: jms.Message, private val jmsSession: JmsAckSession) {
 

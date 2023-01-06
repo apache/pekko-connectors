@@ -6,12 +6,12 @@ package akka.stream.alpakka.hdfs.scaladsl
 
 import akka.NotUsed
 import akka.stream.ActorAttributes.IODispatcher
-import akka.stream.scaladsl.{Source, StreamConverters}
-import akka.stream.{Attributes, IOResult}
+import akka.stream.scaladsl.{ Source, StreamConverters }
+import akka.stream.{ Attributes, IOResult }
 import akka.util.ByteString
-import org.apache.hadoop.fs.{FileSystem, Path}
+import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.io.compress.CompressionCodec
-import org.apache.hadoop.io.{SequenceFile, Writable}
+import org.apache.hadoop.io.{ SequenceFile, Writable }
 
 import scala.concurrent.Future
 
@@ -27,8 +27,7 @@ object HdfsSource {
   def data(
       fs: FileSystem,
       path: Path,
-      chunkSize: Int = 8192
-  ): Source[ByteString, Future[IOResult]] =
+      chunkSize: Int = 8192): Source[ByteString, Future[IOResult]] =
     StreamConverters.fromInputStream(() => fs.open(path), chunkSize)
 
   /**
@@ -43,8 +42,7 @@ object HdfsSource {
       fs: FileSystem,
       path: Path,
       codec: CompressionCodec,
-      chunkSize: Int = 8192
-  ): Source[ByteString, Future[IOResult]] =
+      chunkSize: Int = 8192): Source[ByteString, Future[IOResult]] =
     StreamConverters.fromInputStream(() => codec.createInputStream(fs.open(path)), chunkSize)
 
   /**
@@ -59,8 +57,7 @@ object HdfsSource {
       fs: FileSystem,
       path: Path,
       classK: Class[K],
-      classV: Class[V]
-  ): Source[(K, V), NotUsed] = {
+      classV: Class[V]): Source[(K, V), NotUsed] = {
     val reader: SequenceFile.Reader = new SequenceFile.Reader(fs.getConf, SequenceFile.Reader.file(path))
     val it = Iterator
       .continually {

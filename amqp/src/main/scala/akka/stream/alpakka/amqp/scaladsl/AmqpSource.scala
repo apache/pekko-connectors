@@ -7,7 +7,7 @@ package akka.stream.alpakka.amqp.scaladsl
 import akka.NotUsed
 import akka.dispatch.ExecutionContexts
 import akka.stream.alpakka.amqp.impl
-import akka.stream.alpakka.amqp.{AmqpSourceSettings, ReadResult}
+import akka.stream.alpakka.amqp.{ AmqpSourceSettings, ReadResult }
 import akka.stream.scaladsl.Source
 
 object AmqpSource {

@@ -8,7 +8,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.testkit.TestKit
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers

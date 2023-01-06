@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.jms.impl
 import java.util.concurrent.Executors
-import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
+import java.util.concurrent.atomic.{ AtomicBoolean, AtomicReference }
 
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutorService, Future}
+import scala.concurrent.{ ExecutionContext, ExecutionContextExecutorService, Future }
 import scala.concurrent.duration._
 
 class SoftReferenceCacheSpec extends AnyWordSpec with Matchers {

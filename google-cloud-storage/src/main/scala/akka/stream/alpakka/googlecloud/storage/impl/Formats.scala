@@ -6,9 +6,9 @@ package akka.stream.alpakka.googlecloud.storage.impl
 
 import java.time.OffsetDateTime
 
-import akka.http.scaladsl.model.{ContentType, ContentTypes}
+import akka.http.scaladsl.model.{ ContentType, ContentTypes }
 import akka.stream.alpakka.googlecloud.storage._
-import spray.json.{DefaultJsonProtocol, JsObject, JsValue, RootJsonFormat, RootJsonReader}
+import spray.json.{ DefaultJsonProtocol, JsObject, JsValue, RootJsonFormat, RootJsonReader }
 
 import scala.util.Try
 
@@ -25,18 +25,18 @@ object Formats extends DefaultJsonProtocol {
   private implicit val ProjectTeamJsonFormat = jsonFormat2(ProjectTeam)
 
   private final case class ObjectAccessControls(kind: String,
-                                                id: String,
-                                                selfLink: String,
-                                                bucket: String,
-                                                `object`: String,
-                                                generation: String,
-                                                entity: String,
-                                                role: String,
-                                                email: String,
-                                                entityId: String,
-                                                domain: String,
-                                                projectTeam: ProjectTeam,
-                                                etag: String)
+      id: String,
+      selfLink: String,
+      bucket: String,
+      `object`: String,
+      generation: String,
+      entity: String,
+      role: String,
+      email: String,
+      entityId: String,
+      domain: String,
+      projectTeam: ProjectTeam,
+      etag: String)
   private implicit val ObjectAccessControlsJsonFormat = jsonFormat13(ObjectAccessControls)
 
   /**
@@ -65,8 +65,7 @@ object Formats extends DefaultJsonProtocol {
       timeCreated: String,
       timeDeleted: Option[String],
       timeStorageClassUpdated: String,
-      updated: String
-  )
+      updated: String)
 
   private implicit val storageObjectReadOnlyJson = jsonFormat18(StorageObjectReadOnlyJson)
 
@@ -85,8 +84,7 @@ object Formats extends DefaultJsonProtocol {
       name: String,
       storageClass: String,
       temporaryHold: Option[Boolean],
-      acl: Option[List[ObjectAccessControls]]
-  )
+      acl: Option[List[ObjectAccessControls]])
 
   private implicit val storageObjectWritableJson = jsonFormat14(StorageObjectWriteableJson)
 
@@ -119,8 +117,7 @@ object Formats extends DefaultJsonProtocol {
       kind: String,
       nextPageToken: Option[String],
       prefixes: Option[List[String]],
-      items: Option[List[StorageObjectJson]]
-  )
+      items: Option[List[StorageObjectJson]])
 
   private implicit val bucketInfoJsonFormat = jsonFormat6(BucketInfoJson)
 
@@ -135,8 +132,7 @@ object Formats extends DefaultJsonProtocol {
       objectSize: String,
       done: Boolean,
       rewriteToken: Option[String],
-      resource: Option[StorageObjectJson]
-  )
+      resource: Option[StorageObjectJson])
 
   private implicit val rewriteResponseFormat = jsonFormat6(RewriteResponseJson)
 
@@ -151,8 +147,7 @@ object Formats extends DefaultJsonProtocol {
       kind: String,
       id: String,
       selfLink: String,
-      etag: String
-  )
+      etag: String)
 
   implicit val bucketInfoFormat = jsonFormat2(BucketInfo)
 
@@ -163,8 +158,7 @@ object Formats extends DefaultJsonProtocol {
         res.kind,
         res.nextPageToken,
         res.prefixes,
-        res.items.getOrElse(List.empty).map(storageObjectJsonToStorageObject)
-      )
+        res.items.getOrElse(List.empty).map(storageObjectJsonToStorageObject))
     }
   }
 
@@ -188,15 +182,13 @@ object Formats extends DefaultJsonProtocol {
         objectSize,
         res.done,
         res.rewriteToken,
-        res.resource.map(storageObjectJsonToStorageObject)
-      )
+        res.resource.map(storageObjectJsonToStorageObject))
     }
   }
 
   implicit object BucketReads extends RootJsonReader[Bucket] {
     override def read(
-        json: JsValue
-    ): Bucket = {
+        json: JsValue): Bucket = {
       val res = bucketInfoJsonFormat.read(json)
 
       Bucket(
@@ -205,8 +197,7 @@ object Formats extends DefaultJsonProtocol {
         res.kind,
         res.id,
         res.selfLink,
-        res.etag
-      )
+        res.etag)
     }
   }
 
@@ -254,39 +245,32 @@ object Formats extends DefaultJsonProtocol {
       metadata,
       componentCount,
       kmsKeyName,
-      customerEncryption.map(
-        ce =>
-          akka.stream.alpakka.googlecloud.storage
-            .CustomerEncryption(ce.encryptionAlgorithm, ce.keySha256)
-      ),
+      customerEncryption.map(ce =>
+        akka.stream.alpakka.googlecloud.storage
+          .CustomerEncryption(ce.encryptionAlgorithm, ce.keySha256)),
       owner.map(o => akka.stream.alpakka.googlecloud.storage.Owner(o.entity, o.entityId)),
       acl.map(
-        _.map(
-          a =>
-            akka.stream.alpakka.googlecloud.storage.ObjectAccessControls(
-              a.kind,
-              a.id,
-              a.selfLink,
-              a.bucket,
-              a.`object`,
-              a.generation,
-              a.entity,
-              a.role,
-              a.email,
-              a.entityId,
-              a.domain,
-              akka.stream.alpakka.googlecloud.storage
-                .ProjectTeam(a.projectTeam.projectNumber, a.projectTeam.team),
-              a.etag
-            )
-        )
-      )
-    )
+        _.map(a =>
+          akka.stream.alpakka.googlecloud.storage.ObjectAccessControls(
+            a.kind,
+            a.id,
+            a.selfLink,
+            a.bucket,
+            a.`object`,
+            a.generation,
+            a.entity,
+            a.role,
+            a.email,
+            a.entityId,
+            a.domain,
+            akka.stream.alpakka.googlecloud.storage
+              .ProjectTeam(a.projectTeam.projectNumber, a.projectTeam.team),
+            a.etag))))
   }
 
   private def parseContentType(contentType: String): ContentType =
     ContentType.parse(contentType) match {
-      case Left(_) => throw new RuntimeException(s"Storage object content type $contentType is not supported")
+      case Left(_)   => throw new RuntimeException(s"Storage object content type $contentType is not supported")
       case Right(ct) => ct
     }
 }

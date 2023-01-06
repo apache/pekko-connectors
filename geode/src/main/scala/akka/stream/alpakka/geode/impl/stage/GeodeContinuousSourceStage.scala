@@ -7,10 +7,10 @@ package akka.stream.alpakka.geode.impl.stage
 import akka.Done
 import akka.annotation.InternalApi
 import akka.stream.stage._
-import akka.stream.{ActorAttributes, Attributes, Outlet, SourceShape}
+import akka.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import org.apache.geode.cache.client.ClientCache
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 @InternalApi
 private[geode] class GeodeContinuousSourceStage[V](cache: ClientCache, name: String, sql: String)
@@ -28,36 +28,35 @@ private[geode] class GeodeContinuousSourceStage[V](cache: ClientCache, name: Str
 
     (new GeodeCQueryGraphLogic[V](shape, cache, name, sql) {
 
-      override val onConnect: AsyncCallback[Unit] = getAsyncCallback[Unit] { v =>
-        subPromise.success(Done)
-      }
-
-      val onElement: AsyncCallback[V] = getAsyncCallback[V] { element =>
-        if (isAvailable(out) && incomingQueueIsEmpty) {
-          pushElement(out, element)
-        } else
-          enqueue(element)
-        handleTerminaison()
-      }
-
-      //
-      // This handler, will first forward initial (old) result, then new ones (continuous).
-      //
-      setHandler(
-        out,
-        new OutHandler {
-          override def onPull() = {
-            if (initialResultsIterator.hasNext)
-              push(out, initialResultsIterator.next())
-            else
-              dequeue() foreach { e =>
-                pushElement(out, e)
-              }
-            handleTerminaison()
-          }
+        override val onConnect: AsyncCallback[Unit] = getAsyncCallback[Unit] { v =>
+          subPromise.success(Done)
         }
-      )
 
-    }, subPromise.future)
+        val onElement: AsyncCallback[V] = getAsyncCallback[V] { element =>
+          if (isAvailable(out) && incomingQueueIsEmpty) {
+            pushElement(out, element)
+          } else
+            enqueue(element)
+          handleTerminaison()
+        }
+
+        //
+        // This handler, will first forward initial (old) result, then new ones (continuous).
+        //
+        setHandler(
+          out,
+          new OutHandler {
+            override def onPull() = {
+              if (initialResultsIterator.hasNext)
+                push(out, initialResultsIterator.next())
+              else
+                dequeue().foreach { e =>
+                  pushElement(out, e)
+                }
+              handleTerminaison()
+            }
+          })
+
+      }, subPromise.future)
   }
 }

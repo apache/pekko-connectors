@@ -6,9 +6,9 @@ package akka.stream.alpakka.reference.impl
 
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.alpakka.reference.{ReferenceWriteMessage, ReferenceWriteResult, Resource}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.alpakka.reference.{ ReferenceWriteMessage, ReferenceWriteResult, Resource }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.util.ByteString
 
 /**
@@ -20,8 +20,7 @@ import akka.util.ByteString
  */
 @InternalApi private[reference] final class ReferenceWithResourceFlowStageLogic(
     val resource: Resource,
-    val shape: FlowShape[ReferenceWriteMessage, ReferenceWriteResult]
-) extends GraphStageLogic(shape) {
+    val shape: FlowShape[ReferenceWriteMessage, ReferenceWriteResult]) extends GraphStageLogic(shape) {
 
   private def in = shape.in
   private def out = shape.out
@@ -39,12 +38,12 @@ import akka.util.ByteString
         val data = writeMessage.data.map(_ ++ ByteString(s" ${resource.settings.msg}"))
         push(out, new ReferenceWriteResult(writeMessage.withData(data), writeMessage.metrics, 200))
       }
-    }
-  )
+    })
 
-  setHandler(out, new OutHandler {
-    override def onPull(): Unit = pull(in)
-  })
+  setHandler(out,
+    new OutHandler {
+      override def onPull(): Unit = pull(in)
+    })
 
   /**
    * Cleanup logic

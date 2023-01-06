@@ -5,32 +5,32 @@
 package akka.stream.alpakka.google.http
 
 import akka.NotUsed
-import akka.actor.{ActorSystem, ExtendedActorSystem}
+import akka.actor.{ ActorSystem, ExtendedActorSystem }
 import akka.event.LoggingAdapter
 import akka.http.scaladsl.Http.HostConnectionPool
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.ContentTypes.`application/json`
-import akka.http.scaladsl.model.StatusCodes.{BadRequest, InternalServerError, OK}
+import akka.http.scaladsl.model.StatusCodes.{ BadRequest, InternalServerError, OK }
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.model.headers.{Authorization, OAuth2BearerToken}
+import akka.http.scaladsl.model.headers.{ Authorization, OAuth2BearerToken }
 import akka.http.scaladsl.settings.ConnectionPoolSettings
-import akka.http.scaladsl.{HttpExt, HttpsConnectionContext}
-import akka.stream.alpakka.google.auth.{Credentials, GoogleOAuth2Exception}
+import akka.http.scaladsl.{ HttpExt, HttpsConnectionContext }
+import akka.stream.alpakka.google.auth.{ Credentials, GoogleOAuth2Exception }
 import akka.stream.alpakka.google.implicits._
-import akka.stream.alpakka.google.{GoogleHttpException, GoogleSettings, RequestSettings}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.alpakka.google.{ GoogleHttpException, GoogleSettings, RequestSettings }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.testkit.TestKit
-import org.mockito.ArgumentMatchers.{any, anyInt, argThat}
+import org.mockito.ArgumentMatchers.{ any, anyInt, argThat }
 import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.mockito.MockitoSugar
-import spray.json.{JsObject, JsValue}
+import spray.json.{ JsObject, JsValue }
 
 import scala.annotation.nowarn
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
 class GoogleHttpSpec
@@ -45,7 +45,7 @@ class GoogleHttpSpec
 
   def mockHttp: HttpExt = {
     val http = mock[HttpExt]
-    when(http.system) thenReturn system.asInstanceOf[ExtendedActorSystem]
+    when(http.system).thenReturn(system.asInstanceOf[ExtendedActorSystem])
     http
   }
 
@@ -57,14 +57,12 @@ class GoogleHttpSpec
         anyInt,
         any[HttpsConnectionContext],
         any[ConnectionPoolSettings],
-        any[LoggingAdapter]
-      )
-    ).thenReturn(Flow[Any]
-                   .zipWith(response)(Keep.right)
-                   .map(Try(_))
-                   .map((_, mock[Nothing]))
-                   .mapMaterializedValue(_ => mock[HostConnectionPool]),
-                 Nil: _*): @nowarn("msg=dead code")
+        any[LoggingAdapter])).thenReturn(Flow[Any]
+        .zipWith(response)(Keep.right)
+        .map(Try(_))
+        .map((_, mock[Nothing]))
+        .mapMaterializedValue(_ => mock[HostConnectionPool]),
+      Nil: _*): @nowarn("msg=dead code")
     http
   }
 
@@ -83,12 +81,9 @@ class GoogleHttpSpec
           any[HttpRequest],
           any[HttpsConnectionContext],
           any[ConnectionPoolSettings],
-          any[LoggingAdapter]
-        )
-      ).thenReturn(
+          any[LoggingAdapter])).thenReturn(
         Future.successful(response1),
-        Future.successful(response2)
-      )
+        Future.successful(response2))
 
       import GoogleHttpException._
 
@@ -113,9 +108,7 @@ class GoogleHttpSpec
           any[HttpRequest],
           any[HttpsConnectionContext],
           any[ConnectionPoolSettings],
-          any[LoggingAdapter]
-        )
-      ).thenReturn(Future.successful(response1), Future.successful(response2))
+          any[LoggingAdapter])).thenReturn(Future.successful(response1), Future.successful(response2))
 
       import GoogleHttpException._
       val result1 = GoogleHttp(http).singleRequest[JsValue](HttpRequest())
@@ -140,9 +133,8 @@ class GoogleHttpSpec
           argThat[HttpRequest](_.headers.contains(Authorization(OAuth2BearerToken("yyyy.c.an-access-token")))),
           any[HttpsConnectionContext],
           any[ConnectionPoolSettings],
-          any[LoggingAdapter]
-        )
-      ).thenReturn(Future.successful(HttpResponse(OK, Nil, HttpEntity(ContentTypes.`application/json`, "{}"))))
+          any[LoggingAdapter])).thenReturn(Future.successful(HttpResponse(OK, Nil,
+        HttpEntity(ContentTypes.`application/json`, "{}"))))
 
       import GoogleHttpException._
       val response = GoogleHttp(http).singleAuthenticatedRequest[JsValue](HttpRequest())
@@ -160,8 +152,7 @@ class GoogleHttpSpec
       val credentials = mock[Credentials]
       when(credentials.get()(any[ExecutionContext], any[RequestSettings])).thenReturn(
         Future.failed(GoogleOAuth2Exception(ErrorInfo())),
-        Future.failed(new AnotherException)
-      )
+        Future.failed(new AnotherException))
       implicit val settingsWithMockedCredentials = GoogleSettings().copy(credentials = credentials)
 
       val http = mockHttp
@@ -170,12 +161,9 @@ class GoogleHttpSpec
           any[HttpRequest],
           any[HttpsConnectionContext],
           any[ConnectionPoolSettings],
-          any[LoggingAdapter]
-        )
-      ).thenReturn(
+          any[LoggingAdapter])).thenReturn(
         Future.successful(HttpResponse(BadRequest, Nil, HttpEntity(ContentTypes.`application/json`, "{}"))),
-        Future.successful(HttpResponse(OK, Nil, HttpEntity(ContentTypes.`application/json`, "{}")))
-      )
+        Future.successful(HttpResponse(OK, Nil, HttpEntity(ContentTypes.`application/json`, "{}"))))
 
       import GoogleHttpException._
       val response = GoogleHttp(http).singleAuthenticatedRequest[JsValue](HttpRequest())

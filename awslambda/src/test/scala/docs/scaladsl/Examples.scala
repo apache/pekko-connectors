@@ -5,21 +5,21 @@
 package docs.scaladsl
 
 import akka.stream.alpakka.awslambda.scaladsl.AwsLambdaFlow
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 
 object Examples {
 
-  //#init-sys
+  // #init-sys
   import akka.actor.ActorSystem
 
   implicit val system: ActorSystem = ActorSystem()
-  //#init-sys
+  // #init-sys
 
   def initClient(): Unit = {
-    //#init-client
+    // #init-client
     import com.github.matsluni.akkahttpspi.AkkaHttpClient
-    import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+    import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
     import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 
     // Don't encode credentials in your source code!
@@ -35,11 +35,11 @@ object Examples {
       .build()
 
     system.registerOnTermination(lambdaClient.close())
-    //#init-client
+    // #init-client
   }
 
   def run()(implicit lambdaClient: LambdaAsyncClient): Unit = {
-    //#run
+    // #run
     import software.amazon.awssdk.core.SdkBytes
     import software.amazon.awssdk.services.lambda.model.InvokeRequest
 
@@ -49,6 +49,6 @@ object Examples {
       .payload(SdkBytes.fromUtf8String("test-payload"))
       .build()
     Source.single(request).via(AwsLambdaFlow(1)).runWith(Sink.seq)
-    //#run
+    // #run
   }
 }

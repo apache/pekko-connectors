@@ -29,8 +29,7 @@ import scala.concurrent.Future
  * @tparam Out dynamodb response type
  */
 sealed class DynamoDbOp[In <: DynamoDbRequest, Out <: DynamoDbResponse](
-    sdkExecute: DynamoDbAsyncClient => In => CompletableFuture[Out]
-) {
+    sdkExecute: DynamoDbAsyncClient => In => CompletableFuture[Out]) {
   def execute(request: In)(implicit client: DynamoDbAsyncClient): Future[Out] = sdkExecute(client)(request).toScala
 }
 
@@ -45,8 +44,7 @@ sealed class DynamoDbOp[In <: DynamoDbRequest, Out <: DynamoDbResponse](
  */
 sealed class DynamoDbPaginatedOp[In <: DynamoDbRequest, Out <: DynamoDbResponse, Pub <: SdkPublisher[Out]](
     sdkExecute: DynamoDbAsyncClient => In => CompletableFuture[Out],
-    sdkPublisher: DynamoDbAsyncClient => In => Pub
-) extends DynamoDbOp[In, Out](sdkExecute) {
+    sdkPublisher: DynamoDbAsyncClient => In => Pub) extends DynamoDbOp[In, Out](sdkExecute) {
   def publisher(request: In)(implicit client: DynamoDbAsyncClient): Publisher[Out] = sdkPublisher(client)(request)
 }
 

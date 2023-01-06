@@ -7,9 +7,9 @@ package akka.stream.alpakka.kudu.javadsl
 import java.util.concurrent.CompletionStage
 
 import akka.stream.alpakka.kudu.KuduTableSettings
-import akka.stream.javadsl.{Flow, Keep, Sink}
+import akka.stream.javadsl.{ Flow, Keep, Sink }
 import akka.stream.alpakka.kudu.scaladsl
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 
 /**
  * Java API

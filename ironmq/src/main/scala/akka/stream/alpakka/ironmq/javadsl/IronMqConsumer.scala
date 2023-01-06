@@ -6,7 +6,7 @@ package akka.stream.alpakka.ironmq.javadsl
 
 import akka.NotUsed
 import akka.stream.alpakka.ironmq._
-import akka.stream.alpakka.ironmq.scaladsl.{IronMqConsumer => ScalaIronMqConsumer}
+import akka.stream.alpakka.ironmq.scaladsl.{ IronMqConsumer => ScalaIronMqConsumer }
 import akka.stream.javadsl._
 
 object IronMqConsumer {

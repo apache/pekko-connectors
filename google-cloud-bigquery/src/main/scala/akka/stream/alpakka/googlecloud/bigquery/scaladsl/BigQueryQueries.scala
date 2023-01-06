@@ -10,19 +10,19 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model.HttpMethods.POST
 import akka.http.scaladsl.model.Uri.Query
-import akka.http.scaladsl.model.{HttpRequest, RequestEntity}
+import akka.http.scaladsl.model.{ HttpRequest, RequestEntity }
 import akka.http.scaladsl.unmarshalling.FromEntityUnmarshaller
 import akka.stream.RestartSettings
 import akka.stream.alpakka.google.GoogleAttributes
 import akka.stream.alpakka.google.implicits._
 import akka.stream.alpakka.googlecloud.bigquery.model.JobReference
-import akka.stream.alpakka.googlecloud.bigquery.model.{QueryRequest, QueryResponse}
-import akka.stream.alpakka.googlecloud.bigquery.{BigQueryEndpoints, BigQueryException}
-import akka.stream.scaladsl.{Keep, RestartSource, Sink, Source}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ QueryRequest, QueryResponse }
+import akka.stream.alpakka.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException }
+import akka.stream.scaladsl.{ Keep, RestartSource, Sink, Source }
 
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
 
@@ -38,8 +38,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    *         a [[scala.concurrent.Future]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.QueryResponse]]
    */
   def query[Out](query: String, dryRun: Boolean = false, useLegacySql: Boolean = true)(
-      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]
-  ): Source[Out, Future[QueryResponse[Out]]] = {
+      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]): Source[Out, Future[QueryResponse[Out]]] = {
     val request = QueryRequest(query, None, None, None, Some(dryRun), Some(useLegacySql), None)
     this.query(request).mapMaterializedValue(_._2)
   }
@@ -55,8 +54,8 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    *         a [[scala.concurrent.Future]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.QueryResponse]]
    */
   def query[Out](query: QueryRequest)(
-      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]
-  ): Source[Out, (Future[JobReference], Future[QueryResponse[Out]])] =
+      implicit um: FromEntityUnmarshaller[QueryResponse[Out]])
+      : Source[Out, (Future[JobReference], Future[QueryResponse[Out]])] =
     Source
       .fromMaterializer { (mat, attr) =>
         import BigQueryException._
@@ -87,11 +86,11 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
                 jobReference.jobId.map { jobId =>
                   import settings.requestSettings.retrySettings._
                   val pages = queryResultsPages[Out](jobId,
-                                                     None,
-                                                     query.maxResults,
-                                                     query.timeout,
-                                                     initialQueryResponse.jobReference.location,
-                                                     initialQueryResponse.pageToken)
+                    None,
+                    query.maxResults,
+                    query.timeout,
+                    initialQueryResponse.jobReference.location,
+                    initialQueryResponse.pageToken)
                     .map(Success(_))
                     .recover { case ex => Failure(ex) } // Allows upstream failures to escape the RestartSource
                     .map { queryResponse =>
@@ -103,7 +102,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
                     .addAttributes(attr)
                   val restartSettings = RestartSettings(minBackoff, maxBackoff, randomFactor)
                   RestartSource.onFailuresWithBackoff(restartSettings)(() => pages).map(_.get)
-                } getOrElse Source.empty
+                }.getOrElse(Source.empty)
 
             head.concat(tail).mapMaterializedValue(_ => jobReference)
           }
@@ -132,10 +131,8 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
       startIndex: Option[Long] = None,
       maxResults: Option[Int] = None,
       timeout: Option[FiniteDuration] = None,
-      location: Option[String] = None
-  )(
-      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]
-  ): Source[Out, Future[QueryResponse[Out]]] =
+      location: Option[String] = None)(
+      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]): Source[Out, Future[QueryResponse[Out]]] =
     queryResultsPages(jobId, startIndex, maxResults, timeout, location, None)
       .wireTapMat(Sink.head)(Keep.right)
       .mapConcat(_.rows.fold[List[Out]](Nil)(_.toList))
@@ -146,10 +143,8 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
       maxResults: Option[Int],
       timeout: Option[FiniteDuration],
       location: Option[String],
-      pageToken: Option[String]
-  )(
-      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]
-  ): Source[QueryResponse[Out], NotUsed] =
+      pageToken: Option[String])(
+      implicit um: FromEntityUnmarshaller[QueryResponse[Out]]): Source[QueryResponse[Out], NotUsed] =
     source { settings =>
       import BigQueryException._
       val uri = BigQueryEndpoints.query(settings.projectId, jobId)

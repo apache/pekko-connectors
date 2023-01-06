@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray
 
-import spray.json.{JsonFormat, JsonReader, JsonWriter, RootJsonWriter}
+import spray.json.{ JsonFormat, JsonReader, JsonWriter, RootJsonWriter }
 
 import scala.annotation.implicitNotFound
 

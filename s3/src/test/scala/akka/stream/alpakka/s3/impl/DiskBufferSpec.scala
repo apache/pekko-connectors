@@ -9,14 +9,14 @@ import java.nio.file.Files
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
-import akka.testkit.{EventFilter, TestKit}
+import akka.stream.scaladsl.{ Sink, Source }
+import akka.testkit.{ EventFilter, TestKit }
 import akka.util.ByteString
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.concurrent.{Eventually, ScalaFutures}
+import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatest.time.{ Millis, Seconds, Span }
 
 class DiskBufferSpec(_system: ActorSystem)
     extends TestKit(_system)
@@ -41,24 +41,22 @@ class DiskBufferSpec(_system: ActorSystem)
       .runWith(Sink.seq)
       .futureValue
 
-    result should have size (1)
+    result should have size 1
     val chunk = result.head
     chunk shouldBe a[DiskChunk]
     val diskChunk = chunk.asInstanceOf[DiskChunk]
     chunk.size should be(14)
     diskChunk.data.runWith(Sink.seq).futureValue should be(
-      Seq(ByteString(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14))
-    )
+      Seq(ByteString(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)))
   }
 
   it should "fail if more than maxSize bytes are fed into it" in {
-    EventFilter[BufferOverflowException](occurrences = 1) intercept {
+    EventFilter[BufferOverflowException](occurrences = 1).intercept {
       whenReady(
         Source(Vector(ByteString(1, 2, 3, 4, 5), ByteString(6, 7, 8, 9, 10, 11, 12), ByteString(13, 14)))
           .via(new DiskBuffer(1, 10, None))
           .runWith(Sink.seq)
-          .failed
-      ) { e =>
+          .failed) { e =>
         e shouldBe a[BufferOverflowException]
       }
     }

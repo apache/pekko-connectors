@@ -10,13 +10,13 @@ import java.util.concurrent.locks.ReentrantLock
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.alpakka.mqtt.streaming
-import akka.stream.alpakka.mqtt.streaming.scaladsl.{ActorMqttClientSession, ActorMqttServerSession, Mqtt}
-import akka.stream.scaladsl.{BroadcastHub, Keep, Sink, Source, Tcp}
+import akka.stream.alpakka.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession, Mqtt }
+import akka.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, Tcp }
 import akka.stream.OverflowStrategy
 import akka.util.ByteString
 import org.openjdk.jmh.annotations._
 
-import scala.concurrent.{Await, Promise}
+import scala.concurrent.{ Await, Promise }
 import scala.concurrent.duration._
 
 object MqttPerf {
@@ -72,14 +72,14 @@ class MqttPerf {
     val bound = Tcp()
       .bind(host, port)
       .flatMapMerge(
-        1, { connection =>
+        1,
+        { connection =>
           Source
             .fromGraph(serverSource)
             .via(
               Mqtt
                 .serverSessionFlow(serverSession, ByteString(connection.remoteAddress.getAddress.getAddress))
-                .join(connection.flow)
-            )
+                .join(connection.flow))
             .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
               case Right(Event(_: Connect, _)) =>
                 server.offer(Command(connAck))
@@ -94,8 +94,7 @@ class MqttPerf {
                 }
               case _ =>
             })
-        }
-      )
+        })
       .toMat(Sink.ignore)(Keep.left)
       .run()
     Await.ready(bound, 3.seconds)
@@ -107,8 +106,7 @@ class MqttPerf {
       .via(
         Mqtt
           .clientSessionFlow(clientSession, ByteString("1"))
-          .join(Tcp().outgoingConnection(host, port))
-      )
+          .join(Tcp().outgoingConnection(host, port)))
       .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
         case Right(Event(_: SubAck, _)) =>
           subscribed.success(Done)

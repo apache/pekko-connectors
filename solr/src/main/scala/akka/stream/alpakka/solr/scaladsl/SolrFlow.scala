@@ -6,7 +6,7 @@ package akka.stream.alpakka.solr.scaladsl
 
 import akka.NotUsed
 import akka.stream.alpakka.solr.impl.SolrFlowStage
-import akka.stream.alpakka.solr.{SolrUpdateSettings, WriteMessage, WriteResult}
+import akka.stream.alpakka.solr.{ SolrUpdateSettings, WriteMessage, WriteResult }
 import akka.stream.scaladsl.Flow
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
@@ -23,20 +23,16 @@ object SolrFlow {
    */
   def documents(
       collection: String,
-      settings: SolrUpdateSettings
-  )(
-      implicit client: SolrClient
-  ): Flow[immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]], immutable.Seq[WriteResult[SolrInputDocument,
-                                                                                             NotUsed]], NotUsed] =
+      settings: SolrUpdateSettings)(
+      implicit client: SolrClient): Flow[immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]], immutable.Seq[
+      WriteResult[SolrInputDocument, NotUsed]], NotUsed] =
     Flow
       .fromGraph(
         new SolrFlowStage[SolrInputDocument, NotUsed](
           collection,
           client,
           settings,
-          identity
-        )
-      )
+          identity))
 
   /**
    * Write Java bean stream elements to Solr in a flow emitting `WriteResult`s containing the status.
@@ -44,19 +40,16 @@ object SolrFlow {
    */
   def beans[T](
       collection: String,
-      settings: SolrUpdateSettings
-  )(
-      implicit client: SolrClient
-  ): Flow[immutable.Seq[WriteMessage[T, NotUsed]], immutable.Seq[WriteResult[T, NotUsed]], NotUsed] =
+      settings: SolrUpdateSettings)(
+      implicit client: SolrClient)
+      : Flow[immutable.Seq[WriteMessage[T, NotUsed]], immutable.Seq[WriteResult[T, NotUsed]], NotUsed] =
     Flow
       .fromGraph(
         new SolrFlowStage[T, NotUsed](
           collection,
           client,
           settings,
-          new DefaultSolrObjectBinder(client)
-        )
-      )
+          new DefaultSolrObjectBinder(client)))
 
   /**
    * Write stream elements to Solr in a flow emitting `WriteResult`s containing the status.
@@ -66,19 +59,16 @@ object SolrFlow {
   def typeds[T](
       collection: String,
       settings: SolrUpdateSettings,
-      binder: T => SolrInputDocument
-  )(
-      implicit client: SolrClient
-  ): Flow[immutable.Seq[WriteMessage[T, NotUsed]], immutable.Seq[WriteResult[T, NotUsed]], NotUsed] =
+      binder: T => SolrInputDocument)(
+      implicit client: SolrClient)
+      : Flow[immutable.Seq[WriteMessage[T, NotUsed]], immutable.Seq[WriteResult[T, NotUsed]], NotUsed] =
     Flow
       .fromGraph(
         new SolrFlowStage[T, NotUsed](
           collection,
           client,
           settings,
-          binder
-        )
-      )
+          binder))
 
   /**
    * Write `SolrInputDocument`s to Solr in a flow emitting `WriteResult`s containing the status.
@@ -87,21 +77,16 @@ object SolrFlow {
    */
   def documentsWithPassThrough[PT](
       collection: String,
-      settings: SolrUpdateSettings
-  )(
-      implicit client: SolrClient
-  ): Flow[immutable.Seq[WriteMessage[SolrInputDocument, PT]],
-          immutable.Seq[WriteResult[SolrInputDocument, PT]],
-          NotUsed] =
+      settings: SolrUpdateSettings)(
+      implicit client: SolrClient): Flow[immutable.Seq[WriteMessage[SolrInputDocument, PT]],
+    immutable.Seq[WriteResult[SolrInputDocument, PT]], NotUsed] =
     Flow
       .fromGraph(
         new SolrFlowStage[SolrInputDocument, PT](
           collection,
           client,
           settings,
-          identity
-        )
-      )
+          identity))
 
   /**
    * Write Java bean stream elements to Solr in a flow emitting `WriteResult`s containing the status.
@@ -111,17 +96,15 @@ object SolrFlow {
    */
   def beansWithPassThrough[T, PT](
       collection: String,
-      settings: SolrUpdateSettings
-  )(implicit client: SolrClient): Flow[immutable.Seq[WriteMessage[T, PT]], immutable.Seq[WriteResult[T, PT]], NotUsed] =
+      settings: SolrUpdateSettings)(implicit client: SolrClient)
+      : Flow[immutable.Seq[WriteMessage[T, PT]], immutable.Seq[WriteResult[T, PT]], NotUsed] =
     Flow
       .fromGraph(
         new SolrFlowStage[T, PT](
           collection,
           client,
           settings,
-          new DefaultSolrObjectBinder(client)
-        )
-      )
+          new DefaultSolrObjectBinder(client)))
 
   /**
    * Write stream elements to Solr in a flow emitting `WriteResult`s containing the status.
@@ -132,17 +115,15 @@ object SolrFlow {
   def typedsWithPassThrough[T, PT](
       collection: String,
       settings: SolrUpdateSettings,
-      binder: T => SolrInputDocument
-  )(implicit client: SolrClient): Flow[immutable.Seq[WriteMessage[T, PT]], immutable.Seq[WriteResult[T, PT]], NotUsed] =
+      binder: T => SolrInputDocument)(implicit client: SolrClient)
+      : Flow[immutable.Seq[WriteMessage[T, PT]], immutable.Seq[WriteResult[T, PT]], NotUsed] =
     Flow
       .fromGraph(
         new SolrFlowStage[T, PT](
           collection,
           client,
           settings,
-          binder
-        )
-      )
+          binder))
 
   private class DefaultSolrObjectBinder(solrClient: SolrClient) extends (Any => SolrInputDocument) {
     override def apply(v1: Any): SolrInputDocument =

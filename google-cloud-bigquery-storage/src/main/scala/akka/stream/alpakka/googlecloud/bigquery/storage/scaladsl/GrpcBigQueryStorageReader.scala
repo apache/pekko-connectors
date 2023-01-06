@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl
 
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import akka.annotation.ApiMayChange
 import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryStorageSettings
 import akka.stream.alpakka.googlecloud.bigquery.storage.impl.AkkaGrpcSettings

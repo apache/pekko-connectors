@@ -5,7 +5,7 @@
 package akka.stream.alpakka.google.firebase.fcm.impl
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.stream.alpakka.google.firebase.fcm.{FcmErrorResponse, FcmResponse, FcmSuccessResponse}
+import akka.stream.alpakka.google.firebase.fcm.{ FcmErrorResponse, FcmResponse, FcmSuccessResponse }
 import akka.annotation.InternalApi
 import akka.stream.alpakka.google.firebase.fcm.FcmNotification
 import akka.stream.alpakka.google.firebase.fcm.FcmNotificationModels._
@@ -27,13 +27,13 @@ private[fcm] case class FcmSend(validate_only: Boolean, message: FcmNotification
 @Deprecated
 private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
 
-  //custom formatters
+  // custom formatters
   implicit object FcmSuccessResponseJsonFormat extends RootJsonFormat[FcmSuccessResponse] {
     def write(c: FcmSuccessResponse): JsValue = JsString(c.name)
 
     def read(value: JsValue) = value match {
       case JsObject(fields) if fields.contains("name") => FcmSuccessResponse(fields("name").convertTo[String])
-      case other => throw DeserializationException(s"object containing `name` expected, but we get $other")
+      case other                                       => throw DeserializationException(s"object containing `name` expected, but we get $other")
     }
   }
   implicit object FcmErrorResponseJsonFormat extends RootJsonFormat[FcmErrorResponse] {
@@ -43,9 +43,9 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
 
   implicit object FcmResponseFormat extends RootJsonReader[FcmResponse] {
     def read(value: JsValue): FcmResponse = value match {
-      case JsObject(fields) if fields.keys.exists(_ == "name") => value.convertTo[FcmSuccessResponse]
+      case JsObject(fields) if fields.keys.exists(_ == "name")       => value.convertTo[FcmSuccessResponse]
       case JsObject(fields) if fields.keys.exists(_ == "error_code") => value.convertTo[FcmErrorResponse]
-      case other => throw DeserializationException(s"FcmResponse expected, but we get $other")
+      case other                                                     => throw DeserializationException(s"FcmResponse expected, but we get $other")
     }
   }
 
@@ -53,13 +53,13 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
     def write(c: AndroidMessagePriority): JsString =
       c match {
         case Normal => JsString("NORMAL")
-        case High => JsString("HIGH")
+        case High   => JsString("HIGH")
       }
 
     def read(value: JsValue): AndroidMessagePriority = value match {
       case JsString("NORMAL") => Normal
-      case JsString("HIGH") => High
-      case other => throw DeserializationException(s"AndroidMessagePriority expected, but we get $other")
+      case JsString("HIGH")   => High
+      case other              => throw DeserializationException(s"AndroidMessagePriority expected, but we get $other")
     }
   }
 
@@ -67,8 +67,7 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
     def write(c: ApnsConfig): JsObject =
       JsObject(
         "headers" -> c.headers.toJson,
-        "payload" -> c.rawPayload.parseJson
-      )
+        "payload" -> c.rawPayload.parseJson)
 
     def read(value: JsValue): ApnsConfig = {
       val map = value.asJsObject
@@ -76,7 +75,7 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
     }
   }
 
-  //app -> google
+  // app -> google
   implicit val webPushNotificationJsonFormat: RootJsonFormat[WebPushNotification] = jsonFormat3(WebPushNotification)
   implicit val webPushConfigJsonFormat: RootJsonFormat[WebPushConfig] = jsonFormat3(WebPushConfig.apply)
   implicit val androidNotificationJsonFormat: RootJsonFormat[AndroidNotification] = jsonFormat11(AndroidNotification)

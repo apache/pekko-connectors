@@ -7,10 +7,10 @@ package akka.stream.alpakka.influxdb.scaladsl
 import akka.NotUsed
 import akka.annotation.ApiMayChange
 import akka.stream.alpakka.influxdb.InfluxDbReadSettings
-import akka.stream.alpakka.influxdb.impl.{InfluxDbRawSourceStage, InfluxDbSourceStage}
+import akka.stream.alpakka.influxdb.impl.{ InfluxDbRawSourceStage, InfluxDbSourceStage }
 import akka.stream.scaladsl.Source
 import org.influxdb.InfluxDB
-import org.influxdb.dto.{Query, QueryResult}
+import org.influxdb.dto.{ Query, QueryResult }
 
 /**
  * Scala API.
@@ -35,8 +35,6 @@ object InfluxDbSource {
         clazz,
         settings,
         influxDB,
-        query
-      )
-    )
+        query))
 
 }

@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.mqtt.streaming.impl
 
-import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
-import akka.actor.typed.{Behavior, Signal}
+import akka.actor.typed.scaladsl.{ ActorContext, Behaviors }
+import akka.actor.typed.{ Behavior, Signal }
 
 import scala.collection.immutable.Seq
 

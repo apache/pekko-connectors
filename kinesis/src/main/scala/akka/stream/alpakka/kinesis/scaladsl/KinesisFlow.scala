@@ -11,7 +11,7 @@ import akka.dispatch.ExecutionContexts.parasitic
 import akka.stream.ThrottleMode
 import akka.stream.alpakka.kinesis.KinesisFlowSettings
 import akka.stream.alpakka.kinesis.KinesisErrors.FailurePublishingRecords
-import akka.stream.scaladsl.{Flow, FlowWithContext}
+import akka.stream.scaladsl.{ Flow, FlowWithContext }
 import akka.util.ByteString
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
@@ -26,13 +26,12 @@ import scala.jdk.CollectionConverters._
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
 import scala.compat.java8.FutureConverters._
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 object KinesisFlow {
 
   def apply(streamName: String, settings: KinesisFlowSettings = KinesisFlowSettings.Defaults)(
-      implicit kinesisClient: KinesisAsyncClient
-  ): Flow[PutRecordsRequestEntry, PutRecordsResultEntry, NotUsed] =
+      implicit kinesisClient: KinesisAsyncClient): Flow[PutRecordsRequestEntry, PutRecordsResultEntry, NotUsed] =
     Flow[PutRecordsRequestEntry]
       .map((_, ()))
       .via(withContext(streamName, settings))
@@ -50,8 +49,8 @@ object KinesisFlow {
    * and combined in other ways than the default in this method.
    */
   def withContext[T](streamName: String, settings: KinesisFlowSettings = KinesisFlowSettings.Defaults)(
-      implicit kinesisClient: KinesisAsyncClient
-  ): FlowWithContext[PutRecordsRequestEntry, T, PutRecordsResultEntry, T, NotUsed] =
+      implicit kinesisClient: KinesisAsyncClient)
+      : FlowWithContext[PutRecordsRequestEntry, T, PutRecordsResultEntry, T, NotUsed] =
     FlowWithContext.fromTuples(
       batchingFlow(settings)
         .via(
@@ -59,49 +58,40 @@ object KinesisFlow {
             streamName,
             batch => {
               case Success(putRecordsResponse) => Success(handlePutRecordsSuccess(batch)(putRecordsResponse))
-              case Failure(throwable) => Failure(FailurePublishingRecords(throwable))
+              case Failure(throwable)          => Failure(FailurePublishingRecords(throwable))
             },
-            settings: KinesisFlowSettings
-          )
-        )
-    )
+            settings: KinesisFlowSettings)))
 
   def batchingFlow[T](
-      settings: KinesisFlowSettings
-  ): Flow[(PutRecordsRequestEntry, T), Iterable[(PutRecordsRequestEntry, T)], NotUsed] =
+      settings: KinesisFlowSettings)
+      : Flow[(PutRecordsRequestEntry, T), Iterable[(PutRecordsRequestEntry, T)], NotUsed] =
     Flow[(PutRecordsRequestEntry, T)]
       .throttle(settings.maxRecordsPerSecond, 1.second, settings.maxRecordsPerSecond, ThrottleMode.Shaping)
       .throttle(settings.maxBytesPerSecond,
-                1.second,
-                settings.maxBytesPerSecond,
-                getPayloadByteSize,
-                ThrottleMode.Shaping)
+        1.second,
+        settings.maxBytesPerSecond,
+        getPayloadByteSize,
+        ThrottleMode.Shaping)
       .batch(settings.maxBatchSize, Queue(_))(_ :+ _)
 
   def batchWritingFlow[S, T](
       streamName: String,
       handleBatch: Iterable[(PutRecordsRequestEntry, T)] => Try[PutRecordsResponse] => Try[Iterable[(S, T)]],
-      settings: KinesisFlowSettings
-  )(
-      implicit kinesisClient: KinesisAsyncClient
-  ): Flow[Iterable[(PutRecordsRequestEntry, T)], (S, T), NotUsed] = {
+      settings: KinesisFlowSettings)(
+      implicit kinesisClient: KinesisAsyncClient): Flow[Iterable[(PutRecordsRequestEntry, T)], (S, T), NotUsed] = {
     checkClient(kinesisClient)
     Flow[Iterable[(PutRecordsRequestEntry, T)]]
-      .mapAsync(settings.parallelism)(
-        entries =>
-          kinesisClient
-            .putRecords(
-              PutRecordsRequest.builder().streamName(streamName).records(entries.map(_._1).asJavaCollection).build
-            )
-            .toScala
-            .transform(handleBatch(entries))(parasitic)
-      )
+      .mapAsync(settings.parallelism)(entries =>
+        kinesisClient
+          .putRecords(
+            PutRecordsRequest.builder().streamName(streamName).records(entries.map(_._1).asJavaCollection).build)
+          .toScala
+          .transform(handleBatch(entries))(parasitic))
       .mapConcat(identity)
   }
 
   def handlePutRecordsSuccess[T](
-      entries: Iterable[(PutRecordsRequestEntry, T)]
-  )(result: PutRecordsResponse): List[(PutRecordsResultEntry, T)] =
+      entries: Iterable[(PutRecordsRequestEntry, T)])(result: PutRecordsResponse): List[(PutRecordsResultEntry, T)] =
     result.records.asScala.toList.zip(entries).map { case (res, (_, t)) => (res, t) }
 
   private def getPayloadByteSize[T](record: (PutRecordsRequestEntry, T)): Int = record match {
@@ -110,10 +100,8 @@ object KinesisFlow {
 
   def byPartitionAndData(
       streamName: String,
-      settings: KinesisFlowSettings = KinesisFlowSettings.Defaults
-  )(
-      implicit kinesisClient: KinesisAsyncClient
-  ): Flow[(String, ByteBuffer), PutRecordsResultEntry, NotUsed] =
+      settings: KinesisFlowSettings = KinesisFlowSettings.Defaults)(
+      implicit kinesisClient: KinesisAsyncClient): Flow[(String, ByteBuffer), PutRecordsResultEntry, NotUsed] =
     Flow[(String, ByteBuffer)]
       .map {
         case (partitionKey, data) =>
@@ -127,10 +115,8 @@ object KinesisFlow {
 
   def byPartitionAndBytes(
       streamName: String,
-      settings: KinesisFlowSettings = KinesisFlowSettings.Defaults
-  )(
-      implicit kinesisClient: KinesisAsyncClient
-  ): Flow[(String, ByteString), PutRecordsResultEntry, NotUsed] =
+      settings: KinesisFlowSettings = KinesisFlowSettings.Defaults)(
+      implicit kinesisClient: KinesisAsyncClient): Flow[(String, ByteString), PutRecordsResultEntry, NotUsed] =
     Flow[(String, ByteString)]
       .map {
         case (partitionKey, bytes) =>

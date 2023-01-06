@@ -8,10 +8,10 @@ import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.grpc.GrpcServiceException
 import akka.grpc.scaladsl.Metadata
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
+import akka.http.scaladsl.model.{ HttpRequest, HttpResponse }
 import akka.http.scaladsl.Http
 import akka.stream.scaladsl.Source
-import com.google.cloud.bigquery.storage.v1.arrow.{ArrowRecordBatch, ArrowSchema}
+import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.avro.AvroSchema
 import com.google.cloud.bigquery.storage.v1.storage._
 import com.google.cloud.bigquery.storage.v1.stream._
@@ -58,7 +58,7 @@ class BigQueryMockServer(port: Int) extends BigQueryMockData {
                 val avroSchema = readSession.readOptions.map(_.selectedFields.toList).getOrElse(Nil) match {
                   case Col1 :: Nil => Col1Schema
                   case Col2 :: Nil => Col2Schema
-                  case _ => FullAvroSchema
+                  case _           => FullAvroSchema
                 }
                 sessionSchemas += (sessionName -> avroSchema)
                 ReadSession.Schema.AvroSchema(AvroSchema(avroSchema.toString))
@@ -68,17 +68,14 @@ class BigQueryMockServer(port: Int) extends BigQueryMockData {
                 }
                 sessionSchemas += (sessionName -> FullArrowSchema)
                 ReadSession.Schema.ArrowSchema(
-                  ArrowSchema(serializedSchema = arrowSchema)
-                )
+                  ArrowSchema(serializedSchema = arrowSchema))
               }
 
             Future.successful(
               readSession.copy(
                 schema = schema,
                 name = sessionName,
-                streams = streams
-              )
-            )
+                streams = streams))
           }
         }
 
@@ -94,11 +91,11 @@ class BigQueryMockServer(port: Int) extends BigQueryMockData {
             val sessionName = in.readStream.split("/").dropRight(2).mkString("/")
 
             val response = sessionSchemas(sessionName) match {
-              case FullAvroSchema => avroResponse(FullAvroRecord)
-              case Col1Schema => avroResponse(Col1AvroRecord)
-              case Col2Schema => avroResponse(Col2AvroRecord)
+              case FullAvroSchema  => avroResponse(FullAvroRecord)
+              case Col1Schema      => avroResponse(Col1AvroRecord)
+              case Col2Schema      => avroResponse(Col2AvroRecord)
               case FullArrowSchema => arrowResponse(ArrowRecordBatch.of(GCPSerializedArrowTenRecordBatch, 10))
-              case _ => avroResponse(Col2AvroRecord)
+              case _               => avroResponse(Col2AvroRecord)
             }
 
             Source(1 to ResponsesPerStream).map(_ => response)
@@ -106,7 +103,7 @@ class BigQueryMockServer(port: Int) extends BigQueryMockData {
 
         private def avroResponse(record: GenericRecord) =
           ReadRowsResponse(rowCount = RecordsPerReadRowsResponse,
-                           rows = ReadRowsResponse.Rows.AvroRows(recordsAsRows(record)))
+            rows = ReadRowsResponse.Rows.AvroRows(recordsAsRows(record)))
 
         private def arrowResponse(arrowBatch: ArrowRecordBatch) =
           ReadRowsResponse(rowCount = 10, rows = ReadRowsResponse.Rows.ArrowRecordBatch(arrowBatch))

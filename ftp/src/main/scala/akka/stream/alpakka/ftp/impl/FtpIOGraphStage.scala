@@ -6,13 +6,22 @@ package akka.stream.alpakka.ftp
 package impl
 
 import akka.stream.impl.Stages.DefaultAttributes.IODispatcher
-import akka.stream.stage.{GraphStageWithMaterializedValue, InHandler, OutHandler}
-import akka.stream.{Attributes, IOOperationIncompleteException, IOResult, Inlet, Outlet, Shape, SinkShape, SourceShape}
+import akka.stream.stage.{ GraphStageWithMaterializedValue, InHandler, OutHandler }
+import akka.stream.{
+  Attributes,
+  IOOperationIncompleteException,
+  IOResult,
+  Inlet,
+  Outlet,
+  Shape,
+  SinkShape,
+  SourceShape
+}
 import akka.util.ByteString
 import akka.util.ByteString.ByteString1C
 
-import scala.concurrent.{Future, Promise}
-import java.io.{IOException, InputStream, OutputStream}
+import scala.concurrent.{ Future, Promise }
+import java.io.{ IOException, InputStream, OutputStream }
 import akka.annotation.InternalApi
 
 import scala.util.control.NonFatal
@@ -80,8 +89,7 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
                 matFailure(e)
                 failStage(e)
             }
-        }
-      ) // end of handler
+        }) // end of handler
 
       override def postStop(): Unit =
         try {
@@ -120,18 +128,16 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
         }
 
       private def withUnconfirmedReads(
-          ftpLikeWithUnconfirmedReads: FtpLike[FtpClient, S] with UnconfirmedReads
-      ): Option[InputStream] =
+          ftpLikeWithUnconfirmedReads: FtpLike[FtpClient, S] with UnconfirmedReads): Option[InputStream] =
         connectionSettings match {
           case s: SftpSettings =>
             Some(
               ftpLikeWithUnconfirmedReads
                 .retrieveFileInputStream(path,
-                                         handler.get.asInstanceOf[ftpLikeWithUnconfirmedReads.Handler],
-                                         offset,
-                                         s.maxUnconfirmedReads)
-                .get
-            )
+                  handler.get.asInstanceOf[ftpLikeWithUnconfirmedReads.Handler],
+                  offset,
+                  s.maxUnconfirmedReads)
+                .get)
           case _ => None
         }
 
@@ -206,8 +212,7 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
             failed = true
             super.onUpstreamFailure(exception)
           }
-        }
-      ) // end of handler
+        }) // end of handler
 
       override def postStop(): Unit =
         try {
@@ -302,8 +307,7 @@ private[ftp] trait FtpMoveSink[FtpClient, S <: RemoteFileSettings]
               failed = true
               super.onUpstreamFailure(exception)
             }
-          }
-        )
+          })
       }
 
       protected[this] def doPreStart(): Unit = pull(in)
@@ -358,8 +362,7 @@ private[ftp] trait FtpRemoveSink[FtpClient, S <: RemoteFileSettings]
               failed = true
               super.onUpstreamFailure(exception)
             }
-          }
-        )
+          })
       }
 
       protected[this] def doPreStart(): Unit = pull(in)

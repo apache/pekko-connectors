@@ -6,7 +6,7 @@ package akka.stream.alpakka.ftp
 package impl
 
 import akka.annotation.InternalApi
-import org.apache.commons.net.ftp.{FTP, FTPClient}
+import org.apache.commons.net.ftp.{ FTP, FTPClient }
 
 import scala.util.Try
 
@@ -25,22 +25,19 @@ private[ftp] trait FtpOperations extends CommonFtpOperations { _: FtpLike[FTPCli
       case e: java.net.ConnectException =>
         throw new java.net.ConnectException(
           e.getMessage + s" host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
-            .map("proxy=" + _.toString)
-            .getOrElse("")}"
-        )
+              .map("proxy=" + _.toString)
+              .getOrElse("")}")
     }
 
     connectionSettings.configureConnection(ftpClient)
 
     ftpClient.login(
       connectionSettings.credentials.username,
-      connectionSettings.credentials.password
-    )
+      connectionSettings.credentials.password)
     if (ftpClient.getReplyCode == 530) {
       throw new FtpAuthenticationException(
         s"unable to login to host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
-          .fold("")("proxy=" + _.toString)}"
-      )
+            .fold("")("proxy=" + _.toString)}")
     }
 
     if (connectionSettings.binary) {

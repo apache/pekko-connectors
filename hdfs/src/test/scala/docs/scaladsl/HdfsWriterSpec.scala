@@ -9,7 +9,7 @@ import akka.stream.alpakka.hdfs._
 import akka.stream.alpakka.hdfs.scaladsl.HdfsFlow
 import akka.stream.alpakka.hdfs.util.ScalaTestUtils._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 import akka.util.ByteString
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hdfs.MiniDFSCluster
@@ -19,8 +19,8 @@ import org.apache.hadoop.io.compress._
 import org.apache.hadoop.io.compress.zlib.ZlibCompressor.CompressionLevel
 import org.scalatest._
 
-import scala.concurrent.duration.{Duration, _}
-import scala.concurrent.{Await, ExecutionContextExecutor}
+import scala.concurrent.duration.{ Duration, _ }
+import scala.concurrent.{ Await, ExecutionContextExecutor }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -35,7 +35,7 @@ class HdfsWriterSpec
   private val destination = "/tmp/alpakka/"
 
   implicit val system: ActorSystem = ActorSystem()
-  //#init-client
+  // #init-client
   import org.apache.hadoop.conf.Configuration
   import org.apache.hadoop.fs.FileSystem
 
@@ -43,7 +43,7 @@ class HdfsWriterSpec
   conf.set("fs.default.name", "hdfs://localhost:54310")
 
   val fs: FileSystem = FileSystem.get(conf)
-  //#init-client
+  // #init-client
 
   implicit val ec: ExecutionContextExecutor = system.dispatcher
 
@@ -72,9 +72,7 @@ class HdfsWriterSpec
               .withPathGenerator(FilePathGenerator {
                 case (_, _) => existentFile.toString
               })
-              .withOverwrite(true)
-          )
-        )
+              .withOverwrite(true)))
         .runWith(Sink.seq)
       val logs = Await.result(overwriteF, Duration.Inf)
       logs shouldEqual Seq(RotationMessage(existentFile.toString, 0))
@@ -87,8 +85,7 @@ class HdfsWriterSpec
         fs,
         SyncStrategy.count(50),
         RotationStrategy.size(0.01, FileUnit.KB),
-        settings
-      )
+        settings)
 
       val resF = Source
         .fromIterator(() => books.iterator)
@@ -102,8 +99,7 @@ class HdfsWriterSpec
         RotationMessage(output("1"), 1),
         RotationMessage(output("2"), 2),
         RotationMessage(output("3"), 3),
-        RotationMessage(output("4"), 4)
-      )
+        RotationMessage(output("4"), 4))
 
       verifyOutputFileSize(fs, logs)
       readLogs(fs, logs) shouldBe books.map(_.utf8String)
@@ -117,8 +113,7 @@ class HdfsWriterSpec
         fs,
         SyncStrategy.count(500),
         RotationStrategy.size(0.5, FileUnit.KB),
-        HdfsWritingSettings()
-      )
+        HdfsWritingSettings())
 
       val resF = Source
         .fromIterator(() => dataIterator)
@@ -141,14 +136,13 @@ class HdfsWriterSpec
       // Use huge rotation
       val data = generateFakeContent(1, FileUnit.KB.byteCount)
       val dataIterator = data.iterator
-      //#define-data
+      // #define-data
       val flow = HdfsFlow.data(
         fs,
         SyncStrategy.count(500),
         RotationStrategy.size(1, FileUnit.GB),
-        HdfsWritingSettings()
-      )
-      //#define-data
+        HdfsWritingSettings())
+      // #define-data
       val resF = Source
         .fromIterator(() => dataIterator)
         .map(HdfsWriteMessage(_))
@@ -169,8 +163,7 @@ class HdfsWriterSpec
         fs,
         SyncStrategy.count(1),
         RotationStrategy.count(2),
-        settings
-      )
+        settings)
 
       val resF = Source
         .fromIterator(() => books.iterator)
@@ -194,9 +187,7 @@ class HdfsWriterSpec
             fs,
             SyncStrategy.none,
             RotationStrategy.time(500.milliseconds),
-            HdfsWritingSettings()
-          )
-        )
+            HdfsWritingSettings()))
         .toMat(Sink.seq)(Keep.both)
         .run()
 
@@ -211,8 +202,7 @@ class HdfsWriterSpec
         fs,
         SyncStrategy.none,
         RotationStrategy.none,
-        HdfsWritingSettings()
-      )
+        HdfsWritingSettings())
 
       val resF = Source
         .fromIterator(() => books.iterator)
@@ -229,13 +219,13 @@ class HdfsWriterSpec
     }
 
     "kafka-example - store data with passThrough" in {
-      //#define-kafka-classes
+      // #define-kafka-classes
       case class Book(title: String)
       case class KafkaOffset(offset: Int)
       case class KafkaMessage(book: Book, offset: KafkaOffset)
-      //#define-kafka-classes
+      // #define-kafka-classes
 
-      //#kafka-example
+      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // After we've written them to HDFS, we want
       // to commit the offset to Kafka
@@ -245,8 +235,7 @@ class HdfsWriterSpec
         KafkaMessage(Book("Effective Akka"), KafkaOffset(2)),
         KafkaMessage(Book("Learning Scala"), KafkaOffset(3)),
         KafkaMessage(Book("Scala Puzzlers"), KafkaOffset(4)),
-        KafkaMessage(Book("Scala for Spark in Production"), KafkaOffset(5))
-      )
+        KafkaMessage(Book("Scala for Spark in Production"), KafkaOffset(5)))
 
       var committedOffsets = List[KafkaOffset]()
 
@@ -264,9 +253,7 @@ class HdfsWriterSpec
             fs,
             SyncStrategy.count(50),
             RotationStrategy.count(4),
-            HdfsWritingSettings().withNewLine(true)
-          )
-        )
+            HdfsWritingSettings().withNewLine(true)))
         .map { message =>
           message match {
             case WrittenMessage(passThrough, _) =>
@@ -279,13 +266,12 @@ class HdfsWriterSpec
           case rm: RotationMessage => rm
         }
         .runWith(Sink.seq)
-      //#kafka-example
+      // #kafka-example
 
       val logs = Await.result(resF, Duration.Inf)
       logs shouldBe Seq(
         RotationMessage(output("0"), 0),
-        RotationMessage(output("1"), 1)
-      )
+        RotationMessage(output("1"), 1))
 
       // Make sure all messages was committed to kafka
       assert(List(0, 1, 2, 3, 4, 5) == committedOffsets.map(_.offset))
@@ -298,20 +284,19 @@ class HdfsWriterSpec
   "CompressedDataWriter" should {
     "use file size rotation and produce six files" in {
 
-      //#define-codec
+      // #define-codec
       val codec = new DefaultCodec()
       codec.setConf(fs.getConf)
-      //#define-codec
+      // #define-codec
 
-      //#define-compress
+      // #define-compress
       val flow = HdfsFlow.compressed(
         fs,
         SyncStrategy.count(1),
         RotationStrategy.size(0.1, FileUnit.MB),
         codec,
-        settings
-      )
-      //#define-compress
+        settings)
+      // #define-compress
       val content = generateFakeContentWithPartitions(1, FileUnit.MB.byteCount, 30)
 
       val resF = Source
@@ -327,8 +312,7 @@ class HdfsWriterSpec
         RotationMessage(output("2.deflate"), 2),
         RotationMessage(output("3.deflate"), 3),
         RotationMessage(output("4.deflate"), 4),
-        RotationMessage(output("5.deflate"), 5)
-      )
+        RotationMessage(output("5.deflate"), 5))
 
       verifyOutputFileSize(fs, logs)
       verifyLogsWithCodec(fs, content, logs, codec)
@@ -343,8 +327,7 @@ class HdfsWriterSpec
         SyncStrategy.count(1),
         RotationStrategy.count(1),
         codec,
-        settings
-      )
+        settings)
 
       val resF = Source
         .fromIterator(() => books.iterator)
@@ -358,8 +341,7 @@ class HdfsWriterSpec
         RotationMessage(output("1.deflate"), 1),
         RotationMessage(output("2.deflate"), 2),
         RotationMessage(output("3.deflate"), 3),
-        RotationMessage(output("4.deflate"), 4)
-      )
+        RotationMessage(output("4.deflate"), 4))
 
       verifyOutputFileSize(fs, logs)
       verifyLogsWithCodec(fs, books, logs, codec)
@@ -374,8 +356,7 @@ class HdfsWriterSpec
         SyncStrategy.none,
         RotationStrategy.none,
         codec,
-        settings
-      )
+        settings)
 
       val content = generateFakeContentWithPartitions(1, FileUnit.MB.byteCount, 30)
 
@@ -387,8 +368,7 @@ class HdfsWriterSpec
 
       val logs = Await.result(resF, Duration.Inf)
       logs shouldEqual Seq(
-        RotationMessage(output("0.deflate"), 0)
-      )
+        RotationMessage(output("0.deflate"), 0))
 
       verifyOutputFileSize(fs, logs)
       verifyLogsWithCodec(fs, content, logs, codec)
@@ -397,16 +377,15 @@ class HdfsWriterSpec
 
   "SequenceWriter" should {
     "use file size rotation and produce six files without a compression" in {
-      //#define-sequence
+      // #define-sequence
       val flow = HdfsFlow.sequence(
         fs,
         SyncStrategy.none,
         RotationStrategy.size(1, FileUnit.MB),
         settings,
         classOf[Text],
-        classOf[Text]
-      )
-      //#define-sequence
+        classOf[Text])
+      // #define-sequence
 
       // half MB data becomes more when it is sequence
       val content = generateFakeContentForSequence(0.5, FileUnit.MB.byteCount)
@@ -427,7 +406,7 @@ class HdfsWriterSpec
       val codec = new DefaultCodec()
       codec.setConf(fs.getConf)
 
-      //#define-sequence-compressed
+      // #define-sequence-compressed
       val flow = HdfsFlow.sequence(
         fs,
         SyncStrategy.none,
@@ -436,9 +415,8 @@ class HdfsWriterSpec
         codec,
         settings,
         classOf[Text],
-        classOf[Text]
-      )
-      //#define-sequence-compressed
+        classOf[Text])
+      // #define-sequence-compressed
 
       // half MB data becomes more when it is sequence
       val content = generateFakeContentForSequence(0.5, FileUnit.MB.byteCount)
@@ -462,8 +440,7 @@ class HdfsWriterSpec
         RotationStrategy.count(1),
         settings,
         classOf[Text],
-        classOf[Text]
-      )
+        classOf[Text])
 
       val content = booksForSequenceWriter
 
@@ -487,8 +464,7 @@ class HdfsWriterSpec
         RotationStrategy.none,
         settings,
         classOf[Text],
-        classOf[Text]
-      )
+        classOf[Text])
 
       // half MB data becomes more when it is sequence
       val content = generateFakeContentForSequence(0.5, FileUnit.MB.byteCount)
@@ -524,20 +500,18 @@ class HdfsWriterSpec
   private def output(s: String): String = s"$destination$s"
 
   private def documentation(): HdfsWritingSettings = {
-    //#define-generator
+    // #define-generator
     val pathGenerator =
-      FilePathGenerator(
-        (rotationCount: Long, timestamp: Long) => s"/tmp/alpakka/$rotationCount-$timestamp"
-      )
-    //#define-generator
-    //#define-settings
+      FilePathGenerator((rotationCount: Long, timestamp: Long) => s"/tmp/alpakka/$rotationCount-$timestamp")
+    // #define-generator
+    // #define-settings
     val settings =
       HdfsWritingSettings()
         .withOverwrite(true)
         .withNewLine(false)
         .withLineSeparator(System.getProperty("line.separator"))
         .withPathGenerator(pathGenerator)
-    //#define-settings
+    // #define-settings
     settings
   }
   documentation()

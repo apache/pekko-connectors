@@ -42,8 +42,7 @@ object JmsConsumer {
    * control instance to shut down the consumer.
    */
   def mapSource(
-      settings: JmsConsumerSettings
-  ): akka.stream.javadsl.Source[java.util.Map[String, Any], JmsConsumerControl] =
+      settings: JmsConsumerSettings): akka.stream.javadsl.Source[java.util.Map[String, Any], JmsConsumerControl] =
     akka.stream.alpakka.jms.scaladsl.JmsConsumer
       .mapSource(settings)
       .map(_.asJava)
@@ -55,8 +54,7 @@ object JmsConsumer {
    * control instance to shut down the consumer.
    */
   def objectSource(
-      settings: JmsConsumerSettings
-  ): akka.stream.javadsl.Source[java.io.Serializable, JmsConsumerControl] =
+      settings: JmsConsumerSettings): akka.stream.javadsl.Source[java.io.Serializable, JmsConsumerControl] =
     akka.stream.alpakka.jms.scaladsl.JmsConsumer.objectSource(settings).mapMaterializedValue(toConsumerControl).asJava
 
   /**

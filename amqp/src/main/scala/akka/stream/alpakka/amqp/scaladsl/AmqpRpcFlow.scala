@@ -6,7 +6,7 @@ package akka.stream.alpakka.amqp.scaladsl
 
 import akka.dispatch.ExecutionContexts
 import akka.stream.alpakka.amqp._
-import akka.stream.scaladsl.{Flow, Keep}
+import akka.stream.scaladsl.{ Flow, Keep }
 import akka.util.ByteString
 
 import scala.concurrent.Future
@@ -35,8 +35,8 @@ object AmqpRpcFlow {
    * before it is emitted downstream.
    */
   def atMostOnceFlow(settings: AmqpWriteSettings,
-                     bufferSize: Int,
-                     repliesPerMessage: Int = 1): Flow[WriteMessage, ReadResult, Future[String]] =
+      bufferSize: Int,
+      repliesPerMessage: Int = 1): Flow[WriteMessage, ReadResult, Future[String]] =
     committableFlow(settings, bufferSize, repliesPerMessage)
       .mapAsync(1) { cm =>
         cm.ack().map(_ => cm.message)(ExecutionContexts.parasitic)
@@ -54,8 +54,8 @@ object AmqpRpcFlow {
    * Compared to auto-commit, this gives exact control over when a message is considered consumed.
    */
   def committableFlow(settings: AmqpWriteSettings,
-                      bufferSize: Int,
-                      repliesPerMessage: Int = 1): Flow[WriteMessage, CommittableReadResult, Future[String]] =
+      bufferSize: Int,
+      repliesPerMessage: Int = 1): Flow[WriteMessage, CommittableReadResult, Future[String]] =
     Flow.fromGraph(new impl.AmqpRpcFlowStage(settings, bufferSize, repliesPerMessage))
 
 }

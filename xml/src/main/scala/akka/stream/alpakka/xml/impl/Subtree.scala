@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.xml.impl
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.stream.alpakka.xml._
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import javax.xml.parsers.DocumentBuilderFactory
 import org.w3c.dom.Element
 
@@ -26,7 +26,7 @@ import scala.collection.immutable
   private def createElement(start: StartElement): Element = {
     val element = start.namespace match {
       case Some(ns) => doc.createElementNS(ns, start.localName)
-      case None => doc.createElement(start.localName)
+      case None     => doc.createElement(start.localName)
     }
     start.attributes.foreach {
       case (name, value) =>

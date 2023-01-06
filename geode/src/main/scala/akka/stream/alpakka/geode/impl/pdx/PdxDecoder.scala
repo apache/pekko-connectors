@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.geode.impl.pdx
 
-import java.util.{Date, UUID}
+import java.util.{ Date, UUID }
 
 import akka.annotation.InternalApi
 import org.apache.geode.pdx.PdxReader
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 @InternalApi
 trait PdxDecoder[A] {
@@ -143,14 +143,13 @@ object PdxDecoder {
   implicit def hlistDecoder[K <: Symbol, H, T <: HList](
       implicit witness: Witness.Aux[K],
       hDecoder: Lazy[PdxDecoder[H]],
-      tDecoder: Lazy[PdxDecoder[T]]
-  ): PdxDecoder[FieldType[K, H] :: T] = instance {
+      tDecoder: Lazy[PdxDecoder[T]]): PdxDecoder[FieldType[K, H] :: T] = instance {
     case (reader, fieldName) => {
       val headField = hDecoder.value.decode(reader, witness.value)
       val tailFields = tDecoder.value.decode(reader, fieldName)
       (headField, tailFields) match {
         case (Success(h), Success(t)) => Success(field[K](h) :: t)
-        case _ => Failure(null)
+        case _                        => Failure(null)
       }
     }
     case e => Failure(null)
@@ -158,8 +157,7 @@ object PdxDecoder {
 
   implicit def objectDecoder[A, Repr <: HList](
       implicit gen: LabelledGeneric.Aux[A, Repr],
-      hlistDecoder: PdxDecoder[Repr]
-  ): PdxDecoder[A] = instance { (reader, fieldName) =>
+      hlistDecoder: PdxDecoder[Repr]): PdxDecoder[A] = instance { (reader, fieldName) =>
     hlistDecoder.decode(reader, fieldName).map(gen.from)
   }
 

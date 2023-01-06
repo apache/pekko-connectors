@@ -6,9 +6,9 @@ package akka.stream.alpakka.pravega
 import java.net.URI
 import java.time.Duration
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
-import io.pravega.client.stream.{EventWriterConfig, ReaderConfig, Serializer}
+import io.pravega.client.stream.{ EventWriterConfig, ReaderConfig, Serializer }
 import io.pravega.client.ClientConfig
 import io.pravega.client.ClientConfig.ClientConfigBuilder
 import io.pravega.client.stream.EventWriterConfig.EventWriterConfigBuilder
@@ -19,8 +19,7 @@ import io.pravega.client.tables.TableKey
 private[pravega] abstract class WithClientConfig(
     config: Config,
     clientConfig: Option[ClientConfig] = None,
-    clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] = None
-) {
+    clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] = None) {
 
   protected def handleClientConfig(): ClientConfig = {
     val rawClientConfig =
@@ -28,7 +27,7 @@ private[pravega] abstract class WithClientConfig(
 
     clientConfigCustomization match {
       case Some(cust) => cust(rawClientConfig.toBuilder).build()
-      case _ => rawClientConfig
+      case _          => rawClientConfig
     }
 
   }
@@ -36,19 +35,18 @@ private[pravega] abstract class WithClientConfig(
 }
 
 class ReaderSettingsBuilder(config: Config,
-                            clientConfig: Option[ClientConfig] = None,
-                            clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] = None,
-                            readerConfigBuilder: ReaderConfigBuilder,
-                            readerConfigCustomizer: Option[ReaderConfigBuilder => ReaderConfigBuilder] = None,
-                            timeout: Duration,
-                            readerId: Option[String])
+    clientConfig: Option[ClientConfig] = None,
+    clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] = None,
+    readerConfigBuilder: ReaderConfigBuilder,
+    readerConfigCustomizer: Option[ReaderConfigBuilder => ReaderConfigBuilder] = None,
+    timeout: Duration,
+    readerId: Option[String])
     extends WithClientConfig(config, clientConfig, clientConfigCustomization) {
 
   def withClientConfig(clientConfig: ClientConfig): ReaderSettingsBuilder = copy(clientConfig = Some(clientConfig))
 
   def clientConfigBuilder(
-      clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder
-  ): ReaderSettingsBuilder =
+      clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder): ReaderSettingsBuilder =
     copy(clientConfigCustomization = Some(clientConfigCustomization))
 
   def readerConfigBuilder(f: ReaderConfigBuilder => ReaderConfigBuilder): ReaderSettingsBuilder =
@@ -67,26 +65,26 @@ class ReaderSettingsBuilder(config: Config,
     readerConfigCustomizer.foreach(_(readerConfigBuilder))
 
     new ReaderSettings[Message](handleClientConfig(),
-                                readerConfigBuilder.build(),
-                                timeout.toMillis,
-                                serializer,
-                                readerId)
+      readerConfigBuilder.build(),
+      timeout.toMillis,
+      serializer,
+      readerId)
   }
 
   private def copy(clientConfig: Option[ClientConfig] = clientConfig,
-                   clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] =
-                     clientConfigCustomization,
-                   readerConfigBuilder: ReaderConfigBuilder = readerConfigBuilder,
-                   readerConfigCustomizer: Option[ReaderConfigBuilder => ReaderConfigBuilder] = readerConfigCustomizer,
-                   timeout: Duration = timeout,
-                   readerId: Option[String] = readerId) =
+      clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] =
+        clientConfigCustomization,
+      readerConfigBuilder: ReaderConfigBuilder = readerConfigBuilder,
+      readerConfigCustomizer: Option[ReaderConfigBuilder => ReaderConfigBuilder] = readerConfigCustomizer,
+      timeout: Duration = timeout,
+      readerId: Option[String] = readerId) =
     new ReaderSettingsBuilder(config,
-                              clientConfig,
-                              clientConfigCustomization,
-                              readerConfigBuilder,
-                              readerConfigCustomizer,
-                              timeout,
-                              readerId)
+      clientConfig,
+      clientConfigCustomization,
+      readerConfigBuilder,
+      readerConfigCustomizer,
+      timeout,
+      readerId)
 }
 
 /**
@@ -102,10 +100,10 @@ class ReaderSettingsBuilder(config: Config,
  * @tparam Message
  */
 class ReaderSettings[Message] private[pravega] (val clientConfig: ClientConfig,
-                                                val readerConfig: ReaderConfig,
-                                                val timeout: Long,
-                                                val serializer: Serializer[Message],
-                                                val readerId: Option[String])
+    val readerConfig: ReaderConfig,
+    val timeout: Long,
+    val serializer: Serializer[Message],
+    val readerId: Option[String])
 
 object ReaderSettingsBuilder {
   val configPath = "akka.alpakka.pravega.reader"
@@ -161,12 +159,12 @@ object ReaderSettingsBuilder {
     val readerConfigBuilder = ConfigHelper.buildReaderConfig(config)
 
     new ReaderSettingsBuilder(config,
-                              None,
-                              None,
-                              readerConfigBuilder,
-                              None,
-                              readerBasicSetting.timeout,
-                              readerBasicSetting.readerId)
+      None,
+      None,
+      readerConfigBuilder,
+      None,
+      readerBasicSetting.timeout,
+      readerBasicSetting.readerId)
 
   }
 }
@@ -178,19 +176,16 @@ class WriterSettingsBuilder[Message](
     eventWriterConfigBuilder: EventWriterConfigBuilder,
     eventWriterConfigCustomizer: Option[EventWriterConfigBuilder => EventWriterConfigBuilder] = None,
     maximumInflightMessages: Int,
-    keyExtractor: Option[Message => String]
-) extends WithClientConfig(config, clientConfig, clientConfigCustomization) {
+    keyExtractor: Option[Message => String]) extends WithClientConfig(config, clientConfig, clientConfigCustomization) {
 
   def eventWriterConfigBuilder(
-      f: EventWriterConfigBuilder => EventWriterConfigBuilder
-  ): WriterSettingsBuilder[Message] =
+      f: EventWriterConfigBuilder => EventWriterConfigBuilder): WriterSettingsBuilder[Message] =
     copy(eventWriterConfigCustomizer = Some(f))
 
   def withClientConfig(clientConfig: ClientConfig) = copy(clientConfig = Some(clientConfig))
 
   def clientConfigBuilder(
-      clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder
-  ): WriterSettingsBuilder[Message] =
+      clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder): WriterSettingsBuilder[Message] =
     copy(clientConfigCustomization = Some(clientConfigCustomization))
 
   def withMaximumInflightMessages(i: Int): WriterSettingsBuilder[Message] = copy(maximumInflightMessages = i)
@@ -199,19 +194,19 @@ class WriterSettingsBuilder[Message](
     copy(keyExtractor = Some(keyExtractor))
 
   private def copy(clientConfig: Option[ClientConfig] = clientConfig,
-                   clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] =
-                     clientConfigCustomization,
-                   eventWriterConfigCustomizer: Option[EventWriterConfigBuilder => EventWriterConfigBuilder] =
-                     eventWriterConfigCustomizer,
-                   maximumInflightMessages: Int = maximumInflightMessages,
-                   keyExtractor: Option[Message => String] = keyExtractor): WriterSettingsBuilder[Message] =
+      clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] =
+        clientConfigCustomization,
+      eventWriterConfigCustomizer: Option[EventWriterConfigBuilder => EventWriterConfigBuilder] =
+        eventWriterConfigCustomizer,
+      maximumInflightMessages: Int = maximumInflightMessages,
+      keyExtractor: Option[Message => String] = keyExtractor): WriterSettingsBuilder[Message] =
     new WriterSettingsBuilder(config,
-                              clientConfig,
-                              clientConfigCustomization,
-                              eventWriterConfigBuilder,
-                              eventWriterConfigCustomizer,
-                              maximumInflightMessages,
-                              keyExtractor)
+      clientConfig,
+      clientConfigCustomization,
+      eventWriterConfigBuilder,
+      eventWriterConfigCustomizer,
+      maximumInflightMessages,
+      keyExtractor)
 
   def withSerializer(serializer: Serializer[Message]): WriterSettings[Message] = {
 
@@ -219,10 +214,10 @@ class WriterSettingsBuilder[Message](
 
     val eventWriterConfig = eventWriterConfigBuilder.build()
     new WriterSettings[Message](handleClientConfig(),
-                                eventWriterConfig,
-                                serializer,
-                                keyExtractor,
-                                maximumInflightMessages)
+      eventWriterConfig,
+      serializer,
+      keyExtractor,
+      maximumInflightMessages)
   }
 
 }
@@ -266,12 +261,12 @@ object WriterSettingsBuilder {
    */
   def apply[Message](config: Config): WriterSettingsBuilder[Message] =
     new WriterSettingsBuilder(config,
-                              None,
-                              None,
-                              eventWriterConfig(config),
-                              None,
-                              config.getInt("maximum-inflight-messages"),
-                              None)
+      None,
+      None,
+      eventWriterConfig(config),
+      None,
+      config.getInt("maximum-inflight-messages"),
+      None)
 
   private def eventWriterConfig(readerConfig: Config): EventWriterConfigBuilder = {
     val builder = EventWriterConfig.builder()
@@ -299,14 +294,13 @@ class TableReaderSettingsBuilder[K, V](
     clientConfigModifier: Option[ClientConfigBuilder => ClientConfigBuilder] = None,
     keyValueTableClientConfigurationBuilder: KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder,
     keyValueTableClientConfigurationBuilderCustomizer: Option[
-      KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder
-    ] = None,
+      KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder] =
+      None,
     maximumInflightMessages: Int,
-    maxEntriesAtOnce: Int
-) extends WithClientConfig(config, clientConfig, clientConfigModifier) {
+    maxEntriesAtOnce: Int) extends WithClientConfig(config, clientConfig, clientConfigModifier) {
   def keyValueTableClientConfigurationBuilder(
-      f: KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder
-  ): TableReaderSettingsBuilder[K, V] =
+      f: KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder)
+      : TableReaderSettingsBuilder[K, V] =
     copy(keyValueTableClientConfigurationBuilderCustomizer = Some(f))
 
   def withClientConfigModifier(clientConfig: ClientConfig) = copy(clientConfig = Some(clientConfig))
@@ -316,8 +310,7 @@ class TableReaderSettingsBuilder[K, V](
   def withMaxEntriesAtOnce(i: Int): TableReaderSettingsBuilder[K, V] = copy(maxEntriesAtOnce = i)
 
   def clientConfigBuilder(
-      clientConfigModifier: ClientConfigBuilder => ClientConfigBuilder
-  ): TableReaderSettingsBuilder[K, V] =
+      clientConfigModifier: ClientConfigBuilder => ClientConfigBuilder): TableReaderSettingsBuilder[K, V] =
     copy(clientConfigModifier = Some(clientConfigModifier))
 
   private def copy(
@@ -325,28 +318,26 @@ class TableReaderSettingsBuilder[K, V](
       tableKeyExtractor: Option[K => TableKey] = tableKeyExtractor,
       clientConfigModifier: Option[ClientConfigBuilder => ClientConfigBuilder] = clientConfigModifier,
       keyValueTableClientConfigurationBuilderCustomizer: Option[
-        KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder
-      ] = keyValueTableClientConfigurationBuilderCustomizer,
+        KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder] =
+        keyValueTableClientConfigurationBuilderCustomizer,
       maximumInflightMessages: Int = maximumInflightMessages,
-      maxEntriesAtOnce: Int = maxEntriesAtOnce
-  ): TableReaderSettingsBuilder[K, V] =
+      maxEntriesAtOnce: Int = maxEntriesAtOnce): TableReaderSettingsBuilder[K, V] =
     new TableReaderSettingsBuilder(config,
-                                   keySerializer,
-                                   valueSerializer,
-                                   tableKeyExtractor,
-                                   clientConfig,
-                                   clientConfigModifier,
-                                   keyValueTableClientConfigurationBuilder,
-                                   keyValueTableClientConfigurationBuilderCustomizer,
-                                   maximumInflightMessages,
-                                   maxEntriesAtOnce)
+      keySerializer,
+      valueSerializer,
+      tableKeyExtractor,
+      clientConfig,
+      clientConfigModifier,
+      keyValueTableClientConfigurationBuilder,
+      keyValueTableClientConfigurationBuilderCustomizer,
+      maximumInflightMessages,
+      maxEntriesAtOnce)
 
   @deprecated("Use withKeyExtractor instead", "4.0.0")
   def withTableKey(extractor: K => TableKey): TableReaderSettingsBuilder[K, V] = withKeyExtractor(extractor)
 
   def withKeyExtractor(
-      extractor: K => TableKey
-  ): TableReaderSettingsBuilder[K, V] = copy(tableKeyExtractor = Some(extractor))
+      extractor: K => TableKey): TableReaderSettingsBuilder[K, V] = copy(tableKeyExtractor = Some(extractor))
 
   def build(): TableReaderSettings[K, V] = {
 
@@ -360,8 +351,7 @@ class TableReaderSettingsBuilder[K, V](
       valueSerializer,
       tableKeyExtractor.getOrElse(k => new TableKey(keySerializer.serialize(k))),
       maximumInflightMessages,
-      maxEntriesAtOnce
-    )
+      maxEntriesAtOnce)
   }
 
 }
@@ -374,8 +364,8 @@ object TableReaderSettingsBuilder {
    * `akka.alpakka.pravega`.
    */
   def apply[K, V]()(implicit actorSystem: ActorSystem,
-                    keySerializer: Serializer[K],
-                    valueSerializer: Serializer[V]): TableReaderSettingsBuilder[K, V] =
+      keySerializer: Serializer[K],
+      valueSerializer: Serializer[V]): TableReaderSettingsBuilder[K, V] =
     apply(actorSystem.settings.config.getConfig(configPath), keySerializer, valueSerializer)
 
   /**
@@ -383,8 +373,8 @@ object TableReaderSettingsBuilder {
    * `akka.alpakka.pravega`.
    */
   def create[K, V](actorSystem: ActorSystem,
-                   keySerializer: Serializer[K],
-                   valueSerializer: Serializer[V]): TableReaderSettingsBuilder[K, V] =
+      keySerializer: Serializer[K],
+      valueSerializer: Serializer[V]): TableReaderSettingsBuilder[K, V] =
     apply()(actorSystem, keySerializer, valueSerializer)
 
   /**
@@ -392,18 +382,18 @@ object TableReaderSettingsBuilder {
    * the default configuration `akka.alpakka.pravega`.
    */
   def apply[K, V](config: Config,
-                  keySerializer: Serializer[K],
-                  valueSerializer: Serializer[V]): TableReaderSettingsBuilder[K, V] =
+      keySerializer: Serializer[K],
+      valueSerializer: Serializer[V]): TableReaderSettingsBuilder[K, V] =
     new TableReaderSettingsBuilder(config,
-                                   keySerializer,
-                                   valueSerializer,
-                                   None,
-                                   None,
-                                   None,
-                                   tableClientConfiguration(config),
-                                   None,
-                                   config.getInt("maximum-inflight-messages"),
-                                   config.getInt("max-entries-at-once"))
+      keySerializer,
+      valueSerializer,
+      None,
+      None,
+      None,
+      tableClientConfiguration(config),
+      None,
+      config.getInt("maximum-inflight-messages"),
+      config.getInt("max-entries-at-once"))
 
   private def tableClientConfiguration(implicit config: Config) = {
 
@@ -429,22 +419,20 @@ class TableWriterSettingsBuilder[K, V](
     clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] = None,
     keyValueTableClientConfigurationBuilder: KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder,
     keyValueTableClientConfigurationBuilderCustomizer: Option[
-      KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder
-    ] = None,
+      KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder] =
+      None,
     maximumInflightMessages: Int,
-    maxEntriesAtOnce: Int
-) extends WithClientConfig(config, clientConfig, clientConfigCustomization) {
+    maxEntriesAtOnce: Int) extends WithClientConfig(config, clientConfig, clientConfigCustomization) {
 
   def keyValueTableClientConfigurationBuilder(
-      f: KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder
-  ): TableWriterSettingsBuilder[K, V] =
+      f: KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder)
+      : TableWriterSettingsBuilder[K, V] =
     copy(keyValueTableClientConfigurationBuilderCustomizer = Some(f))
 
   def withClientConfig(clientConfig: ClientConfig) = copy(clientConfig = Some(clientConfig))
 
   def clientConfigBuilder(
-      clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder
-  ): TableWriterSettingsBuilder[K, V] =
+      clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder): TableWriterSettingsBuilder[K, V] =
     copy(clientConfigCustomization = Some(clientConfigCustomization))
 
   def withMaximumInflightMessages(i: Int): TableWriterSettingsBuilder[K, V] = copy(maximumInflightMessages = i)
@@ -456,25 +444,23 @@ class TableWriterSettingsBuilder[K, V](
       clientConfig: Option[ClientConfig] = clientConfig,
       clientConfigCustomization: Option[ClientConfigBuilder => ClientConfigBuilder] = clientConfigCustomization,
       keyValueTableClientConfigurationBuilderCustomizer: Option[
-        KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder
-      ] = keyValueTableClientConfigurationBuilderCustomizer,
+        KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder => KeyValueTableClientConfiguration.KeyValueTableClientConfigurationBuilder] =
+        keyValueTableClientConfigurationBuilderCustomizer,
       maximumInflightMessages: Int = maximumInflightMessages,
-      maxEntriesAtOnce: Int = maxEntriesAtOnce
-  ): TableWriterSettingsBuilder[K, V] =
+      maxEntriesAtOnce: Int = maxEntriesAtOnce): TableWriterSettingsBuilder[K, V] =
     new TableWriterSettingsBuilder(config,
-                                   keySerializer,
-                                   valueSerializer,
-                                   tableKeyExtractor,
-                                   clientConfig,
-                                   clientConfigCustomization,
-                                   keyValueTableClientConfigurationBuilder,
-                                   keyValueTableClientConfigurationBuilderCustomizer,
-                                   maximumInflightMessages,
-                                   maxEntriesAtOnce)
+      keySerializer,
+      valueSerializer,
+      tableKeyExtractor,
+      clientConfig,
+      clientConfigCustomization,
+      keyValueTableClientConfigurationBuilder,
+      keyValueTableClientConfigurationBuilderCustomizer,
+      maximumInflightMessages,
+      maxEntriesAtOnce)
 
   def withKeyExtractor(
-      extractor: K => TableKey
-  ): TableWriterSettingsBuilder[K, V] = copy(tableKeyExtractor = Some(extractor))
+      extractor: K => TableKey): TableWriterSettingsBuilder[K, V] = copy(tableKeyExtractor = Some(extractor))
 
   def build(): TableWriterSettings[K, V] = {
 
@@ -482,11 +468,11 @@ class TableWriterSettingsBuilder[K, V](
 
     val eventWriterConfig = keyValueTableClientConfigurationBuilder.build()
     new TableWriterSettings[K, V](handleClientConfig(),
-                                  eventWriterConfig,
-                                  keySerializer,
-                                  valueSerializer,
-                                  tableKeyExtractor.getOrElse(k => new TableKey(keySerializer.serialize(k))),
-                                  maximumInflightMessages)
+      eventWriterConfig,
+      keySerializer,
+      valueSerializer,
+      tableKeyExtractor.getOrElse(k => new TableKey(keySerializer.serialize(k))),
+      maximumInflightMessages)
   }
 
 }
@@ -499,8 +485,8 @@ object TableWriterSettingsBuilder {
    * `akka.alpakka.pravega`.
    */
   def apply[K, V]()(implicit actorSystem: ActorSystem,
-                    keySerializer: Serializer[K],
-                    valueSerializer: Serializer[V]): TableWriterSettingsBuilder[K, V] =
+      keySerializer: Serializer[K],
+      valueSerializer: Serializer[V]): TableWriterSettingsBuilder[K, V] =
     apply(actorSystem.settings.config.getConfig(configPath), keySerializer, valueSerializer)
 
   /**
@@ -508,8 +494,8 @@ object TableWriterSettingsBuilder {
    * `akka.alpakka.pravega`.
    */
   def create[K, V](actorSystem: ActorSystem,
-                   keySerializer: Serializer[K],
-                   valueSerializer: Serializer[V]): TableWriterSettingsBuilder[K, V] =
+      keySerializer: Serializer[K],
+      valueSerializer: Serializer[V]): TableWriterSettingsBuilder[K, V] =
     apply()(actorSystem, keySerializer, valueSerializer)
 
   /**
@@ -517,18 +503,18 @@ object TableWriterSettingsBuilder {
    * the default configuration `akka.alpakka.pravega`.
    */
   def apply[K, V](config: Config,
-                  keySerializer: Serializer[K],
-                  valueSerializer: Serializer[V]): TableWriterSettingsBuilder[K, V] =
+      keySerializer: Serializer[K],
+      valueSerializer: Serializer[V]): TableWriterSettingsBuilder[K, V] =
     new TableWriterSettingsBuilder(config,
-                                   keySerializer,
-                                   valueSerializer,
-                                   None,
-                                   None,
-                                   None,
-                                   tableClientConfiguration(config),
-                                   None,
-                                   config.getInt("maximum-inflight-messages"),
-                                   config.getInt("max-entries-at-once"))
+      keySerializer,
+      valueSerializer,
+      None,
+      None,
+      None,
+      tableClientConfiguration(config),
+      None,
+      config.getInt("maximum-inflight-messages"),
+      config.getInt("max-entries-at-once"))
 
   private def tableClientConfiguration(implicit config: Config) = {
 
@@ -548,8 +534,7 @@ object TableWriterSettingsBuilder {
 private[pravega] class ReaderBasicSetting(
     var groupName: Option[String] = None,
     var readerId: Option[String] = None,
-    var timeout: Duration = Duration.ofSeconds(5)
-) {
+    var timeout: Duration = Duration.ofSeconds(5)) {
   def withGroupName(name: String) = groupName = Some(name)
   def withReaderId(name: String) = readerId = Some(name)
   def withTimeout(t: Duration) = timeout = t
@@ -568,17 +553,16 @@ private[pravega] class ReaderBasicSetting(
  * @param maximumInflightMessages
  */
 class WriterSettings[Message](val clientConfig: ClientConfig,
-                              val eventWriterConfig: EventWriterConfig,
-                              val serializer: Serializer[Message],
-                              val keyExtractor: Option[Message => String],
-                              val maximumInflightMessages: Int)
+    val eventWriterConfig: EventWriterConfig,
+    val serializer: Serializer[Message],
+    val keyExtractor: Option[Message => String],
+    val maximumInflightMessages: Int)
 
 /**
  * Table Writer settings that must be provided to @see Sink [[akka.stream.alpakka.pravega.scaladsl.PravegaTable.sink]]
  * or @see Flow [[akka.stream.alpakka.pravega.scaladsl.PravegaTable.writeFlow]]
  *
  * Built with @see [[WriterSettingsBuilder]]
- *
  */
 class TableWriterSettings[K, V](
     clientConfig: ClientConfig,
@@ -586,13 +570,12 @@ class TableWriterSettings[K, V](
     keySerializer: Serializer[K],
     valueSerializer: Serializer[V],
     tableKey: K => TableKey,
-    maximumInflightMessages: Int
-) extends TableSettings(clientConfig,
-                          keySerializer,
-                          valueSerializer,
-                          tableKey,
-                          keyValueTableClientConfiguration,
-                          maximumInflightMessages)
+    maximumInflightMessages: Int) extends TableSettings(clientConfig,
+      keySerializer,
+      valueSerializer,
+      tableKey,
+      keyValueTableClientConfiguration,
+      maximumInflightMessages)
 
 class TableReaderSettings[K, V](
     clientConfig: ClientConfig,
@@ -601,13 +584,12 @@ class TableReaderSettings[K, V](
     valueSerializer: Serializer[V],
     tableKey: K => TableKey,
     maximumInflightMessages: Int,
-    val maxEntriesAtOnce: Int
-) extends TableSettings(clientConfig,
-                          keySerializer,
-                          valueSerializer,
-                          tableKey,
-                          keyValueTableClientConfiguration,
-                          maximumInflightMessages)
+    val maxEntriesAtOnce: Int) extends TableSettings(clientConfig,
+      keySerializer,
+      valueSerializer,
+      tableKey,
+      keyValueTableClientConfiguration,
+      maximumInflightMessages)
 
 protected abstract class TableSettings[K, V](
     val clientConfig: ClientConfig,
@@ -615,8 +597,7 @@ protected abstract class TableSettings[K, V](
     val valueSerializer: Serializer[V],
     val tableKey: K => TableKey,
     val keyValueTableClientConfiguration: KeyValueTableClientConfiguration,
-    val maximumInflightMessages: Int
-)
+    val maximumInflightMessages: Int)
 
 private[pravega] object ConfigHelper {
   def buildReaderConfig(config: Config): ReaderConfigBuilder = {

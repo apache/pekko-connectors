@@ -10,7 +10,7 @@ import akka.annotation.InternalApi
 import akka.stream.alpakka.ftp.FtpCredentials
 import akka.stream.alpakka.ftp._
 import net.schmizz.sshj.SSHClient
-import org.apache.commons.net.ftp.{FTPClient, FTPSClient}
+import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
 /**
  * INTERNAL API
@@ -33,16 +33,16 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
   protected[this] def createBrowserGraph(
       _basePath: String,
       _connectionSettings: S,
-      _branchSelector: FtpFile => Boolean
-  )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpBrowserGraphStage[FtpClient, S] =
+      _branchSelector: FtpFile => Boolean)(
+      implicit _ftpLike: FtpLike[FtpClient, S]): FtpBrowserGraphStage[FtpClient, S] =
     createBrowserGraph(_basePath, _connectionSettings, _branchSelector, _emitTraversedDirectories = false)
 
   protected[this] def createBrowserGraph(
       _basePath: String,
       _connectionSettings: S,
       _branchSelector: FtpFile => Boolean,
-      _emitTraversedDirectories: Boolean
-  )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpBrowserGraphStage[FtpClient, S] =
+      _emitTraversedDirectories: Boolean)(
+      implicit _ftpLike: FtpLike[FtpClient, S]): FtpBrowserGraphStage[FtpClient, S] =
     new FtpBrowserGraphStage[FtpClient, S] {
       lazy val name: String = ftpBrowserSourceName
       val basePath: String = _basePath
@@ -54,8 +54,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
     }
 
   protected[this] def createMkdirGraph(baseDirectoryPath: String, dirName: String, currentConnectionSettings: S)(
-      implicit _ftpLike: FtpLike[FtpClient, S]
-  ): FtpDirectoryOperationsGraphStage[FtpClient, S] =
+      implicit _ftpLike: FtpLike[FtpClient, S]): FtpDirectoryOperationsGraphStage[FtpClient, S] =
     new FtpDirectoryOperationsGraphStage[FtpClient, S] {
       override val ftpLike: FtpLike[FtpClient, S] = _ftpLike
 
@@ -73,16 +72,14 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
   protected[this] def createIOSource(
       _path: String,
       _connectionSettings: S,
-      _chunkSize: Int
-  )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpIOSourceStage[FtpClient, S] =
+      _chunkSize: Int)(implicit _ftpLike: FtpLike[FtpClient, S]): FtpIOSourceStage[FtpClient, S] =
     createIOSource(_path, _connectionSettings, _chunkSize, 0L)
 
   protected[this] def createIOSource(
       _path: String,
       _connectionSettings: S,
       _chunkSize: Int,
-      _offset: Long
-  )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpIOSourceStage[FtpClient, S] =
+      _offset: Long)(implicit _ftpLike: FtpLike[FtpClient, S]): FtpIOSourceStage[FtpClient, S] =
     new FtpIOSourceStage[FtpClient, S] {
       lazy val name: String = ftpIOSourceName
       val path: String = _path
@@ -96,8 +93,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
   protected[this] def createIOSink(
       _path: String,
       _connectionSettings: S,
-      _append: Boolean
-  )(implicit _ftpLike: FtpLike[FtpClient, S]): FtpIOSinkStage[FtpClient, S] =
+      _append: Boolean)(implicit _ftpLike: FtpLike[FtpClient, S]): FtpIOSinkStage[FtpClient, S] =
     new FtpIOSinkStage[FtpClient, S] {
       lazy val name: String = ftpIOSinkName
       val path: String = _path
@@ -109,8 +105,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
 
   protected[this] def createMoveSink(
       _destinationPath: FtpFile => String,
-      _connectionSettings: S
-  )(implicit _ftpLike: FtpLike[FtpClient, S]) =
+      _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]) =
     new FtpMoveSink[FtpClient, S] {
       val connectionSettings: S = _connectionSettings
       val ftpClient: () => FtpClient = self.ftpClient
@@ -119,8 +114,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
     }
 
   protected[this] def createRemoveSink(
-      _connectionSettings: S
-  )(implicit _ftpLike: FtpLike[FtpClient, S]) =
+      _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]) =
     new FtpRemoveSink[FtpClient, S] {
       val connectionSettings: S = _connectionSettings
       val ftpClient: () => FtpClient = self.ftpClient
@@ -130,8 +124,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
   protected[this] def defaultSettings(
       hostname: String,
       username: Option[String] = None,
-      password: Option[String] = None
-  ): S
+      password: Option[String] = None): S
 }
 
 /**
@@ -194,16 +187,13 @@ private[ftp] trait FtpDefaultSettings {
   protected def defaultSettings(
       hostname: String,
       username: Option[String] = None,
-      password: Option[String] = None
-  ): FtpSettings =
+      password: Option[String] = None): FtpSettings =
     FtpSettings(
-      InetAddress.getByName(hostname)
-    ).withCredentials(
+      InetAddress.getByName(hostname)).withCredentials(
       if (username.isDefined)
         FtpCredentials.create(username.get, password.getOrElse(""))
       else
-        FtpCredentials.anonymous
-    )
+        FtpCredentials.anonymous)
 }
 
 /**
@@ -214,16 +204,13 @@ private[ftp] trait FtpsDefaultSettings {
   protected def defaultSettings(
       hostname: String,
       username: Option[String] = None,
-      password: Option[String] = None
-  ): FtpsSettings =
+      password: Option[String] = None): FtpsSettings =
     FtpsSettings(
-      InetAddress.getByName(hostname)
-    ).withCredentials(
+      InetAddress.getByName(hostname)).withCredentials(
       if (username.isDefined)
         FtpCredentials.create(username.get, password.getOrElse(""))
       else
-        FtpCredentials.anonymous
-    )
+        FtpCredentials.anonymous)
 }
 
 /**
@@ -234,16 +221,13 @@ private[ftp] trait SftpDefaultSettings {
   protected def defaultSettings(
       hostname: String,
       username: Option[String] = None,
-      password: Option[String] = None
-  ): SftpSettings =
+      password: Option[String] = None): SftpSettings =
     SftpSettings(
-      InetAddress.getByName(hostname)
-    ).withCredentials(
+      InetAddress.getByName(hostname)).withCredentials(
       if (username.isDefined)
         FtpCredentials.create(username.get, password.getOrElse(""))
       else
-        FtpCredentials.anonymous
-    )
+        FtpCredentials.anonymous)
 }
 
 /**

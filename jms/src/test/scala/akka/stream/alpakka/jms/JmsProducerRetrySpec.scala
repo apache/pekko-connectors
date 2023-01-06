@@ -7,10 +7,10 @@ package akka.stream.alpakka.jms
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.stream._
-import akka.stream.alpakka.jms.scaladsl.{JmsConsumer, JmsProducer}
-import akka.stream.scaladsl.{Keep, Sink, Source}
-import javax.jms.{JMSException, Message, TextMessage}
-import org.mockito.ArgumentMatchers.{any, anyInt, anyLong}
+import akka.stream.alpakka.jms.scaladsl.{ JmsConsumer, JmsProducer }
+import akka.stream.scaladsl.{ Keep, Sink, Source }
+import javax.jms.{ JMSException, Message, TextMessage }
+import org.mockito.ArgumentMatchers.{ any, anyInt, anyLong }
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
@@ -35,12 +35,9 @@ class JmsProducerRetrySpec extends JmsSpec {
                 .withConnectTimeout(100.millis)
                 .withInitialRetry(50.millis)
                 .withMaxBackoff(50.millis)
-                .withInfiniteRetries()
-            )
+                .withInfiniteRetries())
             .withSendRetrySettings(
-              SendRetrySettings(system).withInitialRetry(10.millis).withMaxBackoff(10.millis).withInfiniteRetries()
-            )
-        )
+              SendRetrySettings(system).withInitialRetry(10.millis).withMaxBackoff(10.millis).withInfiniteRetries()))
         .withAttributes(ActorAttributes.supervisionStrategy(stoppingDecider))
 
       val (queue, result) = Source
@@ -97,9 +94,7 @@ class JmsProducerRetrySpec extends JmsSpec {
                 .withInitialRetry(100.millis)
                 .withMaxBackoff(600.millis)
                 .withBackoffFactor(2)
-                .withMaxRetries(3)
-            )
-        )
+                .withMaxRetries(3)))
         .withAttributes(ActorAttributes.supervisionStrategy(stoppingDecider))
 
       val (cancellable, result) = Source
@@ -127,13 +122,12 @@ class JmsProducerRetrySpec extends JmsSpec {
         .flow[JmsMapMessage](
           JmsProducerSettings(producerConfig, connectionFactory)
             .withQueue("test")
-            .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries())
-        )
+            .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries()))
         .withAttributes(ActorAttributes.supervisionStrategy(stoppingDecider))
 
       val result = Source(
-        List(JmsMapMessage(Map("body" -> "1")), JmsMapMessage(Map("body" -> this)), JmsMapMessage(Map("body" -> "3")))
-      ).via(jms)
+        List(JmsMapMessage(Map("body" -> "1")), JmsMapMessage(Map("body" -> this)),
+          JmsMapMessage(Map("body" -> "3")))).via(jms)
         .map(_.body("body").toString)
         .runWith(Sink.seq)
 
@@ -152,14 +146,13 @@ class JmsProducerRetrySpec extends JmsSpec {
         .flow[JmsMapMessage](
           JmsProducerSettings(producerConfig, connectionFactory)
             .withQueue("test")
-            .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries())
-        )
+            .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries()))
         .withAttributes(ActorAttributes.supervisionStrategy(decider))
 
       // second element is a wrong map message.
       val result = Source(
-        List(JmsMapMessage(Map("body" -> "1")), JmsMapMessage(Map("body" -> this)), JmsMapMessage(Map("body" -> "3")))
-      ).via(jms)
+        List(JmsMapMessage(Map("body" -> "1")), JmsMapMessage(Map("body" -> this)),
+          JmsMapMessage(Map("body" -> "3")))).via(jms)
         .map(_.body("body").toString)
         .runWith(Sink.seq)
 
@@ -189,9 +182,7 @@ class JmsProducerRetrySpec extends JmsSpec {
         JmsProducerSettings(producerConfig, factory)
           .withQueue("test")
           .withSendRetrySettings(
-            SendRetrySettings(system).withInitialRetry(10.millis).withMaxBackoff(10.millis).withMaxRetries(5)
-          )
-      )
+            SendRetrySettings(system).withInitialRetry(10.millis).withMaxBackoff(10.millis).withMaxRetries(5)))
 
       val result = Source(List("one")).runWith(jms)
 
@@ -215,8 +206,7 @@ class JmsProducerRetrySpec extends JmsSpec {
       val jms = JmsProducer.textSink(
         JmsProducerSettings(producerConfig, factory)
           .withQueue("test")
-          .withSendRetrySettings(SendRetrySettings(system).withMaxRetries(0))
-      )
+          .withSendRetrySettings(SendRetrySettings(system).withMaxRetries(0)))
 
       val result = Source(List("one")).runWith(jms)
 

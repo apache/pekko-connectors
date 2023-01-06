@@ -5,7 +5,7 @@
 package akka.stream.alpakka.amqp.javadsl
 
 import akka.NotUsed
-import akka.stream.alpakka.amqp.{AmqpSourceSettings, ReadResult}
+import akka.stream.alpakka.amqp.{ AmqpSourceSettings, ReadResult }
 import akka.stream.javadsl.Source
 
 object AmqpSource {

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.jms.impl
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.stream.ActorAttributes.SupervisionStrategy
 import akka.stream._
 import akka.annotation.InternalApi
@@ -17,7 +17,7 @@ import javax.jms
 
 import scala.concurrent.Future
 import scala.util.control.NoStackTrace
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 /**
  * Internal API.
@@ -27,7 +27,7 @@ private trait JmsProducerConnector extends JmsConnector[JmsProducerSession] {
   this: TimerGraphStageLogic with StageLogging =>
 
   protected final def createSession(connection: jms.Connection,
-                                    createDestination: jms.Session => jms.Destination): JmsProducerSession = {
+      createDestination: jms.Session => jms.Destination): JmsProducerSession = {
     val session = connection.createSession(false, AcknowledgeMode.AutoAcknowledge.mode)
     new JmsProducerSession(connection, session, createDestination(session))
   }
@@ -45,7 +45,7 @@ private trait JmsProducerConnector extends JmsConnector[JmsProducerSession] {
  */
 @InternalApi
 private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThrough](settings: JmsProducerSettings,
-                                                                                      destination: Destination)
+    destination: Destination)
     extends GraphStageWithMaterializedValue[FlowShape[E, E], JmsProducerMatValue] { stage =>
   import JmsProducerStage._
 
@@ -58,8 +58,7 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
     super.initialAttributes and Attributes.name("JmsProducer") and ActorAttributes.IODispatcher
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, JmsProducerMatValue) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, JmsProducerMatValue) = {
     val logic: TimerGraphStageLogic with JmsProducerConnector = producerLogic(inheritedAttributes)
     (logic, logic.status)
   }
@@ -110,11 +109,12 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
         super.connectionFailed(ex)
       }
 
-      setHandler(out, new OutHandler {
-        override def onPull(): Unit = pushNextIfPossible()
+      setHandler(out,
+        new OutHandler {
+          override def onPull(): Unit = pushNextIfPossible()
 
-        override def onDownstreamFinish(cause: Throwable): Unit = publishAndCompleteStage()
-      })
+          override def onDownstreamFinish(cause: Throwable): Unit = publishAndCompleteStage()
+        })
 
       setHandler(
         in,
@@ -145,8 +145,7 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
             // immediately ask for the next element if producers are available.
             pullIfNeeded()
           }
-        }
-      )
+        })
 
       private def publishAndCompleteStage(): Unit = {
         val previous = updateState(InternalConnectionState.JmsConnectorStopping(Success(Done)))
@@ -157,7 +156,7 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
 
       override def onTimer(timerKey: Any): Unit = timerKey match {
         case s: SendAttempt[E @unchecked] => sendWithRetries(s)
-        case _ => super.onTimer(timerKey)
+        case _                            => super.onTimer(timerKey)
       }
 
       private def sendWithRetries(send: SendAttempt[E]): Unit = {
@@ -209,8 +208,8 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
 
       private def pullIfNeeded(): Unit =
         if (jmsProducers.nonEmpty // only pull if a producer is available in the pool.
-            && !inFlightMessages.isFull // and a place is available in the in-flight queue.
-            && !hasBeenPulled(in))
+          && !inFlightMessages.isFull // and a place is available in the in-flight queue.
+          && !hasBeenPulled(in))
           tryPull(in)
 
       private def pushNextIfPossible(): Unit =
@@ -234,7 +233,7 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
       private def handleFailure(ex: Throwable, holder: Holder[E]): Unit =
         holder.supervisionDirectiveFor(decider, ex) match {
           case Supervision.Stop => failStage(ex) // fail only if supervision asks for it.
-          case _ => pushNextIfPossible()
+          case _                => pushNextIfPossible()
         }
     }
 }
@@ -272,7 +271,7 @@ private[jms] object JmsProducerStage {
   }
 
   case class SendAttempt[E <: JmsEnvelope[_]](envelope: E,
-                                              holder: Holder[E],
-                                              attempt: Int = 0,
-                                              backoffMaxed: Boolean = false)
+      holder: Holder[E],
+      attempt: Int = 0,
+      backoffMaxed: Boolean = false)
 }

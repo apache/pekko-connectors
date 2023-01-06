@@ -11,12 +11,12 @@ import akka.Done
 import akka.testkit.TestKitBase
 import com.datastax.oss.driver.api.core.cql._
 import org.scalatest._
-import org.scalatest.concurrent.{PatienceConfiguration, ScalaFutures}
+import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }
 
 import scala.jdk.CollectionConverters._
 import scala.collection.immutable
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 import scala.util.control.NonFatal
 import scala.compat.java8.FutureConverters._
 
@@ -40,16 +40,14 @@ trait CassandraLifecycleBase {
   def createKeyspace(session: CassandraSession, name: String): Future[Done] = {
     session.executeWrite(
       new SimpleStatementBuilder(
-        s"""CREATE KEYSPACE $name WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1'};"""
-      ).setTimeout(keyspaceTimeout)
-        .build()
-    )
+        s"""CREATE KEYSPACE $name WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1'};""").setTimeout(
+        keyspaceTimeout)
+        .build())
   }
 
   def dropKeyspace(session: CassandraSession, name: String): Future[Done] =
     session.executeWrite(
-      new SimpleStatementBuilder(s"""DROP KEYSPACE IF EXISTS $name;""").setTimeout(keyspaceTimeout).build()
-    )
+      new SimpleStatementBuilder(s"""DROP KEYSPACE IF EXISTS $name;""").setTimeout(keyspaceTimeout).build())
 
   def createKeyspace(name: String): Future[Done] = withSchemaMetadataDisabled(createKeyspace(lifecycleSession, name))
 

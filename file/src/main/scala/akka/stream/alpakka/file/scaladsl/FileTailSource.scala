@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.file.scaladsl
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.{ Charset, StandardCharsets }
 import java.nio.file.Path
 
 import akka.NotUsed
@@ -31,12 +31,11 @@ object FileTailSource {
    * @param pollingInterval  When the end has been reached, look for new content with this interval
    */
   def apply(path: Path,
-            maxChunkSize: Int,
-            startingPosition: Long,
-            pollingInterval: FiniteDuration): Source[ByteString, NotUsed] =
+      maxChunkSize: Int,
+      startingPosition: Long,
+      pollingInterval: FiniteDuration): Source[ByteString, NotUsed] =
     Source.fromGraph(
-      new akka.stream.alpakka.file.impl.FileTailSource(path, maxChunkSize, startingPosition, pollingInterval)
-    )
+      new akka.stream.alpakka.file.impl.FileTailSource(path, maxChunkSize, startingPosition, pollingInterval))
 
   /**
    * Scala API: Read the entire contents of a file as text lines, and then when the end is reached, keep reading
@@ -53,10 +52,10 @@ object FileTailSource {
    * @param charset         The charset of the file, defaults to UTF-8
    */
   def lines(path: Path,
-            maxLineSize: Int,
-            pollingInterval: FiniteDuration,
-            lf: String = System.getProperty("line.separator"),
-            charset: Charset = StandardCharsets.UTF_8): Source[String, NotUsed] =
+      maxLineSize: Int,
+      pollingInterval: FiniteDuration,
+      lf: String = System.getProperty("line.separator"),
+      charset: Charset = StandardCharsets.UTF_8): Source[String, NotUsed] =
     apply(path, maxLineSize, 0, pollingInterval)
       .via(akka.stream.scaladsl.Framing.delimiter(ByteString.fromString(lf, charset.name), maxLineSize, false))
       .map(_.decodeString(charset))

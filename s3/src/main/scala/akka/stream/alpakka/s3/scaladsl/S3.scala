@@ -8,11 +8,11 @@ import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.ByteRange
 import akka.stream.Attributes
 import akka.stream.alpakka.s3._
-import akka.stream.alpakka.s3.headers.{CannedAcl, ServerSideEncryption}
+import akka.stream.alpakka.s3.headers.{ CannedAcl, ServerSideEncryption }
 import akka.stream.alpakka.s3.impl._
-import akka.stream.scaladsl.{RunnableGraph, Sink, Source}
+import akka.stream.scaladsl.{ RunnableGraph, Sink, Source }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -34,10 +34,10 @@ object S3 {
    * @return a raw HTTP response from S3
    */
   def request(bucket: String,
-              key: String,
-              method: HttpMethod = HttpMethods.GET,
-              versionId: Option[String] = None,
-              s3Headers: S3Headers = S3Headers.empty): Source[HttpResponse, NotUsed] =
+      key: String,
+      method: HttpMethod = HttpMethods.GET,
+      versionId: Option[String] = None,
+      s3Headers: S3Headers = S3Headers.empty): Source[HttpResponse, NotUsed] =
     S3Stream.request(S3Location(bucket, key), method, versionId = versionId, s3Headers = s3Headers.headers)
 
   /**
@@ -53,8 +53,7 @@ object S3 {
       bucket: String,
       key: String,
       versionId: Option[String] = None,
-      sse: Option[ServerSideEncryption] = None
-  ): Source[Option[ObjectMetadata], NotUsed] =
+      sse: Option[ServerSideEncryption] = None): Source[Option[ObjectMetadata], NotUsed] =
     getObjectMetadata(bucket, key, versionId, S3Headers.empty.withOptionalServerSideEncryption(sse))
 
   /**
@@ -70,8 +69,7 @@ object S3 {
       bucket: String,
       key: String,
       versionId: Option[String],
-      s3Headers: S3Headers
-  ): Source[Option[ObjectMetadata], NotUsed] =
+      s3Headers: S3Headers): Source[Option[ObjectMetadata], NotUsed] =
     S3Stream.getObjectMetadata(bucket, key, versionId, s3Headers)
 
   /**
@@ -95,9 +93,9 @@ object S3 {
    * @return A [[akka.stream.scaladsl.Source Source]] that will emit [[akka.Done]] when operation is completed
    */
   def deleteObject(bucket: String,
-                   key: String,
-                   versionId: Option[String],
-                   s3Headers: S3Headers): Source[Done, NotUsed] =
+      key: String,
+      versionId: Option[String],
+      s3Headers: S3Headers): Source[Done, NotUsed] =
     S3Stream.deleteObject(S3Location(bucket, key), versionId, s3Headers)
 
   /**
@@ -142,9 +140,9 @@ object S3 {
    * @return A [[akka.stream.scaladsl.Source Source]] that will emit [[akka.Done]] when operation is completed
    */
   def deleteObjectsByPrefix(bucket: String,
-                            prefix: Option[String],
-                            deleteAllVersions: Boolean,
-                            s3Headers: S3Headers): Source[Done, NotUsed] =
+      prefix: Option[String],
+      deleteAllVersions: Boolean,
+      s3Headers: S3Headers): Source[Done, NotUsed] =
     S3Stream.deleteObjectsByPrefix(bucket, prefix, deleteAllVersions, s3Headers)
 
   /**
@@ -178,11 +176,11 @@ object S3 {
    * @return a [[akka.stream.scaladsl.Source Source]] containing the [[ObjectMetadata]] of the uploaded S3 Object
    */
   def putObject(bucket: String,
-                key: String,
-                data: Source[ByteString, _],
-                contentLength: Long,
-                contentType: ContentType = ContentTypes.`application/octet-stream`,
-                s3Headers: S3Headers): Source[ObjectMetadata, NotUsed] =
+      key: String,
+      data: Source[ByteString, _],
+      contentLength: Long,
+      contentType: ContentType = ContentTypes.`application/octet-stream`,
+      s3Headers: S3Headers): Source[ObjectMetadata, NotUsed] =
     S3Stream.putObject(S3Location(bucket, key), contentType, data, contentLength, s3Headers)
 
   /**
@@ -201,8 +199,8 @@ object S3 {
       key: String,
       range: Option[ByteRange] = None,
       versionId: Option[String] = None,
-      sse: Option[ServerSideEncryption] = None
-  ): Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] =
+      sse: Option[ServerSideEncryption] = None)
+      : Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] =
     download(bucket, key, range, versionId, S3Headers.empty.withOptionalServerSideEncryption(sse))
 
   /**
@@ -221,8 +219,7 @@ object S3 {
       key: String,
       range: Option[ByteRange],
       versionId: Option[String],
-      s3Headers: S3Headers
-  ): Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] =
+      s3Headers: S3Headers): Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] =
     S3Stream.download(S3Location(bucket, key), range, versionId, s3Headers)
 
   /**
@@ -240,8 +237,7 @@ object S3 {
       key: String,
       range: Option[ByteRange] = None,
       versionId: Option[String] = None,
-      sse: Option[ServerSideEncryption] = None
-  ): Source[ByteString, Future[ObjectMetadata]] =
+      sse: Option[ServerSideEncryption] = None): Source[ByteString, Future[ObjectMetadata]] =
     getObject(bucket, key, range, versionId, S3Headers.empty.withOptionalServerSideEncryption(sse))
 
   /**
@@ -259,8 +255,7 @@ object S3 {
       key: String,
       range: Option[ByteRange],
       versionId: Option[String],
-      s3Headers: S3Headers
-  ): Source[ByteString, Future[ObjectMetadata]] =
+      s3Headers: S3Headers): Source[ByteString, Future[ObjectMetadata]] =
     S3Stream.getObject(S3Location(bucket, key), range, versionId, s3Headers)
 
   /**
@@ -311,8 +306,8 @@ object S3 {
    * @return [[akka.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
    */
   def listBucket(bucket: String,
-                 prefix: Option[String],
-                 s3Headers: S3Headers): Source[ListBucketResultContents, NotUsed] =
+      prefix: Option[String],
+      s3Headers: S3Headers): Source[ListBucketResultContents, NotUsed] =
     S3Stream.listBucket(bucket, prefix, s3Headers)
 
   /**
@@ -329,9 +324,9 @@ object S3 {
    * @return [[akka.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
    */
   def listBucket(bucket: String,
-                 delimiter: String,
-                 prefix: Option[String] = None,
-                 s3Headers: S3Headers = S3Headers.empty): Source[ListBucketResultContents, NotUsed] =
+      delimiter: String,
+      prefix: Option[String] = None,
+      s3Headers: S3Headers = S3Headers.empty): Source[ListBucketResultContents, NotUsed] =
     S3Stream
       .listBucketAndCommonPrefixes(bucket, delimiter, prefix, s3Headers)
       .mapConcat(_._1)
@@ -355,8 +350,8 @@ object S3 {
       bucket: String,
       delimiter: String,
       prefix: Option[String] = None,
-      s3Headers: S3Headers = S3Headers.empty
-  ): Source[(Seq[ListBucketResultContents], Seq[ListBucketResultCommonPrefixes]), NotUsed] =
+      s3Headers: S3Headers = S3Headers.empty)
+      : Source[(Seq[ListBucketResultContents], Seq[ListBucketResultCommonPrefixes]), NotUsed] =
     S3Stream.listBucketAndCommonPrefixes(bucket, delimiter, prefix, s3Headers)
 
   /**
@@ -380,8 +375,8 @@ object S3 {
    * @return [[akka.stream.scaladsl.Source Source]] of [[ListMultipartUploadResultUploads]]
    */
   def listMultipartUpload(bucket: String,
-                          prefix: Option[String],
-                          s3Headers: S3Headers): Source[ListMultipartUploadResultUploads, NotUsed] =
+      prefix: Option[String],
+      s3Headers: S3Headers): Source[ListMultipartUploadResultUploads, NotUsed] =
     S3Stream.listMultipartUpload(bucket, prefix, s3Headers)
 
   /**
@@ -398,8 +393,8 @@ object S3 {
       bucket: String,
       delimiter: String,
       prefix: Option[String] = None,
-      s3Headers: S3Headers = S3Headers.empty
-  ): Source[(Seq[ListMultipartUploadResultUploads], Seq[CommonPrefixes]), NotUsed] =
+      s3Headers: S3Headers = S3Headers.empty)
+      : Source[(Seq[ListMultipartUploadResultUploads], Seq[CommonPrefixes]), NotUsed] =
     S3Stream.listMultipartUploadAndCommonPrefixes(bucket, delimiter, prefix, s3Headers)
 
   /**
@@ -425,9 +420,9 @@ object S3 {
    * @return [[akka.stream.scaladsl.Source Source]] of [[ListPartsResultParts]]
    */
   def listParts(bucket: String,
-                key: String,
-                uploadId: String,
-                s3Headers: S3Headers): Source[ListPartsResultParts, NotUsed] =
+      key: String,
+      uploadId: String,
+      s3Headers: S3Headers): Source[ListPartsResultParts, NotUsed] =
     S3Stream.listParts(bucket, key, uploadId, s3Headers)
 
   /**
@@ -440,8 +435,7 @@ object S3 {
    */
   def listObjectVersions(
       bucket: String,
-      prefix: Option[String]
-  ): Source[(Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers]), NotUsed] =
+      prefix: Option[String]): Source[(Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers]), NotUsed] =
     S3Stream.listObjectVersions(bucket, prefix, S3Headers.empty)
 
   /**
@@ -456,8 +450,7 @@ object S3 {
   def listObjectVersions(
       bucket: String,
       prefix: Option[String],
-      s3Headers: S3Headers
-  ): Source[(Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers]), NotUsed] =
+      s3Headers: S3Headers): Source[(Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers]), NotUsed] =
     S3Stream.listObjectVersions(bucket, prefix, s3Headers)
 
   /**
@@ -474,8 +467,7 @@ object S3 {
       bucket: String,
       delimiter: String,
       prefix: Option[String],
-      s3Headers: S3Headers
-  ): Source[(Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers]), NotUsed] =
+      s3Headers: S3Headers): Source[(Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers]), NotUsed] =
     S3Stream.listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix, s3Headers).map {
       case (versions, markers, _) =>
         (versions, markers)
@@ -492,12 +484,10 @@ object S3 {
    * @return [[akka.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[akka.stream.alpakka.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[akka.stream.alpakka.s3.DeleteMarkers DeleteMarkers]], [[scala.collection.Seq Seq]] of [[akka.stream.alpakka.s3.CommonPrefixes CommonPrefixes]])
    */
   def listObjectVersionsAndCommonPrefixes(bucket: String,
-                                          delimiter: String,
-                                          prefix: Option[String],
-                                          s3Headers: S3Headers): Source[
-    (Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers], Seq[CommonPrefixes]),
-    NotUsed
-  ] =
+      delimiter: String,
+      prefix: Option[String],
+      s3Headers: S3Headers): Source[
+    (Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers], Seq[CommonPrefixes]), NotUsed] =
     S3Stream.listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix, s3Headers)
 
   /**
@@ -520,8 +510,7 @@ object S3 {
       cannedAcl: CannedAcl = CannedAcl.Private,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      sse: Option[ServerSideEncryption] = None
-  ): Sink[ByteString, Future[MultipartUploadResult]] = {
+      sse: Option[ServerSideEncryption] = None): Sink[ByteString, Future[MultipartUploadResult]] = {
     val headers =
       S3Headers.empty.withCannedAcl(cannedAcl).withMetaHeaders(metaHeaders).withOptionalServerSideEncryption(sse)
     multipartUploadWithHeaders(bucket, key, contentType, chunkSize, chunkingParallelism, headers)
@@ -544,16 +533,14 @@ object S3 {
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      s3Headers: S3Headers = S3Headers.empty
-  ): Sink[ByteString, Future[MultipartUploadResult]] =
+      s3Headers: S3Headers = S3Headers.empty): Sink[ByteString, Future[MultipartUploadResult]] =
     S3Stream
       .multipartUpload(
         S3Location(bucket, key),
         contentType,
         s3Headers,
         chunkSize,
-        chunkingParallelism
-      )
+        chunkingParallelism)
 
   /**
    * Uploads a S3 Object by making multiple requests. Unlike `multipartUpload`, this version allows you to pass in a
@@ -589,17 +576,16 @@ object S3 {
       cannedAcl: CannedAcl = CannedAcl.Private,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      sse: Option[ServerSideEncryption] = None
-  ): Sink[(ByteString, C), Future[MultipartUploadResult]] = {
+      sse: Option[ServerSideEncryption] = None): Sink[(ByteString, C), Future[MultipartUploadResult]] = {
     val headers =
       S3Headers.empty.withCannedAcl(cannedAcl).withMetaHeaders(metaHeaders).withOptionalServerSideEncryption(sse)
     multipartUploadWithHeadersAndContext(bucket,
-                                         key,
-                                         chunkUploadSink,
-                                         contentType,
-                                         chunkSize,
-                                         chunkingParallelism,
-                                         headers)
+      key,
+      chunkUploadSink,
+      contentType,
+      chunkSize,
+      chunkingParallelism,
+      headers)
   }
 
   /**
@@ -633,8 +619,7 @@ object S3 {
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      s3Headers: S3Headers = S3Headers.empty
-  ): Sink[(ByteString, C), Future[MultipartUploadResult]] =
+      s3Headers: S3Headers = S3Headers.empty): Sink[(ByteString, C), Future[MultipartUploadResult]] =
     S3Stream
       .multipartUploadWithContext(
         S3Location(bucket, key),
@@ -642,8 +627,7 @@ object S3 {
         contentType,
         s3Headers,
         chunkSize,
-        chunkingParallelism
-      )
+        chunkingParallelism)
 
   /**
    * Resumes from a previously aborted multipart upload by providing the uploadId and previous upload part identifiers
@@ -669,18 +653,17 @@ object S3 {
       cannedAcl: CannedAcl = CannedAcl.Private,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      sse: Option[ServerSideEncryption] = None
-  ): Sink[ByteString, Future[MultipartUploadResult]] = {
+      sse: Option[ServerSideEncryption] = None): Sink[ByteString, Future[MultipartUploadResult]] = {
     val headers =
       S3Headers.empty.withCannedAcl(cannedAcl).withMetaHeaders(metaHeaders).withOptionalServerSideEncryption(sse)
     resumeMultipartUploadWithHeaders(bucket,
-                                     key,
-                                     uploadId,
-                                     previousParts,
-                                     contentType,
-                                     chunkSize,
-                                     chunkingParallelism,
-                                     headers)
+      key,
+      uploadId,
+      previousParts,
+      contentType,
+      chunkSize,
+      chunkingParallelism,
+      headers)
   }
 
   /**
@@ -722,19 +705,18 @@ object S3 {
       cannedAcl: CannedAcl = CannedAcl.Private,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      sse: Option[ServerSideEncryption] = None
-  ): Sink[(ByteString, C), Future[MultipartUploadResult]] = {
+      sse: Option[ServerSideEncryption] = None): Sink[(ByteString, C), Future[MultipartUploadResult]] = {
     val headers =
       S3Headers.empty.withCannedAcl(cannedAcl).withMetaHeaders(metaHeaders).withOptionalServerSideEncryption(sse)
     resumeMultipartUploadWithHeadersAndContext(bucket,
-                                               key,
-                                               uploadId,
-                                               previousParts,
-                                               chunkUploadSink,
-                                               contentType,
-                                               chunkSize,
-                                               chunkingParallelism,
-                                               headers)
+      key,
+      uploadId,
+      previousParts,
+      chunkUploadSink,
+      contentType,
+      chunkSize,
+      chunkingParallelism,
+      headers)
   }
 
   /**
@@ -761,8 +743,7 @@ object S3 {
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      s3Headers: S3Headers = S3Headers.empty
-  ): Sink[ByteString, Future[MultipartUploadResult]] =
+      s3Headers: S3Headers = S3Headers.empty): Sink[ByteString, Future[MultipartUploadResult]] =
     S3Stream
       .resumeMultipartUpload(
         S3Location(bucket, key),
@@ -771,8 +752,7 @@ object S3 {
         contentType,
         s3Headers,
         chunkSize,
-        chunkingParallelism
-      )
+        chunkingParallelism)
 
   /**
    * Resumes from a previously aborted multipart upload by providing the uploadId and previous upload part identifiers.
@@ -810,8 +790,7 @@ object S3 {
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
-      s3Headers: S3Headers = S3Headers.empty
-  ): Sink[(ByteString, C), Future[MultipartUploadResult]] =
+      s3Headers: S3Headers = S3Headers.empty): Sink[(ByteString, C), Future[MultipartUploadResult]] =
     S3Stream
       .resumeMultipartUploadWithContext(
         S3Location(bucket, key),
@@ -821,8 +800,7 @@ object S3 {
         contentType,
         s3Headers,
         chunkSize,
-        chunkingParallelism
-      )
+        chunkingParallelism)
 
   /**
    * Complete a multipart upload with an already given list of parts
@@ -838,8 +816,7 @@ object S3 {
    */
   def completeMultipartUpload(bucket: String, key: String, uploadId: String, parts: immutable.Iterable[Part])(
       implicit system: ClassicActorSystemProvider,
-      attributes: Attributes = Attributes()
-  ): Future[MultipartUploadResult] =
+      attributes: Attributes = Attributes()): Future[MultipartUploadResult] =
     S3Stream.completeMultipartUpload(S3Location(bucket, key), uploadId, parts, S3Headers.empty)
 
   /**
@@ -860,8 +837,8 @@ object S3 {
       key: String,
       uploadId: String,
       parts: immutable.Iterable[Part],
-      s3Headers: S3Headers
-  )(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[MultipartUploadResult] =
+      s3Headers: S3Headers)(
+      implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[MultipartUploadResult] =
     S3Stream.completeMultipartUpload(S3Location(bucket, key), uploadId, parts, s3Headers)
 
   /**
@@ -887,8 +864,7 @@ object S3 {
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       s3Headers: S3Headers = S3Headers.empty,
       chunkSize: Int = MinChunkSize,
-      chunkingParallelism: Int = 4
-  ): RunnableGraph[Future[MultipartUploadResult]] =
+      chunkingParallelism: Int = 4): RunnableGraph[Future[MultipartUploadResult]] =
     S3Stream
       .multipartCopy(
         S3Location(sourceBucket, sourceKey),
@@ -897,8 +873,7 @@ object S3 {
         contentType,
         s3Headers,
         chunkSize,
-        chunkingParallelism
-      )
+        chunkingParallelism)
 
   /**
    * Create new bucket with a given name
@@ -909,7 +884,7 @@ object S3 {
    * @return [[scala.concurrent.Future Future]] with type [[Done]] as API doesn't return any additional information
    */
   def makeBucket(bucketName: String)(implicit system: ClassicActorSystemProvider,
-                                     attr: Attributes = Attributes()): Future[Done] =
+      attr: Attributes = Attributes()): Future[Done] =
     S3Stream.makeBucket(bucketName, S3Headers.empty)
 
   /**
@@ -922,7 +897,7 @@ object S3 {
    * @return [[scala.concurrent.Future Future]] with type [[Done]] as API doesn't return any additional information
    */
   def makeBucket(bucketName: String, s3Headers: S3Headers)(implicit system: ClassicActorSystemProvider,
-                                                           attr: Attributes): Future[Done] =
+      attr: Attributes): Future[Done] =
     S3Stream.makeBucket(bucketName, s3Headers)
 
   /**
@@ -957,7 +932,7 @@ object S3 {
    * @return [[scala.concurrent.Future Future]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteBucket(bucketName: String)(implicit system: ClassicActorSystemProvider,
-                                       attributes: Attributes = Attributes()): Future[Done] =
+      attributes: Attributes = Attributes()): Future[Done] =
     S3Stream.deleteBucket(bucketName, S3Headers.empty)
 
   /**
@@ -971,8 +946,7 @@ object S3 {
    */
   def deleteBucket(
       bucketName: String,
-      s3Headers: S3Headers
-  )(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[Done] =
+      s3Headers: S3Headers)(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[Done] =
     S3Stream.deleteBucket(bucketName, s3Headers)
 
   /**
@@ -1007,7 +981,7 @@ object S3 {
    * @return [[scala.concurrent.Future Future]] of type [[BucketAccess]]
    */
   def checkIfBucketExists(bucketName: String)(implicit system: ClassicActorSystemProvider,
-                                              attributes: Attributes = Attributes()): Future[BucketAccess] =
+      attributes: Attributes = Attributes()): Future[BucketAccess] =
     S3Stream.checkIfBucketExists(bucketName, S3Headers.empty)
 
   /**
@@ -1021,8 +995,7 @@ object S3 {
    */
   def checkIfBucketExists(
       bucketName: String,
-      s3Headers: S3Headers
-  )(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[BucketAccess] =
+      s3Headers: S3Headers)(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[BucketAccess] =
     S3Stream.checkIfBucketExists(bucketName, s3Headers)
 
   /**
@@ -1060,8 +1033,7 @@ object S3 {
    */
   def deleteUpload(bucketName: String, key: String, uploadId: String)(
       implicit system: ClassicActorSystemProvider,
-      attributes: Attributes = Attributes()
-  ): Future[Done] =
+      attributes: Attributes = Attributes()): Future[Done] =
     deleteUpload(bucketName, key, uploadId, S3Headers.empty)
 
   /**
@@ -1078,8 +1050,7 @@ object S3 {
       bucketName: String,
       key: String,
       uploadId: String,
-      s3Headers: S3Headers
-  )(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[Done] =
+      s3Headers: S3Headers)(implicit system: ClassicActorSystemProvider, attributes: Attributes): Future[Done] =
     S3Stream.deleteUpload(bucketName, key, uploadId, s3Headers)
 
   /**
@@ -1106,8 +1077,8 @@ object S3 {
    * @return [[akka.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteUploadSource(bucketName: String,
-                         key: String,
-                         uploadId: String,
-                         s3Headers: S3Headers): Source[Done, NotUsed] =
+      key: String,
+      uploadId: String,
+      s3Headers: S3Headers): Source[Done, NotUsed] =
     S3Stream.deleteUploadSource(bucketName, key, uploadId, s3Headers)
 }

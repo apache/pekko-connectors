@@ -8,18 +8,17 @@ import java.util.concurrent.Semaphore
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.kinesis.CommittableRecord
-import akka.stream.alpakka.kinesis.CommittableRecord.{BatchData, ShardProcessorData}
+import akka.stream.alpakka.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.lifecycle.events._
-import software.amazon.kinesis.processor.{RecordProcessorCheckpointer, ShardRecordProcessor}
+import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }
 import software.amazon.kinesis.retrieval.KinesisClientRecord
 
 import scala.jdk.CollectionConverters._
 
 @InternalApi
 private[kinesis] class ShardProcessor(
-    processRecord: CommittableRecord => Unit
-) extends ShardRecordProcessor {
+    processRecord: CommittableRecord => Unit) extends ShardRecordProcessor {
 
   // We need extra coordination in the event of a Shard End (for example, when we double
   // the number of shards, the old shards are ended and the new shards take their place).
@@ -45,16 +44,16 @@ private[kinesis] class ShardProcessor(
 
   override def initialize(initializationInput: InitializationInput): Unit =
     shardData = new ShardProcessorData(initializationInput.shardId,
-                                       initializationInput.extendedSequenceNumber,
-                                       initializationInput.pendingCheckpointSequenceNumber)
+      initializationInput.extendedSequenceNumber,
+      initializationInput.pendingCheckpointSequenceNumber)
 
   override def processRecords(processRecordsInput: ProcessRecordsInput): Unit = {
     checkpointer = processRecordsInput.checkpointer()
 
     val batchData = new BatchData(processRecordsInput.cacheEntryTime,
-                                  processRecordsInput.cacheExitTime,
-                                  processRecordsInput.isAtShardEnd,
-                                  processRecordsInput.millisBehindLatest)
+      processRecordsInput.cacheExitTime,
+      processRecordsInput.isAtShardEnd,
+      processRecordsInput.millisBehindLatest)
 
     if (batchData.isAtShardEnd) {
       lastRecordSemaphore.acquire()
@@ -67,9 +66,7 @@ private[kinesis] class ShardProcessor(
           new InternalCommittableRecord(
             record,
             batchData,
-            lastRecord = processRecordsInput.isAtShardEnd && index + 1 == numberOfRecords
-          )
-        )
+            lastRecord = processRecordsInput.isAtShardEnd && index + 1 == numberOfRecords))
     }
   }
 

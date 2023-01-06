@@ -15,16 +15,16 @@ import akka.stream.alpakka.mqtt.streaming.scaladsl.{
   MqttServerSession
 }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete}
+import akka.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.stream.OverflowStrategy
 import akka.testkit._
-import akka.util.{ByteString, Timeout}
+import akka.util.{ ByteString, Timeout }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Span}
+import org.scalatest.time.{ Millis, Span }
 
-import scala.concurrent.{ExecutionContext, Promise}
+import scala.concurrent.{ ExecutionContext, Promise }
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -61,8 +61,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .take(3)
           .toMat(Sink.seq)(Keep.both)
           .run()
@@ -117,8 +116,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.head)(Keep.both)
           .run()
 
@@ -151,8 +149,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .drop(1)
           .toMat(Sink.head)(Keep.both)
           .run()
@@ -193,8 +190,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.both)
           .run()
 
@@ -220,8 +216,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.both)
           .run()
 
@@ -255,8 +250,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .toMat(Sink.ignore)(Keep.both)
         .run()
 
@@ -293,8 +287,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .toMat(Sink.ignore)(Keep.both)
         .run()
 
@@ -325,8 +318,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.both)
           .run()
 
@@ -369,8 +361,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.head)(Keep.both)
           .run()
 
@@ -393,8 +384,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("2"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.head)(Keep.both)
           .run()
 
@@ -428,8 +418,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .drop(2)
         .toMat(Sink.head)(Keep.both)
         .run()
@@ -476,8 +465,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .collect {
           case Right(Event(cp: Publish, None)) => cp
         }
@@ -537,8 +525,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .collect {
           case Right(Event(cp: Publish, None)) => cp
         }
@@ -610,8 +597,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .collect {
           case Right(Event(cp: Publish, None)) => cp
         }
@@ -689,8 +675,7 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .collect {
           case Right(Event(cp: Publish, None)) => cp
         }
@@ -703,8 +688,8 @@ class MqttSessionSpec
       val connAckBytes = connAck.encode(ByteString.newBuilder).result()
 
       val publish = Publish(ControlPacketFlags.QoSAtLeastOnceDelivery | ControlPacketFlags.DUP,
-                            "some-topic",
-                            ByteString("some-payload"))
+        "some-topic",
+        ByteString("some-payload"))
       val publishBytes = publish.encode(ByteString.newBuilder, Some(PacketId(1))).result()
 
       client.offer(Command(connect))
@@ -733,17 +718,16 @@ class MqttSessionSpec
         .via(
           Mqtt
             .clientSessionFlow(session, ByteString("1"))
-            .join(pipeToServer)
-        )
+            .join(pipeToServer))
         .collect {
           case Right(Event(cp: Publish, None)) => cp
-          case Right(Event(cp: PubRel, None)) => cp
+          case Right(Event(cp: PubRel, None))  => cp
         }
         .wireTap { e =>
           e match {
             case _: Publish => publishReceived.success(Done)
-            case _: PubRel => pubRelReceived.success(Done)
-            case _ =>
+            case _: PubRel  => pubRelReceived.success(Done)
+            case _          =>
           }
         }
         .toMat(Sink.ignore)(Keep.left)
@@ -805,8 +789,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.left)
           .run()
 
@@ -842,8 +825,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow[String](session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .drop(1)
           .toMat(Sink.head)(Keep.both)
           .run()
@@ -886,8 +868,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.left)
           .run()
 
@@ -938,8 +919,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.left)
           .run()
 
@@ -999,8 +979,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.left)
           .run()
 
@@ -1023,8 +1002,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("2"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.left)
           .run()
 
@@ -1056,8 +1034,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow[String](session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .drop(2)
           .toMat(Sink.head)(Keep.both)
           .run()
@@ -1109,8 +1086,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.left)
           .run()
 
@@ -1151,8 +1127,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.ignore)(Keep.both)
           .run()
 
@@ -1191,8 +1166,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .drop(3)
           .wireTap { e =>
             e match {
@@ -1203,7 +1177,7 @@ class MqttSessionSpec
           }
           .takeWhile {
             case Right(Event(PingResp, None)) => false
-            case _ => true
+            case _                            => true
           }
           .toMat(Sink.seq)(Keep.both)
           .run()
@@ -1274,8 +1248,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
-              .join(pipeToServer)
-          )
+              .join(pipeToServer))
           .toMat(Sink.headOption)(Keep.both)
           .run()
 
@@ -1323,8 +1296,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
@@ -1391,7 +1363,7 @@ class MqttSessionSpec
       result.futureValue.head shouldBe Right(Event(connect))
       result.futureValue.apply(1) match {
         case Right(Event(s: Subscribe, _)) => s.topicFilters shouldBe subscribe.topicFilters
-        case x => fail("Unexpected: " + x)
+        case x                             => fail("Unexpected: " + x)
       }
 
       server.complete()
@@ -1423,8 +1395,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
@@ -1502,8 +1473,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
@@ -1584,11 +1554,10 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) => connectReceived.success(Done)
-            case _ =>
+            case _                          =>
           })
           .toMat(Sink.seq)(Keep.both)
           .run()
@@ -1646,11 +1615,10 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) => connectReceived.success(Done)
-            case _ =>
+            case _                          =>
           })
           .toMat(Sink.ignore)(Keep.both)
           .run()
@@ -1699,12 +1667,11 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
-            case Right(Event(`connect`, _)) => connectReceived.success(Done)
+            case Right(Event(`connect`, _))    => connectReceived.success(Done)
             case Right(Event(`disconnect`, _)) => disconnectReceived.success(Done)
-            case _ =>
+            case _                             =>
           })
           .toMat(Sink.ignore)(Keep.left)
           .run()
@@ -1727,8 +1694,7 @@ class MqttSessionSpec
       disconnectReceived.future.futureValue shouldBe Done
 
       session.watchClientSessions.runWith(Sink.head).futureValue shouldBe MqttServerSession.ClientSessionTerminated(
-        clientId
-      )
+        clientId)
 
       fromClientQueue.complete()
       server.complete()
@@ -1754,8 +1720,8 @@ class MqttSessionSpec
       val publishReceived = Promise[Done]()
 
       def server(
-          connectionId: ByteString
-      ): (SourceQueueWithComplete[ByteString], SourceQueueWithComplete[Command[Nothing]]) = {
+          connectionId: ByteString)
+          : (SourceQueueWithComplete[ByteString], SourceQueueWithComplete[Command[Nothing]]) = {
         val toClient = Sink.foreach[ByteString](bytes => client.ref ! bytes)
         val (fromClientQueue, fromClient) = Source
           .queue[ByteString](1, OverflowStrategy.dropHead)
@@ -1769,8 +1735,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, connectionId)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) if !firstConnectReceived.isCompleted =>
               firstConnectReceived.success(Done)
@@ -1892,8 +1857,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
-              .join(pipeToClient)
-          )
+              .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
@@ -1983,8 +1947,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(serverSession, ByteString.empty)
-              .join(pipeToClient1)
-          )
+              .join(pipeToClient1))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connect1Received.success(Done)
@@ -2047,8 +2010,7 @@ class MqttSessionSpec
           .via(
             Mqtt
               .serverSessionFlow(serverSession, ByteString.empty)
-              .join(pipeToClient2)
-          )
+              .join(pipeToClient2))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connect2Received.success(Done)
@@ -2076,7 +2038,7 @@ class MqttSessionSpec
 
       client2.fishForMessage(3.seconds.dilated) {
         case msg: ByteString if msg == dupPublishBytes => true
-        case _ => false
+        case _                                         => false
       }
 
       client2Connection.offer(pubAckBytes)

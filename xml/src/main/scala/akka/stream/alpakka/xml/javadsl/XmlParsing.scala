@@ -33,8 +33,7 @@ object XmlParsing {
    * Parser Flow that takes a stream of ByteStrings and parses them to XML events similar to SAX.
    */
   def parser(
-      configureFactory: Consumer[AsyncXMLInputFactory]
-  ): akka.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
+      configureFactory: Consumer[AsyncXMLInputFactory]): akka.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.parser(false, configureFactory.accept(_)).asJava
 
   /**
@@ -42,8 +41,7 @@ object XmlParsing {
    */
   def parser(
       ignoreInvalidChars: Boolean,
-      configureFactory: Consumer[AsyncXMLInputFactory]
-  ): akka.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
+      configureFactory: Consumer[AsyncXMLInputFactory]): akka.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.parser(ignoreInvalidChars, configureFactory.accept(_)).asJava
 
   /**

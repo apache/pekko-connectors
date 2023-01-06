@@ -8,7 +8,7 @@ import java.util.concurrent.CompletionStage
 
 import akka.NotUsed
 import akka.stream.javadsl.Source
-import com.datastax.oss.driver.api.core.cql.{Row, Statement}
+import com.datastax.oss.driver.api.core.cql.{ Row, Statement }
 
 import scala.annotation.varargs
 

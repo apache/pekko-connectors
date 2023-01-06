@@ -5,7 +5,7 @@
 package akka.stream.alpakka.googlecloud.bigquery
 
 import akka.stream.Attributes.Attribute
-import akka.stream.{Attributes, Materializer}
+import akka.stream.{ Attributes, Materializer }
 
 /**
  * Akka Stream [[Attributes]] that are used when materializing BigQuery stream blueprints.
@@ -28,8 +28,8 @@ object BigQueryAttributes {
   def resolveSettings(mat: Materializer, attr: Attributes): BigQuerySettings =
     attr.attributeList.collectFirst {
       case BigQuerySettingsValue(settings) => settings
-      case BigQuerySettingsPath(path) => BigQueryExt(mat.system).settings(path)
-    } getOrElse {
+      case BigQuerySettingsPath(path)      => BigQueryExt(mat.system).settings(path)
+    }.getOrElse {
       BigQueryExt(mat.system).settings
     }
 

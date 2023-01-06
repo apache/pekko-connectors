@@ -7,11 +7,11 @@ package akka.stream.alpakka.eip.scaladsl
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.Consumer.DrainingControl
-import akka.kafka.scaladsl.{Committer, Consumer}
-import akka.kafka.{CommitterSettings, ConsumerMessage, ConsumerSettings, Subscriptions}
+import akka.kafka.scaladsl.{ Committer, Consumer }
+import akka.kafka.{ CommitterSettings, ConsumerMessage, ConsumerSettings, Subscriptions }
 import akka.stream.scaladsl._
-import akka.stream.{FlowShape, Graph}
-import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
+import akka.stream.{ FlowShape, Graph }
+import org.apache.kafka.common.serialization.{ ByteArrayDeserializer, StringDeserializer }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -24,8 +24,8 @@ class PassThroughExamples extends AnyWordSpec with BeforeAndAfterAll with Matche
   "PassThroughFlow" should {
     " original message is maintained " in {
 
-      //#PassThroughWithKeep
-      //Sample Source
+      // #PassThroughWithKeep
+      // Sample Source
       val source = Source(List(1, 2, 3))
 
       // Pass through this flow maintaining the original message
@@ -37,16 +37,16 @@ class PassThroughExamples extends AnyWordSpec with BeforeAndAfterAll with Matche
         .via(PassThroughFlow(passThroughMe, Keep.right))
         .runWith(Sink.seq)
 
-      //Verify results
+      // Verify results
       ret.futureValue should be(Vector(1, 2, 3))
-      //#PassThroughWithKeep
+      // #PassThroughWithKeep
 
     }
 
     " original message and pass through flow output are returned " in {
 
-      //#PassThroughTuple
-      //Sample Source
+      // #PassThroughTuple
+      // Sample Source
       val source = Source(List(1, 2, 3))
 
       // Pass through this flow maintaining the original message
@@ -58,9 +58,9 @@ class PassThroughExamples extends AnyWordSpec with BeforeAndAfterAll with Matche
         .via(PassThroughFlow(passThroughMe))
         .runWith(Sink.seq)
 
-      //Verify results
+      // Verify results
       ret.futureValue should be(Vector((10, 1), (20, 2), (30, 3)))
-      //#PassThroughTuple
+      // #PassThroughTuple
 
     }
   }

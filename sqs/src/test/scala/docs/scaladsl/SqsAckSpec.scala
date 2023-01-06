@@ -4,7 +4,7 @@
 
 package docs.scaladsl
 
-import java.util.concurrent.{CompletableFuture, TimeUnit}
+import java.util.concurrent.{ CompletableFuture, TimeUnit }
 import java.util.function.Supplier
 
 import akka.Done
@@ -13,9 +13,9 @@ import akka.stream.alpakka.sqs._
 import akka.stream.alpakka.sqs.SqsAckResult._
 import akka.stream.alpakka.sqs.SqsAckResultEntry._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{spy, times, verify, when}
+import org.mockito.Mockito.{ spy, times, verify, when }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar.mock
@@ -64,11 +64,11 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
   }
 
   "SqsAckSettings" should "construct settings" in {
-    //#SqsAckSettings
+    // #SqsAckSettings
     val sinkSettings =
       SqsAckSettings()
         .withMaxInFlight(10)
-    //#SqsAckSettings
+    // #SqsAckSettings
     sinkSettings.maxInFlight should be(10)
   }
 
@@ -83,22 +83,22 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
   }
 
   "SqsAckBatchSettings" should "construct settings" in {
-    //#SqsAckBatchSettings
+    // #SqsAckBatchSettings
     val batchSettings =
       SqsAckBatchSettings()
         .withConcurrentRequests(1)
-    //#SqsAckBatchSettings
+    // #SqsAckBatchSettings
     batchSettings.concurrentRequests should be(1)
   }
 
   "SqsAckGroupedSettings" should "construct settings" in {
-    //#SqsAckGroupedSettings
+    // #SqsAckGroupedSettings
     val batchSettings =
       SqsAckGroupedSettings()
         .withMaxBatchSize(10)
         .withMaxBatchWait(500.millis)
         .withConcurrentRequests(1)
-    //#SqsAckGroupedSettings
+    // #SqsAckGroupedSettings
     batchSettings.maxBatchSize should be(10)
   }
 
@@ -107,17 +107,16 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       sendMessage("alpakka-2")
 
       val future =
-        //#ack
+        // #ack
         SqsSource(queueUrl, sqsSourceSettings)
           .take(1)
           .map(MessageAction.Delete(_))
           .runWith(SqsAckSink(queueUrl))
-      //#ack
+      // #ack
 
       future.futureValue shouldBe Done
       verify(awsSqsClient).deleteMessage(
-        any[DeleteMessageRequest]
-      )
+        any[DeleteMessageRequest])
     }
   }
 
@@ -126,17 +125,16 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       sendMessage("alpakka-3")
 
       val future =
-        //#requeue
+        // #requeue
         SqsSource(queueUrl, sqsSourceSettings)
           .take(1)
           .map(MessageAction.ChangeMessageVisibility(_, 5.minutes))
           .runWith(SqsAckSink(queueUrl))
-      //#requeue
+      // #requeue
 
       future.futureValue shouldBe Done
       verify(awsSqsClient).changeMessageVisibility(
-        any[ChangeMessageVisibilityRequest]
-      )
+        any[ChangeMessageVisibilityRequest])
     }
   }
 
@@ -145,12 +143,12 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       sendMessage("alpakka-flow-ack")
 
       val future =
-        //#ignore
+        // #ignore
         SqsSource(queueUrl, sqsSourceSettings)
           .take(1)
           .map(MessageAction.Ignore(_))
           .runWith(SqsAckSink(queueUrl))
-      //#ignore
+      // #ignore
 
       future.futureValue shouldBe Done
     }
@@ -161,13 +159,13 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       sendMessage("alpakka-flow-ack")
 
       val future =
-        //#flow-ack
+        // #flow-ack
         SqsSource(queueUrl, sqsSourceSettings)
           .take(1)
           .map(MessageAction.Delete(_))
           .via(SqsAckFlow(queueUrl))
           .runWith(Sink.head)
-      //#flow-ack
+      // #flow-ack
 
       val result = future.futureValue
       result shouldBe a[SqsDeleteResult]
@@ -199,13 +197,13 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       sendMessages(messages)
 
       val future =
-        //#batch-ack
+        // #batch-ack
         SqsSource(queueUrl, sqsSourceSettings)
           .take(10)
           .map(MessageAction.Delete(_))
           .via(SqsAckFlow.grouped(queueUrl, SqsAckGroupedSettings.Defaults))
           .runWith(Sink.seq)
-      //#batch-ack
+      // #batch-ack
 
       val results = future.futureValue
       results.size shouldBe 10
@@ -214,8 +212,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       }
       results.map(_.messageAction.message.body()) should contain theSameElementsAs messages
       verify(awsSqsClient, times(1)).deleteMessageBatch(
-        any[DeleteMessageBatchRequest]
-      )
+        any[DeleteMessageBatchRequest])
     }
   }
 
@@ -235,8 +232,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
     }
     results.map(_.messageAction.message.body()) should contain theSameElementsAs messages
     verify(awsSqsClient, times(2)).deleteMessageBatch(
-      any[DeleteMessageBatchRequest]
-    )
+      any[DeleteMessageBatchRequest])
   }
 
   it should "fail if any of the messages in the batch request failed" in {
@@ -269,8 +265,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       .thenReturn(
         CompletableFuture.supplyAsync[DeleteMessageBatchResponse](new Supplier[DeleteMessageBatchResponse] {
           override def get(): DeleteMessageBatchResponse = throw new RuntimeException("Fake client error")
-        })
-      )
+        }))
 
     val future = Source(messages)
       .take(10)
@@ -287,8 +282,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
     implicit val mockAwsSqsClient = mock[SqsAsyncClient]
 
     when(
-      mockAwsSqsClient.deleteMessageBatch(any[DeleteMessageBatchRequest])
-    ).thenThrow(new RuntimeException("error"))
+      mockAwsSqsClient.deleteMessageBatch(any[DeleteMessageBatchRequest])).thenThrow(new RuntimeException("error"))
 
     val future = Source(messages)
       .take(10)
@@ -310,7 +304,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
         .map {
           case (m, i) if i % 3 == 0 => MessageAction.Delete(m)
           case (m, i) if i % 3 == 1 => MessageAction.ChangeMessageVisibility(m, 5)
-          case (m, _) => MessageAction.Ignore(m)
+          case (m, _)               => MessageAction.Ignore(m)
         }
         .via(SqsAckFlow.grouped(queueUrl, SqsAckGroupedSettings.Defaults))
         .runWith(Sink.seq)
@@ -331,13 +325,13 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       sendMessages(messages)
 
       val future =
-        //#batch-requeue
+        // #batch-requeue
         SqsSource(queueUrl, sqsSourceSettings)
           .take(10)
           .map(MessageAction.ChangeMessageVisibility(_, 5.minutes))
           .via(SqsAckFlow.grouped(queueUrl, SqsAckGroupedSettings.Defaults))
           .runWith(Sink.seq)
-      //#batch-requeue
+      // #batch-requeue
 
       val results = future.futureValue
       results.foreach { r =>
@@ -346,8 +340,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
       results.map(_.messageAction.message.body()) should contain theSameElementsAs messages
       verify(awsSqsClient, times(1))
         .changeMessageVisibilityBatch(
-          any[ChangeMessageVisibilityBatchRequest]
-        )
+          any[ChangeMessageVisibilityBatchRequest])
     }
   }
 
@@ -357,13 +350,13 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
     implicit val mockAwsSqsClient = mock[SqsAsyncClient]
 
     val future =
-      //#batch-ignore
+      // #batch-ignore
       Source(messages)
         .take(10)
         .map(MessageAction.Ignore(_))
         .via(SqsAckFlow.grouped("queue", SqsAckGroupedSettings.Defaults))
         .runWith(Sink.seq)
-    //#batch-ignore
+    // #batch-ignore
 
     val results = future.futureValue
     results.foreach { r =>

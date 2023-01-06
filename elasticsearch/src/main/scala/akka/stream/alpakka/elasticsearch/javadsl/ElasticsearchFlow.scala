@@ -6,7 +6,7 @@ package akka.stream.alpakka.elasticsearch.javadsl
 
 import akka.NotUsed
 import akka.annotation.ApiMayChange
-import akka.stream.alpakka.elasticsearch.{scaladsl, _}
+import akka.stream.alpakka.elasticsearch.{ scaladsl, _ }
 import com.fasterxml.jackson.databind.ObjectMapper
 
 import scala.jdk.CollectionConverters._
@@ -28,8 +28,8 @@ object ElasticsearchFlow {
   def create[T](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper
-  ): akka.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
+      objectMapper: ObjectMapper)
+      : akka.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
     create(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
@@ -44,8 +44,8 @@ object ElasticsearchFlow {
   def create[T](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      messageWriter: MessageWriter[T]
-  ): akka.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
+      messageWriter: MessageWriter[T])
+      : akka.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
     scaladsl.ElasticsearchFlow
       .create(elasticsearchParams, settings, messageWriter)
       .asJava
@@ -63,8 +63,7 @@ object ElasticsearchFlow {
   def createWithPassThrough[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper
-  ): akka.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
+      objectMapper: ObjectMapper): akka.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
     createWithPassThrough(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
@@ -80,8 +79,7 @@ object ElasticsearchFlow {
   def createWithPassThrough[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      messageWriter: MessageWriter[T]
-  ): akka.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
+      messageWriter: MessageWriter[T]): akka.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
     scaladsl.ElasticsearchFlow
       .createWithPassThrough(elasticsearchParams, settings, messageWriter)
       .asJava
@@ -100,8 +98,8 @@ object ElasticsearchFlow {
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper
-  ): akka.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]], java.util.List[WriteResult[T, C]], NotUsed] =
+      objectMapper: ObjectMapper)
+      : akka.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]], java.util.List[WriteResult[T, C]], NotUsed] =
     createBulk(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
@@ -118,15 +116,14 @@ object ElasticsearchFlow {
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      messageWriter: MessageWriter[T]
-  ): akka.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]], java.util.List[WriteResult[T, C]], NotUsed] =
+      messageWriter: MessageWriter[T])
+      : akka.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]], java.util.List[WriteResult[T, C]], NotUsed] =
     akka.stream.scaladsl
       .Flow[java.util.List[WriteMessage[T, C]]]
       .map(_.asScala.toIndexedSeq)
       .via(
         scaladsl.ElasticsearchFlow
-          .createBulk(elasticsearchParams, settings, messageWriter)
-      )
+          .createBulk(elasticsearchParams, settings, messageWriter))
       .map(_.asJava)
       .asJava
 
@@ -143,8 +140,8 @@ object ElasticsearchFlow {
   def createWithContext[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper
-  ): akka.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
+      objectMapper: ObjectMapper)
+      : akka.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
     createWithContext(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
@@ -160,8 +157,8 @@ object ElasticsearchFlow {
   def createWithContext[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      messageWriter: MessageWriter[T]
-  ): akka.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
+      messageWriter: MessageWriter[T])
+      : akka.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
     scaladsl.ElasticsearchFlow
       .createWithContext(elasticsearchParams, settings, messageWriter)
       .asJava

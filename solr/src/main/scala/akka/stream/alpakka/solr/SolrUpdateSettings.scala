@@ -5,8 +5,7 @@
 package akka.stream.alpakka.solr
 
 final class SolrUpdateSettings private (
-    val commitWithin: Int
-) {
+    val commitWithin: Int) {
 
   /**
    * Set max time (in ms) before a commit will happen
@@ -14,10 +13,8 @@ final class SolrUpdateSettings private (
   def withCommitWithin(value: Int): SolrUpdateSettings = copy(commitWithin = value)
 
   private def copy(
-      commitWithin: Int
-  ): SolrUpdateSettings = new SolrUpdateSettings(
-    commitWithin = commitWithin
-  )
+      commitWithin: Int): SolrUpdateSettings = new SolrUpdateSettings(
+    commitWithin = commitWithin)
 
   override def toString =
     "SolrUpdateSettings(" +

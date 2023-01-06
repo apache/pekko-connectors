@@ -6,21 +6,21 @@ package akka.stream.alpakka.jms.impl
 
 import java.util.concurrent.atomic.AtomicReference
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.actor.ActorSystem
 import akka.annotation.InternalApi
 import akka.dispatch.ExecutionContexts
 import akka.pattern.after
 import akka.stream.alpakka.jms._
 import akka.stream.alpakka.jms.impl.InternalConnectionState._
-import akka.stream.scaladsl.{BroadcastHub, Keep, Sink, Source, SourceQueueWithComplete}
-import akka.stream.stage.{AsyncCallback, StageLogging, TimerGraphStageLogic}
-import akka.stream.{ActorAttributes, Attributes, OverflowStrategy}
+import akka.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, SourceQueueWithComplete }
+import akka.stream.stage.{ AsyncCallback, StageLogging, TimerGraphStageLogic }
+import akka.stream.{ ActorAttributes, Attributes, OverflowStrategy }
 import javax.jms
 
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.util.control.NonFatal
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 /**
  * Internal API.
@@ -72,11 +72,10 @@ private[jms] trait JmsConnector[S <: JmsSession] {
   protected def finishStop(): Unit = {
     val update: InternalConnectionState => InternalConnectionState = {
       case JmsConnectorStopping(completion) => JmsConnectorStopped(completion)
-      case stopped: JmsConnectorStopped => stopped
+      case stopped: JmsConnectorStopped     => stopped
       case current =>
         JmsConnectorStopped(
-          Failure(new IllegalStateException(s"Completing stage stop in unexpected state ${current.getClass}"))
-        )
+          Failure(new IllegalStateException(s"Completing stage stop in unexpected state ${current.getClass}")))
     }
 
     closeSessions()
@@ -95,8 +94,8 @@ private[jms] trait JmsConnector[S <: JmsSession] {
   protected def updateState(next: InternalConnectionState): InternalConnectionState = {
     val update: InternalConnectionState => InternalConnectionState = {
       case current: JmsConnectorStopping => current
-      case current: JmsConnectorStopped => current
-      case _ => next
+      case current: JmsConnectorStopped  => current
+      case _                             => next
     }
     updateStateWith(update)
   }
@@ -121,8 +120,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
         ex,
         "{} initializing connection failed, security settings are not properly configured for destination[{}]",
         attributes.nameLifted.mkString,
-        destination.name
-      )
+        destination.name)
       publishAndFailStage(ex)
 
     case _: jms.JMSException | _: JmsConnectTimedOut => handleRetriableException(ex)
@@ -151,9 +149,9 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   private def logStoppingException(ex: Throwable): Unit =
     log.info("{} caught exception {} while stopping stage: {}",
-             attributes.nameLifted.mkString,
-             ex.getClass.getSimpleName,
-             ex.getMessage)
+      attributes.nameLifted.mkString,
+      ex.getClass.getSimpleName,
+      ex.getMessage)
 
   private val onSession: AsyncCallback[S] = getAsyncCallback[S] { session =>
     jmsSessions :+= session
@@ -185,9 +183,9 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
     case Failure(ex) =>
       log.error(ex,
-                "{} initializing connection failed for destination[{}]",
-                attributes.nameLifted.mkString,
-                destination.name)
+        "{} initializing connection failed for destination[{}]",
+        attributes.nameLifted.mkString,
+        destination.name)
       publishAndFailStage(ex)
   }
 
@@ -202,9 +200,9 @@ private[jms] trait JmsConnector[S <: JmsSession] {
         if (maxRetries == 0) ex
         else ConnectionRetryException(s"Could not establish connection after $maxRetries retries.", ex)
       log.error(exception,
-                "{} initializing connection failed for destination[{}]",
-                attributes.nameLifted.mkString,
-                destination.name)
+        "{} initializing connection failed for destination[{}]",
+        attributes.nameLifted.mkString,
+        destination.name)
       publishAndFailStage(exception)
     } else {
       val status = updateState(JmsConnectorDisconnected)
@@ -222,7 +220,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
       log.info("{} retries connecting, attempt {}", attributes.nameLifted.mkString, attempt)
       initSessionAsync(attempt, backoffMaxed)
     case ConnectionStatusTimeout => drainConnectionState()
-    case _ => ()
+    case _                       => ()
   }
 
   private def drainConnectionState(): Unit =
@@ -357,7 +355,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     val connectionFuture = Future {
       val connection = jmsSettings.credentials match {
         case Some(c: Credentials) => factory.createConnection(c.username, c.password)
-        case _ => factory.createConnection()
+        case _                    => factory.createConnection()
       }
       if (status.get == Connecting) { // `TimedOut` can be set at any point. So we have to check whether to continue.
         connectionRef.set(Some(connection))
@@ -382,13 +380,11 @@ private[jms] trait JmsConnector[S <: JmsSession] {
         Future.failed(
           JmsConnectTimedOut(
             s"Timed out after $connectTimeout trying to establish connection. " +
-            "Please see ConnectionRetrySettings.connectTimeout"
-          )
-        )
+            "Please see ConnectionRetrySettings.connectTimeout"))
       } else
         connectionRef.get match {
           case Some(connection) => Future.successful(connection)
-          case None => Future.failed(new IllegalStateException("BUG: Connection reference not set when connected"))
+          case None             => Future.failed(new IllegalStateException("BUG: Connection reference not set when connected"))
         }
     }
 
@@ -413,7 +409,7 @@ object JmsConnector {
 
   def connection: InternalConnectionState => Future[jms.Connection] = {
     case InternalConnectionState.JmsConnectorInitializing(c, _, _, _) => c
-    case InternalConnectionState.JmsConnectorConnected(c) => Future.successful(c)
-    case _ => Future.failed(JmsNotConnected)
+    case InternalConnectionState.JmsConnectorConnected(c)             => Future.successful(c)
+    case _                                                            => Future.failed(JmsNotConnected)
   }
 }

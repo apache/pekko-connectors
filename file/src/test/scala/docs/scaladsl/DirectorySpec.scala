@@ -4,15 +4,15 @@
 
 package docs.scaladsl
 
-import java.nio.file.{Files, Path}
+import java.nio.file.{ Files, Path }
 
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Flow, FlowWithContext, Sink, Source}
+import akka.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.testkit.TestKit
-import com.google.common.jimfs.{Configuration, Jimfs}
+import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
@@ -93,7 +93,7 @@ class DirectorySpec
           .runWith(Sink.seq)
       // #mkdirs
 
-      created.futureValue should have size (2)
+      created.futureValue should have size 2
       Files.isDirectory(dir.resolve("dirA")) shouldBe true
       Files.isDirectory(dir.resolve("dirB")) shouldBe true
     }
@@ -114,7 +114,7 @@ class DirectorySpec
           .via(flowWithContext)
           .runWith(Sink.seq)
 
-      created.futureValue should have size (2)
+      created.futureValue should have size 2
       Files.isDirectory(dir.resolve("dirA")) shouldBe true
       Files.isDirectory(dir.resolve("dirB")) shouldBe true
     }

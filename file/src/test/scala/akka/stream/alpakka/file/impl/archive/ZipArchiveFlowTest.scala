@@ -7,7 +7,7 @@ package akka.stream.alpakka.file.impl.archive
 import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Keep
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.testkit.TestKit
 import akka.util.ByteString
 import org.scalatest.BeforeAndAfterAll

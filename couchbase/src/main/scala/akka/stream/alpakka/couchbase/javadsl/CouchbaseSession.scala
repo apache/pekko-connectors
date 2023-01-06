@@ -6,20 +6,20 @@ package akka.stream.alpakka.couchbase.javadsl
 
 import java.time.Duration
 import java.util.Optional
-import java.util.concurrent.{CompletionStage, Executor}
+import java.util.concurrent.{ CompletionStage, Executor }
 
 import akka.annotation.DoNotInherit
 import akka.dispatch.ExecutionContexts
 import akka.stream.alpakka.couchbase.impl.CouchbaseSessionJavaAdapter
-import akka.stream.alpakka.couchbase.scaladsl.{CouchbaseSession => ScalaDslCouchbaseSession}
-import akka.stream.alpakka.couchbase.{CouchbaseSessionSettings, CouchbaseWriteSettings}
+import akka.stream.alpakka.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
+import akka.stream.alpakka.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import akka.stream.javadsl.Source
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.document.{Document, JsonDocument}
+import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
-import com.couchbase.client.java.query.{N1qlQuery, Statement}
-import com.couchbase.client.java.{AsyncBucket, AsyncCluster, Bucket}
+import com.couchbase.client.java.query.{ N1qlQuery, Statement }
+import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, Bucket }
 
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext
@@ -36,13 +36,12 @@ object CouchbaseSession {
    * the session is closed.
    */
   def create(settings: CouchbaseSessionSettings,
-             bucketName: String,
-             executor: Executor): CompletionStage[CouchbaseSession] =
+      bucketName: String,
+      executor: Executor): CompletionStage[CouchbaseSession] =
     ScalaDslCouchbaseSession
       .apply(settings, bucketName)(executionContext(executor))
       .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
-        ExecutionContexts.parasitic
-      )
+        ExecutionContexts.parasitic)
       .toJava
 
   /**
@@ -52,8 +51,7 @@ object CouchbaseSession {
   def create(client: AsyncCluster, bucketName: String, executor: Executor): CompletionStage[CouchbaseSession] =
     ScalaDslCouchbaseSession(client, bucketName)(executionContext(executor))
       .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
-        ExecutionContexts.parasitic
-      )
+        ExecutionContexts.parasitic)
       .toJava
 
   /**
@@ -68,7 +66,7 @@ object CouchbaseSession {
   private def executionContext(executor: Executor): ExecutionContext =
     executor match {
       case ec: ExecutionContext => ec
-      case _ => ExecutionContext.fromExecutor(executor)
+      case _                    => ExecutionContext.fromExecutor(executor)
     }
 
   /**
@@ -269,7 +267,7 @@ abstract class CouchbaseSession {
    * @return a [[java.util.concurrent.CompletionStage]] of `true` if the index was/will be effectively created, `false`
    *      if the index existed and ignoreIfExist` is true. Completion of the `CompletionStage` does not guarantee the index
    *      is online and ready to be used.
-    **/
+   */
   def createIndex(indexName: String, ignoreIfExist: Boolean, fields: AnyRef*): CompletionStage[Boolean]
 
   /**

@@ -19,8 +19,7 @@ final class SqsAckBatchSettings private (val concurrentRequests: Int) {
 }
 object SqsAckBatchSettings {
   val Defaults = new SqsAckBatchSettings(
-    concurrentRequests = 1
-  )
+    concurrentRequests = 1)
 
   /** Scala API */
   def apply(): SqsAckBatchSettings = Defaults

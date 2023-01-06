@@ -6,13 +6,13 @@ package akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl
 
 import akka.actor.Cancellable
 import akka.dispatch.ExecutionContexts
-import akka.stream.{Attributes, Materializer}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
+import akka.stream.{ Attributes, Materializer }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import akka.{ Done, NotUsed }
 import com.google.pubsub.v1.pubsub._
 
 import scala.concurrent.duration._
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Google Pub/Sub Akka Stream operator factory.
@@ -43,8 +43,7 @@ object GooglePubSub {
    */
   def subscribe(
       request: StreamingPullRequest,
-      pollInterval: FiniteDuration
-  ): Source[ReceivedMessage, Future[Cancellable]] =
+      pollInterval: FiniteDuration): Source[ReceivedMessage, Future[Cancellable]] =
     Source
       .fromMaterializer { (mat, attr) =>
         val cancellable = Promise[Cancellable]()
@@ -61,9 +60,7 @@ object GooglePubSub {
                 Source
                   .tick(0.seconds, pollInterval, ())
                   .map(_ => subsequentRequest)
-                  .mapMaterializedValue(cancellable.success)
-              )
-          )
+                  .mapMaterializedValue(cancellable.success)))
           .mapConcat(_.receivedMessages.toVector)
           .mapMaterializedValue(_ => cancellable.future)
       }
@@ -79,8 +76,7 @@ object GooglePubSub {
    */
   def subscribePolling(
       request: PullRequest,
-      pollInterval: FiniteDuration
-  ): Source[ReceivedMessage, Future[Cancellable]] =
+      pollInterval: FiniteDuration): Source[ReceivedMessage, Future[Cancellable]] =
     Source
       .fromMaterializer { (mat, attr) =>
         val cancellable = Promise[Cancellable]()
@@ -101,12 +97,10 @@ object GooglePubSub {
     Flow
       .fromMaterializer { (mat, attr) =>
         Flow[AcknowledgeRequest]
-          .mapAsync(1)(
-            req =>
-              subscriber(mat, attr).client
-                .acknowledge(req)
-                .map(_ => req)(mat.executionContext)
-          )
+          .mapAsync(1)(req =>
+            subscriber(mat, attr).client
+              .acknowledge(req)
+              .map(_ => req)(mat.executionContext))
       }
       .mapMaterializedValue(_ => NotUsed)
 

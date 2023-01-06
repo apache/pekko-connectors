@@ -7,14 +7,14 @@ package akka.stream.alpakka.file.impl.archive
 import akka.NotUsed
 import akka.annotation.InternalApi
 import akka.stream.alpakka.file.ZipArchiveMetadata
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import akka.stream.scaladsl.Source
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import akka.util.ByteString
 
-import java.io.{File, FileInputStream}
-import java.nio.charset.{Charset, StandardCharsets}
-import java.util.zip.{ZipEntry, ZipInputStream}
+import java.io.{ File, FileInputStream }
+import java.nio.charset.{ Charset, StandardCharsets }
+import java.util.zip.{ ZipEntry, ZipInputStream }
 
 @InternalApi class ZipEntrySource(n: ZipArchiveMetadata, f: File, chunkSize: Int, fileCharset: Charset)
     extends GraphStage[SourceShape[ByteString]] {
@@ -55,8 +55,7 @@ import java.util.zip.{ZipEntry, ZipInputStream}
               push(out, ByteString.fromArray(data, 0, c))
             }
           }
-        }
-      )
+        })
 
       override def postStop(): Unit = {
         super.postStop()
@@ -89,8 +88,7 @@ import java.util.zip.{ZipEntry, ZipInputStream}
               completeStage()
             }
           }
-        }
-      )
+        })
 
       override def postStop(): Unit = {
         super.postStop()

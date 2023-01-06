@@ -24,7 +24,7 @@ object AmqpRpcFlow {
    * @param repliesPerMessage The number of responses that should be expected for each message placed on the queue.
    */
   def createSimple(settings: AmqpWriteSettings,
-                   repliesPerMessage: Int): Flow[ByteString, ByteString, CompletionStage[String]] =
+      repliesPerMessage: Int): Flow[ByteString, ByteString, CompletionStage[String]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpRpcFlow
       .simple(settings, repliesPerMessage)
       .mapMaterializedValue(f => f.toJava)
@@ -36,7 +36,7 @@ object AmqpRpcFlow {
    * before its read result is emitted downstream.
    */
   def atMostOnceFlow(settings: AmqpWriteSettings,
-                     bufferSize: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
+      bufferSize: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpRpcFlow
       .atMostOnceFlow(settings, bufferSize)
       .mapMaterializedValue(f => f.toJava)
@@ -48,8 +48,8 @@ object AmqpRpcFlow {
    * before its read result is emitted downstream.
    */
   def atMostOnceFlow(settings: AmqpWriteSettings,
-                     bufferSize: Int,
-                     repliesPerMessage: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
+      bufferSize: Int,
+      repliesPerMessage: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpRpcFlow
       .atMostOnceFlow(settings, bufferSize, repliesPerMessage)
       .mapMaterializedValue(f => f.toJava)
@@ -69,8 +69,7 @@ object AmqpRpcFlow {
   def committableFlow(
       settings: AmqpWriteSettings,
       bufferSize: Int,
-      repliesPerMessage: Int = 1
-  ): Flow[WriteMessage, CommittableReadResult, CompletionStage[String]] =
+      repliesPerMessage: Int = 1): Flow[WriteMessage, CommittableReadResult, CompletionStage[String]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpRpcFlow
       .committableFlow(settings, bufferSize, repliesPerMessage)
       .mapMaterializedValue(f => f.toJava)

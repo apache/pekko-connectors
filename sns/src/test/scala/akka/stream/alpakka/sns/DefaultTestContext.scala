@@ -7,7 +7,7 @@ package akka.stream.alpakka.sns
 import akka.actor.ActorSystem
 import org.mockito.Mockito.reset
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach, Suite }
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 
 import scala.concurrent.Await

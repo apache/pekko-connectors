@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.s3.impl
 
-import java.io.{File, FileOutputStream}
+import java.io.{ File, FileOutputStream }
 import java.nio.BufferOverflowException
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger

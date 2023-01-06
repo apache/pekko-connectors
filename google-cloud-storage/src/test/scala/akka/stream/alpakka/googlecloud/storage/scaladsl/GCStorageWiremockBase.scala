@@ -11,10 +11,10 @@ import akka.stream.alpakka.googlecloud.storage.scaladsl.GCStorageWiremockBase._
 import akka.testkit.TestKit
 import com.typesafe.config.ConfigFactory
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
-import io.specto.hoverfly.junit.core.{Hoverfly, HoverflyConfig, HoverflyMode, SimulationSource}
-import io.specto.hoverfly.junit.dsl.HoverflyDsl.{response, service}
+import io.specto.hoverfly.junit.core.{ Hoverfly, HoverflyConfig, HoverflyMode, SimulationSource }
+import io.specto.hoverfly.junit.dsl.HoverflyDsl.{ response, service }
 import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.equalsToJson
-import spray.json.DefaultJsonProtocol.{mapFormat, StringJsonFormat}
+import spray.json.DefaultJsonProtocol.{ mapFormat, StringJsonFormat }
 import spray.json.enrichAny
 
 import scala.annotation.nowarn
@@ -24,8 +24,8 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
 
   def this(mock: Hoverfly) =
     this(ActorSystem(getCallerName(getClass),
-                     config(mock.getHoverflyConfig.getProxyPort).withFallback(ConfigFactory.load())),
-         mock)
+      config(mock.getHoverflyConfig.getProxyPort).withFallback(ConfigFactory.load())),
+      mock)
 
   def this() = this(initServer())
 
@@ -42,8 +42,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
       generation: Long = 1543055053992768L,
       metadata: Map[String, String] = Map("countryOfOrigin" -> "United Kingdom"),
       maybeMd5Hash: Option[String] = Some("emjwm9mSZxuzsZpecLeCfg=="),
-      maybeCrc32c: Option[String] = Some("AtvFhg==")
-  ): String =
+      maybeCrc32c: Option[String] = Some("AtvFhg==")): String =
     s"""
        |{
        |  "etag":"CMDm8oLo7N4CEAE=",
@@ -100,9 +99,8 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .header("Content-Type", "application/json")
-            .body(s"""{"access_token": "${TestCredentials.accessToken}", "token_type": "String", "expires_in": 3600}""")
-        )
-    )
+            .body(
+              s"""{"access_token": "${TestCredentials.accessToken}", "token_type": "String", "expires_in": 3600}""")))
   }
 
   def storageService = service("storage.googleapis.com")
@@ -135,9 +133,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .header("Content-Type", "application/json")
-            .body(createBucketJsonResponse)
-        )
-    )
+            .body(createBucketJsonResponse)))
   }
 
   def mockBucketCreateFailure(location: String) = {
@@ -151,9 +147,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("Create failed")
-        )
-    )
+            .body("Create failed")))
   }
 
   def mockDeleteBucket() = {
@@ -167,9 +161,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(204)
             .body(deleteBucketJsonResponse)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
   }
 
   def mockDeleteBucketFailure() =
@@ -181,9 +173,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(400)
             .body("Delete failed")
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
 
   def mockGetExistingBucket() = {
     val getBucketJsonResponse =
@@ -211,9 +201,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(getBucketJsonResponse)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
   }
 
   def mockGetNonExistingBucket() =
@@ -224,9 +212,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(404)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
 
   def mockGetBucketFailure() =
     dsl(
@@ -237,9 +223,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(400)
             .body("Get bucket failed")
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
 
   def mockEmptyBucketListing() = {
     val emptyBucketJsonResponse = """{"kind":"storage#objects"}"""
@@ -252,9 +236,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(emptyBucketJsonResponse)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
   }
 
   def mockNonExistingFolderListing(folder: String) = {
@@ -269,9 +251,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(emptyFolderJsonResponse)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
   }
 
   def mockDeleteObjectJava(name: String) =
@@ -288,9 +268,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .inplace(b => generation.foreach(g => b.queryParam("generation", g.toString)))
         .willReturn(
           response()
-            .status(204)
-        )
-    )
+            .status(204)))
 
   def mockNonExistingDeleteObject(name: String) =
     dsl(
@@ -299,9 +277,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
-            .status(404)
-        )
-    )
+            .status(404)))
 
   def mockDeleteObjectFailure(name: String) =
     dsl(
@@ -311,9 +287,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("Delete object failed")
-        )
-    )
+            .body("Delete object failed")))
 
   def mockObjectExists(name: String) =
     dsl(
@@ -322,9 +296,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
-            .status(200)
-        )
-    )
+            .status(200)))
 
   def mockObjectDoesNotExist(name: String) =
     dsl(
@@ -333,9 +305,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
-            .status(404)
-        )
-    )
+            .status(404)))
 
   def mockObjectExistsFailure(name: String) =
     dsl(
@@ -344,9 +314,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
-            .status(400)
-        )
-    )
+            .status(400)))
 
   def mockNonExistingBucketListing(folder: Option[String] = None) =
     dsl(
@@ -356,9 +324,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .inplace(b => folder.foreach(f => b.queryParam("prefix", f)))
         .willReturn(
           response()
-            .status(404)
-        )
-    )
+            .status(404)))
 
   def mockNonExistingBucketListingJava(folder: String) =
     mockNonExistingBucketListing(Some(folder))
@@ -376,9 +342,9 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
     mockBucketListing(firstFileName, secondFileName, Some(folder), versions)
 
   def mockBucketListing(firstFileName: String,
-                        secondFileName: String,
-                        folder: Option[String] = None,
-                        versions: Boolean = false) = {
+      secondFileName: String,
+      folder: Option[String] = None,
+      versions: Boolean = false) = {
     val nextPageToken = "CiAyMDA1MDEwMy8wMDAwOTUwMTQyLTA1LTAwMDAwNi5uYw"
 
     val firstFile =
@@ -492,8 +458,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(listJsonItemsPageOne)
-            .header("Content-Type", "application/json")
-        )
+            .header("Content-Type", "application/json"))
         .get(s"/storage/v1/b/$bucketName/o")
         .queryParam("prettyPrint", "false")
         .inplace(b => folder.foreach(f => b.queryParam("prefix", f)))
@@ -503,9 +468,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(listJsonItemsPageTwo)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
   }
 
   def mockBucketListingFailure() =
@@ -516,9 +479,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("Bucket listing failed")
-        )
-    )
+            .body("Bucket listing failed")))
 
   def mockGetExistingStorageObjectJava() =
     mockGetExistingStorageObject()
@@ -527,8 +488,8 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
     mockGetExistingStorageObject(Some(generation))
 
   def mockGetExistingStorageObject(generation: Option[Long] = None,
-                                   maybeMd5Hash: Option[String] = Some("emjwm9mSZxuzsZpecLeCfg=="),
-                                   maybeCrc32c: Option[String] = Some("AtvFhg==")) =
+      maybeMd5Hash: Option[String] = Some("emjwm9mSZxuzsZpecLeCfg=="),
+      maybeCrc32c: Option[String] = Some("AtvFhg==")) =
     dsl(
       storageService
         .get(s"/storage/v1/b/$bucketName/o/$fileName")
@@ -539,14 +500,11 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
             .status(200)
             .body(
               generation
-                .map(storageObjectJson(_, maybeMd5Hash = maybeMd5Hash, maybeCrc32c = maybeCrc32c)) getOrElse storageObjectJson(
-                maybeMd5Hash = maybeMd5Hash,
-                maybeCrc32c = maybeCrc32c
-              )
-            )
-            .header("Content-Type", "application/json")
-        )
-    )
+                .map(storageObjectJson(_, maybeMd5Hash = maybeMd5Hash, maybeCrc32c = maybeCrc32c)).getOrElse(
+                  storageObjectJson(
+                    maybeMd5Hash = maybeMd5Hash,
+                    maybeCrc32c = maybeCrc32c)))
+            .header("Content-Type", "application/json")))
 
   def mockGetNonExistingStorageObject() =
     dsl(
@@ -555,9 +513,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
-            .status(404)
-        )
-    )
+            .status(404)))
 
   def mockGetNonStorageObjectFailure() =
     dsl(
@@ -567,9 +523,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("Get storage object failed")
-        )
-    )
+            .body("Get storage object failed")))
 
   def mockFileDownloadJava(fileContent: String) =
     mockFileDownload(fileContent)
@@ -587,9 +541,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(200)
-            .body(fileContent)
-        )
-    )
+            .body(fileContent)))
 
   def mockNonExistingFileDownload() =
     dsl(
@@ -599,9 +551,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
-            .status(404)
-        )
-    )
+            .status(404)))
 
   def mockFileDownloadFailure() =
     dsl(
@@ -612,9 +562,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("File download failed")
-        )
-    )
+            .body("File download failed")))
 
   def mockFileDownloadFailureThenSuccess(failureStatus: Int, failureMessage: String, fileContent: String) =
     dsl(
@@ -626,8 +574,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(failureStatus)
             .body(failureMessage)
-            .andSetState("Retry scenario", "after error")
-        )
+            .andSetState("Retry scenario", "after error"))
         .get(s"/storage/v1/b/$bucketName/o/$fileName")
         .queryParam("alt", "media")
         .queryParam("prettyPrint", "false")
@@ -635,9 +582,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(200)
-            .body(fileContent)
-        )
-    )
+            .body(fileContent)))
 
   def mockUploadSmallFile(fileContent: String) =
     dsl(
@@ -651,9 +596,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .header("Content-Type", "application/json")
-            .body(storageObjectJson())
-        )
-    )
+            .body(storageObjectJson())))
 
   def mockUploadSmallFileFailure(fileContent: String) =
     dsl(
@@ -666,17 +609,15 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("Upload small file failed")
-        )
-    )
+            .body("Upload small file failed")))
 
   def mockLargeFileUpload(firstChunkContent: String, secondChunkContent: String, chunkSize: Int): SimulationSource =
     mockLargeFileUpload(firstChunkContent, secondChunkContent, chunkSize, None)
 
   def mockLargeFileUpload(firstChunkContent: String,
-                          secondChunkContent: String,
-                          chunkSize: Int,
-                          metadata: Option[Map[String, String]] = None) = {
+      secondChunkContent: String,
+      chunkSize: Int,
+      metadata: Option[Map[String, String]] = None) = {
     val uploadId = "uploadId"
 
     val noMeta = storageService
@@ -694,10 +635,8 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .header(
               "Location",
-              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId"
-            )
-            .status(200)
-        )
+              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId")
+            .status(200))
         .put(s"/upload/storage/v1/b/$bucketName/o")
         .queryParam("uploadType", "resumable")
         .queryParam("upload_id", uploadId)
@@ -709,11 +648,9 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .header(
               "Location",
-              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId"
-            )
+              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId")
             .status(308)
-            .andSetState("resumableUploadStatus", "uploadedFirstChunk")
-        )
+            .andSetState("resumableUploadStatus", "uploadedFirstChunk"))
         .put(s"/upload/storage/v1/b/$bucketName/o")
         .queryParam("uploadType", "resumable")
         .queryParam("upload_id", uploadId)
@@ -726,9 +663,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .header("Content-Type", "application/json")
-            .body(metadata.map(m => storageObjectJson(metadata = m)).getOrElse(storageObjectJson()))
-        )
-    )
+            .body(metadata.map(m => storageObjectJson(metadata = m)).getOrElse(storageObjectJson()))))
   }
 
   def mockLargeFileUploadFailure(firstChunkContent: String, secondChunkContent: String, chunkSize: Int) = {
@@ -744,10 +679,8 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .header(
               "Location",
-              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId"
-            )
-            .status(200)
-        )
+              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId")
+            .status(200))
         .put(s"/upload/storage/v1/b/$bucketName/o")
         .queryParam("uploadType", "resumable")
         .queryParam("upload_id", uploadId)
@@ -759,11 +692,9 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .header(
               "Location",
-              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId"
-            )
+              s"https://storage.googleapis.com/upload/storage/v1/b/$bucketName/o?uploadType=resumable&upload_id=$uploadId")
             .status(308)
-            .andSetState("resumableUploadStatus", "uploadedFirstChunk")
-        )
+            .andSetState("resumableUploadStatus", "uploadedFirstChunk"))
         .put(s"/upload/storage/v1/b/$bucketName/o")
         .queryParam("uploadType", "resumable")
         .queryParam("upload_id", uploadId)
@@ -775,9 +706,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .willReturn(
           response()
             .status(400)
-            .body("Chunk upload failed")
-        )
-    )
+            .body("Chunk upload failed")))
   }
 
   def mockRewrite(rewriteBucketName: String) = {
@@ -843,8 +772,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(firstRewriteResponse)
-            .header("Content-Type", "application/json")
-        )
+            .header("Content-Type", "application/json"))
         .post(s"/storage/v1/b/$bucketName/o/$fileName/rewriteTo/b/$rewriteBucketName/o/$fileName")
         .queryParam("rewriteToken", rewriteToken)
         .queryParam("prettyPrint", "false")
@@ -852,9 +780,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(secondRewriteResponse)
-            .header("Content-Type", "application/json")
-        )
-    )
+            .header("Content-Type", "application/json")))
   }
 
   def mockRewriteFailure(rewriteBucketName: String) = {
@@ -878,28 +804,25 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
           response()
             .status(200)
             .body(firstRewriteResponse)
-            .header("Content-Type", "application/json")
-        )
+            .header("Content-Type", "application/json"))
         .post(s"/storage/v1/b/$bucketName/o/$fileName/rewriteTo/b/$rewriteBucketName/o/$fileName")
         .queryParam("rewriteToken", rewriteToken)
         .queryParam("prettyPrint", "false")
         .willReturn(
           response()
             .status(400)
-            .body("Rewrite failed")
-        )
-    )
+            .body("Rewrite failed")))
   }
 }
 
 object GCStorageWiremockBase {
 
   def getCallerName(clazz: Class[_]): String = {
-    val s = (Thread.currentThread.getStackTrace map (_.getClassName) drop 1)
-      .dropWhile(_ matches "(java.lang.Thread|.*WireMockBase.?$)")
+    val s = Thread.currentThread.getStackTrace.map(_.getClassName).drop(1)
+      .dropWhile(_.matches("(java.lang.Thread|.*WireMockBase.?$)"))
     val reduced = s.lastIndexWhere(_ == clazz.getName) match {
       case -1 => s
-      case z => s drop (z + 1)
+      case z  => s.drop(z + 1)
     }
     reduced.head.replaceFirst(""".*\.""", "").replaceAll("[^a-zA-Z_0-9]", "_")
   }
@@ -912,8 +835,7 @@ object GCStorageWiremockBase {
         .adminPort(8888)
         .captureHeaders("Content-Range", "X-Upload-Content-Type")
         .enableStatefulCapture(),
-      HoverflyMode.SIMULATE
-    )
+      HoverflyMode.SIMULATE)
     server.start()
     server
   }

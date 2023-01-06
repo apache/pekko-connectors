@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.ironmq
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.http.scaladsl.model.Uri
 import akka.stream.alpakka.ironmq.IronMqSettings.ConsumerSettings
 import com.typesafe.config.Config
@@ -19,8 +19,7 @@ final class IronMqSettings private (
     val endpoint: akka.http.scaladsl.model.Uri,
     val projectId: String,
     val token: String,
-    val consumerSettings: ConsumerSettings
-) {
+    val consumerSettings: ConsumerSettings) {
 
   /** The IronMq endpoint. It is available on the IronMQ project page and change based on availability zone and region. */
   def withEndpoint(value: akka.http.scaladsl.model.Uri): IronMqSettings = copy(endpoint = value)
@@ -38,13 +37,11 @@ final class IronMqSettings private (
       endpoint: akka.http.scaladsl.model.Uri = endpoint,
       projectId: String = projectId,
       token: String = token,
-      consumerSettings: ConsumerSettings = consumerSettings
-  ): IronMqSettings = new IronMqSettings(
+      consumerSettings: ConsumerSettings = consumerSettings): IronMqSettings = new IronMqSettings(
     endpoint = endpoint,
     projectId = projectId,
     token = token,
-    consumerSettings = consumerSettings
-  )
+    consumerSettings = consumerSettings)
 
   override def toString =
     "IronMqSettings(" +
@@ -64,8 +61,7 @@ object IronMqSettings {
       val bufferMaxSize: Int,
       val fetchInterval: scala.concurrent.duration.FiniteDuration,
       val pollTimeout: scala.concurrent.duration.FiniteDuration,
-      val reservationTimeout: scala.concurrent.duration.FiniteDuration
-  ) {
+      val reservationTimeout: scala.concurrent.duration.FiniteDuration) {
 
     /** The buffer size limit where a new batch of message will be consumed from the queue. */
     def withBufferMinSize(value: Int): ConsumerSettings = copy(bufferMinSize = value)
@@ -80,19 +76,22 @@ object IronMqSettings {
     /** Java API: The interval of time between each poll loop. */
     def withFetchInterval(value: java.time.Duration): ConsumerSettings = copy(fetchInterval = value.asScala)
 
-    /** Scala API:
+    /**
+     * Scala API:
      * The amount of time the consumer will wait for the messages to be available on the queue. The IronMQ time unit is
      * the second so any other value is approximated to the second.
      */
     def withPollTimeout(value: scala.concurrent.duration.FiniteDuration): ConsumerSettings = copy(pollTimeout = value)
 
-    /** Java API:
+    /**
+     * Java API:
      * The amount of time the consumer will wait for the messages to be available on the queue. The IronMQ time unit is
      * the second so any other value is approximated to the second.
      */
     def withPollTimeout(value: java.time.Duration): ConsumerSettings = copy(pollTimeout = value.asScala)
 
-    /** Scala API:
+    /**
+     * Scala API:
      * The amount of time the consumer will reserve the message from. It should be higher that the time needed to
      * process the message otherwise the same message will be processed multiple times. Again the IronMq time unit is
      * the second.
@@ -100,7 +99,8 @@ object IronMqSettings {
     def withReservationTimeout(value: scala.concurrent.duration.FiniteDuration): ConsumerSettings =
       copy(reservationTimeout = value)
 
-    /** Java API:
+    /**
+     * Java API:
      * The amount of time the consumer will reserve the message from. It should be higher that the time needed to
      * process the message otherwise the same message will be processed multiple times. Again the IronMq time unit is
      * the second.
@@ -112,14 +112,13 @@ object IronMqSettings {
         bufferMaxSize: Int = bufferMaxSize,
         fetchInterval: scala.concurrent.duration.FiniteDuration = fetchInterval,
         pollTimeout: scala.concurrent.duration.FiniteDuration = pollTimeout,
-        reservationTimeout: scala.concurrent.duration.FiniteDuration = reservationTimeout
-    ): ConsumerSettings = new ConsumerSettings(
-      bufferMinSize = bufferMinSize,
-      bufferMaxSize = bufferMaxSize,
-      fetchInterval = fetchInterval,
-      pollTimeout = pollTimeout,
-      reservationTimeout = reservationTimeout
-    )
+        reservationTimeout: scala.concurrent.duration.FiniteDuration = reservationTimeout): ConsumerSettings =
+      new ConsumerSettings(
+        bufferMinSize = bufferMinSize,
+        bufferMaxSize = bufferMaxSize,
+        fetchInterval = fetchInterval,
+        pollTimeout = pollTimeout,
+        reservationTimeout = reservationTimeout)
 
     override def toString =
       "ConsumerSettings(" +

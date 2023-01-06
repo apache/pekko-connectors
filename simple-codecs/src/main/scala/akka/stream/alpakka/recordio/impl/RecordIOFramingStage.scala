@@ -7,12 +7,12 @@ package akka.stream.alpakka.recordio.impl
 import akka.annotation.InternalApi
 import akka.stream.Attributes.name
 import akka.stream.scaladsl.Framing.FramingException
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.util.ByteString
 
 import scala.annotation.tailrec
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 /**
  * INTERNAL API
@@ -90,9 +90,7 @@ private[recordio] class RecordIOFramingStage(maxRecordLength: Int)
                   case Success(length) if length > maxRecordLength =>
                     failStage(
                       new FramingException(
-                        s"Record of size $length bytes exceeds maximum of $maxRecordLength bytes."
-                      )
-                    )
+                        s"Record of size $length bytes exceeds maximum of $maxRecordLength bytes."))
                   case Success(length) if length < 0 =>
                     failStage(new FramingException(s"Record size prefix $length is negative."))
                   case Success(length) =>

@@ -6,7 +6,7 @@ package akka.stream.alpakka.ironmq.impl
 
 import akka.stream.alpakka.ironmq.Message
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.{ Decoder, Encoder, Json }
 
 /**
  * Internal API.

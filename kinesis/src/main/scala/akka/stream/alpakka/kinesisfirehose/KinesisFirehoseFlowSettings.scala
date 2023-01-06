@@ -5,14 +5,13 @@
 package akka.stream.alpakka.kinesisfirehose
 
 final class KinesisFirehoseFlowSettings private (val parallelism: Int,
-                                                 val maxBatchSize: Int,
-                                                 val maxRecordsPerSecond: Int,
-                                                 val maxBytesPerSecond: Int) {
+    val maxBatchSize: Int,
+    val maxRecordsPerSecond: Int,
+    val maxBytesPerSecond: Int) {
 
   require(
     maxBatchSize >= 1 && maxBatchSize <= 500,
-    "Limit must be between 1 and 500. See: https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html"
-  )
+    "Limit must be between 1 and 500. See: https://docs.aws.amazon.com/firehose/latest/APIReference/API_PutRecordBatch.html")
   require(maxRecordsPerSecond >= 1)
   require(maxBytesPerSecond >= 1)
 
@@ -25,13 +24,11 @@ final class KinesisFirehoseFlowSettings private (val parallelism: Int,
       parallelism: Int = parallelism,
       maxBatchSize: Int = maxBatchSize,
       maxRecordsPerSecond: Int = maxRecordsPerSecond,
-      maxBytesPerSecond: Int = maxBytesPerSecond
-  ): KinesisFirehoseFlowSettings = new KinesisFirehoseFlowSettings(
+      maxBytesPerSecond: Int = maxBytesPerSecond): KinesisFirehoseFlowSettings = new KinesisFirehoseFlowSettings(
     parallelism = parallelism,
     maxBatchSize = maxBatchSize,
     maxRecordsPerSecond = maxRecordsPerSecond,
-    maxBytesPerSecond = maxBytesPerSecond
-  )
+    maxBytesPerSecond = maxBytesPerSecond)
 
   override def toString =
     "KinesisFirehoseFlowSettings(" +
@@ -51,8 +48,7 @@ object KinesisFirehoseFlowSettings {
     parallelism = MaxRecordsPerSecond / MaxRecordsPerRequest,
     maxBatchSize = MaxRecordsPerRequest,
     maxRecordsPerSecond = MaxRecordsPerSecond,
-    maxBytesPerSecond = MaxBytesPerSecond
-  )
+    maxBytesPerSecond = MaxBytesPerSecond)
 
   /** Scala API */
   def apply(): KinesisFirehoseFlowSettings = Defaults

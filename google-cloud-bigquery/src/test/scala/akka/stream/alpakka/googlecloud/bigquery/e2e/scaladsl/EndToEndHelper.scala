@@ -4,10 +4,10 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.e2e.scaladsl
 
-import akka.stream.alpakka.googlecloud.bigquery.e2e.{A, B, C}
+import akka.stream.alpakka.googlecloud.bigquery.e2e.{ A, B, C }
 import akka.util.ByteString
 
-import java.time.{Instant, LocalDate, LocalDateTime, LocalTime}
+import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
 import scala.util.Random
 
 trait EndToEndHelper {
@@ -23,18 +23,16 @@ trait EndToEndHelper {
     LocalDate.ofEpochDay(rng.nextInt(100 * 365)),
     LocalTime.ofSecondOfDay(rng.nextInt(60 * 60 * 24)),
     LocalDateTime.of(LocalDate.ofEpochDay(rng.nextInt(100 * 365)), LocalTime.ofSecondOfDay(rng.nextInt(60 * 60 * 24))),
-    Instant.ofEpochSecond(rng.nextInt())
-  )
+    Instant.ofEpochSecond(rng.nextInt()))
 
   private def randomB(): B = B(
     if (rng.nextBoolean()) Some(rng.nextString(rng.nextInt(64))) else None,
-    ByteString({
+    ByteString {
       val bytes = new Array[Byte](rng.nextInt(64))
       rng.nextBytes(bytes)
       bytes
-    }),
-    Seq.fill(rng.nextInt(16))(randomC())
-  )
+    },
+    Seq.fill(rng.nextInt(16))(randomC()))
 
   private def randomA(): A = A(
     rng.nextInt(),
@@ -43,8 +41,7 @@ trait EndToEndHelper {
     rng.nextDouble(),
     rng.nextString(rng.nextInt(64)),
     rng.nextBoolean(),
-    randomB()
-  )
+    randomB())
 
   val rows = List.fill(10)(randomA())
 

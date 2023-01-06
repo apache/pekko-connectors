@@ -7,11 +7,11 @@ package akka.stream.alpakka.googlecloud.bigquery.scaladsl
 import akka.NotUsed
 import akka.dispatch.ExecutionContexts
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.marshalling.{Marshal, ToEntityMarshaller}
+import akka.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
 import akka.http.scaladsl.model.HttpMethods.POST
 import akka.http.scaladsl.model.Uri.Query
-import akka.http.scaladsl.model.{HttpRequest, RequestEntity}
-import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, FromResponseUnmarshaller}
+import akka.http.scaladsl.model.{ HttpRequest, RequestEntity }
+import akka.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller }
 import akka.stream.alpakka.google.GoogleAttributes
 import akka.stream.alpakka.google.http.GoogleHttp
 import akka.stream.alpakka.google.implicits._
@@ -21,10 +21,10 @@ import akka.stream.alpakka.googlecloud.bigquery.model.{
   TableDataInsertAllResponse,
   TableDataListResponse
 }
-import akka.stream.alpakka.googlecloud.bigquery.{BigQueryEndpoints, BigQueryException, InsertAllRetryPolicy}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.alpakka.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException, InsertAllRetryPolicy }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 
-import java.util.{SplittableRandom, UUID}
+import java.util.{ SplittableRandom, UUID }
 import scala.collection.immutable.Seq
 import scala.concurrent.Future
 
@@ -43,12 +43,12 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    * @return a [[akka.stream.scaladsl.Source]] that emits an [[Out]] for each row in the table
    */
   def tableData[Out](datasetId: String,
-                     tableId: String,
-                     startIndex: Option[Long] = None,
-                     maxResults: Option[Int] = None,
-                     selectedFields: Seq[String] = Seq.empty)(
-      implicit um: FromEntityUnmarshaller[TableDataListResponse[Out]]
-  ): Source[Out, Future[TableDataListResponse[Out]]] =
+      tableId: String,
+      startIndex: Option[Long] = None,
+      maxResults: Option[Int] = None,
+      selectedFields: Seq[String] = Seq.empty)(
+      implicit um: FromEntityUnmarshaller[TableDataListResponse[Out]])
+      : Source[Out, Future[TableDataListResponse[Out]]] =
     source { settings =>
       import BigQueryException._
       val uri = BigQueryEndpoints.tableData(settings.projectId, datasetId, tableId)
@@ -74,8 +74,8 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
       datasetId: String,
       tableId: String,
       retryPolicy: InsertAllRetryPolicy,
-      templateSuffix: Option[String] = None
-  )(implicit m: ToEntityMarshaller[TableDataInsertAllRequest[In]]): Sink[Seq[In], NotUsed] = {
+      templateSuffix: Option[String] = None)(
+      implicit m: ToEntityMarshaller[TableDataInsertAllRequest[In]]): Sink[Seq[In], NotUsed] = {
     val requests = Flow[Seq[In]].statefulMapConcat { () =>
       val randomGen = new SplittableRandom
 
@@ -115,8 +115,8 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    * @return a [[akka.stream.scaladsl.Flow]] that sends each [[akka.stream.alpakka.googlecloud.bigquery.model.TableDataInsertAllRequest]] and emits a [[akka.stream.alpakka.googlecloud.bigquery.model.TableDataInsertAllResponse]] for each
    */
   def insertAll[In](datasetId: String, tableId: String, retryFailedRequests: Boolean)(
-      implicit m: ToEntityMarshaller[TableDataInsertAllRequest[In]]
-  ): Flow[TableDataInsertAllRequest[In], TableDataInsertAllResponse, NotUsed] =
+      implicit m: ToEntityMarshaller[TableDataInsertAllRequest[In]])
+      : Flow[TableDataInsertAllRequest[In], TableDataInsertAllResponse, NotUsed] =
     Flow
       .fromMaterializer { (mat, attr) =>
         import BigQueryException._
@@ -136,7 +136,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
         val pool = {
           val uri = BigQueryEndpoints.endpoint
           GoogleHttp().cachedHostConnectionPool[TableDataInsertAllResponse](uri.authority.host.address,
-                                                                            uri.effectivePort)(um)
+            uri.effectivePort)(um)
         }
 
         Flow[TableDataInsertAllRequest[In]]

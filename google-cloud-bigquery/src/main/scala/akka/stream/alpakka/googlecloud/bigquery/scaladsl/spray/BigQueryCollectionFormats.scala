@@ -17,7 +17,7 @@ trait BigQueryCollectionFormats {
     def write(list: List[T]) = JsArray(list.map(_.toJson).toVector)
     def read(value: JsValue): List[T] = value match {
       case JsArray(elements) => elements.iterator.map(_.asJsObject.fields("v").convertTo[T]).toList
-      case x => deserializationError("Expected List as JsArray, but got " + x)
+      case x                 => deserializationError("Expected List as JsArray, but got " + x)
     }
   }
 
@@ -29,11 +29,11 @@ trait BigQueryCollectionFormats {
       def write(array: Array[T]) = JsArray(array.map(_.toJson).toVector)
       def read(value: JsValue) = value match {
         case JsArray(elements) => elements.map(_.asJsObject.fields("v").convertTo[T]).toArray[T]
-        case x => deserializationError("Expected Array as JsArray, but got " + x)
+        case x                 => deserializationError("Expected Array as JsArray, but got " + x)
       }
     }
 
-  import collection.{immutable => imm}
+  import collection.{ immutable => imm }
 
   implicit def immIterableFormat[T: BigQueryJsonFormat] = viaSeq[imm.Iterable[T], T](seq => imm.Iterable(seq: _*))
   implicit def immSeqFormat[T: BigQueryJsonFormat] = viaSeq[imm.Seq[T], T](seq => imm.Seq(seq: _*))
@@ -57,7 +57,7 @@ trait BigQueryCollectionFormats {
       def write(iterable: I) = JsArray(iterable.map(_.toJson).toVector)
       def read(value: JsValue) = value match {
         case JsArray(elements) => f(elements.map(_.asJsObject.fields("v").convertTo[T]))
-        case x => deserializationError("Expected Collection as JsArray, but got " + x)
+        case x                 => deserializationError("Expected Collection as JsArray, but got " + x)
       }
     }
 }

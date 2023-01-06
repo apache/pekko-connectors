@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.amqp.scaladsl
 
-import com.rabbitmq.client.{Address, Channel, ConfirmCallback, ConfirmListener, Connection, ConnectionFactory}
+import com.rabbitmq.client.{ Address, Channel, ConfirmCallback, ConfirmListener, Connection, ConnectionFactory }
 import org.mockito.ArgumentMatchers._
 import org.scalatestplus.mockito.MockitoSugar
 import org.mockito.Mockito.when

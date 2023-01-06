@@ -9,15 +9,15 @@ import java.util.concurrent.TimeUnit
 import akka.annotation.InternalApi
 import akka.dispatch.ExecutionContexts
 import akka.stream.alpakka.couchbase.scaladsl.CouchbaseSession
-import akka.stream.alpakka.couchbase.{javadsl, CouchbaseWriteSettings}
+import akka.stream.alpakka.couchbase.{ javadsl, CouchbaseWriteSettings }
 import akka.stream.scaladsl.Source
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import com.couchbase.client.java.bucket.AsyncBucketManager
 import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.document.{Document, JsonDocument}
+import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
-import com.couchbase.client.java.query.{N1qlQuery, Statement}
-import com.couchbase.client.java.{AsyncBucket, AsyncCluster}
+import com.couchbase.client.java.query.{ N1qlQuery, Statement }
+import com.couchbase.client.java.{ AsyncBucket, AsyncCluster }
 import rx.RxReactiveStreams
 
 import scala.concurrent.Future
@@ -47,11 +47,11 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def insertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
     singleObservableToFuture(asyncBucket.insert(document,
-                                                writeSettings.persistTo,
-                                                writeSettings.replicateTo,
-                                                writeSettings.timeout.toMillis,
-                                                TimeUnit.MILLISECONDS),
-                             document)
+      writeSettings.persistTo,
+      writeSettings.replicateTo,
+      writeSettings.timeout.toMillis,
+      TimeUnit.MILLISECONDS),
+      document)
 
   def get(id: String): Future[Option[JsonDocument]] =
     zeroOrOneObservableToFuture(asyncBucket.get(id))
@@ -63,8 +63,8 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
     zeroOrOneObservableToFuture(asyncBucket.get(id, timeout.toMillis, TimeUnit.MILLISECONDS))
 
   def get[T <: Document[_]](id: String,
-                            timeout: FiniteDuration,
-                            documentClass: Class[T]): scala.concurrent.Future[Option[T]] =
+      timeout: FiniteDuration,
+      documentClass: Class[T]): scala.concurrent.Future[Option[T]] =
     zeroOrOneObservableToFuture(asyncBucket.get(id, documentClass, timeout.toMillis, TimeUnit.MILLISECONDS))
 
   def upsert(document: JsonDocument): Future[JsonDocument] = upsertDoc(document)
@@ -77,11 +77,11 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def upsertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
     singleObservableToFuture(asyncBucket.upsert(document,
-                                                writeSettings.persistTo,
-                                                writeSettings.replicateTo,
-                                                writeSettings.timeout.toMillis,
-                                                TimeUnit.MILLISECONDS),
-                             document.id)
+      writeSettings.persistTo,
+      writeSettings.replicateTo,
+      writeSettings.timeout.toMillis,
+      TimeUnit.MILLISECONDS),
+      document.id)
 
   def replace(document: JsonDocument): Future[JsonDocument] = replaceDoc(document)
 
@@ -93,11 +93,11 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def replaceDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
     singleObservableToFuture(asyncBucket.replace(document,
-                                                 writeSettings.persistTo,
-                                                 writeSettings.replicateTo,
-                                                 writeSettings.timeout.toMillis,
-                                                 TimeUnit.MILLISECONDS),
-                             document.id)
+      writeSettings.persistTo,
+      writeSettings.replicateTo,
+      writeSettings.timeout.toMillis,
+      TimeUnit.MILLISECONDS),
+      document.id)
 
   def remove(id: String): Future[Done] =
     singleObservableToFuture(asyncBucket.remove(id), id)
@@ -105,11 +105,11 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def remove(id: String, writeSettings: CouchbaseWriteSettings): Future[Done] =
     singleObservableToFuture(asyncBucket.remove(id,
-                                                writeSettings.persistTo,
-                                                writeSettings.replicateTo,
-                                                writeSettings.timeout.toMillis,
-                                                TimeUnit.MILLISECONDS),
-                             id)
+      writeSettings.persistTo,
+      writeSettings.replicateTo,
+      writeSettings.timeout.toMillis,
+      TimeUnit.MILLISECONDS),
+      id)
       .map(_ => Done)(ExecutionContexts.parasitic)
 
   def streamedQuery(query: N1qlQuery): Source[JsonObject, NotUsed] =
@@ -130,13 +130,13 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def counter(id: String, delta: Long, initial: Long, writeSettings: CouchbaseWriteSettings): Future[Long] =
     singleObservableToFuture(asyncBucket.counter(id,
-                                                 delta,
-                                                 initial,
-                                                 writeSettings.persistTo,
-                                                 writeSettings.replicateTo,
-                                                 writeSettings.timeout.toMillis,
-                                                 TimeUnit.MILLISECONDS),
-                             id)
+      delta,
+      initial,
+      writeSettings.persistTo,
+      writeSettings.replicateTo,
+      writeSettings.timeout.toMillis,
+      TimeUnit.MILLISECONDS),
+      id)
       .map(_.content(): Long)(ExecutionContexts.parasitic)
 
   def close(): Future[Done] =
@@ -162,11 +162,8 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
         .flatMap(
           func1Observable[AsyncBucketManager, Boolean](
             _.createN1qlIndex(indexName, ignoreIfExist, false, fields: _*)
-              .map(func1(Boolean.unbox))
-          )
-        ),
-      s"Create index: $indexName"
-    )
+              .map(func1(Boolean.unbox)))),
+      s"Create index: $indexName")
 
   override def listIndexes(): Source[IndexInfo, NotUsed] =
     Source.fromPublisher(
@@ -174,9 +171,6 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
         asyncBucket
           .bucketManager()
           .flatMap(
-            func1Observable((abm: AsyncBucketManager) => abm.listN1qlIndexes())
-          )
-      )
-    )
+            func1Observable((abm: AsyncBucketManager) => abm.listN1qlIndexes()))))
 
 }

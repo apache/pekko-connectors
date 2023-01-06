@@ -4,13 +4,13 @@
 
 package akka.stream.alpakka.cassandra
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider, ExtendedActorSystem}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider, ExtendedActorSystem }
 import com.datastax.oss.driver.api.core.CqlSession
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 
 import scala.collection.immutable
 import scala.compat.java8.FutureConverters._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Failure
 
 /**
@@ -82,9 +82,7 @@ object CqlSessionProvider {
             new IllegalArgumentException(
               s"Unable to create SessionProvider instance for class [$className], " +
               "tried constructor with ActorSystem, Config, and only ActorSystem, and no parameters",
-              ex
-            )
-          )
+              ex))
       }
       .get
   }

@@ -4,13 +4,13 @@
 
 package docs.scaladsl
 
-import java.io.{BufferedInputStream, InputStream, OutputStream, File => JavaFile}
-import java.nio.file.{Files, Path, Paths}
+import java.io.{ BufferedInputStream, File => JavaFile, InputStream, OutputStream }
+import java.nio.file.{ Files, Path, Paths }
 
 import akka.util.ByteString
 
 import scala.concurrent.Future
-import scala.sys.process.{BasicIO, Process}
+import scala.sys.process.{ BasicIO, Process }
 
 object ExecutableUtils {
 
@@ -37,7 +37,7 @@ object ExecutableUtils {
           stderr = Some(readStream(stream))
         }
       proc.run(io).exitValue() match {
-        case 0 => stdout.get
+        case 0    => stdout.get
         case code => throw new RuntimeException(s"Subprocess exited with code $code\n\n${stderr.get.utf8String}")
       }
     }(scala.concurrent.ExecutionContext.Implicits.global)

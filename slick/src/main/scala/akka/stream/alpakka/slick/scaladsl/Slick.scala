@@ -36,8 +36,7 @@ object Slick {
    * @param session The database session to use.
    */
   def source[T](
-      streamingQuery: StreamingDBIO[Seq[T], T]
-  )(implicit session: SlickSession): Source[T, NotUsed] =
+      streamingQuery: StreamingDBIO[Seq[T], T])(implicit session: SlickSession): Source[T, NotUsed] =
     Source.fromPublisher(session.db.stream(streamingQuery))
 
   /**
@@ -51,8 +50,7 @@ object Slick {
    * @param session The database session to use.
    */
   def flow[T](
-      toStatement: T => DBIO[Int]
-  )(implicit session: SlickSession): Flow[T, Int, NotUsed] = flow(1, toStatement)
+      toStatement: T => DBIO[Int])(implicit session: SlickSession): Flow[T, Int, NotUsed] = flow(1, toStatement)
 
   /**
    * Scala API: creates a Flow that takes a stream of elements of
@@ -69,8 +67,7 @@ object Slick {
    */
   def flow[T](
       parallelism: Int,
-      toStatement: T => DBIO[Int]
-  )(implicit session: SlickSession): Flow[T, Int, NotUsed] =
+      toStatement: T => DBIO[Int])(implicit session: SlickSession): Flow[T, Int, NotUsed] =
     flowWithPassThrough(parallelism, toStatement)
 
   /**
@@ -85,8 +82,8 @@ object Slick {
    * @param session The database session to use.
    */
   def flowWithPassThrough[T, R](
-      toStatement: T => DBIO[R]
-  )(implicit session: SlickSession): Flow[T, R, NotUsed] = flowWithPassThrough(1, toStatement)
+      toStatement: T => DBIO[R])(implicit session: SlickSession): Flow[T, R, NotUsed] =
+    flowWithPassThrough(1, toStatement)
 
   /**
    * Scala API: creates a Flow that takes a stream of elements of
@@ -104,8 +101,7 @@ object Slick {
    */
   def flowWithPassThrough[T, R](
       parallelism: Int,
-      toStatement: T => DBIO[R]
-  )(implicit session: SlickSession): Flow[T, R, NotUsed] =
+      toStatement: T => DBIO[R])(implicit session: SlickSession): Flow[T, R, NotUsed] =
     Flow[T]
       .mapAsync(parallelism) { t =>
         session.db.run(toStatement(t))
@@ -122,8 +118,7 @@ object Slick {
    * @param session The database session to use.
    */
   def sink[T](
-      toStatement: T => DBIO[Int]
-  )(implicit session: SlickSession): Sink[T, Future[Done]] =
+      toStatement: T => DBIO[Int])(implicit session: SlickSession): Sink[T, Future[Done]] =
     flow[T](1, toStatement).toMat(Sink.ignore)(Keep.right)
 
   /**
@@ -141,7 +136,6 @@ object Slick {
    */
   def sink[T](
       parallelism: Int,
-      toStatement: T => DBIO[Int]
-  )(implicit session: SlickSession): Sink[T, Future[Done]] =
+      toStatement: T => DBIO[Int])(implicit session: SlickSession): Sink[T, Future[Done]] =
     flow[T](parallelism, toStatement).toMat(Sink.ignore)(Keep.right)
 }

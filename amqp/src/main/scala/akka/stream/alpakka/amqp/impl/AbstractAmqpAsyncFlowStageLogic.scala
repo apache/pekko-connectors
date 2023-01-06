@@ -8,7 +8,7 @@ import akka.Done
 import akka.annotation.InternalApi
 import akka.stream._
 import akka.stream.alpakka.amqp.impl.AbstractAmqpAsyncFlowStageLogic.DeliveryTag
-import akka.stream.alpakka.amqp.{AmqpWriteSettings, WriteMessage, WriteResult}
+import akka.stream.alpakka.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
 import akka.stream.stage._
 import com.rabbitmq.client.ConfirmCallback
 
@@ -21,8 +21,7 @@ import scala.concurrent.Promise
 @InternalApi private final case class AwaitingMessage[T](
     tag: DeliveryTag,
     passThrough: T,
-    ready: Boolean = false
-)
+    ready: Boolean = false)
 
 /**
  * Internal API.
@@ -39,8 +38,7 @@ import scala.concurrent.Promise
 @InternalApi private abstract class AbstractAmqpAsyncFlowStageLogic[T](
     override val settings: AmqpWriteSettings,
     streamCompletion: Promise[Done],
-    shape: FlowShape[(WriteMessage, T), (WriteResult, T)]
-) extends TimerGraphStageLogic(shape)
+    shape: FlowShape[(WriteMessage, T), (WriteResult, T)]) extends TimerGraphStageLogic(shape)
     with AmqpConnectorLogic
     with StageLogging {
 
@@ -77,8 +75,7 @@ import scala.concurrent.Promise
     dequeued.foreach(m => cancelTimer(m.tag))
 
     pushOrEnqueueResults(
-      dequeued.map(m => (WriteResult.confirmed, m.passThrough))
-    )
+      dequeued.map(m => (WriteResult.confirmed, m.passThrough)))
   }
 
   private def onRejection(tag: DeliveryTag, multiple: Boolean): Unit = {
@@ -89,21 +86,18 @@ import scala.concurrent.Promise
     dequeued.foreach(m => cancelTimer(m.tag))
 
     pushOrEnqueueResults(
-      dequeued.map(m => (WriteResult.rejected, m.passThrough))
-    )
+      dequeued.map(m => (WriteResult.rejected, m.passThrough)))
   }
 
   private def pushOrEnqueueResults(results: Iterable[(WriteResult, T)]): Unit = {
-    results.foreach(
-      result =>
-        if (isAvailable(out) && exitQueue.isEmpty) {
-          log.debug("Pushing {} downstream.", result)
-          push(out, result)
-        } else {
-          log.debug("Message {} queued for downstream push.", result)
-          exitQueue.enqueue(result)
-        }
-    )
+    results.foreach(result =>
+      if (isAvailable(out) && exitQueue.isEmpty) {
+        log.debug("Pushing {} downstream.", result)
+        push(out, result)
+      } else {
+        log.debug("Message {} queued for downstream push.", result)
+        exitQueue.enqueue(result)
+      })
     if (isFinished) closeStage()
   }
 
@@ -166,13 +160,11 @@ import scala.concurrent.Promise
           message.mandatory,
           message.immediate,
           message.properties.orNull,
-          message.bytes.toArray
-        )
+          message.bytes.toArray)
 
         tag
       }
-    }
-  )
+    })
 
   setHandler(
     out,
@@ -187,8 +179,7 @@ import scala.concurrent.Promise
         if (isFinished) closeStage()
         else if (!hasBeenPulled(in)) tryPull(in)
       }
-    }
-  )
+    })
 
   override protected def onTimer(timerKey: Any): Unit =
     timerKey match {

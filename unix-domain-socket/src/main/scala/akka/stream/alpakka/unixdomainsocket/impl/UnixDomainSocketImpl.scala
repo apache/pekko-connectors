@@ -5,29 +5,29 @@
 package akka.stream.alpakka.unixdomainsocket
 package impl
 
-import akka.actor.{Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension}
+import akka.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
 import akka.annotation.InternalApi
-import akka.event.{Logging, LoggingAdapter}
+import akka.event.{ Logging, LoggingAdapter }
 import akka.stream._
 import akka.stream.alpakka.unixdomainsocket.scaladsl.UnixDomainSocket.{
   IncomingConnection,
   OutgoingConnection,
   ServerBinding
 }
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source, SourceQueueWithComplete }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import jnr.enxio.channels.NativeSelectorProvider
-import jnr.unixsocket.{UnixServerSocketChannel, UnixSocketChannel, UnixSocketAddress => JnrUnixSocketAddress}
+import jnr.unixsocket.{ UnixServerSocketChannel, UnixSocketAddress => JnrUnixSocketAddress, UnixSocketChannel }
 
 import java.io.IOException
 import java.nio.ByteBuffer
-import java.nio.channels.{SelectionKey, Selector}
-import java.nio.file.{Files, Path, Paths}
-import scala.concurrent.duration.{Duration, FiniteDuration}
-import scala.concurrent.{ExecutionContext, Future, Promise}
+import java.nio.channels.{ SelectionKey, Selector }
+import java.nio.file.{ Files, Path, Paths }
+import scala.concurrent.duration.{ Duration, FiniteDuration }
+import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.util.control.NonFatal
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 /**
  * INTERNAL API
@@ -37,28 +37,22 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
   private sealed abstract class ReceiveContext(
       val queue: SourceQueueWithComplete[ByteString],
-      val buffer: ByteBuffer
-  )
+      val buffer: ByteBuffer)
   private case class ReceiveAvailable(
       override val queue: SourceQueueWithComplete[ByteString],
-      override val buffer: ByteBuffer
-  ) extends ReceiveContext(queue, buffer)
+      override val buffer: ByteBuffer) extends ReceiveContext(queue, buffer)
   private case class PendingReceiveAck(
       override val queue: SourceQueueWithComplete[ByteString],
       override val buffer: ByteBuffer,
-      pendingResult: Future[QueueOfferResult]
-  ) extends ReceiveContext(queue, buffer)
+      pendingResult: Future[QueueOfferResult]) extends ReceiveContext(queue, buffer)
 
   private sealed abstract class SendContext(
-      val buffer: ByteBuffer
-  )
+      val buffer: ByteBuffer)
   private case class SendAvailable(
-      override val buffer: ByteBuffer
-  ) extends SendContext(buffer)
+      override val buffer: ByteBuffer) extends SendContext(buffer)
   private case class SendRequested(
       override val buffer: ByteBuffer,
-      sent: Promise[Done]
-  ) extends SendContext(buffer)
+      sent: Promise[Done]) extends SendContext(buffer)
   private case object CloseRequested extends SendContext(ByteString.empty.asByteBuffer)
   private case object ShutdownRequested extends SendContext(ByteString.empty.asByteBuffer)
 
@@ -67,8 +61,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
       @volatile var receive: ReceiveContext,
       @volatile var halfClose: Boolean,
       @volatile var isOutputShutdown: Boolean,
-      @volatile var isInputShutdown: Boolean
-  )
+      @volatile var isInputShutdown: Boolean)
 
   /*
    * All NIO for UnixDomainSocket across an entire actor system is performed on just one thread. Data
@@ -108,8 +101,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                    | connectable=${key.isConnectable}%5s
                    | readable=${key.isReadable}%5s
                    | writable=${key.isWritable}%5s
-                   | $interestInfo""".stripMargin.replaceAll("\n", "")
-              )
+                   | $interestInfo""".stripMargin.replaceAll("\n", ""))
             }
 
             if (keySelectable && (key.isAcceptable || key.isConnectable)) {
@@ -246,13 +238,13 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
       incomingConnectionQueue: SourceQueueWithComplete[IncomingConnection],
       halfClose: Boolean,
       receiveBufferSize: Int,
-      sendBufferSize: Int
-  )(sel: Selector, key: SelectionKey)(implicit mat: Materializer, ec: ExecutionContext): Unit = {
+      sendBufferSize: Int)(sel: Selector, key: SelectionKey)(implicit mat: Materializer, ec: ExecutionContext): Unit = {
 
     val acceptingChannel = key.channel().asInstanceOf[UnixServerSocketChannel]
-    val acceptedChannel = try {
-      acceptingChannel.accept()
-    } catch { case _: IOException => null }
+    val acceptedChannel =
+      try {
+        acceptingChannel.accept()
+      } catch { case _: IOException => null }
 
     if (acceptedChannel != null) {
       acceptedChannel.configureBlocking(false)
@@ -264,18 +256,15 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
         IncomingConnection(
           localAddress = UnixSocketAddress(Paths.get(localAddress.path())),
           remoteAddress = UnixSocketAddress(
-            Paths.get(Option(acceptingChannel.getRemoteSocketAddress).getOrElse(new JnrUnixSocketAddress("")).path())
-          ),
-          flow = connectionFlow
-        )
-      )
+            Paths.get(Option(acceptingChannel.getRemoteSocketAddress).getOrElse(new JnrUnixSocketAddress("")).path())),
+          flow = connectionFlow))
     }
   }
 
   private def connectKey(remoteAddress: JnrUnixSocketAddress,
-                         connectionFinished: Promise[Done],
-                         cancellable: Option[Cancellable],
-                         sendReceiveContext: SendReceiveContext)(sel: Selector, key: SelectionKey): Unit = {
+      connectionFinished: Promise[Done],
+      cancellable: Option[Cancellable],
+      sendReceiveContext: SendReceiveContext)(sel: Selector, key: SelectionKey): Unit = {
 
     val connectingChannel = key.channel().asInstanceOf[UnixSocketChannel]
     cancellable.foreach(_.cancel())
@@ -293,8 +282,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
   private def sendReceiveStructures(sel: Selector, receiveBufferSize: Int, sendBufferSize: Int, halfClose: Boolean)(
       implicit mat: Materializer,
-      ec: ExecutionContext
-  ): (SendReceiveContext, Flow[ByteString, ByteString, NotUsed]) = {
+      ec: ExecutionContext): (SendReceiveContext, Flow[ByteString, ByteString, NotUsed]) = {
 
     val (receiveQueue, receiveSource) =
       Source
@@ -309,8 +297,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
         ReceiveAvailable(receiveQueue, ByteBuffer.allocate(receiveBufferSize)),
         halfClose = halfClose,
         isOutputShutdown = false,
-        isInputShutdown = false
-      ) // FIXME: No need for the costly allocation of direct buffers yet given https://github.com/jnr/jnr-unixsocket/pull/49
+        isInputShutdown = false) // FIXME: No need for the costly allocation of direct buffers yet given https://github.com/jnr/jnr-unixsocket/pull/49
 
     val sendSink = Sink.fromGraph(
       Flow[ByteString]
@@ -354,8 +341,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
             }
             Keep.left
         }
-        .to(Sink.ignore)
-    )
+        .to(Sink.ignore))
 
     (sendReceiveContext, Flow.fromSinkAndSource(sendSink, Source.futureSource(receiveSource)))
   }
@@ -391,8 +377,8 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
     system.settings.config.getBytes("akka.stream.alpakka.unix-domain-socket.send-buffer-size").toInt
 
   protected def bind(path: Path,
-                     backlog: Int = 128,
-                     halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] = {
+      backlog: Int = 128,
+      halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] = {
 
     val bind: () => Source[IncomingConnection, Future[ServerBinding]] = { () =>
       val (incomingConnectionQueue, incomingConnectionSource) =
@@ -425,8 +411,8 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
       val address = new JnrUnixSocketAddress(path.toFile)
       val registeredKey =
         channel.register(sel,
-                         SelectionKey.OP_ACCEPT,
-                         acceptKey(address, incomingConnectionQueue, halfClose, receiveBufferSize, sendBufferSize) _)
+          SelectionKey.OP_ACCEPT,
+          acceptKey(address, incomingConnectionQueue, halfClose, receiveBufferSize, sendBufferSize) _)
       try {
         channel.socket().bind(address, backlog)
         sel.wakeup()
@@ -436,8 +422,7 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
             channel.close()
             incomingConnectionQueue.complete()
             incomingConnectionQueue.watchCompletion().map(_ => ())
-          }
-        )
+          })
       } catch {
         case e: IOException =>
           val withAddress = new IOException(e.getMessage + s" ($address)", e)
@@ -466,8 +451,7 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
       remoteAddress: UnixSocketAddress,
       localAddress: Option[UnixSocketAddress] = None,
       halfClose: Boolean = true,
-      connectTimeout: Duration = Duration.Inf
-  ): Flow[ByteString, ByteString, Future[OutgoingConnection]] = {
+      connectTimeout: Duration = Duration.Inf): Flow[ByteString, ByteString, Future[OutgoingConnection]] = {
 
     val connect = { () =>
       val channel = UnixSocketChannel.open()
@@ -476,10 +460,11 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
       val cancellable =
         connectTimeout match {
           case d: FiniteDuration =>
-            Some(system.scheduler.scheduleOnce(d, new Runnable {
-              override def run(): Unit =
-                channel.close()
-            }))
+            Some(system.scheduler.scheduleOnce(d,
+              new Runnable {
+                override def run(): Unit =
+                  channel.close()
+              }))
           case _ =>
             None
         }
@@ -505,8 +490,7 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
                 channel.close()
                 Future.failed(e)
             }
-          }
-      )
+          })
     }
 
     Flow.lazyFutureFlow(connect).mapMaterializedValue(_.flatten)

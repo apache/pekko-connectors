@@ -9,13 +9,13 @@ import akka.stream.ActorAttributes.SupervisionStrategy
 import akka.stream.Attributes.name
 import akka.stream._
 import akka.stream.impl.fusing.MapAsync
-import akka.stream.impl.{BoundedBuffer, Buffer, FixedSizeBuffer}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.impl.{ BoundedBuffer, Buffer, FixedSizeBuffer }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 import scala.annotation.tailrec
 import scala.concurrent.Future
 import scala.util.control.NonFatal
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 /**
  * Internal API.
@@ -35,8 +35,7 @@ import scala.util.{Failure, Success}
 @InternalApi private[sqs] final case class BalancingMapAsync[In, Out](
     maxParallelism: Int,
     f: In => Future[Out],
-    balancingF: (Out, Int) => Int
-) extends GraphStage[FlowShape[In, Out]] {
+    balancingF: (Out, Int) => Int) extends GraphStage[FlowShape[In, Out]] {
 
   import MapAsync._
 
@@ -54,20 +53,18 @@ import scala.util.{Failure, Success}
       var buffer: Buffer[Holder[Out]] = _
       var parallelism = maxParallelism
 
-      private val futureCB = getAsyncCallback[Holder[Out]](
-        holder =>
-          holder.elem match {
-            case Success(value) =>
-              parallelism = balancingF(value, parallelism)
-              pushNextIfPossible()
-            case Failure(ex) =>
-              holder.supervisionDirectiveFor(decider, ex) match {
-                // fail fast as if supervision says so
-                case Supervision.Stop => failStage(ex)
-                case _ => pushNextIfPossible()
-              }
-          }
-      )
+      private val futureCB = getAsyncCallback[Holder[Out]](holder =>
+        holder.elem match {
+          case Success(value) =>
+            parallelism = balancingF(value, parallelism)
+            pushNextIfPossible()
+          case Failure(ex) =>
+            holder.supervisionDirectiveFor(decider, ex) match {
+              // fail fast as if supervision says so
+              case Supervision.Stop => failStage(ex)
+              case _                => pushNextIfPossible()
+            }
+        })
 
       override def preStart(): Unit = buffer = BufferImpl(parallelism, inheritedAttributes)
 
@@ -80,7 +77,7 @@ import scala.util.{Failure, Success}
           buffer.enqueue(holder)
 
           future.value match {
-            case None => future.onComplete(holder)(akka.dispatch.ExecutionContexts.parasitic)
+            case None    => future.onComplete(holder)(akka.dispatch.ExecutionContexts.parasitic)
             case Some(v) =>
               // #20217 the future is already here, optimization: avoid scheduling it on the dispatcher and
               // run the logic directly on this thread
@@ -88,7 +85,7 @@ import scala.util.{Failure, Success}
               v match {
                 // this optimization also requires us to stop the stage to fail fast if the decider says so:
                 case Failure(ex) if holder.supervisionDirectiveFor(decider, ex) == Supervision.Stop => failStage(ex)
-                case _ => pushNextIfPossible()
+                case _                                                                              => pushNextIfPossible()
               }
           }
 
@@ -120,7 +117,7 @@ import scala.util.{Failure, Success}
                 // this could happen if we are looping in pushNextIfPossible and end up on a failed future before the
                 // onComplete callback has run
                 case Supervision.Stop => failStage(ex)
-                case _ =>
+                case _                =>
                   // try next element
                   pushNextIfPossible()
               }
