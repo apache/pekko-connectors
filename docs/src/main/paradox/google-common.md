@@ -5,8 +5,8 @@ The `google-common` module provides central configuration for Google connectors 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-group=com.lightbend.akka
-artifact=akka-stream-alpakka-google-common_$scala.binary.version$
+group=org.apache.pekko
+artifact=pekko-connectors-google-common_$scala.binary.version$
 version=$project.version$
 symbol2=AkkaVersion
 value2=$akka.version$

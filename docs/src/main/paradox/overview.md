@@ -12,7 +12,7 @@ There are a few blog posts and presentations about Alpakka out there, we've @ref
 
 The code in this documentation is compiled against:
 
-* Alpakka $project.version$ ([Github](https://github.com/akka/alpakka), [API docs](https://doc.akka.io/api/alpakka/current/akka/stream/alpakka/index.html))
+* Alpakka $project.version$ ([Github](https://github.com/apache/incubator-pekko-connectors), [API docs](https://doc.akka.io/api/alpakka/current/akka/stream/alpakka/index.html))
 * Scala $scala.binary.version$ (all modules are available for Scala 2.13)
 * Akka Streams $akka.version$+ (@extref:[Reference](akka:stream/index.html), [Github](https://github.com/akka/akka))
 * Akka HTTP $akka-http.version$+ (@extref:[Reference](akka-http:), [Github](https://github.com/akka/akka-http))
@@ -25,7 +25,7 @@ If you want to try out a connector that has not yet been released, give @ref[sna
 
 ## Contributing
 
-Please feel free to contribute to Alpakka by reporting issues you identify, or by suggesting changes to the code. Please refer to our [contributing instructions](https://github.com/akka/alpakka/blob/master/CONTRIBUTING.md) and our [contributor advice](https://github.com/akka/alpakka/blob/master/contributor-advice.md) to learn how it can be done. The target structure for Alpakka connectors is illustrated by the @ref[Reference connector](reference.md).
+Please feel free to contribute to Alpakka by reporting issues you identify, or by suggesting changes to the code. Please refer to our [contributing instructions](https://github.com/apache/incubator-pekko-connectors/blob/master/CONTRIBUTING.md) and our [contributor advice](https://github.com/apache/incubator-pekko-connectors/blob/master/contributor-advice.md) to learn how it can be done. The target structure for Alpakka connectors is illustrated by the @ref[Reference connector](reference.md).
 
 We want Akka and Alpakka to strive in a welcoming and open atmosphere and expect all contributors to respect our [code of conduct](https://www.lightbend.com/conduct).
 

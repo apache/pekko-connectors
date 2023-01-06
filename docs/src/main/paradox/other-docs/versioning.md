@@ -10,9 +10,9 @@ As all Alpakka modules (excluding Alpakka Kafka) share a single version number, 
 
 Alpakka publishes 
 
-* regular releases to [Maven Central](https://search.maven.org/search?q=g:com.lightbend.akka%20akka-stream-)
+* regular releases to [Maven Central](https://search.maven.org/search?q=g:org.pekko%20pekko-connectors-)
 * milestone and release candidates (of major versions) to Maven Central
-* @ref:[snapshots](snapshots.md) to [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/)
+* @ref:[snapshots](snapshots.md) to [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/org/pekko/)
 
 ### Compatibility
 

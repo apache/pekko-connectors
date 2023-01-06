@@ -7,13 +7,13 @@ about the technology the connector is using.
 
 ### Reported issues
 
-[Tagged issues at Github](https://github.com/akka/alpakka/labels/p%3Areference)
+[Tagged issues at Github](https://github.com/apache/incubator-pekko-connectors/labels/p%3Areference)
 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-reference_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-reference_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

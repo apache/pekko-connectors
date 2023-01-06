@@ -1,5 +1,5 @@
 # Config for https://github.com/toolmantim/release-drafter
-name-template: 'Alpakka $NEXT_PATCH_VERSION'
+name-template: 'Apache Pekko Connectors $NEXT_PATCH_VERSION'
 tag-template: 'v$NEXT_PATCH_VERSION'
 categories:
   - title: ':toolbox: Infrastructure'
@@ -99,9 +99,9 @@ categories:
   - title: 'XML'
     label: 'p:xml'
 
-change-template: '- $TITLE [#$NUMBER](https://github.com/akka/alpakka/issues/$NUMBER) by [@$AUTHOR](https://github.com/$AUTHOR)'
+change-template: '- $TITLE [#$NUMBER](https://github.com/apache/incubator-pekko-connectors/issues/$NUMBER) by [@$AUTHOR](https://github.com/$AUTHOR)'
 template: |
-  # :mega: Alpakka $NEXT_PATCH_VERSION released!
+  # :mega: Apache Pekko Connectors $NEXT_PATCH_VERSION released!
 
   ## Changes
 

@@ -21,8 +21,8 @@ The Couchbase connector supports all document formats which are supported by the
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-couchbase_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-couchbase_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

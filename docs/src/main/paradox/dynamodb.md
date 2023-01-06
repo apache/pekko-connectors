@@ -7,8 +7,8 @@ The AWS DynamoDB connector provides a flow for streaming DynamoDB requests. For 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-dynamodb_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-dynamodb_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

@@ -15,8 +15,8 @@ The Alpakka JMS connector provides Akka Stream sources and sinks to connect to J
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group1=com.lightbend.akka
-  artifact1=akka-stream-alpakka-jms_$scala.binary.version$
+  group1=org.pekko
+  artifact1=pekko-connectors-jms_$scala.binary.version$
   version1=$project.version$
   group2=javax.jms
   artifact2=jms

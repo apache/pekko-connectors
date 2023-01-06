@@ -1,4 +1,4 @@
-# Some advice for Alpakka contributors
+# Some advice for Pekko connectors contributors
 
 ## Reference connector
 
@@ -9,7 +9,7 @@ To inspect how all of the below listed guidelines are to be implemented in pract
 
 ### Public factory methods
 
-Depending on the technology you integrate with Akka Streams and Alpakka you'll create Sources, Flows and Sinks.
+Depending on the technology you integrate with Pekko streams and Pekko connectors you'll create Sources, Flows and Sinks.
 Regardless on how they are implemented make sure that you create the relevant Sources, Sinks and Flows APIs so they are
 simple and easy to use.
 
@@ -98,7 +98,7 @@ Refrain from using `akka.stream.alpakka` as Config prefix, prefer `alpakka` as r
 
 ### Evolving APIs with binary compatibility
 
-All Akka APIs aim to evolve in a binary compatible way within minor versions.
+All Pekko APIs aim to evolve in a binary compatible way within minor versions.
 
 1. Do not use any default arguments
 
@@ -110,7 +110,7 @@ See [Binary Compatibilty Rules](https://doc.akka.io/docs/akka/current/common/bin
 
 See [Binary Compatibility for library authors](https://docs.scala-lang.org/overviews/core/binary-compatibility-for-library-authors.html)
 
-Use [MigrationManager (MiMa)](https://github.com/lightbend/migration-manager) to validate, if versions are binary compatible. See [Binary compatibility (MiMa) in CONTRIBUTING.md](https://github.com/akka/alpakka/blob/master/CONTRIBUTING.md#binary-compatibility-mima) for details.
+Use [MigrationManager (MiMa)](https://github.com/lightbend/migration-manager) to validate, if versions are binary compatible. See [Binary compatibility (MiMa) in CONTRIBUTING.md](https://github.com/apache/incubator-pekko-connectors/blob/master/CONTRIBUTING.md#binary-compatibility-mima) for details.
 
 
 ### External Dependencies

@@ -9,8 +9,8 @@ Alpakka Geode provides flows and sinks to put elements into Geode, and a source 
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-geode_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-geode_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

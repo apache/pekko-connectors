@@ -14,8 +14,8 @@ This connector communicates to the BigQuery Storage API via the gRPC protocol. T
 Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with the same Akka version that the application uses.
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-google-cloud-bigquery-storage_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-google-cloud-bigquery-storage_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

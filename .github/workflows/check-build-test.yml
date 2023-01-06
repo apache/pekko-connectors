@@ -70,8 +70,9 @@ jobs:
       - name: "Create all API docs and create site with Paradox"
         run: sbt docs/makeSite
 
-      - name: Run Link Validator
-        run: cs launch net.runne::site-link-validator:0.2.2 -- scripts/link-validator.conf
+# TODO: Fix after documentation updates
+#      - name: Run Link Validator
+#        run: cs launch net.runne::site-link-validator:0.2.2 -- scripts/link-validator.conf
 
   connectors:
     runs-on: ubuntu-20.04

@@ -1,4 +1,4 @@
-lazy val pekkoConnectors = project
+lazy val `pekko-connectors` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
@@ -422,7 +422,7 @@ lazy val `doc-examples` = project
   .enablePlugins(AutomateHeaderPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
   .settings(
-    name := s"akka-stream-alpakka-doc-examples",
+    name := s"pekko-connectors-doc-examples",
     publish / skip := true,
     Dependencies.`Doc-examples`
   )
@@ -435,7 +435,7 @@ def pekkoConnectorProject(projectId: String,
     .enablePlugins(AutomateHeaderPlugin)
     .disablePlugins(SitePlugin)
     .settings(
-      name := s"akka-stream-alpakka-$projectId",
+      name := s"pekko-connectors-$projectId",
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"akka.stream.alpakka.$moduleName"),
       mimaPreviousArtifacts := Set(
@@ -457,10 +457,7 @@ def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefin
   Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin)
     .disablePlugins(SitePlugin, MimaPlugin)
-    .settings(
-      name := s"akka-stream-alpakka-$projectId",
-      publish / skip := true
-    )
+    .settings(name := s"pekko-connectors-$projectId", publish / skip := true)
     .settings(additionalSettings: _*)
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>

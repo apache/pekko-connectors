@@ -9,8 +9,8 @@ Azure Storage Queue is a queuing service similar to Amazon's SQS. It is designed
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-azure-storage-queue_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-azure-storage-queue_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$

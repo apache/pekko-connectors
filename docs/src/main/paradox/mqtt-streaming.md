@@ -25,8 +25,8 @@ Alpakka MQTT Streaming implements the [MQTT 3.1.1](https://docs.oasis-open.org/m
 ## Artifacts
 
 @@dependency [sbt,Maven,Gradle] {
-  group=com.lightbend.akka
-  artifact=akka-stream-alpakka-mqtt-streaming_$scala.binary.version$
+  group=org.apache.pekko
+  artifact=pekko-connectors-mqtt-streaming_$scala.binary.version$
   version=$project.version$
   symbol2=AkkaVersion
   value2=$akka.version$
