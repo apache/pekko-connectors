@@ -7,7 +7,7 @@ package docs.scaladsl
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.alpakka.avroparquet.scaladsl.AvroParquetFlow
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.testkit.TestKit
 import com.sksamuel.avro4s.Record
@@ -29,7 +29,7 @@ class AvroParquetFlowSpec
   "Parquet Flow" should {
 
     "insert avro records in parquet from `GenericRecord`" in assertAllStagesStopped {
-      //given
+      // given
       val n: Int = 2
       val file: String = genFinalFile.sample.get
       // #init-flow
@@ -38,7 +38,7 @@ class AvroParquetFlowSpec
       = genDocuments(n).sample.get.map(docToGenericRecord)
       val writer: ParquetWriter[GenericRecord] = parquetWriter(file, conf, schema)
 
-      //when
+      // when
       // #init-flow
       val source: Source[GenericRecord, NotUsed] = Source(records)
       val avroParquet: Flow[GenericRecord, GenericRecord, NotUsed] = AvroParquetFlow(writer)
@@ -50,27 +50,27 @@ class AvroParquetFlowSpec
 
       result.futureValue
 
-      //then
+      // then
       val parquetContent: List[GenericRecord] = fromParquet(file, conf)
       parquetContent.length shouldEqual n
       parquetContent should contain theSameElementsAs records
     }
 
     "insert avro records in parquet from a subtype of `GenericRecord`" in assertAllStagesStopped {
-      //given
+      // given
       val n: Int = 2
       val file: String = genFinalFile.sample.get
       val documents: List[Document] = genDocuments(n).sample.get
       val avroDocuments: List[Record] = documents.map(format.to(_))
       val writer: ParquetWriter[Record] = parquetWriter[Record](file, conf, schema)
 
-      //when
+      // when
       Source(avroDocuments)
         .via(AvroParquetFlow[Record](writer))
         .runWith(Sink.seq)
         .futureValue
 
-      //then
+      // then
       val parquetContent: List[GenericRecord] = fromParquet(file, conf)
       parquetContent.length shouldEqual n
       parquetContent.map(format.from(_)) should contain theSameElementsAs documents

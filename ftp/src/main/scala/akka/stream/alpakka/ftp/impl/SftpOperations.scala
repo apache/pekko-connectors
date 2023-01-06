@@ -5,23 +5,23 @@
 package akka.stream.alpakka.ftp
 package impl
 
-import java.io.{File, IOException, InputStream, OutputStream}
+import java.io.{ File, IOException, InputStream, OutputStream }
 import java.nio.file.attribute.PosixFilePermission
 import java.nio.charset.StandardCharsets
 
 import akka.annotation.InternalApi
 import net.schmizz.sshj.SSHClient
-import net.schmizz.sshj.sftp.{OpenMode, RemoteResourceInfo, SFTPClient}
+import net.schmizz.sshj.sftp.{ OpenMode, RemoteResourceInfo, SFTPClient }
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier
 import net.schmizz.sshj.userauth.UserAuthException
-import net.schmizz.sshj.userauth.method.{AuthPassword, AuthPublickey}
-import net.schmizz.sshj.userauth.password.{PasswordFinder, PasswordUtils, Resource}
+import net.schmizz.sshj.userauth.method.{ AuthPassword, AuthPublickey }
+import net.schmizz.sshj.userauth.password.{ PasswordFinder, PasswordUtils, Resource }
 import net.schmizz.sshj.xfer.FilePermission
 import org.apache.commons.net.DefaultSocketFactory
 
 import scala.jdk.CollectionConverters._
 import scala.collection.immutable
-import scala.util.{Failure, Try}
+import scala.util.{ Failure, Try }
 
 /**
  * INTERNAL API
@@ -70,8 +70,7 @@ private[ftp] trait SftpOperations { _: FtpLike[SSHClient, SftpSettings] =>
       case Failure(_: UserAuthException) =>
         throw new FtpAuthenticationException(
           s"unable to login to host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
-            .fold("")("proxy=" + _.toString)}"
-        )
+              .fold("")("proxy=" + _.toString)}")
       case result => result
     }
 
@@ -90,8 +89,7 @@ private[ftp] trait SftpOperations { _: FtpLike[SSHClient, SftpSettings] =>
         file.isDirectory,
         file.getAttributes.getSize,
         file.getAttributes.getMtime * 1000L,
-        getPosixFilePermissions(file)
-      )
+        getPosixFilePermissions(file))
     }.toVector
   }
 
@@ -126,9 +124,9 @@ private[ftp] trait SftpOperations { _: FtpLike[SSHClient, SftpSettings] =>
     retrieveFileInputStream(name, handler, offset, 1)
 
   def retrieveFileInputStream(name: String,
-                              handler: Handler,
-                              offset: Long,
-                              maxUnconfirmedReads: Int): Try[InputStream] =
+      handler: Handler,
+      offset: Long,
+      maxUnconfirmedReads: Int): Try[InputStream] =
     Try {
       val remoteFile = handler.open(name, java.util.EnumSet.of(OpenMode.READ))
       val is = maxUnconfirmedReads match {
@@ -194,8 +192,7 @@ private[ftp] trait SftpOperations { _: FtpLike[SSHClient, SftpSettings] =>
     identity match {
       case id: RawKeySftpIdentity =>
         new AuthPublickey(
-          ssh.loadKeys(bats(id.privateKey), id.publicKey.map(bats).orNull, passphrase)
-        )
+          ssh.loadKeys(bats(id.privateKey), id.publicKey.map(bats).orNull, passphrase))
       case id: KeyFileSftpIdentity =>
         new AuthPublickey(ssh.loadKeys(id.privateKey, passphrase))
     }

@@ -4,11 +4,11 @@
 
 package akka.stream.alpakka.kinesis
 
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler, OutHandler }
 import akka.stream._
-import SwitchMode.{Close, Open}
+import SwitchMode.{ Close, Open }
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Pause/ Resume a Flow
@@ -35,25 +35,21 @@ object Valve {
 
   /**
    * Factory for [[Valve]] instances.
-   *
    */
   def apply[A](): Valve[A] = Valve[A](SwitchMode.Open)
 
   /**
    * Java API: Factory for [[Valve]] instances.
-   *
    */
   def create[A](): Valve[A] = Valve[A](SwitchMode.Open)
 
   /**
    * Factory for [[Valve]] instances.
-   *
    */
   def apply[A](mode: SwitchMode): Valve[A] = new Valve[A](mode)
 
   /**
    * Java API: Factory for [[Valve]] instances.
-   *
    */
   def create[A](mode: SwitchMode): Valve[A] = Valve[A](mode)
 
@@ -75,8 +71,7 @@ final class Valve[A](mode: SwitchMode) extends GraphStageWithMaterializedValue[F
   override val shape = FlowShape(in, out)
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, Future[ValveSwitch]) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, Future[ValveSwitch]) = {
     val logic = new ValveGraphStageLogic(shape, mode)
     (logic, logic.promise.future)
   }

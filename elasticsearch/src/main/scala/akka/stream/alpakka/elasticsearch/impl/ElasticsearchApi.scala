@@ -15,16 +15,14 @@ import scala.concurrent.Future
 @InternalApi private[impl] object ElasticsearchApi {
   def executeRequest(
       request: HttpRequest,
-      connectionSettings: ElasticsearchConnectionSettings
-  )(implicit http: HttpExt): Future[HttpResponse] = {
+      connectionSettings: ElasticsearchConnectionSettings)(implicit http: HttpExt): Future[HttpResponse] = {
     if (connectionSettings.hasCredentialsDefined) {
       http.singleRequest(
-        request.addCredentials(BasicHttpCredentials(connectionSettings.username.get, connectionSettings.password.get))
-      )
+        request.addCredentials(BasicHttpCredentials(connectionSettings.username.get, connectionSettings.password.get)))
     } else {
       http.singleRequest(request,
-                         connectionContext =
-                           connectionSettings.connectionContext.getOrElse(http.defaultClientHttpsContext))
+        connectionContext =
+          connectionSettings.connectionContext.getOrElse(http.defaultClientHttpsContext))
     }
   }
 }

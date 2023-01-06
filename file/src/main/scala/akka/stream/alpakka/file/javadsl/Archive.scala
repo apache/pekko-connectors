@@ -5,15 +5,15 @@
 package akka.stream.alpakka.file.javadsl
 
 import akka.NotUsed
-import akka.stream.alpakka.file.{scaladsl, ArchiveMetadata, TarArchiveMetadata, ZipArchiveMetadata}
+import akka.stream.alpakka.file.{ scaladsl, ArchiveMetadata, TarArchiveMetadata, ZipArchiveMetadata }
 import akka.stream.javadsl.Flow
 import akka.util.ByteString
 import akka.japi.Pair
-import akka.stream.alpakka.file.impl.archive.{TarReaderStage, ZipSource}
+import akka.stream.alpakka.file.impl.archive.{ TarReaderStage, ZipSource }
 import akka.stream.javadsl.Source
 
 import java.io.File
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.{ Charset, StandardCharsets }
 
 /**
  * Java API.
@@ -35,8 +35,7 @@ object Archive {
   def zipReader(
       file: File,
       chunkSize: Int,
-      fileCharset: Charset
-  ): Source[Pair[ZipArchiveMetadata, Source[ByteString, NotUsed]], NotUsed] =
+      fileCharset: Charset): Source[Pair[ZipArchiveMetadata, Source[ByteString, NotUsed]], NotUsed] =
     Source
       .fromGraph(new ZipSource(file, chunkSize, fileCharset))
       .map(func {
@@ -47,8 +46,7 @@ object Archive {
     zipReader(file, 8192)
   def zipReader(
       file: File,
-      chunkSize: Int
-  ): Source[Pair[ZipArchiveMetadata, Source[ByteString, NotUsed]], NotUsed] =
+      chunkSize: Int): Source[Pair[ZipArchiveMetadata, Source[ByteString, NotUsed]], NotUsed] =
     Source
       .fromGraph(new ZipSource(file, chunkSize, StandardCharsets.UTF_8))
       .map(func {

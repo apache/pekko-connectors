@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray
 
-import spray.json.{deserializationError, DeserializationException, JsArray, JsValue, ProductFormats, StandardFormats}
+import spray.json.{ deserializationError, DeserializationException, JsArray, JsValue, ProductFormats, StandardFormats }
 
 /**
  * Provides the helpers for constructing custom BigQueryJsonFormat implementations for types implementing the Product trait
@@ -13,8 +13,7 @@ import spray.json.{deserializationError, DeserializationException, JsArray, JsVa
 trait BigQueryProductFormats extends BigQueryProductFormatsInstances { this: ProductFormats with StandardFormats =>
 
   protected def fromBigQueryField[T](value: JsValue, fieldName: String, index: Int)(
-      implicit reader: BigQueryJsonReader[T]
-  ): T =
+      implicit reader: BigQueryJsonReader[T]): T =
     value match {
       case x: JsArray =>
         try reader.read(x.elements(index).asJsObject.fields("v"))

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.s3.scaladsl
 
-import java.time.{Duration, Instant}
+import java.time.{ Duration, Instant }
 
 import akka.Done
 import akka.actor.ActorSystem
@@ -14,14 +14,14 @@ import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Source
 import akka.testkit.TestKit
 import akka.util.ByteString
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext}
+import scala.concurrent.{ Await, ExecutionContext }
 
 /*
  * Test performing a multipart upload against a slow minio instance.  When minio is responding to a
@@ -47,8 +47,7 @@ class S3SlowMinioIntegrationSpec
 
   implicit val actorSystem: ActorSystem = ActorSystem(
     "S3SlowMinioIntegrationSpec",
-    config().withFallback(ConfigFactory.load())
-  )
+    config().withFallback(ConfigFactory.load()))
   implicit val ec: ExecutionContext = actorSystem.dispatcher
 
   val defaultBucket = "my-test-us-east-1"

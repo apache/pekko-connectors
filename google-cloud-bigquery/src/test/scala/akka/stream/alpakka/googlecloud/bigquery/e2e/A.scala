@@ -6,12 +6,12 @@ package akka.stream.alpakka.googlecloud.bigquery.e2e
 
 import akka.util.ByteString
 import com.fasterxml.jackson.annotation.JsonInclude.Include
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonInclude, JsonProperty, JsonPropertyOrder}
+import com.fasterxml.jackson.annotation.{ JsonCreator, JsonInclude, JsonProperty, JsonPropertyOrder }
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
-import java.time.{Instant, LocalDate, LocalDateTime, LocalTime}
+import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
 import scala.jdk.CollectionConverters._
 
 @JsonPropertyOrder(alphabetic = true)
@@ -26,8 +26,7 @@ case class A(integer: Int, long: Long, float: Float, double: Double, string: Str
       f.get(3).get("v").textValue().toDouble,
       f.get(4).get("v").textValue(),
       f.get(5).get("v").textValue().toBoolean,
-      new B(f.get(6).get("v"))
-    )
+      new B(f.get(6).get("v")))
 
   def getInteger = integer
   @JsonSerialize(using = classOf[ToStringSerializer])
@@ -47,8 +46,7 @@ case class B(nullable: Option[String], bytes: ByteString, repeated: Seq[C]) {
     this(
       Option(node.get("f").get(0).get("v").textValue()),
       ByteString(node.get("f").get(1).get("v").textValue()).decodeBase64,
-      node.get("f").get(2).get("v").asScala.map(n => new C(n.get("v"))).toList
-    )
+      node.get("f").get(2).get("v").asScala.map(n => new C(n.get("v"))).toList)
 
   def getNullable = nullable.orNull
   def getBytes = bytes.encodeBase64.utf8String
@@ -64,8 +62,7 @@ case class C(numeric: BigDecimal, date: LocalDate, time: LocalTime, dateTime: Lo
       LocalDate.parse(node.get("f").get(1).get("v").textValue()),
       LocalTime.parse(node.get("f").get(2).get("v").textValue()),
       LocalDateTime.parse(node.get("f").get(3).get("v").textValue()),
-      Instant.ofEpochMilli((BigDecimal(node.get("f").get(4).get("v").textValue()) * 1000).toLong)
-    )
+      Instant.ofEpochMilli((BigDecimal(node.get("f").get(4).get("v").textValue()) * 1000).toLong))
 
   @JsonSerialize(using = classOf[ToStringSerializer])
   def getNumeric = numeric

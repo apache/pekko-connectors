@@ -27,8 +27,7 @@ object AmqpFlow {
    * @param settings `bufferSize` and `confirmationTimeout` properties are ignored by this connector
    */
   def create(
-      settings: AmqpWriteSettings
-  ): akka.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
+      settings: AmqpWriteSettings): akka.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpFlow(settings).mapMaterializedValue(f => f.toJava).asJava
 
   /**
@@ -50,8 +49,7 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def createWithConfirm(
-      settings: AmqpWriteSettings
-  ): akka.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
+      settings: AmqpWriteSettings): akka.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpFlow
       .withConfirm(settings = settings)
       .mapMaterializedValue(_.toJava)
@@ -76,8 +74,7 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def createWithConfirmUnordered(
-      settings: AmqpWriteSettings
-  ): akka.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
+      settings: AmqpWriteSettings): akka.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
     akka.stream.alpakka.amqp.scaladsl.AmqpFlow
       .withConfirmUnordered(settings)
       .mapMaterializedValue(_.toJava)
@@ -93,15 +90,14 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def createWithConfirmAndPassThroughUnordered[T](
-      settings: AmqpWriteSettings
-  ): akka.stream.javadsl.Flow[Pair[WriteMessage, T], Pair[WriteResult, T], CompletionStage[Done]] =
+      settings: AmqpWriteSettings)
+      : akka.stream.javadsl.Flow[Pair[WriteMessage, T], Pair[WriteResult, T], CompletionStage[Done]] =
     akka.stream.scaladsl
       .Flow[Pair[WriteMessage, T]]
       .map((p: Pair[WriteMessage, T]) => p.toScala)
       .viaMat(
         akka.stream.alpakka.amqp.scaladsl.AmqpFlow
-          .withConfirmAndPassThroughUnordered[T](settings = settings)
-      )(Keep.right)
+          .withConfirmAndPassThroughUnordered[T](settings = settings))(Keep.right)
       .map { case (writeResult, passThrough) => Pair(writeResult, passThrough) }
       .mapMaterializedValue(_.toJava)
       .asJava

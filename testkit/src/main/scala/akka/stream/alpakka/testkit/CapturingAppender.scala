@@ -28,8 +28,7 @@ import org.slf4j.LoggerFactory
     logbackLogger.getAppender(CapturingAppenderName) match {
       case null =>
         throw new IllegalStateException(
-          s"$CapturingAppenderName not defined for [${loggerNameOrRoot(loggerName)}] in logback-test.xml"
-        )
+          s"$CapturingAppenderName not defined for [${loggerNameOrRoot(loggerName)}] in logback-test.xml")
       case appender: CapturingAppender => appender
       case other =>
         throw new IllegalStateException(s"Unexpected $CapturingAppender: $other")
@@ -95,8 +94,8 @@ import org.slf4j.LoggerFactory
     val appenders = logbackLogger.iteratorForAppenders().asScala.filterNot(_ == this).toList
     for (event <- buffer; appender <- appenders) {
       if (sourceActorSystem.isEmpty
-          || event.getMDCPropertyMap.get("sourceActorSystem") == null
-          || sourceActorSystem.contains(event.getMDCPropertyMap.get("sourceActorSystem"))) {
+        || event.getMDCPropertyMap.get("sourceActorSystem") == null
+        || sourceActorSystem.contains(event.getMDCPropertyMap.get("sourceActorSystem"))) {
         appender.doAppend(event)
       }
     }

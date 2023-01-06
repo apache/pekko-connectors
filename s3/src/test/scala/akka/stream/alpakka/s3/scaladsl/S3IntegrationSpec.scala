@@ -6,16 +6,16 @@ package akka.stream.alpakka.s3.scaladsl
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
-import akka.stream.{Attributes, KillSwitches, SharedKillSwitch}
-import akka.stream.alpakka.s3.AccessStyle.{PathAccessStyle, VirtualHostAccessStyle}
-import akka.stream.alpakka.s3.BucketAccess.{AccessGranted, NotExists}
+import akka.http.scaladsl.model.{ ContentTypes, StatusCodes }
+import akka.stream.{ Attributes, KillSwitches, SharedKillSwitch }
+import akka.stream.alpakka.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import akka.stream.alpakka.s3.BucketAccess.{ AccessGranted, NotExists }
 import akka.stream.alpakka.s3._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink, Source}
-import akka.testkit.{TestKit, TestKitBase}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
+import akka.testkit.{ TestKit, TestKitBase }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import org.scalatest.Inspectors.forEvery
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import scala.annotation.tailrec
 import scala.collection.immutable
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 
 trait S3IntegrationSpec
@@ -68,8 +68,7 @@ trait S3IntegrationSpec
       .withS3RegionProvider(
         new AwsRegionProvider {
           val getRegion: Region = Region.US_EAST_1
-        }
-      )
+        })
       .withAccessStyle(PathAccessStyle)
 
   def attributes: Attributes =
@@ -77,23 +76,19 @@ trait S3IntegrationSpec
 
   def attributes(block: S3Settings => S3Settings): Attributes =
     S3Attributes.settings(
-      block(defaultS3Settings)
-    )
+      block(defaultS3Settings))
 
   def otherRegionSettingsPathStyleAccess =
     attributes(
       _.withAccessStyle(PathAccessStyle)
         .withS3RegionProvider(new AwsRegionProvider {
           val getRegion: Region = Region.EU_CENTRAL_1
-        })
-    )
+        }))
 
   def invalidCredentials: Attributes =
     attributes(
       _.withCredentialsProvider(
-        StaticCredentialsProvider.create(AwsBasicCredentials.create("invalid", "invalid"))
-      )
-    )
+        StaticCredentialsProvider.create(AwsBasicCredentials.create("invalid", "invalid"))))
 
   def defaultRegionContentCount = 4
   def otherRegionContentCount = 5
@@ -144,10 +139,10 @@ trait S3IntegrationSpec
 
     val result =
       S3.putObject(defaultBucket,
-                   objectKey,
-                   data,
-                   bytes.length,
-                   s3Headers = S3Headers().withMetaHeaders(MetaHeaders(metaHeaders)))
+        objectKey,
+        data,
+        bytes.length,
+        s3Headers = S3Headers().withMetaHeaders(MetaHeaders(metaHeaders)))
         .withAttributes(attributes)
         .runWith(Sink.head)
 
@@ -162,10 +157,10 @@ trait S3IntegrationSpec
     val result = for {
       put <- S3
         .putObject(defaultBucket,
-                   objectKey,
-                   data,
-                   bytes.length,
-                   s3Headers = S3Headers().withMetaHeaders(MetaHeaders(metaHeaders)))
+          objectKey,
+          data,
+          bytes.length,
+          s3Headers = S3Headers().withMetaHeaders(MetaHeaders(metaHeaders)))
         .withAttributes(attributes)
         .runWith(Sink.head)
       metaBefore <- S3.getObjectMetadata(defaultBucket, objectKey).withAttributes(attributes).runWith(Sink.head)
@@ -189,8 +184,7 @@ trait S3IntegrationSpec
       source
         .runWith(
           S3.multipartUpload(defaultBucket, objectKey, metaHeaders = MetaHeaders(metaHeaders))
-            .withAttributes(attributes)
-        )
+            .withAttributes(attributes))
 
     val multipartUploadResult = result.futureValue
     multipartUploadResult.bucket shouldBe defaultBucket
@@ -227,8 +221,7 @@ trait S3IntegrationSpec
         .single(ByteString(hugeString))
         .runWith(
           S3.multipartUpload(defaultBucket, objectKey, metaHeaders = MetaHeaders(metaHeaders))
-            .withAttributes(attributes)
-        )
+            .withAttributes(attributes))
 
     val multipartUploadResult = result.futureValue
     multipartUploadResult.bucket shouldBe defaultBucket
@@ -243,8 +236,7 @@ trait S3IntegrationSpec
       upload <- source
         .runWith(
           S3.multipartUpload(defaultBucket, objectKey, metaHeaders = MetaHeaders(metaHeaders))
-            .withAttributes(attributes)
-        )
+            .withAttributes(attributes))
       download <- S3
         .getObject(defaultBucket, objectKey)
         .withAttributes(attributes)
@@ -272,8 +264,7 @@ trait S3IntegrationSpec
       upload <- source
         .runWith(
           S3.multipartUpload(defaultBucket, objectKey, metaHeaders = MetaHeaders(metaHeaders))
-            .withAttributes(attributes)
-        )
+            .withAttributes(attributes))
       download <- S3
         .getObject(defaultBucket, objectKey)
         .withAttributes(attributes)
@@ -294,28 +285,23 @@ trait S3IntegrationSpec
   }
 
   it should "upload, download and delete with spaces in the key in non us-east-1 zone" in uploadDownloadAndDeleteInOtherRegionCase(
-    "test folder/test file.txt"
-  )
+    "test folder/test file.txt")
 
   // we want ASCII and other UTF-8 characters!
   it should "upload, download and delete with special characters in the key in non us-east-1 zone" in uploadDownloadAndDeleteInOtherRegionCase(
-    "føldęrü/1234()[]><!? .TXT"
-  )
+    "føldęrü/1234()[]><!? .TXT")
 
   it should "upload, download and delete with `+` character in the key in non us-east-1 zone" in uploadDownloadAndDeleteInOtherRegionCase(
-    "1 + 2 = 3"
-  )
+    "1 + 2 = 3")
 
   it should "upload, copy, download the copy, and delete" in uploadCopyDownload(
     "original/file.txt",
-    "copy/file.txt"
-  )
+    "copy/file.txt")
 
   // NOTE: MinIO currently has problems copying files with spaces.
   it should "upload, copy, download the copy, and delete with special characters in key" in uploadCopyDownload(
     "original/føldęrü/1234()[]><!?.TXT",
-    "copy/1 + 2 = 3"
-  )
+    "copy/1 + 2 = 3")
 
   it should "upload 2 files with common prefix, 1 with different prefix and delete by prefix" in {
     val sourceKey1 = "original/file1.txt"
@@ -363,44 +349,46 @@ trait S3IntegrationSpec
     val two = ByteString("two")
     val three = ByteString("three")
 
-    val results = for {
-      // Clean the bucket just incase there is residual data in there
-      _ <- S3
-        .deleteBucketContents(bucketWithVersioning, deleteAllVersions = true)
-        .withAttributes(attributes)
-        .runWith(Sink.ignore)
-      _ <- S3
-        .putObject(bucketWithVersioning, versionKey, Source.single(one), one.length, s3Headers = S3Headers())
-        .withAttributes(attributes)
-        .runWith(Sink.ignore)
-      _ <- S3
-        .putObject(bucketWithVersioning, versionKey, Source.single(two), two.length, s3Headers = S3Headers())
-        .withAttributes(attributes)
-        .runWith(Sink.ignore)
-      _ <- S3
-        .putObject(bucketWithVersioning, versionKey, Source.single(three), three.length, s3Headers = S3Headers())
-        .withAttributes(attributes)
-        .runWith(Sink.ignore)
-      versionsBeforeDelete <- S3
-        .listObjectVersions(bucketWithVersioning, None)
-        .withAttributes(attributes)
-        .runWith(Sink.seq)
-      _ <- S3
-        .deleteBucketContents(bucketWithVersioning, deleteAllVersions = true)
-        .withAttributes(attributes)
-        .runWith(Sink.ignore)
-      versionsAfterDelete <- S3
-        .listObjectVersions(bucketWithVersioning, None)
-        .withAttributes(attributes)
-        .runWith(Sink.seq)
-      listBucketContentsAfterDelete <- S3
-        .listBucket(bucketWithVersioning, None)
-        .withAttributes(attributes)
-        .runWith(Sink.seq)
+    val results =
+      for {
+        // Clean the bucket just incase there is residual data in there
+        _ <- S3
+          .deleteBucketContents(bucketWithVersioning, deleteAllVersions = true)
+          .withAttributes(attributes)
+          .runWith(Sink.ignore)
+        _ <- S3
+          .putObject(bucketWithVersioning, versionKey, Source.single(one), one.length, s3Headers = S3Headers())
+          .withAttributes(attributes)
+          .runWith(Sink.ignore)
+        _ <- S3
+          .putObject(bucketWithVersioning, versionKey, Source.single(two), two.length, s3Headers = S3Headers())
+          .withAttributes(attributes)
+          .runWith(Sink.ignore)
+        _ <- S3
+          .putObject(bucketWithVersioning, versionKey, Source.single(three), three.length, s3Headers = S3Headers())
+          .withAttributes(attributes)
+          .runWith(Sink.ignore)
+        versionsBeforeDelete <- S3
+          .listObjectVersions(bucketWithVersioning, None)
+          .withAttributes(attributes)
+          .runWith(Sink.seq)
+        _ <- S3
+          .deleteBucketContents(bucketWithVersioning, deleteAllVersions = true)
+          .withAttributes(attributes)
+          .runWith(Sink.ignore)
+        versionsAfterDelete <- S3
+          .listObjectVersions(bucketWithVersioning, None)
+          .withAttributes(attributes)
+          .runWith(Sink.seq)
+        listBucketContentsAfterDelete <- S3
+          .listBucket(bucketWithVersioning, None)
+          .withAttributes(attributes)
+          .runWith(Sink.seq)
 
-    } yield (versionsBeforeDelete.flatMap { case (versions, _) => versions }, versionsAfterDelete.flatMap {
-      case (versions, _) => versions
-    }, listBucketContentsAfterDelete)
+      } yield (versionsBeforeDelete.flatMap { case (versions, _) => versions },
+        versionsAfterDelete.flatMap {
+          case (versions, _) => versions
+        }, listBucketContentsAfterDelete)
 
     val (versionsBeforeDelete, versionsAfterDelete, bucketContentsAfterDelete) = results.futureValue
 
@@ -418,10 +406,10 @@ trait S3IntegrationSpec
     val results = for {
       _ <- S3
         .putObject(defaultBucket,
-                   objectKey,
-                   data,
-                   bytes.length,
-                   s3Headers = S3Headers().withMetaHeaders(MetaHeaders(metaHeaders)))
+          objectKey,
+          data,
+          bytes.length,
+          s3Headers = S3Headers().withMetaHeaders(MetaHeaders(metaHeaders)))
         .withAttributes(attributes)
         .runWith(Sink.ignore)
       result <- S3.listObjectVersions(defaultBucket, None).withAttributes(attributes).runWith(Sink.seq)
@@ -465,9 +453,9 @@ trait S3IntegrationSpec
 
   @tailrec
   final def createStringCollectionWithMinChunkSizeRec(numberOfChunks: Int,
-                                                      stringAcc: BigInt = BigInt(0),
-                                                      currentChunk: Int = 0,
-                                                      result: Vector[ByteString] = Vector.empty): Vector[ByteString] = {
+      stringAcc: BigInt = BigInt(0),
+      currentChunk: Int = 0,
+      result: Vector[ByteString] = Vector.empty): Vector[ByteString] = {
 
     if (currentChunk == numberOfChunks)
       result
@@ -477,14 +465,14 @@ trait S3IntegrationSpec
       result.lift(currentChunk) match {
         case Some(currentString) =>
           val newString = ByteString(s"\n${newAcc.toString()}")
-          //TODO: Performance here can be improved by using the same technique as in
-          //createStringCollectionContextWithMinChunkSizeRec to keep track of the current string size in bytes
+          // TODO: Performance here can be improved by using the same technique as in
+          // createStringCollectionContextWithMinChunkSizeRec to keep track of the current string size in bytes
           if (currentString.toArray.length < S3.MinChunkSize) {
             val appendedString = currentString ++ newString
             createStringCollectionWithMinChunkSizeRec(numberOfChunks,
-                                                      newAcc,
-                                                      currentChunk,
-                                                      result.updated(currentChunk, appendedString))
+              newAcc,
+              currentChunk,
+              result.updated(currentChunk, appendedString))
           } else {
             val newChunk = currentChunk + 1
             val newResult = {
@@ -519,7 +507,7 @@ trait S3IntegrationSpec
   case object AbortException extends Exception("Aborting multipart upload")
 
   def createSlowSource(data: immutable.Seq[ByteString],
-                       killSwitch: Option[SharedKillSwitch]): Source[ByteString, NotUsed] = {
+      killSwitch: Option[SharedKillSwitch]): Source[ByteString, NotUsed] = {
     val base = Source(data)
       .throttle(1, 10.seconds)
 
@@ -597,8 +585,7 @@ trait S3IntegrationSpec
     val multiPartUpload =
       slowSource
         .toMat(S3.multipartUpload(defaultBucket, sourceKey).withAttributes(attributes))(
-          Keep.right
-        )
+          Keep.right)
         .run()
 
     val results = for {
@@ -620,17 +607,14 @@ trait S3IntegrationSpec
       _ <- Source(remainingData)
         .toMat(
           S3.resumeMultipartUpload(defaultBucket, sourceKey, uploadId, parts.map(_.toPart))
-            .withAttributes(attributes)
-        )(
-          Keep.right
-        )
+            .withAttributes(attributes))(
+          Keep.right)
         .run()
 
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
       downloaded <- akka.pattern.after(5.seconds)(
-        S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq)
-      )
+        S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq))
 
       _ <- S3.deleteObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.head)
     } yield downloaded
@@ -655,8 +639,7 @@ trait S3IntegrationSpec
     val multiPartUpload =
       slowSource
         .toMat(S3.multipartUpload(defaultBucket, sourceKey).withAttributes(attributes))(
-          Keep.right
-        )
+          Keep.right)
         .run()
 
     val results = for {
@@ -678,8 +661,7 @@ trait S3IntegrationSpec
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
       downloaded <- akka.pattern.after(5.seconds)(
-        S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq)
-      )
+        S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq))
       _ <- S3.deleteObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.head)
     } yield downloaded
 
@@ -696,8 +678,7 @@ trait S3IntegrationSpec
       stringAcc: BigInt = BigInt(0),
       currentChunk: Int = 0,
       currentChunkSize: Int = 0,
-      result: Vector[Vector[(ByteString, BigInt)]] = Vector.empty
-  ): Vector[Vector[(ByteString, BigInt)]] = {
+      result: Vector[Vector[(ByteString, BigInt)]] = Vector.empty): Vector[Vector[(ByteString, BigInt)]] = {
 
     if (currentChunk == numberOfChunks)
       result
@@ -711,10 +692,10 @@ trait S3IntegrationSpec
             val newChunkSize = currentChunkSize + newString.toArray.length
             val newEntry = currentStrings :+ ((newString, newAcc))
             createStringCollectionContextWithMinChunkSizeRec(numberOfChunks,
-                                                             newAcc,
-                                                             currentChunk,
-                                                             newChunkSize,
-                                                             result.updated(currentChunk, newEntry))
+              newAcc,
+              currentChunk,
+              newChunkSize,
+              result.updated(currentChunk, newEntry))
           } else {
             val newChunk = currentChunk + 1
             val (newResult, newChunkSize) = {
@@ -731,10 +712,10 @@ trait S3IntegrationSpec
           val initial = ByteString("1")
           val firstResult = Vector(Vector((initial, newAcc)))
           createStringCollectionContextWithMinChunkSizeRec(numberOfChunks,
-                                                           newAcc,
-                                                           currentChunk,
-                                                           initial.toArray.length,
-                                                           firstResult)
+            newAcc,
+            currentChunk,
+            initial.toArray.length,
+            firstResult)
       }
     }
   }
@@ -771,16 +752,13 @@ trait S3IntegrationSpec
       _ <- source
         .toMat(
           S3.multipartUploadWithContext[BigInt](defaultBucket, sourceKey, collectContextSink, chunkingParallelism = 1)
-            .withAttributes(attributes)
-        )(
-          Keep.right
-        )
+            .withAttributes(attributes))(
+          Keep.right)
         .run()
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
       downloaded <- akka.pattern.after(5.seconds)(
-        S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq)
-      )
+        S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq))
       _ <- S3.deleteObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.head)
 
     } yield downloaded
@@ -894,8 +872,7 @@ trait S3IntegrationSpec
 
   it should "only upload single chunk when exact chunk is followed by an empty ByteString" in {
     val source: Source[ByteString, Any] = Source[ByteString](
-      chunk :: ByteString.empty :: Nil
-    )
+      chunk :: ByteString.empty :: Nil)
 
     uploadAndAndCheckParts(source, 1)
   }
@@ -912,8 +889,7 @@ trait S3IntegrationSpec
           .empty[ByteString]
           .runWith(
             S3.multipartUpload(defaultBucket, objectKey, chunkSize = S3.MinChunkSize)
-              .withAttributes(attributes)
-          )
+              .withAttributes(attributes))
         _ <- S3.deleteObject(defaultBucket, objectKey).withAttributes(attributes).runWith(Sink.head)
       } yield upload
 
@@ -925,8 +901,7 @@ trait S3IntegrationSpec
       for {
         _ <- source.runWith(
           S3.multipartUpload(defaultBucket, objectKey, chunkSize = S3.MinChunkSize)
-            .withAttributes(attributes)
-        )
+            .withAttributes(attributes))
         metadata <- S3
           .getObjectMetadata(defaultBucket, objectKey)
           .withAttributes(attributes)
@@ -945,8 +920,7 @@ trait S3IntegrationSpec
       upload <- source
         .runWith(
           S3.multipartUpload(bucketWithDots, objectKey, metaHeaders = MetaHeaders(metaHeaders))
-            .withAttributes(otherRegionSettingsPathStyleAccess)
-        )
+            .withAttributes(otherRegionSettingsPathStyleAccess))
       download <- S3
         .getObject(bucketWithDots, objectKey)
         .withAttributes(otherRegionSettingsPathStyleAccess)
@@ -1038,8 +1012,7 @@ class MinioS3IntegrationSpec
     .withS3RegionProvider(
       new AwsRegionProvider {
         val getRegion: Region = Region.US_EAST_1
-      }
-    )
+      })
     .withAccessStyle(PathAccessStyle)
 
   override def beforeAll(): Unit = {
@@ -1052,18 +1025,13 @@ class MinioS3IntegrationSpec
           _.withS3RegionProvider(
             new AwsRegionProvider {
               val getRegion: Region = Region.EU_CENTRAL_1
-            }
-          )
-        )
-      )
+            })))
       _ <- S3.makeBucket(defaultBucket)(
         system,
-        attributes
-      )
+        attributes)
       _ <- S3.makeBucket(bucketWithVersioning)(
         system,
-        attributes
-      )
+        attributes)
     } yield ()
     Await.result(makeBuckets, 10.seconds)
   }

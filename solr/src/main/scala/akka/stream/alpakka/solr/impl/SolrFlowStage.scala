@@ -32,8 +32,8 @@ private[solr] final class SolrFlowStage[T, C](
     collection: String,
     client: SolrClient,
     settings: SolrUpdateSettings,
-    messageBinder: T => SolrInputDocument
-) extends GraphStage[FlowShape[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]]] {
+    messageBinder: T => SolrInputDocument)
+    extends GraphStage[FlowShape[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]]] {
 
   private val in = Inlet[immutable.Seq[WriteMessage[T, C]]]("messages")
   private val out = Outlet[immutable.Seq[WriteResult[T, C]]]("result")
@@ -56,8 +56,7 @@ private final class SolrFlowLogic[T, C](
     out: Outlet[immutable.Seq[WriteResult[T, C]]],
     shape: FlowShape[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]],
     settings: SolrUpdateSettings,
-    messageBinder: T => SolrInputDocument
-) extends GraphStageLogic(shape)
+    messageBinder: T => SolrInputDocument) extends GraphStageLogic(shape)
     with OutHandler
     with InHandler
     with StageLogging {
@@ -76,7 +75,7 @@ private final class SolrFlowLogic[T, C](
       case NonFatal(ex) =>
         decider(ex) match {
           case Supervision.Stop => failStage(ex)
-          case _ => tryPull() // for resume and restart strategies tryPull
+          case _                => tryPull() // for resume and restart strategies tryPull
         }
     }
   }
@@ -159,17 +158,17 @@ private final class SolrFlowLogic[T, C](
     @tailrec
     def send(toSend: immutable.Seq[WriteMessage[T, C]]): Option[UpdateResponse] = {
       val operation = toSend.head.operation
-      //Just take a subset of this operation
+      // Just take a subset of this operation
       val (current, remaining) = toSend.span { m =>
         m.operation == operation
       }
-      //send this subset
+      // send this subset
       val response = operation match {
-        case Upsert => Option(updateBulkToSolr(current))
-        case AtomicUpdate => Option(atomicUpdateBulkToSolr(current))
-        case DeleteByIds => Option(deleteBulkToSolrByIds(current))
+        case Upsert        => Option(updateBulkToSolr(current))
+        case AtomicUpdate  => Option(atomicUpdateBulkToSolr(current))
+        case DeleteByIds   => Option(deleteBulkToSolrByIds(current))
         case DeleteByQuery => Option(deleteEachByQuery(current))
-        case PassThrough => None
+        case PassThrough   => None
       }
       if (remaining.nonEmpty) {
         send(remaining)
@@ -178,20 +177,19 @@ private final class SolrFlowLogic[T, C](
       }
     }
 
-    val response = if (messages.nonEmpty) send(messages).fold(0) { _.getStatus } else 0
+    val response = if (messages.nonEmpty) send(messages).fold(0) { _.getStatus }
+    else 0
 
     log.debug("Handle the response with {}", response)
-    val results = messages.map(
-      m =>
-        WriteResult(m.idField,
-                    m.idFieldValue,
-                    m.routingFieldValue,
-                    m.query,
-                    m.source,
-                    m.updates,
-                    m.passThrough,
-                    response)
-    )
+    val results = messages.map(m =>
+      WriteResult(m.idField,
+        m.idFieldValue,
+        m.routingFieldValue,
+        m.query,
+        m.source,
+        m.updates,
+        m.passThrough,
+        response))
     emit(out, results)
   }
 }

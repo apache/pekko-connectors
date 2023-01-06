@@ -9,21 +9,21 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.alpakka.unixdomainsocket.UnixSocketAddress
 import akka.stream.alpakka.unixdomainsocket.scaladsl.UnixDomainSocket
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.stream.{Materializer, OverflowStrategy}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import akka.stream.{ Materializer, OverflowStrategy }
 import akka.testkit._
 import akka.util.ByteString
 import org.scalatest._
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import java.io.IOException
-import java.nio.file.{Files, Paths}
+import java.nio.file.{ Files, Paths }
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future, Promise}
-import scala.util.{Failure, Success}
+import scala.concurrent.{ Await, ExecutionContext, Future, Promise }
+import scala.util.{ Failure, Success }
 
 class UnixDomainSocketSpec
     extends TestKit(ActorSystem("UnixDomainSocketSpec"))
@@ -44,9 +44,9 @@ class UnixDomainSocketSpec
 
   "A Unix Domain Socket" should {
     "receive some bytes" in {
-      //#binding
+      // #binding
       val path: java.nio.file.Path = // ...
-        //#binding
+        // #binding
         dir.resolve("sock1")
       val received = Promise[ByteString]()
 
@@ -54,12 +54,12 @@ class UnixDomainSocketSpec
         .buffer(1, OverflowStrategy.backpressure)
         .wireTap(bytes => received.success(bytes))
 
-      //#binding
+      // #binding
       val binding: Future[UnixDomainSocket.ServerBinding] =
         UnixDomainSocket().bindAndHandle(serverSideFlow, path)
-      //#binding
+      // #binding
 
-      //#outgoingConnection
+      // #outgoingConnection
       val sendBytes = ByteString("Hello")
       binding.flatMap { _ => // connection
         Source
@@ -67,7 +67,7 @@ class UnixDomainSocketSpec
           .via(UnixDomainSocket().outgoingConnection(path))
           .runWith(Sink.ignore)
       }
-      //#outgoingConnection
+      // #outgoingConnection
       received.future.futureValue shouldBe sendBytes
       binding.futureValue.unbind().futureValue should be(())
     }
@@ -121,8 +121,7 @@ class UnixDomainSocketSpec
         UnixDomainSocket().bindAndHandle(
           Flow.fromFunction[ByteString, ByteString](identity).wireTap(_ => receiving.success(Done)).delay(1.second),
           path,
-          halfClose = true
-        )
+          halfClose = true)
 
       val result = binding.flatMap { connection =>
         Source

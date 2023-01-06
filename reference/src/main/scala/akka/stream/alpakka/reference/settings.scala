@@ -5,7 +5,7 @@
 package akka.stream.alpakka.reference
 
 // rename Java imports if the name clashes with the Scala name
-import java.time.{Duration => JavaDuration}
+import java.time.{ Duration => JavaDuration }
 import java.util.Optional
 import java.util.function.Predicate
 
@@ -23,8 +23,7 @@ final class SourceSettings private (
     val clientId: String,
     val traceId: Option[String] = None,
     val authentication: Authentication = Authentication.None,
-    val pollInterval: FiniteDuration = 5.seconds
-) {
+    val pollInterval: FiniteDuration = 5.seconds) {
 
   def withClientId(clientId: String): SourceSettings = copy(clientId = clientId)
 
@@ -74,9 +73,9 @@ final class SourceSettings private (
    * Private copy method for internal use only.
    */
   private def copy(clientId: String = clientId,
-                   traceId: Option[String] = traceId,
-                   authentication: Authentication = authentication,
-                   pollInterval: FiniteDuration = pollInterval) =
+      traceId: Option[String] = traceId,
+      authentication: Authentication = authentication,
+      pollInterval: FiniteDuration = pollInterval) =
     new SourceSettings(clientId, traceId, authentication, pollInterval)
 
   override def toString: String =
@@ -118,8 +117,7 @@ object Authentication {
   def createNone: None = None
 
   final class Provided private (
-      verifier: String => Boolean = _ => false
-  ) extends Authentication {
+      verifier: String => Boolean = _ => false) extends Authentication {
 
     def withVerifier(verifier: String => Boolean): Provided =
       copy(verifier = verifier)

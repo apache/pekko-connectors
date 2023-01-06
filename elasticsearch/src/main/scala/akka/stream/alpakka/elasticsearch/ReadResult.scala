@@ -15,8 +15,8 @@ import scala.compat.java8.OptionConverters._
  * [[akka.stream.alpakka.elasticsearch.testkit.MessageFactory]].
  */
 final class ReadResult[T] @InternalApi private[elasticsearch] (val id: String,
-                                                               val source: T,
-                                                               val version: Option[Long]) {
+    val source: T,
+    val version: Option[Long]) {
 
   /** Java API */
   def getVersion: java.util.Optional[Long] = version.asJava

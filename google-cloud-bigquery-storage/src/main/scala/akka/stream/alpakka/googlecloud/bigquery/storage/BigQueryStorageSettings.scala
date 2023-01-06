@@ -10,8 +10,7 @@ import com.typesafe.config.Config
 final class BigQueryStorageSettings private (
     val host: String,
     val port: Int,
-    val rootCa: Option[String] = None
-) {
+    val rootCa: Option[String] = None) {
 
   /**
    * Endpoint hostname where the gRPC connection is made.
@@ -62,7 +61,7 @@ object BigQueryStorageSettings {
     val setRootCa = (bigQueryConfig: BigQueryStorageSettings) =>
       config.getString("rootCa") match {
         case fileName if fileName != "none" => bigQueryConfig.withRootCa(fileName)
-        case _ => bigQueryConfig
+        case _                              => bigQueryConfig
       }
 
     Seq(setRootCa).foldLeft(bigQueryConfig) {

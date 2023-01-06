@@ -4,31 +4,30 @@
 
 package akka.stream.alpakka.pravega.impl
 
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging}
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import akka.Done
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.alpakka.pravega.{PravegaEvent, ReaderSettings}
+import akka.stream.alpakka.pravega.{ PravegaEvent, ReaderSettings }
 import io.pravega.client.ClientConfig
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 import scala.concurrent.duration.DurationLong
-import io.pravega.client.stream.{EventStreamReader, ReaderGroup}
+import io.pravega.client.stream.{ EventStreamReader, ReaderGroup }
 
 import scala.util.control.NonFatal
 import akka.stream.ActorAttributes
 import akka.stream.stage.AsyncCallback
 
 import java.util.UUID
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 @InternalApi private final class PravegaSourcesStageLogic[A](
     shape: SourceShape[PravegaEvent[A]],
     readerGroup: ReaderGroup,
     val readerSettings: ReaderSettings[A],
-    startupPromise: Promise[Done]
-) extends GraphStageLogic(shape)
+    startupPromise: Promise[Done]) extends GraphStageLogic(shape)
     with PravegaCapabilities
     with StageLogging {
 
@@ -65,8 +64,7 @@ import scala.util.{Failure, Success, Try}
         }
       }
 
-    }
-  )
+    })
 
   override def preStart(): Unit = {
     log.debug("Start consuming {}...", readerGroup.toString)
@@ -85,8 +83,7 @@ import scala.util.{Failure, Success, Try}
       settings.readerId.getOrElse(UUID.randomUUID().toString),
       readerGroup.getGroupName,
       settings.serializer,
-      settings.readerConfig
-    )
+      settings.readerConfig)
 
   override def postStop(): Unit = {
     log.debug("Stopping reader")
@@ -109,8 +106,7 @@ import scala.util.{Failure, Success, Try}
 
 @InternalApi private[pravega] final class PravegaSource[A](
     readerGroup: ReaderGroup,
-    settings: ReaderSettings[A]
-) extends GraphStageWithMaterializedValue[SourceShape[PravegaEvent[A]], Future[Done]] {
+    settings: ReaderSettings[A]) extends GraphStageWithMaterializedValue[SourceShape[PravegaEvent[A]], Future[Done]] {
 
   private val out: Outlet[PravegaEvent[A]] = Outlet(Logging.simpleName(this) + ".out")
 
@@ -120,16 +116,14 @@ import scala.util.{Failure, Success, Try}
     super.initialAttributes and Attributes.name(Logging.simpleName(this)) and ActorAttributes.IODispatcher
 
   override def createLogicAndMaterializedValue(
-      inheritedAttributes: Attributes
-  ): (GraphStageLogic, Future[Done]) = {
+      inheritedAttributes: Attributes): (GraphStageLogic, Future[Done]) = {
     val startupPromise = Promise[Done]()
 
     val logic = new PravegaSourcesStageLogic[A](
       shape,
       readerGroup,
       settings,
-      startupPromise
-    )
+      startupPromise)
 
     (logic, startupPromise.future)
 

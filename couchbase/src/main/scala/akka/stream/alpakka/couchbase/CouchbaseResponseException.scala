@@ -20,6 +20,5 @@ private[akka] object CouchbaseResponseException {
   def apply(json: JsonObject): CouchbaseResponseException =
     new CouchbaseResponseException(
       msg = if (json.containsKey("msg")) json.getString("msg") else "",
-      code = if (json.containsKey("code")) Some(json.getInt("code")) else None
-    )
+      code = if (json.containsKey("code")) Some(json.getInt("code")) else None)
 }

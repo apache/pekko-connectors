@@ -5,7 +5,7 @@
 package docs.scaladsl
 
 import akka.stream.alpakka.jms._
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.scalatest.OptionValues
 
@@ -18,7 +18,7 @@ class JmsSettingsSpec extends JmsSpec with OptionValues {
   "Jms producer" should {
     "have producer settings" in {
 
-      //#retry-settings-case-class
+      // #retry-settings-case-class
       // reiterating defaults from reference.conf
       val retrySettings = ConnectionRetrySettings(system)
         .withConnectTimeout(10.seconds)
@@ -26,24 +26,24 @@ class JmsSettingsSpec extends JmsSpec with OptionValues {
         .withBackoffFactor(2.0d)
         .withMaxBackoff(1.minute)
         .withMaxRetries(10)
-      //#retry-settings-case-class
+      // #retry-settings-case-class
 
-      //#send-retry-settings
+      // #send-retry-settings
       // reiterating defaults from reference.conf
       val sendRetrySettings = SendRetrySettings(system)
         .withInitialRetry(20.millis)
         .withBackoffFactor(1.5d)
         .withMaxBackoff(500.millis)
         .withMaxRetries(10)
-      //#send-retry-settings
+      // #send-retry-settings
 
-      //#producer-settings
+      // #producer-settings
       val producerConfig: Config = system.settings.config.getConfig(JmsProducerSettings.configPath)
       val settings = JmsProducerSettings(producerConfig, connectionFactory)
         .withTopic("target-topic")
         .withCredentials(Credentials("username", "password"))
         .withSessionCount(1)
-      //#producer-settings
+      // #producer-settings
 
       val retrySettings2 = ConnectionRetrySettings(system)
       retrySettings.toString should be(retrySettings2.toString)
@@ -70,7 +70,7 @@ class JmsSettingsSpec extends JmsSpec with OptionValues {
         .withMaxBackoff(1.minute)
         .withMaxRetries(10)
 
-      //#consumer-settings
+      // #consumer-settings
       val consumerConfig: Config = system.settings.config.getConfig(JmsConsumerSettings.configPath)
       // reiterating defaults from reference.conf
       val settings = JmsConsumerSettings(consumerConfig, connectionFactory)
@@ -80,7 +80,7 @@ class JmsSettingsSpec extends JmsSpec with OptionValues {
         .withSessionCount(1)
         .withBufferSize(100)
         .withAckTimeout(1.second)
-      //#consumer-settings
+      // #consumer-settings
 
       val retrySettings2 = ConnectionRetrySettings(system)
       retrySettings.toString should be(retrySettings2.toString)
@@ -150,13 +150,13 @@ class JmsSettingsSpec extends JmsSpec with OptionValues {
   "Browse settings" should {
     "read from config" in {
       val retrySettings = ConnectionRetrySettings(system)
-      //#browse-settings
+      // #browse-settings
       val browseConfig: Config = system.settings.config.getConfig(JmsBrowseSettings.configPath)
       val settings = JmsBrowseSettings(browseConfig, connectionFactory)
         .withQueue("target-queue")
         .withCredentials(Credentials("username", "password"))
         .withConnectionRetrySettings(retrySettings)
-      //#browse-settings
+      // #browse-settings
 
       val settings2 = JmsBrowseSettings(browseConfig, settings.connectionFactory)
         .withQueue("target-queue")

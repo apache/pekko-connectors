@@ -4,14 +4,14 @@
 
 package akka.stream.alpakka.ftp
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.stream.IOResult
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.testkit.TestKit
 import akka.util.ByteString
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Args, BeforeAndAfter, BeforeAndAfterAll, Inside, Status, TestSuite, TestSuiteMixin}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
+import org.scalatest.{ Args, BeforeAndAfter, BeforeAndAfterAll, Inside, Status, TestSuite, TestSuiteMixin }
 
 import scala.concurrent.Future
 import org.scalatest.matchers.should.Matchers
@@ -37,18 +37,15 @@ trait BaseSpec
   protected def listFilesWithFilter(
       basePath: String,
       branchSelector: FtpFile => Boolean,
-      emitTraversedDirectories: Boolean = false
-  ): Source[FtpFile, NotUsed]
+      emitTraversedDirectories: Boolean = false): Source[FtpFile, NotUsed]
 
   protected def retrieveFromPath(
       path: String,
-      fromRoot: Boolean = false
-  ): Source[ByteString, Future[IOResult]]
+      fromRoot: Boolean = false): Source[ByteString, Future[IOResult]]
 
   protected def retrieveFromPathWithOffset(
       path: String,
-      offset: Long
-  ): Source[ByteString, Future[IOResult]]
+      offset: Long): Source[ByteString, Future[IOResult]]
 
   protected def storeToPath(path: String, append: Boolean): Sink[ByteString, Future[IOResult]]
 

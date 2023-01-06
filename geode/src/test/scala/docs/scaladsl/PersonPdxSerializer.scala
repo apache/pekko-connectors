@@ -7,7 +7,7 @@ package docs.scaladsl
 import java.util.Date
 
 import akka.stream.alpakka.geode.AkkaPdxSerializer
-import org.apache.geode.pdx.{PdxReader, PdxWriter}
+import org.apache.geode.pdx.{ PdxReader, PdxWriter }
 
 //#person-pdx-serializer
 object PersonPdxSerializer extends AkkaPdxSerializer[Person] {

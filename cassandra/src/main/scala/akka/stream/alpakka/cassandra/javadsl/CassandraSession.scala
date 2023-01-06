@@ -4,10 +4,10 @@
 
 package akka.stream.alpakka.cassandra.javadsl
 
-import java.util.{List => JList}
+import java.util.{ List => JList }
 import java.util.Optional
-import java.util.concurrent.{CompletionStage, Executor}
-import java.util.function.{Function => JFunction}
+import java.util.concurrent.{ CompletionStage, Executor }
+import java.util.function.{ Function => JFunction }
 
 import scala.annotation.varargs
 import scala.jdk.CollectionConverters._
@@ -16,11 +16,11 @@ import scala.compat.java8.OptionConverters._
 import scala.concurrent.ExecutionContext
 import akka.Done
 import akka.NotUsed
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.annotation.InternalApi
 import akka.event.LoggingAdapter
 import akka.stream.alpakka.cassandra.CassandraServerMetaData
-import akka.stream.alpakka.cassandra.{scaladsl, CqlSessionProvider}
+import akka.stream.alpakka.cassandra.{ scaladsl, CqlSessionProvider }
 import akka.stream.javadsl.Source
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql.BatchStatement
@@ -46,32 +46,31 @@ final class CassandraSession(@InternalApi private[akka] val delegate: scaladsl.C
    * Use this constructor if you want to create a stand-alone `CassandraSession`.
    */
   def this(system: ActorSystem,
-           sessionProvider: CqlSessionProvider,
-           executionContext: ExecutionContext,
-           log: LoggingAdapter,
-           metricsCategory: String,
-           init: JFunction[CqlSession, CompletionStage[Done]],
-           onClose: java.lang.Runnable) =
+      sessionProvider: CqlSessionProvider,
+      executionContext: ExecutionContext,
+      log: LoggingAdapter,
+      metricsCategory: String,
+      init: JFunction[CqlSession, CompletionStage[Done]],
+      onClose: java.lang.Runnable) =
     this(
       new scaladsl.CassandraSession(system,
-                                    sessionProvider,
-                                    executionContext,
-                                    log,
-                                    metricsCategory,
-                                    session => init.apply(session).toScala,
-                                    () => onClose.run())
-    )
+        sessionProvider,
+        executionContext,
+        log,
+        metricsCategory,
+        session => init.apply(session).toScala,
+        () => onClose.run()))
 
   /**
    * Use this constructor if you want to create a stand-alone `CassandraSession`.
    */
   def this(system: ClassicActorSystemProvider,
-           sessionProvider: CqlSessionProvider,
-           executionContext: ExecutionContext,
-           log: LoggingAdapter,
-           metricsCategory: String,
-           init: JFunction[CqlSession, CompletionStage[Done]],
-           onClose: java.lang.Runnable) =
+      sessionProvider: CqlSessionProvider,
+      executionContext: ExecutionContext,
+      log: LoggingAdapter,
+      metricsCategory: String,
+      init: JFunction[CqlSession, CompletionStage[Done]],
+      onClose: java.lang.Runnable) =
     this(system.classicSystem, sessionProvider, executionContext, log, metricsCategory, init, onClose)
 
   implicit private val ec = delegate.ec

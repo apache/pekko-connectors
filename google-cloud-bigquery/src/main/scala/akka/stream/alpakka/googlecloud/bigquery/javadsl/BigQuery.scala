@@ -7,37 +7,37 @@ package akka.stream.alpakka.googlecloud.bigquery.javadsl
 import akka.actor.ClassicActorSystemProvider
 import akka.annotation.ApiMayChange
 import akka.http.javadsl.marshalling.Marshaller
-import akka.http.javadsl.model.{HttpEntity, RequestEntity}
+import akka.http.javadsl.model.{ HttpEntity, RequestEntity }
 import akka.http.javadsl.unmarshalling.Unmarshaller
-import akka.http.scaladsl.{model => sm}
+import akka.http.scaladsl.{ model => sm }
 import akka.japi.Pair
 import akka.stream.alpakka.google.GoogleSettings
 import akka.stream.alpakka.google.javadsl.Google
 import akka.stream.alpakka.googlecloud.bigquery.InsertAllRetryPolicy
 import akka.stream.alpakka.googlecloud.bigquery.model.Dataset
-import akka.stream.alpakka.googlecloud.bigquery.model.{Job, JobCancelResponse, JobReference}
-import akka.stream.alpakka.googlecloud.bigquery.model.{QueryRequest, QueryResponse}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ Job, JobCancelResponse, JobReference }
+import akka.stream.alpakka.googlecloud.bigquery.model.{ QueryRequest, QueryResponse }
 import akka.stream.alpakka.googlecloud.bigquery.model.{
   TableDataInsertAllRequest,
   TableDataInsertAllResponse,
   TableDataListResponse
 }
-import akka.stream.alpakka.googlecloud.bigquery.model.{Table, TableListResponse, TableReference, TableSchema}
-import akka.stream.alpakka.googlecloud.bigquery.scaladsl.{BigQuery => ScalaBigQuery}
-import akka.stream.javadsl.{Flow, Sink, Source}
-import akka.stream.{scaladsl => ss}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ Table, TableListResponse, TableReference, TableSchema }
+import akka.stream.alpakka.googlecloud.bigquery.scaladsl.{ BigQuery => ScalaBigQuery }
+import akka.stream.javadsl.{ Flow, Sink, Source }
+import akka.stream.{ scaladsl => ss }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 
 import java.time.Duration
 import java.util.concurrent.CompletionStage
-import java.{lang, util}
+import java.{ lang, util }
 
 import scala.annotation.nowarn
 import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
-import scala.concurrent.duration.{FiniteDuration, MILLISECONDS}
+import scala.concurrent.duration.{ FiniteDuration, MILLISECONDS }
 
 /**
  * Java API to interface with BigQuery.
@@ -55,8 +55,8 @@ object BigQuery extends Google {
    * @return a [[akka.stream.javadsl.Source]] that emits each [[akka.stream.alpakka.googlecloud.bigquery.model.Dataset]]
    */
   def listDatasets(maxResults: util.OptionalInt,
-                   all: util.Optional[lang.Boolean],
-                   filter: util.Map[String, String]): Source[Dataset, NotUsed] =
+      all: util.Optional[lang.Boolean],
+      filter: util.Map[String, String]): Source[Dataset, NotUsed] =
     ScalaBigQuery.datasets(maxResults.asScala, all.asScala.map(_.booleanValue), filter.asScala.toMap).asJava
 
   /**
@@ -69,8 +69,8 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.Dataset]]
    */
   def getDataset(datasetId: String,
-                 settings: GoogleSettings,
-                 system: ClassicActorSystemProvider): CompletionStage[Dataset] =
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Dataset] =
     ScalaBigQuery.dataset(datasetId)(system, settings).toJava
 
   /**
@@ -83,8 +83,8 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.Dataset]]
    */
   def createDataset(datasetId: String,
-                    settings: GoogleSettings,
-                    system: ClassicActorSystemProvider): CompletionStage[Dataset] =
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Dataset] =
     ScalaBigQuery.createDataset(datasetId)(system, settings).toJava
 
   /**
@@ -97,8 +97,8 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.Dataset]]
    */
   def createDataset(dataset: Dataset,
-                    settings: GoogleSettings,
-                    system: ClassicActorSystemProvider): CompletionStage[Dataset] =
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Dataset] =
     ScalaBigQuery.createDataset(dataset)(system, settings).toJava
 
   /**
@@ -111,9 +111,9 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing [[akka.Done]]
    */
   def deleteDataset(datasetId: String,
-                    deleteContents: Boolean,
-                    settings: GoogleSettings,
-                    system: ClassicActorSystemProvider): CompletionStage[Done] =
+      deleteContents: Boolean,
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
     ScalaBigQuery.deleteDataset(datasetId, deleteContents)(system, settings).toJava
 
   /**
@@ -138,9 +138,9 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.Table]]
    */
   def getTable(datasetId: String,
-               tableId: String,
-               settings: GoogleSettings,
-               system: ClassicActorSystemProvider): CompletionStage[Table] =
+      tableId: String,
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Table] =
     ScalaBigQuery.table(datasetId, tableId)(system, settings).toJava
 
   /**
@@ -155,10 +155,10 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.Table]]
    */
   def createTable(datasetId: String,
-                  tableId: String,
-                  schema: TableSchema,
-                  settings: GoogleSettings,
-                  system: ClassicActorSystemProvider): CompletionStage[Table] =
+      tableId: String,
+      schema: TableSchema,
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Table] =
     createTable(Table(TableReference(None, datasetId, Some(tableId)), None, Some(schema), None, None), settings, system)
 
   /**
@@ -184,9 +184,9 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing [[akka.Done]]
    */
   def deleteTable(datasetId: String,
-                  tableId: String,
-                  settings: GoogleSettings,
-                  system: ClassicActorSystemProvider): CompletionStage[Done] =
+      tableId: String,
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
     ScalaBigQuery.deleteTable(datasetId, tableId)(system, settings).toJava
 
   /**
@@ -208,8 +208,8 @@ object BigQuery extends Google {
       startIndex: util.OptionalLong,
       maxResults: util.OptionalInt,
       selectedFields: util.List[String],
-      unmarshaller: Unmarshaller[HttpEntity, TableDataListResponse[Out]]
-  ): Source[Out, CompletionStage[TableDataListResponse[Out]]] = {
+      unmarshaller: Unmarshaller[HttpEntity, TableDataListResponse[Out]])
+      : Source[Out, CompletionStage[TableDataListResponse[Out]]] = {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .tableData(datasetId, tableId, startIndex.asScala, maxResults.asScala, selectedFields.asScala.toList)
@@ -234,8 +234,7 @@ object BigQuery extends Google {
       tableId: String,
       retryPolicy: InsertAllRetryPolicy,
       templateSuffix: util.Optional[String],
-      marshaller: Marshaller[TableDataInsertAllRequest[In], RequestEntity]
-  ): Sink[util.List[In], NotUsed] = {
+      marshaller: Marshaller[TableDataInsertAllRequest[In], RequestEntity]): Sink[util.List[In], NotUsed] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     ss.Flow[util.List[In]]
       .map(_.asScala.toList)
@@ -258,8 +257,8 @@ object BigQuery extends Google {
       datasetId: String,
       tableId: String,
       retryFailedRequests: Boolean,
-      marshaller: Marshaller[TableDataInsertAllRequest[In], RequestEntity]
-  ): Flow[TableDataInsertAllRequest[In], TableDataInsertAllResponse, NotUsed] = {
+      marshaller: Marshaller[TableDataInsertAllRequest[In], RequestEntity])
+      : Flow[TableDataInsertAllRequest[In], TableDataInsertAllResponse, NotUsed] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     ScalaBigQuery.insertAll[In](datasetId, tableId, retryFailedRequests).asJava
   }
@@ -280,8 +279,7 @@ object BigQuery extends Google {
       query: String,
       dryRun: Boolean,
       useLegacySql: Boolean,
-      unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]
-  ): Source[Out, CompletionStage[QueryResponse[Out]]] = {
+      unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]): Source[Out, CompletionStage[QueryResponse[Out]]] = {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery.query(query, dryRun, useLegacySql).mapMaterializedValue(_.toJava).asJava
   }
@@ -299,8 +297,8 @@ object BigQuery extends Google {
    */
   def query[Out](
       query: QueryRequest,
-      unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]
-  ): Source[Out, Pair[CompletionStage[JobReference], CompletionStage[QueryResponse[Out]]]] = {
+      unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]])
+      : Source[Out, Pair[CompletionStage[JobReference], CompletionStage[QueryResponse[Out]]]] = {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .query(query)
@@ -330,15 +328,14 @@ object BigQuery extends Google {
       maxResults: util.OptionalInt,
       timeout: util.Optional[Duration],
       location: util.Optional[String],
-      unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]
-  ): Source[Out, CompletionStage[QueryResponse[Out]]] = {
+      unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]): Source[Out, CompletionStage[QueryResponse[Out]]] = {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .queryResults(jobId,
-                    startIndex.asScala,
-                    maxResults.asScala,
-                    timeout.asScala.map(d => FiniteDuration(d.toMillis, MILLISECONDS)),
-                    location.asScala)
+        startIndex.asScala,
+        maxResults.asScala,
+        timeout.asScala.map(d => FiniteDuration(d.toMillis, MILLISECONDS)),
+        location.asScala)
       .mapMaterializedValue(_.toJava)
       .asJava
   }
@@ -354,9 +351,9 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[Job]]
    */
   def getJob(jobId: String,
-             location: util.Optional[String],
-             settings: GoogleSettings,
-             system: ClassicActorSystemProvider): CompletionStage[Job] =
+      location: util.Optional[String],
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[Job] =
     ScalaBigQuery.job(jobId, location.asScala)(system, settings).toJava
 
   /**
@@ -370,9 +367,9 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.JobCancelResponse]]
    */
   def cancelJob(jobId: String,
-                location: util.Optional[String],
-                settings: GoogleSettings,
-                system: ClassicActorSystemProvider): CompletionStage[JobCancelResponse] =
+      location: util.Optional[String],
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[JobCancelResponse] =
     ScalaBigQuery.cancelJob(jobId, location.asScala)(system, settings).toJava
 
   /**
@@ -387,8 +384,8 @@ object BigQuery extends Google {
    * @return a [[akka.stream.javadsl.Flow]] that uploads each [[In]] and emits a [[Job]] for every upload job created
    */
   def insertAllAsync[In](datasetId: String,
-                         tableId: String,
-                         marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
+      tableId: String,
+      marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     ScalaBigQuery.insertAllAsync[In](datasetId, tableId).asJava[In]
   }
@@ -405,9 +402,9 @@ object BigQuery extends Google {
    * @return a [[akka.stream.javadsl.Flow]] that uploads each [[In]] and emits a [[Job]] for every upload job created
    */
   def insertAllAsync[In](datasetId: String,
-                         tableId: String,
-                         labels: util.Optional[util.Map[String, String]],
-                         marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
+      tableId: String,
+      labels: util.Optional[util.Map[String, String]],
+      marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     ScalaBigQuery.insertAllAsync[In](datasetId, tableId, labels.asScala.map(_.asScala.toMap)).asJava[In]
   }
@@ -428,8 +425,7 @@ object BigQuery extends Google {
   def createLoadJob[@nowarn("msg=shadows") Job](
       job: Job,
       marshaller: Marshaller[Job, RequestEntity],
-      unmarshaller: Unmarshaller[HttpEntity, Job]
-  ): Sink[ByteString, CompletionStage[Job]] = {
+      unmarshaller: Unmarshaller[HttpEntity, Job]): Sink[ByteString, CompletionStage[Job]] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery.createLoadJob(job).mapMaterializedValue(_.toJava).asJava[ByteString]

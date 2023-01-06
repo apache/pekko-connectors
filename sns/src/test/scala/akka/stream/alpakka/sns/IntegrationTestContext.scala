@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.scalatest.{ BeforeAndAfterAll, Suite }
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest
 
@@ -19,9 +19,9 @@ import scala.concurrent.duration.FiniteDuration
 trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
   this: Suite =>
 
-  //#init-system
+  // #init-system
   implicit val system: ActorSystem = ActorSystem()
-  //#init-system
+  // #init-system
 
   def snsEndpoint: String = s"http://localhost:4100"
 
@@ -49,7 +49,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
   }
 
   def createAsyncClient(endEndpoint: String): SnsAsyncClient = {
-    //#init-client
+    // #init-client
     import java.net.URI
 
     import com.github.matsluni.akkahttpspi.AkkaHttpClient
@@ -65,9 +65,9 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
       SnsAsyncClient
         .builder()
         .credentialsProvider(credentialsProvider)
-        //#init-client
+        // #init-client
         .endpointOverride(URI.create(endEndpoint))
-        //#init-client
+        // #init-client
         .region(Region.EU_CENTRAL_1)
         .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
         // Possibility to configure the retry policy
@@ -76,7 +76,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
         .build()
 
     system.registerOnTermination(awsSnsClient.close())
-    //#init-client
+    // #init-client
     awsSnsClient
   }
 

@@ -42,8 +42,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
 
         override def records = util.Arrays.asList(
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("1").toByteBuffer)).build(),
-          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build()
-        )
+          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build())
 
         val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
 
@@ -61,8 +60,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
 
         override def records = util.Arrays.asList(
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("1").toByteBuffer)).build(),
-          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build()
-        )
+          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build())
 
         val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
 
@@ -84,8 +82,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("3").toByteBuffer)).build(),
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("4").toByteBuffer)).build(),
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("5").toByteBuffer)).build(),
-          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("6").toByteBuffer)).build()
-        )
+          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("6").toByteBuffer)).build())
 
         val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
 
@@ -106,8 +103,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
       new KinesisSpecContext with WithGetShardIteratorSuccess with WithGetRecordsSuccess {
         val mergeSettings = List(
           shardSettings.withShardId("0"),
-          shardSettings.withShardId("1")
-        )
+          shardSettings.withShardId("1"))
 
         override def shards: util.List[Shard] =
           util.Arrays.asList(Shard.builder().shardId("1").build(), Shard.builder().shardId("2").build())
@@ -115,8 +111,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
         override def records = util.Arrays.asList(
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("1").toByteBuffer)).build(),
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build(),
-          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("3").toByteBuffer)).build()
-        )
+          Record.builder().data(SdkBytes.fromByteBuffer(ByteString("3").toByteBuffer)).build())
 
         val probe =
           KinesisSource.basicMerge(mergeSettings, amazonKinesisAsync).map(_.utf8String).runWith(TestSink.probe)

@@ -6,18 +6,18 @@ package akka.stream.alpakka.s3.impl
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.headers.ByteRange
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
-import akka.stream.alpakka.s3.BucketAccess.{AccessDenied, AccessGranted, NotExists}
-import akka.stream.alpakka.s3.{ApiVersion, BucketAccess, MemoryBufferType, S3Settings}
+import akka.http.scaladsl.model.{ HttpRequest, HttpResponse, StatusCodes }
+import akka.stream.alpakka.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
+import akka.stream.alpakka.s3.{ ApiVersion, BucketAccess, MemoryBufferType, S3Settings }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink, Source}
-import akka.stream.{Attributes, SystemMaterializer}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
+import akka.stream.{ Attributes, SystemMaterializer }
 import akka.testkit.TestKit
 import akka.util.ByteString
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{BeforeAndAfterAll, PrivateMethodTester}
+import org.scalatest.{ BeforeAndAfterAll, PrivateMethodTester }
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers._
@@ -46,9 +46,7 @@ class S3StreamSpec(_system: ActorSystem)
     val credentialsProvider = StaticCredentialsProvider.create(
       AwsBasicCredentials.create(
         "test-Id",
-        "test-key"
-      )
-    )
+        "test-key"))
     val regionProvider = new AwsRegionProvider {
       def getRegion = Region.US_EAST_1
     }
@@ -57,7 +55,7 @@ class S3StreamSpec(_system: ActorSystem)
     implicit val settings =
       S3Settings(MemoryBufferType, credentialsProvider, regionProvider, ApiVersion.ListBucketVersion2)
 
-    val result: HttpRequest = S3Stream invokePrivate requestHeaders(getDownloadRequest(location), None)
+    val result: HttpRequest = S3Stream.invokePrivate(requestHeaders(getDownloadRequest(location), None))
     result.headers.size shouldBe 2
     result.headers.exists(_.lowercaseName() == "host")
     result.headers.exists(_.lowercaseName() == "raw-request-uri")
@@ -70,9 +68,7 @@ class S3StreamSpec(_system: ActorSystem)
       StaticCredentialsProvider.create(
         AwsBasicCredentials.create(
           "test-Id",
-          "test-key"
-        )
-      )
+          "test-key"))
     val regionProvider =
       new AwsRegionProvider {
         def getRegion: Region = Region.US_EAST_1
@@ -83,7 +79,7 @@ class S3StreamSpec(_system: ActorSystem)
     implicit val settings =
       S3Settings(MemoryBufferType, credentialsProvider, regionProvider, ApiVersion.ListBucketVersion2)
 
-    val result: HttpRequest = S3Stream invokePrivate requestHeaders(getDownloadRequest(location), Some(range))
+    val result: HttpRequest = S3Stream.invokePrivate(requestHeaders(getDownloadRequest(location), Some(range)))
     result.headers.size shouldBe 3
     result.headers.exists(_.lowercaseName() == "host")
     result.headers.exists(_.lowercaseName() == "range")
@@ -122,14 +118,12 @@ class S3StreamSpec(_system: ActorSystem)
     val sourceLocation = S3Location("test-bucket", "test-key")
 
     val partitions: List[CopyPartition] = S3Stream.createPartitions(chunkSize, sourceLocation)(objectSize)
-    partitions should have length 3
+    (partitions should have).length(3)
     partitions should equal(
       List(
         CopyPartition(1, sourceLocation, Some(ByteRange(0, 25))),
         CopyPartition(2, sourceLocation, Some(ByteRange(25, 50))),
-        CopyPartition(3, sourceLocation, Some(ByteRange(50, 69)))
-      )
-    )
+        CopyPartition(3, sourceLocation, Some(ByteRange(50, 69)))))
   }
 
   it should "create partitions when object size is multiple of chunk size" in {
@@ -138,11 +132,10 @@ class S3StreamSpec(_system: ActorSystem)
     val sourceLocation = S3Location("test-bucket", "test-key")
 
     val partitions: List[CopyPartition] = S3Stream.createPartitions(chunkSize, sourceLocation)(objectSize)
-    partitions should have length 2
+    (partitions should have).length(2)
     partitions should equal(
       List(CopyPartition(1, sourceLocation, Some(ByteRange(0, 25))),
-           CopyPartition(2, sourceLocation, Some(ByteRange(25, 50))))
-    )
+        CopyPartition(2, sourceLocation, Some(ByteRange(25, 50)))))
   }
 
   it should "partition with object size is equal to 0 should not contain range info" in {
@@ -151,7 +144,7 @@ class S3StreamSpec(_system: ActorSystem)
     val sourceLocation = S3Location("test-bucket", "test-key")
 
     val partitions: List[CopyPartition] = S3Stream.createPartitions(chunkSize, sourceLocation)(objectSize)
-    partitions should have length 1
+    (partitions should have).length(1)
     partitions should equal(List(CopyPartition(1, sourceLocation)))
   }
 
@@ -159,27 +152,24 @@ class S3StreamSpec(_system: ActorSystem)
     def bucketStatusPreparation(response: HttpResponse): Future[BucketAccess] = {
       val testedMethod = PrivateMethod[Future[BucketAccess]](Symbol("processCheckIfExistsResponse"))
 
-      val result: Future[BucketAccess] = S3Stream invokePrivate testedMethod(response,
-                                                                             SystemMaterializer(system).materializer)
+      val result: Future[BucketAccess] = S3Stream.invokePrivate(testedMethod(response,
+        SystemMaterializer(system).materializer))
 
       result
     }
 
     val responseWithOkCode = HttpResponse(
-      status = StatusCodes.OK
-    )
+      status = StatusCodes.OK)
 
     bucketStatusPreparation(responseWithOkCode).futureValue shouldEqual AccessGranted
 
     val responseWithNotFoundCode = HttpResponse(
-      status = StatusCodes.NotFound
-    )
+      status = StatusCodes.NotFound)
 
     bucketStatusPreparation(responseWithNotFoundCode).futureValue shouldEqual NotExists
 
     val responseWithForbiddenCode = HttpResponse(
-      status = StatusCodes.Forbidden
-    )
+      status = StatusCodes.Forbidden)
 
     bucketStatusPreparation(responseWithForbiddenCode).futureValue shouldEqual AccessDenied
   }
@@ -188,8 +178,8 @@ class S3StreamSpec(_system: ActorSystem)
 
     val attr = Attributes()
     val resolveSettings = PrivateMethod[S3Settings](Symbol("resolveSettings"))
-    val settings1 = S3Stream invokePrivate resolveSettings(attr, system)
-    val settings2 = S3Stream invokePrivate resolveSettings(attr, system)
+    val settings1 = S3Stream.invokePrivate(resolveSettings(attr, system))
+    val settings2 = S3Stream.invokePrivate(resolveSettings(attr, system))
 
     settings1 eq settings2 shouldBe true
   }

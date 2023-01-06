@@ -21,13 +21,13 @@ private[fcm] case class FcmSend(validate_only: Boolean, message: FcmNotification
 @InternalApi
 private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
 
-  //custom formatters
+  // custom formatters
   implicit object FcmSuccessResponseJsonFormat extends RootJsonFormat[FcmSuccessResponse] {
     def write(c: FcmSuccessResponse): JsValue = JsString(c.name)
 
     def read(value: JsValue) = value match {
       case JsObject(fields) if fields.contains("name") => FcmSuccessResponse(fields("name").convertTo[String])
-      case other => throw DeserializationException(s"object containing `name` expected, but we get $other")
+      case other                                       => throw DeserializationException(s"object containing `name` expected, but we get $other")
     }
   }
   implicit object FcmErrorResponseJsonFormat extends RootJsonFormat[FcmErrorResponse] {
@@ -37,23 +37,23 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
 
   implicit object FcmResponseFormat extends RootJsonReader[FcmResponse] {
     def read(value: JsValue): FcmResponse = value match {
-      case JsObject(fields) if fields.keys.exists(_ == "name") => value.convertTo[FcmSuccessResponse]
+      case JsObject(fields) if fields.keys.exists(_ == "name")       => value.convertTo[FcmSuccessResponse]
       case JsObject(fields) if fields.keys.exists(_ == "error_code") => value.convertTo[FcmErrorResponse]
-      case other => throw DeserializationException(s"FcmResponse expected, but we get $other")
+      case other                                                     => throw DeserializationException(s"FcmResponse expected, but we get $other")
     }
   }
 
   implicit object FcmOptionsFormat extends RootJsonFormat[FcmOption] {
     def write(c: FcmOption): JsValue = c match {
-      case apns: ApnsFcmOptions => apns.toJson
+      case apns: ApnsFcmOptions       => apns.toJson
       case webPush: WebPushFcmOptions => webPush.toJson
-      case main: FcmOptions => main.toJson
+      case main: FcmOptions           => main.toJson
     }
     def read(value: JsValue): FcmOption = value match {
       case JsObject(fields) if fields.contains("image") => value.convertTo[ApnsFcmOptions]
-      case JsObject(fields) if fields.contains("link") => value.convertTo[WebPushFcmOptions]
-      case JsObject(_) => value.convertTo[FcmOptions]
-      case other: JsValue => throw DeserializationException(s"JsObject expected, but we get $other")
+      case JsObject(fields) if fields.contains("link")  => value.convertTo[WebPushFcmOptions]
+      case JsObject(_)                                  => value.convertTo[FcmOptions]
+      case other: JsValue                               => throw DeserializationException(s"JsObject expected, but we get $other")
     }
   }
 
@@ -73,8 +73,7 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
           if (map.fields.contains("headers")) Option(map.fields("headers").convertTo[Map[String, String]]) else None,
         payload = if (map.fields.contains("payload")) Option(map.fields("payload").toString) else None,
         fcm_options =
-          if (map.fields.contains("fcm_options")) Option(map.fields("fcm_options").convertTo[FcmOption]) else None
-      )
+          if (map.fields.contains("fcm_options")) Option(map.fields("fcm_options").convertTo[FcmOption]) else None)
     }
   }
 
@@ -96,8 +95,7 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
         data = if (map.fields.contains("data")) Option(map.fields("data").convertTo[Map[String, String]]) else None,
         notification = if (map.fields.contains("notification")) Option(map.fields("notification").toString) else None,
         fcm_options =
-          if (map.fields.contains("fcm_options")) Option(map.fields("fcm_options").convertTo[FcmOption]) else None
-      )
+          if (map.fields.contains("fcm_options")) Option(map.fields("fcm_options").convertTo[FcmOption]) else None)
     }
   }
 
@@ -105,33 +103,33 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
     def write(c: AndroidMessagePriority): JsString =
       c match {
         case Normal => JsString("NORMAL")
-        case High => JsString("HIGH")
+        case High   => JsString("HIGH")
       }
 
     def read(value: JsValue): AndroidMessagePriority = value match {
       case JsString("NORMAL") => Normal
-      case JsString("HIGH") => High
-      case other => throw DeserializationException(s"AndroidMessagePriority expected, but we get $other")
+      case JsString("HIGH")   => High
+      case other              => throw DeserializationException(s"AndroidMessagePriority expected, but we get $other")
     }
   }
 
   implicit object NotificationPriorityFormat extends RootJsonFormat[NotificationPriority] {
     def write(c: NotificationPriority): JsString =
       c match {
-        case PriorityMin => JsString("PRIORITY_MIN")
-        case PriorityLow => JsString("PRIORITY_LOW")
+        case PriorityMin     => JsString("PRIORITY_MIN")
+        case PriorityLow     => JsString("PRIORITY_LOW")
         case PriorityDefault => JsString("PRIORITY_DEFAULT")
-        case PriorityHigh => JsString("PRIORITY_HIGH")
-        case PriorityMax => JsString("PRIORITY_MAX")
+        case PriorityHigh    => JsString("PRIORITY_HIGH")
+        case PriorityMax     => JsString("PRIORITY_MAX")
       }
 
     def read(value: JsValue): NotificationPriority = value match {
-      case JsString("PRIORITY_MIN") => PriorityMin
-      case JsString("PRIORITY_LOW") => PriorityLow
+      case JsString("PRIORITY_MIN")     => PriorityMin
+      case JsString("PRIORITY_LOW")     => PriorityLow
       case JsString("PRIORITY_DEFAULT") => PriorityDefault
-      case JsString("PRIORITY_HIGH") => PriorityHigh
-      case JsString("PRIORITY_MAX") => PriorityMax
-      case other => throw DeserializationException(s"NotificationPriority expected, but we get $other")
+      case JsString("PRIORITY_HIGH")    => PriorityHigh
+      case JsString("PRIORITY_MAX")     => PriorityMax
+      case other                        => throw DeserializationException(s"NotificationPriority expected, but we get $other")
     }
   }
 
@@ -139,15 +137,15 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
     def write(c: Visibility): JsString =
       c match {
         case Private => JsString("PRIVATE")
-        case Public => JsString("PUBLIC")
-        case Secret => JsString("SECRET")
+        case Public  => JsString("PUBLIC")
+        case Secret  => JsString("SECRET")
       }
 
     def read(value: JsValue): Visibility = value match {
       case JsString("PRIVATE") => Private
-      case JsString("PUBLIC") => Public
-      case JsString("SECRET") => Secret
-      case other => throw DeserializationException(s"Visibility expected, but we get $other")
+      case JsString("PUBLIC")  => Public
+      case JsString("SECRET")  => Secret
+      case other               => throw DeserializationException(s"Visibility expected, but we get $other")
     }
   }
 
@@ -234,8 +232,7 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
         light_settings =
           if (map.fields.contains("light_settings")) Option(map.fields("light_settings").convertTo[LightSettings])
           else None,
-        image = if (map.fields.contains("image")) Option(map.fields("image").toString()) else None
-      )
+        image = if (map.fields.contains("image")) Option(map.fields("image").toString()) else None)
     }
   }
 

@@ -6,9 +6,9 @@ package akka.stream.alpakka.ironmq.scaladsl
 
 import akka.NotUsed
 import akka.dispatch.ExecutionContexts
-import akka.stream.alpakka.ironmq.{IronMqSettings, IronMqSpec, PushMessage}
-import akka.stream.scaladsl.{Sink, Source}
-import com.typesafe.config.{Config, ConfigFactory}
+import akka.stream.alpakka.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
+import akka.stream.scaladsl.{ Sink, Source }
+import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.ParallelTestExecution
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 

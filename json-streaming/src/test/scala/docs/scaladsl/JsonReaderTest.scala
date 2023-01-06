@@ -7,7 +7,7 @@ package docs.scaladsl
 import akka.actor.ActorSystem
 import akka.stream.alpakka.json.scaladsl.JsonReader
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.util.ByteString
 import org.jsfr.json.compiler.JsonPathCompiler
 import org.jsfr.json.exception.JsonSurfingException

@@ -10,11 +10,11 @@ import akka.Done
 import akka.stream.alpakka.sqs._
 import akka.stream.alpakka.sqs.scaladsl._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
-import software.amazon.awssdk.services.sqs.model.{Message, ReceiveMessageRequest, SendMessageRequest}
+import software.amazon.awssdk.services.sqs.model.{ Message, ReceiveMessageRequest, SendMessageRequest }
 
 import scala.jdk.CollectionConverters._
 import scala.concurrent.duration._
@@ -49,11 +49,11 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   }
 
   "SqsPublishSettings" should "construct settings" in {
-    //#SqsPublishSettings
+    // #SqsPublishSettings
     val sinkSettings =
       SqsPublishSettings()
         .withMaxInFlight(10)
-    //#SqsPublishSettings
+    // #SqsPublishSettings
     sinkSettings.maxInFlight shouldBe 10
   }
 
@@ -68,33 +68,33 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   }
 
   "SqsPublishBatchSettings" should "construct settings" in {
-    //#SqsPublishBatchSettings
+    // #SqsPublishBatchSettings
     val batchSettings =
       SqsPublishBatchSettings()
         .withConcurrentRequests(1)
-    //#SqsPublishBatchSettings
+    // #SqsPublishBatchSettings
     batchSettings.concurrentRequests shouldBe 1
   }
 
   "SqsPublishGroupedSettings" should "construct settings" in {
-    //#SqsPublishGroupedSettings
+    // #SqsPublishGroupedSettings
     val batchSettings =
       SqsPublishGroupedSettings()
         .withMaxBatchSize(10)
         .withMaxBatchWait(500.millis)
         .withConcurrentRequests(1)
-    //#SqsPublishGroupedSettings
+    // #SqsPublishGroupedSettings
     batchSettings.concurrentRequests shouldBe 1
   }
 
   "PublishSink" should "publish and pull a message" taggedAs Integration in {
     new IntegrationFixture {
       val future =
-        //#run-string
+        // #run-string
         Source
           .single("alpakka")
           .runWith(SqsPublishSink(queueUrl))
-      //#run-string
+      // #run-string
       future.futureValue shouldBe Done
 
       receiveMessage().body() shouldBe "alpakka"
@@ -104,13 +104,13 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   it should "publish and pull a message provided as a SendMessageRequest" taggedAs Integration in {
     new IntegrationFixture {
       val future =
-        //#run-send-request
+        // #run-send-request
         // for fix SQS queue
         Source
           .single(SendMessageRequest.builder().messageBody("alpakka").build())
           .runWith(SqsPublishSink.messageSink(queueUrl))
 
-      //#run-send-request
+      // #run-send-request
 
       future.futureValue shouldBe Done
 
@@ -121,12 +121,12 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   it should "publish and pull a message provided as a SendMessageRequest with dynamic queue" taggedAs Integration in {
     new IntegrationFixture {
       val future =
-        //#run-send-request
+        // #run-send-request
         // for dynamic SQS queues
         Source
           .single(SendMessageRequest.builder().messageBody("alpakka").queueUrl(queueUrl).build())
           .runWith(SqsPublishSink.messageSink())
-      //#run-send-request
+      // #run-send-request
 
       future.futureValue shouldBe Done
 
@@ -136,12 +136,12 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
 
   it should "publish messages by grouping and pull them" taggedAs Integration in {
     new IntegrationFixture {
-      //#group
+      // #group
       val messages = for (i <- 0 until 10) yield s"Message - $i"
 
       val future = Source(messages)
         .runWith(SqsPublishSink.grouped(queueUrl, SqsPublishGroupedSettings.Defaults.withMaxBatchSize(2)))
-      //#group
+      // #group
 
       future.futureValue shouldBe Done
 
@@ -151,13 +151,13 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
 
   it should "publish batch of messages and pull them" taggedAs Integration in {
     new IntegrationFixture {
-      //#batch-string
+      // #batch-string
       val messages = for (i <- 0 until 10) yield s"Message - $i"
 
       val future = Source
         .single(messages)
         .runWith(SqsPublishSink.batch(queueUrl))
-      //#batch-string
+      // #batch-string
 
       future.futureValue shouldBe Done
 
@@ -167,13 +167,13 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
 
   it should "publish batch of SendMessageRequests and pull them" taggedAs Integration in {
     new IntegrationFixture {
-      //#batch-send-request
+      // #batch-send-request
       val messages = for (i <- 0 until 10) yield SendMessageRequest.builder().messageBody(s"Message - $i").build()
 
       val future = Source
         .single(messages)
         .runWith(SqsPublishSink.batchedMessageSink(queueUrl))
-      //#batch-send-request
+      // #batch-send-request
 
       future.futureValue shouldBe Done
 
@@ -184,14 +184,14 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   "PublishFlow" should "put message in a flow, then pass the result further" taggedAs Integration in {
     new IntegrationFixture {
       val future =
-        //#flow
+        // #flow
         // for fix SQS queue
         Source
           .single(SendMessageRequest.builder().messageBody("alpakka").build())
           .via(SqsPublishFlow(queueUrl))
           .runWith(Sink.head)
 
-      //#flow
+      // #flow
 
       val result = future.futureValue
       result.result
@@ -204,13 +204,13 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   it should "put message in a flow, then pass the result further with dynamic queue" taggedAs Integration in {
     new IntegrationFixture {
       val future =
-        //#flow
+        // #flow
         // for dynamic SQS queues
         Source
           .single(SendMessageRequest.builder().messageBody("alpakka").queueUrl(queueUrl).build())
           .via(SqsPublishFlow())
           .runWith(Sink.head)
-      //#flow
+      // #flow
 
       val result = future.futureValue
       result.result.md5OfMessageBody() shouldBe md5HashString("alpakka")
@@ -220,8 +220,7 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   }
 
   ignore should "put message in a flow, then pass the result further with fifo queues" taggedAs Integration in new IntegrationFixture(
-    fifo = true
-  ) {
+    fifo = true) {
     // elasticmq does not provide proper fifo support (see https://github.com/adamw/elasticmq/issues/92)
     // set your fifo sqs queue url and awsSqsClient manually
     // override val queueUrl = "https://sqs.us-east-1.amazonaws.com/$AWS_ACCOUNT_ID/$queue_name.fifo"
@@ -235,8 +234,7 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
             .messageBody("alpakka")
             .messageGroupId("group-id")
             .messageDeduplicationId("deduplication-id")
-            .build()
-        )
+            .build())
         .via(SqsPublishFlow(queueUrl))
         .runWith(Sink.head)
 
@@ -248,8 +246,7 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   }
 
   ignore should "put message in a flow, batch, then pass the result further with fifo queues" taggedAs Integration in new IntegrationFixture(
-    fifo = true
-  ) {
+    fifo = true) {
     // elasticmq does not provide proper fifo support (see https://github.com/adamw/elasticmq/issues/92)
     // set your fifo sqs queue url and awsSqsClient manually
     // override val queueUrl = "https://sqs.us-east-1.amazonaws.com/$AWS_ACCOUNT_ID/$queue_name.fifo"

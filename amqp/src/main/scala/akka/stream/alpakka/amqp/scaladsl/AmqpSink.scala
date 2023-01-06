@@ -6,7 +6,7 @@ package akka.stream.alpakka.amqp.scaladsl
 
 import akka.Done
 import akka.stream.alpakka.amqp._
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{ Keep, Sink }
 import akka.util.ByteString
 
 import scala.concurrent.Future

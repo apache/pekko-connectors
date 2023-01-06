@@ -26,7 +26,7 @@ import scala.annotation.tailrec
  */
 @InternalApi private[impl] object SplitAfterSize {
   def apply[I, M](minChunkSize: Int,
-                  maxChunkSize: Int)(in: Flow[I, ByteString, M]): SubFlow[ByteString, M, in.Repr, in.Closed] = {
+      maxChunkSize: Int)(in: Flow[I, ByteString, M]): SubFlow[ByteString, M, in.Repr, in.Closed] = {
     require(minChunkSize < maxChunkSize, "the min chunk size must be smaller than the max chunk size")
     in.via(insertMarkers(minChunkSize, maxChunkSize)).splitWhen(_ == NewStream).collect { case bs: ByteString => bs }
   }

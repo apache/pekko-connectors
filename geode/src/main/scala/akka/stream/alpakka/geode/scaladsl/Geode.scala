@@ -5,11 +5,11 @@
 package akka.stream.alpakka.geode.scaladsl
 
 import akka.stream.alpakka.geode.impl._
-import akka.stream.alpakka.geode.impl.pdx.{PdxDecoder, PdxEncoder, ShapelessPdxSerializer}
-import akka.stream.alpakka.geode.impl.stage.{GeodeContinuousSourceStage, GeodeFiniteSourceStage, GeodeFlowStage}
-import akka.stream.alpakka.geode.{AkkaPdxSerializer, GeodeSettings, RegionSettings}
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
+import akka.stream.alpakka.geode.impl.pdx.{ PdxDecoder, PdxEncoder, ShapelessPdxSerializer }
+import akka.stream.alpakka.geode.impl.stage.{ GeodeContinuousSourceStage, GeodeFiniteSourceStage, GeodeFlowStage }
+import akka.stream.alpakka.geode.{ AkkaPdxSerializer, GeodeSettings, RegionSettings }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import akka.{ Done, NotUsed }
 import org.apache.geode.cache.client.ClientCacheFactory
 
 import scala.concurrent.Future
@@ -47,8 +47,7 @@ class Geode(settings: GeodeSettings) extends GeodeCache(settings) {
    * Shapeless powered implicit serializer.
    */
   def query[V <: AnyRef](
-      query: String
-  )(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Source[V, Future[Done]] = {
+      query: String)(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Source[V, Future[Done]] = {
 
     registerPDXSerializer(new ShapelessPdxSerializer[V](enc, dec), tag.runtimeClass)
 
@@ -59,8 +58,8 @@ class Geode(settings: GeodeSettings) extends GeodeCache(settings) {
    * Shapeless powered implicit serializer.
    */
   def flow[K, V <: AnyRef](
-      settings: RegionSettings[K, V]
-  )(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Flow[V, V, NotUsed] = {
+      settings: RegionSettings[K, V])(
+      implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Flow[V, V, NotUsed] = {
 
     registerPDXSerializer(new ShapelessPdxSerializer[V](enc, dec), tag.runtimeClass)
 
@@ -71,8 +70,8 @@ class Geode(settings: GeodeSettings) extends GeodeCache(settings) {
    * Shapeless powered implicit serializer.
    */
   def sink[K, V <: AnyRef](
-      settings: RegionSettings[K, V]
-  )(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Sink[V, Future[Done]] =
+      settings: RegionSettings[K, V])(
+      implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Sink[V, Future[Done]] =
     Flow[V].via(flow(settings)).toMat(Sink.ignore)(Keep.right)
 
 }
@@ -86,8 +85,8 @@ trait PoolSubscription extends Geode {
     super.configure(factory).setPoolSubscriptionEnabled(true)
 
   def continuousQuery[V <: AnyRef](queryName: Symbol,
-                                   query: String,
-                                   serializer: AkkaPdxSerializer[V]): Source[V, Future[Done]] = {
+      query: String,
+      serializer: AkkaPdxSerializer[V]): Source[V, Future[Done]] = {
 
     registerPDXSerializer(serializer, serializer.clazz)
 
@@ -99,8 +98,7 @@ trait PoolSubscription extends Geode {
    */
   def continuousQuery[V <: AnyRef](
       queryName: Symbol,
-      query: String
-  )(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Source[V, Future[Done]] = {
+      query: String)(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Source[V, Future[Done]] = {
 
     registerPDXSerializer(new ShapelessPdxSerializer[V](enc, dec), tag.runtimeClass)
 
@@ -111,6 +109,6 @@ trait PoolSubscription extends Geode {
     for {
       qs <- Option(cache.getQueryService())
       query <- Option(qs.getCq(queryName.name))
-    } yield (query.close())
+    } yield query.close()
 
 }

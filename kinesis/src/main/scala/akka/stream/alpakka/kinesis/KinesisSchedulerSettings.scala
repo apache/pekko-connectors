@@ -9,8 +9,7 @@ import scala.concurrent.duration._
 final class KinesisSchedulerSourceSettings private (val bufferSize: Int, val backpressureTimeout: FiniteDuration) {
   require(
     bufferSize >= 1,
-    "Buffer size must be greater than 0; use size 1 to disable stage buffering"
-  )
+    "Buffer size must be greater than 0; use size 1 to disable stage buffering")
   def withBufferSize(size: Int): KinesisSchedulerSourceSettings =
     KinesisSchedulerSourceSettings(size, backpressureTimeout)
   def withBackpressureTimeout(timeout: java.time.Duration): KinesisSchedulerSourceSettings =
@@ -19,8 +18,7 @@ final class KinesisSchedulerSourceSettings private (val bufferSize: Int, val bac
 final class KinesisSchedulerCheckpointSettings private (val maxBatchSize: Int, val maxBatchWait: FiniteDuration) {
   require(
     maxBatchSize >= 1,
-    "Batch size must be greater than 0; use size 1 to commit records one at a time"
-  )
+    "Batch size must be greater than 0; use size 1 to commit records one at a time")
 
   def withMaxBatchSize(size: Int): KinesisSchedulerCheckpointSettings =
     KinesisSchedulerCheckpointSettings(size, maxBatchWait)

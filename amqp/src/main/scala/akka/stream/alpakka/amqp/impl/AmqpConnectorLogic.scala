@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.amqp.impl
 
-import akka.stream.alpakka.amqp.{AmqpConnectorSettings, BindingDeclaration, ExchangeDeclaration, QueueDeclaration}
-import akka.stream.stage.{AsyncCallback, GraphStageLogic}
+import akka.stream.alpakka.amqp.{ AmqpConnectorSettings, BindingDeclaration, ExchangeDeclaration, QueueDeclaration }
+import akka.stream.stage.{ AsyncCallback, GraphStageLogic }
 import com.rabbitmq.client._
 
 import scala.util.control.NonFatal
@@ -41,16 +41,14 @@ private trait AmqpConnectorLogic { this: GraphStageLogic =>
             d.durable,
             d.exclusive,
             d.autoDelete,
-            d.arguments.asJava
-          )
+            d.arguments.asJava)
 
         case d: BindingDeclaration =>
           channel.queueBind(
             d.queue,
             d.exchange,
             d.routingKey.getOrElse(""),
-            d.arguments.asJava
-          )
+            d.arguments.asJava)
 
         case d: ExchangeDeclaration =>
           channel.exchangeDeclare(
@@ -59,8 +57,7 @@ private trait AmqpConnectorLogic { this: GraphStageLogic =>
             d.durable,
             d.autoDelete,
             d.internal,
-            d.arguments.asJava
-          )
+            d.arguments.asJava)
       }
 
       whenConnected()

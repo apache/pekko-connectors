@@ -6,14 +6,14 @@ package akka.stream.alpakka.sse
 package javadsl
 
 import akka.NotUsed
-import akka.http.javadsl.model.{HttpRequest, HttpResponse, Uri}
-import akka.http.scaladsl.model.{HttpResponse => SHttpResponse}
+import akka.http.javadsl.model.{ HttpRequest, HttpResponse, Uri }
+import akka.http.scaladsl.model.{ HttpResponse => SHttpResponse }
 import akka.stream.Materializer
 import akka.stream.javadsl.Source
 import akka.http.javadsl.model.sse.ServerSentEvent
 import java.util.Optional
 import java.util.concurrent.CompletionStage
-import java.util.function.{Function => JFunction}
+import java.util.function.{ Function => JFunction }
 
 import akka.actor.ClassicActorSystemProvider
 
@@ -30,7 +30,7 @@ import scala.compat.java8.OptionConverters
  * Progress (including termination) is controlled by the connected flow or sink, e.g. a retry delay can be implemented
  * by streaming the materialized values of the handler via a throttle.
  *
- *{{{
+ * {{{
  * + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
  *                                               +---------------------+
  * |                                             |       trigger       | |
@@ -61,7 +61,7 @@ import scala.compat.java8.OptionConverters
  *                     ServerSentEvent|          +---------------------+
  * |                                  v                                  |
  *  - - - - - - - - - - - - - - - - - o - - - - - - - - - - - - - - - - -
- *}}}
+ * }}}
  */
 object EventSource {
   import FutureConverters._
@@ -75,16 +75,15 @@ object EventSource {
    * @return continuous source of server-sent events
    */
   def create(uri: Uri,
-             send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
-             lastEventId: Optional[String],
-             system: ClassicActorSystemProvider): Source[ServerSentEvent, NotUsed] = {
+      send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
+      lastEventId: Optional[String],
+      system: ClassicActorSystemProvider): Source[ServerSentEvent, NotUsed] = {
     val eventSource =
       scaladsl
         .EventSource(
           uri.asScala,
           send(_).toScala.map(_.asInstanceOf[SHttpResponse])(system.classicSystem.dispatcher),
-          lastEventId.asScala
-        )(system)
+          lastEventId.asScala)(system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
   }
@@ -99,16 +98,15 @@ object EventSource {
    */
   @deprecated("pass in the actor system instead of the materializer", "3.0.0")
   def create(uri: Uri,
-             send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
-             lastEventId: Optional[String],
-             mat: Materializer): Source[ServerSentEvent, NotUsed] = {
+      send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
+      lastEventId: Optional[String],
+      mat: Materializer): Source[ServerSentEvent, NotUsed] = {
     val eventSource =
       scaladsl
         .EventSource(
           uri.asScala,
           send(_).toScala.map(_.asInstanceOf[SHttpResponse])(mat.executionContext),
-          lastEventId.asScala
-        )(mat.system)
+          lastEventId.asScala)(mat.system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
   }

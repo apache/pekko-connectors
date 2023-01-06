@@ -17,11 +17,10 @@ case class FcmNotification(
     fcm_options: Option[FcmOption] = None,
     token: Option[String] = None,
     topic: Option[String] = None,
-    condition: Option[String] = None
-) {
+    condition: Option[String] = None) {
   def withTarget(target: NotificationTarget): FcmNotification = target match {
-    case Token(t) => this.copy(token = Option(t), topic = None, condition = None)
-    case Topic(t) => this.copy(token = None, topic = Option(t), condition = None)
+    case Token(t)     => this.copy(token = Option(t), topic = None, condition = None)
+    case Topic(t)     => this.copy(token = None, topic = Option(t), condition = None)
     case Condition(t) => this.copy(token = None, topic = None, condition = Option(t))
   }
   def isSendable: Boolean =

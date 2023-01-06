@@ -10,7 +10,7 @@ import akka.stream.alpakka.kudu.KuduTableSettings
 import akka.stream.stage._
 import org.apache.kudu.Schema
 import org.apache.kudu.Type._
-import org.apache.kudu.client.{KuduClient, KuduTable, PartialRow}
+import org.apache.kudu.client.{ KuduClient, KuduTable, PartialRow }
 
 import scala.jdk.CollectionConverters._
 import scala.util.control.NonFatal
@@ -35,16 +35,16 @@ private[kudu] class KuduFlowStage[A](settings: KuduTableSettings[A], kuduClient:
       val columnName = cSch.getName
       val kuduType = cSch.getType
       kuduType match {
-        case INT8 => insertPartialRow.addByte(columnName, partialRow.getByte(columnName))
-        case INT16 => insertPartialRow.addShort(columnName, partialRow.getShort(columnName))
-        case INT32 => insertPartialRow.addInt(columnName, partialRow.getInt(columnName))
-        case INT64 => insertPartialRow.addLong(columnName, partialRow.getLong(columnName))
+        case INT8   => insertPartialRow.addByte(columnName, partialRow.getByte(columnName))
+        case INT16  => insertPartialRow.addShort(columnName, partialRow.getShort(columnName))
+        case INT32  => insertPartialRow.addInt(columnName, partialRow.getInt(columnName))
+        case INT64  => insertPartialRow.addLong(columnName, partialRow.getLong(columnName))
         case BINARY => insertPartialRow.addBinary(columnName, partialRow.getBinary(columnName))
         case STRING => insertPartialRow.addString(columnName, partialRow.getString(columnName))
-        case BOOL => insertPartialRow.addBoolean(columnName, partialRow.getBoolean(columnName))
-        case FLOAT => insertPartialRow.addFloat(columnName, partialRow.getFloat(columnName))
+        case BOOL   => insertPartialRow.addBoolean(columnName, partialRow.getBoolean(columnName))
+        case FLOAT  => insertPartialRow.addFloat(columnName, partialRow.getFloat(columnName))
         case DOUBLE => insertPartialRow.addDouble(columnName, partialRow.getDouble(columnName))
-        case _ => throw new UnsupportedOperationException(s"Unknown type ${kuduType}")
+        case _      => throw new UnsupportedOperationException(s"Unknown type ${kuduType}")
       }
     }
 

@@ -8,8 +8,8 @@ import java.lang.reflect.Field
 import java.time.Instant
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
-import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
-import org.influxdb.annotation.{Column, Measurement}
+import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
+import org.influxdb.annotation.{ Column, Measurement }
 import org.influxdb.dto.QueryResult
 
 import java.util.concurrent.TimeUnit
@@ -143,13 +143,12 @@ private[impl] class AlpakkaResultMapperHelper {
   private def throwExceptionIfMissingAnnotation(clazz: Class[_]): Unit =
     if (!clazz.isAnnotationPresent(classOf[Measurement]))
       throw new IllegalArgumentException(
-        "Class " + clazz.getName + " is not annotated with @" + classOf[Measurement].getSimpleName
-      )
+        "Class " + clazz.getName + " is not annotated with @" + classOf[Measurement].getSimpleName)
 
   private def parseRowAs[T](clazz: Class[T],
-                            columns: java.util.List[String],
-                            values: java.util.List[AnyRef],
-                            precision: TimeUnit): T =
+      columns: java.util.List[String],
+      values: java.util.List[AnyRef],
+      precision: TimeUnit): T =
     try {
       val fieldMap = CLASS_FIELD_CACHE.get(clazz.getName)
 
@@ -175,11 +174,10 @@ private[impl] class AlpakkaResultMapperHelper {
       val isAccessible = field.isAccessible() // deprecated in JDK 11+
       if (!isAccessible) field.setAccessible(true)
       if (fieldValueModified(fieldType, field, obj, value, precision) || fieldValueForPrimitivesModified(
-            fieldType,
-            field,
-            obj,
-            value
-          ) || fieldValueForPrimitiveWrappersModified(fieldType, field, obj, value)) return
+          fieldType,
+          field,
+          obj,
+          value) || fieldValueForPrimitiveWrappersModified(fieldType, field, obj, value)) return
       val msg =
         s"""Class '${obj.getClass.getName}' field '${field.getName}' is from an unsupported type '${field.getType}'."""
       throw new InfluxDBMapperException(msg)
@@ -214,9 +212,9 @@ private[impl] class AlpakkaResultMapperHelper {
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
   private def fieldValueForPrimitiveWrappersModified[T](fieldType: Class[_],
-                                                        field: Field,
-                                                        obj: T,
-                                                        value: Any): Boolean =
+      field: Field,
+      obj: T,
+      value: Any): Boolean =
     if (classOf[java.lang.Double].isAssignableFrom(fieldType)) {
       field.set(obj, value)
       true
@@ -236,10 +234,10 @@ private[impl] class AlpakkaResultMapperHelper {
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
   private def fieldValueModified[T](fieldType: Class[_],
-                                    field: Field,
-                                    obj: T,
-                                    value: Any,
-                                    precision: TimeUnit): Boolean =
+      field: Field,
+      obj: T,
+      value: Any,
+      precision: TimeUnit): Boolean =
     if (classOf[String].isAssignableFrom(fieldType)) {
       field.set(obj, String.valueOf(value))
       true

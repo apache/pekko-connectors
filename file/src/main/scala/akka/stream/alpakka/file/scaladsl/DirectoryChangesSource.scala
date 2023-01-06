@@ -28,10 +28,9 @@ object DirectoryChangesSource {
    * @param maxBufferSize Maximum number of buffered directory changes before the stage fails
    */
   def apply(directoryPath: Path,
-            pollInterval: FiniteDuration,
-            maxBufferSize: Int): Source[(Path, DirectoryChange), NotUsed] =
+      pollInterval: FiniteDuration,
+      maxBufferSize: Int): Source[(Path, DirectoryChange), NotUsed] =
     Source.fromGraph(
-      new akka.stream.alpakka.file.impl.DirectoryChangesSource(directoryPath, pollInterval, maxBufferSize, tupler)
-    )
+      new akka.stream.alpakka.file.impl.DirectoryChangesSource(directoryPath, pollInterval, maxBufferSize, tupler))
 
 }

@@ -7,19 +7,16 @@ import com.typesafe.config.Config
 
 final class Credentials private (
     val username: String,
-    val password: String
-) {
+    val password: String) {
 
   def withUsername(value: String): Credentials = copy(username = value)
   def withPassword(value: String): Credentials = copy(password = value)
 
   private def copy(
       username: String = username,
-      password: String = password
-  ): Credentials = new Credentials(
+      password: String = password): Credentials = new Credentials(
     username = username,
-    password = password
-  )
+    password = password)
 
   override def toString =
     "Credentials(" +
@@ -47,8 +44,7 @@ object Credentials {
     val password = c.getString("password")
     new Credentials(
       username,
-      password
-    )
+      password)
   }
 
   /**
@@ -59,18 +55,14 @@ object Credentials {
   /** Scala API */
   def apply(
       username: String,
-      password: String
-  ): Credentials = new Credentials(
+      password: String): Credentials = new Credentials(
     username,
-    password
-  )
+    password)
 
   /** Java API */
   def create(
       username: String,
-      password: String
-  ): Credentials = new Credentials(
+      password: String): Credentials = new Credentials(
     username,
-    password
-  )
+    password)
 }

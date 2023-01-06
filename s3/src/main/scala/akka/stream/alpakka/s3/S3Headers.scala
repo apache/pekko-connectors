@@ -9,7 +9,7 @@ import java.util.Objects
 import akka.annotation.InternalApi
 import akka.http.scaladsl.model.HttpHeader
 import akka.http.scaladsl.model.headers.RawHeader
-import akka.stream.alpakka.s3.headers.{CannedAcl, ServerSideEncryption, StorageClass}
+import akka.stream.alpakka.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
 import akka.stream.alpakka.s3.impl.S3Request
 
 import scala.collection.immutable.Seq
@@ -23,8 +23,7 @@ final class MetaHeaders private (val metaHeaders: Map[String, String]) {
     }
 
   def withMetaHeaders(metaHeaders: Map[String, String]) = new MetaHeaders(
-    metaHeaders = metaHeaders
-  )
+    metaHeaders = metaHeaders)
 
   override def toString: String =
     "MetaHeaders(" +
@@ -54,10 +53,10 @@ object MetaHeaders {
  * metadata, server side encryption or custom headers for more advanced use cases.
  */
 final class S3Headers private (val cannedAcl: Option[CannedAcl] = None,
-                               val metaHeaders: Option[MetaHeaders] = None,
-                               val storageClass: Option[StorageClass] = None,
-                               val customHeaders: Map[String, String] = Map.empty,
-                               val serverSideEncryption: Option[ServerSideEncryption] = None) {
+    val metaHeaders: Option[MetaHeaders] = None,
+    val storageClass: Option[StorageClass] = None,
+    val customHeaders: Map[String, String] = Map.empty,
+    val serverSideEncryption: Option[ServerSideEncryption] = None) {
 
   @InternalApi private[s3] val headers: Seq[HttpHeader] =
     cannedAcl.toIndexedSeq.map(_.header) ++
@@ -84,14 +83,12 @@ final class S3Headers private (val cannedAcl: Option[CannedAcl] = None,
       metaHeaders: Option[MetaHeaders] = metaHeaders,
       storageClass: Option[StorageClass] = storageClass,
       customHeaders: Map[String, String] = customHeaders,
-      serverSideEncryption: Option[ServerSideEncryption] = serverSideEncryption
-  ): S3Headers = new S3Headers(
+      serverSideEncryption: Option[ServerSideEncryption] = serverSideEncryption): S3Headers = new S3Headers(
     cannedAcl = cannedAcl,
     metaHeaders = metaHeaders,
     storageClass = storageClass,
     customHeaders = customHeaders,
-    serverSideEncryption = serverSideEncryption
-  )
+    serverSideEncryption = serverSideEncryption)
 
   override def toString: String =
     "S3Headers(" +

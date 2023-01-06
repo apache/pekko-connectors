@@ -16,7 +16,7 @@ import akka.annotation.ApiMayChange
 import akka.stream.alpakka.google.GoogleSettings
 import akka.stream.alpakka.googlecloud.pubsub.grpc.PubSubSettings
 import akka.stream.alpakka.googlecloud.pubsub.grpc.impl.AkkaGrpcSettings
-import com.google.pubsub.v1.pubsub.{SubscriberClient => ScalaSubscriberClient}
+import com.google.pubsub.v1.pubsub.{ SubscriberClient => ScalaSubscriberClient }
 
 /**
  * Holds the gRPC scala subscriber client instance.
@@ -32,7 +32,7 @@ final class GrpcSubscriber private (settings: PubSubSettings, googleSettings: Go
 
 object GrpcSubscriber {
   def apply(settings: PubSubSettings,
-            googleSettings: GoogleSettings)(implicit sys: ClassicActorSystemProvider): GrpcSubscriber =
+      googleSettings: GoogleSettings)(implicit sys: ClassicActorSystemProvider): GrpcSubscriber =
     new GrpcSubscriber(settings, googleSettings, sys.classicSystem)
 
   def apply(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber =

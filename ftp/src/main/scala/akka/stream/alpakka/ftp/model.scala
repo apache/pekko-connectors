@@ -8,8 +8,8 @@ import java.net.InetAddress
 import java.net.Proxy
 import java.nio.file.attribute.PosixFilePermission
 
-import akka.annotation.{DoNotInherit, InternalApi}
-import org.apache.commons.net.ftp.{FTPClient, FTPSClient}
+import akka.annotation.{ DoNotInherit, InternalApi }
+import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
 /**
  * FTP remote file descriptor.
@@ -28,8 +28,7 @@ final case class FtpFile(
     isDirectory: Boolean,
     size: Long,
     lastModified: Long,
-    permissions: Set[PosixFilePermission]
-) {
+    permissions: Set[PosixFilePermission]) {
   val isFile: Boolean = !this.isDirectory
 }
 
@@ -71,8 +70,7 @@ final class FtpSettings private (
     val binary: Boolean,
     val passiveMode: Boolean,
     val configureConnection: FTPClient => Unit,
-    val proxy: Option[Proxy]
-) extends FtpFileSettings {
+    val proxy: Option[Proxy]) extends FtpFileSettings {
 
   def withHost(value: java.net.InetAddress): FtpSettings = copy(host = value)
   def withPort(value: Int): FtpSettings = copy(port = value)
@@ -94,8 +92,7 @@ final class FtpSettings private (
    * Sets the configure connection callback.
    */
   def withConfigureConnectionConsumer(
-      configureConnection: java.util.function.Consumer[FTPClient]
-  ): FtpSettings =
+      configureConnection: java.util.function.Consumer[FTPClient]): FtpSettings =
     copy(configureConnection = configureConnection.accept)
 
   private def copy(
@@ -105,16 +102,14 @@ final class FtpSettings private (
       binary: Boolean = binary,
       passiveMode: Boolean = passiveMode,
       configureConnection: FTPClient => Unit = configureConnection,
-      proxy: Option[Proxy] = proxy
-  ): FtpSettings = new FtpSettings(
+      proxy: Option[Proxy] = proxy): FtpSettings = new FtpSettings(
     host = host,
     port = port,
     credentials = credentials,
     binary = binary,
     passiveMode = passiveMode,
     configureConnection = configureConnection,
-    proxy = proxy
-  )
+    proxy = proxy)
 
   override def toString =
     "FtpSettings(" +
@@ -143,13 +138,11 @@ object FtpSettings {
     binary = false,
     passiveMode = false,
     configureConnection = _ => (),
-    proxy = None
-  )
+    proxy = None)
 
   /** Java API */
   def create(host: java.net.InetAddress): FtpSettings = apply(
-    host
-  )
+    host)
 }
 
 /**
@@ -171,8 +164,7 @@ final class FtpsSettings private (
     val binary: Boolean,
     val passiveMode: Boolean,
     val configureConnection: FTPSClient => Unit,
-    val proxy: Option[Proxy]
-) extends FtpFileSettings {
+    val proxy: Option[Proxy]) extends FtpFileSettings {
 
   def withHost(value: java.net.InetAddress): FtpsSettings = copy(host = value)
   def withPort(value: Int): FtpsSettings = copy(port = value)
@@ -194,8 +186,7 @@ final class FtpsSettings private (
    * Sets the configure connection callback.
    */
   def withConfigureConnectionConsumer(
-      configureConnection: java.util.function.Consumer[FTPSClient]
-  ): FtpsSettings =
+      configureConnection: java.util.function.Consumer[FTPSClient]): FtpsSettings =
     copy(configureConnection = configureConnection.accept)
 
   private def copy(
@@ -205,16 +196,14 @@ final class FtpsSettings private (
       binary: Boolean = binary,
       passiveMode: Boolean = passiveMode,
       configureConnection: FTPSClient => Unit = configureConnection,
-      proxy: Option[Proxy] = proxy
-  ): FtpsSettings = new FtpsSettings(
+      proxy: Option[Proxy] = proxy): FtpsSettings = new FtpsSettings(
     host = host,
     port = port,
     credentials = credentials,
     binary = binary,
     passiveMode = passiveMode,
     configureConnection = configureConnection,
-    proxy = proxy
-  )
+    proxy = proxy)
 
   override def toString =
     "FtpsSettings(" +
@@ -243,13 +232,11 @@ object FtpsSettings {
     binary = false,
     passiveMode = false,
     configureConnection = _ => (),
-    proxy = None
-  )
+    proxy = None)
 
   /** Java API */
   def create(host: java.net.InetAddress): FtpsSettings = apply(
-    host
-  )
+    host)
 }
 
 /**
@@ -272,8 +259,7 @@ final class SftpSettings private (
     val knownHosts: Option[String],
     val sftpIdentity: Option[SftpIdentity],
     val proxy: Option[Proxy],
-    val maxUnconfirmedReads: Int
-) extends RemoteFileSettings {
+    val maxUnconfirmedReads: Int) extends RemoteFileSettings {
 
   def withHost(value: java.net.InetAddress): SftpSettings = copy(host = value)
   def withPort(value: Int): SftpSettings = copy(port = value)
@@ -293,8 +279,7 @@ final class SftpSettings private (
       knownHosts: Option[String] = knownHosts,
       sftpIdentity: Option[SftpIdentity] = sftpIdentity,
       proxy: Option[Proxy] = proxy,
-      maxUnconfirmedReads: Int = maxUnconfirmedReads
-  ): SftpSettings = new SftpSettings(
+      maxUnconfirmedReads: Int = maxUnconfirmedReads): SftpSettings = new SftpSettings(
     host = host,
     port = port,
     credentials = credentials,
@@ -302,8 +287,7 @@ final class SftpSettings private (
     knownHosts = knownHosts,
     sftpIdentity = sftpIdentity,
     proxy = proxy,
-    maxUnconfirmedReads = maxUnconfirmedReads
-  )
+    maxUnconfirmedReads = maxUnconfirmedReads)
 
   override def toString =
     "SftpSettings(" +
@@ -334,13 +318,11 @@ object SftpSettings {
     knownHosts = None,
     sftpIdentity = None,
     proxy = None,
-    maxUnconfirmedReads = 1
-  )
+    maxUnconfirmedReads = 1)
 
   /** Java API */
   def create(host: java.net.InetAddress): SftpSettings = apply(
-    host
-  )
+    host)
 }
 
 /**
@@ -377,8 +359,7 @@ object FtpCredentials {
    */
   final class NonAnonFtpCredentials @InternalApi private[FtpCredentials] (
       val username: String,
-      val password: String
-  ) extends FtpCredentials {
+      val password: String) extends FtpCredentials {
     override def toString =
       s"FtpCredentials(username=$username,password.nonEmpty=${password.nonEmpty})"
   }
@@ -418,8 +399,7 @@ object SftpIdentity {
    */
   def createRawSftpIdentity(
       privateKey: Array[Byte],
-      privateKeyFilePassphrase: Array[Byte]
-  ): RawKeySftpIdentity =
+      privateKeyFilePassphrase: Array[Byte]): RawKeySftpIdentity =
     new RawKeySftpIdentity(privateKey, Some(privateKeyFilePassphrase))
 
   /**
@@ -432,8 +412,7 @@ object SftpIdentity {
   def createRawSftpIdentity(
       privateKey: Array[Byte],
       privateKeyFilePassphrase: Array[Byte],
-      publicKey: Array[Byte]
-  ): RawKeySftpIdentity =
+      publicKey: Array[Byte]): RawKeySftpIdentity =
     new RawKeySftpIdentity(privateKey, Some(privateKeyFilePassphrase), Some(publicKey))
 
   /**
@@ -452,8 +431,7 @@ object SftpIdentity {
    */
   def createFileSftpIdentity(
       privateKey: String,
-      privateKeyFilePassphrase: Array[Byte]
-  ): KeyFileSftpIdentity =
+      privateKeyFilePassphrase: Array[Byte]): KeyFileSftpIdentity =
     new KeyFileSftpIdentity(privateKey, Some(privateKeyFilePassphrase))
 }
 
@@ -467,8 +445,7 @@ object SftpIdentity {
 final class RawKeySftpIdentity @InternalApi private[ftp] (
     val privateKey: Array[Byte],
     val privateKeyFilePassphrase: Option[Array[Byte]] = None,
-    val publicKey: Option[Array[Byte]] = None
-) extends SftpIdentity {
+    val publicKey: Option[Array[Byte]] = None) extends SftpIdentity {
   type KeyType = Array[Byte]
 
   def withPrivateKey(value: KeyType): RawKeySftpIdentity = copy(privateKey = value)
@@ -482,12 +459,10 @@ final class RawKeySftpIdentity @InternalApi private[ftp] (
   private def copy(
       privateKey: Array[Byte] = privateKey,
       privateKeyFilePassphrase: Option[Array[Byte]] = privateKeyFilePassphrase,
-      publicKey: Option[Array[Byte]] = publicKey
-  ): RawKeySftpIdentity = new RawKeySftpIdentity(
+      publicKey: Option[Array[Byte]] = publicKey): RawKeySftpIdentity = new RawKeySftpIdentity(
     privateKey,
     privateKeyFilePassphrase,
-    publicKey
-  )
+    publicKey)
 
   override def toString: String =
     "RawKeySftpIdentity(" +
@@ -504,8 +479,7 @@ final class RawKeySftpIdentity @InternalApi private[ftp] (
  */
 final class KeyFileSftpIdentity @InternalApi private[ftp] (
     val privateKey: String,
-    val privateKeyFilePassphrase: Option[Array[Byte]] = None
-) extends SftpIdentity {
+    val privateKeyFilePassphrase: Option[Array[Byte]] = None) extends SftpIdentity {
   type KeyType = String
 
   def withPrivateKey(value: String): KeyFileSftpIdentity = copy(privateKey = value)
@@ -515,11 +489,10 @@ final class KeyFileSftpIdentity @InternalApi private[ftp] (
 
   private def copy(
       privateKey: String = privateKey,
-      privateKeyFilePassphrase: Option[Array[Byte]] = privateKeyFilePassphrase
-  ): KeyFileSftpIdentity = new KeyFileSftpIdentity(
-    privateKey,
-    privateKeyFilePassphrase
-  )
+      privateKeyFilePassphrase: Option[Array[Byte]] = privateKeyFilePassphrase): KeyFileSftpIdentity =
+    new KeyFileSftpIdentity(
+      privateKey,
+      privateKeyFilePassphrase)
 
 }
 

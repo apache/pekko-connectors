@@ -5,8 +5,8 @@
 package akka.stream.alpakka.s3.impl
 
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
 
 /**

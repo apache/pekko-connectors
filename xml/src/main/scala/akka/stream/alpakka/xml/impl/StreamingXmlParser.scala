@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.xml.impl
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.stream.alpakka.xml._
 import akka.stream.alpakka.xml.impl.StreamingXmlParser.withStreamingFinishedException
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
-import com.fasterxml.aalto.{AsyncByteArrayFeeder, AsyncXMLInputFactory, AsyncXMLStreamReader}
+import com.fasterxml.aalto.{ AsyncByteArrayFeeder, AsyncXMLInputFactory, AsyncXMLStreamReader }
 import com.fasterxml.aalto.stax.InputFactoryImpl
 import com.fasterxml.aalto.util.IllegalCharHandler.ReplacingIllegalCharHandler
 
@@ -23,7 +23,7 @@ private[xml] object StreamingXmlParser {
  * INTERNAL API
  */
 @InternalApi private[xml] class StreamingXmlParser(ignoreInvalidChars: Boolean,
-                                                   configureFactory: AsyncXMLInputFactory => Unit)
+    configureFactory: AsyncXMLInputFactory => Unit)
     extends GraphStage[FlowShape[ByteString, ParseEvent]] {
   val in: Inlet[ByteString] = Inlet("XMLParser.in")
   val out: Outlet[ParseEvent] = Outlet("XMLParser.out")
@@ -62,8 +62,8 @@ private[xml] object StreamingXmlParser {
         if (parser.hasNext) {
           parser.next() match {
             case AsyncXMLStreamReader.EVENT_INCOMPLETE if isClosed(in) && !started => completeStage()
-            case AsyncXMLStreamReader.EVENT_INCOMPLETE if isClosed(in) => failStage(withStreamingFinishedException)
-            case AsyncXMLStreamReader.EVENT_INCOMPLETE => pull(in)
+            case AsyncXMLStreamReader.EVENT_INCOMPLETE if isClosed(in)             => failStage(withStreamingFinishedException)
+            case AsyncXMLStreamReader.EVENT_INCOMPLETE                             => pull(in)
 
             case XMLStreamConstants.START_DOCUMENT =>
               started = true
@@ -78,9 +78,9 @@ private[xml] object StreamingXmlParser {
                 val optNs = Option(parser.getAttributeNamespace(i)).filterNot(_ == "")
                 val optPrefix = Option(parser.getAttributePrefix(i)).filterNot(_ == "")
                 Attribute(name = parser.getAttributeLocalName(i),
-                          value = parser.getAttributeValue(i),
-                          prefix = optPrefix,
-                          namespace = optNs)
+                  value = parser.getAttributeValue(i),
+                  prefix = optPrefix,
+                  namespace = optNs)
               }.toList
               val namespaces = (0 until parser.getNamespaceCount).map { i =>
                 val namespace = parser.getNamespaceURI(i)
@@ -92,11 +92,10 @@ private[xml] object StreamingXmlParser {
               push(
                 out,
                 StartElement(parser.getLocalName,
-                             attributes,
-                             optPrefix.filterNot(_ == ""),
-                             optNs.filterNot(_ == ""),
-                             namespaceCtx = namespaces)
-              )
+                  attributes,
+                  optPrefix.filterNot(_ == ""),
+                  optNs.filterNot(_ == ""),
+                  namespaceCtx = namespaces))
 
             case XMLStreamConstants.END_ELEMENT =>
               push(out, EndElement(parser.getLocalName))

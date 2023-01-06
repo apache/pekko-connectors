@@ -13,7 +13,7 @@ import com.github.matsluni.akkahttpspi.AkkaHttpClient
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.TableStatus
@@ -114,7 +114,7 @@ class ItemSpec extends TestKit(ActorSystem("ItemSpec")) with AsyncWordSpecLike w
       for {
         _ <- DynamoDb.single(deleteTableRequest)
         list <- DynamoDb.single(listTablesRequest)
-      } yield list.tableNames.asScala should not contain (tableName)
+      } yield list.tableNames.asScala should not contain tableName
     }
 
   }

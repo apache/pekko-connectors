@@ -7,17 +7,17 @@ package akka.stream.alpakka.sqs.scaladsl
 import java.net.URI
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{ActorSystem, Terminated}
+import akka.actor.{ ActorSystem, Terminated }
 import akka.http.scaladsl.Http
 import akka.stream.alpakka.sqs.SqsSourceSettings
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{BeforeAndAfterAll, Suite, Tag}
+import org.scalatest.{ BeforeAndAfterAll, Suite, Tag }
 
 import scala.concurrent.ExecutionContext
 //#init-client
 import com.github.matsluni.akkahttpspi.AkkaHttpClient
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest
@@ -28,9 +28,9 @@ import scala.util.Random
 
 trait DefaultTestContext extends Matchers with BeforeAndAfterAll with ScalaFutures { this: Suite =>
 
-  //#init-mat
+  // #init-mat
   implicit val system: ActorSystem = ActorSystem()
-  //#init-mat
+  // #init-mat
 
   // endpoint of the elasticmq docker container
   val sqsEndpoint: String = "http://localhost:9324"
@@ -41,9 +41,9 @@ trait DefaultTestContext extends Matchers with BeforeAndAfterAll with ScalaFutur
 
   lazy val sqsClient = createAsyncClient(sqsEndpoint)
 
-  //ElasticMQ has a bug: when you set wait time seconds > 0,
-  //sometimes the server does not return any message and blocks the 20 seconds, even if a message arrives later.
-  //this helps the tests to become a little less intermittent. =)
+  // ElasticMQ has a bug: when you set wait time seconds > 0,
+  // sometimes the server does not return any message and blocks the 20 seconds, even if a message arrives later.
+  // this helps the tests to become a little less intermittent. =)
   val sqsSourceSettings = SqsSourceSettings.Defaults.withWaitTimeSeconds(0)
 
   def randomQueueUrl(): String =
@@ -75,7 +75,7 @@ trait DefaultTestContext extends Matchers with BeforeAndAfterAll with ScalaFutur
   protected def closeSqsClient(): Unit = sqsClient.close()
 
   def createAsyncClient(sqsEndpoint: String): SqsAsyncClient = {
-    //#init-client
+    // #init-client
 
     // Don't encode credentials in your source code!
     // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
@@ -94,7 +94,7 @@ trait DefaultTestContext extends Matchers with BeforeAndAfterAll with ScalaFutur
       .build()
 
     system.registerOnTermination(awsSqsClient.close())
-    //#init-client
+    // #init-client
     awsSqsClient
   }
 }

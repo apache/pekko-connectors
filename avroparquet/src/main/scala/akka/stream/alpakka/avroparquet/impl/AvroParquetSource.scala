@@ -4,8 +4,8 @@
 
 package akka.stream.alpakka.avroparquet.impl
 import akka.annotation.InternalApi
-import akka.stream.{ActorAttributes, Attributes, Outlet, SourceShape}
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler}
+import akka.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetReader
 
@@ -38,8 +38,7 @@ private[avroparquet] class AvroParquetSource[T <: GenericRecord](reader: Parquet
             complete(out)
           }(push(out, _))
         }
-      }
-    )
+      })
 
     override def postStop(): Unit = reader.close()
 

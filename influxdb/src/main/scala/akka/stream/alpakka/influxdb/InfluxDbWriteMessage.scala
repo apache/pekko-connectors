@@ -30,9 +30,9 @@ object InfluxDbWriteMessage {
  */
 @ApiMayChange
 final class InfluxDbWriteMessage[T, C] private (val point: T,
-                                                val passThrough: C,
-                                                val databaseName: Option[String] = None,
-                                                val retentionPolicy: Option[String] = None) {
+    val passThrough: C,
+    val databaseName: Option[String] = None,
+    val retentionPolicy: Option[String] = None) {
 
   def withPoint(point: T): InfluxDbWriteMessage[T, C] =
     copy(point = point)
@@ -42,8 +42,7 @@ final class InfluxDbWriteMessage[T, C] private (val point: T,
       point = point,
       passThrough = passThrough,
       databaseName = databaseName,
-      retentionPolicy = retentionPolicy
-    )
+      retentionPolicy = retentionPolicy)
 
   def withDatabaseName(databaseName: String): InfluxDbWriteMessage[T, C] =
     copy(databaseName = Some(databaseName))
@@ -55,12 +54,11 @@ final class InfluxDbWriteMessage[T, C] private (val point: T,
       point: T = point,
       passThrough: C = passThrough,
       databaseName: Option[String] = databaseName,
-      retentionPolicy: Option[String] = retentionPolicy
-  ): InfluxDbWriteMessage[T, C] =
+      retentionPolicy: Option[String] = retentionPolicy): InfluxDbWriteMessage[T, C] =
     new InfluxDbWriteMessage(point = point,
-                             passThrough = passThrough,
-                             databaseName = databaseName,
-                             retentionPolicy = retentionPolicy)
+      passThrough = passThrough,
+      databaseName = databaseName,
+      retentionPolicy = retentionPolicy)
 
   override def toString: String =
     "InfluxDbWriteMessage(" +

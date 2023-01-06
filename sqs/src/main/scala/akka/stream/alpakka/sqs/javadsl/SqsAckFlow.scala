@@ -20,15 +20,15 @@ object SqsAckFlow {
    * creates a [[akka.stream.javadsl.Flow Flow]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def create(queueUrl: String,
-             settings: SqsAckSettings,
-             sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResult, NotUsed] =
+      settings: SqsAckSettings,
+      sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResult, NotUsed] =
     akka.stream.alpakka.sqs.scaladsl.SqsAckFlow.apply(queueUrl, settings)(sqsClient).asJava
 
   /**
    * creates a [[akka.stream.javadsl.Flow Flow]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def grouped(queueUrl: String,
-              settings: SqsAckGroupedSettings,
-              sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResultEntry, NotUsed] =
+      settings: SqsAckGroupedSettings,
+      sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResultEntry, NotUsed] =
     akka.stream.alpakka.sqs.scaladsl.SqsAckFlow.grouped(queueUrl, settings)(sqsClient).asJava
 }

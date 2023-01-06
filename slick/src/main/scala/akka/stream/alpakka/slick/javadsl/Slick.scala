@@ -7,13 +7,13 @@ package akka.stream.alpakka.slick.javadsl
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.util.concurrent.CompletionStage
-import java.util.function.{Function => JFunction}
-import java.util.function.{BiFunction => JBiFunction}
+import java.util.function.{ Function => JFunction }
+import java.util.function.{ BiFunction => JBiFunction }
 
 import akka.Done
 import akka.NotUsed
 import akka.japi.function.Function2
-import akka.stream.alpakka.slick.scaladsl.{Slick => ScalaSlick}
+import akka.stream.alpakka.slick.scaladsl.{ Slick => ScalaSlick }
 import akka.stream.javadsl._
 import slick.dbio.DBIO
 import slick.jdbc.GetResult
@@ -43,8 +43,7 @@ object Slick {
   def source[T](
       session: SlickSession,
       query: String,
-      mapper: JFunction[SlickRow, T]
-  ): Source[T, NotUsed] = {
+      mapper: JFunction[SlickRow, T]): Source[T, NotUsed] = {
     val streamingAction = SQLActionBuilder(query, SetParameter.SetUnit).as[T](toSlick(mapper))
 
     ScalaSlick
@@ -82,8 +81,7 @@ object Slick {
    */
   def flow[T](
       session: SlickSession,
-      toStatement: Function2[T, Connection, PreparedStatement]
-  ): Flow[T, java.lang.Integer, NotUsed] =
+      toStatement: Function2[T, Connection, PreparedStatement]): Flow[T, java.lang.Integer, NotUsed] =
     flow(session, 1, toStatement)
 
   /**
@@ -103,8 +101,7 @@ object Slick {
   def flow[T](
       session: SlickSession,
       parallelism: Int,
-      toStatement: JFunction[T, String]
-  ): Flow[T, java.lang.Integer, NotUsed] =
+      toStatement: JFunction[T, String]): Flow[T, java.lang.Integer, NotUsed] =
     ScalaSlick
       .flow[T](parallelism, toDBIO(toStatement))(session)
       .map(Int.box)
@@ -127,8 +124,7 @@ object Slick {
   def flow[T](
       session: SlickSession,
       parallelism: Int,
-      toStatement: Function2[T, Connection, PreparedStatement]
-  ): Flow[T, java.lang.Integer, NotUsed] =
+      toStatement: Function2[T, Connection, PreparedStatement]): Flow[T, java.lang.Integer, NotUsed] =
     ScalaSlick
       .flow[T](parallelism, toDBIO(toStatement))(session)
       .map(Int.box)
@@ -154,8 +150,7 @@ object Slick {
       session: SlickSession,
       executionContext: ExecutionContext,
       toStatement: JFunction[T, String],
-      mapper: JBiFunction[T, java.lang.Integer, R]
-  ): Flow[T, R, NotUsed] =
+      mapper: JBiFunction[T, java.lang.Integer, R]): Flow[T, R, NotUsed] =
     flowWithPassThrough(session, executionContext, 1, toStatement, mapper)
 
   /**
@@ -178,8 +173,7 @@ object Slick {
       session: SlickSession,
       executionContext: ExecutionContext,
       toStatement: Function2[T, Connection, PreparedStatement],
-      mapper: Function2[T, java.lang.Integer, R]
-  ): Flow[T, R, NotUsed] =
+      mapper: Function2[T, java.lang.Integer, R]): Flow[T, R, NotUsed] =
     flowWithPassThrough(session, executionContext, 1, toStatement, mapper)
 
   /**
@@ -206,14 +200,14 @@ object Slick {
       executionContext: ExecutionContext,
       parallelism: Int,
       toStatement: JFunction[T, String],
-      mapper: JBiFunction[T, java.lang.Integer, R]
-  ): Flow[T, R, NotUsed] =
+      mapper: JBiFunction[T, java.lang.Integer, R]): Flow[T, R, NotUsed] =
     ScalaSlick
-      .flowWithPassThrough[T, R](parallelism, (t: T) => {
-        toDBIO(toStatement)
-          .apply(t)
-          .map(count => mapper.apply(t, count))(executionContext)
-      })(session)
+      .flowWithPassThrough[T, R](parallelism,
+        (t: T) => {
+          toDBIO(toStatement)
+            .apply(t)
+            .map(count => mapper.apply(t, count))(executionContext)
+        })(session)
       .asJava
 
   /**
@@ -240,14 +234,14 @@ object Slick {
       executionContext: ExecutionContext,
       parallelism: Int,
       toStatement: Function2[T, Connection, PreparedStatement],
-      mapper: Function2[T, java.lang.Integer, R]
-  ): Flow[T, R, NotUsed] =
+      mapper: Function2[T, java.lang.Integer, R]): Flow[T, R, NotUsed] =
     ScalaSlick
-      .flowWithPassThrough[T, R](parallelism, (t: T) => {
-        toDBIO(toStatement)
-          .apply(t)
-          .map(count => mapper.apply(t, count))(executionContext)
-      })(session)
+      .flowWithPassThrough[T, R](parallelism,
+        (t: T) => {
+          toDBIO(toStatement)
+            .apply(t)
+            .map(count => mapper.apply(t, count))(executionContext)
+        })(session)
       .asJava
 
   /**
@@ -280,8 +274,7 @@ object Slick {
    */
   def sink[T](
       session: SlickSession,
-      toStatement: Function2[T, Connection, PreparedStatement]
-  ): Sink[T, CompletionStage[Done]] =
+      toStatement: Function2[T, Connection, PreparedStatement]): Sink[T, CompletionStage[Done]] =
     sink(session, 1, toStatement)
 
   /**
@@ -301,8 +294,7 @@ object Slick {
   def sink[T](
       session: SlickSession,
       parallelism: Int,
-      toStatement: JFunction[T, String]
-  ): Sink[T, CompletionStage[Done]] =
+      toStatement: JFunction[T, String]): Sink[T, CompletionStage[Done]] =
     ScalaSlick
       .sink[T](parallelism, toDBIO(toStatement))(session)
       .mapMaterializedValue(_.toJava)
@@ -325,8 +317,7 @@ object Slick {
   def sink[T](
       session: SlickSession,
       parallelism: Int,
-      toStatement: Function2[T, Connection, PreparedStatement]
-  ): Sink[T, CompletionStage[Done]] =
+      toStatement: Function2[T, Connection, PreparedStatement]): Sink[T, CompletionStage[Done]] =
     ScalaSlick
       .sink[T](parallelism, toDBIO(toStatement))(session)
       .mapMaterializedValue(_.toJava)
@@ -340,8 +331,7 @@ object Slick {
    * @param session The database session to use.
    */
   def sink(
-      session: SlickSession
-  ): Sink[String, CompletionStage[Done]] =
+      session: SlickSession): Sink[String, CompletionStage[Done]] =
     sink[String](session, 1, JFunction.identity[String]())
 
   /**
@@ -356,8 +346,7 @@ object Slick {
    */
   def sink(
       session: SlickSession,
-      parallelism: Int
-  ): Sink[String, CompletionStage[Done]] =
+      parallelism: Int): Sink[String, CompletionStage[Done]] =
     sink[String](session, parallelism, JFunction.identity[String]())
 
   private def toSlick[T](mapper: JFunction[SlickRow, T]): GetResult[T] =

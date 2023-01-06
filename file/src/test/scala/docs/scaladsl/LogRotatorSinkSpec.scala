@@ -9,23 +9,23 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import akka.Done
 import akka.actor.ActorSystem
-import akka.stream.{Attributes, Inlet, SinkShape}
+import akka.stream.{ Attributes, Inlet, SinkShape }
 import akka.stream.alpakka.file.scaladsl.LogRotatorSink
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Compression, FileIO, Flow, Keep, Sink, Source}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, InHandler}
+import akka.stream.scaladsl.{ Compression, FileIO, Flow, Keep, Sink, Source }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.stream.testkit.scaladsl.TestSource
 import akka.testkit.TestKit
 import akka.util.ByteString
-import com.google.common.jimfs.{Configuration, Jimfs}
+import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future, Promise}
+import scala.concurrent.{ Await, ExecutionContext, Future, Promise }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -191,8 +191,7 @@ class LogRotatorSinkSpec
             Flow[(String, String)]
               .map { case (_, data) => ByteString(data) }
               .via(Compression.gzip)
-              .toMat(FileIO.toPath(path))(Keep.right)
-        )
+              .toMat(FileIO.toPath(path))(Keep.right))
       // #stream
 
       val timeBaseCompletion = Source(
@@ -202,9 +201,7 @@ class LogRotatorSinkSpec
           ("stream1", "test3"),
           ("stream2", "test4"),
           ("stream2", "test5"),
-          ("stream2", "test6")
-        )
-      ).runWith(timeBasedSink)
+          ("stream2", "test6"))).runWith(timeBasedSink)
 
       timeBaseCompletion.futureValue shouldBe Done
 
@@ -255,11 +252,9 @@ class LogRotatorSinkSpec
       val completion =
         Source(test.map(ByteString.apply)).runWith(
           LogRotatorSink.withSinkFactory[Unit, Done](
-            triggerGeneratorCreator = () => (_: ByteString) => Some({}),
+            triggerGeneratorCreator = () => (_: ByteString) => Some {},
             sinkFactory = (_: Unit) =>
-              Flow[ByteString].toMat(new StrangeSlowSink[ByteString](add, 100.millis, 200.millis))(Keep.right)
-          )
-        )
+              Flow[ByteString].toMat(new StrangeSlowSink[ByteString](add, 100.millis, 200.millis))(Keep.right)))
 
       Await.result(completion, 3.seconds)
       out should contain theSameElementsAs test
@@ -279,9 +274,7 @@ class LogRotatorSinkSpec
               (path: Path) =>
                 Flow[ByteString]
                   .via(Compression.gzip)
-                  .toMat(FileIO.toPath(path))(Keep.right)
-            )
-          )
+                  .toMat(FileIO.toPath(path))(Keep.right)))
       // #sample
 
       completion.futureValue shouldBe Done
@@ -321,9 +314,10 @@ class LogRotatorSinkSpec
     "function fail on path creation" in assertAllStagesStopped {
       val ex = new Exception("my-exception")
       val triggerFunctionCreator = () => {
-        (x: ByteString) => {
-          throw ex
-        }
+        (x: ByteString) =>
+          {
+            throw ex
+          }
       }
       val (probe, completion) =
         TestSource.probe[ByteString].toMat(LogRotatorSink(triggerFunctionCreator))(Keep.both).run()
@@ -334,9 +328,10 @@ class LogRotatorSinkSpec
     "downstream fail on file write" in assertAllStagesStopped {
       val path = Files.createTempFile(fs.getPath("/"), "test", ".log")
       val triggerFunctionCreator = () => {
-        (x: ByteString) => {
-          Option(path)
-        }
+        (x: ByteString) =>
+          {
+            Option(path)
+          }
       }
       val (probe, completion) =
         TestSource
@@ -354,7 +349,7 @@ class LogRotatorSinkSpec
       exactly(
         1,
         List(exception, // Akka 2.5 throws nio exception directly
-             exception.getCause) // Akka 2.6 wraps nio exception in a akka.stream.IOOperationIncompleteException
+          exception.getCause) // Akka 2.6 wraps nio exception in a akka.stream.IOOperationIncompleteException
       ) shouldBe a[java.nio.channels.NonWritableChannelException]
     }
 
@@ -363,9 +358,10 @@ class LogRotatorSinkSpec
   "downstream fail on exception in sink" in assertAllStagesStopped {
     val path = Files.createTempFile(fs.getPath("/"), "test", ".log")
     val triggerFunctionCreator = () => {
-      (x: ByteString) => {
-        Option(path)
-      }
+      (x: ByteString) =>
+        {
+          Option(path)
+        }
     }
     val (probe, completion) =
       TestSource
@@ -379,9 +375,7 @@ class LogRotatorSinkSpec
                   if (data.utf8String == "test") throw new IllegalArgumentException("The data is broken")
                   data
                 }
-                .toMat(Sink.ignore)(Keep.right)
-          )
-        )(Keep.both)
+                .toMat(Sink.ignore)(Keep.right)))(Keep.both)
         .run()
 
     probe.sendNext(ByteString("test"))
@@ -395,7 +389,7 @@ class LogRotatorSinkSpec
     exactly(
       1,
       List(exception, // Akka 2.5 throws nio exception directly
-           exception.getCause) // Akka 2.6 wraps nio exception in a akka.stream.IOOperationIncompleteException
+        exception.getCause) // Akka 2.6 wraps nio exception in a akka.stream.IOOperationIncompleteException
     ) shouldBe a[IllegalArgumentException]
   }
 
@@ -441,8 +435,7 @@ class LogRotatorSinkSpec
               promise.success(Done.done())
               super.onUpstreamFinish()
             }
-          }
-        )
+          })
       }
 
       (logic, promise.future)

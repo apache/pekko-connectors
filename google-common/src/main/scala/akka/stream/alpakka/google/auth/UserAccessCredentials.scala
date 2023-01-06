@@ -10,7 +10,7 @@ import akka.stream.Materializer
 import akka.stream.alpakka.google.RequestSettings
 import com.typesafe.config.Config
 import spray.json.DefaultJsonProtocol._
-import spray.json.{JsonParser, RootJsonFormat}
+import spray.json.{ JsonParser, RootJsonFormat }
 
 import java.time.Clock
 import scala.concurrent.Future
@@ -20,12 +20,10 @@ import scala.io.Source
 private[alpakka] object UserAccessCredentials {
 
   def apply(clientId: String, clientSecret: String, refreshToken: String, projectId: String)(
-      implicit system: ClassicActorSystemProvider
-  ): Credentials = {
+      implicit system: ClassicActorSystemProvider): Credentials = {
     require(
       clientId.nonEmpty && clientSecret.nonEmpty && refreshToken.nonEmpty && projectId.nonEmpty,
-      "User access credentials requires that client id, client secret, refresh token, and project id are defined."
-    )
+      "User access credentials requires that client id, client secret, refresh token, and project id are defined.")
     new UserAccessCredentials(clientId, clientSecret, refreshToken, projectId)
   }
 
@@ -35,8 +33,7 @@ private[alpakka] object UserAccessCredentials {
         clientId = c.getString("client-id"),
         clientSecret = c.getString("client-secret"),
         refreshToken = c.getString("refresh-token"),
-        projectId = c.getString("project-id")
-      )
+        projectId = c.getString("project-id"))
     } else {
       val src = Source.fromFile(c.getString("path"))
       val credentials = JsonParser(src.mkString).convertTo[UserAccessCredentialsFile]
@@ -45,31 +42,28 @@ private[alpakka] object UserAccessCredentials {
         clientId = credentials.client_id,
         clientSecret = credentials.client_secret,
         refreshToken = credentials.refresh_token,
-        projectId = credentials.quota_project_id
-      )
+        projectId = credentials.quota_project_id)
     }
   }
 
   final case class UserAccessCredentialsFile(client_id: String,
-                                             client_secret: String,
-                                             refresh_token: String,
-                                             quota_project_id: String)
+      client_secret: String,
+      refresh_token: String,
+      quota_project_id: String)
   implicit val userAccessCredentialsFormat: RootJsonFormat[UserAccessCredentialsFile] = jsonFormat4(
-    UserAccessCredentialsFile
-  )
+    UserAccessCredentialsFile)
 }
 
 @InternalApi
 private final class UserAccessCredentials(clientId: String,
-                                          clientSecret: String,
-                                          refreshToken: String,
-                                          projectId: String)(
-    implicit mat: Materializer
-) extends OAuth2Credentials(projectId) {
+    clientSecret: String,
+    refreshToken: String,
+    projectId: String)(
+    implicit mat: Materializer) extends OAuth2Credentials(projectId) {
 
   override protected def getAccessToken()(implicit mat: Materializer,
-                                          settings: RequestSettings,
-                                          clock: Clock): Future[AccessToken] = {
+      settings: RequestSettings,
+      clock: Clock): Future[AccessToken] = {
     UserAccessMetadata.getAccessToken(clientId, clientSecret, refreshToken)
   }
 }

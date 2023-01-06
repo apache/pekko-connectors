@@ -6,7 +6,7 @@ package akka.stream.alpakka.orientdb.impl
 
 import akka.annotation.InternalApi
 import akka.stream._
-import akka.stream.alpakka.orientdb.{OrientDbWriteMessage, OrientDbWriteSettings}
+import akka.stream.alpakka.orientdb.{ OrientDbWriteMessage, OrientDbWriteSettings }
 import akka.stream.stage._
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
@@ -24,8 +24,9 @@ import scala.util.control.NonFatal
 private[orientdb] class OrientDbFlowStage[T, C](
     className: String,
     settings: OrientDbWriteSettings,
-    clazz: Option[Class[T]]
-) extends GraphStage[FlowShape[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T, C]]]] {
+    clazz: Option[Class[T]])
+    extends GraphStage[FlowShape[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T,
+        C]]]] {
 
   private val in = Inlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("in")
   private val out = Outlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("out")
@@ -37,7 +38,7 @@ private[orientdb] class OrientDbFlowStage[T, C](
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     clazz match {
       case Some(c) => new OrientDbTypedLogic(c)
-      case None => new ORecordLogic(className)
+      case None    => new ORecordLogic(className)
     }
 
   sealed abstract class OrientDbLogic extends GraphStageLogic(shape) with InHandler with OutHandler {

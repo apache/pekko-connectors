@@ -4,13 +4,13 @@
 
 package docs.scaladsl
 
-import akka.stream.alpakka.couchbase.scaladsl.{CouchbaseSession, CouchbaseSource}
+import akka.stream.alpakka.couchbase.scaladsl.{ CouchbaseSession, CouchbaseSource }
 import akka.stream.alpakka.couchbase.testing.CouchbaseSupport
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Sink
 import akka.stream.testkit.scaladsl.StreamTestKit._
 import com.couchbase.client.java.auth.PasswordAuthenticator
-import com.couchbase.client.java.{Bucket, CouchbaseCluster}
+import com.couchbase.client.java.{ Bucket, CouchbaseCluster }
 import com.couchbase.client.java.document.json.JsonObject
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -70,8 +70,8 @@ class CouchbaseSourceSpec
 
     "run simple N1QL query" in assertAllStagesStopped {
 
-      //#n1ql
-      import com.couchbase.client.java.query.{N1qlParams, N1qlQuery}
+      // #n1ql
+      import com.couchbase.client.java.query.{ N1qlParams, N1qlQuery }
 
       val params = N1qlParams.build.adhoc(false)
       val query = N1qlQuery.simple(s"select count(*) from $queryBucketName", params)
@@ -80,7 +80,7 @@ class CouchbaseSourceSpec
         CouchbaseSource
           .fromN1qlQuery(sessionSettings, query, bucketName)
           .runWith(Sink.seq)
-      //#n1ql
+      // #n1ql
 
       resultAsFuture.futureValue.head.get("$1") shouldEqual 4
     }

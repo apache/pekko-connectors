@@ -6,12 +6,12 @@ package akka.stream.alpakka.google.javadsl
 
 import akka.NotUsed
 import akka.actor.ClassicActorSystemProvider
-import akka.http.javadsl.model.{HttpRequest, HttpResponse}
+import akka.http.javadsl.model.{ HttpRequest, HttpResponse }
 import akka.http.javadsl.unmarshalling.Unmarshaller
-import akka.http.scaladsl.{model => sm}
+import akka.http.scaladsl.{ model => sm }
 import akka.stream.alpakka.google.GoogleSettings
-import akka.stream.alpakka.google.scaladsl.{Google => ScalaGoogle}
-import akka.stream.javadsl.{Sink, Source}
+import akka.stream.alpakka.google.scaladsl.{ Google => ScalaGoogle }
+import akka.stream.javadsl.{ Sink, Source }
 import akka.util.ByteString
 
 import java.util.concurrent.CompletionStage
@@ -34,9 +34,9 @@ private[alpakka] trait Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the unmarshalled response
    */
   final def singleRequest[T](request: HttpRequest,
-                             unmarshaller: Unmarshaller[HttpResponse, T],
-                             settings: GoogleSettings,
-                             system: ClassicActorSystemProvider): CompletionStage[T] =
+      unmarshaller: Unmarshaller[HttpResponse, T],
+      settings: GoogleSettings,
+      system: ClassicActorSystemProvider): CompletionStage[T] =
     ScalaGoogle.singleRequest[T](request)(unmarshaller.asScala, system, settings).toJava
 
   /**
@@ -48,7 +48,7 @@ private[alpakka] trait Google {
    * @return a [[akka.stream.javadsl.Source]] that emits an `Out` for each page of the resource
    */
   final def paginatedRequest[Out <: Paginated](request: HttpRequest,
-                                               unmarshaller: Unmarshaller[HttpResponse, Out]): Source[Out, NotUsed] = {
+      unmarshaller: Unmarshaller[HttpResponse, Out]): Source[Out, NotUsed] = {
     implicit val um = unmarshaller.asScala
     ScalaGoogle.paginatedRequest[Out](request).asJava
   }
@@ -64,8 +64,7 @@ private[alpakka] trait Google {
    */
   final def resumableUpload[Out](
       request: HttpRequest,
-      unmarshaller: Unmarshaller[HttpResponse, Out]
-  ): Sink[ByteString, CompletionStage[Out]] =
+      unmarshaller: Unmarshaller[HttpResponse, Out]): Sink[ByteString, CompletionStage[Out]] =
     ScalaGoogle.resumableUpload(request)(unmarshaller.asScala).mapMaterializedValue(_.toJava).asJava
 
   private implicit def requestAsScala(request: HttpRequest): sm.HttpRequest = request.asInstanceOf[sm.HttpRequest]

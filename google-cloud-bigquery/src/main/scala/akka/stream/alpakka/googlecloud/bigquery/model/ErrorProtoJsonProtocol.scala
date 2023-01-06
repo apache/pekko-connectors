@@ -5,7 +5,7 @@
 package akka.stream.alpakka.googlecloud.bigquery.model
 
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
+import com.fasterxml.jackson.annotation.{ JsonCreator, JsonProperty }
 import spray.json.JsonFormat
 
 import java.util
@@ -26,8 +26,8 @@ final case class ErrorProto private (reason: Option[String], location: Option[St
   @nowarn("msg=never used")
   @JsonCreator
   private def this(@JsonProperty(value = "reason") reason: String,
-                   @JsonProperty("location") location: String,
-                   @JsonProperty(value = "message") message: String) =
+      @JsonProperty("location") location: String,
+      @JsonProperty(value = "message") message: String) =
     this(Option(reason), Option(location), Option(message))
 
   def getReason = reason.asJava

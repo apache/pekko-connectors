@@ -7,7 +7,7 @@ package akka.stream.alpakka.hbase.impl
 import akka.stream._
 import akka.stream.alpakka.hbase.HTableSettings
 import akka.stream.stage._
-import org.apache.hadoop.hbase.client.{Attributes => _, _}
+import org.apache.hadoop.hbase.client.{ Attributes => _, _ }
 
 import scala.util.control.NonFatal
 
@@ -30,10 +30,11 @@ private[hbase] class HBaseFlowStage[A](settings: HTableSettings[A]) extends Grap
 
       lazy val table: Table = getOrCreateTable(settings.tableName, settings.columnFamilies).get
 
-      setHandler(out, new OutHandler {
-        override def onPull() =
-          pull(in)
-      })
+      setHandler(out,
+        new OutHandler {
+          override def onPull() =
+            pull(in)
+        })
 
       setHandler(
         in,
@@ -45,19 +46,18 @@ private[hbase] class HBaseFlowStage[A](settings: HTableSettings[A]) extends Grap
 
             for (mutation <- mutations) {
               mutation match {
-                case x: Put => table.put(x)
-                case x: Delete => table.delete(x)
-                case x: Append => table.append(x)
+                case x: Put       => table.put(x)
+                case x: Delete    => table.delete(x)
+                case x: Append    => table.append(x)
                 case x: Increment => table.increment(x)
-                case _ =>
+                case _            =>
               }
             }
 
             push(out, msg)
           }
 
-        }
-      )
+        })
 
       override def postStop() = {
         log.debug("Stage completed")

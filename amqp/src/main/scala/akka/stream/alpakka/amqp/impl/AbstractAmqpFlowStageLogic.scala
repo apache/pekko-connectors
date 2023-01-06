@@ -7,8 +7,8 @@ package akka.stream.alpakka.amqp.impl
 import akka.Done
 import akka.annotation.InternalApi
 import akka.stream._
-import akka.stream.alpakka.amqp.{AmqpWriteSettings, WriteMessage, WriteResult}
-import akka.stream.stage.{GraphStageLogic, InHandler, OutHandler, StageLogging}
+import akka.stream.alpakka.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
+import akka.stream.stage.{ GraphStageLogic, InHandler, OutHandler, StageLogging }
 
 import scala.concurrent.Promise
 
@@ -20,8 +20,7 @@ import scala.concurrent.Promise
 @InternalApi private abstract class AbstractAmqpFlowStageLogic[T](
     override val settings: AmqpWriteSettings,
     streamCompletion: Promise[Done],
-    shape: FlowShape[(WriteMessage, T), (WriteResult, T)]
-) extends GraphStageLogic(shape)
+    shape: FlowShape[(WriteMessage, T), (WriteResult, T)]) extends GraphStageLogic(shape)
     with AmqpConnectorLogic
     with StageLogging {
 
@@ -47,15 +46,15 @@ import scala.concurrent.Promise
         val (message, passThrough) = grab(in)
         publish(message, passThrough)
       }
-    }
-  )
+    })
 
   protected def publish(message: WriteMessage, passThrough: T): Unit
 
-  setHandler(out, new OutHandler {
-    override def onPull(): Unit =
-      if (!hasBeenPulled(in)) tryPull(in)
-  })
+  setHandler(out,
+    new OutHandler {
+      override def onPull(): Unit =
+        if (!hasBeenPulled(in)) tryPull(in)
+    })
 
   override def postStop(): Unit = {
     streamCompletion.tryFailure(new RuntimeException("Stage stopped unexpectedly."))

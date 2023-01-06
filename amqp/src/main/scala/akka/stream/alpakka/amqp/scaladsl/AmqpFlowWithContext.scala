@@ -6,7 +6,7 @@ package akka.stream.alpakka.amqp.scaladsl
 
 import akka.Done
 import akka.stream.alpakka.amqp._
-import akka.stream.scaladsl.{Flow, FlowWithContext}
+import akka.stream.scaladsl.{ Flow, FlowWithContext }
 
 import scala.concurrent.Future
 
@@ -18,11 +18,9 @@ object AmqpFlowWithContext {
    * @see [[AmqpFlow.apply]]
    */
   def apply[T](
-      settings: AmqpWriteSettings
-  ): FlowWithContext[WriteMessage, T, WriteResult, T, Future[Done]] =
+      settings: AmqpWriteSettings): FlowWithContext[WriteMessage, T, WriteResult, T, Future[Done]] =
     FlowWithContext.fromTuples(
-      Flow.fromGraph(new impl.AmqpSimpleFlowStage[T](settings))
-    )
+      Flow.fromGraph(new impl.AmqpSimpleFlowStage[T](settings)))
 
   /**
    * Creates a contextual variant of corresponding [[AmqpFlow]].
@@ -34,9 +32,7 @@ object AmqpFlowWithContext {
    * supposed to be used with another AMQP brokers.
    */
   def withConfirm[T](
-      settings: AmqpWriteSettings
-  ): FlowWithContext[WriteMessage, T, WriteResult, T, Future[Done]] =
+      settings: AmqpWriteSettings): FlowWithContext[WriteMessage, T, WriteResult, T, Future[Done]] =
     FlowWithContext.fromTuples(
-      Flow.fromGraph(new impl.AmqpAsyncFlowStage(settings))
-    )
+      Flow.fromGraph(new impl.AmqpAsyncFlowStage(settings)))
 }

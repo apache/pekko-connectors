@@ -6,7 +6,7 @@ package akka.stream.alpakka.elasticsearch.impl
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.elasticsearch.Operation._
-import akka.stream.alpakka.elasticsearch.{MessageWriter, WriteMessage}
+import akka.stream.alpakka.elasticsearch.{ MessageWriter, WriteMessage }
 import spray.json._
 
 import scala.collection.immutable
@@ -19,10 +19,10 @@ import scala.collection.immutable
  */
 @InternalApi
 private[impl] final class RestBulkApiV5[T, C](indexName: String,
-                                              typeName: String,
-                                              versionType: Option[String],
-                                              allowExplicitIndex: Boolean,
-                                              messageWriter: MessageWriter[T])
+    typeName: String,
+    versionType: Option[String],
+    allowExplicitIndex: Boolean,
+    messageWriter: MessageWriter[T])
     extends RestBulkApi[T, C] {
 
   private lazy val typeNameTuple = "_type" -> JsString(typeName)
@@ -36,23 +36,20 @@ private[impl] final class RestBulkApiV5[T, C](indexName: String,
             val fields = Seq(
               optionalNumber("_version", message.version),
               optionalString("version_type", versionType),
-              optionalString("_id", message.id)
-            ).flatten
+              optionalString("_id", message.id)).flatten
             "index" -> JsObject(sharedFields ++ fields: _*)
           case Create => "create" -> JsObject(sharedFields ++ optionalString("_id", message.id): _*)
           case Update | Upsert =>
             val fields =
               ("_id" -> JsString(message.id.get)) +: Seq(
                 optionalNumber("_version", message.version),
-                optionalString("version_type", versionType)
-              ).flatten
+                optionalString("version_type", versionType)).flatten
             "update" -> JsObject(sharedFields ++ fields: _*)
           case Delete =>
             val fields =
               ("_id" -> JsString(message.id.get)) +: Seq(
                 optionalNumber("_version", message.version),
-                optionalString("version_type", versionType)
-              ).flatten
+                optionalString("version_type", versionType)).flatten
             "delete" -> JsObject(sharedFields ++ fields: _*)
           case Nop => "" -> JsObject()
         }
@@ -63,7 +60,7 @@ private[impl] final class RestBulkApiV5[T, C](indexName: String,
       }
       .filter(_.nonEmpty) match {
       case Nil => "" // if all NOPs
-      case x => x.mkString("", "\n", "\n")
+      case x   => x.mkString("", "\n", "\n")
     }
 
   override def constructSharedFields(message: WriteMessage[T, C]): Seq[(String, JsString)] = {

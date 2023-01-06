@@ -9,7 +9,7 @@ import java.util.UUID
 import akka.actor.ActorSystem
 import akka.testkit.TestKit
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.scalatest.{ BeforeAndAfterAll, Suite }
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient
 import software.amazon.awssdk.services.eventbridge.model.CreateEventBusRequest
 
@@ -18,9 +18,9 @@ import scala.concurrent.duration.FiniteDuration
 trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
   this: Suite =>
 
-  //#init-system
+  // #init-system
   implicit val system: ActorSystem = ActorSystem()
-  //#init-system
+  // #init-system
 
   def eventBusEndpoint: String = s"http://localhost:4587"
 
@@ -30,8 +30,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
   def createEventBus(): String =
     eventBridgeClient
       .createEventBus(
-        CreateEventBusRequest.builder().name(s"alpakka-topic-${UUID.randomUUID().toString}").build()
-      )
+        CreateEventBusRequest.builder().name(s"alpakka-topic-${UUID.randomUUID().toString}").build())
       .get()
       .eventBusArn()
 
@@ -43,11 +42,11 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
   override protected def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
   def createAsyncClient(endEndpoint: String): EventBridgeAsyncClient = {
-    //#init-client
+    // #init-client
     import java.net.URI
 
     import com.github.matsluni.akkahttpspi.AkkaHttpClient
-    import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+    import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
     import software.amazon.awssdk.regions.Region
     import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient
 
@@ -61,7 +60,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
         .build()
 
     system.registerOnTermination(awsEventBridgeClient.close())
-    //#init-client
+    // #init-client
     awsEventBridgeClient
   }
 

@@ -20,26 +20,25 @@ object WriteMessage {
     new WriteMessage(DeleteByQuery, query = Option(query))
 
   def createUpdateMessage[T](idField: String,
-                             idValue: String,
-                             updates: Map[String, Map[String, Any]]): WriteMessage[T, NotUsed] =
+      idValue: String,
+      updates: Map[String, Map[String, Any]]): WriteMessage[T, NotUsed] =
     new WriteMessage(AtomicUpdate,
-                     idField = Option(idField),
-                     idFieldValue = Option(idValue),
-                     routingFieldValue = None,
-                     updates = updates)
+      idField = Option(idField),
+      idFieldValue = Option(idValue),
+      routingFieldValue = None,
+      updates = updates)
 
   /**
    * Java API
    */
   def createUpdateMessage[T](idField: String,
-                             idValue: String,
-                             updates: java.util.Map[String, java.util.Map[String, Object]]): WriteMessage[T, NotUsed] =
+      idValue: String,
+      updates: java.util.Map[String, java.util.Map[String, Object]]): WriteMessage[T, NotUsed] =
     WriteMessage.createUpdateMessage(idField, idValue, asScalaUpdates(updates))
 
   @InternalApi
   private[solr] def asScalaUpdates(
-      jupdates: java.util.Map[String, java.util.Map[String, Object]]
-  ): Map[String, Map[String, Any]] =
+      jupdates: java.util.Map[String, java.util.Map[String, Object]]): Map[String, Map[String, Any]] =
     jupdates.asScala.map {
       case (k, v: java.util.Map[String, Object]) =>
         (k, v.asScala.toMap)
@@ -57,8 +56,7 @@ final class WriteMessage[T, C] private (
     val query: Option[String] = None,
     val source: Option[T] = None,
     val updates: Map[String, Map[String, Any]] = Map.empty,
-    val passThrough: C = NotUsed
-) {
+    val passThrough: C = NotUsed) {
 
   def withIdFieldValue(idField: String, idFieldValue: String): WriteMessage[T, C] =
     copy(idField = Option(idField), idFieldValue = Some(idFieldValue))
@@ -88,8 +86,7 @@ final class WriteMessage[T, C] private (
       query: Option[String] = query,
       source: Option[T] = source,
       updates: Map[String, Map[String, Any]] = updates,
-      passThrough: C = passThrough
-  ): WriteMessage[T, C] = new WriteMessage[T, C](
+      passThrough: C = passThrough): WriteMessage[T, C] = new WriteMessage[T, C](
     operation = operation,
     idField = idField,
     idFieldValue = idFieldValue,
@@ -97,8 +94,7 @@ final class WriteMessage[T, C] private (
     query = query,
     source = source,
     updates = updates,
-    passThrough = passThrough
-  )
+    passThrough = passThrough)
 
   override def toString =
     "WriteMessage(" +
@@ -114,13 +110,13 @@ final class WriteMessage[T, C] private (
 }
 
 final case class WriteResult[T, C](idField: Option[String],
-                                   idFieldValue: Option[String],
-                                   routingFieldValue: Option[String],
-                                   query: Option[String],
-                                   source: Option[T],
-                                   updates: Map[String, Map[String, Any]],
-                                   passThrough: C,
-                                   status: Int)
+    idFieldValue: Option[String],
+    routingFieldValue: Option[String],
+    query: Option[String],
+    source: Option[T],
+    updates: Map[String, Map[String, Any]],
+    passThrough: C,
+    status: Int)
 
 sealed trait Operation
 object Upsert extends Operation

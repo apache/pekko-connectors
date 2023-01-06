@@ -7,7 +7,7 @@ package docs.scaladsl
 import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.alpakka.xml.scaladsl.XmlParsing
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.util.ByteString
 import docs.javadsl.XmlHelper
 import org.scalatest.BeforeAndAfterAll
@@ -20,13 +20,13 @@ import org.scalatest.wordspec.AnyWordSpec
 class XmlSubtreeSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with LogCapturing {
   implicit val system: ActorSystem = ActorSystem("Test")
 
-  //#subtree
+  // #subtree
   val parse = Flow[String]
     .map(ByteString(_))
     .via(XmlParsing.parser)
     .via(XmlParsing.subtree("doc" :: "elem" :: "item" :: Nil))
     .toMat(Sink.seq)(Keep.right)
-  //#subtree
+  // #subtree
 
   "XML subtree support" must {
 
@@ -48,14 +48,12 @@ class XmlSubtreeSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         Seq(
           "<item>i1</item>",
           "<item>i2</item>",
-          "<item>i3</item>"
-        )
-      )
+          "<item>i3</item>"))
     }
 
     "properly extract subtree of nested events" in {
 
-      //#subtree-usage
+      // #subtree-usage
       val doc =
         """
           |<doc>
@@ -67,7 +65,7 @@ class XmlSubtreeSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
           |</doc>
         """.stripMargin
       val resultFuture = Source.single(doc).runWith(parse)
-      //#subtree-usage
+      // #subtree-usage
 
       val result = Await.result(resultFuture, 3.seconds)
 
@@ -75,9 +73,7 @@ class XmlSubtreeSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
         Seq(
           "<item>i1</item>",
           "<item><sub>i2</sub></item>",
-          "<item>i3</item>"
-        )
-      )
+          "<item>i3</item>"))
     }
 
     "properly ignore matches not deep enough" in {
@@ -137,9 +133,7 @@ class XmlSubtreeSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
           "<item>i1</item>",
           "<item><sub>i2</sub></item>",
           "<item>i3</item>",
-          "<item>i4</item>"
-        )
-      )
+          "<item>i4</item>"))
     }
 
     "properly extract a subtree of events even with the namespace prefix" in {

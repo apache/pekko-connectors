@@ -11,8 +11,7 @@ package akka.stream.alpakka.google.firebase.fcm.v1.models
 case class ApnsConfig(
     headers: Option[Map[String, String]] = None,
     payload: Option[String] = None,
-    fcm_options: Option[FcmOption] = None
-) {
+    fcm_options: Option[FcmOption] = None) {
   def withHeaders(value: Map[String, String]): ApnsConfig = this.copy(headers = Option(value))
   def withPayload(value: String): ApnsConfig = this.copy(payload = Option(value))
   def withFcmOptions(value: FcmOption): ApnsConfig = this.copy(fcm_options = Option(value))

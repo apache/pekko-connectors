@@ -48,13 +48,13 @@ private[jms] object JmsMessageReader {
       .map { key =>
         key -> (accessor(key) match {
           case v: java.lang.Boolean => v.booleanValue()
-          case v: java.lang.Byte => v.byteValue()
-          case v: java.lang.Short => v.shortValue()
+          case v: java.lang.Byte    => v.byteValue()
+          case v: java.lang.Short   => v.shortValue()
           case v: java.lang.Integer => v.intValue()
-          case v: java.lang.Long => v.longValue()
-          case v: java.lang.Float => v.floatValue()
-          case v: java.lang.Double => v.doubleValue()
-          case other => other
+          case v: java.lang.Long    => v.longValue()
+          case v: java.lang.Float   => v.floatValue()
+          case v: java.lang.Double  => v.doubleValue()
+          case other                => other
         })
       }
       .toMap

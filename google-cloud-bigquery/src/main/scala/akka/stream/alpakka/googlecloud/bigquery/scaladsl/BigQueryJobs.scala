@@ -8,23 +8,23 @@ import akka.NotUsed
 import akka.actor.ClassicActorSystemProvider
 import akka.dispatch.ExecutionContexts
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.marshalling.{Marshal, ToEntityMarshaller}
+import akka.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
 import akka.http.scaladsl.model.ContentTypes.`application/octet-stream`
 import akka.http.scaladsl.model.HttpMethods.POST
 import akka.http.scaladsl.model.Uri.Query
-import akka.http.scaladsl.model.{HttpEntity, HttpRequest, RequestEntity}
+import akka.http.scaladsl.model.{ HttpEntity, HttpRequest, RequestEntity }
 import akka.http.scaladsl.unmarshalling.FromEntityUnmarshaller
 import akka.stream.FlowShape
 import akka.stream.alpakka.google.implicits._
 import akka.stream.alpakka.google.scaladsl.`X-Upload-Content-Type`
-import akka.stream.alpakka.google.{GoogleAttributes, GoogleSettings}
+import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
 import akka.stream.alpakka.googlecloud.bigquery._
 import akka.stream.alpakka.googlecloud.bigquery.model.CreateDisposition.CreateNever
 import akka.stream.alpakka.googlecloud.bigquery.model.SourceFormat.NewlineDelimitedJsonFormat
-import akka.stream.alpakka.googlecloud.bigquery.model.{Job, JobCancelResponse, JobConfiguration, JobConfigurationLoad}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ Job, JobCancelResponse, JobConfiguration, JobConfigurationLoad }
 import akka.stream.alpakka.googlecloud.bigquery.model.TableReference
 import akka.stream.alpakka.googlecloud.bigquery.model.WriteDisposition.WriteAppend
-import akka.stream.scaladsl.{Flow, GraphDSL, Keep, Sink}
+import akka.stream.scaladsl.{ Flow, GraphDSL, Keep, Sink }
 import akka.util.ByteString
 
 import scala.annotation.nowarn
@@ -41,7 +41,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    * @return a [[scala.concurrent.Future]] containing the [[akka.stream.alpakka.googlecloud.bigquery.model.Job]]
    */
   def job(jobId: String, location: Option[String] = None)(implicit system: ClassicActorSystemProvider,
-                                                          settings: GoogleSettings): Future[Job] = {
+      settings: GoogleSettings): Future[Job] = {
     import BigQueryException._
     import SprayJsonSupport._
     val uri = BigQueryEndpoints.job(settings.projectId, jobId)
@@ -59,8 +59,8 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    */
   def cancelJob(
       jobId: String,
-      location: Option[String] = None
-  )(implicit system: ClassicActorSystemProvider, settings: GoogleSettings): Future[JobCancelResponse] = {
+      location: Option[String] = None)(
+      implicit system: ClassicActorSystemProvider, settings: GoogleSettings): Future[JobCancelResponse] = {
     import BigQueryException._
     import SprayJsonSupport._
     val uri = BigQueryEndpoints.jobCancel(settings.projectId, jobId)
@@ -93,8 +93,8 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    * @return a [[akka.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[akka.stream.alpakka.googlecloud.bigquery.model.Job]] for every upload job created
    */
   def insertAllAsync[In: ToEntityMarshaller](datasetId: String,
-                                             tableId: String,
-                                             labels: Option[Map[String, String]]): Flow[In, Job, NotUsed] =
+      tableId: String,
+      labels: Option[Map[String, String]]): Flow[In, Job, NotUsed] =
     Flow
       .fromMaterializer { (mat, attr) =>
         import SprayJsonSupport._
@@ -111,15 +111,10 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
                   Some(TableReference(Some(settings.projectId), datasetId, Some(tableId))),
                   Some(CreateNever),
                   Some(WriteAppend),
-                  Some(NewlineDelimitedJsonFormat)
-                )
-              ),
-              labels
-            )
-          ),
+                  Some(NewlineDelimitedJsonFormat))),
+              labels)),
           None,
-          None
-        )
+          None)
 
         val jobFlow = {
           val newline = ByteString("\n")
@@ -154,8 +149,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    * @return a [[akka.stream.scaladsl.Sink]] that uploads bytes and materializes a [[scala.concurrent.Future]] containing the [[Job]] when completed
    */
   def createLoadJob[@nowarn("msg=shadows") Job: ToEntityMarshaller: FromEntityUnmarshaller](
-      job: Job
-  ): Sink[ByteString, Future[Job]] =
+      job: Job): Sink[ByteString, Future[Job]] =
     Sink
       .fromMaterializer { (mat, attr) =>
         import BigQueryException._

@@ -6,7 +6,7 @@ package docs.scaladsl
 
 import akka.Done
 import akka.actor.ActorSystem
-import akka.stream.alpakka.cassandra.scaladsl.{CassandraSession, CassandraSource, CassandraSpecBase}
+import akka.stream.alpakka.cassandra.scaladsl.{ CassandraSession, CassandraSource, CassandraSpecBase }
 import akka.stream.scaladsl.Sink
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
@@ -15,9 +15,9 @@ import scala.concurrent.Future
 
 class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSourceSpec")) {
 
-  //#element-to-insert
+  // #element-to-insert
   case class ToInsert(id: Integer, cc: Integer)
-  //#element-to-insert
+  // #element-to-insert
 
   val sessionSettings = akka.stream.alpakka.cassandra.CassandraSessionSettings()
   val data = 1 until 103
@@ -80,7 +80,7 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
 
     "stream the result of a Cassandra statement with several pages" in assertAllStagesStopped {
       // #statement
-      import com.datastax.oss.driver.api.core.cql.{Row, SimpleStatement}
+      import com.datastax.oss.driver.api.core.cql.{ Row, SimpleStatement }
 
       val stmt = SimpleStatement.newInstance(s"SELECT * FROM $intTable").setPageSize(20)
 

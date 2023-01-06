@@ -5,9 +5,9 @@
 package docs.scaladsl
 
 import akka.Done
-import akka.actor.{ActorSystem, Cancellable}
+import akka.actor.{ ActorSystem, Cancellable }
 import akka.stream.alpakka.googlecloud.pubsub.grpc.PubSubSettings
-import akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.{GrpcPublisher, PubSubAttributes}
+import akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.{ GrpcPublisher, PubSubAttributes }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import org.scalatest.OptionValues
 
@@ -24,7 +24,7 @@ import scala.concurrent.Future
 //#publish-single
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{BeforeAndAfterAll, Inside}
+import org.scalatest.{ BeforeAndAfterAll, Inside }
 
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
@@ -46,7 +46,7 @@ class IntegrationSpec
   "connector" should {
 
     "publish a message" in {
-      //#publish-single
+      // #publish-single
       val projectId = "alpakka"
       val topic = "simpleTopic"
 
@@ -66,13 +66,13 @@ class IntegrationSpec
         GooglePubSub.publish(parallelism = 1)
 
       val publishedMessageIds: Future[Seq[PublishResponse]] = source.via(publishFlow).runWith(Sink.seq)
-      //#publish-single
+      // #publish-single
 
       publishedMessageIds.futureValue should not be empty
     }
 
     "publish batch" in {
-      //#publish-fast
+      // #publish-fast
       val projectId = "alpakka"
       val topic = "simpleTopic"
 
@@ -90,13 +90,13 @@ class IntegrationSpec
         }
         .via(GooglePubSub.publish(parallelism = 1))
         .runWith(Sink.seq)
-      //#publish-fast
+      // #publish-fast
 
       published.futureValue should not be empty
     }
 
     "subscribe streaming" in {
-      //#subscribe-stream
+      // #subscribe-stream
       val projectId = "alpakka"
       val subscription = "simpleSubscription"
 
@@ -106,7 +106,7 @@ class IntegrationSpec
 
       val subscriptionSource: Source[ReceivedMessage, Future[Cancellable]] =
         GooglePubSub.subscribe(request, pollInterval = 1.second)
-      //#subscribe-stream
+      // #subscribe-stream
 
       val first = subscriptionSource.runWith(Sink.head)
 
@@ -127,7 +127,7 @@ class IntegrationSpec
     }
 
     "subscribe sync" in {
-      //#subscribe-sync
+      // #subscribe-sync
       val projectId = "alpakka"
       val subscription = "simpleSubscription"
 
@@ -137,7 +137,7 @@ class IntegrationSpec
 
       val subscriptionSource: Source[ReceivedMessage, Future[Cancellable]] =
         GooglePubSub.subscribePolling(request, pollInterval = 1.second)
-      //#subscribe-sync
+      // #subscribe-sync
 
       val first = subscriptionSource.runWith(Sink.head)
 
@@ -168,7 +168,7 @@ class IntegrationSpec
       val subscriptionSource: Source[ReceivedMessage, Future[Cancellable]] =
         GooglePubSub.subscribe(request, pollInterval = 1.second)
 
-      //#acknowledge
+      // #acknowledge
       val ackSink: Sink[AcknowledgeRequest, Future[Done]] =
         GooglePubSub.acknowledge(parallelism = 1)
 
@@ -178,16 +178,13 @@ class IntegrationSpec
           message.ackId
         }
         .groupedWithin(10, 1.second)
-        .map(
-          ids =>
-            AcknowledgeRequest()
-              .withSubscription(
-                s"projects/$projectId/subscriptions/$subscription"
-              )
-              .withAckIds(ids)
-        )
+        .map(ids =>
+          AcknowledgeRequest()
+            .withSubscription(
+              s"projects/$projectId/subscriptions/$subscription")
+            .withAckIds(ids))
         .to(ackSink)
-      //#acknowledge
+      // #acknowledge
     }
 
     "acknowledge flow" in {
@@ -242,8 +239,7 @@ class IntegrationSpec
         .alsoTo(
           Flow[ReceivedMessage]
             .map(msg => AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId)))
-            .to(GooglePubSub.acknowledge(parallelism = 1))
-        )
+            .to(GooglePubSub.acknowledge(parallelism = 1)))
         .runWith(Sink.head)
 
       inside(subWithAckResp.futureValue.message) {

@@ -6,7 +6,7 @@ package docs.scaladsl
 
 import akka.actor.typed.scaladsl.Behaviors
 import akka.stream.alpakka.mqtt.streaming.MqttSessionSettings
-import akka.stream.alpakka.mqtt.streaming.scaladsl.{ActorMqttClientSession, ActorMqttServerSession}
+import akka.stream.alpakka.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession }
 import org.scalatest.wordspec.AnyWordSpec
 
 class MqttTypedActorSystemSpec extends AnyWordSpec {

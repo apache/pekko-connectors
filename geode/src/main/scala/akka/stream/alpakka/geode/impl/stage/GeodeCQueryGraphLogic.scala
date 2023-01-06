@@ -8,10 +8,10 @@ import java.util
 import java.util.concurrent.Semaphore
 
 import akka.annotation.InternalApi
-import akka.stream.stage.{AsyncCallback, StageLogging}
-import akka.stream.{Outlet, SourceShape}
+import akka.stream.stage.{ AsyncCallback, StageLogging }
+import akka.stream.{ Outlet, SourceShape }
 import org.apache.geode.cache.client.ClientCache
-import org.apache.geode.cache.query.{CqAttributesFactory, CqEvent, CqQuery, Struct}
+import org.apache.geode.cache.query.{ CqAttributesFactory, CqEvent, CqQuery, Struct }
 import org.apache.geode.cache.util.CqListenerAdapter
 
 import scala.collection.mutable
@@ -19,9 +19,9 @@ import scala.util.Try
 
 @InternalApi
 private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V],
-                                                       val clientCache: ClientCache,
-                                                       val queryName: String,
-                                                       val sql: String)
+    val clientCache: ClientCache,
+    val queryName: String,
+    val sql: String)
     extends GeodeSourceStageLogic[V](shape, clientCache)
     with StageLogging {
 
@@ -42,7 +42,7 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
 
     val eventListener = new CqListenerAdapter() {
       override def onEvent(ev: CqEvent): Unit =
-        onGeodeElement((ev.getNewValue().asInstanceOf[V]))
+        onGeodeElement(ev.getNewValue().asInstanceOf[V])
 
       override def onError(ev: CqEvent): Unit =
         log.error(ev.getThrowable, s"$ev")

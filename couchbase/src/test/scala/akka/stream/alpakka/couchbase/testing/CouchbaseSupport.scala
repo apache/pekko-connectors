@@ -7,13 +7,13 @@ package akka.stream.alpakka.couchbase.testing
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.alpakka.couchbase.scaladsl._
-import akka.stream.alpakka.couchbase.{CouchbaseSessionSettings, CouchbaseWriteSettings}
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.alpakka.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import akka.stream.scaladsl.{ Sink, Source }
 import com.couchbase.client.deps.io.netty.buffer.Unpooled
 import com.couchbase.client.deps.io.netty.util.CharsetUtil
 import com.couchbase.client.java.ReplicateTo
 import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.document.{BinaryDocument, JsonDocument, RawJsonDocument, StringDocument}
+import com.couchbase.client.java.document.{ BinaryDocument, JsonDocument, RawJsonDocument, StringDocument }
 import org.slf4j.LoggerFactory
 import play.api.libs.json.Json
 
@@ -21,7 +21,7 @@ import scala.jdk.CollectionConverters._
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 
 case class TestObject(id: String, value: String)
 
@@ -29,15 +29,15 @@ trait CouchbaseSupport {
 
   private val log = LoggerFactory.getLogger(classOf[CouchbaseSupport])
 
-  //#init-actor-system
+  // #init-actor-system
   implicit val actorSystem: ActorSystem = ActorSystem()
-  //#init-actor-system
+  // #init-actor-system
 
   val sampleData = TestObject("First", "First")
 
   val sampleSequence: Seq[TestObject] = sampleData +: Seq[TestObject](TestObject("Second", "Second"),
-                                                                      TestObject("Third", "Third"),
-                                                                      TestObject("Fourth", "Fourth"))
+    TestObject("Third", "Third"),
+    TestObject("Fourth", "Fourth"))
 
   val sampleJavaList: java.util.List[TestObject] = sampleSequence.asJava
 
@@ -78,7 +78,7 @@ trait CouchbaseSupport {
       .via(CouchbaseFlow.upsert(sessionSettings, CouchbaseWriteSettings.inMemory, bucketName))
       .runWith(Sink.ignore)
     Await.result(bulkUpsertResult, 5.seconds)
-    //all queries are Eventual Consistent, se we need to wait for index refresh!!
+    // all queries are Eventual Consistent, se we need to wait for index refresh!!
     Thread.sleep(2000)
   }
 

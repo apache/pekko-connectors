@@ -13,7 +13,7 @@ import akka.http.scaladsl.unmarshalling.FromResponseUnmarshaller
 import akka.stream.alpakka.google.http.GoogleHttp
 import akka.stream.alpakka.google.scaladsl.Paginated
 import akka.stream.scaladsl.Source
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -31,8 +31,7 @@ private[alpakka] object PaginatedRequest {
    * @return a [[akka.stream.scaladsl.Source]] that emits an `Out` for each page of the resource
    */
   def apply[Out: FromResponseUnmarshaller](request: HttpRequest)(
-      implicit paginated: Paginated[Out]
-  ): Source[Out, NotUsed] = {
+      implicit paginated: Paginated[Out]): Source[Out, NotUsed] = {
 
     require(request.method == GET, "Paginated request must be GET request")
 

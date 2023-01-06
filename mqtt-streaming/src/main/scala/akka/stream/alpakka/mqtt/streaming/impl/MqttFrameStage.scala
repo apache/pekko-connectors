@@ -6,8 +6,8 @@ package akka.stream.alpakka.mqtt.streaming
 package impl
 
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
 
 import scala.annotation.tailrec
@@ -18,8 +18,7 @@ import scala.collection.immutable
   def frames(
       maxPacketSize: Int,
       bytesReceived: ByteString,
-      bytesToEmit: Vector[ByteString]
-  ): Either[IllegalStateException, (immutable.Iterable[ByteString], ByteString)] = {
+      bytesToEmit: Vector[ByteString]): Either[IllegalStateException, (immutable.Iterable[ByteString], ByteString)] = {
     import MqttCodec._
 
     val i = bytesReceived.iterator
@@ -83,12 +82,12 @@ import scala.collection.immutable
                 failStage(ex)
             }
           }
-        }
-      )
+        })
 
-      setHandler(out, new OutHandler {
-        override def onPull(): Unit =
-          if (!hasBeenPulled(in)) pull(in)
-      })
+      setHandler(out,
+        new OutHandler {
+          override def onPull(): Unit =
+            if (!hasBeenPulled(in)) pull(in)
+        })
     }
 }

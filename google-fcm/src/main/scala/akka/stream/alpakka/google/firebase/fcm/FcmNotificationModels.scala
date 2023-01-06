@@ -6,7 +6,7 @@ package akka.stream.alpakka.google.firebase.fcm
 
 import akka.stream.alpakka.google.firebase.fcm.FcmNotificationModels._
 
-/** Use class from package akka.stream.alpakka.google.firebase.fcm.v1.models*/
+/** Use class from package akka.stream.alpakka.google.firebase.fcm.v1.models */
 @deprecated("Use class from package akka.stream.alpakka.google.firebase.fcm.v1.models", "3.0.2")
 @Deprecated
 object FcmNotificationModels {
@@ -30,8 +30,7 @@ object FcmNotificationModels {
       body_loc_key: String,
       body_loc_args: Seq[String],
       title_loc_key: String,
-      title_loc_args: Seq[String]
-  )
+      title_loc_args: Seq[String])
 
   /** Use akka.stream.alpakka.google.firebase.fcm.v1.models.AndroidConfig */
   @deprecated("Use akka.stream.alpakka.google.firebase.fcm.v1.models.AndroidConfig", "3.0.2")
@@ -42,8 +41,7 @@ object FcmNotificationModels {
       ttl: String,
       restricted_package_name: String,
       data: Map[String, String],
-      notification: AndroidNotification
-  )
+      notification: AndroidNotification)
 
   /** Use akka.stream.alpakka.google.firebase.fcm.v1.models.AndroidMessagePriority */
   @deprecated("Use akka.stream.alpakka.google.firebase.fcm.v1.models.AndroidMessagePriority", "3.0.2")
@@ -134,8 +132,7 @@ case class FcmNotification(
     apns: Option[ApnsConfig] = None,
     token: Option[String] = None,
     topic: Option[String] = None,
-    condition: Option[String] = None
-) {
+    condition: Option[String] = None) {
   def withData(data: Map[String, String]): FcmNotification = this.copy(data = Option(data))
   def withBasicNotification(notification: BasicNotification): FcmNotification =
     this.copy(notification = Option(notification))
@@ -145,8 +142,8 @@ case class FcmNotification(
   def withWebPushConfig(webPush: WebPushConfig): FcmNotification = this.copy(webPush = Option(webPush))
   def withApnsConfig(apns: ApnsConfig): FcmNotification = this.copy(apns = Option(apns))
   def withTarget(target: NotificationTarget): FcmNotification = target match {
-    case Token(t) => this.copy(token = Option(t), topic = None, condition = None)
-    case Topic(t) => this.copy(token = None, topic = Option(t), condition = None)
+    case Token(t)     => this.copy(token = Option(t), topic = None, condition = None)
+    case Topic(t)     => this.copy(token = None, topic = Option(t), condition = None)
     case Condition(t) => this.copy(token = None, topic = None, condition = Option(t))
   }
   def isSendable: Boolean =

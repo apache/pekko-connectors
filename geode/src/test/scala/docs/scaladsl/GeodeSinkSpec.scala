@@ -6,10 +6,10 @@ package docs.scaladsl
 
 import akka.Done
 import akka.stream.alpakka.geode.RegionSettings
-import akka.stream.alpakka.geode.scaladsl.{Geode, PoolSubscription}
+import akka.stream.alpakka.geode.scaladsl.{ Geode, PoolSubscription }
 import akka.stream.scaladsl.Sink
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration.DurationInt
 
 class GeodeSinkSpec extends GeodeBaseSpec {
@@ -36,7 +36,7 @@ class GeodeSinkSpec extends GeodeBaseSpec {
 
         val source = buildAnimalsSource(1 to 40)
 
-        //#sink
+        // #sink
         val animalsRegionSettings: RegionSettings[Int, Animal] =
           RegionSettings("animals", (a: Animal) => a.id)
 
@@ -44,7 +44,7 @@ class GeodeSinkSpec extends GeodeBaseSpec {
           geode.sink(animalsRegionSettings)
 
         val fut: Future[Done] = source.runWith(sink)
-        //#sink
+        // #sink
         Await.ready(fut, 10.seconds)
 
         geode.close()

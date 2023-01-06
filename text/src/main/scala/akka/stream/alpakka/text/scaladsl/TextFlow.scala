@@ -7,7 +7,7 @@ package akka.stream.alpakka.text.scaladsl
 import java.nio.charset.Charset
 
 import akka.NotUsed
-import akka.stream.alpakka.text.impl.{CharsetDecodingFlow, CharsetTranscodingFlow}
+import akka.stream.alpakka.text.impl.{ CharsetDecodingFlow, CharsetTranscodingFlow }
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 

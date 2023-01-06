@@ -4,13 +4,14 @@
 
 package akka.stream.alpakka.azure.storagequeue
 
-import java.time.{Duration => JavaDuration}
+import java.time.{ Duration => JavaDuration }
 import java.util.Optional
 
 import scala.compat.java8.OptionConverters._
-import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.concurrent.duration.{ Duration, FiniteDuration }
 
-/** Settings for AzureQueueSource
+/**
+ * Settings for AzureQueueSource
  *
  * @param initalVisibilityTimeout Specifies how many seconds a message becomes invisible after it has been dequeued.
  *        See parameter of the same name in [[com.microsoft.azure.storage.queue.CloudQueue$.retrieveMessages]].
@@ -22,14 +23,12 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 final class AzureQueueSourceSettings private (
     val initialVisibilityTimeout: Int,
     val batchSize: Int,
-    val retrieveRetryTimeout: Option[FiniteDuration] = None
-) {
+    val retrieveRetryTimeout: Option[FiniteDuration] = None) {
 
   def withBatchSize(batchSize: Int): AzureQueueSourceSettings =
     copy(batchSize = batchSize)
 
   /**
-   *
    * @param retrieveRetryTimeout in seconds. If <= 0 retrying of message retrieval is disabled.
    * @return
    */

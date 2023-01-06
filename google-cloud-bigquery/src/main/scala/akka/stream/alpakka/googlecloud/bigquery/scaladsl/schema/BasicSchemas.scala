@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema
 
-import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaType.{Boolean, Float, Integer, Numeric, String}
+import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaType.{ Boolean, Float, Integer, Numeric, String }
 
 /**
  * Provides the BigQuery schemas for the most important Scala types.

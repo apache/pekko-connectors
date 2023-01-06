@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.geode.impl.pdx
 
-import java.util.{Date, UUID}
+import java.util.{ Date, UUID }
 
 import akka.annotation.InternalApi
 import org.apache.geode.pdx.PdxWriter
@@ -32,8 +32,7 @@ object PdxEncoder {
       implicit witness: Witness.Aux[K],
       isHCons: IsHCons.Aux[H :: T, H, T],
       hEncoder: Lazy[PdxEncoder[H]],
-      tEncoder: Lazy[PdxEncoder[T]]
-  ): PdxEncoder[FieldType[K, H] :: T] =
+      tEncoder: Lazy[PdxEncoder[T]]): PdxEncoder[FieldType[K, H] :: T] =
     instance[FieldType[K, H] :: T] {
       case (writer, o, fieldName) =>
         hEncoder.value.encode(writer, isHCons.head(o), witness.value)
@@ -43,8 +42,7 @@ object PdxEncoder {
 
   implicit def objectEncoder[A, Repr <: HList](
       implicit gen: LabelledGeneric.Aux[A, Repr],
-      hlistEncoder: Lazy[PdxEncoder[Repr]]
-  ): PdxEncoder[A] = instance {
+      hlistEncoder: Lazy[PdxEncoder[Repr]]): PdxEncoder[A] = instance {
     case (writer, o, fieldName) =>
       hlistEncoder.value.encode(writer, gen.to(o), fieldName)
   }

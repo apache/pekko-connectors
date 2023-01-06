@@ -6,7 +6,7 @@ package akka.stream.alpakka.googlecloud.bigquery.model
 
 import akka.stream.alpakka.google.scaladsl.Paginated
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import spray.json.{JsonFormat, RootJsonFormat}
+import spray.json.{ JsonFormat, RootJsonFormat }
 
 import java.util
 import scala.jdk.CollectionConverters._
@@ -23,9 +23,9 @@ import scala.compat.java8.OptionConverters._
  * @param location the geographic location where the dataset should reside
  */
 final case class Dataset private (datasetReference: DatasetReference,
-                                  friendlyName: Option[String],
-                                  labels: Option[Map[String, String]],
-                                  location: Option[String]) {
+    friendlyName: Option[String],
+    labels: Option[Map[String, String]],
+    location: Option[String]) {
 
   def getDatasetReference = datasetReference
   def getFriendlyName = friendlyName.asJava
@@ -62,9 +62,9 @@ object Dataset {
    * @return a [[Dataset]]
    */
   def create(datasetReference: DatasetReference,
-             friendlyName: util.Optional[String],
-             labels: util.Optional[util.Map[String, String]],
-             location: util.Optional[String]) =
+      friendlyName: util.Optional[String],
+      labels: util.Optional[util.Map[String, String]],
+      location: util.Optional[String]) =
     Dataset(datasetReference, friendlyName.asScala, labels.asScala.map(_.asScala.toMap), location.asScala)
 
   implicit val format: RootJsonFormat[Dataset] = jsonFormat4(apply)

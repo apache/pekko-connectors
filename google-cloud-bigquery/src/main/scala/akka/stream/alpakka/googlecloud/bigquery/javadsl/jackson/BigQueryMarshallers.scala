@@ -6,11 +6,11 @@ package akka.stream.alpakka.googlecloud.bigquery.javadsl.jackson
 
 import akka.http.javadsl.marshallers.jackson.Jackson
 import akka.http.javadsl.marshalling.Marshaller
-import akka.http.javadsl.model.{HttpEntity, MediaTypes, RequestEntity}
+import akka.http.javadsl.model.{ HttpEntity, MediaTypes, RequestEntity }
 import akka.http.javadsl.unmarshalling.Unmarshaller
 import akka.stream.alpakka.googlecloud.bigquery.model.QueryResponse
-import akka.stream.alpakka.googlecloud.bigquery.model.{TableDataInsertAllRequest, TableDataListResponse}
-import com.fasterxml.jackson.databind.{JavaType, MapperFeature, ObjectMapper}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ TableDataInsertAllRequest, TableDataListResponse }
+import com.fasterxml.jackson.databind.{ JavaType, MapperFeature, ObjectMapper }
 
 import java.io.IOException
 
@@ -35,7 +35,7 @@ object BigQueryMarshallers {
    * @tparam T the data model for each row
    */
   def tableDataListResponseUnmarshaller[T](mapper: ObjectMapper,
-                                           `type`: Class[T]): Unmarshaller[HttpEntity, TableDataListResponse[T]] =
+      `type`: Class[T]): Unmarshaller[HttpEntity, TableDataListResponse[T]] =
     unmarshaller(mapper, mapper.getTypeFactory.constructParametricType(classOf[TableDataListResponse[T]], `type`))
 
   /**
@@ -53,8 +53,7 @@ object BigQueryMarshallers {
    * @tparam T the data model for each row
    */
   def tableDataInsertAllRequestMarshaller[T](
-      mapper: ObjectMapper
-  ): Marshaller[TableDataInsertAllRequest[T], RequestEntity] =
+      mapper: ObjectMapper): Marshaller[TableDataInsertAllRequest[T], RequestEntity] =
     Jackson.marshaller[TableDataInsertAllRequest[T]](mapper)
 
   /**

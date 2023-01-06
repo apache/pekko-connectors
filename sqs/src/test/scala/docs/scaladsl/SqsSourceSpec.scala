@@ -10,14 +10,14 @@ import java.util.concurrent.TimeUnit
 import akka.Done
 import akka.stream.KillSwitches
 import akka.stream.alpakka.sqs._
-import akka.stream.alpakka.sqs.scaladsl.{DefaultTestContext, SqsSource}
+import akka.stream.alpakka.sqs.scaladsl.{ DefaultTestContext, SqsSource }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{ Keep, Sink }
 import com.github.matsluni.akkahttpspi.AkkaHttpClient
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.http.async.SdkAsyncHttpClient
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
@@ -115,7 +115,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
     }
   }
 
-  allAvailableAttributes foreach { attribute =>
+  allAvailableAttributes.foreach { attribute =>
     it should s"ask for '${attribute.name}' set in the settings" taggedAs Integration in {
       new IntegrationFixture {
         val settings = sqsSourceSettings.withAttribute(attribute)
@@ -164,8 +164,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
     new IntegrationFixture {
       val messageAttributes = Map(
         "attribute-1" -> MessageAttributeValue.builder().stringValue("v1").dataType("String").build(),
-        "attribute-2" -> MessageAttributeValue.builder().stringValue("v2").dataType("String").build()
-      )
+        "attribute-2" -> MessageAttributeValue.builder().stringValue("v2").dataType("String").build())
       val settings =
         sqsSourceSettings.withMessageAttributes(messageAttributes.keys.toList.map(MessageAttributeName.apply))
 
@@ -187,7 +186,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
   }
 
   "SqsSourceSettings" should "be constructed" in {
-    //#SqsSourceSettings
+    // #SqsSourceSettings
     val settings = SqsSourceSettings()
       .withWaitTime(20.seconds)
       .withMaxBufferSize(100)
@@ -196,7 +195,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       .withMessageAttribute(MessageAttributeName.create("bar.*"))
       .withCloseOnEmptyReceive(true)
       .withVisibilityTimeout(10.seconds)
-    //#SqsSourceSettings
+    // #SqsSourceSettings
 
     settings.maxBufferSize should be(100)
   }
@@ -246,18 +245,18 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
        */
       val customClient: SdkAsyncHttpClient = AkkaHttpClient.builder().withActorSystem(system).build()
 
-      //#init-custom-client
+      // #init-custom-client
       implicit val customSqsClient = SqsAsyncClient
         .builder()
         .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("x", "x")))
-        //#init-custom-client
+        // #init-custom-client
         .endpointOverride(URI.create(sqsEndpoint))
-        //#init-custom-client
+        // #init-custom-client
         .region(Region.EU_CENTRAL_1)
         .httpClient(customClient)
         .build()
 
-      //#init-custom-client
+      // #init-custom-client
 
       val sendMessageRequest =
         SendMessageRequest
@@ -287,13 +286,12 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
 
       input.foreach(m => sqsClient.sendMessage(m).get(2, TimeUnit.SECONDS))
 
-      //#run
+      // #run
       val messages: Future[immutable.Seq[Message]] =
         SqsSource(
           queueUrl,
-          SqsSourceSettings().withCloseOnEmptyReceive(true).withWaitTime(10.millis)
-        ).runWith(Sink.seq)
-      //#run
+          SqsSourceSettings().withCloseOnEmptyReceive(true).withWaitTime(10.millis)).runWith(Sink.seq)
+      // #run
 
       messages.futureValue should have size 100
     }

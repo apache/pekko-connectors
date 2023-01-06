@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.jms
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
 
 import scala.concurrent.duration._
@@ -15,9 +15,9 @@ import akka.util.JavaDurationConverters._
  * Those failed messages can be retried at the cost of potentially duplicating the failed messages.
  */
 final class SendRetrySettings private (val initialRetry: scala.concurrent.duration.FiniteDuration,
-                                       val backoffFactor: Double,
-                                       val maxBackoff: scala.concurrent.duration.FiniteDuration,
-                                       val maxRetries: Int) {
+    val backoffFactor: Double,
+    val maxBackoff: scala.concurrent.duration.FiniteDuration,
+    val maxRetries: Int) {
 
   /** Wait time before retrying the first time. */
   def withInitialRetry(value: scala.concurrent.duration.FiniteDuration): SendRetrySettings = copy(initialRetry = value)
@@ -48,13 +48,11 @@ final class SendRetrySettings private (val initialRetry: scala.concurrent.durati
       initialRetry: scala.concurrent.duration.FiniteDuration = initialRetry,
       backoffFactor: Double = backoffFactor,
       maxBackoff: scala.concurrent.duration.FiniteDuration = maxBackoff,
-      maxRetries: Int = maxRetries
-  ): SendRetrySettings = new SendRetrySettings(
+      maxRetries: Int = maxRetries): SendRetrySettings = new SendRetrySettings(
     initialRetry = initialRetry,
     backoffFactor = backoffFactor,
     maxBackoff = maxBackoff,
-    maxRetries = maxRetries
-  )
+    maxRetries = maxRetries)
 
   override def toString: String =
     "SendRetrySettings(" +
@@ -82,8 +80,7 @@ object SendRetrySettings {
       initialRetry,
       backoffFactor,
       maxBackoff,
-      maxRetries
-    )
+      maxRetries)
   }
 
   /**

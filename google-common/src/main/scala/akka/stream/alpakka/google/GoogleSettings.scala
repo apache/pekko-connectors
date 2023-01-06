@@ -6,14 +6,14 @@ package akka.stream.alpakka.google
 
 import akka.actor.ClassicActorSystemProvider
 import akka.annotation.InternalApi
-import akka.http.javadsl.{model => jm}
+import akka.http.javadsl.{ model => jm }
 import akka.http.scaladsl.model.Uri.Query
 import akka.http.scaladsl.model.headers.BasicHttpCredentials
 import akka.http.scaladsl.settings.ConnectionPoolSettings
-import akka.http.scaladsl.{Http, HttpsConnectionContext}
-import akka.http.{javadsl => jh}
+import akka.http.scaladsl.{ Http, HttpsConnectionContext }
+import akka.http.{ javadsl => jh }
 import akka.stream.alpakka.google.auth.Credentials
-import akka.stream.alpakka.google.http.{ForwardProxyHttpsContext, ForwardProxyPoolSettings}
+import akka.stream.alpakka.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
 import akka.stream.alpakka.google.implicits._
 import akka.util.JavaDurationConverters._
 import com.typesafe.config.Config
@@ -81,8 +81,8 @@ object GoogleSettings {
 }
 
 final case class GoogleSettings @InternalApi private (projectId: String,
-                                                      credentials: Credentials,
-                                                      requestSettings: RequestSettings) {
+    credentials: Credentials,
+    requestSettings: RequestSettings) {
   def getProjectId = projectId
   def getCredentials = credentials
   def getRequestSettings = requestSettings
@@ -110,18 +110,17 @@ object RequestSettings {
       c.getBoolean("pretty-print"),
       java.lang.Math.toIntExact(c.getBytes("upload-chunk-size")),
       retrySettings,
-      maybeForwardProxy
-    )
+      maybeForwardProxy)
   }
 
   def create(config: Config)(implicit system: ClassicActorSystemProvider) = apply(config)
 
   def create(userIp: Optional[String],
-             quotaUser: Optional[String],
-             prettyPrint: Boolean,
-             chunkSize: Int,
-             retrySettings: RetrySettings,
-             forwardProxy: Optional[ForwardProxy]) =
+      quotaUser: Optional[String],
+      prettyPrint: Boolean,
+      chunkSize: Int,
+      retrySettings: RetrySettings,
+      forwardProxy: Optional[ForwardProxy]) =
     apply(userIp.asScala, quotaUser.asScala, prettyPrint, chunkSize, retrySettings, forwardProxy.asScala)
 }
 
@@ -131,13 +130,11 @@ final case class RequestSettings @InternalApi private (
     prettyPrint: Boolean,
     uploadChunkSize: Int,
     retrySettings: RetrySettings,
-    forwardProxy: Option[ForwardProxy]
-) {
+    forwardProxy: Option[ForwardProxy]) {
 
   require(
     (uploadChunkSize >= (256 * 1024)) & (uploadChunkSize % (256 * 1024) == 0),
-    "Chunk size must be a multiple of 256 KiB"
-  )
+    "Chunk size must be a multiple of 256 KiB")
 
   def getUserIp = userIp.asJava
   def getQuotaUser = quotaUser.asJava
@@ -179,8 +176,7 @@ object RetrySettings {
       config.getInt("max-retries"),
       config.getDuration("min-backoff").asScala,
       config.getDuration("max-backoff").asScala,
-      config.getDouble("random-factor")
-    )
+      config.getDouble("random-factor"))
   }
 
   def create(config: Config) = apply(config)
@@ -190,14 +186,13 @@ object RetrySettings {
       maxRetries,
       minBackoff.asScala,
       maxBackoff.asScala,
-      randomFactor
-    )
+      randomFactor)
 }
 
 final case class RetrySettings @InternalApi private (maxRetries: Int,
-                                                     minBackoff: FiniteDuration,
-                                                     maxBackoff: FiniteDuration,
-                                                     randomFactor: Double) {
+    minBackoff: FiniteDuration,
+    maxBackoff: FiniteDuration,
+    randomFactor: Double) {
   def getMaxRetries = maxRetries
   def getMinBackoff = minBackoff.asJava
   def getMaxBackoff = maxBackoff.asJava
@@ -242,22 +237,21 @@ object ForwardProxy {
     apply(c)(system)
 
   def apply(scheme: String,
-            host: String,
-            port: Int,
-            credentials: Option[BasicHttpCredentials],
-            trustPem: Option[String])(implicit system: ClassicActorSystemProvider): ForwardProxy = {
+      host: String,
+      port: Int,
+      credentials: Option[BasicHttpCredentials],
+      trustPem: Option[String])(implicit system: ClassicActorSystemProvider): ForwardProxy = {
     ForwardProxy(
       trustPem.fold(Http(system).defaultClientHttpsContext)(ForwardProxyHttpsContext(_)),
-      ForwardProxyPoolSettings(scheme, host, port, credentials)(system.classicSystem)
-    )
+      ForwardProxyPoolSettings(scheme, host, port, credentials)(system.classicSystem))
   }
 
   def create(scheme: String,
-             host: String,
-             port: Int,
-             credentials: Optional[jm.headers.BasicHttpCredentials],
-             trustPem: Optional[String],
-             system: ClassicActorSystemProvider) =
+      host: String,
+      port: Int,
+      credentials: Optional[jm.headers.BasicHttpCredentials],
+      trustPem: Optional[String],
+      system: ClassicActorSystemProvider) =
     apply(scheme, host, port, credentials.asScala.map(_.asInstanceOf[BasicHttpCredentials]), trustPem.asScala)(system)
 
   def create(connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings) =
@@ -265,7 +259,7 @@ object ForwardProxy {
 }
 
 final case class ForwardProxy @InternalApi private (connectionContext: HttpsConnectionContext,
-                                                    poolSettings: ConnectionPoolSettings) {
+    poolSettings: ConnectionPoolSettings) {
   def getConnectionContext: jh.HttpsConnectionContext = connectionContext
   def getPoolSettings: jh.settings.ConnectionPoolSettings = poolSettings
   def withConnectionContext(connectionContext: HttpsConnectionContext) =

@@ -20,16 +20,14 @@ import scala.jdk.CollectionConverters._
  * @param pullMaxMessagesPerInternalBatch when pulling messages, the maximum that will be in the batch of messages. Defaults to 1000.
  */
 class PubSubConfig private (
-    /** @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]] */ @deprecated(
+    /** @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]] */
+    @deprecated(
       "Use akka.stream.alpakka.google.GoogleSettings",
-      "3.0.0"
-    ) @Deprecated val projectId: String,
+      "3.0.0") @Deprecated val projectId: String,
     val pullReturnImmediately: Boolean,
     val pullMaxMessagesPerInternalBatch: Int,
     @deprecated("Added only to help with migration", "3.0.0") @InternalApi private[pubsub] val settings: Option[
-      GoogleSettings
-    ]
-) {
+      GoogleSettings]) {
 
   override def toString: String =
     s"PubSubConfig(projectId=$projectId)": @nowarn("msg=deprecated")
@@ -53,8 +51,7 @@ object PubSubConfig {
   @deprecated("Use akka.stream.alpakka.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated
   def apply(projectId: String, clientEmail: String, privateKey: String)(
-      implicit actorSystem: ActorSystem
-  ): PubSubConfig =
+      implicit actorSystem: ActorSystem): PubSubConfig =
     new PubSubConfig(
       projectId = projectId,
       pullReturnImmediately = true,
@@ -63,10 +60,8 @@ object PubSubConfig {
         GoogleSettings().copy(
           projectId = projectId,
           credentials =
-            ServiceAccountCredentials(projectId, clientEmail, privateKey, Seq("https://www.googleapis.com/auth/pubsub"))
-        )
-      )
-    )
+            ServiceAccountCredentials(projectId, clientEmail, privateKey,
+              Seq("https://www.googleapis.com/auth/pubsub")))))
 
   /**
    * @deprecated Use [[akka.stream.alpakka.google.GoogleSettings]] to manage credentials
@@ -74,12 +69,11 @@ object PubSubConfig {
   @deprecated("Use akka.stream.alpakka.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated
   def apply(projectId: String,
-            clientEmail: String,
-            privateKey: String,
-            pullReturnImmediately: Boolean,
-            pullMaxMessagesPerInternalBatch: Int)(
-      implicit actorSystem: ActorSystem
-  ): PubSubConfig =
+      clientEmail: String,
+      privateKey: String,
+      pullReturnImmediately: Boolean,
+      pullMaxMessagesPerInternalBatch: Int)(
+      implicit actorSystem: ActorSystem): PubSubConfig =
     new PubSubConfig(
       projectId = projectId,
       pullReturnImmediately = pullReturnImmediately,
@@ -88,10 +82,8 @@ object PubSubConfig {
         GoogleSettings().copy(
           projectId = projectId,
           credentials =
-            ServiceAccountCredentials(projectId, clientEmail, privateKey, Seq("https://www.googleapis.com/auth/pubsub"))
-        )
-      )
-    )
+            ServiceAccountCredentials(projectId, clientEmail, privateKey,
+              Seq("https://www.googleapis.com/auth/pubsub")))))
 
   /**
    * Java API
@@ -109,17 +101,17 @@ object PubSubConfig {
   @deprecated("Use akka.stream.alpakka.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated
   def create(projectId: String,
-             clientEmail: String,
-             privateKey: String,
-             actorSystem: ActorSystem,
-             pullReturnImmediately: Boolean,
-             pullMaxMessagesPerInternalBatch: Int): PubSubConfig =
+      clientEmail: String,
+      privateKey: String,
+      actorSystem: ActorSystem,
+      pullReturnImmediately: Boolean,
+      pullMaxMessagesPerInternalBatch: Int): PubSubConfig =
     apply(projectId, clientEmail, privateKey, pullReturnImmediately, pullMaxMessagesPerInternalBatch)(actorSystem)
 }
 
 final class PublishMessage private (val data: String,
-                                    val attributes: Option[immutable.Map[String, String]],
-                                    val orderingKey: Option[String]) {
+    val attributes: Option[immutable.Map[String, String]],
+    val orderingKey: Option[String]) {
   def this(data: String, attributes: Option[immutable.Map[String, String]]) = this(data, attributes, None)
 
   override def toString: String =
@@ -127,7 +119,7 @@ final class PublishMessage private (val data: String,
 
   override def equals(other: Any): Boolean = other match {
     case that: PublishMessage => data == that.data && attributes == that.attributes && orderingKey == that.orderingKey
-    case _ => false
+    case _                    => false
   }
 
   override def hashCode: Int = java.util.Objects.hash(data, attributes, orderingKey)
@@ -152,8 +144,8 @@ object PublishMessage {
    * Java API with ordering key
    */
   def create(data: String,
-             attributes: java.util.Map[String, String],
-             orderingKey: java.util.Optional[String]): PublishMessage =
+      attributes: java.util.Map[String, String],
+      orderingKey: java.util.Optional[String]): PublishMessage =
     new PublishMessage(data, Some(attributes.asScala.toMap), Option(orderingKey.orElse(null)))
 }
 
@@ -166,15 +158,15 @@ object PublishMessage {
  * @param orderingKey if non-empty, identifies related messages for which publish order should be respected
  */
 final class PubSubMessage private (val data: Option[String],
-                                   val attributes: Option[immutable.Map[String, String]],
-                                   val messageId: String,
-                                   val publishTime: Instant,
-                                   val orderingKey: Option[String]) {
+    val attributes: Option[immutable.Map[String, String]],
+    val messageId: String,
+    val publishTime: Instant,
+    val orderingKey: Option[String]) {
 
   def this(data: Option[String],
-           attributes: Option[immutable.Map[String, String]],
-           messageId: String,
-           publishTime: Instant) = this(data, attributes, messageId, publishTime, None)
+      attributes: Option[immutable.Map[String, String]],
+      messageId: String,
+      publishTime: Instant) = this(data, attributes, messageId, publishTime, None)
 
   def withAttributes(attributes: java.util.Map[String, String]): PubSubMessage =
     new PubSubMessage(data, Some(attributes.asScala.toMap), messageId, publishTime, orderingKey)
@@ -200,40 +192,40 @@ final class PubSubMessage private (val data: Option[String],
 object PubSubMessage {
 
   def apply(data: Option[String],
-            attributes: Option[immutable.Map[String, String]],
-            messageId: String,
-            publishTime: Instant) =
+      attributes: Option[immutable.Map[String, String]],
+      messageId: String,
+      publishTime: Instant) =
     new PubSubMessage(data, attributes, messageId, publishTime, None)
 
   def apply(data: Option[String] = None,
-            attributes: Option[immutable.Map[String, String]] = None,
-            messageId: String,
-            publishTime: Instant,
-            orderingKey: Option[String] = None) =
+      attributes: Option[immutable.Map[String, String]] = None,
+      messageId: String,
+      publishTime: Instant,
+      orderingKey: Option[String] = None) =
     new PubSubMessage(data, attributes, messageId, publishTime, orderingKey)
 
   /**
    * Java API
    */
   def create(data: java.util.Optional[String],
-             attributes: java.util.Optional[java.util.Map[String, String]],
-             messageId: String,
-             publishTime: Instant): PubSubMessage =
+      attributes: java.util.Optional[java.util.Map[String, String]],
+      messageId: String,
+      publishTime: Instant): PubSubMessage =
     create(data, attributes, messageId, publishTime, java.util.Optional.empty())
 
   /**
    * Java API with ordering key
    */
   def create(data: java.util.Optional[String],
-             attributes: java.util.Optional[java.util.Map[String, String]],
-             messageId: String,
-             publishTime: Instant,
-             orderingKey: java.util.Optional[String]): PubSubMessage =
+      attributes: java.util.Optional[java.util.Map[String, String]],
+      messageId: String,
+      publishTime: Instant,
+      orderingKey: java.util.Optional[String]): PubSubMessage =
     new PubSubMessage(Option(data.orElse(null)),
-                      Option(attributes.orElse(null)).map(_.asScala.toMap),
-                      messageId,
-                      publishTime,
-                      Option(orderingKey.orElse(null)))
+      Option(attributes.orElse(null)).map(_.asScala.toMap),
+      messageId,
+      publishTime,
+      Option(orderingKey.orElse(null)))
 
 }
 
@@ -241,7 +233,7 @@ final class PublishRequest private (val messages: immutable.Seq[PublishMessage])
 
   override def equals(other: Any): Boolean = other match {
     case that: PublishRequest => messages == that.messages
-    case _ => false
+    case _                    => false
   }
 
   override def hashCode: Int = messages.hashCode
@@ -269,7 +261,7 @@ final class ReceivedMessage private (val ackId: String, val message: PubSubMessa
 
   override def equals(other: Any): Boolean = other match {
     case that: ReceivedMessage => ackId == that.ackId && message == that.message
-    case _ => false
+    case _                     => false
   }
 
   override def hashCode: Int = java.util.Objects.hash(ackId, message)
@@ -290,7 +282,7 @@ final class AcknowledgeRequest private (val ackIds: immutable.Seq[String]) {
 
   override def equals(other: Any): Boolean = other match {
     case that: AcknowledgeRequest => ackIds == that.ackIds
-    case _ => false
+    case _                        => false
   }
 
   override def hashCode: Int = ackIds.hashCode
@@ -314,7 +306,7 @@ private final class PublishResponse private (val messageIds: immutable.Seq[Strin
 
   override def equals(other: Any): Boolean = other match {
     case that: PublishResponse => messageIds == that.messageIds
-    case _ => false
+    case _                     => false
   }
 
   override def hashCode: Int = messageIds.hashCode
@@ -336,7 +328,7 @@ private final class PullResponse private[pubsub] (val receivedMessages: Option[i
 
   override def equals(other: Any): Boolean = other match {
     case that: PullResponse => receivedMessages == that.receivedMessages
-    case _ => false
+    case _                  => false
   }
 
   override def hashCode: Int = receivedMessages.hashCode

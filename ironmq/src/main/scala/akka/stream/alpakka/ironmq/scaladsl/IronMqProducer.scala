@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.ironmq.scaladsl
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.stream.FlowShape
 import akka.stream.alpakka.ironmq._
 import akka.stream.alpakka.ironmq.impl.IronMqPushStage
@@ -32,7 +32,7 @@ object IronMqProducer {
    * commit the associated [[Committable]].
    */
   def atLeastOnceFlow(queueName: String,
-                      settings: IronMqSettings): Flow[(PushMessage, Committable), Message.Id, NotUsed] =
+      settings: IronMqSettings): Flow[(PushMessage, Committable), Message.Id, NotUsed] =
     // TODO Not sure about parallelism, as the commits should not be in-order, maybe add it as parameter?
     atLeastOnceFlow(queueName, settings, Flow[Committable].mapAsync(1)(_.commit())).map(_._1)
 
@@ -51,8 +51,8 @@ object IronMqProducer {
   def atLeastOnceFlow[ToCommit, CommitResult, CommitMat](
       queueName: String,
       settings: IronMqSettings,
-      commitFlow: Flow[ToCommit, CommitResult, CommitMat]
-  ): Flow[(PushMessage, ToCommit), (Message.Id, CommitResult), CommitMat] = {
+      commitFlow: Flow[ToCommit, CommitResult, CommitMat])
+      : Flow[(PushMessage, ToCommit), (Message.Id, CommitResult), CommitMat] = {
 
     // This graph is used to pass the ToCommit through the producer. It assume a 1-to-1 semantic on the producer
     val producerGraph = GraphDSL.createGraph(flow(queueName, settings)) { implicit builder => producer =>
@@ -79,8 +79,8 @@ object IronMqProducer {
         val extractCommittable = builder.add(Flow[(Message.Id, ToCommit)].map(_._2))
         val zip = builder.add(Zip[Message.Id, CommitResult]())
 
-        producer ~> broadcast ~> extractMessageId ~> zip.in0
-        broadcast ~> extractCommittable ~> committer ~> zip.in1
+        producer  ~> broadcast          ~> extractMessageId ~> zip.in0
+        broadcast ~> extractCommittable ~> committer        ~> zip.in1
 
         FlowShape(producer.in, zip.out)
     })
@@ -93,8 +93,7 @@ object IronMqProducer {
   def atLeastOnceSink[ToCommit, CommitResult, CommitMat](
       queueName: String,
       settings: IronMqSettings,
-      commitFlow: Flow[ToCommit, CommitResult, CommitMat]
-  ): Sink[(PushMessage, ToCommit), CommitMat] =
+      commitFlow: Flow[ToCommit, CommitResult, CommitMat]): Sink[(PushMessage, ToCommit), CommitMat] =
     atLeastOnceFlow(queueName, settings, commitFlow).to(Sink.ignore)
 
 }

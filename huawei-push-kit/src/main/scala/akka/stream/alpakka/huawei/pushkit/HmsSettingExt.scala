@@ -27,10 +27,10 @@ private[pushkit] final class HmsSettingExt private (sys: ExtendedActorSystem) ex
 
   def settings(path: String): HmsSettings =
     cachedSettings.getOrElse(path, {
-      val settings = HmsSettings(sys.settings.config.getConfig(path))
-      cachedSettings += path -> settings
-      settings
-    })
+        val settings = HmsSettings(sys.settings.config.getConfig(path))
+        cachedSettings += path -> settings
+        settings
+      })
 }
 
 /**

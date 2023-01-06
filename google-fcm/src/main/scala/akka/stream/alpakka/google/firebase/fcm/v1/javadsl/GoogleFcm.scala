@@ -8,8 +8,8 @@ import akka.japi.Pair
 import akka.stream.alpakka.google.firebase.fcm.FcmSettings
 import akka.stream.alpakka.google.firebase.fcm.v1.impl.FcmFlows
 import akka.stream.alpakka.google.firebase.fcm.v1.models._
-import akka.stream.{javadsl, scaladsl}
-import akka.{Done, NotUsed}
+import akka.stream.{ javadsl, scaladsl }
+import akka.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 

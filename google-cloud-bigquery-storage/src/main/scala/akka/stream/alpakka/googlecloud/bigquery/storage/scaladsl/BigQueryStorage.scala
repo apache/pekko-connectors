@@ -9,16 +9,16 @@ import akka.actor.ClassicActorSystemProvider
 import akka.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
 import akka.stream.alpakka.googlecloud.bigquery.storage.impl.SDKClientSource
 import akka.stream.scaladsl.Source
-import akka.stream.{Attributes, Materializer}
+import akka.stream.{ Attributes, Materializer }
 import akka.util.ByteString
 import com.google.cloud.bigquery.storage.v1.DataFormat
-import com.google.cloud.bigquery.storage.v1.storage.{BigQueryReadClient, CreateReadSessionRequest, ReadRowsResponse}
+import com.google.cloud.bigquery.storage.v1.storage.{ BigQueryReadClient, CreateReadSessionRequest, ReadRowsResponse }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 
-import com.google.cloud.bigquery.storage.v1.stream.{DataFormat => StreamDataFormat}
+import com.google.cloud.bigquery.storage.v1.stream.{ DataFormat => StreamDataFormat }
 
-import scala.concurrent.{ExecutionContextExecutor, Future}
+import scala.concurrent.{ ExecutionContextExecutor, Future }
 
 /**
  * Google BigQuery Storage Api Akka Stream operator factory.
@@ -33,8 +33,8 @@ object BigQueryStorage {
       tableId: String,
       dataFormat: DataFormat,
       readOptions: Option[TableReadOptions] = None,
-      maxNumStreams: Int = 0
-  ): Source[(ReadSession.Schema, Seq[Source[ReadRowsResponse.Rows, NotUsed]]), Future[NotUsed]] =
+      maxNumStreams: Int = 0)
+      : Source[(ReadSession.Schema, Seq[Source[ReadRowsResponse.Rows, NotUsed]]), Future[NotUsed]] =
     Source.fromMaterializer { (mat, attr) =>
       val client = reader(mat.system, attr).client
       readSession(client, projectId, datasetId, tableId, dataFormat, readOptions, maxNumStreams)
@@ -49,8 +49,7 @@ object BigQueryStorage {
       tableId: String,
       dataFormat: DataFormat,
       readOptions: Option[TableReadOptions] = None,
-      maxNumStreams: Int = 0
-  )(implicit um: FromByteStringUnmarshaller[A]): Source[A, Future[NotUsed]] = {
+      maxNumStreams: Int = 0)(implicit um: FromByteStringUnmarshaller[A]): Source[A, Future[NotUsed]] = {
     Source.fromMaterializer { (mat, attr) =>
       {
         implicit val materializer: Materializer = mat
@@ -78,12 +77,12 @@ object BigQueryStorage {
   }
 
   private[scaladsl] def readSession(client: BigQueryReadClient,
-                                    projectId: String,
-                                    datasetId: String,
-                                    tableId: String,
-                                    dataFormat: DataFormat,
-                                    readOptions: Option[TableReadOptions] = None,
-                                    maxNumStreams: Int = 0) =
+      projectId: String,
+      datasetId: String,
+      tableId: String,
+      dataFormat: DataFormat,
+      readOptions: Option[TableReadOptions] = None,
+      maxNumStreams: Int = 0) =
     Source
       .future {
         val table = s"projects/$projectId/datasets/$datasetId/tables/$tableId"
@@ -95,12 +94,9 @@ object BigQueryStorage {
               parent = s"projects/$projectId",
               Some(
                 ReadSession(dataFormat = StreamDataFormat.fromValue(dataFormat.getNumber),
-                            table = table,
-                            readOptions = readOptions)
-              ),
-              maxNumStreams
-            )
-          )
+                  table = table,
+                  readOptions = readOptions)),
+              maxNumStreams))
       }
 
   private[scaladsl] def reader(system: ClassicActorSystemProvider, attr: Attributes) =

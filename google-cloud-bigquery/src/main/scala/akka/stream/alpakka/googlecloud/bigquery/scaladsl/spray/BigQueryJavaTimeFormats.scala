@@ -4,10 +4,10 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray
 
-import spray.json.{deserializationError, JsString, JsValue}
+import spray.json.{ deserializationError, JsString, JsValue }
 
-import java.time.{Instant, LocalDate, LocalDateTime, LocalTime}
-import java.time.format.DateTimeFormatter.{ISO_LOCAL_DATE, ISO_LOCAL_DATE_TIME, ISO_LOCAL_TIME}
+import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
+import java.time.format.DateTimeFormatter.{ ISO_LOCAL_DATE, ISO_LOCAL_DATE_TIME, ISO_LOCAL_TIME }
 import scala.util.Try
 
 /**
@@ -19,7 +19,7 @@ trait BigQueryJavaTimeFormats {
 
     override def read(json: JsValue): LocalDate = json match {
       case BigQueryLocalDate(date) => date
-      case x => deserializationError("Expected LocalDate as JsString, but got " + x)
+      case x                       => deserializationError("Expected LocalDate as JsString, but got " + x)
     }
 
     override def write(date: LocalDate): JsValue =
@@ -35,7 +35,7 @@ trait BigQueryJavaTimeFormats {
 
     override def read(json: JsValue): LocalTime = json match {
       case BigQueryLocalTime(time) => time
-      case x => deserializationError("Expected LocalTime as JsString, but got " + x)
+      case x                       => deserializationError("Expected LocalTime as JsString, but got " + x)
     }
 
     override def write(time: LocalTime): JsValue =
@@ -52,7 +52,7 @@ trait BigQueryJavaTimeFormats {
 
     override def read(json: JsValue): LocalDateTime = json match {
       case BigQueryLocalDateTime(dateTime) => dateTime
-      case x => deserializationError("Expected LocalDateTime as JsString, but got " + x)
+      case x                               => deserializationError("Expected LocalDateTime as JsString, but got " + x)
     }
 
     override def write(dateTime: LocalDateTime): JsValue =
@@ -68,7 +68,7 @@ trait BigQueryJavaTimeFormats {
 
     override def read(json: JsValue): Instant = json match {
       case BigQueryInstant(instant) => instant
-      case x => deserializationError("Expected Instant as JsString, but got " + x)
+      case x                        => deserializationError("Expected Instant as JsString, but got " + x)
     }
 
     override def write(instant: Instant): JsValue =

@@ -7,10 +7,10 @@ package docs.scaladsl
 import akka.Done
 import akka.stream.alpakka.mqtt
 import akka.stream.alpakka.mqtt._
-import akka.stream.alpakka.mqtt.scaladsl.{MqttSink, MqttSource}
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.alpakka.mqtt.scaladsl.{ MqttSink, MqttSource }
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 import akka.util.ByteString
-import org.eclipse.paho.client.mqttv3.{MqttException, MqttSecurityException}
+import org.eclipse.paho.client.mqttv3.{ MqttException, MqttSecurityException }
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -29,8 +29,8 @@ class MqttSinkSpec extends MqttSpecBase("MqttSinkSpec") {
 
       val (subscribed, message) = MqttSource
         .atMostOnce(connectionSettings.withClientId(clientId = "sink-spec/source"),
-                    MqttSubscriptions(topic, MqttQoS.AtLeastOnce),
-                    8)
+          MqttSubscriptions(topic, MqttQoS.AtLeastOnce),
+          8)
         .toMat(Sink.head)(Keep.both)
         .run()
 
@@ -47,8 +47,8 @@ class MqttSinkSpec extends MqttSpecBase("MqttSinkSpec") {
       val (subscribed, messagesFuture) =
         MqttSource
           .atMostOnce(connectionSettings.withClientId(clientId = "sink-spec/source"),
-                      mqtt.MqttSubscriptions(topic2, MqttQoS.atLeastOnce),
-                      8)
+            mqtt.MqttSubscriptions(topic2, MqttQoS.atLeastOnce),
+            8)
           .take(numOfMessages)
           .toMat(Sink.seq)(Keep.both)
           .run()
@@ -57,8 +57,8 @@ class MqttSinkSpec extends MqttSpecBase("MqttSinkSpec") {
       Source(1 to numOfMessages).map(_ => msg).runWith(MqttSink(sinkSettings, MqttQoS.atLeastOnce))
 
       val messages = messagesFuture.futureValue
-      messages should have length numOfMessages
-      messages foreach { _ shouldBe msg }
+      (messages should have).length(numOfMessages)
+      messages.foreach { _ shouldBe msg }
     }
 
     "connection should fail to wrong broker" in {
@@ -104,8 +104,8 @@ class MqttSinkSpec extends MqttSpecBase("MqttSinkSpec") {
       val messageFuture =
         MqttSource
           .atMostOnce(connectionSettings.withClientId("source-spec/retained"),
-                      mqtt.MqttSubscriptions(topic, MqttQoS.atLeastOnce),
-                      8)
+            mqtt.MqttSubscriptions(topic, MqttQoS.atLeastOnce),
+            8)
           .runWith(Sink.head)
 
       val message = messageFuture.futureValue

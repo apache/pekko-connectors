@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.google.firebase.fcm.v1
 
-import akka.stream.alpakka.google.firebase.fcm.v1.models.{Condition, FcmNotification, Token, Topic}
+import akka.stream.alpakka.google.firebase.fcm.v1.models.{ Condition, FcmNotification, Token, Topic }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

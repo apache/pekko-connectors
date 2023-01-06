@@ -20,8 +20,7 @@ final class HdfsWritingSettings private (
     val overwrite: Boolean,
     val newLine: Boolean,
     val lineSeparator: String,
-    val pathGenerator: FilePathGenerator
-) {
+    val pathGenerator: FilePathGenerator) {
   private[hdfs] val newLineByteArray = ByteString(lineSeparator).toArray
 
   def withOverwrite(value: Boolean): HdfsWritingSettings = if (overwrite == value) this else copy(overwrite = value)
@@ -33,13 +32,11 @@ final class HdfsWritingSettings private (
       overwrite: Boolean = overwrite,
       newLine: Boolean = newLine,
       lineSeparator: String = lineSeparator,
-      pathGenerator: FilePathGenerator = pathGenerator
-  ): HdfsWritingSettings = new HdfsWritingSettings(
+      pathGenerator: FilePathGenerator = pathGenerator): HdfsWritingSettings = new HdfsWritingSettings(
     overwrite = overwrite,
     newLine = newLine,
     lineSeparator = lineSeparator,
-    pathGenerator = pathGenerator
-  )
+    pathGenerator = pathGenerator)
 
   override def toString =
     "HdfsWritingSettings(" +
@@ -59,8 +56,7 @@ object HdfsWritingSettings {
     overwrite = true,
     newLine = false,
     lineSeparator = System.getProperty("line.separator"),
-    pathGenerator = DefaultFilePathGenerator
-  )
+    pathGenerator = DefaultFilePathGenerator)
 
   /** Scala API */
   def apply(): HdfsWritingSettings = default

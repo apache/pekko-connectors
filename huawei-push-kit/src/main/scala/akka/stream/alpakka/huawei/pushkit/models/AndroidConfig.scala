@@ -9,12 +9,12 @@ package akka.stream.alpakka.huawei.pushkit.models
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
  */
 case class AndroidConfig(collapse_key: Option[Int] = None,
-                         ttl: Option[String] = None,
-                         bi_tag: Option[String] = None,
-                         receipt_id: Option[String] = None,
-                         fast_app_target: Option[Int] = None,
-                         data: Option[String] = None,
-                         notification: Option[AndroidNotification] = None) {
+    ttl: Option[String] = None,
+    bi_tag: Option[String] = None,
+    receipt_id: Option[String] = None,
+    fast_app_target: Option[Int] = None,
+    data: Option[String] = None,
+    notification: Option[AndroidNotification] = None) {
   def withCollapseKey(value: Int): AndroidConfig = this.copy(collapse_key = Option(value))
 
   def withTtl(value: String): AndroidConfig = this.copy(ttl = Option(value))
@@ -43,40 +43,40 @@ object AndroidConfig {
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
  */
 case class AndroidNotification(title: Option[String] = None,
-                               body: Option[String] = None,
-                               icon: Option[String] = None,
-                               color: Option[String] = None,
-                               sound: Option[String] = None,
-                               default_sound: Option[Boolean] = None,
-                               tag: Option[String] = None,
-                               click_action: Option[ClickAction] = None,
-                               body_loc_key: Option[String] = None,
-                               body_loc_args: Option[Seq[String]] = None,
-                               title_loc_key: Option[String] = None,
-                               title_loc_args: Option[Seq[String]] = None,
-                               multi_lang_key: Option[String] = None,
-                               channel_id: Option[String] = None,
-                               notify_summary: Option[String] = None,
-                               image: Option[String] = None,
-                               style: Option[Int] = None,
-                               big_title: Option[String] = None,
-                               big_body: Option[String] = None,
-                               auto_clear: Option[Int] = None,
-                               notify_id: Option[Int] = None,
-                               group: Option[String] = None,
-                               badge: Option[BadgeNotification] = None,
-                               ticker: Option[String] = None,
-                               when: Option[String] = None,
-                               importance: Option[String] = None,
-                               use_default_vibrate: Option[Boolean] = None,
-                               use_default_light: Option[Boolean] = None,
-                               vibrate_config: Option[Seq[String]] = None,
-                               visibility: Option[String] = None,
-                               light_settings: Option[LightSettings] = None,
-                               foreground_show: Option[Boolean] = None,
-                               profile_id: Option[String] = None,
-                               inbox_content: Option[Seq[String]] = None,
-                               buttons: Option[Seq[Button]] = None) {
+    body: Option[String] = None,
+    icon: Option[String] = None,
+    color: Option[String] = None,
+    sound: Option[String] = None,
+    default_sound: Option[Boolean] = None,
+    tag: Option[String] = None,
+    click_action: Option[ClickAction] = None,
+    body_loc_key: Option[String] = None,
+    body_loc_args: Option[Seq[String]] = None,
+    title_loc_key: Option[String] = None,
+    title_loc_args: Option[Seq[String]] = None,
+    multi_lang_key: Option[String] = None,
+    channel_id: Option[String] = None,
+    notify_summary: Option[String] = None,
+    image: Option[String] = None,
+    style: Option[Int] = None,
+    big_title: Option[String] = None,
+    big_body: Option[String] = None,
+    auto_clear: Option[Int] = None,
+    notify_id: Option[Int] = None,
+    group: Option[String] = None,
+    badge: Option[BadgeNotification] = None,
+    ticker: Option[String] = None,
+    when: Option[String] = None,
+    importance: Option[String] = None,
+    use_default_vibrate: Option[Boolean] = None,
+    use_default_light: Option[Boolean] = None,
+    vibrate_config: Option[Seq[String]] = None,
+    visibility: Option[String] = None,
+    light_settings: Option[LightSettings] = None,
+    foreground_show: Option[Boolean] = None,
+    profile_id: Option[String] = None,
+    inbox_content: Option[Seq[String]] = None,
+    buttons: Option[Seq[Button]] = None) {
   def withTitle(value: String): AndroidNotification = this.copy(title = Option(value))
   def withBody(value: String): AndroidNotification = this.copy(body = Option(value))
   def withIcon(value: String): AndroidNotification = this.copy(icon = Option(value))
@@ -124,8 +124,8 @@ object AndroidNotification {
  * LightSettings model.
  */
 case class LightSettings(color: Option[Color] = None,
-                         light_on_duration: Option[String] = None,
-                         light_off_duration: Option[String] = None) {
+    light_on_duration: Option[String] = None,
+    light_off_duration: Option[String] = None) {
   def withColor(color: Color): LightSettings = this.copy(color = Option(color))
 
   def withLightOnDuration(value: String): LightSettings = this.copy(light_on_duration = Option(value))
@@ -143,9 +143,9 @@ object LightSettings {
  * Color model.
  */
 case class Color(alpha: Option[Float] = None,
-                 red: Option[Float] = None,
-                 green: Option[Float] = None,
-                 blue: Option[Float] = None) {
+    red: Option[Float] = None,
+    green: Option[Float] = None,
+    blue: Option[Float] = None) {
   def withAlpha(value: Float): Color = this.copy(alpha = Option(value))
 
   def withRed(value: Float): Color = this.copy(red = Option(value))
@@ -165,9 +165,9 @@ object Color {
  * Click Action model.
  */
 case class ClickAction(`type`: Option[Int] = None,
-                       intent: Option[String] = None,
-                       url: Option[String] = None,
-                       action: Option[String] = None) {
+    intent: Option[String] = None,
+    url: Option[String] = None,
+    action: Option[String] = None) {
   def withType(value: Int): ClickAction = this.copy(`type` = Option(value))
 
   def withIntent(value: String): ClickAction = this.copy(intent = Option(value))
@@ -201,10 +201,10 @@ object BadgeNotification {
  * Button model.
  */
 case class Button(name: Option[String] = None,
-                  action_type: Option[Int] = None,
-                  intent_type: Option[Int] = None,
-                  intent: Option[String] = None,
-                  data: Option[String] = None) {
+    action_type: Option[Int] = None,
+    intent_type: Option[Int] = None,
+    intent: Option[String] = None,
+    data: Option[String] = None) {
   def withName(value: String): Button = this.copy(name = Option(value))
   def withActionType(value: Int): Button = this.copy(action_type = Option(value))
   def withIntentType(value: Int): Button = this.copy(intent_type = Option(value))

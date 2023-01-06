@@ -11,7 +11,7 @@ import akka.stream.alpakka.dynamodb.scaladsl.DynamoDb
 import akka.testkit.TestKit
 import com.github.matsluni.akkahttpspi.AkkaHttpClient
 import org.scalatest.BeforeAndAfterAll
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
@@ -80,7 +80,7 @@ class TableSpec extends TestKit(ActorSystem("TableSpec")) with AsyncWordSpecLike
       for {
         _ <- DynamoDb.single(deleteTableRequest)
         list <- DynamoDb.single(listTablesRequest)
-      } yield list.tableNames.asScala should not contain (tableName)
+      } yield list.tableNames.asScala should not contain tableName
     }
 
   }

@@ -8,7 +8,7 @@ import java.util.Properties
 
 import akka.annotation.InternalApi
 import org.apache.geode.cache.Declarable
-import org.apache.geode.pdx.{PdxReader, PdxSerializer, PdxWriter}
+import org.apache.geode.pdx.{ PdxReader, PdxSerializer, PdxWriter }
 
 /**
  * Geode ClientCache does not support more than one serializer.
@@ -17,8 +17,7 @@ import org.apache.geode.pdx.{PdxReader, PdxSerializer, PdxWriter}
  */
 @InternalApi
 private[geode] class DelegatingPdxSerializer(
-    isPdxCompat: (Class[_], Class[_]) => Boolean
-) extends PdxSerializer
+    isPdxCompat: (Class[_], Class[_]) => Boolean) extends PdxSerializer
     with Declarable {
 
   private var serializers = Map[Class[_], PdxSerializer]()

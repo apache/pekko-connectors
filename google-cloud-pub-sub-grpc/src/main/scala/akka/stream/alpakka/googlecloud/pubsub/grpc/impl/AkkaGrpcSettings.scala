@@ -19,7 +19,7 @@ import scala.annotation.nowarn
  */
 @InternalApi private[grpc] object AkkaGrpcSettings {
   def fromPubSubSettings(config: PubSubSettings,
-                         googleSettings: GoogleSettings)(implicit sys: ActorSystem): GrpcClientSettings = {
+      googleSettings: GoogleSettings)(implicit sys: ActorSystem): GrpcClientSettings = {
     val akkaGrpcConfig = s"""
       |host = "${config.host}"
       |port = ${config.port}
@@ -30,15 +30,13 @@ import scala.annotation.nowarn
     val settings = GrpcClientSettings.fromConfig(
       ConfigFactory
         .parseString(akkaGrpcConfig)
-        .withFallback(sys.settings.config.getConfig("akka.grpc.client.\"*\""))
-    )
+        .withFallback(sys.settings.config.getConfig("akka.grpc.client.\"*\"")))
 
     (config.callCredentials: @nowarn("msg=deprecated")) match {
       case None => settings
       case Some(DeprecatedCredentials(_)) => // Deprecated credentials were loaded from config so override them
         sys.log.warning(
-          "Config path alpakka.google.cloud.pubsub.grpc.callCredentials is deprecated, use alpakka.google.credentials"
-        )
+          "Config path alpakka.google.cloud.pubsub.grpc.callCredentials is deprecated, use alpakka.google.credentials")
         val credentials = googleSettings.credentials.asGoogle(sys.dispatcher, googleSettings.requestSettings)
         settings.withCallCredentials(MoreCallCredentials.from(credentials))
       case Some(creds) => settings.withCallCredentials(creds)

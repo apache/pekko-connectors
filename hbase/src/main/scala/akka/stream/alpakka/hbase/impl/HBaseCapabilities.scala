@@ -7,13 +7,13 @@ package akka.stream.alpakka.hbase.impl
 import java.io.Closeable
 
 import akka.stream.stage.StageLogging
-import org.apache.hadoop.hbase.{HColumnDescriptor, HTableDescriptor, TableName}
-import org.apache.hadoop.hbase.client.{Connection, ConnectionFactory, Table}
+import org.apache.hadoop.hbase.{ HColumnDescriptor, HTableDescriptor, TableName }
+import org.apache.hadoop.hbase.client.{ Connection, ConnectionFactory, Table }
 import org.apache.hadoop.conf.Configuration
 
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Future}
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.{ Await, Future }
+import scala.util.{ Failure, Success, Try }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -47,8 +47,7 @@ private[impl] trait HBaseCapabilities { this: StageLogging =>
     Await.result(Future(ConnectionFactory.createConnection(conf)), timeout seconds)
 
   private[impl] def getOrCreateTable(tableName: TableName, columnFamilies: Seq[String])(
-      implicit connection: Connection
-  ): Try[Table] = twr(connection.getAdmin) { admin =>
+      implicit connection: Connection): Try[Table] = twr(connection.getAdmin) { admin =>
     val table =
       if (admin.isTableAvailable(tableName))
         connection.getTable(tableName)

@@ -12,13 +12,13 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.Marshal
 import akka.http.scaladsl.model.HttpMethods.POST
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.unmarshalling.{FromResponseUnmarshaller, Unmarshal, Unmarshaller}
+import akka.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, Unmarshaller }
 import akka.stream.alpakka.google.GoogleAttributes
 import akka.stream.alpakka.google.http.GoogleHttp
 import akka.stream.alpakka.google.implicits._
 import akka.stream.alpakka.googlecloud.pubsub._
-import akka.stream.scaladsl.{Flow, FlowWithContext}
-import akka.{Done, NotUsed}
+import akka.stream.scaladsl.{ Flow, FlowWithContext }
+import akka.{ Done, NotUsed }
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 
@@ -62,7 +62,7 @@ private[pubsub] trait PubSubApi {
   private implicit val instantFormat = new RootJsonFormat[Instant] {
     override def read(jsValue: JsValue): Instant = jsValue match {
       case JsString(time) => Instant.parse(time)
-      case _ => deserializationError("Instant required as a string of RFC3339 UTC Zulu format.")
+      case _              => deserializationError("Instant required as a string of RFC3339 UTC Zulu format.")
     }
     override def write(instant: Instant): JsValue = JsString(instant.toString)
   }
@@ -76,19 +76,16 @@ private[pubsub] trait PubSubApi {
           fields.get("attributes").map(_.convertTo[Map[String, String]]),
           fields("messageId").convertTo[String],
           fields("publishTime").convertTo[Instant],
-          fields.get("orderingKey").map(_.convertTo[String])
-        )
+          fields.get("orderingKey").map(_.convertTo[String]))
       }
       override def write(m: PubSubMessage): JsValue =
         JsObject(
           Seq(
             "messageId" -> m.messageId.toJson,
-            "publishTime" -> m.publishTime.toJson
-          )
+            "publishTime" -> m.publishTime.toJson)
           ++ m.data.map(data => "data" -> data.toJson)
           ++ m.orderingKey.map(orderingKey => "orderingKey" -> orderingKey.toJson)
-          ++ m.attributes.map(attributes => "attributes" -> attributes.toJson): _*
-        )
+          ++ m.attributes.map(attributes => "attributes" -> attributes.toJson): _*)
     }
 
   private implicit val publishMessageFormat = new RootJsonFormat[PublishMessage] {
@@ -102,8 +99,7 @@ private[pubsub] trait PubSubApi {
       JsObject(
         Seq("data" -> JsString(m.data)) ++
         m.orderingKey.map(orderingKey => "orderingKey" -> orderingKey.toJson) ++
-        m.attributes.map(a => "attributes" -> a.toJson): _*
-      )
+        m.attributes.map(a => "attributes" -> a.toJson): _*)
   }
 
   private implicit val pubSubRequestFormat = new RootJsonFormat[PublishRequest] {
@@ -120,7 +116,7 @@ private[pubsub] trait PubSubApi {
   private implicit val receivedMessageFormat = new RootJsonFormat[ReceivedMessage] {
     def read(json: JsValue): ReceivedMessage =
       ReceivedMessage(json.asJsObject.fields("ackId").convertTo[String],
-                      json.asJsObject.fields("message").convertTo[PubSubMessage])
+        json.asJsObject.fields("message").convertTo[PubSubMessage])
     def write(rm: ReceivedMessage): JsValue =
       JsObject("ackId" -> rm.ackId.toJson, "message" -> rm.message.toJson)
   }
@@ -151,8 +147,7 @@ private[pubsub] trait PubSubApi {
           scheme = scheme,
           host = PubSubGoogleApisHost,
           port = PubSubGoogleApisPort,
-          path = s"/v1/projects/${settings.projectId}/subscriptions/$subscription:pull"
-        )
+          path = s"/v1/projects/${settings.projectId}/subscriptions/$subscription:pull")
 
         Flow[Done].mapAsync(1) { _ =>
           for {
@@ -190,8 +185,7 @@ private[pubsub] trait PubSubApi {
           scheme = scheme,
           host = PubSubGoogleApisHost,
           port = PubSubGoogleApisPort,
-          path = s"/v1/projects/${settings.projectId}/subscriptions/$subscription:acknowledge"
-        )
+          path = s"/v1/projects/${settings.projectId}/subscriptions/$subscription:acknowledge")
 
         Flow[AcknowledgeRequest].mapAsync(1) { request =>
           for {
@@ -214,26 +208,23 @@ private[pubsub] trait PubSubApi {
         case status =>
           Unmarshal(response.entity).to[String].map { entity =>
             throw new RuntimeException(
-              s"Unexpected acknowledge response. Code [$status] Content-type [${response.entity.contentType}] Entity [$entity]"
-            )
+              s"Unexpected acknowledge response. Code [$status] Content-type [${response.entity.contentType}] Entity [$entity]")
           }
       }
     }.withDefaultRetry
 
   private def pool[T: FromResponseUnmarshaller, Ctx](parallelism: Int, host: Option[String])(
-      implicit system: ActorSystem
-  ): FlowWithContext[HttpRequest, Ctx, Try[T], Ctx, Future[HostConnectionPool]] =
+      implicit system: ActorSystem): FlowWithContext[HttpRequest, Ctx, Try[T], Ctx, Future[HostConnectionPool]] =
     GoogleHttp().cachedHostConnectionPoolWithContext[T, Ctx](
       host.getOrElse(PubSubGoogleApisHost),
       PubSubGoogleApisPort,
       https = !isEmulated,
       authenticate = !isEmulated,
-      parallelism = parallelism
-    )
+      parallelism = parallelism)
 
   def publish[T](topic: String,
-                 parallelism: Int,
-                 host: Option[String]): FlowWithContext[PublishRequest, T, PublishResponse, T, NotUsed] =
+      parallelism: Int,
+      host: Option[String]): FlowWithContext[PublishRequest, T, PublishResponse, T, NotUsed] =
     FlowWithContext.fromTuples {
       Flow
         .fromMaterializer { (mat, attr) =>
@@ -267,8 +258,7 @@ private[pubsub] trait PubSubApi {
         case status =>
           Unmarshal(response.entity).to[String].map { entity =>
             throw new RuntimeException(
-              s"Unexpected publish response. Code [$status] Content-type [${response.entity.contentType}] Entity [$entity]"
-            )
+              s"Unexpected publish response. Code [$status] Content-type [${response.entity.contentType}] Entity [$entity]")
           }
       }
     }.withDefaultRetry

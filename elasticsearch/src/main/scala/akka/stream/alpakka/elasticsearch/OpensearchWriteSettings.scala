@@ -8,24 +8,24 @@ package akka.stream.alpakka.elasticsearch
  * Configure Opensearch sinks and flows.
  */
 final class OpensearchWriteSettings private (connection: ElasticsearchConnectionSettings,
-                                             bufferSize: Int,
-                                             retryLogic: RetryLogic,
-                                             versionType: Option[String],
-                                             apiVersion: OpensearchApiVersion,
-                                             allowExplicitIndex: Boolean)
+    bufferSize: Int,
+    retryLogic: RetryLogic,
+    versionType: Option[String],
+    apiVersion: OpensearchApiVersion,
+    allowExplicitIndex: Boolean)
     extends WriteSettingsBase[OpensearchApiVersion, OpensearchWriteSettings](connection,
-                                                                             bufferSize,
-                                                                             retryLogic,
-                                                                             versionType,
-                                                                             apiVersion,
-                                                                             allowExplicitIndex) {
+      bufferSize,
+      retryLogic,
+      versionType,
+      apiVersion,
+      allowExplicitIndex) {
 
   protected override def copy(connection: ElasticsearchConnectionSettings,
-                              bufferSize: Int,
-                              retryLogic: RetryLogic,
-                              versionType: Option[String],
-                              apiVersion: OpensearchApiVersion,
-                              allowExplicitIndex: Boolean): OpensearchWriteSettings =
+      bufferSize: Int,
+      retryLogic: RetryLogic,
+      versionType: Option[String],
+      apiVersion: OpensearchApiVersion,
+      allowExplicitIndex: Boolean): OpensearchWriteSettings =
     new OpensearchWriteSettings(connection, bufferSize, retryLogic, versionType, apiVersion, allowExplicitIndex)
 
   override def toString: String =

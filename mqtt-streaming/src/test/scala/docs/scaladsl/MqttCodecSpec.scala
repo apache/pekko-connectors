@@ -7,7 +7,7 @@ import java.nio.ByteOrder
 
 import akka.stream.alpakka.mqtt.streaming._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.util.{ByteString, ByteStringBuilder}
+import akka.util.{ ByteString, ByteStringBuilder }
 
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
@@ -66,8 +66,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
         .result()
         .iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Left(
-        UnknownPacketType(ControlPacketType(0), ControlPacketFlags(1))
-      )
+        UnknownPacketType(ControlPacketType(0), ControlPacketFlags(1)))
     }
 
     "encode/decode one byte remaining length" in {
@@ -123,8 +122,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
         Some("some-will-topic"),
         Some("some-will-message"),
         Some("some-username"),
-        Some("some-password")
-      )
+        Some("some-password"))
       val bytes = packet.encode(bsb).result()
       bytes.size shouldBe 94
       bytes.iterator.decodeControlPacket(MaxPacketSize) shouldBe Right(packet)
@@ -169,11 +167,10 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
         .iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Left(
         MqttCodec.BadConnectMessage(Right("some-client-id"),
-                                    Some(Left(BufferUnderflow)),
-                                    Some(Left(BufferUnderflow)),
-                                    None,
-                                    None)
-      )
+          Some(Left(BufferUnderflow)),
+          Some(Left(BufferUnderflow)),
+          None,
+          None))
     }
 
     "underflow when decoding connect packets" in {
@@ -209,8 +206,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
       val packet = Publish(
         ControlPacketFlags.RETAIN | ControlPacketFlags.QoSAtMostOnceDelivery | ControlPacketFlags.DUP,
         "some-topic-name",
-        ByteString("some-payload")
-      )
+        ByteString("some-payload"))
       val bytes = packet.encode(bsb, None).result()
       bytes.size shouldBe 31
       bytes.iterator.decodeControlPacket(MaxPacketSize) shouldBe Right(packet)
@@ -242,8 +238,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
         .result()
         .iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Left(
-        BadPublishMessage(Left(BufferUnderflow), None, ByteString.empty)
-      )
+        BadPublishMessage(Left(BufferUnderflow), None, ByteString.empty))
     }
 
     "underflow when decoding publish packets" in {
@@ -307,8 +302,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
       val bsb: ByteStringBuilder = ByteString.newBuilder
       val packet = Subscribe(
         List("some-head-topic" -> ControlPacketFlags.QoSExactlyOnceDelivery,
-             "some-tail-topic" -> ControlPacketFlags.QoSExactlyOnceDelivery)
-      )
+          "some-tail-topic" -> ControlPacketFlags.QoSExactlyOnceDelivery))
       val bytes = packet.encode(bsb, PacketId(0)).result()
       bytes.size shouldBe 40
       bytes.iterator.decodeControlPacket(MaxPacketSize) shouldBe Right(packet)
@@ -326,15 +320,13 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
       val bsb: ByteStringBuilder = ByteString.newBuilder
       val packet = Subscribe(
         List("some-head-topic" -> ControlPacketFlags.QoSExactlyOnceDelivery,
-             "some-tail-topic" -> ControlPacketFlags.QoSReserved)
-      )
+          "some-tail-topic" -> ControlPacketFlags.QoSReserved))
       val bytes = packet.encode(bsb, PacketId(1)).result()
       bytes.iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Left(
         BadSubscribeMessage(PacketId(1),
-                            List(Right("some-head-topic") -> ControlPacketFlags.QoSExactlyOnceDelivery,
-                                 Right("some-tail-topic") -> ControlPacketFlags.QoSReserved))
-      )
+          List(Right("some-head-topic") -> ControlPacketFlags.QoSExactlyOnceDelivery,
+            Right("some-tail-topic") -> ControlPacketFlags.QoSReserved)))
     }
 
     "bad subscribe message when decoding subscribe packets given no topics" in {
@@ -343,8 +335,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
       val bytes = packet.encode(bsb, PacketId(1)).result()
       bytes.iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Left(
-        BadSubscribeMessage(PacketId(1), List.empty)
-      )
+        BadSubscribeMessage(PacketId(1), List.empty))
     }
 
     "underflow when decoding subscribe packets" in {
@@ -366,8 +357,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
       val bytes = packet.encode(bsb).result()
       bytes.iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Right(
-        SubAck(PacketId(1), List(ControlPacketFlags.QoSExactlyOnceDelivery, ControlPacketFlags.QoSFailure))
-      )
+        SubAck(PacketId(1), List(ControlPacketFlags.QoSExactlyOnceDelivery, ControlPacketFlags.QoSFailure)))
     }
 
     "underflow when decoding sub ack packets" in {
@@ -388,8 +378,7 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
       val bytes = packet.encode(bsb, PacketId(1)).result()
       bytes.iterator
         .decodeControlPacket(MaxPacketSize) shouldBe Left(
-        BadUnsubscribeMessage(PacketId(1), List.empty)
-      )
+        BadUnsubscribeMessage(PacketId(1), List.empty))
     }
 
     "underflow when decoding unsubscribe packets" in {

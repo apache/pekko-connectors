@@ -13,8 +13,7 @@ import com.rabbitmq.client.Envelope
 final class ReadResult private (
     val bytes: ByteString,
     val envelope: Envelope,
-    val properties: BasicProperties
-) {
+    val properties: BasicProperties) {
   override def toString: String =
     s"ReadResult(bytes=$bytes, envelope=$envelope, properties=$properties)"
 }
@@ -35,8 +34,7 @@ final class WriteMessage private (
     val immediate: Boolean,
     val mandatory: Boolean,
     val properties: Option[BasicProperties] = None,
-    val routingKey: Option[String] = None
-) {
+    val routingKey: Option[String] = None) {
 
   def withImmediate(value: Boolean): WriteMessage =
     if (value == immediate) this
@@ -53,9 +51,9 @@ final class WriteMessage private (
     copy(routingKey = Some(routingKey))
 
   private def copy(immediate: Boolean = immediate,
-                   mandatory: Boolean = mandatory,
-                   properties: Option[BasicProperties] = properties,
-                   routingKey: Option[String] = routingKey) =
+      mandatory: Boolean = mandatory,
+      properties: Option[BasicProperties] = properties,
+      routingKey: Option[String] = routingKey) =
     new WriteMessage(bytes, immediate, mandatory, properties, routingKey)
 
   override def toString: String =

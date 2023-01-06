@@ -18,7 +18,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
 
-  //#source-example
+  // #source-example
   implicit val session = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
@@ -42,7 +42,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
       .source(sql"SELECT ID, NAME FROM ALPAKKA_SLICK_SCALADSL_TEST_USERS".as[User])
       .log("user")
       .runWith(Sink.ignore)
-  //#source-example
+  // #source-example
 
   done.onComplete {
     case _ =>
@@ -54,7 +54,7 @@ object SlickSourceWithTypedQueryExample extends App {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
 
-  //#source-with-typed-query
+  // #source-with-typed-query
   implicit val session = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
@@ -74,7 +74,7 @@ object SlickSourceWithTypedQueryExample extends App {
       .source(TableQuery[Users].result)
       .log("user")
       .runWith(Sink.ignore)
-  //#source-with-typed-query
+  // #source-with-typed-query
 
   done.onComplete {
     case _ =>
@@ -86,7 +86,7 @@ object SlickSinkExample extends App {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
 
-  //#sink-example
+  // #sink-example
   implicit val session = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
@@ -104,9 +104,8 @@ object SlickSinkExample extends App {
     Source(users)
       .runWith(
         // add an optional first argument to specify the parallelism factor (Int)
-        Slick.sink(user => sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})")
-      )
-  //#sink-example
+        Slick.sink(user => sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
+  // #sink-example
 
   done.onComplete {
     case _ =>
@@ -118,7 +117,7 @@ object SlickFlowExample extends App {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
 
-  //#flow-example
+  // #flow-example
   implicit val session = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
@@ -136,11 +135,10 @@ object SlickFlowExample extends App {
     Source(users)
       .via(
         // add an optional first argument to specify the parallelism factor (Int)
-        Slick.flow(user => sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})")
-      )
+        Slick.flow(user => sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
       .log("nr-of-updated-rows")
       .runWith(Sink.ignore)
-  //#flow-example
+  // #flow-example
 
   done.onComplete(_ => system.terminate())
 }
@@ -162,7 +160,7 @@ object SlickFlowWithPassThroughExample extends App {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
 
-  //#flowWithPassThrough-example
+  // #flowWithPassThrough-example
   implicit val session = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
@@ -183,20 +181,19 @@ object SlickFlowWithPassThroughExample extends App {
         // add an optional first argument to specify the parallelism factor (Int)
         Slick.flowWithPassThrough { kafkaMessage =>
           val user = kafkaMessage.msg
-          (sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})")
+          sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
             .map { insertCount => // map db result to something else
               // allows to keep the kafka message offset so it can be committed in a next stage
               kafkaMessage.map(user => (user, insertCount))
             }
-        }
-      )
+        })
       .log("nr-of-updated-rows")
       .mapAsync(1) { // in correct order
         kafkaMessage =>
           kafkaMessage.offset.commit // commit kafka messages
       }
       .runWith(Sink.ignore)
-  //#flowWithPassThrough-example
+  // #flowWithPassThrough-example
 
   done.onComplete {
     case _ =>

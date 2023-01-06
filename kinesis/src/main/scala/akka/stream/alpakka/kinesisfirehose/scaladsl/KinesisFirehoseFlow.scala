@@ -11,7 +11,7 @@ import akka.stream.alpakka.kinesisfirehose.KinesisFirehoseFlowSettings
 import akka.stream.alpakka.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
 import akka.stream.scaladsl.Flow
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
-import software.amazon.awssdk.services.firehose.model.{PutRecordBatchRequest, PutRecordBatchResponseEntry, Record}
+import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchRequest, PutRecordBatchResponseEntry, Record }
 
 import scala.jdk.CollectionConverters._
 import scala.collection.immutable.Queue
@@ -21,25 +21,21 @@ import scala.compat.java8.FutureConverters._
 
 object KinesisFirehoseFlow {
   def apply(streamName: String, settings: KinesisFirehoseFlowSettings = KinesisFirehoseFlowSettings.Defaults)(
-      implicit kinesisClient: FirehoseAsyncClient
-  ): Flow[Record, PutRecordBatchResponseEntry, NotUsed] =
+      implicit kinesisClient: FirehoseAsyncClient): Flow[Record, PutRecordBatchResponseEntry, NotUsed] =
     Flow[Record]
       .throttle(settings.maxRecordsPerSecond, 1.second, settings.maxRecordsPerSecond, ThrottleMode.Shaping)
       .throttle(settings.maxBytesPerSecond, 1.second, settings.maxBytesPerSecond, getByteSize, ThrottleMode.Shaping)
       .batch(settings.maxBatchSize, Queue(_))(_ :+ _)
-      .mapAsync(settings.parallelism)(
-        records =>
-          kinesisClient
-            .putRecordBatch(
-              PutRecordBatchRequest
-                .builder()
-                .deliveryStreamName(streamName)
-                .records(records.asJavaCollection)
-                .build()
-            )
-            .toScala
-            .transform(identity, FailurePublishingRecords(_))(parasitic)
-      )
+      .mapAsync(settings.parallelism)(records =>
+        kinesisClient
+          .putRecordBatch(
+            PutRecordBatchRequest
+              .builder()
+              .deliveryStreamName(streamName)
+              .records(records.asJavaCollection)
+              .build())
+          .toScala
+          .transform(identity, FailurePublishingRecords(_))(parasitic))
       .mapConcat(_.requestResponses.asScala.toIndexedSeq)
 
   private def getByteSize(record: Record): Int = record.data.asByteBuffer.position

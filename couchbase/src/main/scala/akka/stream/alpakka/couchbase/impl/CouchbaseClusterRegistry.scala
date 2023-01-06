@@ -14,7 +14,7 @@ import akka.stream.alpakka.couchbase.scaladsl.CouchbaseSession
 import com.couchbase.client.java.AsyncCluster
 
 import scala.annotation.tailrec
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Internal API
@@ -31,7 +31,7 @@ final private[couchbase] class CouchbaseClusterRegistry(system: ActorSystem) {
   def clusterFor(settings: CouchbaseSessionSettings): Future[AsyncCluster] =
     clusters.get.get(settings) match {
       case Some(futureSession) => futureSession
-      case _ => createClusterClient(settings)
+      case _                   => createClusterClient(settings)
     }
 
   @tailrec
@@ -45,8 +45,7 @@ final private[couchbase] class CouchbaseClusterRegistry(system: ActorSystem) {
       log.info("Starting Couchbase client for nodes [{}]", nodesAsString)
       promise.completeWith(
         CouchbaseSession
-          .createClusterClient(settings)(blockingDispatcher)
-      )
+          .createClusterClient(settings)(blockingDispatcher))
       val future = promise.future
       system.registerOnTermination {
         future.foreach { cluster =>

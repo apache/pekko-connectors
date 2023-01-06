@@ -13,7 +13,7 @@ import javax.jms
 final class AcknowledgeMode(val mode: Int) {
   override def equals(other: Any): Boolean = other match {
     case that: AcknowledgeMode => this.mode == that.mode
-    case _ => false
+    case _                     => false
   }
   override def hashCode: Int = mode
   override def toString: String = s"AcknowledgeMode(${AcknowledgeMode.asString(this)})"
@@ -29,10 +29,10 @@ object AcknowledgeMode {
    * Interpret string to corresponding acknowledge mode.
    */
   def from(s: String): AcknowledgeMode = s match {
-    case "auto" => AutoAcknowledge
-    case "client" => ClientAcknowledge
+    case "auto"          => AutoAcknowledge
+    case "client"        => ClientAcknowledge
     case "duplicates-ok" => DupsOkAcknowledge
-    case "session" => SessionTransacted
+    case "session"       => SessionTransacted
     case other =>
       try {
         val mode = other.toInt
@@ -40,8 +40,7 @@ object AcknowledgeMode {
       } catch {
         case _: NumberFormatException =>
           throw new IllegalArgumentException(
-            s"can't read AcknowledgeMode '$other', (known are auto, client, duplicates-ok, session, or an integer value)"
-          )
+            s"can't read AcknowledgeMode '$other', (known are auto, client, duplicates-ok, session, or an integer value)")
       }
   }
 
@@ -49,11 +48,11 @@ object AcknowledgeMode {
    * Convert to a string presentation.
    */
   def asString(mode: AcknowledgeMode): String = mode match {
-    case AutoAcknowledge => "auto"
+    case AutoAcknowledge   => "auto"
     case ClientAcknowledge => "client"
     case DupsOkAcknowledge => "duplicates-ok"
     case SessionTransacted => "session"
-    case other => other.mode.toString
+    case other             => other.mode.toString
   }
 
 }

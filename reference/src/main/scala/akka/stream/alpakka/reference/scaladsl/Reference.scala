@@ -6,12 +6,12 @@ package akka.stream.alpakka.reference.scaladsl
 
 import akka.actor.ActorSystem
 import akka.stream.Attributes
-import akka.{Done, NotUsed}
-import akka.stream.alpakka.reference.impl.{ReferenceFlowStage, ReferenceSourceStage, ReferenceWithResourceFlowStage}
+import akka.{ Done, NotUsed }
+import akka.stream.alpakka.reference.impl.{ ReferenceFlowStage, ReferenceSourceStage, ReferenceWithResourceFlowStage }
 import akka.stream.alpakka.reference._
-import akka.stream.scaladsl.{Flow, Source}
+import akka.stream.scaladsl.{ Flow, Source }
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 object Reference {
 

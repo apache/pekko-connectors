@@ -4,12 +4,17 @@
 
 package akka.stream.alpakka.reference.javadsl
 
-import java.util.concurrent.{CompletionStage, Executor}
+import java.util.concurrent.{ CompletionStage, Executor }
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.stream.alpakka.reference.scaladsl
-import akka.stream.alpakka.reference.{ReferenceReadResult, ReferenceWriteMessage, ReferenceWriteResult, SourceSettings}
-import akka.stream.javadsl.{Flow, Source}
+import akka.stream.alpakka.reference.{
+  ReferenceReadResult,
+  ReferenceWriteMessage,
+  ReferenceWriteResult,
+  SourceSettings
+}
+import akka.stream.javadsl.{ Flow, Source }
 
 import scala.concurrent.ExecutionContext
 

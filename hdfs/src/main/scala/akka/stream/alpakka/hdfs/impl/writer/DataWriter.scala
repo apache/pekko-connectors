@@ -8,7 +8,7 @@ import akka.annotation.InternalApi
 import akka.stream.alpakka.hdfs.FilePathGenerator
 import akka.stream.alpakka.hdfs.impl.writer.HdfsWriter._
 import akka.util.ByteString
-import org.apache.hadoop.fs.{FSDataOutputStream, FileSystem, Path}
+import org.apache.hadoop.fs.{ FSDataOutputStream, FileSystem, Path }
 
 /**
  * Internal API
@@ -18,8 +18,7 @@ private[writer] final case class DataWriter(
     override val fs: FileSystem,
     override val pathGenerator: FilePathGenerator,
     maybeTargetPath: Option[Path],
-    override val overwrite: Boolean
-) extends HdfsWriter[FSDataOutputStream, ByteString] {
+    override val overwrite: Boolean) extends HdfsWriter[FSDataOutputStream, ByteString] {
 
   override protected lazy val target: Path =
     getOrCreatePath(maybeTargetPath, createTargetPath(pathGenerator, 0))

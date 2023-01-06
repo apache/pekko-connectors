@@ -6,7 +6,7 @@ package akka.stream.alpakka.mqtt.scaladsl
 
 import akka.Done
 import akka.stream.alpakka.mqtt._
-import akka.stream.scaladsl.{Keep, Source}
+import akka.stream.scaladsl.{ Keep, Source }
 
 import scala.concurrent.Future
 
@@ -25,12 +25,11 @@ object MqttSource {
    * @param bufferSize max number of messages read from MQTT before back-pressure applies
    */
   def atMostOnce(settings: MqttConnectionSettings,
-                 subscriptions: MqttSubscriptions,
-                 bufferSize: Int): Source[MqttMessage, Future[Done]] =
+      subscriptions: MqttSubscriptions,
+      bufferSize: Int): Source[MqttMessage, Future[Done]] =
     Source.maybe
       .viaMat(
-        MqttFlow.atMostOnce(settings, subscriptions, bufferSize, defaultQos = MqttQoS.AtLeastOnce)
-      )(Keep.right)
+        MqttFlow.atMostOnce(settings, subscriptions, bufferSize, defaultQos = MqttQoS.AtLeastOnce))(Keep.right)
 
   /**
    * Create a source subscribing to MQTT messages with a commit handle to acknowledge message reception.
@@ -40,10 +39,9 @@ object MqttSource {
    * @param bufferSize max number of messages read from MQTT before back-pressure applies
    */
   def atLeastOnce(settings: MqttConnectionSettings,
-                  subscriptions: MqttSubscriptions,
-                  bufferSize: Int): Source[MqttMessageWithAck, Future[Done]] =
+      subscriptions: MqttSubscriptions,
+      bufferSize: Int): Source[MqttMessageWithAck, Future[Done]] =
     Source.maybe.viaMat(
-      MqttFlow.atLeastOnce(settings, subscriptions, bufferSize, defaultQos = MqttQoS.AtLeastOnce)
-    )(Keep.right)
+      MqttFlow.atLeastOnce(settings, subscriptions, bufferSize, defaultQos = MqttQoS.AtLeastOnce))(Keep.right)
 
 }

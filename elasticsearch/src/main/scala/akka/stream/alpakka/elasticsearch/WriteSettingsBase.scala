@@ -16,8 +16,7 @@ abstract class WriteSettingsBase[Version <: ApiVersionBase, W <: WriteSettingsBa
     val retryLogic: RetryLogic,
     val versionType: Option[String],
     val apiVersion: Version,
-    val allowExplicitIndex: Boolean
-) { this: W =>
+    val allowExplicitIndex: Boolean) { this: W =>
 
   def withConnection(value: ElasticsearchConnectionSettings): W = copy(connection = value)
 
@@ -34,9 +33,9 @@ abstract class WriteSettingsBase[Version <: ApiVersionBase, W <: WriteSettingsBa
   def withAllowExplicitIndex(value: Boolean): W = copy(allowExplicitIndex = value)
 
   protected def copy(connection: ElasticsearchConnectionSettings = connection,
-                     bufferSize: Int = bufferSize,
-                     retryLogic: RetryLogic = retryLogic,
-                     versionType: Option[String] = versionType,
-                     apiVersion: Version = apiVersion,
-                     allowExplicitIndex: Boolean = allowExplicitIndex): W;
+      bufferSize: Int = bufferSize,
+      retryLogic: RetryLogic = retryLogic,
+      versionType: Option[String] = versionType,
+      apiVersion: Version = apiVersion,
+      allowExplicitIndex: Boolean = allowExplicitIndex): W;
 }

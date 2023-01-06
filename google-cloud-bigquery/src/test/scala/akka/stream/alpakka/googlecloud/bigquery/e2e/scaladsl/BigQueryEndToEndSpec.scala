@@ -5,13 +5,13 @@
 package akka.stream.alpakka.googlecloud.bigquery.e2e.scaladsl
 
 import akka.actor.ActorSystem
-import akka.{pattern, Done}
+import akka.{ pattern, Done }
 import akka.stream.alpakka.googlecloud.bigquery.HoverflySupport
-import akka.stream.alpakka.googlecloud.bigquery.e2e.{A, B, C}
+import akka.stream.alpakka.googlecloud.bigquery.e2e.{ A, B, C }
 import akka.stream.alpakka.googlecloud.bigquery.model.JobState
 import akka.stream.alpakka.googlecloud.bigquery.model.TableReference
 import akka.testkit.TestKit
-import io.specto.hoverfly.junit.core.{HoverflyMode, SimulationSource}
+import io.specto.hoverfly.junit.core.{ HoverflyMode, SimulationSource }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
 import org.scalatest.matchers.should.Matchers
@@ -35,7 +35,7 @@ class BigQueryEndToEndSpec
       case "simulate" =>
         hoverfly.simulate(SimulationSource.url(getClass.getClassLoader.getResource("BigQueryEndToEndSpec.json")))
       case "capture" => hoverfly.resetMode(HoverflyMode.CAPTURE)
-      case _ => throw new IllegalArgumentException
+      case _         => throw new IllegalArgumentException
     }
   }
 
@@ -54,7 +54,7 @@ class BigQueryEndToEndSpec
     import akka.stream.alpakka.googlecloud.bigquery.scaladsl.BigQuery
     import akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
     import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
-    import akka.stream.scaladsl.{Sink, Source}
+    import akka.stream.scaladsl.{ Sink, Source }
 
     implicit val cFormat = bigQueryJsonFormat5(C)
     implicit val bFormat = bigQueryJsonFormat3(B)
@@ -111,8 +111,7 @@ class BigQueryEndToEndSpec
                   }
                 },
                 60,
-                if (hoverfly.getMode == HoverflyMode.SIMULATE) 0.seconds else 1.second
-              )
+                if (hoverfly.getMode == HoverflyMode.SIMULATE) 0.seconds else 1.second)
               .map { job =>
                 job.status.flatMap(_.errorResult) shouldBe None
               }

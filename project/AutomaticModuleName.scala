@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2016-2018 Lightbend Inc. <https://www.lightbend.com>
  */
-import sbt.{Def, _}
+import sbt.{ Def, _ }
 import sbt.Keys._
 
 /**
@@ -16,6 +16,5 @@ object AutomaticModuleName {
   private val AutomaticModuleName = "Automatic-Module-Name"
 
   def settings(name: String): Seq[Def.Setting[Task[Seq[PackageOption]]]] = Seq(
-    Compile / packageBin / packageOptions += Package.ManifestAttributes(AutomaticModuleName → name)
-  )
+    Compile / packageBin / packageOptions += Package.ManifestAttributes(AutomaticModuleName -> name))
 }

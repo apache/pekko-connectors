@@ -8,7 +8,7 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.alpakka.xml._
 import akka.stream.alpakka.xml.scaladsl.XmlParsing
-import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import akka.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 
@@ -42,9 +42,7 @@ class XmlCoalesceSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll w
           StartElement("doc", List.empty[Attribute]),
           Characters("0123456789"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly unify a chain of CDATA chunks" in {
@@ -61,9 +59,7 @@ class XmlCoalesceSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll w
           StartElement("doc", List.empty[Attribute]),
           Characters("0123456789"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly unify a chain of CDATA and character chunks" in {
@@ -83,9 +79,7 @@ class XmlCoalesceSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll w
           StartElement("doc", List.empty[Attribute]),
           Characters("0123456789"),
           EndElement("doc"),
-          EndDocument
-        )
-      )
+          EndDocument))
     }
 
     "properly report an error if text limit is exceeded" in {

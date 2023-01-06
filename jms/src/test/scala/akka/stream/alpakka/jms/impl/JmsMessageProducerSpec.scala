@@ -4,9 +4,9 @@
 
 package akka.stream.alpakka.jms.impl
 
-import akka.stream.alpakka.jms.{Destination, _}
-import javax.jms.{Destination => JmsDestination, _}
-import org.mockito.ArgumentMatchers.{any, anyBoolean, anyInt, anyString}
+import akka.stream.alpakka.jms.{ Destination, _ }
+import javax.jms.{ Destination => JmsDestination, _ }
+import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt, anyString }
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 
@@ -45,8 +45,7 @@ class JmsMessageProducerSpec extends JmsSpec with MockitoSugar {
           .withProperty("short", 3.toShort)
           .withProperty("long", 4L)
           .withProperty("double", 5.0)
-          .withProperty("bytearray", Array[Byte](1, 1, 0))
-      )
+          .withProperty("bytearray", Array[Byte](1, 1, 0)))
 
       verify(textMessage).setStringProperty("string", "string")
       verify(textMessage).setIntProperty("int", 1)
@@ -70,15 +69,13 @@ class JmsMessageProducerSpec extends JmsSpec with MockitoSugar {
         "long" -> 4L,
         "Java-boxed long" -> java.lang.Long.valueOf(44L),
         "double" -> 5.0,
-        "bytearray" -> Array[Byte](1, 1, 0)
-      )
+        "bytearray" -> Array[Byte](1, 1, 0))
 
       val jmsProducer = JmsMessageProducer(jmsSession, settings, 0)
       jmsProducer.populateMessageProperties(
         textMessage,
         JmsTextMessage("test")
-          .withProperties(props)
-      )
+          .withProperties(props))
 
       verify(textMessage).setStringProperty("string", "string")
       verify(textMessage).setIntProperty("int", 1)
@@ -122,10 +119,7 @@ class JmsMessageProducerSpec extends JmsSpec with MockitoSugar {
             "Java-boxed float" -> java.lang.Float.valueOf(4.35f),
             "long" -> 4L,
             "Java-boxed long" -> java.lang.Long.valueOf(44L),
-            "double" -> 5.0
-          )
-        )
-      )
+            "double" -> 5.0)))
       verify(mapMessage).setString("string", "string")
       verify(mapMessage).setInt("int", 1)
       verify(mapMessage).setBoolean("boolean", true)

@@ -5,7 +5,7 @@
 package akka.stream.alpakka.mongodb.javadsl
 
 import akka.NotUsed
-import akka.stream.alpakka.mongodb.{scaladsl, DocumentReplace, DocumentUpdate}
+import akka.stream.alpakka.mongodb.{ scaladsl, DocumentReplace, DocumentUpdate }
 import akka.stream.alpakka.mongodb.scaladsl.MongoFlow.{
   DefaultDeleteOptions,
   DefaultInsertManyOptions,
@@ -14,8 +14,8 @@ import akka.stream.alpakka.mongodb.scaladsl.MongoFlow.{
   DefaultUpdateOptions
 }
 import akka.stream.javadsl.Flow
-import com.mongodb.client.model.{DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions}
-import com.mongodb.client.result.{DeleteResult, UpdateResult}
+import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
+import com.mongodb.client.result.{ DeleteResult, UpdateResult }
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.conversions.Bson
 
@@ -55,7 +55,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def insertMany[T](collection: MongoCollection[T],
-                    options: InsertManyOptions): Flow[java.util.List[T], java.util.List[T], NotUsed] =
+      options: InsertManyOptions): Flow[java.util.List[T], java.util.List[T], NotUsed] =
     akka.stream.scaladsl
       .Flow[java.util.List[T]]
       .map(_.asScala.toIndexedSeq)
@@ -69,8 +69,7 @@ object MongoFlow {
    * @param collection the mongo db collection to update.
    */
   def updateOne[T](
-      collection: MongoCollection[T]
-  ): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
+      collection: MongoCollection[T]): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
     updateOne(collection, DefaultUpdateOptions)
 
   /**
@@ -81,8 +80,7 @@ object MongoFlow {
    */
   def updateOne[T](
       collection: MongoCollection[T],
-      options: UpdateOptions
-  ): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
+      options: UpdateOptions): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
     scaladsl.MongoFlow.updateOne(collection, options).map(fromTupleToPair).asJava
 
   /**
@@ -91,8 +89,7 @@ object MongoFlow {
    * @param collection the mongo db collection to update.
    */
   def updateMany[T](
-      collection: MongoCollection[T]
-  ): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
+      collection: MongoCollection[T]): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
     updateMany(collection, DefaultUpdateOptions)
 
   /**
@@ -103,8 +100,8 @@ object MongoFlow {
    */
   def updateMany[T](
       collection: MongoCollection[T],
-      options: UpdateOptions = DefaultUpdateOptions
-  ): Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
+      options: UpdateOptions = DefaultUpdateOptions)
+      : Flow[DocumentUpdate, akka.japi.Pair[UpdateResult, DocumentUpdate], NotUsed] =
     scaladsl.MongoFlow.updateMany(collection, options).map(fromTupleToPair).asJava
 
   /**
@@ -122,7 +119,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def deleteOne[T](collection: MongoCollection[T],
-                   options: DeleteOptions): Flow[Bson, akka.japi.Pair[DeleteResult, Bson], NotUsed] =
+      options: DeleteOptions): Flow[Bson, akka.japi.Pair[DeleteResult, Bson], NotUsed] =
     scaladsl.MongoFlow.deleteOne(collection, options).map(fromTupleToPair).asJava
 
   /**
@@ -140,7 +137,7 @@ object MongoFlow {
    * @param options options to apply to the operation
    */
   def deleteMany[T](collection: MongoCollection[T],
-                    options: DeleteOptions): Flow[Bson, akka.japi.Pair[DeleteResult, Bson], NotUsed] =
+      options: DeleteOptions): Flow[Bson, akka.japi.Pair[DeleteResult, Bson], NotUsed] =
     scaladsl.MongoFlow.deleteMany(collection, options).map(fromTupleToPair).asJava
 
   /**
@@ -151,8 +148,8 @@ object MongoFlow {
    */
   def replaceOne[T](
       collection: MongoCollection[T],
-      options: ReplaceOptions = DefaultReplaceOptions
-  ): Flow[DocumentReplace[T], akka.japi.Pair[UpdateResult, DocumentReplace[T]], NotUsed] =
+      options: ReplaceOptions = DefaultReplaceOptions)
+      : Flow[DocumentReplace[T], akka.japi.Pair[UpdateResult, DocumentReplace[T]], NotUsed] =
     scaladsl.MongoFlow.replaceOne(collection, options).map(fromTupleToPair).asJava
 
   private def fromTupleToPair[T, R] = (akka.japi.Pair.create[T, R] _).tupled

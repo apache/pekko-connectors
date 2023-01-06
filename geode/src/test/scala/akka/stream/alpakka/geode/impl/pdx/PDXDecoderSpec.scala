@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.geode.impl.pdx
 
-import java.util.{Date, UUID}
+import java.util.{ Date, UUID }
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.slick
 
-import slick.jdbc.{JdbcBackend, JdbcProfile}
+import slick.jdbc.{ JdbcBackend, JdbcProfile }
 
 package object scaladsl {
 

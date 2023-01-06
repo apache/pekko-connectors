@@ -15,7 +15,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec {
       val connectionProvider = AmqpLocalConnectionProvider
       val connection1 = connectionProvider.get
       val connection2 = connectionProvider.get
-      connection1 should not equal connection2
+      (connection1 should not).equal(connection2)
       connectionProvider.release(connection1)
       connectionProvider.release(connection2)
     }
@@ -31,7 +31,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec {
       val connectionProvider = AmqpUriConnectionProvider("amqp://localhost:5672")
       val connection1 = connectionProvider.get
       val connection2 = connectionProvider.get
-      connection1 should not equal connection2
+      (connection1 should not).equal(connection2)
       connectionProvider.release(connection1)
       connectionProvider.release(connection2)
     }
@@ -47,7 +47,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec {
       val connectionProvider = AmqpDetailsConnectionProvider("localhost", 5672)
       val connection1 = connectionProvider.get
       val connection2 = connectionProvider.get
-      connection1 should not equal connection2
+      (connection1 should not).equal(connection2)
       connectionProvider.release(connection1)
       connectionProvider.release(connection2)
     }
@@ -65,7 +65,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec {
         AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672)
       val connection1 = connectionProvider.get
       val connection2 = connectionProvider.get
-      connection1 should not equal connection2
+      (connection1 should not).equal(connection2)
       connectionProvider.release(connection1)
       connectionProvider.release(connection2)
     }

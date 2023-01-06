@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.s3
 
-import akka.annotation.{DoNotInherit, InternalApi}
+import akka.annotation.{ DoNotInherit, InternalApi }
 import akka.http.scaladsl.model.StatusCode
 
 import scala.xml.XML
@@ -14,10 +14,10 @@ import scala.xml.XML
  */
 @DoNotInherit
 class S3Exception @InternalApi private[s3] (val statusCode: StatusCode,
-                                            val code: String,
-                                            val message: String,
-                                            val requestId: String,
-                                            val resource: String)
+    val code: String,
+    val message: String,
+    val requestId: String,
+    val resource: String)
     extends RuntimeException(message) {
 
   override def toString: String =
@@ -34,8 +34,7 @@ object S3Exception {
         (xmlResponse \ "Code").text,
         (xmlResponse \ "Message").text,
         (xmlResponse \ "RequestId").text,
-        (xmlResponse \ "Resource").text
-      )
+        (xmlResponse \ "Resource").text)
     } catch {
       case e: Exception =>
         new S3Exception(statusCode, statusCode.toString, response, "-", "-")

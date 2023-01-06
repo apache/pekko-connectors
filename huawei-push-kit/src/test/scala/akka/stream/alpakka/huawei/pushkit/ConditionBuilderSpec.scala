@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.huawei.pushkit
 
-import models.Condition.{And, Not, Or, Topic}
+import models.Condition.{ And, Not, Or, Topic }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -5,7 +5,7 @@
 package akka.stream.alpakka.google
 
 import akka.stream.Attributes.Attribute
-import akka.stream.{Attributes, Materializer}
+import akka.stream.{ Attributes, Materializer }
 
 /**
  * Akka Stream [[Attributes]] that are used when materializing stream blueprints containing Google connectors.
@@ -28,7 +28,7 @@ object GoogleAttributes {
   def resolveSettings(mat: Materializer, attr: Attributes): GoogleSettings =
     attr.get[GoogleAttribute].fold(GoogleExt(mat.system).settings) {
       case GoogleSettingsValue(settings) => settings
-      case GoogleSettingsPath(path) => GoogleExt(mat.system).settings(path)
+      case GoogleSettingsPath(path)      => GoogleExt(mat.system).settings(path)
     }
 
   private sealed abstract class GoogleAttribute extends Attribute

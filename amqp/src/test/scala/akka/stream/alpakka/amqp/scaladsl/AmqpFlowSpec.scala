@@ -6,15 +6,15 @@ package akka.stream.alpakka.amqp.scaladsl
 
 import akka.Done
 import akka.stream.alpakka.amqp._
-import akka.stream.scaladsl.{Flow, FlowWithContext, Keep, Sink, Source}
+import akka.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.ConfirmCallback
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.mockito.{ArgumentCaptor, Mockito}
+import org.mockito.{ ArgumentCaptor, Mockito }
 import org.scalatest.BeforeAndAfterEach
 
 import scala.concurrent.Future
@@ -91,8 +91,7 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
           val channelError = new RuntimeException("channel error")
 
           when(
-            connectionMock.createChannel()
-          ).thenThrow(channelError)
+            connectionMock.createChannel()).thenThrow(channelError)
 
           val completion =
             Source
@@ -175,8 +174,7 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
         (WriteResult.rejected, input(3)),
         (WriteResult.rejected, input(4)),
         (WriteResult.rejected, input(5)),
-        (WriteResult.rejected, input(6))
-      )
+        (WriteResult.rejected, input(6)))
 
       messages should contain theSameElementsInOrderAs expectedResult
       completion.futureValue shouldBe an[Done]
@@ -262,8 +260,7 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
         (WriteResult.rejected, input(6)),
         (WriteResult.rejected, input(3)),
         (WriteResult.rejected, input(4)),
-        (WriteResult.rejected, input(5))
-      )
+        (WriteResult.rejected, input(5)))
 
       messages should contain theSameElementsInOrderAs expectedResult
       completion.futureValue shouldBe an[Done]
@@ -327,8 +324,8 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
 
     when(
       channelMock
-        .basicPublish(any[String], any[String], any[Boolean], any[Boolean], any[BasicProperties], any[Array[Byte]])
-    ).thenThrow(publicationError)
+        .basicPublish(any[String], any[String], any[Boolean], any[Boolean], any[BasicProperties],
+          any[Array[Byte]])).thenThrow(publicationError)
 
     val completion =
       Source
@@ -419,8 +416,7 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
       WriteResult.confirmed,
       WriteResult.confirmed,
       WriteResult.rejected,
-      WriteResult.rejected
-    )
+      WriteResult.rejected)
 
     messages should contain theSameElementsAs expectedResult
     completion.futureValue shouldBe an[Done]

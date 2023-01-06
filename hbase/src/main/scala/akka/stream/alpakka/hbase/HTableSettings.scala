@@ -13,9 +13,9 @@ import scala.jdk.CollectionConverters._
 import scala.compat.java8.FunctionConverters._
 
 final class HTableSettings[T] private (val conf: Configuration,
-                                       val tableName: TableName,
-                                       val columnFamilies: immutable.Seq[String],
-                                       val converter: T => immutable.Seq[Mutation]) {
+    val tableName: TableName,
+    val columnFamilies: immutable.Seq[String],
+    val converter: T => immutable.Seq[Mutation]) {
 
   def withConf(conf: Configuration): HTableSettings[T] =
     copy(conf = conf)
@@ -50,9 +50,9 @@ final class HTableSettings[T] private (val conf: Configuration,
     ")"
 
   private def copy(conf: Configuration = conf,
-                   tableName: TableName = tableName,
-                   columnFamilies: immutable.Seq[String] = columnFamilies,
-                   converter: T => immutable.Seq[Mutation] = converter) =
+      tableName: TableName = tableName,
+      columnFamilies: immutable.Seq[String] = columnFamilies,
+      converter: T => immutable.Seq[Mutation] = converter) =
     new HTableSettings[T](conf, tableName, columnFamilies, converter)
 
 }
@@ -63,9 +63,9 @@ object HTableSettings {
    * Create table settings, describing table name, columns and HBase mutations for every model object
    */
   def apply[T](conf: Configuration,
-               tableName: TableName,
-               columnFamilies: immutable.Seq[String],
-               converter: T => immutable.Seq[Mutation]) =
+      tableName: TableName,
+      columnFamilies: immutable.Seq[String],
+      converter: T => immutable.Seq[Mutation]) =
     new HTableSettings(conf, tableName, columnFamilies, converter)
 
   /**
@@ -73,8 +73,8 @@ object HTableSettings {
    * Create table settings, describing table name, columns and HBase mutations for every model object
    */
   def create[T](conf: Configuration,
-                tableName: TableName,
-                columnFamilies: java.util.List[String],
-                converter: java.util.function.Function[T, java.util.List[Mutation]]): HTableSettings[T] =
+      tableName: TableName,
+      columnFamilies: java.util.List[String],
+      converter: java.util.function.Function[T, java.util.List[Mutation]]): HTableSettings[T] =
     HTableSettings(conf, tableName, columnFamilies.asScala.toIndexedSeq, converter.asScala(_).asScala.toIndexedSeq)
 }

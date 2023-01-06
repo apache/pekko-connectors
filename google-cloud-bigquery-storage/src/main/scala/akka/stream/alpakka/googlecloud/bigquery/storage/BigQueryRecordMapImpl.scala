@@ -26,7 +26,7 @@ case class BigQueryRecordAvroImpl(record: GenericRecord) extends BigQueryRecord 
 
   override def equals(that: Any): Boolean = that match {
     case BigQueryRecordAvroImpl(thatRecord) => thatRecord.equals(record)
-    case _ => false
+    case _                                  => false
   }
 
   override def hashCode(): Int = record.hashCode()
@@ -39,7 +39,7 @@ case class BigQueryRecordMapImpl(map: Map[String, Object]) extends BigQueryRecor
 
   override def equals(that: Any): Boolean = that match {
     case BigQueryRecordMapImpl(thatMap) => thatMap.equals(map)
-    case _ => false
+    case _                              => false
   }
 
   override def hashCode(): Int = map.hashCode()

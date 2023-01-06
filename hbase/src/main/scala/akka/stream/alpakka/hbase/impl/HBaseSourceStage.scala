@@ -4,10 +4,10 @@
 
 package akka.stream.alpakka.hbase.impl
 
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import akka.stream.alpakka.hbase.HTableSettings
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler, StageLogging}
-import org.apache.hadoop.hbase.client.{Result, Scan, Table}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
+import org.apache.hadoop.hbase.client.{ Result, Scan, Table }
 
 import scala.util.control.NonFatal
 
@@ -22,9 +22,9 @@ private[hbase] final class HBaseSourceStage[A](scan: Scan, settings: HTableSetti
 }
 
 private[hbase] final class HBaseSourceLogic[A](scan: Scan,
-                                               settings: HTableSettings[A],
-                                               out: Outlet[Result],
-                                               shape: SourceShape[Result])
+    settings: HTableSettings[A],
+    out: Outlet[Result],
+    shape: SourceShape[Result])
     extends GraphStageLogic(shape)
     with OutHandler
     with StageLogging

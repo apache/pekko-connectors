@@ -6,22 +6,22 @@ package docs.scaladsl
 
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.{Arrays, Optional}
+import java.util.{ Arrays, Optional }
 
 import akka.Done
 import akka.actor.ActorSystem
 import akka.stream.alpakka.solr._
-import akka.stream.alpakka.solr.scaladsl.{SolrFlow, SolrSink, SolrSource}
+import akka.stream.alpakka.solr.scaladsl.{ SolrFlow, SolrSink, SolrSource }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.testkit.TestKit
 import org.apache.solr.client.solrj.embedded.JettyConfig
-import org.apache.solr.client.solrj.impl.{CloudSolrClient, ZkClientClusterStateProvider}
-import org.apache.solr.client.solrj.io.stream.expr.{StreamExpressionParser, StreamFactory}
-import org.apache.solr.client.solrj.io.stream.{CloudSolrStream, StreamContext, TupleStream}
-import org.apache.solr.client.solrj.io.{SolrClientCache, Tuple}
-import org.apache.solr.client.solrj.request.{CollectionAdminRequest, UpdateRequest}
-import org.apache.solr.cloud.{MiniSolrCloudCluster, ZkTestServer}
+import org.apache.solr.client.solrj.impl.{ CloudSolrClient, ZkClientClusterStateProvider }
+import org.apache.solr.client.solrj.io.stream.expr.{ StreamExpressionParser, StreamFactory }
+import org.apache.solr.client.solrj.io.stream.{ CloudSolrStream, StreamContext, TupleStream }
+import org.apache.solr.client.solrj.io.{ SolrClientCache, Tuple }
+import org.apache.solr.client.solrj.request.{ CollectionAdminRequest, UpdateRequest }
+import org.apache.solr.cloud.{ MiniSolrCloudCluster, ZkTestServer }
 import org.apache.solr.common.SolrInputDocument
 import org.junit.Assert.assertTrue
 import org.scalatest.concurrent.ScalaFutures
@@ -29,7 +29,7 @@ import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -45,14 +45,14 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
   final val predefinedCollection = "collection1"
 
-  //#init-client
+  // #init-client
   final val zookeeperPort = 9984
   final val zookeeperHost = s"127.0.0.1:$zookeeperPort/solr"
   implicit val solrClient: CloudSolrClient =
     new CloudSolrClient.Builder(Arrays.asList(zookeeperHost), Optional.empty()).build
 
-  //#init-client
-  //#define-class
+  // #init-client
+  // #define-class
   case class Book(title: String, comment: String = "", routerOpt: Option[String] = None)
 
   val bookToDoc: Book => SolrInputDocument = { b =>
@@ -69,7 +69,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
     val title = t.getString("title")
     Book(title, t.getString("comment"))
   }
-  //#define-class
+  // #define-class
 
   "Alpakka Solr" should {
     "consume and publish SolrInputDocument" in {
@@ -77,7 +77,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val collectionName = createCollection()
       val stream = getTupleStream(predefinedCollection)
 
-      //#run-document
+      // #run-document
       val copyCollection = SolrSource
         .fromTupleStream(stream)
         .map { tuple: Tuple =>
@@ -87,13 +87,12 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
         }(commitExecutionContext)
-      //#run-document
+      // #run-document
 
       copyCollection.futureValue
 
@@ -112,22 +111,21 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "consume and publish documents as specific type using a bean" in {
       val collectionName = createCollection()
       val stream = getTupleStream(predefinedCollection)
 
-      //#define-bean
+      // #define-bean
       import org.apache.solr.client.solrj.beans.Field
 
       import scala.annotation.meta.field
       case class BookBean(@(Field @field) title: String)
-      //#define-bean
+      // #define-bean
 
-      //#run-bean
+      // #run-bean
       val copyCollection = SolrSource
         .fromTupleStream(stream)
         .map { tuple: Tuple =>
@@ -136,13 +134,12 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.beans[BookBean](collectionName, SolrUpdateSettings())
-        )
+          SolrSink.beans[BookBean](collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
         }(commitExecutionContext)
-      //#run-bean
+      // #run-bean
 
       copyCollection.futureValue
 
@@ -161,8 +158,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "consume and publish documents as specific type with a binder" in {
@@ -170,7 +166,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val collectionName = createCollection()
       val stream = getTupleStream(predefinedCollection)
 
-      //#run-typed
+      // #run-typed
       val copyCollection = SolrSource
         .fromTupleStream(stream)
         .map { tuple: Tuple =>
@@ -183,14 +179,12 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
             .typeds[Book](
               collectionName,
               SolrUpdateSettings(),
-              binder = bookToDoc
-            )
-        )
+              binder = bookToDoc))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
         }(commitExecutionContext)
-      //#run-typed
+      // #run-typed
 
       copyCollection.futureValue
 
@@ -209,8 +203,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "store documents and pass status to downstream" in {
@@ -230,9 +223,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
             .typeds[Book](
               collectionName,
               SolrUpdateSettings(),
-              binder = bookToDoc
-            )
-        )
+              binder = bookToDoc))
         .runWith(Sink.seq)
         // explicit commit when stream ended
         .map { seq =>
@@ -261,8 +252,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "store documents and pass responses with passThrough (Kafka example)" in {
@@ -289,10 +279,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val messagesFromKafka = List(
         CommittableMessage(Book("Book 1"), CommittableOffset(0)),
         CommittableMessage(Book("Book 2"), CommittableOffset(1)),
-        CommittableMessage(Book("Book 3"), CommittableOffset(2))
-      )
+        CommittableMessage(Book("Book 3"), CommittableOffset(2)))
       val kafkaConsumerSource = Source(messagesFromKafka)
-      //#kafka-example
+      // #kafka-example
       // Note: This code mimics Alpakka Kafka APIs
       val copyCollection = kafkaConsumerSource
         .map { kafkaMessage: CommittableMessage =>
@@ -306,9 +295,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
             collectionName,
             // use implicit commits to Solr
             SolrUpdateSettings().withCommitWithin(5),
-            binder = bookToDoc
-          )
-        ) // check status and collect Kafka offsets
+            binder = bookToDoc)) // check status and collect Kafka offsets
         .map { messageResults =>
           val offsets = messageResults.map { result =>
             if (result.status != 0)
@@ -319,7 +306,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .mapAsync(1)(_.commitScaladsl())
         .runWith(Sink.ignore)
-      //#kafka-example
+      // #kafka-example
 
       copyCollection.futureValue
 
@@ -350,8 +337,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
@@ -361,7 +347,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
       val stream2 = getTupleStream(collectionName)
 
-      //#delete-documents
+      // #delete-documents
       val deleteDocuments = SolrSource
         .fromTupleStream(stream2)
         .map { tuple: Tuple =>
@@ -370,13 +356,12 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
         }(commitExecutionContext)
-      //#delete-documents
+      // #delete-documents
 
       deleteDocuments.futureValue
 
@@ -406,8 +391,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
@@ -417,7 +401,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
       val stream2 = getTupleStream(collectionName)
 
-      //#update-atomically-documents
+      // #update-atomically-documents
       val updateCollection = SolrSource
         .fromTupleStream(stream2)
         .map { tuple: Tuple =>
@@ -428,19 +412,16 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
             idValue = id,
             updates = Map(
               "comment" ->
-              Map("set" -> (comment + " It is a good book!!!"))
-            )
-          )
+              Map("set" -> (comment + " It is a good book!!!"))))
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
         }(commitExecutionContext)
-      //#update-atomically-documents
+      // #update-atomically-documents
 
       updateCollection.futureValue
 
@@ -461,8 +442,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         "Learning Scala. Written by good authors. It is a good book!!!",
         "Programming in Scala. Written by good authors. It is a good book!!!",
         "Scala Puzzlers. Written by good authors. It is a good book!!!",
-        "Scala for Spark in Production. Written by good authors. It is a good book!!!"
-      )
+        "Scala for Spark in Production. Written by good authors. It is a good book!!!")
     }
 
     "consume and delete beans" in {
@@ -480,9 +460,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
           SolrSink.typeds[Book](
             collectionName,
             SolrUpdateSettings(),
-            binder = bookToDoc
-          )
-        )
+            binder = bookToDoc))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
@@ -503,9 +481,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
           SolrSink.typeds[Book](
             collectionName,
             SolrUpdateSettings().withCommitWithin(5),
-            binder = bookToDoc
-          )
-        )
+            binder = bookToDoc))
 
       deleteElements.futureValue
 
@@ -536,9 +512,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
           SolrSink.typeds[Book](
             collectionName,
             SolrUpdateSettings(),
-            binder = bookToDoc
-          )
-        )
+            binder = bookToDoc))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
@@ -555,8 +529,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
             .createUpdateMessage[Book](
               idField = "title",
               tuple.fields.get("title").toString,
-              updates = Map("comment" -> Map("set" -> (s"${tuple.fields.get("comment")} It is a good book!!!")))
-            )
+              updates = Map("comment" -> Map("set" -> s"${tuple.fields.get("comment")} It is a good book!!!")))
             .withRoutingFieldValue("router-value")
         }
         .groupedWithin(5, 10.millis)
@@ -564,9 +537,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
           SolrSink.typeds[Book](
             collectionName,
             SolrUpdateSettings(),
-            binder = bookToDoc
-          )
-        )
+            binder = bookToDoc))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
@@ -591,8 +562,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         "Learning Scala. Written by good authors. It is a good book!!!",
         "Programming in Scala. Written by good authors. It is a good book!!!",
         "Scala Puzzlers. Written by good authors. It is a good book!!!",
-        "Scala for Spark in Production. Written by good authors. It is a good book!!!"
-      )
+        "Scala for Spark in Production. Written by good authors. It is a good book!!!")
     }
 
     "consume and delete documents by query" in {
@@ -608,8 +578,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
@@ -619,24 +588,22 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
       val stream2 = getTupleStream(collectionName)
 
-      //#delete-documents-query
+      // #delete-documents-query
       val deleteByQuery = SolrSource
         .fromTupleStream(stream2)
         .map { tuple: Tuple =>
           val title = tuple.fields.get("title").toString
           WriteMessage.createDeleteByQueryMessage[SolrInputDocument](
-            s"""title:"$title" """
-          )
+            s"""title:"$title" """)
         }
         .groupedWithin(5, 10.millis)
         .runWith(
-          SolrSink.documents(collectionName, SolrUpdateSettings())
-        )
+          SolrSink.documents(collectionName, SolrUpdateSettings()))
         // explicit commit when stream ended
         .map { _ =>
           solrClient.commit(collectionName)
         }(commitExecutionContext)
-      //#delete-documents-query
+      // #delete-documents-query
 
       deleteByQuery.futureValue
 
@@ -675,10 +642,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val messagesFromKafka = List(
         CommittableOffset(0),
         CommittableOffset(1),
-        CommittableOffset(2)
-      )
+        CommittableOffset(2))
       val kafkaConsumerSource = Source(messagesFromKafka)
-      //#kafka-example-PT
+      // #kafka-example-PT
       // Note: This code mimics Alpakka Kafka APIs
       val copyCollection = kafkaConsumerSource
         .map { offset: CommittableOffset =>
@@ -690,9 +656,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
           SolrFlow.documentsWithPassThrough[CommittableOffset](
             collectionName,
             // use implicit commits to Solr
-            SolrUpdateSettings().withCommitWithin(5)
-          )
-        ) // check status and collect Kafka offsets
+            SolrUpdateSettings().withCommitWithin(5))) // check status and collect Kafka offsets
         .map { messageResults =>
           val offsets = messageResults.map { result =>
             if (result.status != 0)
@@ -703,7 +667,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
         .mapAsync(1)(_.commitScaladsl())
         .runWith(Sink.ignore)
-      //#kafka-example-PT
+      // #kafka-example-PT
 
       copyCollection.futureValue
 
@@ -716,12 +680,12 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
   override def beforeAll(): Unit = {
     setupCluster()
 
-    //#solr-update-settings
+    // #solr-update-settings
     import akka.stream.alpakka.solr.SolrUpdateSettings
 
     val settings = SolrUpdateSettings()
       .withCommitWithin(-1)
-    //#solr-update-settings
+    // #solr-update-settings
     settings.toString shouldBe SolrUpdateSettings().toString
 
     CollectionAdminRequest
@@ -764,8 +728,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       testWorkingDir.toPath,
       MiniSolrCloudCluster.DEFAULT_CLOUD_SOLR_XML,
       JettyConfig.builder.setContext("/solr").build,
-      zkTestServer
-    )
+      zkTestServer)
     solrClient.getClusterStateProvider
       .asInstanceOf[ZkClientClusterStateProvider]
       .uploadConfig(confDir.toPath, "conf")
@@ -786,7 +749,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
   }
 
   private def getTupleStream(collection: String): TupleStream = {
-    //#tuple-stream
+    // #tuple-stream
     val factory = new StreamFactory().withCollectionZkHost(collection, zookeeperHost)
     val solrClientCache = new SolrClientCache()
     val streamContext = new StreamContext()
@@ -799,7 +762,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
     val source = SolrSource
       .fromTupleStream(stream)
-    //#tuple-stream
+    // #tuple-stream
     source should not be null
     stream
   }

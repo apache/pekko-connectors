@@ -7,11 +7,11 @@ package akka.stream.alpakka.amqp.impl
 import akka.Done
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.{ActorAttributes, Attributes, FlowShape, Inlet, Outlet}
-import akka.stream.alpakka.amqp.{AmqpWriteSettings, WriteMessage, WriteResult}
-import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue}
+import akka.stream.{ ActorAttributes, Attributes, FlowShape, Inlet, Outlet }
+import akka.stream.alpakka.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
+import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ Future, Promise }
 
 /**
  * Internal API.
@@ -36,19 +36,18 @@ import scala.concurrent.{Future, Promise}
   override def createLogicAndMaterializedValue(inheritedAttributes: Attributes): (GraphStageLogic, Future[Done]) = {
     val streamCompletion = Promise[Done]()
     (new AbstractAmqpFlowStageLogic[T](settings, streamCompletion, shape) {
-      override def publish(message: WriteMessage, passThrough: T): Unit = {
-        log.debug("Publishing message {}.", message)
+        override def publish(message: WriteMessage, passThrough: T): Unit = {
+          log.debug("Publishing message {}.", message)
 
-        channel.basicPublish(
-          settings.exchange.getOrElse(""),
-          message.routingKey.orElse(settings.routingKey).getOrElse(""),
-          message.mandatory,
-          message.immediate,
-          message.properties.orNull,
-          message.bytes.toArray
-        )
-        push(out, (WriteResult.confirmed, passThrough))
-      }
-    }, streamCompletion.future)
+          channel.basicPublish(
+            settings.exchange.getOrElse(""),
+            message.routingKey.orElse(settings.routingKey).getOrElse(""),
+            message.mandatory,
+            message.immediate,
+            message.properties.orNull,
+            message.bytes.toArray)
+          push(out, (WriteResult.confirmed, passThrough))
+        }
+      }, streamCompletion.future)
   }
 }

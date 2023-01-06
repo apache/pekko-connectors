@@ -7,7 +7,7 @@ package akka.stream.alpakka.s3
 import akka.testkit.TestKitBase
 import com.dimafeng.testcontainers.ForAllTestContainer
 import org.scalatest.Suite
-import software.amazon.awssdk.auth.credentials.{AwsBasicCredentials, StaticCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 
 trait MinioS3Test extends ForAllTestContainer with TestKitBase { self: Suite =>
   val S3DummyAccessKey = "TESTKEY"
@@ -20,6 +20,5 @@ trait MinioS3Test extends ForAllTestContainer with TestKitBase { self: Suite =>
     S3Settings()
       .withEndpointUrl(container.getHostAddress)
       .withCredentialsProvider(
-        StaticCredentialsProvider.create(AwsBasicCredentials.create(S3DummyAccessKey, S3DummySecretKey))
-      )
+        StaticCredentialsProvider.create(AwsBasicCredentials.create(S3DummyAccessKey, S3DummySecretKey)))
 }

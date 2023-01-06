@@ -29,15 +29,11 @@ object SqsAckSettings {
 
   /** Scala API */
   def apply(
-      maxInFlight: Int
-  ): SqsAckSettings = new SqsAckSettings(
-    maxInFlight
-  )
+      maxInFlight: Int): SqsAckSettings = new SqsAckSettings(
+    maxInFlight)
 
   /** Java API */
   def create(
-      maxInFlight: Int
-  ): SqsAckSettings = new SqsAckSettings(
-    maxInFlight
-  )
+      maxInFlight: Int): SqsAckSettings = new SqsAckSettings(
+    maxInFlight)
 }

@@ -13,13 +13,13 @@ import akka.actor.ActorSystem
 import akka.stream.alpakka.googlecloud.pubsub.scaladsl.GooglePubSub
 import akka.stream.alpakka.googlecloud.pubsub._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestKit
-import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.{BeforeAndAfterAll, OptionValues}
+import org.scalatest.{ BeforeAndAfterAll, OptionValues }
 
 import scala.collection.immutable.Seq
 import scala.concurrent.Future

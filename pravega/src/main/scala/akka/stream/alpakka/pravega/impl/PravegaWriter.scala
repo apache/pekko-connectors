@@ -14,7 +14,6 @@ import akka.stream.stage.StageLogging
     eventStreamClientFactory.createEventWriter(
       streamName,
       writerSettings.serializer,
-      writerSettings.eventWriterConfig
-    )
+      writerSettings.eventWriterConfig)
 
 }

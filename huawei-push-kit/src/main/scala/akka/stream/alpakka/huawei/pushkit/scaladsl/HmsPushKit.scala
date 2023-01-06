@@ -6,9 +6,9 @@ package akka.stream.alpakka.huawei.pushkit.scaladsl
 
 import akka.stream.alpakka.huawei.pushkit._
 import akka.stream.alpakka.huawei.pushkit.impl.PushKitFlows
-import akka.stream.alpakka.huawei.pushkit.models.{PushKitNotification, Response}
-import akka.stream.scaladsl.{Flow, Keep, Sink}
-import akka.{Done, NotUsed}
+import akka.stream.alpakka.huawei.pushkit.models.{ PushKitNotification, Response }
+import akka.stream.scaladsl.{ Flow, Keep, Sink }
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

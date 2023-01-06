@@ -5,7 +5,7 @@
 package akka.stream.alpakka.google
 
 import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.unmarshalling.{FromResponseUnmarshaller, Unmarshaller}
+import akka.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshaller }
 import akka.stream.alpakka.google.implicits._
 
 final case class GoogleHttpException() extends Exception

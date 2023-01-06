@@ -6,14 +6,14 @@ package akka.stream.alpakka.s3.impl
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.testkit.TestKit
 import akka.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.time.{Millis, Seconds, Span}
+import org.scalatest.time.{ Millis, Seconds, Span }
 
 class MemoryBufferSpec(_system: ActorSystem)
     extends TestKit(_system)
@@ -36,7 +36,7 @@ class MemoryBufferSpec(_system: ActorSystem)
       .runWith(Sink.seq)
       .futureValue
 
-    result should have size (1)
+    result should have size 1
     val chunk = result.head
     chunk.size should be(14)
 
@@ -49,8 +49,7 @@ class MemoryBufferSpec(_system: ActorSystem)
       Source(Vector(ByteString(1, 2, 3, 4, 5), ByteString(6, 7, 8, 9, 10, 11, 12), ByteString(13, 14)))
         .via(new MemoryBuffer(10))
         .runWith(Sink.seq)
-        .failed
-    ) { e =>
+        .failed) { e =>
       e shouldBe a[IllegalStateException]
     }
   }

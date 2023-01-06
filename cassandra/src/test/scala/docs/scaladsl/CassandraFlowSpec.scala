@@ -4,11 +4,11 @@
 
 package docs.scaladsl
 
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import akka.actor.ActorSystem
-import akka.stream.alpakka.cassandra.{CassandraSessionSettings, CassandraWriteSettings}
-import akka.stream.alpakka.cassandra.scaladsl.{CassandraFlow, CassandraSession, CassandraSource, CassandraSpecBase}
-import akka.stream.scaladsl.{Sink, Source, SourceWithContext}
+import akka.stream.alpakka.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
+import akka.stream.alpakka.cassandra.scaladsl.{ CassandraFlow, CassandraSession, CassandraSource, CassandraSpecBase }
+import akka.stream.scaladsl.{ Sink, Source, SourceWithContext }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.collection.immutable
@@ -16,9 +16,9 @@ import scala.concurrent.Future
 
 class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec")) {
 
-  //#element-to-insert
+  // #element-to-insert
   case class ToInsert(id: Integer, cc: Integer)
-  //#element-to-insert
+  // #element-to-insert
 
   val sessionSettings = CassandraSessionSettings("alpakka.cassandra")
   val data = 1 until 103
@@ -40,9 +40,8 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       val written: Future[Done] = Source(data)
         .via(
           CassandraFlow.create(CassandraWriteSettings.defaults,
-                               s"INSERT INTO $table(id) VALUES (?)",
-                               (element, preparedStatement) => preparedStatement.bind(Int.box(element)))
-        )
+            s"INSERT INTO $table(id) VALUES (?)",
+            (element, preparedStatement) => preparedStatement.bind(Int.box(element))))
         .runWith(Sink.ignore)
 
       written.futureValue mustBe Done
@@ -65,7 +64,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       // #prepared
       import akka.stream.alpakka.cassandra.CassandraWriteSettings
       import akka.stream.alpakka.cassandra.scaladsl.CassandraFlow
-      import com.datastax.oss.driver.api.core.cql.{BoundStatement, PreparedStatement}
+      import com.datastax.oss.driver.api.core.cql.{ BoundStatement, PreparedStatement }
 
       case class Person(id: Int, name: String, city: String)
 
@@ -78,9 +77,8 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       val written: Future[immutable.Seq[Person]] = Source(persons)
         .via(
           CassandraFlow.create(CassandraWriteSettings.defaults,
-                               s"INSERT INTO $table(id, name, city) VALUES (?, ?, ?)",
-                               statementBinder)
-        )
+            s"INSERT INTO $table(id, name, city) VALUES (?, ?, ?)",
+            statementBinder))
         .runWith(Sink.seq)
       // #prepared
 
@@ -112,8 +110,8 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       }
       val persons =
         immutable.Seq(Person(12, "John", "London") -> AckHandle(12),
-                      Person(43, "Umberto", "Roma") -> AckHandle(43),
-                      Person(56, "James", "Chicago") -> AckHandle(56))
+          Person(43, "Umberto", "Roma") -> AckHandle(43),
+          Person(56, "James", "Chicago") -> AckHandle(56))
 
       // #withContext
       val personsAndHandles: SourceWithContext[Person, AckHandle, NotUsed] = // ???
@@ -126,9 +124,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
           CassandraFlow.withContext(
             CassandraWriteSettings.defaults,
             s"INSERT INTO $table(id, name, city) VALUES (?, ?, ?)",
-            (person, preparedStatement) => preparedStatement.bind(Int.box(person.id), person.name, person.city)
-          )
-        )
+            (person, preparedStatement) => preparedStatement.bind(Int.box(person.id), person.name, person.city)))
         .asSource
         .mapAsync(1) {
           case (_, handle) => handle.ack()
@@ -169,9 +165,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
             s"INSERT INTO $table(id, name, city) VALUES (?, ?, ?)",
             statementBinder =
               (person, preparedStatement) => preparedStatement.bind(Int.box(person.id), person.name, person.city),
-            groupingKey = person => person.id
-          )
-        )
+            groupingKey = person => person.id))
         .runWith(Sink.ignore)
       written.futureValue mustBe Done
 

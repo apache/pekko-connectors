@@ -8,7 +8,7 @@ import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.alpakka.mongodb.scaladsl.MongoSource
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import com.mongodb.reactivestreams.client.MongoClients
 import org.bson.Document
@@ -46,7 +46,7 @@ class MongoSourceSpec
   // #pojo
 
   // #codecs
-  import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+  import org.bson.codecs.configuration.CodecRegistries.{ fromProviders, fromRegistries }
   import org.mongodb.scala.MongoClient.DEFAULT_CODEC_REGISTRY
   import org.mongodb.scala.bson.codecs.Macros._
 
@@ -109,7 +109,7 @@ class MongoSourceSpec
 
       // #run-source
       val rows: Future[Seq[Number]] = source.runWith(Sink.seq)
-      //#run-source
+      // #run-source
 
       rows.futureValue must contain theSameElementsAs data
     }

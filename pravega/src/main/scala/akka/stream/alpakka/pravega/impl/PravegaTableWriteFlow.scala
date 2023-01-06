@@ -7,15 +7,15 @@ package akka.stream.alpakka.pravega.impl
 import java.util.concurrent.CompletableFuture
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.stage.{AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 
 import scala.util.control.NonFatal
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.stream.alpakka.pravega.TableWriterSettings
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 import io.pravega.client.tables.KeyValueTable
 import io.pravega.client.KeyValueTableFactory
 import io.pravega.client.tables.KeyValueTableClientConfiguration
@@ -33,8 +33,7 @@ import io.pravega.client.tables.TableKey
     extractor: K => TableKey,
     val scope: String,
     tableName: String,
-    tableWriterSettings: TableWriterSettings[K, V]
-) extends GraphStageLogic(shape)
+    tableWriterSettings: TableWriterSettings[K, V]) extends GraphStageLogic(shape)
     with StageLogging {
 
   private def in = shape.in
@@ -97,8 +96,7 @@ import io.pravega.client.tables.TableKey
 
         val put = new Put(
           extractor(k),
-          tableWriterSettings.valueSerializer.serialize(v)
-        )
+          tableWriterSettings.valueSerializer.serialize(v))
         onAir.incrementAndGet()
         handleSentEvent(table.update(put), msg)
       }
@@ -111,8 +109,7 @@ import io.pravega.client.tables.TableKey
         upstreamEnded = true
       }
 
-    }
-  )
+    })
 
   setHandler(
     out,
@@ -120,8 +117,7 @@ import io.pravega.client.tables.TableKey
       override def onPull(): Unit = {
         pull(in)
       }
-    }
-  )
+    })
 
   /**
    * Cleanup logic
@@ -142,8 +138,7 @@ import io.pravega.client.tables.TableKey
     kvpToTuple2: KVPair => Tuple2[K, V],
     scope: String,
     streamName: String,
-    tableWriterSettings: TableWriterSettings[K, V]
-) extends GraphStage[FlowShape[KVPair, KVPair]] {
+    tableWriterSettings: TableWriterSettings[K, V]) extends GraphStage[FlowShape[KVPair, KVPair]] {
 
   val in: Inlet[KVPair] = Inlet(Logging.simpleName(this) + ".in")
   val out: Outlet[KVPair] = Outlet(Logging.simpleName(this) + ".out")
@@ -155,10 +150,10 @@ import io.pravega.client.tables.TableKey
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new PravegaTableWriteFlowStageLogic[KVPair, K, V](shape,
-                                                      kvpToTuple2,
-                                                      tableWriterSettings.tableKey,
-                                                      scope,
-                                                      streamName,
-                                                      tableWriterSettings)
+      kvpToTuple2,
+      tableWriterSettings.tableKey,
+      scope,
+      streamName,
+      tableWriterSettings)
 
 }

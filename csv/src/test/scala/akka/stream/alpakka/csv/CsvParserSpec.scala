@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.csv
 
-import java.nio.charset.{StandardCharsets, UnsupportedCharsetException}
+import java.nio.charset.{ StandardCharsets, UnsupportedCharsetException }
 
 import akka.stream.alpakka.csv.impl.CsvParser
 import akka.stream.alpakka.csv.scaladsl.ByteOrderMark
@@ -93,7 +93,7 @@ class CsvParserSpec extends AnyWordSpec with Matchers with OptionValues with Log
 
     "parse double quote chars within quotes inte one quoute at end of value" in {
       expectInOut("\"Venture \"\"Extended Edition\"\"\",\"\",4900.00\n",
-                  List("Venture \"Extended Edition\"", "", "4900.00"))
+        List("Venture \"Extended Edition\"", "", "4900.00"))
     }
 
     "parse double escape chars into one escape char" in {
@@ -298,8 +298,8 @@ class CsvParserSpec extends AnyWordSpec with Matchers with OptionValues with Log
 
     "read values with different separator" in {
       expectInOut("$Foo $#$Bar $#$Baz $\n", List("Foo ", "Bar ", "Baz "))(delimiter = '#',
-                                                                          quoteChar = '$',
-                                                                          escapeChar = '\\')
+        quoteChar = '$',
+        escapeChar = '\\')
     }
 
     "fail on a very 'long' line" in {
@@ -348,17 +348,17 @@ class CsvParserSpec extends AnyWordSpec with Matchers with OptionValues with Log
   }
 
   def expectInOut(in: String, expected: List[String]*)(implicit delimiter: Byte = ',',
-                                                       quoteChar: Byte = '"',
-                                                       escapeChar: Byte = '\\',
-                                                       requireLineEnd: Boolean = true): Unit = {
+      quoteChar: Byte = '"',
+      escapeChar: Byte = '\\',
+      requireLineEnd: Boolean = true): Unit = {
     val bsIn = ByteString(in)
     expectBsInOut(bsIn, expected: _*)(delimiter, quoteChar, escapeChar, requireLineEnd)
   }
 
   def expectBsInOut(bsIn: ByteString, expected: List[String]*)(implicit delimiter: Byte = ',',
-                                                               quoteChar: Byte = '"',
-                                                               escapeChar: Byte = '\\',
-                                                               requireLineEnd: Boolean = true): Unit = {
+      quoteChar: Byte = '"',
+      escapeChar: Byte = '\\',
+      requireLineEnd: Boolean = true): Unit = {
     val parser = new CsvParser(delimiter, quoteChar, escapeChar, maximumLineLength)
     parser.offer(bsIn)
     expected.foreach { out =>

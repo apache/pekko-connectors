@@ -8,14 +8,14 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.stream.OverflowStrategy
 import akka.stream.alpakka.jms.scaladsl.JmsConnectorState._
-import akka.stream.alpakka.jms.scaladsl.{JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus}
-import akka.stream.scaladsl.{Flow, Keep, Sink, SinkQueueWithCancel, Source}
+import akka.stream.alpakka.jms.scaladsl.{ JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus }
+import akka.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
 import javax.jms._
-import org.mockito.ArgumentMatchers.{any, anyBoolean, anyInt}
+import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
-import org.scalatest.matchers.{MatchResult, Matcher}
+import org.scalatest.matchers.{ MatchResult, Matcher }
 
 import scala.concurrent.duration._
 
@@ -85,8 +85,7 @@ class JmsConnectionStatusSpec extends JmsSpec {
       val jmsSink = textSink(
         JmsProducerSettings(producerConfig, factory)
           .withConnectionRetrySettings(ConnectionRetrySettings(system).withMaxRetries(1))
-          .withQueue("test")
-      )
+          .withQueue("test"))
       val connectionStatus = Source.tick(10.millis, 20.millis, "text").runWith(jmsSink).connectorState
       val status = connectionStatus.runWith(Sink.queue())
 
@@ -256,13 +255,11 @@ class JmsConnectionStatusSpec extends JmsSpec {
     "report completion on stream shutdown / cancel" in withConnectionFactory() { connectionFactory =>
       val jmsSink = textSink(
         JmsProducerSettings(producerConfig, connectionFactory)
-          .withQueue("test")
-      )
+          .withQueue("test"))
 
       val jmsSource = JmsConsumer.textSource(
         JmsConsumerSettings(system, connectionFactory)
-          .withQueue("test")
-      )
+          .withQueue("test"))
 
       val (cancellable, producerStatus) = Source.tick(10.millis, 20.millis, "text").toMat(jmsSink)(Keep.both).run()
       val consumerControl = jmsSource.toMat(Sink.ignore)(Keep.left).run()
@@ -288,8 +285,7 @@ class JmsConnectionStatusSpec extends JmsSpec {
 
       val jmsSource = JmsConsumer.textSource(
         JmsConsumerSettings(system, connectionFactory)
-          .withQueue("test")
-      )
+          .withQueue("test"))
 
       val consumerControl = jmsSource.toMat(Sink.ignore)(Keep.left).run()
 
@@ -313,10 +309,8 @@ class JmsConnectionStatusSpec extends JmsSpec {
               .withConnectTimeout(1.second)
               .withInitialRetry(100.millis)
               .withMaxBackoff(100.millis)
-              .withInfiniteRetries()
-          )
-          .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries())
-      )
+              .withInfiniteRetries())
+          .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries()))
 
       val jmsSource = JmsConsumer.textSource(
         JmsConsumerSettings(system, connectionFactory)
@@ -326,9 +320,7 @@ class JmsConnectionStatusSpec extends JmsSpec {
               .withConnectTimeout(1.second)
               .withInitialRetry(100.millis)
               .withMaxBackoff(100.millis)
-              .withInfiniteRetries()
-          )
-      )
+              .withInfiniteRetries()))
 
       val producerStatus = Source.tick(50.millis, 100.millis, "text").runWith(jmsSink)
       val consumerControl = jmsSource.toMat(Sink.ignore)(Keep.left).run()
@@ -370,14 +362,12 @@ class JmsConnectionStatusSpec extends JmsSpec {
           MatchResult(
             state == expectedState,
             s"""Published connection state $state was not $expectedState""",
-            s"""Published connection state $state was $expectedState"""
-          )
+            s"""Published connection state $state was $expectedState""")
         case None =>
           MatchResult(
             matches = false,
             s"""Did not publish connection state. Expected was $expectedState""",
-            s"""Published connection state"""
-          )
+            s"""Published connection state""")
       }
   }
 

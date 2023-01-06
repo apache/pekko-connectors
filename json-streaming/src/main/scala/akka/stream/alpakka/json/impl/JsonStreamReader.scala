@@ -6,11 +6,11 @@ package akka.stream.alpakka.json.impl
 
 import akka.annotation.InternalApi
 import akka.stream._
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
 import org.jsfr.json.exception.JsonSurfingException
 import org.jsfr.json.path.JsonPath
-import org.jsfr.json.{JsonPathListener, JsonSurferJackson, ParsingContext}
+import org.jsfr.json.{ JsonPathListener, JsonSurferJackson, ParsingContext }
 
 import scala.collection.immutable.Queue
 
@@ -36,10 +36,11 @@ private[akka] final class JsonStreamReader(path: JsonPath) extends GraphStage[Fl
 
       private val surfer = JsonSurferJackson.INSTANCE
       private val config = surfer.configBuilder
-        .bind(path, new JsonPathListener {
-          override def onValue(value: Any, context: ParsingContext): Unit =
-            buffer = buffer.enqueue(ByteString(value.toString))
-        })
+        .bind(path,
+          new JsonPathListener {
+            override def onValue(value: Any, context: ParsingContext): Unit =
+              buffer = buffer.enqueue(ByteString(value.toString))
+          })
         .build
       private val parser = surfer.createNonBlockingParser(config)
 

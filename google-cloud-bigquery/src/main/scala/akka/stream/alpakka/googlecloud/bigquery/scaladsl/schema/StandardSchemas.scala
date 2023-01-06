@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema
 
-import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaMode.{Nullable, Required}
+import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaMode.{ Nullable, Required }
 
 /**
  * Provides BigQuery schemas for the non-collection standard types.

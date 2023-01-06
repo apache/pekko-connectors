@@ -5,15 +5,15 @@
 package docs.scaladsl
 
 import akka.http.scaladsl.model.headers.ByteRange
-import akka.http.scaladsl.model.{ContentType, ContentTypes, HttpEntity, HttpResponse, IllegalUriException}
+import akka.http.scaladsl.model.{ ContentType, ContentTypes, HttpEntity, HttpResponse, IllegalUriException }
 import akka.stream.Attributes
-import akka.stream.alpakka.s3.BucketAccess.{AccessDenied, AccessGranted, NotExists}
+import akka.stream.alpakka.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
 import akka.stream.alpakka.s3._
 import akka.stream.alpakka.s3.headers.ServerSideEncryption
-import akka.stream.alpakka.s3.scaladsl.{S3, S3ClientIntegrationSpec, S3WireMockBase}
-import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.alpakka.s3.scaladsl.{ S3, S3ClientIntegrationSpec, S3WireMockBase }
+import akka.stream.scaladsl.{ Keep, Sink, Source }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers._
 
@@ -30,30 +30,28 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
 
     mockDownload()
 
-    //#download
+    // #download
     val s3Source: Source[ByteString, Future[ObjectMetadata]] =
       S3.getObject(bucket, bucketKey)
 
     val (metadataFuture, dataFuture) =
       s3Source.toMat(Sink.head)(Keep.both).run()
-    //#download
+    // #download
 
     val data = dataFuture.futureValue
     val metadata = metadataFuture.futureValue
 
     data.utf8String shouldBe body
 
-    //#downloadToAkkaHttp
+    // #downloadToAkkaHttp
     HttpResponse(
       entity = HttpEntity(
         metadata.contentType
           .flatMap(ContentType.parse(_).toOption)
           .getOrElse(ContentTypes.`application/octet-stream`),
         metadata.contentLength,
-        s3Source
-      )
-    )
-    //#downloadToAkkaHttp
+        s3Source))
+    // #downloadToAkkaHttp
   }
 
   "S3Source" should "use custom settings when downloading a file" in {
@@ -79,10 +77,10 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
     val contentLength = 8
     mockHead(contentLength)
 
-    //#objectMetadata
+    // #objectMetadata
     val metadata: Source[Option[ObjectMetadata], NotUsed] =
       S3.getObjectMetadata(bucket, bucketKey)
-    //#objectMetadata
+    // #objectMetadata
 
     val Some(result) = metadata.runWith(Sink.head).futureValue: @nowarn("msg=match may not be exhaustive")
 
@@ -137,9 +135,9 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
 
     mockRangedDownload()
 
-    //#rangedDownload
+    // #rangedDownload
     val s3Source = S3.getObject(bucket, bucketKey, Some(ByteRange(bytesRangeStart, bytesRangeEnd)))
-    //#rangedDownload
+    // #rangedDownload
 
     val result: Future[Array[Byte]] = s3Source.map(_.toArray).runWith(Sink.head)
 
@@ -217,10 +215,10 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
   it should "list keys for a given bucket with a prefix" in {
     mockListBucket()
 
-    //#list-bucket
+    // #list-bucket
     val keySource: Source[ListBucketResultContents, NotUsed] =
       S3.listBucket(bucket, Some(listPrefix))
-    //#list-bucket
+    // #list-bucket
 
     val result = keySource.runWith(Sink.head)
 
@@ -230,14 +228,14 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
   it should "list keys for a given bucket with a prefix using the version 1 api" in {
     mockListBucketVersion1()
 
-    //#list-bucket-attributes
+    // #list-bucket-attributes
     val useVersion1Api = S3Ext(system).settings
       .withListBucketApiVersion(ApiVersion.ListBucketVersion1)
 
     val keySource: Source[ListBucketResultContents, NotUsed] =
       S3.listBucket(bucket, Some(listPrefix))
         .withAttributes(S3Attributes.settings(useVersion1Api))
-    //#list-bucket-attributes
+    // #list-bucket-attributes
 
     val result = keySource.runWith(Sink.head)
 
@@ -247,11 +245,11 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
   it should "list keys and common prefixes for a given bucket with a prefix and delimiter" in {
     mockListBucketAndCommonPrefixes()
 
-    //#list-bucket-and-common-prefixes
+    // #list-bucket-and-common-prefixes
     val keyAndCommonPrefixSource
         : Source[(Seq[ListBucketResultContents], Seq[ListBucketResultCommonPrefixes]), NotUsed] =
       S3.listBucketAndCommonPrefixes(bucket, listDelimiter, Some(listPrefix))
-    //#list-bucket-and-common-prefixes
+    // #list-bucket-and-common-prefixes
 
     val result = keyAndCommonPrefixSource.runWith(Sink.head)
     val contents = result.futureValue._1
@@ -283,10 +281,10 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
   it should "list keys for a given bucket with a delimiter and prefix" in {
     mockListBucketAndCommonPrefixes()
 
-    //#list-bucket-delimiter
+    // #list-bucket-delimiter
     val keySource: Source[ListBucketResultContents, NotUsed] =
       S3.listBucket(bucket, listDelimiter, Some(listPrefix))
-    //#list-bucket-delimiter
+    // #list-bucket-delimiter
 
     val result = keySource.runWith(Sink.head)
 
@@ -311,14 +309,14 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
   it should "make a bucket with given name" in {
     mockMakingBucket()
 
-    //#make-bucket
+    // #make-bucket
     val bucketName = "samplebucket1"
 
     implicit val sampleAttributes: Attributes = S3Attributes.settings(sampleSettings)
 
     val makeBucketRequest: Future[Done] = S3.makeBucket(bucketName)
     val makeBucketSourceRequest: Source[Done, NotUsed] = S3.makeBucketSource(bucketName)
-    //#make-bucket
+    // #make-bucket
 
     makeBucketRequest.futureValue shouldBe Done
     makeBucketSourceRequest.runWith(Sink.ignore).futureValue shouldBe Done
@@ -329,12 +327,12 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
 
     mockDeletingBucket()
 
-    //#delete-bucket
+    // #delete-bucket
     implicit val sampleAttributes: Attributes = S3Attributes.settings(sampleSettings)
 
     val deleteBucketRequest: Future[Done] = S3.deleteBucket(bucketName)
     val deleteBucketSourceRequest: Source[Done, NotUsed] = S3.deleteBucketSource(bucketName)
-    //#delete-bucket
+    // #delete-bucket
 
     deleteBucketRequest.futureValue shouldBe Done
     deleteBucketSourceRequest.runWith(Sink.ignore).futureValue shouldBe Done
@@ -343,12 +341,12 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
   it should "check for non existing buckets" in {
     mockCheckingBucketStateForNonExistingBucket()
 
-    //#check-if-bucket-exists
+    // #check-if-bucket-exists
     implicit val sampleAttributes: Attributes = S3Attributes.settings(sampleSettings)
 
     val doesntExistRequest: Future[BucketAccess] = S3.checkIfBucketExists(bucket)
     val doesntExistSourceRequest: Source[BucketAccess, NotUsed] = S3.checkIfBucketExistsSource(bucket)
-    //#check-if-bucket-exists
+    // #check-if-bucket-exists
 
     doesntExistRequest.futureValue shouldBe NotExists
 

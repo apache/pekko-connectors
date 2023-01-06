@@ -6,8 +6,8 @@ package akka.stream.alpakka.csv.impl
 
 import akka.annotation.InternalApi
 import akka.event.Logging
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.util.ByteString
 
 import scala.annotation.tailrec
@@ -17,9 +17,9 @@ import scala.util.control.NonFatal
  * Internal API: Use [[akka.stream.alpakka.csv.scaladsl.CsvParsing]] instead.
  */
 @InternalApi private[csv] class CsvParsingStage(delimiter: Byte,
-                                                quoteChar: Byte,
-                                                escapeChar: Byte,
-                                                maximumLineLength: Int)
+    quoteChar: Byte,
+    escapeChar: Byte,
+    maximumLineLength: Int)
     extends GraphStage[FlowShape[ByteString, List[ByteString]]] {
 
   private val in = Inlet[ByteString](Logging.simpleName(this) + ".in")
@@ -49,13 +49,14 @@ import scala.util.control.NonFatal
 
       private def tryPollBuffer() =
         try buffer.poll(requireLineEnd = true) match {
-          case Some(csvLine) => push(out, csvLine)
-          case _ =>
-            if (isClosed(in)) {
-              emitRemaining()
-              completeStage()
-            } else pull(in)
-        } catch {
+            case Some(csvLine) => push(out, csvLine)
+            case _ =>
+              if (isClosed(in)) {
+                emitRemaining()
+                completeStage()
+              } else pull(in)
+          }
+        catch {
           case NonFatal(ex) => failStage(ex)
         }
 

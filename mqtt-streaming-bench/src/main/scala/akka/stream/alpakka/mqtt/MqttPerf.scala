@@ -9,8 +9,8 @@ import java.util.concurrent.locks.ReentrantLock
 
 import akka.actor.ActorSystem
 import akka.stream.alpakka.mqtt.scaladsl.MqttFlow
-import akka.stream.alpakka.mqtt.streaming.scaladsl.{ActorMqttServerSession, Mqtt}
-import akka.stream.scaladsl.{BroadcastHub, Keep, Sink, Source, Tcp}
+import akka.stream.alpakka.mqtt.streaming.scaladsl.{ ActorMqttServerSession, Mqtt }
+import akka.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, Tcp }
 import akka.stream.OverflowStrategy
 import akka.util.ByteString
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
@@ -69,14 +69,14 @@ class MqttPerf {
     val bound = Tcp()
       .bind(host, port)
       .flatMapMerge(
-        1, { connection =>
+        1,
+        { connection =>
           Source
             .fromGraph(serverSource)
             .via(
               Mqtt
                 .serverSessionFlow(serverSession, ByteString(connection.remoteAddress.getAddress.getAddress))
-                .join(connection.flow)
-            )
+                .join(connection.flow))
             .wireTap(Sink.foreach[Either[DecodeError, streaming.Event[_]]] {
               case Right(streaming.Event(_: streaming.Connect, _)) =>
                 server.offer(streaming.Command(connAck))
@@ -91,8 +91,7 @@ class MqttPerf {
                 }
               case _ =>
             })
-        }
-      )
+        })
       .toMat(Sink.ignore)(Keep.left)
       .run()
     Await.ready(bound, 3.seconds)
@@ -104,9 +103,7 @@ class MqttPerf {
           connectionSettings,
           MqttSubscriptions("some-topic", MqttQoS.AtLeastOnce),
           bufferSize = 8,
-          MqttQoS.AtLeastOnce
-        )
-      )
+          MqttQoS.AtLeastOnce))
       .mapAsync(1)(_.ack())
       .runWith(Sink.ignore)
   }

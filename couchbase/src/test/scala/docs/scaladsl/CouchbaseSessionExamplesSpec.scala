@@ -12,7 +12,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -35,7 +35,7 @@ class CouchbaseSessionExamplesSpec
       import akka.stream.alpakka.couchbase.CouchbaseSessionRegistry
       import akka.stream.alpakka.couchbase.CouchbaseSessionSettings
       import akka.stream.alpakka.couchbase.scaladsl.CouchbaseSession
-      import com.couchbase.client.java.env.{CouchbaseEnvironment, DefaultCouchbaseEnvironment}
+      import com.couchbase.client.java.env.{ CouchbaseEnvironment, DefaultCouchbaseEnvironment }
 
       // Akka extension (singleton per actor system)
       val registry = CouchbaseSessionRegistry(actorSystem)
@@ -81,7 +81,7 @@ class CouchbaseSessionExamplesSpec
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       // #fromBucket
       import com.couchbase.client.java.auth.PasswordAuthenticator
-      import com.couchbase.client.java.{Bucket, CouchbaseCluster}
+      import com.couchbase.client.java.{ Bucket, CouchbaseCluster }
 
       val cluster: CouchbaseCluster = CouchbaseCluster.create("localhost")
       cluster.authenticate(new PasswordAuthenticator("Administrator", "password"))

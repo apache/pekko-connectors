@@ -6,7 +6,7 @@ package akka.stream.alpakka.google.util
 
 import akka.NotUsed
 import akka.annotation.InternalApi
-import akka.stream.scaladsl.{Flow, Source}
+import akka.stream.scaladsl.{ Flow, Source }
 
 @InternalApi
 private[google] object MaybeLast {

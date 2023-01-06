@@ -35,7 +35,7 @@ trait Repeated extends TestSuiteMixin { this: TestSuite =>
   final def retry[T](n: Int)(fn: Int => T): T =
     util.Try { fn(n + 1) } match {
       case util.Success(x) => x
-      case _ if n > 1 => retry(n - 1)(fn)
+      case _ if n > 1      => retry(n - 1)(fn)
       case util.Failure(e) => throw e
     }
 }

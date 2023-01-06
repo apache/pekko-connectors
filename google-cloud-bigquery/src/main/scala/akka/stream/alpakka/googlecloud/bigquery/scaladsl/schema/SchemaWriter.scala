@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema
 
-import akka.stream.alpakka.googlecloud.bigquery.model.{TableFieldSchema, TableFieldSchemaMode, TableSchema}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ TableFieldSchema, TableFieldSchemaMode, TableSchema }
 
 import scala.annotation.implicitNotFound
 

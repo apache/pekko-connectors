@@ -5,8 +5,8 @@
 package akka.stream.alpakka.solr.impl
 
 import akka.annotation.InternalApi
-import akka.stream.stage.{GraphStage, GraphStageLogic, OutHandler}
-import akka.stream.{Attributes, Outlet, SourceShape}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import akka.stream.{ Attributes, Outlet, SourceShape }
 import org.apache.solr.client.solrj.io.Tuple
 import org.apache.solr.client.solrj.io.stream.TupleStream
 

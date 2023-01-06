@@ -4,11 +4,11 @@
 
 package akka.stream.alpakka.file.scaladsl
 
-import java.nio.file.{FileVisitOption, Files, Path}
+import java.nio.file.{ FileVisitOption, Files, Path }
 
 import akka.NotUsed
 import akka.stream.ActorAttributes
-import akka.stream.scaladsl.{Flow, FlowWithContext, Source, StreamConverters}
+import akka.stream.scaladsl.{ Flow, FlowWithContext, Source, StreamConverters }
 
 import scala.collection.immutable
 
@@ -30,8 +30,8 @@ object Directory {
    * @param fileVisitOptions See `java.nio.files.Files.walk()` for details
    */
   def walk(directory: Path,
-           maxDepth: Option[Int] = None,
-           fileVisitOptions: immutable.Seq[FileVisitOption] = Nil): Source[Path, NotUsed] = {
+      maxDepth: Option[Int] = None,
+      fileVisitOptions: immutable.Seq[FileVisitOption] = Nil): Source[Path, NotUsed] = {
     require(Files.isDirectory(directory), s"Path must be a directory, $directory isn't")
     val factory = maxDepth match {
       case None =>

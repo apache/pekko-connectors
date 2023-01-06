@@ -6,10 +6,10 @@ package akka.stream.alpakka.geode.impl.stage
 
 import akka.annotation.InternalApi
 import akka.stream.SourceShape
-import akka.stream.stage.{AsyncCallback, GraphStageLogic}
+import akka.stream.stage.{ AsyncCallback, GraphStageLogic }
 import org.apache.geode.cache.client.ClientCache
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 @InternalApi
 private[geode] abstract class GeodeSourceStageLogic[V](shape: SourceShape[V], clientCache: ClientCache)

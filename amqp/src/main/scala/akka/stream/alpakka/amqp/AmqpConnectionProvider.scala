@@ -8,8 +8,8 @@ import java.util.ConcurrentModificationException
 import java.util.concurrent.atomic.AtomicReference
 
 import akka.annotation.DoNotInherit
-import com.rabbitmq.client.{Address, Connection, ConnectionFactory, ExceptionHandler}
-import javax.net.ssl.{SSLContext, TrustManager}
+import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler }
+import javax.net.ssl.{ SSLContext, TrustManager }
 
 import scala.annotation.tailrec
 import scala.collection.immutable
@@ -72,8 +72,7 @@ final class AmqpDetailsConnectionProvider private (
     val automaticRecoveryEnabled: Boolean = false,
     val topologyRecoveryEnabled: Boolean = false,
     val exceptionHandler: Option[ExceptionHandler] = None,
-    val connectionName: Option[String] = None
-) extends AmqpConnectionProvider {
+    val connectionName: Option[String] = None) extends AmqpConnectionProvider {
 
   def withHostAndPort(host: String, port: Int): AmqpDetailsConnectionProvider =
     copy(hostAndPortList = immutable.Seq(host -> port))
@@ -152,18 +151,18 @@ final class AmqpDetailsConnectionProvider private (
   }
 
   private def copy(hostAndPortList: immutable.Seq[(String, Int)] = hostAndPortList,
-                   credentials: Option[AmqpCredentials] = credentials,
-                   virtualHost: Option[String] = virtualHost,
-                   sslConfiguration: Option[AmqpSSLConfiguration] = sslConfiguration,
-                   requestedHeartbeat: Option[Int] = requestedHeartbeat,
-                   connectionTimeout: Option[Int] = connectionTimeout,
-                   handshakeTimeout: Option[Int] = handshakeTimeout,
-                   shutdownTimeout: Option[Int] = shutdownTimeout,
-                   networkRecoveryInterval: Option[Int] = networkRecoveryInterval,
-                   automaticRecoveryEnabled: Boolean = automaticRecoveryEnabled,
-                   topologyRecoveryEnabled: Boolean = topologyRecoveryEnabled,
-                   exceptionHandler: Option[ExceptionHandler] = exceptionHandler,
-                   connectionName: Option[String] = connectionName): AmqpDetailsConnectionProvider =
+      credentials: Option[AmqpCredentials] = credentials,
+      virtualHost: Option[String] = virtualHost,
+      sslConfiguration: Option[AmqpSSLConfiguration] = sslConfiguration,
+      requestedHeartbeat: Option[Int] = requestedHeartbeat,
+      connectionTimeout: Option[Int] = connectionTimeout,
+      handshakeTimeout: Option[Int] = handshakeTimeout,
+      shutdownTimeout: Option[Int] = shutdownTimeout,
+      networkRecoveryInterval: Option[Int] = networkRecoveryInterval,
+      automaticRecoveryEnabled: Boolean = automaticRecoveryEnabled,
+      topologyRecoveryEnabled: Boolean = topologyRecoveryEnabled,
+      exceptionHandler: Option[ExceptionHandler] = exceptionHandler,
+      connectionName: Option[String] = connectionName): AmqpDetailsConnectionProvider =
     new AmqpDetailsConnectionProvider(
       hostAndPortList,
       credentials,
@@ -177,8 +176,7 @@ final class AmqpDetailsConnectionProvider private (
       automaticRecoveryEnabled,
       topologyRecoveryEnabled,
       exceptionHandler,
-      connectionName
-    )
+      connectionName)
 
   override def toString: String =
     "AmqpDetailsConnectionProvider(" +
@@ -233,8 +231,8 @@ object AmqpCredentials {
 }
 
 final class AmqpSSLConfiguration private (val protocol: Option[String] = None,
-                                          val trustManager: Option[TrustManager] = None,
-                                          val context: Option[SSLContext] = None) {
+    val trustManager: Option[TrustManager] = None,
+    val context: Option[SSLContext] = None) {
   if (protocol.isDefined && context.isDefined) {
     throw new IllegalArgumentException("Protocol and context can't be defined in the same AmqpSSLConfiguration.")
   }
@@ -249,8 +247,8 @@ final class AmqpSSLConfiguration private (val protocol: Option[String] = None,
     copy(context = context)
 
   private def copy(protocol: Option[String] = protocol,
-                   trustManager: Option[TrustManager] = trustManager,
-                   context: Option[SSLContext] = context): AmqpSSLConfiguration =
+      trustManager: Option[TrustManager] = trustManager,
+      context: Option[SSLContext] = context): AmqpSSLConfiguration =
     new AmqpSSLConfiguration(protocol, trustManager, context)
 
   override def toString: String =
@@ -302,8 +300,8 @@ object AmqpSSLConfiguration {
  *                     If empty, it defaults to the host and port in the underlying factory.
  */
 final class AmqpConnectionFactoryConnectionProvider private (val factory: ConnectionFactory,
-                                                             private val hostAndPorts: immutable.Seq[(String, Int)] =
-                                                               Nil)
+    private val hostAndPorts: immutable.Seq[(String, Int)] =
+      Nil)
     extends AmqpConnectionProvider {
 
   /**
@@ -326,8 +324,7 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
    * Java API
    */
   def withHostsAndPorts(
-      hostAndPorts: java.util.List[akka.japi.Pair[String, Int]]
-  ): AmqpConnectionFactoryConnectionProvider =
+      hostAndPorts: java.util.List[akka.japi.Pair[String, Int]]): AmqpConnectionFactoryConnectionProvider =
     copy(hostAndPorts = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
 
   override def get: Connection = {
@@ -358,7 +355,7 @@ object AmqpConnectionFactoryConnectionProvider {
 }
 
 final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionProvider,
-                                                  val automaticRelease: Boolean = true)
+    val automaticRelease: Boolean = true)
     extends AmqpConnectionProvider {
 
   import akka.stream.alpakka.amqp.AmqpCachedConnectionProvider._
@@ -375,8 +372,7 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
           val connection = provider.get
           if (!state.compareAndSet(Connecting, Connected(connection, 1)))
             throw new ConcurrentModificationException(
-              "Unexpected concurrent modification while creating the connection."
-            )
+              "Unexpected concurrent modification while creating the connection.")
           connection
         } catch {
           case e: ConcurrentModificationException => throw e
@@ -394,7 +390,7 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
 
   @tailrec
   override def release(connection: Connection): Unit = state.get match {
-    case Empty => throw new IllegalStateException("There is no connection to release.")
+    case Empty      => throw new IllegalStateException("There is no connection to release.")
     case Connecting => release(connection)
     case c @ Connected(cachedConnection, clients) =>
       if (cachedConnection != connection)
@@ -405,8 +401,7 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
           provider.release(connection)
           if (!state.compareAndSet(Closing, Empty))
             throw new ConcurrentModificationException(
-              "Unexpected concurrent modification while closing the connection."
-            )
+              "Unexpected concurrent modification while closing the connection.")
         }
       } else {
         if (!state.compareAndSet(c, Connected(cachedConnection, clients - 1))) release(connection)

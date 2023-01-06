@@ -30,9 +30,7 @@ class GCStorageSettingsSpec extends AnyFlatSpec with Matchers with LogCapturing 
         "base-url" -> baseUrl,
         "base-path" -> basePath,
         "token-url" -> tokenUrl,
-        "token-scope" -> tokenScope
-      ).asJava
-    )
+        "token-scope" -> tokenScope).asJava)
 
     @nowarn("msg=deprecated")
     val settings = GCStorageSettings(config)

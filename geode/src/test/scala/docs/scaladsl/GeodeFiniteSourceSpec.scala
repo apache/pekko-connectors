@@ -19,7 +19,7 @@ class GeodeFiniteSourceSpec extends GeodeBaseSpec {
   "Geode finite source" should {
     it { geodeSettings =>
       "retrieves finite elements from geode" in {
-        //#query
+        // #query
         val geode = new Geode(geodeSettings)
         system.registerOnTermination(geode.close())
 
@@ -27,7 +27,7 @@ class GeodeFiniteSourceSpec extends GeodeBaseSpec {
           geode
             .query[Person](s"select * from /persons order by id")
             .runWith(Sink.foreach(e => log.debug(s"$e")))
-        //#query
+        // #query
         Await.ready(source, 10 seconds)
 
         val animals =

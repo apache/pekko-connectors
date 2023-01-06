@@ -8,10 +8,10 @@ import akka.stream.alpakka.ironmq.PushMessage
 import akka.stream.alpakka.ironmq.impl.IronMqClientForTests
 import akka.stream.alpakka.ironmq.scaladsl._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Flow, Sink, Source}
+import akka.stream.scaladsl.{ Flow, Sink, Source }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.testkit.TestKit
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
@@ -95,7 +95,7 @@ class IronMqDocsSpec
 
       val messageCount = 10
       // #flow
-      import akka.stream.alpakka.ironmq.{Message, PushMessage}
+      import akka.stream.alpakka.ironmq.{ Message, PushMessage }
 
       val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
       val producedIds: Future[immutable.Seq[Message.Id]] = Source(messages)
@@ -125,7 +125,7 @@ class IronMqDocsSpec
       produced.futureValue shouldBe Done
 
       // #atLeastOnceFlow
-      import akka.stream.alpakka.ironmq.{Message, PushMessage}
+      import akka.stream.alpakka.ironmq.{ Message, PushMessage }
       import akka.stream.alpakka.ironmq.scaladsl.Committable
 
       val pushAndCommit: Flow[(PushMessage, Committable), Message.Id, NotUsed] =
@@ -155,7 +155,7 @@ class IronMqDocsSpec
 
       val messageCount = 10
       // #sink
-      import akka.stream.alpakka.ironmq.{Message, PushMessage}
+      import akka.stream.alpakka.ironmq.{ Message, PushMessage }
 
       val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
       val producedIds: Future[Done] = Source(messages)

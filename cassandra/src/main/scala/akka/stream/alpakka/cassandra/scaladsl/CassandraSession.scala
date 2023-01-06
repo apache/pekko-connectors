@@ -7,18 +7,18 @@ package akka.stream.alpakka.cassandra.scaladsl
 import akka.actor.NoSerializationVerificationNeeded
 import akka.annotation.InternalApi
 import akka.event.LoggingAdapter
-import akka.stream.alpakka.cassandra.{CassandraMetricsRegistry, CassandraServerMetaData, CqlSessionProvider}
-import akka.stream.scaladsl.{Sink, Source}
-import akka.stream.{Materializer, SystemMaterializer}
+import akka.stream.alpakka.cassandra.{ CassandraMetricsRegistry, CassandraServerMetaData, CqlSessionProvider }
+import akka.stream.scaladsl.{ Sink, Source }
+import akka.stream.{ Materializer, SystemMaterializer }
 import akka.util.OptionVal
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql._
 import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException
 
 import scala.collection.immutable
 import scala.compat.java8.FutureConverters._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.NonFatal
 
 /**
@@ -34,12 +34,12 @@ import scala.util.control.NonFatal
  * All methods are non-blocking.
  */
 final class CassandraSession(system: akka.actor.ActorSystem,
-                             sessionProvider: CqlSessionProvider,
-                             executionContext: ExecutionContext,
-                             log: LoggingAdapter,
-                             metricsCategory: String,
-                             init: CqlSession => Future[Done],
-                             onClose: () => Unit)
+    sessionProvider: CqlSessionProvider,
+    executionContext: ExecutionContext,
+    log: LoggingAdapter,
+    metricsCategory: String,
+    init: CqlSession => Future[Done],
+    onClose: () => Unit)
     extends NoSerializationVerificationNeeded {
 
   implicit private[akka] val ec: ExecutionContext = executionContext
@@ -92,8 +92,8 @@ final class CassandraSession(system: akka.actor.ActorSystem,
         val result = selectOne("select cluster_name, data_center, release_version from system.local").map {
           case Some(row) =>
             new CassandraServerMetaData(row.getString("cluster_name"),
-                                        row.getString("data_center"),
-                                        row.getString("release_version"))
+              row.getString("data_center"),
+              row.getString("release_version"))
           case None =>
             log.warning("Couldn't retrieve serverMetaData from system.local table. No rows found.")
             new CassandraServerMetaData("", "", "")

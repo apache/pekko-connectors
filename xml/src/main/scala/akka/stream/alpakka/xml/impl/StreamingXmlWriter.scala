@@ -6,10 +6,10 @@ package akka.stream.alpakka.xml.impl
 import java.nio.charset.Charset
 
 import akka.annotation.InternalApi
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import akka.stream.alpakka.xml._
-import akka.stream.stage.{GraphStage, GraphStageLogic, InHandler, OutHandler}
-import akka.util.{ByteString, ByteStringBuilder}
+import akka.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import akka.util.{ ByteString, ByteStringBuilder }
 import javax.xml.stream.XMLOutputFactory
 
 /**

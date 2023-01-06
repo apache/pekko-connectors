@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.jms
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.util.JavaDurationConverters._
 import com.typesafe.config.Config
 
@@ -20,8 +20,7 @@ final class ConnectionRetrySettings private (
     val initialRetry: scala.concurrent.duration.FiniteDuration,
     val backoffFactor: Double,
     val maxBackoff: scala.concurrent.duration.FiniteDuration,
-    val maxRetries: Int
-) {
+    val maxRetries: Int) {
 
   /** Time allowed to establish and start a connection. */
   def withConnectTimeout(value: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
@@ -62,14 +61,12 @@ final class ConnectionRetrySettings private (
       initialRetry: scala.concurrent.duration.FiniteDuration = initialRetry,
       backoffFactor: Double = backoffFactor,
       maxBackoff: scala.concurrent.duration.FiniteDuration = maxBackoff,
-      maxRetries: Int = maxRetries
-  ): ConnectionRetrySettings = new ConnectionRetrySettings(
+      maxRetries: Int = maxRetries): ConnectionRetrySettings = new ConnectionRetrySettings(
     connectTimeout = connectTimeout,
     initialRetry = initialRetry,
     backoffFactor = backoffFactor,
     maxBackoff = maxBackoff,
-    maxRetries = maxRetries
-  )
+    maxRetries = maxRetries)
 
   override def toString: String =
     "ConnectionRetrySettings(" +
@@ -100,8 +97,7 @@ object ConnectionRetrySettings {
       initialRetry,
       backoffFactor,
       maxBackoff,
-      maxRetries
-    )
+      maxRetries)
   }
 
   /** Java API: Reads from the given config. */

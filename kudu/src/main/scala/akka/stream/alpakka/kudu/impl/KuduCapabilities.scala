@@ -16,9 +16,9 @@ private trait KuduCapabilities {
   this: StageLogging =>
 
   protected def getOrCreateTable(kuduClient: KuduClient,
-                                 tableName: String,
-                                 schema: Schema,
-                                 createTableOptions: CreateTableOptions): KuduTable =
+      tableName: String,
+      schema: Schema,
+      createTableOptions: CreateTableOptions): KuduTable =
     if (kuduClient.tableExists(tableName))
       kuduClient.openTable(tableName)
     else {

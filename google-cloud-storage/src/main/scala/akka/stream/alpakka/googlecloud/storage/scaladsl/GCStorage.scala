@@ -5,12 +5,12 @@
 package akka.stream.alpakka.googlecloud.storage.scaladsl
 
 import akka.http.scaladsl.model.ContentType
-import akka.stream.{Attributes, Materializer}
+import akka.stream.{ Attributes, Materializer }
 import akka.stream.alpakka.googlecloud.storage.impl.GCStorageStream
-import akka.stream.alpakka.googlecloud.storage.{Bucket, StorageObject}
-import akka.stream.scaladsl.{RunnableGraph, Sink, Source}
+import akka.stream.alpakka.googlecloud.storage.{ Bucket, StorageObject }
+import akka.stream.scaladsl.{ RunnableGraph, Sink, Source }
 import akka.util.ByteString
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -28,7 +28,7 @@ object GCStorage {
    * @return a `Future` containing `Bucket` if it exists
    */
   def getBucket(bucketName: String)(implicit mat: Materializer,
-                                    attr: Attributes = Attributes()): Future[Option[Bucket]] =
+      attr: Attributes = Attributes()): Future[Option[Bucket]] =
     GCStorageStream.getBucket(bucketName)
 
   /**
@@ -52,7 +52,7 @@ object GCStorage {
    * @return a `Future` of `Bucket` with created bucket
    */
   def createBucket(bucketName: String, location: String)(implicit mat: Materializer,
-                                                         attr: Attributes = Attributes()): Future[Bucket] =
+      attr: Attributes = Attributes()): Future[Bucket] =
     GCStorageStream.createBucket(bucketName, location)
 
   /**
@@ -189,8 +189,8 @@ object GCStorage {
    *         Otherwise [[scala.Option Option]] will contain a source of object's data.
    */
   def download(bucket: String,
-               objectName: String,
-               generation: Option[Long]): Source[Option[Source[ByteString, NotUsed]], NotUsed] =
+      objectName: String,
+      generation: Option[Long]): Source[Option[Source[ByteString, NotUsed]], NotUsed] =
     GCStorageStream.download(bucket, objectName, generation)
 
   /**
@@ -205,9 +205,9 @@ object GCStorage {
    * @return a `Source` containing the `StorageObject` of the uploaded object
    */
   def simpleUpload(bucket: String,
-                   objectName: String,
-                   data: Source[ByteString, _],
-                   contentType: ContentType): Source[StorageObject, NotUsed] =
+      objectName: String,
+      data: Source[ByteString, _],
+      contentType: ContentType): Source[StorageObject, NotUsed] =
     GCStorageStream.putObject(bucket, objectName, data, contentType)
 
   /**
@@ -223,10 +223,10 @@ object GCStorage {
    * @return a `Sink` that accepts `ByteString`'s and materializes to a `Future` of `StorageObject`
    */
   def resumableUpload(bucket: String,
-                      objectName: String,
-                      contentType: ContentType,
-                      chunkSize: Int,
-                      metadata: Map[String, String]): Sink[ByteString, Future[StorageObject]] =
+      objectName: String,
+      contentType: ContentType,
+      chunkSize: Int,
+      metadata: Map[String, String]): Sink[ByteString, Future[StorageObject]] =
     resumableUpload(bucket, objectName, contentType, chunkSize, Some(metadata))
 
   /**
@@ -241,20 +241,19 @@ object GCStorage {
    * @return a `Sink` that accepts `ByteString`'s and materializes to a `Future` of `StorageObject`
    */
   def resumableUpload(bucket: String,
-                      objectName: String,
-                      contentType: ContentType,
-                      chunkSize: Int): Sink[ByteString, Future[StorageObject]] =
+      objectName: String,
+      contentType: ContentType,
+      chunkSize: Int): Sink[ByteString, Future[StorageObject]] =
     resumableUpload(bucket, objectName, contentType, chunkSize, metadata = None)
 
   private def resumableUpload(bucket: String,
-                              objectName: String,
-                              contentType: ContentType,
-                              chunkSize: Int,
-                              metadata: Option[Map[String, String]]): Sink[ByteString, Future[StorageObject]] = {
+      objectName: String,
+      contentType: ContentType,
+      chunkSize: Int,
+      metadata: Option[Map[String, String]]): Sink[ByteString, Future[StorageObject]] = {
     assert(
       (chunkSize >= (256 * 1024)) && (chunkSize % (256 * 1024) == 0),
-      "Chunk size must be a multiple of 256KB"
-    )
+      "Chunk size must be a multiple of 256KB")
     GCStorageStream.resumableUpload(bucket, objectName, contentType, chunkSize, metadata)
   }
 
@@ -269,8 +268,8 @@ object GCStorage {
    * @return a `Sink` that accepts `ByteString`'s and materializes to a `scala.concurrent.Future Future` of `StorageObject`
    */
   def resumableUpload(bucket: String,
-                      objectName: String,
-                      contentType: ContentType): Sink[ByteString, Future[StorageObject]] =
+      objectName: String,
+      contentType: ContentType): Sink[ByteString, Future[StorageObject]] =
     GCStorageStream.resumableUpload(bucket, objectName, contentType)
 
   /**
@@ -285,9 +284,9 @@ object GCStorage {
    * @return a runnable graph which upon materialization will return a [[scala.concurrent.Future Future ]] containing the `StorageObject` with info about rewritten file
    */
   def rewrite(sourceBucket: String,
-              sourceObjectName: String,
-              destinationBucket: String,
-              destinationObjectName: String): RunnableGraph[Future[StorageObject]] =
+      sourceObjectName: String,
+      destinationBucket: String,
+      destinationObjectName: String): RunnableGraph[Future[StorageObject]] =
     GCStorageStream.rewrite(sourceBucket, sourceObjectName, destinationBucket, destinationObjectName)
 
   /**

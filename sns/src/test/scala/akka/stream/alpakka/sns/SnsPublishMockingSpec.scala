@@ -8,13 +8,13 @@ import java.util.concurrent.CompletableFuture
 
 import akka.stream.alpakka.sns.scaladsl.SnsPublisher
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{ Keep, Sink }
 import akka.stream.testkit.scaladsl.TestSource
-import org.mockito.ArgumentMatchers.{any, eq => meq}
+import org.mockito.ArgumentMatchers.{ any, eq => meq }
 import org.mockito.Mockito._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
-import software.amazon.awssdk.services.sns.model.{PublishRequest, PublishResponse}
+import software.amazon.awssdk.services.sns.model.{ PublishRequest, PublishResponse }
 
 import scala.concurrent.Await
 import scala.concurrent.duration._

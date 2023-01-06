@@ -4,12 +4,12 @@
 
 package akka.stream.alpakka.text.impl
 
-import java.nio.{ByteBuffer, CharBuffer}
-import java.nio.charset.{Charset, CharsetDecoder, CharsetEncoder}
+import java.nio.{ ByteBuffer, CharBuffer }
+import java.nio.charset.{ Charset, CharsetDecoder, CharsetEncoder }
 
 import akka.annotation.InternalApi
-import akka.stream.{FlowShape, Inlet, Outlet}
-import akka.stream.stage.{GraphStageLogic, InHandler, OutHandler}
+import akka.stream.{ FlowShape, Inlet, Outlet }
+import akka.stream.stage.{ GraphStageLogic, InHandler, OutHandler }
 import akka.util.ByteString
 
 /**
@@ -96,9 +96,9 @@ private[impl] trait Encoding {
 
 @InternalApi
 private[impl] class DecodingLogic(in: Inlet[ByteString],
-                                  out: Outlet[String],
-                                  shape: FlowShape[ByteString, String],
-                                  incoming: Charset)
+    out: Outlet[String],
+    shape: FlowShape[ByteString, String],
+    incoming: Charset)
     extends GraphStageLogic(shape)
     with Decoding
     with InHandler
@@ -129,9 +129,9 @@ private[impl] class DecodingLogic(in: Inlet[ByteString],
 }
 
 private[impl] class EncodingLogic(in: Inlet[String],
-                                  out: Outlet[ByteString],
-                                  shape: FlowShape[String, ByteString],
-                                  outgoing: Charset)
+    out: Outlet[ByteString],
+    shape: FlowShape[String, ByteString],
+    outgoing: Charset)
     extends GraphStageLogic(shape)
     with Encoding
     with InHandler
@@ -158,10 +158,10 @@ private[impl] class EncodingLogic(in: Inlet[String],
 }
 
 private[impl] class TranscodingLogic(in: Inlet[ByteString],
-                                     out: Outlet[ByteString],
-                                     shape: FlowShape[ByteString, ByteString],
-                                     incoming: Charset,
-                                     outgoing: Charset)
+    out: Outlet[ByteString],
+    shape: FlowShape[ByteString, ByteString],
+    incoming: Charset,
+    outgoing: Charset)
     extends GraphStageLogic(shape)
     with Encoding
     with Decoding

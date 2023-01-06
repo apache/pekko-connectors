@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.xml.scaladsl
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.{ Charset, StandardCharsets }
 
 import akka.NotUsed
 import akka.stream.alpakka.xml.ParseEvent

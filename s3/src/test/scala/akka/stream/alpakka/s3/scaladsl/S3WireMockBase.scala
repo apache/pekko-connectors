@@ -11,13 +11,13 @@ import akka.stream.alpakka.s3.impl.S3Stream
 import akka.stream.alpakka.s3.scaladsl.S3WireMockBase._
 import akka.testkit.TestKit
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.{ResponseDefinitionBuilder, WireMock}
+import com.github.tomakehurst.wiremock.client.{ ResponseDefinitionBuilder, WireMock }
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import com.github.tomakehurst.wiremock.http.Fault
-import com.github.tomakehurst.wiremock.matching.{ContainsPattern, EqualToPattern}
+import com.github.tomakehurst.wiremock.matching.{ ContainsPattern, EqualToPattern }
 import com.github.tomakehurst.wiremock.stubbing.Scenario
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import software.amazon.awssdk.regions.Region
 
 abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMockServer) extends TestKit(_system) {
@@ -40,10 +40,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
           .withStatus(404)
           .withBody(
             "<Error><Code>NoSuchKey</Code><Message>No key found</Message>" +
-            "<RequestId>XXXX</RequestId><HostId>XXXX</HostId></Error>"
-          )
-      )
-    )
+            "<RequestId>XXXX</RequestId><HostId>XXXX</HostId></Error>")))
 
   def mockSSEInvalidRequest(): Unit =
     mock.register(
@@ -54,10 +51,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             "<Error><Code>InvalidRequest</Code><Message>The object was stored using a form of Server Side Encryption. " +
             "The correct parameters must be provided to retrieve the object.</Message>" +
             "<RequestId>XXX</RequestId>" +
-            "<HostId>XXXX</HostId></Error>"
-          )
-      )
-    )
+            "<HostId>XXXX</HostId></Error>")))
 
   def stopWireMockServer(): Unit = _wireMockServer.stop()
 
@@ -92,9 +86,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withStatus(200)
             .withHeader("ETag", """"fba9dede5f27731c9771645a39863328"""")
             .withHeader("Content-Length", body.length.toString)
-            .withBody(body)
-        )
-      )
+            .withBody(body)))
 
   def mockDownload(region: Region): Unit =
     mock
@@ -106,9 +98,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
               .withStatus(200)
               .withHeader("ETag", """"fba9dede5f27731c9771645a39863328"""")
               .withHeader("Content-Length", body.length.toString)
-              .withBody(body)
-          )
-      )
+              .withBody(body)))
 
   def mockDownloadSSEC(): Unit =
     mock
@@ -121,9 +111,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             aResponse()
               .withStatus(200)
               .withHeader("ETag", """"fba9dede5f27731c9771645a39863328"""")
-              .withBody(bodySSE)
-          )
-      )
+              .withBody(bodySSE)))
 
   def mockDownloadSSECWithVersion(versionId: String): Unit =
     mock
@@ -137,9 +125,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
               .withStatus(200)
               .withHeader("ETag", """"fba9dede5f27731c9771645a39863328"""")
               .withHeader("x-amz-version-id", versionId)
-              .withBody(bodySSE)
-          )
-      )
+              .withBody(bodySSE)))
 
   def mockHead(contentLength: Long): Unit =
     mock
@@ -148,9 +134,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
           aResponse()
             .withStatus(200)
             .withHeader("ETag", s""""$etag"""")
-            .withHeader("Content-Length", contentLength.toString)
-        )
-      )
+            .withHeader("Content-Length", contentLength.toString)))
 
   def mockHeadWithVersion(versionId: String): Unit =
     mock
@@ -160,9 +144,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withStatus(200)
             .withHeader("ETag", s""""$etag"""")
             .withHeader("Content-Length", "8")
-            .withHeader("x-amz-version-id", versionId)
-        )
-      )
+            .withHeader("x-amz-version-id", versionId)))
 
   def mockHeadSSEC(): Unit =
     mock
@@ -172,9 +154,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
           .withHeader("x-amz-server-side-encryption-customer-key", new EqualToPattern(sseCustomerKey))
           .withHeader("x-amz-server-side-encryption-customer-key-MD5", new EqualToPattern(sseCustomerMd5Key))
           .willReturn(
-            aResponse().withStatus(200).withHeader("ETag", s""""$etagSSE"""").withHeader("Content-Length", "8")
-          )
-      )
+            aResponse().withStatus(200).withHeader("ETag", s""""$etagSSE"""").withHeader("Content-Length", "8")))
 
   def mockRangedDownload(): Unit =
     mock
@@ -185,9 +165,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             aResponse()
               .withStatus(200)
               .withHeader("ETag", """"fba9dede5f27731c9771645a39863328"""")
-              .withBody(rangeOfBody)
-          )
-      )
+              .withBody(rangeOfBody)))
 
   def mockRangedDownloadSSE(): Unit =
     mock
@@ -201,9 +179,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             aResponse()
               .withStatus(200)
               .withHeader("ETag", """"fba9dede5f27731c9771645a39863328"""")
-              .withBody(rangeOfBodySSE)
-          )
-      )
+              .withBody(rangeOfBodySSE)))
 
   def mockListBucket(): Unit =
     mock
@@ -226,9 +202,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                         |        <Size>434234</Size>
                         |        <StorageClass>STANDARD</StorageClass>
                         |    </Contents>
-                        |</ListBucketResult>""".stripMargin)
-        )
-      )
+                        |</ListBucketResult>""".stripMargin)))
 
   def mockListBucketVersion1(): Unit =
     mock
@@ -251,9 +225,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                         |        <Size>434234</Size>
                         |        <StorageClass>STANDARD</StorageClass>
                         |    </Contents>
-                        |</ListBucketResult>""".stripMargin)
-        )
-      )
+                        |</ListBucketResult>""".stripMargin)))
 
   def mockListBucketAndCommonPrefixes(): Unit =
     mock
@@ -279,9 +251,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                           |    <CommonPrefixes>
                           |        <Prefix>$listCommonPrefix</Prefix>
                           |    </CommonPrefixes>
-                          |</ListBucketResult>""".stripMargin)
-        )
-      )
+                          |</ListBucketResult>""".stripMargin)))
 
   def mockListBucketAndCommonPrefixesVersion1(): Unit =
     mock
@@ -307,9 +277,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                           |    <CommonPrefixes>
                           |        <Prefix>$listCommonPrefix</Prefix>
                           |    </CommonPrefixes>
-                          |</ListBucketResult>""".stripMargin)
-        )
-      )
+                          |</ListBucketResult>""".stripMargin)))
 
   def mockUpload(): Unit = mockUpload(body)
 
@@ -334,9 +302,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$bucket</Bucket>
                          |  <Key>$bucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
-                         |</InitiateMultipartUploadResult>""".stripMargin)
-        )
-      )
+                         |</InitiateMultipartUploadResult>""".stripMargin)))
   }
 
   def mockPartUpload(expectedBody: String): Unit = {
@@ -348,9 +314,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withStatus(200)
             .withHeader("x-amz-id-2", "Zn8bf8aEFQ+kBnGPBc/JaAf9SoWM68QDPS9+SyFwkIZOHUG2BiRLZi5oXw4cOCEt")
             .withHeader("x-amz-request-id", "5A37448A37622243")
-            .withHeader("ETag", "\"" + etag + "\"")
-        )
-    )
+            .withHeader("ETag", "\"" + etag + "\"")))
   }
 
   def mockMultipartCompletion(): Unit = {
@@ -370,9 +334,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$bucket</Bucket>
                          |  <Key>$bucketKey</Key>
                          |  <ETag>"$etag"</ETag>
-                         |</CompleteMultipartUploadResult>""".stripMargin)
-        )
-    )
+                         |</CompleteMultipartUploadResult>""".stripMargin)))
   }
 
   def mockMultipartUploadInitiationWithTransientError(expectedBody: String, faultOrStatus: Either[Fault, Int]): Unit = {
@@ -398,8 +360,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
           .inScenario(scenarioName)
           .whenScenarioStateIs(Scenario.STARTED)
           .willReturn(responseBuilder)
-          .willSetStateTo("RecoverFromErrorOnInitiate")
-      )
+          .willSetStateTo("RecoverFromErrorOnInitiate"))
 
     mock
       .register(
@@ -416,9 +377,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                            |  <Bucket>$bucket</Bucket>
                            |  <Key>$bucketKey</Key>
                            |  <UploadId>$uploadId</UploadId>
-                           |</InitiateMultipartUploadResult>""".stripMargin)
-          )
-      )
+                           |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mockPartUpload(expectedBody)
 
@@ -449,8 +408,8 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
   }
 
   private def mockMultipartPartUploadWithTransientError(expectedBody: String,
-                                                        response: ResponseDefinitionBuilder,
-                                                        numFailures: Int): Unit = {
+      response: ResponseDefinitionBuilder,
+      numFailures: Int): Unit = {
     val scenarioName = "UploadWithTransientErrors"
 
     mockMultipartInitiation()
@@ -465,10 +424,8 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
           .whenScenarioStateIs(initialState)
           .withRequestBody(matching(expectedBody))
           .willReturn(
-            response
-          )
-          .willSetStateTo(nextState)
-      )
+            response)
+          .willSetStateTo(nextState))
     }
 
     mock.register(
@@ -481,9 +438,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withStatus(200)
             .withHeader("x-amz-id-2", "Zn8bf8aEFQ+kBnGPBc/JaAf9SoWM68QDPS9+SyFwkIZOHUG2BiRLZi5oXw4cOCEt")
             .withHeader("x-amz-request-id", "5A37448A37622243")
-            .withHeader("ETag", "\"" + etag + "\"")
-        )
-    )
+            .withHeader("ETag", "\"" + etag + "\"")))
 
     mockMultipartCompletion()
   }
@@ -501,18 +456,14 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$bucket</Bucket>
                          |  <Key>$bucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
-                         |</InitiateMultipartUploadResult>""".stripMargin)
-        )
-      )
+                         |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$bucketKey?partNumber=1&uploadId=$uploadId"))
         .withRequestBody(matching(body))
         .willReturn(
           aResponse()
-            .withStatus(500)
-        )
-    )
+            .withStatus(500)))
   }
 
   def mockUploadSSE(): Unit = {
@@ -532,9 +483,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$bucket</Bucket>
                          |  <Key>$bucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
-                         |</InitiateMultipartUploadResult>""".stripMargin)
-          )
-      )
+                         |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$bucketKey?partNumber=1&uploadId=$uploadId"))
@@ -547,9 +496,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withStatus(200)
             .withHeader("x-amz-id-2", "Zn8bf8aEFQ+kBnGPBc/JaAf9SoWM68QDPS9+SyFwkIZOHUG2BiRLZi5oXw4cOCEt")
             .withHeader("x-amz-request-id", "5A37448A37622243")
-            .withHeader("ETag", "\"" + etag + "\"")
-        )
-    )
+            .withHeader("ETag", "\"" + etag + "\"")))
 
     mock.register(
       post(urlEqualTo(s"/$bucketKey?uploadId=$uploadId"))
@@ -567,9 +514,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$bucket</Bucket>
                          |  <Key>$bucketKey</Key>
                          |  <ETag>"$etag"</ETag>
-                         |</CompleteMultipartUploadResult>""".stripMargin)
-        )
-    )
+                         |</CompleteMultipartUploadResult>""".stripMargin)))
   }
 
   def mockCopy(): Unit = mockCopy(body.length)
@@ -583,9 +528,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withHeader("x-amz-id-2", "ef8yU9AS1ed4OpIszj7UDNEHGran")
             .withHeader("x-amz-request-id", "318BC8BC143432E5")
             .withHeader("ETag", "\"" + etag + "\"")
-            .withHeader("Content-Length", s"$expectedContentLength")
-        )
-    )
+            .withHeader("Content-Length", s"$expectedContentLength")))
 
     mock
       .register(
@@ -599,9 +542,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
-                         |</InitiateMultipartUploadResult>""".stripMargin)
-        )
-      )
+                         |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$targetBucketKey?partNumber=1&uploadId=$uploadId"))
@@ -616,9 +557,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                  |  <ETag>"$etag"</ETag>
                  |  <LastModified>2009-10-28T22:32:00.000Z</LastModified>
                  |</CopyPartResult>
-               """.stripMargin)
-        )
-    )
+               """.stripMargin)))
 
     mock.register(
       post(urlEqualTo(s"/$targetBucketKey?uploadId=$uploadId"))
@@ -636,9 +575,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <ETag>"$etag"</ETag>
-                         |</CompleteMultipartUploadResult>""".stripMargin)
-        )
-    )
+                         |</CompleteMultipartUploadResult>""".stripMargin)))
   }
 
   def mockCopyVersioned(): Unit = mockCopyVersioned(body.length)
@@ -652,9 +589,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withHeader("x-amz-request-id", "318BC8BC143432E5")
             .withHeader("x-amz-version-id", "3/L4kqtJlcpXroDTDmJ+rmSpXd3dIbrHY+MTRCxf3vjVBH40Nr8X8gdRQBpUMLUo")
             .withHeader("ETag", "\"" + etag + "\"")
-            .withHeader("Content-Length", s"$expectedContentLength")
-        )
-    )
+            .withHeader("Content-Length", s"$expectedContentLength")))
 
     mock
       .register(
@@ -668,31 +603,26 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
-                         |</InitiateMultipartUploadResult>""".stripMargin)
-        )
-      )
+                         |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$targetBucketKey?partNumber=1&uploadId=$uploadId"))
         .withHeader("x-amz-copy-source",
-                    new EqualToPattern(
-                      s"/$bucket/$bucketKey?versionId=3/L4kqtJlcpXroDTDmJ+rmSpXd3dIbrHY+MTRCxf3vjVBH40Nr8X8gdRQBpUMLUo"
-                    ))
+          new EqualToPattern(
+            s"/$bucket/$bucketKey?versionId=3/L4kqtJlcpXroDTDmJ+rmSpXd3dIbrHY+MTRCxf3vjVBH40Nr8X8gdRQBpUMLUo"))
         .willReturn(
           aResponse()
             .withStatus(200)
             .withHeader("x-amz-id-2", "Zn8bf8aEFQ+kBnGPBc/JaAf9SoWM68QDPS9+SyFwkIZOHUG2BiRLZi5oXw4cOCEt")
             .withHeader("x-amz-request-id", "5A37448A37622243")
             .withHeader("x-amz-copy-source-version-id",
-                        "3/L4kqtJlcpXroDTDmJ+rmSpXd3dIbrHY+MTRCxf3vjVBH40Nr8X8gdRQBpUMLUo")
+              "3/L4kqtJlcpXroDTDmJ+rmSpXd3dIbrHY+MTRCxf3vjVBH40Nr8X8gdRQBpUMLUo")
             .withBody(s"""<?xml version="1.0" encoding="UTF-8"?>
                          |<CopyPartResult>
                          |  <ETag>"$etag"</ETag>
                          |  <LastModified>2009-10-28T22:32:00.000Z</LastModified>
                          |</CopyPartResult>
-               """.stripMargin)
-        )
-    )
+               """.stripMargin)))
 
     mock.register(
       post(urlEqualTo(s"/$targetBucketKey?uploadId=$uploadId"))
@@ -711,9 +641,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <ETag>"$etag"</ETag>
-                         |</CompleteMultipartUploadResult>""".stripMargin)
-        )
-    )
+                         |</CompleteMultipartUploadResult>""".stripMargin)))
   }
 
   def mockCopySSE(): Unit = {
@@ -729,9 +657,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withHeader("x-amz-id-2", "ef8yU9AS1ed4OpIszj7UDNEHGran")
             .withHeader("x-amz-request-id", "318BC8BC143432E5")
             .withHeader("ETag", "\"" + etag + "\"")
-            .withHeader("Content-Length", s"$expectedContentLength")
-        )
-    )
+            .withHeader("Content-Length", s"$expectedContentLength")))
 
     mock
       .register(
@@ -749,9 +675,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                            |  <Bucket>$targetBucket</Bucket>
                            |  <Key>$targetBucketKey</Key>
                            |  <UploadId>$uploadId</UploadId>
-                           |</InitiateMultipartUploadResult>""".stripMargin)
-          )
-      )
+                           |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$targetBucketKey?partNumber=1&uploadId=$uploadId"))
@@ -772,9 +696,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                  |  <ETag>"$etag"</ETag>
                  |  <LastModified>2009-10-28T22:32:00.000Z</LastModified>
                  |</CopyPartResult>
-               """.stripMargin)
-        )
-    )
+               """.stripMargin)))
 
     mock.register(
       post(urlEqualTo(s"/$targetBucketKey?uploadId=$uploadId"))
@@ -795,9 +717,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <ETag>"$etag"</ETag>
-                         |</CompleteMultipartUploadResult>""".stripMargin)
-        )
-    )
+                         |</CompleteMultipartUploadResult>""".stripMargin)))
   }
 
   def mockCopyMulti(): Unit = {
@@ -810,9 +730,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withHeader("x-amz-id-2", "ef8yU9AS1ed4OpIszj7UDNEHGran")
             .withHeader("x-amz-request-id", "318BC8BC143432E5")
             .withHeader("ETag", "\"" + etag + "\"")
-            .withHeader("Content-Length", s"$expectedContentLength")
-        )
-    )
+            .withHeader("Content-Length", s"$expectedContentLength")))
 
     mock
       .register(
@@ -826,9 +744,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
-                         |</InitiateMultipartUploadResult>""".stripMargin)
-        )
-      )
+                         |</InitiateMultipartUploadResult>""".stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$targetBucketKey?partNumber=1&uploadId=$uploadId"))
@@ -844,9 +760,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                  |  <ETag>"$etag"</ETag>
                  |  <LastModified>2009-10-28T22:32:00.000Z</LastModified>
                  |</CopyPartResult>
-               """.stripMargin)
-        )
-    )
+               """.stripMargin)))
 
     mock.register(
       put(urlEqualTo(s"/$targetBucketKey?partNumber=2&uploadId=$uploadId"))
@@ -862,9 +776,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                  |  <ETag>"$etag"</ETag>
                  |  <LastModified>2009-10-28T22:32:00.000Z</LastModified>
                  |</CopyPartResult>
-               """.stripMargin)
-        )
-    )
+               """.stripMargin)))
 
     mock.register(
       post(urlEqualTo(s"/$targetBucketKey?uploadId=$uploadId"))
@@ -882,50 +794,41 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Bucket>$targetBucket</Bucket>
                          |  <Key>$targetBucketKey</Key>
                          |  <ETag>"$etag"</ETag>
-                         |</CompleteMultipartUploadResult>""".stripMargin)
-        )
-    )
+                         |</CompleteMultipartUploadResult>""".stripMargin)))
   }
 
   def mockMakingBucket(): Unit =
     mock.register(
       put(urlEqualTo("/")).willReturn(
         aResponse()
-          .withStatus(200)
-      )
-    )
+          .withStatus(200)))
 
   def mockDeletingBucket(): Unit = mock.register(
     delete(urlEqualTo("/")).willReturn(
       aResponse()
-        .withStatus(200)
-    )
-  )
+        .withStatus(200)))
 
   def mockCheckingBucketStateForNonExistingBucket(): Unit =
     mock.register(
-      head(urlEqualTo("/")).willReturn(aResponse().withStatus(404))
-    )
+      head(urlEqualTo("/")).willReturn(aResponse().withStatus(404)))
 
   def mockCheckingBucketStateForExistingBucket(): Unit =
     mock.register(
-      head(urlEqualTo("/")).willReturn(aResponse().withStatus(200))
-    )
+      head(urlEqualTo("/")).willReturn(aResponse().withStatus(200)))
 
   def mockCheckingBucketStateForBucketWithoutRights(): Unit =
     mock.register(
-      head(urlEqualTo("/")).willReturn(aResponse().withStatus(403))
-    )
+      head(urlEqualTo("/")).willReturn(aResponse().withStatus(403)))
 }
 
 object S3WireMockBase {
 
   def getCallerName(clazz: Class[_]): String = {
-    val s = (Thread.currentThread.getStackTrace map (_.getClassName) drop 1)
-      .dropWhile(_ matches "(java.lang.Thread|.*WireMockBase.?$)")
+    val s = Thread.currentThread.getStackTrace.map(_.getClassName).drop(1)
+      .dropWhile(_.matches("(java.lang.Thread|.*WireMockBase.?$)"))
     val reduced = s.lastIndexWhere(_ == clazz.getName) match {
       case -1 => s
-      case z => s drop (z + 1)
+      case z  => s.drop(z + 1)
     }
     reduced.head.replaceFirst(""".*\.""", "").replaceAll("[^a-zA-Z_0-9]", "_")
   }
@@ -937,8 +840,7 @@ object S3WireMockBase {
         .dynamicHttpsPort()
         .keystorePath("./s3/src/test/resources/keystore.jks")
         .keystorePassword("abcdefg")
-        .keyManagerPassword("abcdefg")
-    )
+        .keyManagerPassword("abcdefg"))
     server.start()
     server
   }

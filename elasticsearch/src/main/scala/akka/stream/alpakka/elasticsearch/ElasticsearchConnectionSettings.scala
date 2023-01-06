@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.elasticsearch
 
-import akka.http.scaladsl.{ConnectionContext, HttpsConnectionContext}
+import akka.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 import akka.http.scaladsl.model.HttpHeader
 import akka.http.scaladsl.model.HttpHeader.ParsingResult
 import akka.japi.Util
@@ -18,8 +18,7 @@ final class ElasticsearchConnectionSettings private (
     val username: Option[String],
     val password: Option[String],
     val headers: List[HttpHeader],
-    val connectionContext: Option[HttpsConnectionContext]
-) {
+    val connectionContext: Option[HttpsConnectionContext]) {
 
   def withBaseUrl(value: String): ElasticsearchConnectionSettings = copy(baseUrl = value)
 
@@ -57,23 +56,20 @@ final class ElasticsearchConnectionSettings private (
   @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "3.1.0")
   @Deprecated
   def withConnectionContext(
-      connectionContext: akka.http.javadsl.HttpsConnectionContext
-  ): ElasticsearchConnectionSettings = {
+      connectionContext: akka.http.javadsl.HttpsConnectionContext): ElasticsearchConnectionSettings = {
     val scalaContext = new HttpsConnectionContext(
       connectionContext.getSslContext,
       None,
       OptionConverters.toScala(connectionContext.getEnabledCipherSuites).map(Util.immutableSeq(_)),
       OptionConverters.toScala(connectionContext.getEnabledProtocols).map(Util.immutableSeq(_)),
       OptionConverters.toScala(connectionContext.getClientAuth),
-      OptionConverters.toScala(connectionContext.getSslParameters)
-    )
+      OptionConverters.toScala(connectionContext.getSslParameters))
 
     copy(connectionContext = Option(scalaContext))
   }
 
   def withSSLContext(
-      sslContext: SSLContext
-  ): ElasticsearchConnectionSettings = {
+      sslContext: SSLContext): ElasticsearchConnectionSettings = {
     copy(connectionContext = Option(ConnectionContext.httpsClient(sslContext)))
   }
 
@@ -84,18 +80,16 @@ final class ElasticsearchConnectionSettings private (
       username: Option[String] = username,
       password: Option[String] = password,
       headers: List[HttpHeader] = headers,
-      connectionContext: Option[HttpsConnectionContext] = connectionContext
-  ): ElasticsearchConnectionSettings =
+      connectionContext: Option[HttpsConnectionContext] = connectionContext): ElasticsearchConnectionSettings =
     new ElasticsearchConnectionSettings(baseUrl = baseUrl,
-                                        username = username,
-                                        password = password,
-                                        headers = headers,
-                                        connectionContext = connectionContext)
+      username = username,
+      password = password,
+      headers = headers,
+      connectionContext = connectionContext)
 
   override def toString =
-    s"""ElasticsearchConnectionSettings(baseUrl=$baseUrl,username=$username,password=${password.fold("")(
-      _ => "***"
-    )},headers=${headers.mkString(";")},connectionContext=$connectionContext)"""
+    s"""ElasticsearchConnectionSettings(baseUrl=$baseUrl,username=$username,password=${password.fold("")(_ =>
+        "***")},headers=${headers.mkString(";")},connectionContext=$connectionContext)"""
 }
 
 object ElasticsearchConnectionSettings {

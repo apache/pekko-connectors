@@ -6,21 +6,21 @@ package akka.stream.alpakka.google
 
 import akka.NotUsed
 import akka.annotation.InternalApi
-import akka.http.scaladsl.model.HttpMethods.{POST, PUT}
-import akka.http.scaladsl.model.StatusCodes.{Created, OK, PermanentRedirect}
+import akka.http.scaladsl.model.HttpMethods.{ POST, PUT }
+import akka.http.scaladsl.model.StatusCodes.{ Created, OK, PermanentRedirect }
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.headers.ByteRange.Slice
-import akka.http.scaladsl.model.headers.{`Content-Range`, Location, Range, RawHeader}
-import akka.http.scaladsl.unmarshalling.{FromResponseUnmarshaller, Unmarshal, Unmarshaller}
+import akka.http.scaladsl.model.headers.{ `Content-Range`, Location, Range, RawHeader }
+import akka.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, Unmarshaller }
 import akka.stream.Materializer
 import akka.stream.alpakka.google.http.GoogleHttp
-import akka.stream.alpakka.google.util.{AnnotateLast, EitherFlow, MaybeLast, Retry}
-import akka.stream.scaladsl.{Flow, Keep, RetryFlow, Sink, Source}
+import akka.stream.alpakka.google.util.{ AnnotateLast, EitherFlow, MaybeLast, Retry }
+import akka.stream.scaladsl.{ Flow, Keep, RetryFlow, Sink, Source }
 import akka.util.ByteString
 
 import scala.concurrent.Future
 import scala.util.control.NoStackTrace
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 @InternalApi
 private[alpakka] object ResumableUpload {
@@ -40,8 +40,7 @@ private[alpakka] object ResumableUpload {
     require(request.method == POST, "Resumable upload must be initiated by POST request")
     require(
       request.uri.rawQueryString.exists(_.contains("uploadType=resumable")),
-      "Resumable upload must include query parameter `uploadType=resumable`"
-    )
+      "Resumable upload must include query parameter `uploadType=resumable`")
 
     Sink
       .fromMaterializer { (mat, attr) =>
@@ -73,7 +72,7 @@ private[alpakka] object ResumableUpload {
               RetryFlow
                 .withBackoff(minBackoff, maxBackoff, randomFactor, maxRetries, flow) {
                   case (chunk, Failure(Retry(_))) => Some(updatePosition(request, chunk.map(_.toOption.get)))
-                  case _ => None
+                  case _                          => None
                 }
                 .map(_.recoverWith { case Retry(ex) => Failure(ex) })
             }
@@ -85,7 +84,7 @@ private[alpakka] object ResumableUpload {
   }
 
   private def initiateSession(request: HttpRequest)(implicit mat: Materializer,
-                                                    settings: GoogleSettings): Future[Uri] = {
+      settings: GoogleSettings): Future[Uri] = {
     implicit val system = mat.system
     import implicits._
 
@@ -101,8 +100,7 @@ private[alpakka] object ResumableUpload {
   private final case class DoNotRetry(ex: Throwable) extends Throwable(ex) with NoStackTrace
 
   private def uploadChunk[T: FromResponseUnmarshaller](
-      request: HttpRequest
-  )(implicit mat: Materializer): Flow[Either[T, MaybeLast[Chunk]], Try[Option[T]], NotUsed] = {
+      request: HttpRequest)(implicit mat: Materializer): Flow[Either[T, MaybeLast[Chunk]], Try[Option[T]], NotUsed] = {
     implicit val system = mat.system
 
     val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
@@ -129,16 +127,15 @@ private[alpakka] object ResumableUpload {
           val totalLength = if (maybeLast.isLast) Some(position + bytes.length) else None
           val header = `Content-Range`(ContentRange(position, position + bytes.length - 1, totalLength))
           request.addHeader(header).withEntity(bytes)
-      } via pool
-    ).map(_.merge).mapMaterializedValue(_ => NotUsed)
+      }.via(pool)).map(_.merge).mapMaterializedValue(_ => NotUsed)
   }
 
   private val statusRequestHeader = RawHeader("Content-Range", "bytes */*")
 
   private def updatePosition[T: FromResponseUnmarshaller](
       request: HttpRequest,
-      chunk: Future[MaybeLast[Chunk]]
-  )(implicit mat: Materializer, settings: GoogleSettings): Future[Either[T, MaybeLast[Chunk]]] = {
+      chunk: Future[MaybeLast[Chunk]])(
+      implicit mat: Materializer, settings: GoogleSettings): Future[Either[T, MaybeLast[Chunk]]] = {
     implicit val system = mat.system
     import implicits._
 
@@ -153,8 +150,7 @@ private[alpakka] object ResumableUpload {
                 .flatMap(_.ranges.headOption)
                 .collect {
                   case Slice(_, last) => last + 1
-                } getOrElse 0L
-            )
+                }.getOrElse(0L))
           }
         case _ => throw InvalidResponseException(ErrorInfo(response.status.value, response.status.defaultMessage))
       }

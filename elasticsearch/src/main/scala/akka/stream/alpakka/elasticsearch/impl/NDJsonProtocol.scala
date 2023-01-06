@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.elasticsearch.impl
 
-import akka.http.scaladsl.model.{ContentType, HttpCharsets, MediaType}
+import akka.http.scaladsl.model.{ ContentType, HttpCharsets, MediaType }
 
 object NDJsonProtocol {
 

@@ -5,11 +5,11 @@
 package akka.stream.alpakka.elasticsearch.impl
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.{Http, HttpExt}
+import akka.http.scaladsl.{ Http, HttpExt }
 import akka.stream.Materializer
 import akka.stream.alpakka.elasticsearch._
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{Keep, Source}
+import akka.stream.scaladsl.{ Keep, Source }
 import akka.stream.testkit.scaladsl.TestSink
 import akka.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
@@ -35,9 +35,7 @@ class ElasticsearchSourcStageTest
               ElasticsearchParams.V7("es-simple-flow-index"),
               Map("query" -> """{ "match_all":{}}"""),
               ElasticsearchSourceSettings(ElasticsearchConnectionSettings("http://wololo:9202")),
-              (json: String) => ScrollResponse(Some(json), None)
-            )
-          )
+              (json: String) => ScrollResponse(Some(json), None)))
           .toMat(TestSink.probe)(Keep.right)
           .run()
 

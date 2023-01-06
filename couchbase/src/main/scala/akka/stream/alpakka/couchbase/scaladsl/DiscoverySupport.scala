@@ -6,7 +6,7 @@ package akka.stream.alpakka.couchbase.scaladsl
 
 import java.util.concurrent.CompletionStage
 
-import akka.actor.{ActorSystem, ClassicActorSystemProvider}
+import akka.actor.{ ActorSystem, ClassicActorSystemProvider }
 import akka.annotation.InternalApi
 import akka.discovery.Discovery
 import akka.stream.alpakka.couchbase.CouchbaseSessionSettings
@@ -29,8 +29,7 @@ sealed class DiscoverySupport private {
    */
   private def readNodes(
       serviceName: String,
-      lookupTimeout: FiniteDuration
-  )(implicit system: ClassicActorSystemProvider): Future[immutable.Seq[String]] = {
+      lookupTimeout: FiniteDuration)(implicit system: ClassicActorSystemProvider): Future[immutable.Seq[String]] = {
     implicit val ec = system.classicSystem.dispatcher
     val discovery = Discovery(system).discovery
     discovery.lookup(serviceName, lookupTimeout).map { resolved =>
@@ -53,8 +52,8 @@ sealed class DiscoverySupport private {
    * to be used as Couchbase `nodes`.
    */
   def nodes(
-      config: Config
-  )(implicit system: ClassicActorSystemProvider): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = {
+      config: Config)(
+      implicit system: ClassicActorSystemProvider): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = {
     implicit val ec = system.classicSystem.dispatcher
     settings =>
       readNodes(config)
@@ -64,7 +63,7 @@ sealed class DiscoverySupport private {
   }
 
   private[couchbase] def nodes(config: Config,
-                               system: ActorSystem): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
+      system: ActorSystem): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
     nodes(config)(system)
 
   /**
@@ -73,8 +72,8 @@ sealed class DiscoverySupport private {
   @InternalApi
   private[couchbase] def getNodes(
       config: Config,
-      system: ClassicActorSystemProvider
-  ): java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]] =
+      system: ClassicActorSystemProvider)
+      : java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]] =
     nodes(config)(system).andThen(_.toJava).asJava
 
   /**
@@ -82,8 +81,7 @@ sealed class DiscoverySupport private {
    * to be used as Couchbase `nodes`.
    */
   def nodes()(
-      implicit system: ClassicActorSystemProvider
-  ): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
+      implicit system: ClassicActorSystemProvider): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
     nodes(system.classicSystem)
 
   /**

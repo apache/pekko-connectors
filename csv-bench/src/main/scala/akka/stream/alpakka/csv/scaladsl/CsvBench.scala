@@ -67,8 +67,7 @@ class CsvBench {
       "1024", // ~8x smaller than row
       "8192", // ~same size as row
       "65536" // ~8k larger than row
-    )
-  )
+    ))
   var bsSize: Int = _
   var source: Source[ByteString, NotUsed] = _
 
@@ -132,8 +131,7 @@ object CsvBench {
   def main(args: Array[String]): Unit = {
     val bench = new CsvBench
     bench.parse(
-      new Blackhole("Today's password is swordfish. I understand instantiating Blackholes directly is dangerous.")
-    )
+      new Blackhole("Today's password is swordfish. I understand instantiating Blackholes directly is dangerous."))
     bench.tearDown()
   }
 }

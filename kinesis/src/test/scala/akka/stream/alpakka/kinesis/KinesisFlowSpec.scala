@@ -10,7 +10,7 @@ import akka.stream.alpakka.kinesis.KinesisErrors.FailurePublishingRecords
 import akka.stream.alpakka.kinesis.scaladsl.KinesisFlow
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Keep
-import akka.stream.testkit.scaladsl.{TestSink, TestSource}
+import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
 import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import akka.util.ByteString
 import org.mockito.ArgumentMatchers.any
@@ -96,15 +96,13 @@ class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with Lo
     val streamName = "stream-name"
     val recordStream = LazyList
       .from(1)
-      .map(
-        i =>
-          (PutRecordsRequestEntry
-             .builder()
-             .partitionKey("partition-key")
-             .data(SdkBytes.fromByteBuffer(ByteString(i).asByteBuffer))
-             .build(),
-           i)
-      )
+      .map(i =>
+        (PutRecordsRequestEntry
+            .builder()
+            .partitionKey("partition-key")
+            .data(SdkBytes.fromByteBuffer(ByteString(i).asByteBuffer))
+            .build(),
+          i))
     val resultStream = LazyList
       .from(1)
       .map(i => (PutRecordsResultEntry.builder().build(), i))
@@ -135,10 +133,10 @@ class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with Lo
 
   trait WithPutRecordsFailure { self: Settings =>
     val requestError = new RuntimeException("kinesis-error")
-    when(amazonKinesisAsync.putRecords(any[PutRecordsRequest])).thenReturn({
+    when(amazonKinesisAsync.putRecords(any[PutRecordsRequest])).thenReturn {
       val future = new CompletableFuture[PutRecordsResponse]()
       future.completeExceptionally(requestError)
       future
-    })
+    }
   }
 }

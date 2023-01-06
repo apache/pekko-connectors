@@ -4,19 +4,19 @@
 
 package akka.stream.alpakka.couchbase.scaladsl
 
-import akka.annotation.{DoNotInherit, InternalApi}
-import akka.stream.alpakka.couchbase.impl.{CouchbaseSessionImpl, RxUtilities}
-import akka.stream.alpakka.couchbase.javadsl.{CouchbaseSession => JavaDslCouchbaseSession}
-import akka.stream.alpakka.couchbase.{CouchbaseSessionSettings, CouchbaseWriteSettings}
+import akka.annotation.{ DoNotInherit, InternalApi }
+import akka.stream.alpakka.couchbase.impl.{ CouchbaseSessionImpl, RxUtilities }
+import akka.stream.alpakka.couchbase.javadsl.{ CouchbaseSession => JavaDslCouchbaseSession }
+import akka.stream.alpakka.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import akka.stream.scaladsl.Source
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import com.couchbase.client.java._
 import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.document.{Document, JsonDocument}
+import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query._
 import com.couchbase.client.java.query.util.IndexInfo
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -31,7 +31,7 @@ object CouchbaseSession {
    * the session is closed.
    */
   def apply(settings: CouchbaseSessionSettings,
-            bucketName: String)(implicit ec: ExecutionContext): Future[CouchbaseSession] =
+      bucketName: String)(implicit ec: ExecutionContext): Future[CouchbaseSession] =
     createClusterClient(settings).flatMap(c => openBucket(c, disconnectClusterOnClose = true, bucketName))
 
   /**
@@ -56,8 +56,7 @@ object CouchbaseSession {
    */
   @InternalApi
   private[couchbase] def createClusterClient(
-      settings: CouchbaseSessionSettings
-  )(implicit ec: ExecutionContext): Future[AsyncCluster] =
+      settings: CouchbaseSessionSettings)(implicit ec: ExecutionContext): Future[AsyncCluster] =
     settings.enriched
       .flatMap { enrichedSettings =>
         Future(enrichedSettings.environment match {
@@ -69,8 +68,7 @@ object CouchbaseSession {
       }
 
   private def openBucket(cluster: AsyncCluster, disconnectClusterOnClose: Boolean, bucketName: String)(
-      implicit ec: ExecutionContext
-  ): Future[CouchbaseSession] =
+      implicit ec: ExecutionContext): Future[CouchbaseSession] =
     RxUtilities
       .singleObservableToFuture(cluster.openBucket(bucketName), "openBucket")
       .map { bucket =>

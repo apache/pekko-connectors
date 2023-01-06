@@ -8,14 +8,14 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import akka.annotation.InternalApi
 import akka.stream.alpakka.jms.impl.InternalConnectionState.JmsConnectorStopping
-import akka.stream.alpakka.jms.{Destination, JmsConsumerSettings}
+import akka.stream.alpakka.jms.{ Destination, JmsConsumerSettings }
 import akka.stream.scaladsl.Source
-import akka.stream.stage.{OutHandler, StageLogging, TimerGraphStageLogic}
-import akka.stream.{Attributes, Outlet, SourceShape}
-import akka.{Done, NotUsed}
+import akka.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
+import akka.stream.{ Attributes, Outlet, SourceShape }
+import akka.{ Done, NotUsed }
 
 import scala.collection.mutable
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 import javax.jms
 
@@ -29,7 +29,7 @@ private trait JmsConsumerConnector extends JmsConnector[JmsConsumerSession] {
   override val startConnection = true
 
   protected def createSession(connection: jms.Connection,
-                              createDestination: jms.Session => jms.Destination): JmsConsumerSession
+      createDestination: jms.Session => jms.Destination): JmsConsumerSession
 
 }
 
@@ -38,10 +38,10 @@ private trait JmsConsumerConnector extends JmsConnector[JmsConsumerSession] {
  */
 @InternalApi
 private abstract class SourceStageLogic[T](shape: SourceShape[T],
-                                           out: Outlet[T],
-                                           settings: JmsConsumerSettings,
-                                           val destination: Destination,
-                                           inheritedAttributes: Attributes)
+    out: Outlet[T],
+    settings: JmsConsumerSettings,
+    val destination: Destination,
+    inheritedAttributes: Attributes)
     extends TimerGraphStageLogic(shape)
     with JmsConsumerConnector
     with StageLogging {
@@ -104,8 +104,7 @@ private abstract class SourceStageLogic[T](shape: SourceShape[T],
         setKeepGoing(true)
         stopSessions()
       }
-    }
-  )
+    })
 
   private def stopSessions(): Unit =
     if (stopping.compareAndSet(false, true)) {

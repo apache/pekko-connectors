@@ -5,9 +5,9 @@
 package akka.stream.alpakka.mqtt
 
 final class MqttMessage private (val topic: String,
-                                 val payload: akka.util.ByteString,
-                                 val qos: Option[MqttQoS],
-                                 val retained: Boolean) {
+    val payload: akka.util.ByteString,
+    val qos: Option[MqttQoS],
+    val retained: Boolean) {
 
   def withTopic(value: String): MqttMessage = copy(topic = value)
   def withPayload(value: akka.util.ByteString): MqttMessage = copy(payload = value)
@@ -16,9 +16,9 @@ final class MqttMessage private (val topic: String,
   def withRetained(value: Boolean): MqttMessage = if (retained == value) this else copy(retained = value)
 
   private def copy(topic: String = topic,
-                   payload: akka.util.ByteString = payload,
-                   qos: Option[MqttQoS] = qos,
-                   retained: Boolean = retained): MqttMessage =
+      payload: akka.util.ByteString = payload,
+      qos: Option[MqttQoS] = qos,
+      retained: Boolean = retained): MqttMessage =
     new MqttMessage(topic = topic, payload = payload, qos = qos, retained = retained)
 
   override def toString =
@@ -42,22 +42,18 @@ object MqttMessage {
   /** Scala API */
   def apply(
       topic: String,
-      payload: akka.util.ByteString
-  ): MqttMessage = new MqttMessage(
+      payload: akka.util.ByteString): MqttMessage = new MqttMessage(
     topic,
     payload,
     qos = None,
-    retained = false
-  )
+    retained = false)
 
   /** Java API */
   def create(
       topic: String,
-      payload: akka.util.ByteString
-  ): MqttMessage = new MqttMessage(
+      payload: akka.util.ByteString): MqttMessage = new MqttMessage(
     topic,
     payload,
     qos = None,
-    retained = false
-  )
+    retained = false)
 }

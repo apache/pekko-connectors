@@ -5,8 +5,8 @@
 package akka.stream.alpakka.amqp.scaladsl
 
 import akka.stream.alpakka.amqp._
-import akka.stream.scaladsl.{Flow, Keep}
-import akka.{Done, NotUsed}
+import akka.stream.scaladsl.{ Flow, Keep }
+import akka.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -24,11 +24,9 @@ object AmqpFlow {
    * @param settings `bufferSize` and `confirmationTimeout` properties are ignored by this connector
    */
   def apply(
-      settings: AmqpWriteSettings
-  ): Flow[WriteMessage, WriteResult, Future[Done]] =
+      settings: AmqpWriteSettings): Flow[WriteMessage, WriteResult, Future[Done]] =
     asFlowWithoutContext(
-      Flow.fromGraph(new impl.AmqpSimpleFlowStage(settings))
-    )
+      Flow.fromGraph(new impl.AmqpSimpleFlowStage(settings)))
 
   /**
    * Creates an `AmqpFlow` that accepts `WriteMessage` elements and emits `WriteResult`.
@@ -45,11 +43,9 @@ object AmqpFlow {
    * either normally or because of an amqp failure.
    */
   def withConfirm(
-      settings: AmqpWriteSettings
-  ): Flow[WriteMessage, WriteResult, Future[Done]] =
+      settings: AmqpWriteSettings): Flow[WriteMessage, WriteResult, Future[Done]] =
     asFlowWithoutContext(
-      Flow.fromGraph(new impl.AmqpAsyncFlowStage(settings))
-    )
+      Flow.fromGraph(new impl.AmqpAsyncFlowStage(settings)))
 
   /**
    * Creates an `AmqpFlow` that accepts `WriteMessage` elements and emits `WriteResult`.
@@ -70,11 +66,9 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def withConfirmUnordered(
-      settings: AmqpWriteSettings
-  ): Flow[WriteMessage, WriteResult, Future[Done]] =
+      settings: AmqpWriteSettings): Flow[WriteMessage, WriteResult, Future[Done]] =
     asFlowWithoutContext(
-      Flow.fromGraph(new impl.AmqpAsyncUnorderedFlowStage(settings))
-    )
+      Flow.fromGraph(new impl.AmqpAsyncUnorderedFlowStage(settings)))
 
   /**
    * Variant of `AmqpFlow.withConfirmUnordered` with additional support for pass-through elements.
@@ -86,8 +80,7 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def withConfirmAndPassThroughUnordered[T](
-      settings: AmqpWriteSettings
-  ): Flow[(WriteMessage, T), (WriteResult, T), Future[Done]] =
+      settings: AmqpWriteSettings): Flow[(WriteMessage, T), (WriteResult, T), Future[Done]] =
     Flow.fromGraph(new impl.AmqpAsyncUnorderedFlowStage(settings))
 
   private def asFlowWithoutContext(flow: Flow[(WriteMessage, NotUsed), (WriteResult, NotUsed), Future[Done]]) =

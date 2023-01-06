@@ -6,7 +6,7 @@ package docs.scaladsl
 
 import akka.http.scaladsl.model.ContentTypes
 import akka.stream.alpakka.googlecloud.storage.StorageObject
-import akka.stream.alpakka.googlecloud.storage.scaladsl.{GCStorage, GCStorageWiremockBase}
+import akka.stream.alpakka.googlecloud.storage.scaladsl.{ GCStorage, GCStorageWiremockBase }
 import akka.stream.alpakka.testkit.scaladsl.LogCapturing
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
@@ -42,20 +42,18 @@ class GCStorageSinkSpec
 
     mock.simulate(
       mockTokenApi,
-      mockLargeFileUpload(firstChunkContent, secondChunkContent, chunkSize, Some(metadata))
-    )
+      mockLargeFileUpload(firstChunkContent, secondChunkContent, chunkSize, Some(metadata)))
 
-    //#upload
+    // #upload
     val sink =
       GCStorage.resumableUpload(bucketName, fileName, ContentTypes.`text/plain(UTF-8)`, chunkSize, metadata)
 
     val source = Source(
-      List(ByteString(firstChunkContent), ByteString(secondChunkContent))
-    )
+      List(ByteString(firstChunkContent), ByteString(secondChunkContent)))
 
     val result: Future[StorageObject] = source.runWith(sink)
 
-    //#upload
+    // #upload
 
     val storageObject: StorageObject = result.futureValue
 
@@ -72,8 +70,7 @@ class GCStorageSinkSpec
 
     mock.simulate(
       mockTokenApi,
-      mockLargeFileUploadFailure(firstChunkContent, secondChunkContent, chunkSize)
-    )
+      mockLargeFileUploadFailure(firstChunkContent, secondChunkContent, chunkSize))
 
     val sink =
       GCStorage.resumableUpload(bucketName, fileName, ContentTypes.`text/plain(UTF-8)`, chunkSize)
@@ -91,8 +88,7 @@ class GCStorageSinkSpec
 
     mock.simulate(
       mockTokenApi,
-      mockRewrite(rewriteBucketName)
-    )
+      mockRewrite(rewriteBucketName))
 
     // #rewrite
 
@@ -111,8 +107,7 @@ class GCStorageSinkSpec
 
     mock.simulate(
       mockTokenApi,
-      mockRewriteFailure(rewriteBucketName)
-    )
+      mockRewriteFailure(rewriteBucketName))
 
     val result = GCStorage.rewrite(bucketName, fileName, rewriteBucketName, fileName).run()
 

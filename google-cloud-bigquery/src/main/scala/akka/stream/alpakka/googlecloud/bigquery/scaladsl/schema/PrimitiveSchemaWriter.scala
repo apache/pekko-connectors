@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema
 
-import akka.stream.alpakka.googlecloud.bigquery.model.{TableFieldSchema, TableFieldSchemaMode, TableFieldSchemaType}
+import akka.stream.alpakka.googlecloud.bigquery.model.{ TableFieldSchema, TableFieldSchemaMode, TableFieldSchemaType }
 
 private[schema] final class PrimitiveSchemaWriter[T](`type`: TableFieldSchemaType) extends SchemaWriter[T] {
 

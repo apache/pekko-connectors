@@ -6,12 +6,12 @@ package akka.stream.alpakka.googlecloud.bigquery.model
 
 import akka.stream.alpakka.google.scaladsl.Paginated
 import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.{BigQueryRootJsonReader, BigQueryRootJsonWriter}
+import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.{ BigQueryRootJsonReader, BigQueryRootJsonWriter }
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation._
-import spray.json.{JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter}
+import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter }
 
-import java.{lang, util}
+import java.{ lang, util }
 
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
@@ -34,8 +34,8 @@ final case class TableDataListResponse[+T] private (totalRows: Long, pageToken: 
   @nowarn("msg=never used")
   @JsonCreator
   private def this(@JsonProperty(value = "totalRows", required = true) totalRows: String,
-                   @JsonProperty("pageToken") pageToken: String,
-                   @JsonProperty("rows") rows: util.List[T]) =
+      @JsonProperty("pageToken") pageToken: String,
+      @JsonProperty("rows") rows: util.List[T]) =
     this(totalRows.toLong, Option(pageToken), Option(rows).map(_.asScala.toList))
 
   def getTotalRows = totalRows
@@ -72,8 +72,7 @@ object TableDataListResponse {
     TableDataListResponse(totalRows, pageToken.asScala, rows.asScala.map(_.asScala.toList))
 
   implicit def reader[T <: AnyRef](
-      implicit reader: BigQueryRootJsonReader[T]
-  ): RootJsonReader[TableDataListResponse[T]] = {
+      implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[TableDataListResponse[T]] = {
     implicit val format = lift(reader)
     jsonFormat3(TableDataListResponse[T])
   }
@@ -92,9 +91,9 @@ object TableDataListResponse {
  */
 @JsonInclude(Include.NON_NULL)
 final case class TableDataInsertAllRequest[+T] private (skipInvalidRows: Option[Boolean],
-                                                        ignoreUnknownValues: Option[Boolean],
-                                                        templateSuffix: Option[String],
-                                                        rows: Seq[Row[T]]) {
+    ignoreUnknownValues: Option[Boolean],
+    templateSuffix: Option[String],
+    rows: Seq[Row[T]]) {
 
   @JsonIgnore def getSkipInvalidRows = skipInvalidRows.map(lang.Boolean.valueOf).asJava
   @JsonIgnore def getIgnoreUnknownValues = ignoreUnknownValues.map(lang.Boolean.valueOf).asJava
@@ -146,19 +145,17 @@ object TableDataInsertAllRequest {
    * @return a [[TableDataInsertAllRequest]]
    */
   def create[T](skipInvalidRows: util.Optional[lang.Boolean],
-                ignoreUnknownValues: util.Optional[lang.Boolean],
-                templateSuffix: util.Optional[String],
-                rows: util.List[Row[T]]) =
+      ignoreUnknownValues: util.Optional[lang.Boolean],
+      templateSuffix: util.Optional[String],
+      rows: util.List[Row[T]]) =
     TableDataInsertAllRequest(
       skipInvalidRows.asScala.map(_.booleanValue),
       ignoreUnknownValues.asScala.map(_.booleanValue),
       templateSuffix.asScala,
-      rows.asScala.toList
-    )
+      rows.asScala.toList)
 
   implicit def writer[T](
-      implicit writer: BigQueryRootJsonWriter[T]
-  ): RootJsonWriter[TableDataInsertAllRequest[T]] = {
+      implicit writer: BigQueryRootJsonWriter[T]): RootJsonWriter[TableDataInsertAllRequest[T]] = {
     implicit val format = lift(writer)
     implicit val rowFormat = jsonFormat2(Row[T])
     jsonFormat4(TableDataInsertAllRequest[T])

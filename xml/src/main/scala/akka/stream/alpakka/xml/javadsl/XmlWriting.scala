@@ -4,7 +4,7 @@
 
 package akka.stream.alpakka.xml.javadsl
 
-import java.nio.charset.{Charset, StandardCharsets}
+import java.nio.charset.{ Charset, StandardCharsets }
 
 import akka.NotUsed
 import akka.stream.alpakka.xml.ParseEvent
@@ -43,7 +43,7 @@ object XmlWriting {
    * @param xmlOutputFactory factory from which to get an XMLStreamWriter
    */
   def writer(charset: Charset,
-             xmlOutputFactory: XMLOutputFactory): akka.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
+      xmlOutputFactory: XMLOutputFactory): akka.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
     Flow.fromGraph(new impl.StreamingXmlWriter(charset, xmlOutputFactory)).asJava
 
 }

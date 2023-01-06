@@ -5,7 +5,7 @@
 package docs.scaladsl
 
 import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.model.{HttpMethods, HttpRequest, Uri}
+import akka.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import akka.stream.alpakka.elasticsearch.{
   ElasticsearchConnectionSettings,
   OpensearchApiVersion,
@@ -15,11 +15,11 @@ import akka.stream.alpakka.elasticsearch.{
   WriteMessage,
   WriteResult
 }
-import akka.stream.alpakka.elasticsearch.scaladsl.{ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource}
+import akka.stream.alpakka.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
 import akka.stream.alpakka.elasticsearch._
-import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.scaladsl.{ Sink, Source }
 import akka.testkit.TestKit
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import spray.json.jsonReader
 
 import scala.collection.immutable
@@ -29,8 +29,7 @@ import spray.json._
 class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils {
 
   private val connectionSettings: ElasticsearchConnectionSettings = OpensearchConnectionSettings(
-    "http://localhost:9203"
-  )
+    "http://localhost:9203")
   private val baseSourceSettings = OpensearchSourceSettings(connectionSettings).withApiVersion(OpensearchApiVersion.V1)
   private val baseWriteSettings = OpensearchWriteSettings(connectionSettings).withApiVersion(OpensearchApiVersion.V1)
 
@@ -50,13 +49,12 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
     "consume and publish Json documents" in {
       val indexName = "sink2"
 
-      //#run-jsobject
+      // #run-jsobject
       val copy = ElasticsearchSource
         .create(
           constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[spray.json.JsObject] =>
           val book: Book = jsonReader[Book].read(message.source)
           WriteMessage.createIndexMessage(message.id, book)
@@ -64,23 +62,21 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .runWith(
           ElasticsearchSink.create[Book](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
-      //#run-jsobject
+            settings = baseWriteSettings))
+      // #run-jsobject
 
       copy.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, indexName)
 
-      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue should contain allElementsOf Seq(
+      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
+        indexName).futureValue should contain allElementsOf Seq(
         "Akka Concurrency",
         "Akka in Action",
         "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
@@ -88,60 +84,54 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
     "consume and publish documents as specific type" in {
       val indexName = "sink2"
 
-      //#run-typed
+      // #run-typed
       val copy = ElasticsearchSource
         .typed[Book](
           constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[Book] =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .runWith(
           ElasticsearchSink.create[Book](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
-      //#run-typed
+            settings = baseWriteSettings))
+      // #run-typed
 
       copy.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, indexName)
 
-      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue should contain allElementsOf Seq(
+      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
+        indexName).futureValue should contain allElementsOf Seq(
         "Akka Concurrency",
         "Akka in Action",
         "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
   "ElasticsearchFlow" should {
     "store documents and pass failed documents to downstream" in {
       val indexName = "sink3"
-      //#run-flow
+      // #run-flow
       val copy = ElasticsearchSource
         .typed[Book](
           constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[Book] =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .via(
           ElasticsearchFlow.create[Book](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .runWith(Sink.seq)
-      //#run-flow
+      // #run-flow
 
       // Assert no errors
       copy.futureValue.filter(!_.success) shouldBe empty
@@ -154,8 +144,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
 
     "store properly formatted JSON from Strings" in {
@@ -166,15 +155,11 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         immutable.Seq(
           WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.toString()),
           WriteMessage.createIndexMessage("2", Book("Faust").toJson.toString()),
-          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.toString())
-        )
-      ).via(
-          ElasticsearchFlow.create(
-            constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings,
-            StringMessageWriter
-          )
-        )
+          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.toString()))).via(
+        ElasticsearchFlow.create(
+          constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
+          settings = baseWriteSettings,
+          StringMessageWriter))
         .runWith(Sink.seq)
       // #string
 
@@ -185,13 +170,12 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue.sorted shouldEqual Seq(
         "Das Parfum",
         "Die unendliche Geschichte",
-        "Faust"
-      )
+        "Faust")
     }
 
     "kafka-example - store documents and pass Responses with passThrough" in {
 
-      //#kafka-example
+      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // After we've written them to Elastic, we want
       // to commit the offset to Kafka
@@ -202,8 +186,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
         KafkaMessage(Book("Book 2"), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3"), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3"), KafkaOffset(2)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -222,9 +205,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .via( // write to elastic
           ElasticsearchFlow.createWithPassThrough[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -233,12 +214,13 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .runWith(Sink.ignore)
 
       kafkaToOs.futureValue shouldBe Done
-      //#kafka-example
+      // #kafka-example
       flushAndRefresh(connectionSettings, indexName)
 
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
-      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
+        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
         .map(_.book.title)
     }
 
@@ -254,8 +236,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
         KafkaMessage(Book("Book 2"), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3"), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3"), KafkaOffset(2)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -275,9 +256,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .via( // write to elastic
           ElasticsearchFlow.createBulk[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map(_.map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -291,7 +270,8 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
 
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
-      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
+        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
         .map(_.book.title)
     }
 
@@ -310,8 +290,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         KafkaMessage(Book("Book 2"), KafkaOffset(2)),
         KafkaMessage(Book("Book B", shouldSkip = Some(true)), KafkaOffset(3)),
         KafkaMessage(Book("Book 3"), KafkaOffset(4)),
-        KafkaMessage(Book("Book C", shouldSkip = Some(true)), KafkaOffset(5))
-      )
+        KafkaMessage(Book("Book C", shouldSkip = Some(true)), KafkaOffset(5)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -333,9 +312,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .via( // write to elastic
           ElasticsearchFlow.createWithPassThrough[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -349,7 +326,8 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
 
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2, 3, 4, 5)
-      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+      readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
+        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
         .filterNot(_.book.shouldSkip.getOrElse(false))
         .map(_.book.title)
     }
@@ -366,8 +344,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1", shouldSkip = Some(true)), KafkaOffset(0)),
         KafkaMessage(Book("Book 2", shouldSkip = Some(true)), KafkaOffset(1)),
-        KafkaMessage(Book("Book 3", shouldSkip = Some(true)), KafkaOffset(2))
-      )
+        KafkaMessage(Book("Book 3", shouldSkip = Some(true)), KafkaOffset(2)))
 
       var committedOffsets = Vector[KafkaOffset]()
 
@@ -391,9 +368,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .via( // write to elastic
           ElasticsearchFlow.createWithPassThrough[Book, KafkaOffset](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
+            settings = baseWriteSettings))
         .map { result =>
           if (!result.success) throw new Exception("Failed to write message to elastic")
           // Commit to kafka
@@ -412,25 +387,22 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
 
     "handle multiple types of operations correctly" in {
       val indexName = "sink8"
-      //#multiple-operations
+      // #multiple-operations
       val requests = List[WriteMessage[Book, NotUsed]](
         WriteMessage.createIndexMessage(id = "00001", source = Book("Book 1")),
         WriteMessage.createUpsertMessage(id = "00002", source = Book("Book 2")),
         WriteMessage.createUpsertMessage(id = "00003", source = Book("Book 3")),
         WriteMessage.createUpdateMessage(id = "00004", source = Book("Book 4")),
         WriteMessage.createCreateMessage(id = "00005", source = Book("Book 5")),
-        WriteMessage.createDeleteMessage(id = "00002")
-      )
+        WriteMessage.createDeleteMessage(id = "00002"))
 
       val writeResults = Source(requests)
         .via(
           ElasticsearchFlow.create[Book](
             constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
-            baseWriteSettings
-          )
-        )
+            baseWriteSettings))
         .runWith(Sink.seq)
-      //#multiple-operations
+      // #multiple-operations
 
       val results = writeResults.futureValue
       results should have size requests.size
@@ -444,32 +416,29 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       val readBooks = ElasticsearchSource(
         constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
         """{"match_all": {}}""",
-        baseSourceSettings
-      ).map { message =>
-          message.source
-        }
+        baseSourceSettings).map { message =>
+        message.source
+      }
         .runWith(Sink.seq)
 
       // Docs should contain both columns
       readBooks.futureValue.sortBy(_.fields("title").compactPrint) shouldEqual Seq(
         Book("Book 1").toJson,
         Book("Book 3").toJson,
-        Book("Book 5").toJson
-      )
+        Book("Book 5").toJson)
     }
 
     "use indexName supplied in message if present" in {
       // Copy source/_doc to sink2/_doc through typed stream
 
-      //#custom-index-name-example
+      // #custom-index-name-example
       val customIndexName = "custom-index"
 
       val writeCustomIndex = ElasticsearchSource
         .typed[Book](
           constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
           query = """{"match_all": {}}""",
-          settings = baseSourceSettings
-        )
+          settings = baseSourceSettings)
         .map { message: ReadResult[Book] =>
           WriteMessage
             .createIndexMessage(message.id, message.source)
@@ -478,10 +447,8 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .runWith(
           ElasticsearchSink.create[Book](
             constructElasticsearchParams("this-is-not-the-index-we-are-using", "_doc", OpensearchApiVersion.V1),
-            settings = baseWriteSettings
-          )
-        )
-      //#custom-index-name-example
+            settings = baseWriteSettings))
+      // #custom-index-name-example
 
       writeCustomIndex.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, customIndexName)
@@ -492,8 +459,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
-        "Scala for Spark in Production"
-      )
+        "Scala for Spark in Production")
     }
   }
 
@@ -512,8 +478,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       val docs = List(
         TestDoc("1", "a1", Some("b1"), "c1"),
         TestDoc("2", "a2", Some("b2"), "c2"),
-        TestDoc("3", "a3", Some("b3"), "c3")
-      )
+        TestDoc("3", "a3", Some("b3"), "c3"))
 
       // insert new documents
       val writes = Source(docs)
@@ -523,15 +488,13 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
         .via(
           ElasticsearchFlow.create[TestDoc](
             constructElasticsearchParams(indexName, typeName, OpensearchApiVersion.V1),
-            baseWriteSettings.withBufferSize(5)
-          )
-        )
+            baseWriteSettings.withBufferSize(5)))
         .runWith(Sink.seq)
 
       writes.futureValue.filter(!_.success) shouldBe empty
       flushAndRefresh(connectionSettings, indexName)
 
-      //#custom-search-params
+      // #custom-search-params
       // Search for docs and ask elastic to only return some fields
 
       val readWithSearchParameters = ElasticsearchSource
@@ -539,15 +502,13 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
           constructElasticsearchParams(indexName, typeName, OpensearchApiVersion.V1),
           searchParams = Map(
             "query" -> """ {"match_all": {}} """,
-            "_source" -> """ ["id", "a", "c"] """
-          ),
-          baseSourceSettings
-        )
+            "_source" -> """ ["id", "a", "c"] """),
+          baseSourceSettings)
         .map { message =>
           message.source
         }
         .runWith(Sink.seq)
-      //#custom-search-params
+      // #custom-search-params
 
       assert(readWithSearchParameters.futureValue.toList.sortBy(_.id) == docs.map(_.copy(b = None)))
 

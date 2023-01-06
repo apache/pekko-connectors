@@ -28,10 +28,8 @@ final class InfluxDbReadSettings private (val precision: TimeUnit) {
   def withPrecision(precision: TimeUnit): InfluxDbReadSettings = copy(precision = precision)
 
   private def copy(
-      precision: TimeUnit
-  ): InfluxDbReadSettings = new InfluxDbReadSettings(
-    precision = precision
-  )
+      precision: TimeUnit): InfluxDbReadSettings = new InfluxDbReadSettings(
+    precision = precision)
 
   override def toString: String =
     s"""InfluxDbReadSettings(precision=$precision)"""

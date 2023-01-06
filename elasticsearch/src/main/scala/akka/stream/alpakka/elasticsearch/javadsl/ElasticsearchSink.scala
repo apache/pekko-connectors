@@ -8,7 +8,7 @@ import java.util.concurrent.CompletionStage
 
 import akka.stream.alpakka.elasticsearch._
 import akka.stream.javadsl._
-import akka.{Done, NotUsed}
+import akka.{ Done, NotUsed }
 import com.fasterxml.jackson.databind.ObjectMapper
 
 /**
@@ -22,8 +22,7 @@ object ElasticsearchSink {
   def create[T](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper
-  ): akka.stream.javadsl.Sink[WriteMessage[T, NotUsed], CompletionStage[Done]] =
+      objectMapper: ObjectMapper): akka.stream.javadsl.Sink[WriteMessage[T, NotUsed], CompletionStage[Done]] =
     ElasticsearchFlow
       .create(elasticsearchParams, settings, objectMapper)
       .toMat(Sink.ignore[WriteResult[T, NotUsed]](), Keep.right[NotUsed, CompletionStage[Done]])

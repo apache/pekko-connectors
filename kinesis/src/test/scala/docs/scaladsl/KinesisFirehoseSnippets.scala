@@ -7,13 +7,13 @@ package docs.scaladsl
 import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.alpakka.kinesisfirehose.KinesisFirehoseFlowSettings
-import akka.stream.alpakka.kinesisfirehose.scaladsl.{KinesisFirehoseFlow, KinesisFirehoseSink}
-import akka.stream.scaladsl.{Flow, Sink}
-import software.amazon.awssdk.services.firehose.model.{PutRecordBatchResponseEntry, Record}
+import akka.stream.alpakka.kinesisfirehose.scaladsl.{ KinesisFirehoseFlow, KinesisFirehoseSink }
+import akka.stream.scaladsl.{ Flow, Sink }
+import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchResponseEntry, Record }
 
 object KinesisFirehoseSnippets {
 
-  //#init-client
+  // #init-client
   import com.github.matsluni.akkahttpspi.AkkaHttpClient
   import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 
@@ -29,9 +29,9 @@ object KinesisFirehoseSnippets {
       .build()
 
   system.registerOnTermination(amazonKinesisFirehoseAsync.close())
-  //#init-client
+  // #init-client
 
-  //#flow-settings
+  // #flow-settings
   val flowSettings = KinesisFirehoseFlowSettings
     .create()
     .withParallelism(1)
@@ -40,18 +40,18 @@ object KinesisFirehoseSnippets {
     .withMaxBytesPerSecond(4000000)
 
   val defaultFlowSettings = KinesisFirehoseFlowSettings.Defaults
-  //#flow-settings
+  // #flow-settings
 
-  //#flow-sink
+  // #flow-sink
   val flow1: Flow[Record, PutRecordBatchResponseEntry, NotUsed] = KinesisFirehoseFlow("myStreamName")
 
   val flow2: Flow[Record, PutRecordBatchResponseEntry, NotUsed] = KinesisFirehoseFlow("myStreamName", flowSettings)
 
   val sink1: Sink[Record, NotUsed] = KinesisFirehoseSink("myStreamName")
   val sink2: Sink[Record, NotUsed] = KinesisFirehoseSink("myStreamName", flowSettings)
-  //#flow-sink
+  // #flow-sink
 
-  //#error-handling
+  // #error-handling
   val flowWithErrors: Flow[Record, PutRecordBatchResponseEntry, NotUsed] = KinesisFirehoseFlow("streamName")
     .map { response =>
       if (response.errorCode() != null) {
@@ -59,6 +59,6 @@ object KinesisFirehoseSnippets {
       }
       response
     }
-  //#error-handling
+  // #error-handling
 
 }

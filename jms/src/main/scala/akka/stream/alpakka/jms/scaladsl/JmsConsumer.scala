@@ -96,7 +96,7 @@ object JmsConsumer {
    * Completes: when all messages have been read
    */
   def browse(settings: JmsBrowseSettings): Source[javax.jms.Message, NotUsed] = settings.destination match {
-    case None => throw new IllegalArgumentException(noBrowseDestination(settings))
+    case None              => throw new IllegalArgumentException(noBrowseDestination(settings))
     case Some(destination) => Source.fromGraph(new JmsBrowseStage(settings, destination))
   }
 

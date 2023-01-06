@@ -10,10 +10,10 @@ import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import akka.Done
-import akka.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
+import akka.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import akka.annotation.InternalStableApi
 import akka.event.Logging
-import akka.stream.alpakka.cassandra.{CassandraSessionSettings, CqlSessionProvider}
+import akka.stream.alpakka.cassandra.{ CassandraSessionSettings, CqlSessionProvider }
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.Config
 
@@ -82,24 +82,24 @@ final class CassandraSessionRegistry(system: ExtendedActorSystem) extends Extens
    * that is different from the ActorSystem's config section for the `configPath`.
    */
   @InternalStableApi private[akka] def sessionFor(settings: CassandraSessionSettings,
-                                                  sessionProviderConfig: Config): CassandraSession = {
+      sessionProviderConfig: Config): CassandraSession = {
     val key = sessionKey(settings)
     sessions.computeIfAbsent(key, _ => startSession(settings, key, sessionProviderConfig))
   }
 
   private def startSession(settings: CassandraSessionSettings,
-                           key: SessionKey,
-                           sessionProviderConfig: Config): CassandraSession = {
+      key: SessionKey,
+      sessionProviderConfig: Config): CassandraSession = {
     val sessionProvider = CqlSessionProvider(system, sessionProviderConfig)
     val log = Logging(system, classOf[CassandraSession])
     val executionContext = system.dispatchers.lookup(sessionProviderConfig.getString("session-dispatcher"))
     new CassandraSession(system,
-                         sessionProvider,
-                         executionContext,
-                         log,
-                         metricsCategory = settings.metricsCategory,
-                         init = settings.init.getOrElse(_ => Future.successful(Done)),
-                         onClose = () => sessions.remove(key))
+      sessionProvider,
+      executionContext,
+      log,
+      metricsCategory = settings.metricsCategory,
+      init = settings.init.getOrElse(_ => Future.successful(Done)),
+      onClose = () => sessions.remove(key))
   }
 
   /**
