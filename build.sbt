@@ -99,14 +99,6 @@ TaskKey[Unit]("verifyCodeFmt") := {
     throw new MessageOnlyException(
       "Unformatted Java code found. Please run 'javafmtAll' and commit the reformatted code")
   }
-  scalafmtCheckAll.all(ScopeFilter(inAnyProject)).result.value.toEither.left.foreach { _ =>
-    throw new MessageOnlyException(
-      "Unformatted Scala code found. Please run 'scalafmtAll' and commit the reformatted code")
-  }
-  (Compile / scalafmtSbtCheck).result.value.toEither.left.foreach { _ =>
-    throw new MessageOnlyException(
-      "Unformatted sbt code found. Please run 'scalafmtSbt' and commit the reformatted code")
-  }
 }
 
 addCommandAlias("verifyCodeStyle", "headerCheck; verifyCodeFmt")
