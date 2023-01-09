@@ -22,16 +22,17 @@ object Common extends AutoPlugin {
 
   override def globalSettings = Seq(
     organization := "org.apache.pekko",
-    organizationName := "Lightbend Inc.",
-    organizationHomepage := Some(url("https://www.lightbend.com/")),
-    homepage := Some(url("https://doc.akka.io/docs/alpakka/current")),
-    scmInfo := Some(ScmInfo(url("https://github.com/akka/alpakka"), "git@github.com:akka/alpakka.git")),
+    organizationName := "Apache Pekko",
+    organizationHomepage := Some(url("https://www.apache.org/")),
+    homepage := Some(url("https://pekko.apache.org/")),
+    scmInfo := Some(ScmInfo(url("https://github.com/apache/incubator-pekko-connectors"),
+      "git@github.com:apache/incubator-pekko-connectors.git")),
     developers += Developer("contributors",
       "Contributors",
-      "https://gitter.im/akka/dev",
-      url("https://github.com/akka/alpakka/graphs/contributors")),
+      "",
+      url("https://github.com/apache/incubator-pekko-connectors/graphs/contributors")),
     licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0"))),
-    description := "Alpakka is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Akka.",
+    description := "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Pekko.",
     fatalWarnings := true,
     mimaReportSignatureProblems := true,
     // Ignore unused keys which affect documentation
@@ -58,7 +59,7 @@ object Common extends AutoPlugin {
     }),
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
-      "Alpakka",
+      "Apache Pekko Connectors",
       "-doc-version",
       version.value,
       "-sourcepath",
@@ -73,7 +74,7 @@ object Common extends AutoPlugin {
       Seq(
         "-doc-source-url", {
           val branch = if (isSnapshot.value) "master" else s"v${version.value}"
-          s"https://github.com/akka/alpakka/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
+          s"https://github.com/apache/incubator-pekko-connectors/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
         },
         "-doc-canonical-base-url",
         "https://doc.akka.io/api/alpakka/current/"),
@@ -112,7 +113,6 @@ object Common extends AutoPlugin {
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-F", "4"),
     scalafmtOnCompile := false,
     javafmtOnCompile := false,
-    headerLicense := Some(
-      HeaderLicense.Custom("Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>")),
-    sonatypeProfileName := "com.lightbend")
+    headerLicense := None,
+    sonatypeProfileName := "org.apache.pekko")
 }
