@@ -1,16 +1,18 @@
-# Welcome! Thank you for contributing to Alpakka!
+# Welcome! Thank you for contributing to Apache Pekko Connectors!
 
 We follow the standard GitHub [fork & pull](https://help.github.com/articles/using-pull-requests/#fork--pull) approach to pull requests. Just fork the official repo, develop in a branch, and submit a PR!
 
-You're always welcome to submit your PR straight away and start the discussion (without reading the rest of this wonderful doc, or the README.md). The goal of these notes is to make your experience contributing to Alpakka as smooth and pleasant as possible. We're happy to guide you through the process once you've submitted your PR.
+You're always welcome to submit your PR straight away and start the discussion (without reading the rest of this wonderful doc, or the README.md). The goal of these notes is to make your experience contributing to Pekko Connectors as smooth and pleasant as possible. We're happy to guide you through the process once you've submitted your PR.
 
-# The Akka Community
+# The Pekko Community
 
-In case of questions about the contribution process or for discussion of specific issues please visit the [akka/dev gitter chat](https://gitter.im/akka/dev).
+If you have questions about the contribution process or discuss specific issues, please interact with the community using the following resources.
 
-You may also check out these [other resources](https://akka.io/get-involved/).
+- [GitHub discussions](https://github.com/apache/incubator-pekko/discussions): for questions and general discussion.
+- [Pekko dev mailing list](https://lists.apache.org/list.html?dev@pekko.apache.org): for Pekko development discussions.
+- [GitHub issues](https://github.com/apache/incubator-pekko/issues): for bug reports and feature requests. Please search the existing issues before creating new ones. If you are unsure whether you have found a bug, consider asking in GitHub discussions or the mailing list first.
 
-# Contributing to Alpakka
+# Contributing to Pekko Connectors
 
 ## General Workflow
 
@@ -29,40 +31,10 @@ This is the process for committing code into main.
 
 1. If the branch merge conflicts with its target, rebase your branch onto the target branch.
 
-## Alpakka specific advice
+## Pekko Connectors specific advice
 
-We've collected a few notes on how we would like Alpakka modules to be designed based on what has evolved so far.
+We've collected a few notes on how we would like Pekko Connectors modules to be designed based on what has evolved so far.
 Please have a look at our [contributor advice](contributor-advice.md).
-
-
-## Binary compatibility (MiMa)
-
-Binary compatibility rules and guarantees are described in depth in the [Binary Compatibility Rules
-](https://doc.akka.io/docs/akka/snapshot/common/binary-compatibility-rules.html) section of the Akka documentation.
-
-Akka projects use [MiMa](https://github.com/lightbend/mima) to validate binary compatibility of incoming pull requests. If your PR fails due to binary compatibility issues, you may see an error like this:
-
-```
-[info] akka-stream: found 1 potential binary incompatibilities while checking against com.typesafe.akka:akka-stream_2.12:2.4.2  (filtered 222)
-[error]  * method foldAsync(java.lang.Object,scala.Function2)akka.stream.scaladsl.FlowOps in trait akka.stream.scaladsl.FlowOps is present only in current version
-[error]    filter with: ProblemFilters.exclude[ReversedMissingMethodProblem]("akka.stream.scaladsl.FlowOps.foldAsync")
-```
-
-In such situations, it's good to consult with a core team member about whether the violation can be safely ignored or if it would indeed
-break binary compatibility. If the violation can be ignored add exclude statements from the MiMa output to
-a new file named `<module>/src/main/mima-filters/<last-version>.backwards.excludes/<pr-or-issue>-<issue-number>-<description>.excludes`,
-e.g. `s3/src/main/mima-filters/1.1.x.backwards.excludes/pr-12345-rename-internal-classes.excludes`. Make sure to add a comment
-in the file that describes briefly why the incompatibility can be ignored.
-
-Situations when it may be fine to ignore a MiMa issued warning include:
-
-- if it is touching any class marked as `private[alpakka]`, `@InternalApi`, `/** INTERNAL API*/` or similar markers
-- if it is concerning internal classes (often recognisable by package names like `impl`, `internal` etc.)
-- if it is adding API to classes / traits which are only meant for extension by Akka itself, i.e. should not be extended by end-users (often marked as `@DoNotInherit` or `sealed`)
-- other tricky situations
-
-The binary compatibility of the current changes can be checked by running `sbt +mimaReportBinaryIssues`.
-
 
 ## Pull Request Requirements
 
