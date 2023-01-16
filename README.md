@@ -1,4 +1,4 @@
-Alpakka [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)
+Apache Pekko Connectors [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)
 =======
 
 [scaladex]:              https://index.scala-lang.org/apache/incubator-pekko-connectors
@@ -8,7 +8,7 @@ Alpakka [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central
 
 Systems don't come alone. In the modern world of microservices and cloud deployment, new components must interact with legacy systems, making integration an important key to success. Reactive Streams give us a technology-independent tool to let these heterogeneous systems communicate without overwhelming each other.
 
-The Alpakka project is an open source initiative to implement stream-aware, reactive, integration pipelines for Java and Scala. It is built on top of [Akka Streams](https://doc.akka.io/docs/akka/current/stream/index.html), and has been designed from the ground up to understand streaming natively and provide a DSL for reactive and stream-oriented programming, with built-in support for backpressure. Akka Streams is a [Reactive Streams](http://www.reactive-streams.org/) and JDK 9+ [java.util.concurrent.Flow](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/Flow.html)-compliant implementation and therefore [fully interoperable](https://doc.akka.io/docs/akka/current/general/stream/stream-design.html#interoperation-with-other-reactive-streams-implementations) with other implementations.
+The Apache Pekko Connectors project is an open source initiative to implement stream-aware, reactive, integration pipelines for Java and Scala. It is built on top of Pekko Streams, and has been designed from the ground up to understand streaming natively and provide a DSL for reactive and stream-oriented programming, with built-in support for backpressure. Pekko Streams is a [Reactive Streams](http://www.reactive-streams.org/) and JDK 9+ [java.util.concurrent.Flow](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/Flow.html)-compliant implementation and therefore [fully interoperable](https://doc.akka.io/docs/akka/current/general/stream/stream-design.html#interoperation-with-other-reactive-streams-implementations) with other implementations.
 
 Pekko connectors is a fork of [Alpakka](https://github.com/akka/alpakka) 4.0.0, prior to the Akka project's adoption of the Business Source License.
 
@@ -17,7 +17,7 @@ Documentation
 
 **TODO add documentation links**
 
-To keep up with the latest Alpakka releases check out [Pekko connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
+To keep up with the latest releases check out [Pekko connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
 
 Community
 ---------
@@ -33,7 +33,7 @@ Contributing
 
 Contributions are very welcome. If you have an idea on how to improve Pekko, don't hesitate to create an issue or submit a pull request.
 
-See [CONTRIBUTING.md](https://github.com/apache/incubator-pekko/blob/main/CONTRIBUTING.md) for details on the development workflow and how to create your pull request.
+See [CONTRIBUTING.md](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md) for details on the development workflow and how to create your pull request.
 
 Code of Conduct
 ---------------
@@ -48,6 +48,6 @@ Apache Pekko is available under the Apache License, version 2.0. See [LICENSE](h
 Caveat Emptor
 -------------
 
-Alpakka components are not always binary compatible between releases. API changes that are not backward compatible might be introduced as we refine and simplify based on your feedback. A module may be dropped in any release without prior deprecation. If not stated otherwise, the [Lightbend subscription](https://www.lightbend.com/subscription) does *not* cover support for Alpakka modules.
+Pekko Connectors components are not always binary compatible between releases. API changes that are not backward compatible might be introduced as we refine and simplify based on your feedback. A module may be dropped in any release without prior deprecation. 
 
-Our goal is to improve the stability and test coverage for Alpakka APIs over time.
+Our goal is to improve the stability and test coverage for Pekko Connectors APIs over time.
