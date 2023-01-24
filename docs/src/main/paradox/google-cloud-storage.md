@@ -13,19 +13,19 @@ This connector communicates to Cloud Storage via HTTP requests.
   group=org.apache.pekko
   artifact=pekko-connectors-google-cloud-storage_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
+  group2=org.apache.pekko
   artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  symbol3=AkkaHttpVersion
+  version2=PekkoVersion
+  symbol3=PekkoHttpVersion
   value3=$akka-http.version$
-  group3=com.typesafe.akka
+  group3=org.apache.pekko
   artifact3=akka-http_$scala.binary.version$
-  version3=AkkaHttpVersion
-  group4=com.typesafe.akka
+  version3=PekkoHttpVersion
+  group4=org.apache.pekko
   artifact4=akka-http-spray-json_$scala.binary.version$
-  version4=AkkaHttpVersion
+  version4=PekkoHttpVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.

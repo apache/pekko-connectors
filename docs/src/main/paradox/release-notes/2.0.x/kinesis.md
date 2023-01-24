@@ -9,7 +9,7 @@
 ## 2.0.1
 
 - Kinesis: Construction safe API [#2331](https://github.com/akka/alpakka/issues/2331) by [@vaslabs](https://github.com/vaslabs)
-- Update AwsSpiAkkaHttpVersion to 0.0.9 [#2328](https://github.com/akka/alpakka/issues/2328) by [@matsluni](https://github.com/matsluni)
+- Update AwsSpiPekkoHttpVersion to 0.0.9 [#2328](https://github.com/akka/alpakka/issues/2328) by [@matsluni](https://github.com/matsluni)
 - Kinesis: code layout [#2300](https://github.com/akka/alpakka/issues/2300) by [@YikSanChan](https://github.com/YikSanChan)
 - Kinesis: Avoid Any in KinesisSchedulerSourceStage [#2297](https://github.com/akka/alpakka/issues/2297) by [@YikSanChan](https://github.com/YikSanChan)
 - Kinesis: Small cleanup [#2299](https://github.com/akka/alpakka/issues/2299) by [@YikSanChan](https://github.com/YikSanChan)

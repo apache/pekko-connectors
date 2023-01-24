@@ -17,14 +17,14 @@ Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with t
   group=org.apache.pekko
   artifact=pekko-connectors-google-cloud-bigquery-storage_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
+  group2=org.apache.pekko
   artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  group3=com.typesafe.akka
+  version2=PekkoVersion
+  group3=org.apache.pekko
   artifact3=akka-discovery_$scala.binary.version$
-  version3=AkkaVersion
+  version3=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
