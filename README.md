@@ -10,14 +10,14 @@ Systems don't come alone. In the modern world of microservices and cloud deploym
 
 The Apache Pekko Connectors project is an open source initiative to implement stream-aware, reactive, integration pipelines for Java and Scala. It is built on top of Pekko Streams, and has been designed from the ground up to understand streaming natively and provide a DSL for reactive and stream-oriented programming, with built-in support for backpressure. Pekko Streams is a [Reactive Streams](http://www.reactive-streams.org/) and JDK 9+ [java.util.concurrent.Flow](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/Flow.html)-compliant implementation and therefore [fully interoperable](https://doc.akka.io/docs/akka/current/general/stream/stream-design.html#interoperation-with-other-reactive-streams-implementations) with other implementations.
 
-Pekko connectors is a fork of [Alpakka](https://github.com/akka/alpakka) 4.0.0, prior to the Akka project's adoption of the Business Source License.
+Pekko Connectors is a fork of [Alpakka](https://github.com/akka/alpakka) 4.0.0, prior to the Akka project's adoption of the Business Source License.
 
 Documentation
 -------------
 
 **TODO add documentation links**
 
-To keep up with the latest releases check out [Pekko connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
+To keep up with the latest releases check out [Pekko Connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko Connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
 
 Community
 ---------
@@ -25,7 +25,7 @@ Community
 You can join these forums and chats to discuss and ask Pekko and Pekko connector related questions:
 
 - [GitHub discussions](https://github.com/apache/incubator-pekko/discussions): for questions and general discussion.
-- [Pekko dev mailing list](https://lists.apache.org/list.html?dev@pekko.apache.org): for Pekko connectors development discussions.
+- [Pekko dev mailing list](https://lists.apache.org/list.html?dev@pekko.apache.org): for Pekko Connectors development discussions.
 - [GitHub issues](https://github.com/apache/incubator-pekko-connectors/issues): for bug reports and feature requests. Please search the existing issues before creating new ones. If you are unsure whether you have found a bug, consider asking in GitHub discussions or the mailing list first.
 
 Contributing
