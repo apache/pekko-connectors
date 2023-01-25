@@ -1,6 +1,6 @@
 # Elasticsearch
 
-The Alpakka Elasticsearch connector provides Akka Streams integration for Elasticsearch.
+The Apache Pekko Connectors Elasticsearch connector provides Akka Streams integration for Elasticsearch.
 
 For more information about Elasticsearch, please visit the [Elasticsearch documentation](https://www.elastic.co/guide/index.html).
 

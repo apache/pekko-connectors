@@ -34,7 +34,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Configuration
 
-The Storage connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The Storage connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 Additional Storage-specific configuration settings can be found in its own @github[reference.conf](/google-cloud-storage/src/main/resources/reference.conf).
 
 ## Store a file in Google Cloud Storage

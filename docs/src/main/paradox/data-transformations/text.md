@@ -6,7 +6,7 @@ as conversion of the character set in binary text data in the form of ByteString
 
 The main use case for these flows is the transcoding of text read from a
 source with a certain character set, which may not be usable with other flows
-or sinks. For example may CSV data arrive in UTF-16 encoding, but the Alpakka CSV
+or sinks. For example may CSV data arrive in UTF-16 encoding, but the Apache Pekko Connectors CSV
 parser does only support UTF-8.
 
 @@project-info{ projectId="text" }

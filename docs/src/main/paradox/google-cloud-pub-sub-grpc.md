@@ -8,7 +8,7 @@ Further information at the official [Google Cloud documentation website](https:/
 
 This connector communicates to Pub/Sub via the gRPC protocol. The integration between Akka Stream and gRPC is handled by
 @extref[Akka gRPC $akka-grpc.version$](akka-grpc:). For a connector that uses HTTP for the communication, take a
-look at the alternative @ref[Alpakka Google Cloud Pub/Sub](google-cloud-pub-sub.md) connector.
+look at the alternative @ref[Apache Pekko Connectors Google Cloud Pub/Sub](google-cloud-pub-sub.md) connector.
 
 @@project-info{ projectId="google-cloud-pub-sub-grpc" }
 
@@ -45,7 +45,7 @@ You can not use a different version of Akka gRPC within the same JVM instance.
 
 ## Build setup
 
-The Alpakka Google Cloud Pub/Sub gRPC library contains the classes generated from [Google's protobuf specification](https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/).
+The Apache Pekko Connectors Google Cloud Pub/Sub gRPC library contains the classes generated from [Google's protobuf specification](https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/).
 
 @@@note { title="ALPN on JDK 8" }
 
@@ -59,7 +59,7 @@ yourself, but we recommend upgrading.
 
 ## Configuration
 
-The Pub/Sub gRPC connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The Pub/Sub gRPC connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 Additional Pub/Sub-specific configuration settings can be found in its own @github[reference.conf](/google-cloud-pub-sub-grpc/src/main/resources/reference.conf).
 
 The defaults can be changed (for example when testing against the emulator) by tweaking the reference configuration:

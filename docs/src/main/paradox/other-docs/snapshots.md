@@ -4,7 +4,7 @@
 [snapshots]:        https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/pekko-connectors-csv_2.13/
 
 Snapshots are published to the Sonatype Snapshot repository after every successful build on master.
-Add the following to your project build definition to resolve Alpakka snapshots:
+Add the following to your project build definition to resolve Apache Pekko Connectors snapshots:
 
 ## Configure repository
 
@@ -46,4 +46,4 @@ The [snapshot documentation](https://doc.akka.io/docs/alpakka/snapshot/) is upda
 
 Latest published snapshot version is [![snapshots-badge][]][snapshots]
 
-The snapshot repository is cleaned from time to time with no further notice. Check [Sonatype snapshots Alpakka Kafka files](https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/) to see what versions are currently available.
+The snapshot repository is cleaned from time to time with no further notice. Check [Sonatype snapshots Apache Pekko Connectors Kafka files](https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/) to see what versions are currently available.

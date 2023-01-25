@@ -10,7 +10,7 @@ Couchbase provides client protocol compatibility with memcached, but adds disk p
 
 @@@
 
-Alpakka Couchbase allows you to read and write to Couchbase. You can query a bucket from CouchbaseSource using N1QL queries or reading by document ID. Couchbase connector uses @extref[Couchbase Java SDK](couchbase:start-using-sdk.html) version @var[couchbase.version] behind the scenes.
+Apache Pekko Connectors Couchbase allows you to read and write to Couchbase. You can query a bucket from CouchbaseSource using N1QL queries or reading by document ID. Couchbase connector uses @extref[Couchbase Java SDK](couchbase:start-using-sdk.html) version @var[couchbase.version] behind the scenes.
 
 The Couchbase connector supports all document formats which are supported by the SDK. All those formats use the @java[`Document<T>`]@scala[`Document[T]`] interface and this is the level of abstraction that this connector is using.
 
@@ -37,7 +37,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 # Overview
 
-Alpakka Couchbase offers both @ref:[Akka Streams APIs](#reading-from-couchbase-in-akka-streams) and a more @ref:[direct API](#using-couchbasesession-directly) to access Couchbase:
+Apache Pekko Connectors Couchbase offers both @ref:[Akka Streams APIs](#reading-from-couchbase-in-akka-streams) and a more @ref:[direct API](#using-couchbasesession-directly) to access Couchbase:
 
 * @apidoc[CouchbaseSession] offers a direct API for one-off operations
 * @apidoc[CouchbaseSessionRegistry$] is an Akka extension to keep track and share `CouchbaseSession`s within an `ActorSystem`

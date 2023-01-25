@@ -8,7 +8,7 @@ For more information about OrientDB please visit the [official documentation](ht
 
 @@@
 
-The Alpakka OrientDB connector provides Akka Stream sources and sinks for OrientDB.
+The Apache Pekko Connectors OrientDB connector provides Akka Stream sources and sinks for OrientDB.
 
 
 @@project-info{ projectId="orientdb" }

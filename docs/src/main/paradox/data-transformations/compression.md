@@ -9,4 +9,4 @@ Use @apidoc[Compression](Compression$) as described in the Akka Stream documenta
 
 ### ZIP
 
-@ref[Alpakka File](../file.md#zip-archive) supports creating flows in ZIP-format.
+@ref[Apache Pekko Connectors File](../file.md#zip-archive) supports creating flows in ZIP-format.

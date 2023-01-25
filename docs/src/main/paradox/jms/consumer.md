@@ -1,6 +1,6 @@
 # Consumer
 
-The Alpakka JMS connector offers consuming JMS messages from topics or queues:
+The Apache Pekko Connectors JMS connector offers consuming JMS messages from topics or queues:
 
 * Read `javax.jms.Message`s from an Akka Streams source 
 * Allow for client acknowledgement to the JMS broker 
@@ -27,7 +27,7 @@ Java
 
 ## Configure JMS consumers
 
-To connect to the JMS broker, first define an appropriate @javadoc[javax.jms.ConnectionFactory](javax.jms.ConnectionFactory). The Alpakka tests and all examples use Active MQ.
+To connect to the JMS broker, first define an appropriate @javadoc[javax.jms.ConnectionFactory](javax.jms.ConnectionFactory). The Apache Pekko Connectors tests and all examples use Active MQ.
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsConnectorsSpec.scala) { #connection-factory }
@@ -46,7 +46,7 @@ Scala
 Java
 : @@snip [snip](/jms/src/test/java/docs/javadsl/JmsSettingsTest.java) { #consumer-settings }
 
-The Alpakka JMS consumer is configured via default settings in the [HOCON](https://github.com/lightbend/config#using-hocon-the-json-superset) config file section `alpakka.jms.consumer` in your `application.conf`, and settings may be tweaked in the code using the `withXyz` methods. On the second tab the section from `reference.conf` shows the structure to use for configuring multiple set-ups.
+The Apache Pekko Connectors JMS consumer is configured via default settings in the [HOCON](https://github.com/lightbend/config#using-hocon-the-json-superset) config file section `alpakka.jms.consumer` in your `application.conf`, and settings may be tweaked in the code using the `withXyz` methods. On the second tab the section from `reference.conf` shows the structure to use for configuring multiple set-ups.
 
 Table
 : Setting               | Description                                                          | Default Value       | 
@@ -145,7 +145,7 @@ Java
 
 ## Raw JVM type sources
 
-| Stream element type                                       | Alpakka source factory   |
+| Stream element type                                       | Apache Pekko Connectors source factory   |
 |-----------------------------------------------------------|--------------------------|
 | `String`                                                  | [`JmsConsumer.textSource`](#text-sources)         |
 | @scala[`Array[Byte]`]@java[`byte[]`]                      | [`JmsConsumer.bytesSource`](#byte-array-sources)  |

@@ -6,7 +6,7 @@ Huawei Push Kit is a messaging service provided for you. It establishes a messag
 
 @@@
 
-The Alpakka Huawei Push Kit connector provides a way to send notifications with [Huawei Push Kit](https://developer.huawei.com/consumer/en/hms/huawei-pushkit).
+The Apache Pekko Connectors Huawei Push Kit connector provides a way to send notifications with [Huawei Push Kit](https://developer.huawei.com/consumer/en/hms/huawei-pushkit).
 
 @@project-info{ projectId="huawei-push-kit" }
 

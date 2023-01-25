@@ -336,7 +336,7 @@ Options:
 
 ## Integration testing
 
-For integration testing without touching Amazon SQS, Alpakka uses [ElasticMQ](https://github.com/softwaremill/elasticmq), 
+For integration testing without touching Amazon SQS, Apache Pekko Connectors uses [ElasticMQ](https://github.com/softwaremill/elasticmq), 
 a queuing service which serves an AWS SQS compatible API.
 
 @@@ index

@@ -10,15 +10,15 @@ Further information on [mqtt.org](https://mqtt.org/).
 
 @@@ note { title="Paho Differences" }
 
-Alpakka contains @ref[another MQTT connector](mqtt.md) which is based on the Eclipse Paho client. Unlike the Paho version, this library has no dependencies other than those of Akka Streams i.e. it is entirely reactive. As such, there should be a significant performance advantage given its pure-Akka foundations in terms of memory usage given its diligent use of threads.
+Apache Pekko Connectors contains @ref[another MQTT connector](mqtt.md) which is based on the Eclipse Paho client. Unlike the Paho version, this library has no dependencies other than those of Akka Streams i.e. it is entirely reactive. As such, there should be a significant performance advantage given its pure-Akka foundations in terms of memory usage given its diligent use of threads.
 
 This library also differs in that it separates out the concern of how MQTT is connected. Unlike Paho, where TCP is assumed, this library can join in any flow. The end result is that by using this library, Unix Domain Sockets, TCP, UDP or anything else can be used to transport MQTT.
 
 @@@
 
-The Alpakka MQTT Streaming connector provides an Akka Stream flow to connect to MQTT brokers. In addition, a flow is provided so that you can implement your own MQTT server in the case where you do not wish to use a broker--MQTT is a fine protocol for directed client/server interactions, as well as having an intermediary broker.
+The Apache Pekko Connectors MQTT Streaming connector provides an Akka Stream flow to connect to MQTT brokers. In addition, a flow is provided so that you can implement your own MQTT server in the case where you do not wish to use a broker--MQTT is a fine protocol for directed client/server interactions, as well as having an intermediary broker.
 
-Alpakka MQTT Streaming implements the [MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) protocol.
+Apache Pekko Connectors MQTT Streaming implements the [MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) protocol.
 
 @@project-info{ projectId="mqtt-streaming" }
 

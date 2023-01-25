@@ -1,4 +1,4 @@
-# Some advice for Pekko Connectors contributors
+# Some advice for Apache Pekko Connectors contributors
 
 ## Reference connector
 
@@ -9,7 +9,7 @@ To inspect how all of the below listed guidelines are to be implemented in pract
 
 ### Public factory methods
 
-Depending on the technology you integrate with Pekko streams and Pekko Connectors you'll create Sources, Flows and Sinks.
+Depending on the technology you integrate with Pekko Streams and Pekko Connectors you'll create Sources, Flows and Sinks.
 Regardless on how they are implemented make sure that you create the relevant Sources, Sinks and Flows APIs so they are
 simple and easy to use.
 
@@ -24,12 +24,12 @@ use case we see, is committing a Kafka offset after passing data to another syst
 
 > Reference connector [Java API factory methods](reference/src/main/scala/akka/stream/alpakka/reference/javadsl/Reference.scala)
 
-Alpakka, same as Akka, aims to keep 100% feature parity between the various language DSLs. Implementing even the API for Java in Scala has proven the most viable way to do it, as long as you keep the following in mind:
+Apache Pekko Connectors, same as Apache Pekko, aims to keep 100% feature parity between the various language DSLs. Implementing even the API for Java in Scala has proven the most viable way to do it, as long as you keep the following in mind:
 
 
 1. Keep entry points separated in `javadsl` and `scaladsl`
 
-1. Provide factory methods for Sources, Flows and Sinks in the `javadsl` package wrapping all the methods in the Scala API. The Akka Stream Scala instances have a `.asJava` method to convert to the `akka.stream.javadsl` counterparts.
+1. Provide factory methods for Sources, Flows and Sinks in the `javadsl` package wrapping all the methods in the Scala API. The Pekko Stream Scala instances have a `.asJava` method to convert to the `akka.stream.javadsl` counterparts.
 
 1. When using Scala `object` instances, offer a `getInstance()` method.
 
@@ -146,9 +146,9 @@ programming (async callbacks, stage actors)
 
 ### Use of blocking APIs
 
-Many technologies come with client libraries that only support blocking calls. Akka Stream stages that use blocking APIs should preferably be run on Akka's `IODispatcher`. (In rare cases you might want to allow the users to configure another dispatcher to run the blocking operations on.)
+Many technologies come with client libraries that only support blocking calls. Pekko Stream stages that use blocking APIs should preferably be run on Pekko's `IODispatcher`. (In rare cases you might want to allow the users to configure another dispatcher to run the blocking operations on.)
 
-To select Akka's `IODispatcher` for a stage use
+To select Pekko's `IODispatcher` for a stage use
 ```$scala
 override protected def initialAttributes: Attributes = Attributes(ActorAttributes.IODispatcher)
 ```

@@ -48,7 +48,7 @@ Two categories of properties can/must be provided to configure the connector.
   - @javadoc[EventWriterConfig](io.pravega.client.stream.EventWriterConfig) `akka.alpakka.pravega.writer.config`
   - @javadoc[ReaderConfig](io.pravega.client.stream.ReaderConfig) `akka.alpakka.pravega.reader.config`
 
-**Alpakka Connector** properties (all others).
+**Apache Pekko Connectors Connector** properties (all others).
 
 reference.conf
 : @@snip(/pravega/src/main/resources/reference.conf)
@@ -181,4 +181,4 @@ Scala
 
 ## Support
 
-In addition to our regular Alpakka community support on [![gitter: akka/akka](https://img.shields.io/badge/gitter%3A-akka%2Fakka-blue.svg?style=flat-square)](https://gitter.im/akka/akka) and Lightbend's [discuss.lightbend.com](https://discuss.lightbend.com/c/akka/streams-and-alpakka), you can also visit the `#akka-streams-connector` channel on the [Pravega slack](https://pravega-slack-invite.herokuapp.com) for assistance with Pravega integration itself.
+In addition to our regular Apache Pekko Connectors community support on [![gitter: akka/akka](https://img.shields.io/badge/gitter%3A-akka%2Fakka-blue.svg?style=flat-square)](https://gitter.im/akka/akka) and Lightbend's [discuss.lightbend.com](https://discuss.lightbend.com/c/akka/streams-and-alpakka), you can also visit the `#akka-streams-connector` channel on the [Pravega slack](https://pravega-slack-invite.herokuapp.com) for assistance with Pravega integration itself.

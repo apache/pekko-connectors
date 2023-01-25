@@ -7,7 +7,7 @@ Thanks to adopting Reactive Streams, multiple libraries can now inter-op since t
 all these libraries. Akka Streams by-design, hides the raw reactive-streams types from end-users, since it allows for
 detaching these types from RS and allows for a painless migration to @javadoc[java.util.concurrent.Flow](java.util.concurrent.Flow) which was introduced in Java 9.
 
-This Alpakka module makes it possible to directly return a `Source` in your Spring Web endpoints.
+This Apache Pekko Connectors module makes it possible to directly return a `Source` in your Spring Web endpoints.
 
 @@project-info{ projectId="spring-web" }
 
@@ -32,7 +32,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Usage
 
-Using Akka Streams in Spring Web (or Boot for that matter) is very simple, as Alpakka provides autoconfiguration to the
+Using Akka Streams in Spring Web (or Boot for that matter) is very simple, as Apache Pekko Connectors provides autoconfiguration to the
 framework, which means that Spring is made aware of Sources and Sinks etc. 
 
 All you need to do is include the above dependency (`pekko-connectors-spring-web`), start your app as usual:

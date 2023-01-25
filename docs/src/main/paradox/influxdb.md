@@ -1,6 +1,6 @@
 #InfluxDB
 
-The Alpakka InfluxDb connector provides Akka Streams integration for InfluxDB.
+The Apache Pekko Connectors InfluxDb connector provides Akka Streams integration for InfluxDB.
 
 For more information about InfluxDB, please visit the [InfluxDB Documentation](https://docs.influxdata.com/)
 
@@ -17,9 +17,9 @@ For more information about InfluxDB, please visit the [InfluxDB Documentation](h
 
 @@@warning { title="API may change" }
 
-Alpakka InfluxDB was added in Alpakka 1.1.0 in July 2019 and is marked as "API may change". Please try it out and suggest improvements.
+Apache Pekko Connectors InfluxDB is marked as "API may change". Please try it out and suggest improvements.
 
-Furthermore, the major InfluxDB update to [version 2.0](https://www.influxdata.com/products/influxdb) is expected to bring API and dependency changes to Alpakka InfluxDB.
+Furthermore, the major InfluxDB update to [version 2.0](https://www.influxdata.com/products/influxdb) is expected to bring API and dependency changes to Apache Pekko Connectors InfluxDB.
 
 @@@
 

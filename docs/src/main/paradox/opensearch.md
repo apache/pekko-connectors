@@ -1,6 +1,6 @@
 # Opensearch
 
-The Alpakka Elasticsearch connector also provides Akka Streams integration for Opensearch.
+The Apache Pekko Connectors Elasticsearch connector also provides Akka Streams integration for Opensearch.
 
 For more information about Opensearch, please visit the [Opensearch documentation](https://opensearch.org/docs/latest).
 

@@ -33,7 +33,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Build setup
 
-The Alpakka Google Cloud BigQuery Storage library contains the classes generated from [Google's protobuf specification](https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1).
+The Apache Pekko Connectors Google Cloud BigQuery Storage library contains the classes generated from [Google's protobuf specification](https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1).
 
 @@@note { title="ALPN on JDK 8" }
 
@@ -47,7 +47,7 @@ yourself, but we recommend upgrading.
 
 ## Configuration
 
-The BigQuery Storage connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The BigQuery Storage connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 
 Example Test Configuration
 ```

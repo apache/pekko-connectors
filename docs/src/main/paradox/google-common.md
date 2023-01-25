@@ -1,6 +1,6 @@
 # Google Common
 
-The `google-common` module provides central configuration for Google connectors in Alpakka as well as basic support for interfacing with Google APIs.
+The `google-common` module provides central configuration for Google connectors in Apache Pekko Connectors as well as basic support for interfacing with Google APIs.
 
 ## Artifacts
 
@@ -69,4 +69,4 @@ Instances of the @apidoc[akka.stream.alpakka.google.auth.Credentials] class can 
 ## Accessing other Google APIs
 
 The @apidoc[Google$] @scala[object] @java[class] provides methods for interfacing with Google APIs.
-You can use it to access APIs that are not currently supported by Alpakka and build new connectors.
+You can use it to access APIs that are not currently supported by Apache Pekko Connectors and build new connectors.

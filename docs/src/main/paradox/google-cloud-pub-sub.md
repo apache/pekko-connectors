@@ -6,7 +6,7 @@ Google Cloud Pub/Sub provides many-to-many, asynchronous messaging that decouple
 Further information at the official [Google Cloud documentation website](https://cloud.google.com/pubsub/docs/overview).
 @@@
 
-This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.googleapis.com`). For a connector that uses gRPC for the communication, take a look at the alternative @ref[Alpakka Google Cloud Pub/Sub gRPC](google-cloud-pub-sub-grpc.md) connector.
+This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.googleapis.com`). For a connector that uses gRPC for the communication, take a look at the alternative @ref[Apache Pekko Connectors Google Cloud Pub/Sub gRPC](google-cloud-pub-sub-grpc.md) connector.
 
 @@project-info{ projectId="google-cloud-pub-sub" }
 
@@ -38,7 +38,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Usage
 
-The Pub/Sub connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The Pub/Sub connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 Additional Pub/Sub-specific configuration settings can be found in its own @github[reference.conf](/google-cloud-pub-sub/src/main/resources/reference.conf).
 
 And prepare the actor system.

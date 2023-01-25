@@ -58,7 +58,7 @@ Scala
 Java
 : @@snip [snip](/doc-examples/src/test/java/akka/stream/alpakka/eip/javadsl/PassThroughExamples.java) { #PassThroughWithKeep }
 
-This pattern is useful when integrating Alpakka connectors together. Here an example with Kafka:
+This pattern is useful when integrating Apache Pekko Connectors connectors together. Here an example with Kafka:
 
 Scala
 : @@snip [snip](/doc-examples/src/test/scala/akka/stream/alpakka/eip/scaladsl/PassThroughExamples.scala) { #passThroughKafkaFlow }

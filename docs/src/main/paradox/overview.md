@@ -1,23 +1,23 @@
 # Overview
 
-The [Alpakka project](https://doc.akka.io/docs/alpakka/current/) is an open source initiative to implement stream-aware and reactive integration pipelines for Java and Scala. It is built on top of [Akka Streams](https://doc.akka.io/docs/akka/current/stream/index.html), and has been designed from the ground up to understand streaming natively and provide a DSL for reactive and stream-oriented programming, with built-in support for backpressure. Akka Streams is a [Reactive Streams](https://www.reactive-streams.org/) and JDK 9+ [java.util.concurrent.Flow](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/Flow.html)-compliant implementation and therefore [fully interoperable](https://doc.akka.io/docs/akka/current/general/stream/stream-design.html#interoperation-with-other-reactive-streams-implementations) with other implementations.
+The [Apache Pekko Connectors project](https://doc.akka.io/docs/alpakka/current/) is an open source initiative to implement stream-aware and reactive integration pipelines for Java and Scala. It is built on top of [Akka Streams](https://doc.akka.io/docs/akka/current/stream/index.html), and has been designed from the ground up to understand streaming natively and provide a DSL for reactive and stream-oriented programming, with built-in support for backpressure. Akka Streams is a [Reactive Streams](https://www.reactive-streams.org/) and JDK 9+ [java.util.concurrent.Flow](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/Flow.html)-compliant implementation and therefore [fully interoperable](https://doc.akka.io/docs/akka/current/general/stream/stream-design.html#interoperation-with-other-reactive-streams-implementations) with other implementations.
 
-If you'd like to know what integrations with Alpakka look like, have a look at our 
+If you'd like to know what integrations with Apache Pekko Connectors look like, have a look at our 
 @ref[self-contained examples](examples/index.md) section.
 
-There are a few blog posts and presentations about Alpakka out there, we've @ref[collected some](other-docs/webinars-presentations-articles.md).
+There are a few blog posts and presentations about Apache Pekko Connectors out there, we've @ref[collected some](other-docs/webinars-presentations-articles.md).
 
 
 ## Versions
 
 The code in this documentation is compiled against:
 
-* Alpakka $project.version$ ([Github](https://github.com/apache/incubator-pekko-connectors), [API docs](https://doc.akka.io/api/alpakka/current/akka/stream/alpakka/index.html))
+* Apache Pekko Connectors $project.version$ ([Github](https://github.com/apache/incubator-pekko-connectors), [API docs](https://doc.akka.io/api/alpakka/current/akka/stream/alpakka/index.html))
 * Scala $scala.binary.version$ (all modules are available for Scala 2.13)
 * Akka Streams $akka.version$+ (@extref:[Reference](akka:stream/index.html), [Github](https://github.com/akka/akka))
 * Akka HTTP $akka-http.version$+ (@extref:[Reference](akka-http:), [Github](https://github.com/akka/akka-http))
 
-See @ref:[Alpakka versioning](other-docs/versioning.md) for more details.
+See @ref:[Apache Pekko Connectors versioning](other-docs/versioning.md) for more details.
 
 Release notes are found at @ref:[Release Notes](release-notes/index.md).
 
@@ -25,9 +25,9 @@ If you want to try out a connector that has not yet been released, give @ref[sna
 
 ## Contributing
 
-Please feel free to contribute to Alpakka by reporting issues you identify, or by suggesting changes to the code. Please refer to our [contributing instructions](https://github.com/apache/incubator-pekko-connectors/blob/master/CONTRIBUTING.md) and our [contributor advice](https://github.com/apache/incubator-pekko-connectors/blob/master/contributor-advice.md) to learn how it can be done. The target structure for Alpakka connectors is illustrated by the @ref[Reference connector](reference.md).
+Please feel free to contribute to Apache Pekko Connectors by reporting issues you identify, or by suggesting changes to the code. Please refer to our [contributing instructions](https://github.com/apache/incubator-pekko-connectors/blob/master/CONTRIBUTING.md) and our [contributor advice](https://github.com/apache/incubator-pekko-connectors/blob/master/contributor-advice.md) to learn how it can be done. The target structure for Apache Pekko Connectors connectors is illustrated by the @ref[Reference connector](reference.md).
 
-We want Akka and Alpakka to strive in a welcoming and open atmosphere and expect all contributors to respect our [code of conduct](https://www.lightbend.com/conduct).
+We want Akka and Apache Pekko Connectors to strive in a welcoming and open atmosphere and expect all contributors to respect our [code of conduct](https://www.lightbend.com/conduct).
 
 [![alpakka]][alpakka-scaladex] Feel free to tag your project with *akka-streams* keyword in Scaladex for easier discoverability.
 

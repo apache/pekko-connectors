@@ -1,6 +1,6 @@
 # Reference
 
-This is the reference documentation for an Alpakka connector. This section should contain
+This is the reference documentation for an Apache Pekko Connectors connector. This section should contain
 a general overview of the connector and mention the libraries and APIs that the connector
 is using. Also it should link to external resources that might help to learn
 about the technology the connector is using.

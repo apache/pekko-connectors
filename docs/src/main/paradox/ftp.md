@@ -136,7 +136,7 @@ Typical use-case for this would be listing files from a ftp location, do some pr
 
 In order to create a directory the user has to specify a parent directory (also known as base path) and directory's name.
 
-Alpakka provides a materialized API `mkdirAsync` (based on @scala[Future]@java[Completion Stage]) and unmaterialized API `mkdir` (using Sources) to let the user choose when the action will be executed.
+Apache Pekko Connectors provides a materialized API `mkdirAsync` (based on @scala[Future]@java[Completion Stage]) and unmaterialized API `mkdir` (using Sources) to let the user choose when the action will be executed.
 
 Scala
 : @@snip [snip](/ftp/src/test/scala/docs/scaladsl/scalaExamples.scala) { #mkdir-source }

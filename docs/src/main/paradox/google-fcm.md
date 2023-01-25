@@ -8,7 +8,7 @@ Using FCM, you can notify a client app that new email or other data is available
 
 @@@
 
-The Alpakka Google Firebase Cloud Messaging connector provides a way to send notifications with [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/).
+The Apache Pekko Connectors Google Firebase Cloud Messaging connector provides a way to send notifications with [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/).
 
 @@project-info{ projectId="google-fcm" }
 
@@ -40,7 +40,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Settings
 
-The FCM connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The FCM connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 Additional FCM-specific configuration settings can be found in its own @github[reference.conf](/google-fcm/src/main/resources/reference.conf).
 You can send test notifications [(so called validate only).](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send)
 And you can set the number of maximum concurrent connections.

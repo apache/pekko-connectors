@@ -8,7 +8,7 @@ Apache Cassandra is a free and open-source, distributed, wide column store, NoSQ
 
 @@@
 
-Alpakka Cassandra offers an @extref:[Akka Streams](akka:/stream/index.html) API on top of a @javadoc[CqlSession](com.datastax.oss.driver.api.core.CqlSession) from the @extref:[Datastax Java Driver](cassandra-driver:) version 4.0+. The @ref:[driver configuration](#custom-session-creation) is provided in the same config format as Akka uses and can be placed in the same `application.conf` as your Akka settings.
+Apache Pekko Connectors Cassandra offers an @extref:[Akka Streams](akka:/stream/index.html) API on top of a @javadoc[CqlSession](com.datastax.oss.driver.api.core.CqlSession) from the @extref:[Datastax Java Driver](cassandra-driver:) version 4.0+. The @ref:[driver configuration](#custom-session-creation) is provided in the same config format as Akka uses and can be placed in the same `application.conf` as your Akka settings.
 
 @@project-info{ projectId="cassandra" }
 
@@ -67,7 +67,7 @@ Here we used a basic sink to complete the stream by collecting all of the stream
 
 ## Writing to Cassandra
 
-@apidoc[CassandraFlow$] provides factory methods to get Akka Streams flows to run CQL statements that change data (`UPDATE`, `INSERT`). Alpakka Cassandra creates a @javadoc[PreparedStatement](com.datastax.oss.driver.api.core.cql.PreparedStatement) and for every stream element the `statementBinder` function binds the CQL placeholders to data.
+@apidoc[CassandraFlow$] provides factory methods to get Akka Streams flows to run CQL statements that change data (`UPDATE`, `INSERT`). Apache Pekko Connectors Cassandra creates a @javadoc[PreparedStatement](com.datastax.oss.driver.api.core.cql.PreparedStatement) and for every stream element the `statementBinder` function binds the CQL placeholders to data.
 
 The incoming elements are emitted unchanged for further processing.
 
@@ -79,7 +79,7 @@ Java
 
 ### Update flows with context
 
-Alpakka Cassandra flows offer **"With Context"**-support which integrates nicely with some other Alpakka connectors.
+Apache Pekko Connectors Cassandra flows offer **"With Context"**-support which integrates nicely with some other Apache Pekko Connectors connectors.
 
 Scala
 : @@snip [snip](/cassandra/src/test/scala/docs/scaladsl/CassandraFlowSpec.scala) { #withContext }
@@ -92,7 +92,7 @@ Java
 
 Session creation and configuration is controlled via settings in `application.conf`. The @apidoc[akka.stream.alpakka.cassandra.CassandraSessionSettings] accept a full path to a configuration section which needs to specify a `session-provider` setting. The @apidoc[CassandraSessionRegistry] expects a fully qualified class name to a class implementing @apidoc[CqlSessionProvider].
 
-Alpakka Cassandra includes a default implementation @apidoc[DefaultSessionProvider], which is referenced in the default configuration `alpakka.cassandra`.
+Apache Pekko Connectors Cassandra includes a default implementation @apidoc[DefaultSessionProvider], which is referenced in the default configuration `alpakka.cassandra`.
 
 The @apidoc[DefaultSessionProvider] config section must contain:
 
