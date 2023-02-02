@@ -1,6 +1,6 @@
 # Azure Storage Queue
 
-The Azure Storage Queue connector provides an Akka Stream Source and Sinks for Azure Storage Queue integration.
+The Azure Storage Queue connector provides an Apache Pekko Stream Source and Sinks for Azure Storage Queue integration.
 
 Azure Storage Queue is a queuing service similar to Amazon's SQS. It is designed mostly for long-running and non-time-critical tasks. For more information on Azure Storage Queue see the [Azure docs](https://azure.microsoft.com/en-us/services/storage/queues/).
 
@@ -15,7 +15,7 @@ Azure Storage Queue is a queuing service similar to Amazon's SQS. It is designed
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 

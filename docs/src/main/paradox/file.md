@@ -1,7 +1,7 @@
 # File
 
 The File connectors provide additional connectors for filesystems complementing
-the sources and sinks for files already included in core Akka Streams
+the sources and sinks for files already included in core Apache Pekko Streams
 (which can be found in @aipdoc[FileIO$]).
 
 @@project-info{ projectId="file" }
@@ -15,7 +15,7 @@ the sources and sinks for files already included in core Akka Streams
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -26,9 +26,9 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Writing to and reading from files
 
-Use the `FileIO` class to create streams reading from or writing to files. It is part part of Akka streams. 
+Use the `FileIO` class to create streams reading from or writing to files. It is part part of Apache Pekko Streams. 
 
-[Akka Streaming File IO documentation](https://doc.akka.io/docs/akka/current/stream/stream-io.html#streaming-file-io)
+@extref:[Apache Pekko Streaming File IO documentation](pekko:stream/stream-io.html#streaming-file-io)
 
 
 ## Tailing a file into a stream

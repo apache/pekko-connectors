@@ -8,7 +8,7 @@ Solr (pronounced "solar") is an open source enterprise search platform, written 
  
 @@@
 
-Apache Pekko Connectors Solr provides Akka Stream sources and sinks for Apache Solr.
+Apache Pekko Connectors Solr provides Apache Pekko Stream sources and sinks for Apache Solr.
 
 For more information about Solr please visit the [Solr documentation](https://lucene.apache.org/solr/resources.html).
 

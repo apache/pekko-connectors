@@ -19,7 +19,7 @@ version=$project.version$
 symbol2=PekkoVersion
 value2=$akka.version$
 group2=org.apache.pekko
-artifact2=akka-stream_$scala.binary.version$
+artifact2=pekko-stream_$scala.binary.version$
 version2=PekkoVersion
 symbol3=PekkoHttpVersion
 value3=$akka-http.version$
@@ -58,7 +58,7 @@ Java
 With this type of send you can get responses from the server.
 These responses can be @scaladoc[PushKitResponse](akka.stream.alpakka.huawei.pushkit.PushKitResponse) or @scaladoc[ErrorResponse](akka.stream.alpakka.huawei.pushkit.ErrorResponse).
 You can choose what you want to do with this information, but keep in mind
-if you try to resend the failed messages you will need to use exponential backoff! (see @extref[[Akka docs `RestartFlow.onFailuresWithBackoff`](akka:stream/operators/RestartFlow/onFailuresWithBackoff.html))
+if you try to resend the failed messages you will need to use exponential backoff! (see @extref[[Apache Pekko docs `RestartFlow.onFailuresWithBackoff`](pekko:stream/operators/RestartFlow/onFailuresWithBackoff.html))
 
 If you don't care if the notification was sent successfully, you may use `fireAndForget`.
 

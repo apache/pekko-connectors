@@ -19,7 +19,7 @@ This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.g
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
   value3=$akka-http.version$

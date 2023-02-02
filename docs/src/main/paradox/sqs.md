@@ -8,7 +8,7 @@ For more information about AWS SQS please visit the [official documentation](htt
 
 @@@
 
-The AWS SQS connector provides Akka Stream sources and sinks for AWS SQS queues.
+The AWS SQS connector provides Apache Pekko Stream sources and sinks for AWS SQS queues.
 
 @@project-info{ projectId="sqs" }
 
@@ -22,7 +22,7 @@ The AWS SQS connector provides Akka Stream sources and sinks for AWS SQS queues.
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
   value3=$akka-http.version$
@@ -57,7 +57,7 @@ Scala
 Java
 : @@snip [snip](/sqs/src/test/java/akka/stream/alpakka/sqs/javadsl/BaseSqsTest.java) { #init-client }
 
-The example above uses @extref:[Akka HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
+The example above uses @extref:[Apache Pekko HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
 
 ## Read from an SQS queue
 
@@ -69,7 +69,7 @@ Scala
 Java
 : @@snip [snip](/sqs/src/test/java/docs/javadsl/SqsSourceTest.java) { #run }
 
-In this example we use the `closeOnEmptyReceive` to let the stream complete when there are no more messages on the queue. In realistic scenarios, you should add a `KillSwitch` to the stream, see ["Controlling stream completion with KillSwitch" in the Akka documentation](https://doc.akka.io/docs/akka/current/stream/stream-dynamic.html#controlling-stream-completion-with-killswitch).
+In this example we use the `closeOnEmptyReceive` to let the stream complete when there are no more messages on the queue. In realistic scenarios, you should add a `KillSwitch` to the stream, see @extref:["Controlling stream completion with KillSwitch" in the Apache Pekko documentation](pekko:stream/stream-dynamic.html#controlling-stream-completion-with-killswitch).
 
 
 ### Source configuration

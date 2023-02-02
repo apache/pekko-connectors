@@ -6,15 +6,15 @@ Google Cloud Pub/Sub provides many-to-many, asynchronous messaging that decouple
 Further information at the official [Google Cloud documentation website](https://cloud.google.com/pubsub/docs/overview).
 @@@
 
-This connector communicates to Pub/Sub via the gRPC protocol. The integration between Akka Stream and gRPC is handled by
-@extref[Akka gRPC $akka-grpc.version$](akka-grpc:). For a connector that uses HTTP for the communication, take a
+This connector communicates to Pub/Sub via the gRPC protocol. The integration between Apache Pekko Stream and gRPC is handled by
+@extref[Apache Pekko gRPC $akka-grpc.version$](akka-grpc:). For a connector that uses HTTP for the communication, take a
 look at the alternative @ref[Apache Pekko Connectors Google Cloud Pub/Sub](google-cloud-pub-sub.md) connector.
 
 @@project-info{ projectId="google-cloud-pub-sub-grpc" }
 
 ## Artifacts
 
-Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with the same Akka version that the application uses.
+Apache Pekko gRPC uses Apache Pekko Discovery internally. Make sure to add Apache Pekko Discovery with the same Apache Pekko version that the application uses.
 
 @@dependency [sbt,Maven,Gradle] {
   group=org.apache.pekko
@@ -23,7 +23,7 @@ Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with t
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   group3=org.apache.pekko
   artifact3=akka-discovery_$scala.binary.version$
@@ -38,8 +38,8 @@ The table below shows direct dependencies of this module and the second tab show
 
 @@@warning
 
-This connector contains code generated from Protobuf files which is bound to @extref:[Akka gRPC $akka-grpc.version$](akka-grpc:). This makes it @extref:[NOT binary-compatible](akka-grpc:/binary-compatibility.html) with later versions of Akka gRPC.
-You can not use a different version of Akka gRPC within the same JVM instance.
+This connector contains code generated from Protobuf files which is bound to @extref:[Apache Pekko gRPC $akka-grpc.version$](akka-grpc:). This makes it @extref:[NOT binary-compatible](akka-grpc:/binary-compatibility.html) with later versions of Apache Pekko gRPC.
+You can not use a different version of Apache Pekko gRPC within the same JVM instance.
 
 @@@
 
@@ -70,7 +70,7 @@ reference.conf
 Test Configuration
 : @@snip (/google-cloud-pub-sub-grpc/src/test/resources/application.conf)
 
-For more configuration details consider the underlying configuration for @extref:[Akka gRPC](akka-grpc:/client/configuration.html).
+For more configuration details consider the underlying configuration for @extref:[Apache Pekko gRPC](akka-grpc:/client/configuration.html).
 
 A manually initialized @scala[@scaladoc[GrpcPublisher](akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.GrpcPublisher)]@java[@scaladoc[GrpcPublisher](akka.stream.alpakka.googlecloud.pubsub.grpc.javadsl.GrpcPublisher)] or @scala[@scaladoc[GrpcSubscriber](akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.GrpcSubscriber)]@java[@scaladoc[GrpcSubscriber](akka.stream.alpakka.googlecloud.pubsub.grpc.javadsl.GrpcSubscriber)] can be used by providing it as an attribute to the stream:
 

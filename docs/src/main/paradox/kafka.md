@@ -1,6 +1,6 @@
 # Apache Kafka
 
-The **Apache Pekko Connectors Kafka connector** (originally known as **Reactive Kafka** or even **Akka Streams Kafka**) is maintained in a separate repository, but kept after by the Apache Pekko Connectors community.
+The **Apache Pekko Connectors Kafka connector** (originally known as **Reactive Kafka** or even **Apache Pekko Streams Kafka**) is maintained in a separate repository, but kept after by the Apache Pekko Connectors community.
 
 ## Separate repository
 

@@ -25,7 +25,7 @@ Please read more about it in the [ReactiveMongo documentation](http://reactivemo
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -92,7 +92,7 @@ Java
 
 Here we used a basic sink to complete the stream by collecting all of the stream elements to a collection.
 The power of streams comes from building larger data pipelines which leverage backpressure to ensure efficient flow control.
-Feel free to edit the example code and build @extref:[more advanced stream topologies](akka:stream/stream-introduction.html).
+Feel free to edit the example code and build @extref:[more advanced stream topologies](pekko:stream/stream-introduction.html).
 
 ## Flow and Sink
 

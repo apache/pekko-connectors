@@ -1,16 +1,16 @@
 #InfluxDB
 
-The Apache Pekko Connectors InfluxDb connector provides Akka Streams integration for InfluxDB.
+The Apache Pekko Connectors InfluxDb connector provides Apache Pekko Streams integration for InfluxDB.
 
 For more information about InfluxDB, please visit the [InfluxDB Documentation](https://docs.influxdata.com/)
 
 @@project-info{ projectId="influxdb" }
 
-@@@note { title="Official Akka Streams client" }
+@@@note { title="Official Apache Pekko Streams client" }
 
-## Influxdata, the makers of InfluxDB now offer an Akka Streams-aware client library in https://github.com/influxdata/influxdb-client-java/tree/master/client-scala 
+## Influxdata, the makers of InfluxDB now offer an Apache Pekko Streams-aware client library in https://github.com/influxdata/influxdb-client-java/tree/master/client-scala 
 
-"The reference Scala client that allows query and write for the InfluxDB 2.0 by Akka Streams."
+"The reference Scala client that allows query and write for the InfluxDB 2.0 by Apache Pekko Streams."
 
 @@@
 
@@ -35,7 +35,7 @@ Furthermore, the major InfluxDB update to [version 2.0](https://www.influxdata.c
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 

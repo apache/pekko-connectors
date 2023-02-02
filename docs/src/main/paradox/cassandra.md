@@ -8,7 +8,7 @@ Apache Cassandra is a free and open-source, distributed, wide column store, NoSQ
 
 @@@
 
-Apache Pekko Connectors Cassandra offers an @extref:[Akka Streams](akka:/stream/index.html) API on top of a @javadoc[CqlSession](com.datastax.oss.driver.api.core.CqlSession) from the @extref:[Datastax Java Driver](cassandra-driver:) version 4.0+. The @ref:[driver configuration](#custom-session-creation) is provided in the same config format as Akka uses and can be placed in the same `application.conf` as your Akka settings.
+Apache Pekko Connectors Cassandra offers an @extref:[Apache Pekko Streams](pekko:/stream/index.html) API on top of a @javadoc[CqlSession](com.datastax.oss.driver.api.core.CqlSession) from the @extref:[Datastax Java Driver](cassandra-driver:) version 4.0+. The @ref:[driver configuration](#custom-session-creation) is provided in the same config format as Apache Pekko uses and can be placed in the same `application.conf` as your Apache Pekko settings.
 
 @@project-info{ projectId="cassandra" }
 
@@ -27,7 +27,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Sessions
 
-Cassandra is accessed through @apidoc[akka.stream.alpakka.cassandra.*.CassandraSession]s which are managed by the @apidoc[CassandraSessionRegistry$] Akka extension. This way a session is shared across all usages within the actor system and properly shut down after the actor system is shut down.
+Cassandra is accessed through @apidoc[akka.stream.alpakka.cassandra.*.CassandraSession]s which are managed by the @apidoc[CassandraSessionRegistry$] Apache Pekko extension. This way a session is shared across all usages within the actor system and properly shut down after the actor system is shut down.
 
 @scala[The `CassandraSession` is provided to the stream factory methods as an `implicit` parameter.]
 
@@ -42,7 +42,7 @@ See @ref[custom session creation](#custom-session-creation) below for tweaking t
 
 ## Reading from Cassandra
 
-@apidoc[CassandraSource$] provides factory methods to get Akka Streams Sources from CQL queries and from @javadoc[com.datastax.oss.driver.api.core.cql.Statement](com.datastax.oss.driver.api.core.cql.Statement)s.
+@apidoc[CassandraSource$] provides factory methods to get Apache Pekko Streams Sources from CQL queries and from @javadoc[com.datastax.oss.driver.api.core.cql.Statement](com.datastax.oss.driver.api.core.cql.Statement)s.
 
 Dynamic parameters can be provided to the CQL as variable arguments.
 
@@ -62,12 +62,12 @@ Java
 : @@snip [snip](/cassandra/src/test/java/docs/javadsl/CassandraSourceTest.java) { #statement }
 
 
-Here we used a basic sink to complete the stream by collecting all of the stream elements into a collection. The power of streams comes from building larger data pipelines which leverage backpressure to ensure efficient flow control. Feel free to edit the example code and build @extref:[more advanced stream topologies](akka:stream/stream-introduction.html).
+Here we used a basic sink to complete the stream by collecting all of the stream elements into a collection. The power of streams comes from building larger data pipelines which leverage backpressure to ensure efficient flow control. Feel free to edit the example code and build @extref:[more advanced stream topologies](pekko:stream/stream-introduction.html).
 
 
 ## Writing to Cassandra
 
-@apidoc[CassandraFlow$] provides factory methods to get Akka Streams flows to run CQL statements that change data (`UPDATE`, `INSERT`). Apache Pekko Connectors Cassandra creates a @javadoc[PreparedStatement](com.datastax.oss.driver.api.core.cql.PreparedStatement) and for every stream element the `statementBinder` function binds the CQL placeholders to data.
+@apidoc[CassandraFlow$] provides factory methods to get Apache Pekko Streams flows to run CQL statements that change data (`UPDATE`, `INSERT`). Apache Pekko Connectors Cassandra creates a @javadoc[PreparedStatement](com.datastax.oss.driver.api.core.cql.PreparedStatement) and for every stream element the `statementBinder` function binds the CQL placeholders to data.
 
 The incoming elements are emitted unchanged for further processing.
 
@@ -96,7 +96,7 @@ Apache Pekko Connectors Cassandra includes a default implementation @apidoc[Defa
 
 The @apidoc[DefaultSessionProvider] config section must contain:
 
-* a settings section `service-discovery` which may be used to discover Cassandra contact points via @ref:[Akka Discovery](#using-akka-discovery),
+* a settings section `service-discovery` which may be used to discover Cassandra contact points via @ref:[Apache Pekko Discovery](#using-apache-pekko-discovery),
 * and a reference to a Cassandra config section in `datastax-java-driver-config` which is used to configure the Cassandra client. For details see the @extref:[Datastax Java Driver configuration](cassandra-driver:manual/core/configuration/#quick-overview) and the driver's @extref:[`reference.conf`](cassandra-driver:manual/core/configuration/reference/).
 
 reference.conf
@@ -108,9 +108,9 @@ application.conf
 : @@snip [snip](/cassandra/src/test/resources/application.conf) { #datastax-sample }
 
 
-### Using Akka Discovery
+### Using Apache Pekko Discovery
 
-To use @extref[Akka Discovery](akka:discovery/) make sure the `akka-discovery` dependency is on you classpath.
+To use @extref[Apache Pekko Discovery](pekko:discovery/) make sure the `akka-discovery` dependency is on you classpath.
 
 @@dependency [sbt,Maven,Gradle] {
   symbolAkka=PekkoVersion
@@ -120,7 +120,7 @@ To use @extref[Akka Discovery](akka:discovery/) make sure the `akka-discovery` d
   version=PekkoVersion
 }
 
-To enable @extref[Akka Discovery](akka:discovery/) with the @apidoc[DefaultSessionProvider], set up the desired service name in the discovery mechanism of your choice and pass that name in `service-discovery.name`. The example below extends the `alpakka.cassandra` config section and only overwrites the service name.
+To enable @extref[Apache Pekko Discovery](pekko:discovery/) with the @apidoc[DefaultSessionProvider], set up the desired service name in the discovery mechanism of your choice and pass that name in `service-discovery.name`. The example below extends the `alpakka.cassandra` config section and only overwrites the service name.
 
 application.conf
 : @@snip [snip](/cassandra/src/test/resources/application.conf) { #akka-discovery-docs }

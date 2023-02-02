@@ -1,6 +1,6 @@
 # AMQP
 
-The AMQP connector provides Akka Stream sources and sinks to connect to AMQP 0.9.1 servers (RabbitMQ, OpenAMQ, etc.).
+The AMQP connector provides Apache Pekko Stream sources and sinks to connect to AMQP 0.9.1 servers (RabbitMQ, OpenAMQ, etc.).
 
 AMQP 1.0 is currently not supported (Qpid, ActiveMQ, Solace, etc.).
 
@@ -15,7 +15,7 @@ AMQP 1.0 is currently not supported (Qpid, ActiveMQ, Solace, etc.).
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -57,7 +57,7 @@ Similarly as with Sink, the first step is to create Flow which accepts @apidoc[a
 
 @apidoc[AmqpFlow$] is a collection of factory methods that facilitates creation of flows. Here we created a *simple* sink, which means that we are able to pass `ByteString`s to the sink instead of wrapping data into @apidoc[amqp.WriteMessage]s.
 
-Last step is to @extref:[materialize](akka:stream/stream-flows-and-basics.html) and run the flow we have created.
+Last step is to @extref:[materialize](pekko:stream/stream-flows-and-basics.html) and run the flow we have created.
 
 Scala
 : @@snip [snip](/amqp/src/test/scala/docs/scaladsl/AmqpDocsSpec.scala) { #create-flow }
@@ -85,7 +85,7 @@ Create a sink, that accepts and forwards @apidoc[akka.util.ByteString]s to the A
 
 @apidoc[AmqpSink$] is a collection of factory methods that facilitates creation of sinks. Here we created a *simple* sink, which means that we are able to pass `ByteString`s to the sink instead of wrapping data into @apidoc[amqp.WriteMessage]s.
 
-Last step is to @extref:[materialize](akka:stream/stream-flows-and-basics.html) and run the sink we have created.
+Last step is to @extref:[materialize](pekko:stream/stream-flows-and-basics.html) and run the sink we have created.
 
 Scala
 : @@snip [snip](/amqp/src/test/scala/docs/scaladsl/AmqpDocsSpec.scala) { #create-sink }
@@ -128,7 +128,7 @@ Scala
 Java
 : @@snip [snip](/amqp/src/test/java/docs/javadsl/AmqpDocsTest.java) { #create-exchange-sink }
 
-For the source, we are going to create multiple sources and merge them using @extref:[Akka Streams operators](akka:stream/operators/index.html).
+For the source, we are going to create multiple sources and merge them using @extref:[Apache Pekko Streams operators](pekko:stream/operators/index.html).
 
 Scala
 : @@snip [snip](/amqp/src/test/scala/docs/scaladsl/AmqpDocsSpec.scala) { #create-exchange-source }

@@ -1,6 +1,6 @@
 # FTP
 
-The FTP connector provides Akka Stream sources to connect to FTP, FTPs and SFTP servers. Currently, two kinds of sources are provided:
+The FTP connector provides Apache Pekko Stream sources to connect to FTP, FTPs and SFTP servers. Currently, two kinds of sources are provided:
 
 * one for browsing or traversing the server recursively and,
 * another for retrieving files as a stream of bytes.
@@ -16,7 +16,7 @@ The FTP connector provides Akka Stream sources to connect to FTP, FTPs and SFTP 
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 

@@ -27,7 +27,7 @@ The Couchbase connector supports all document formats which are supported by the
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -37,32 +37,32 @@ The table below shows direct dependencies of this module and the second tab show
 
 # Overview
 
-Apache Pekko Connectors Couchbase offers both @ref:[Akka Streams APIs](#reading-from-couchbase-in-akka-streams) and a more @ref:[direct API](#using-couchbasesession-directly) to access Couchbase:
+Apache Pekko Connectors Couchbase offers both @ref:[Apache Pekko Streams APIs](#reading-from-couchbase-in-apache-pekko-streams) and a more @ref:[direct API](#using-couchbasesession-directly) to access Couchbase:
 
 * @apidoc[CouchbaseSession] offers a direct API for one-off operations
-* @apidoc[CouchbaseSessionRegistry$] is an Akka extension to keep track and share `CouchbaseSession`s within an `ActorSystem`
-* @apidoc[CouchbaseSource$], @apidoc[CouchbaseFlow$], and @apidoc[CouchbaseSink$] offer factory methods to create Akka Stream operators
+* @apidoc[CouchbaseSessionRegistry$] is an Apache Pekko extension to keep track and share `CouchbaseSession`s within an `ActorSystem`
+* @apidoc[CouchbaseSource$], @apidoc[CouchbaseFlow$], and @apidoc[CouchbaseSink$] offer factory methods to create Apache Pekko Stream operators
 
 ## Configuration
 
-All operations use the `CouchbaseSession` internally. A session is configured with @apidoc[CouchbaseSessionSettings$] and a Couchbase bucket name. The Akka Stream factory methods create and access the corresponding session instance behind the scenes.
+All operations use the `CouchbaseSession` internally. A session is configured with @apidoc[CouchbaseSessionSettings$] and a Couchbase bucket name. The Apache Pekko Stream factory methods create and access the corresponding session instance behind the scenes.
 
 By default the `CouchbaseSessionSettings` are read from the `alpakka.couchbase.session` section from the configuration eg. in your `application.conf`.
 
 Settings
 : @@snip [snip](/couchbase/src/test/resources/application.conf) { #settings }
 
-## Using Akka Discovery
+## Using Apache Pekko Discovery
 
-To delegate the configuration of Couchbase nodes to any of @extref:[Akka Discovery's lookup mechanisms](akka:discovery/index.html), specify a service name and lookup timeout in the Couchbase section, and pass in @apidoc[akka.stream.alpakka.couchbase.(\w+).DiscoverySupport] nodes lookup to `enrichAsync` and configure Akka Discovery accordingly.
+To delegate the configuration of Couchbase nodes to any of @extref:[Apache Pekko Discovery's lookup mechanisms](pekko:discovery/index.html), specify a service name and lookup timeout in the Couchbase section, and pass in @apidoc[akka.stream.alpakka.couchbase.(\w+).DiscoverySupport] nodes lookup to `enrichAsync` and configure Apache Pekko Discovery accordingly.
 
-**The Akka Discovery dependency has to be added explicitly**.
+**The Apache Pekko Discovery dependency has to be added explicitly**.
 
 Discovery settings (Config discovery)
 : @@snip [snip](/couchbase/src/test/resources/discovery.conf) { #discovery-settings }
 
 
-To enable Akka Discovery on the `CouchbaseSessionSettings`, use `DiscoverySupport.nodes()` as enrichment function.
+To enable Apache Pekko Discovery on the `CouchbaseSessionSettings`, use `DiscoverySupport.nodes()` as enrichment function.
 
 Scala
 : @@snip [snip](/couchbase/src/test/scala/docs/scaladsl/DiscoverySpec.scala) { #registry }
@@ -71,7 +71,7 @@ Java
 : @@snip [snip](/couchbase/src/test/java/docs/javadsl/DiscoveryTest.java) { #registry }
 
 
-# Reading from Couchbase in Akka Streams
+# Reading from Couchbase in Apache Pekko Streams
 
 ## Using statements
 
@@ -97,7 +97,7 @@ Java
 
 ## Get by ID
 
-`CouchbaseFlow.fromId` methods allow to read documents specified by the document ID in the Akka Stream.
+`CouchbaseFlow.fromId` methods allow to read documents specified by the document ID in the Apache Pekko Stream.
 
 Scala
 : @@snip [snip](/couchbase/src/test/scala/docs/scaladsl/CouchbaseFlowSpec.scala) { #fromId }
@@ -106,7 +106,7 @@ Java
 : @@snip [snip](/couchbase/src/test/java/docs/javadsl/CouchbaseExamplesTest.java) { #fromId }
 
 
-# Writing to Couchbase in Akka Streams
+# Writing to Couchbase in Apache Pekko Streams
 
 For each mutation operation we need to create @apidoc[CouchbaseWriteSettings] instance which consists of the following parameters
 
@@ -141,7 +141,7 @@ Java
 
 @@@ note
 
-For single document modifications you may consider using the `CouchbaseSession` methods directly, they offer a @scala[future-based]@java[CompletionStage-based] API which in many cases might be simpler than using Akka Streams with just one element (see [below](#using-couchbasesession-directly))
+For single document modifications you may consider using the `CouchbaseSession` methods directly, they offer a @scala[future-based]@java[CompletionStage-based] API which in many cases might be simpler than using Apache Pekko Streams with just one element (see [below](#using-couchbasesession-directly))
 
 @@@
 
@@ -170,7 +170,7 @@ Java
 
 @@@ note
 
-For single document modifications you may consider using the `CouchbaseSession` methods directly, they offer a @scala[future-based]@java[CompletionStage-based] API which in many cases might be simpler than using Akka Streams with just one element (see [below](#using-couchbasesession-directly))
+For single document modifications you may consider using the `CouchbaseSession` methods directly, they offer a @scala[future-based]@java[CompletionStage-based] API which in many cases might be simpler than using Apache Pekko Streams with just one element (see [below](#using-couchbasesession-directly))
 
 @@@
 
@@ -205,7 +205,7 @@ Java
 
 ## Access via registry
 
-The `CouchbaseSesionRegistry` is an Akka extension to manage the life-cycle of Couchbase sessions. All underlying instances are closed upon actor system termination.
+The `CouchbaseSesionRegistry` is an Apache Pekko extension to manage the life-cycle of Couchbase sessions. All underlying instances are closed upon actor system termination.
 
 When accessing more than one Couchbase cluster, the `CouchbaseEnvironment` should be shared by setting a single instance for the different `CouchbaseSessionSettings`.
 

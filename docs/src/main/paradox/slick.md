@@ -108,7 +108,7 @@ Java
 
 ## Using a Slick Source
 
-The Slick connector allows you to perform a SQL query and expose the resulting stream of results as an Akka Streams `Source[T]`. Where `T` is any type that can be constructed using a database row.
+The Slick connector allows you to perform a SQL query and expose the resulting stream of results as an Apache Pekko Streams `Source[T]`. Where `T` is any type that can be constructed using a database row.
 
 @@@ warning
 Some database systems, such as PostgreSQL, require session parameters to be set in a certain way to support streaming without caching all data at once in memory on the client side, see [Slick documentation](https://scala-slick.org/doc/3.2.0/dbio.html#streaming).

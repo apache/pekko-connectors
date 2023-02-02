@@ -1,6 +1,6 @@
 # AWS SNS
 
-The AWS SNS connector provides an Akka Stream Flow and Sink for push notifications through AWS SNS.
+The AWS SNS connector provides an Apache Pekko Stream Flow and Sink for push notifications through AWS SNS.
 
 For more information about AWS SNS please visit the [official documentation](https://docs.aws.amazon.com/sns/index.html).
 
@@ -41,7 +41,7 @@ Scala
 Java
 : @@snip [snip](/sns/src/test/java/docs/javadsl/SnsPublisherTest.java) { #init-client }
 
-The example above uses @extref:[Akka HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
+The example above uses @extref:[Apache Pekko HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
 
 We will also need an @apidoc[akka.actor.ActorSystem].
 

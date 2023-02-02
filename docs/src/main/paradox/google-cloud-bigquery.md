@@ -1,6 +1,6 @@
 # Google Cloud BigQuery
 
-The BigQuery connector provides Akka Stream sources and sinks to connect to [Google Cloud BigQuery](https://cloud.google.com/bigquery/).
+The BigQuery connector provides Apache Pekko Stream sources and sinks to connect to [Google Cloud BigQuery](https://cloud.google.com/bigquery/).
 BigQuery is a serverless data warehouse for storing and analyzing massive datasets.
 This connector is primarily intended for streaming data into and out of BigQuery tables and running SQL queries, although it also provides basic support for managing datasets and tables and flexible access to the BigQuery REST API.
 
@@ -21,7 +21,7 @@ Apache Pekko Connectors Google Cloud BigQuery is marked as "API may change". Ple
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
   value3=$akka-http.version$
@@ -33,7 +33,7 @@ Apache Pekko Connectors Google Cloud BigQuery is marked as "API may change". Ple
   version4=PekkoHttpVersion
 }
 
-To use the [Jackson JSON library](https://github.com/FasterXML/jackson) for marshalling you must also add the Akka HTTP module for Jackson support.
+To use the [Jackson JSON library](https://github.com/FasterXML/jackson) for marshalling you must also add the Apache Pekko HTTP module for Jackson support.
 
 @@dependency [sbt,Maven,Gradle] {
   symbol3=PekkoHttpVersion
@@ -120,7 +120,7 @@ The BigQuery connector enables loading data into tables via real-time streaming 
 For an overview of these strategies see the [BigQuery documentation](https://cloud.google.com/bigquery/docs/loading-data).
 
 The @scala[@apidoc[BigQuery.insertAll[In]](BigQuery$)] @java[@apidoc[BigQuery.<In>insertAll](BigQuery$)] method creates a sink that accepts batches of @scala[`Seq[In]`] @java[`List<In>`]
-(for example created via the [`batch`](https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/batch.html) operator) and streams them directly into a table.
+(for example created via the @extref:[`batch`](pekko:stream/operators/Source-or-Flow/batch.html) operator) and streams them directly into a table.
 To enable/disable BigQuery’s best-effort deduplication feature use the appropriate @apidoc[InsertAllRetryPolicy$].
 
 Scala
@@ -138,7 +138,7 @@ The frequency with which new load jobs are created is controlled by the `alpakka
 
 Pending the resolution of [Google BigQuery issue 176002651](https://issuetracker.google.com/176002651), the `BigQuery.insertAllAsync` API may not work as expected.
 
-As a workaround, you can use the config setting `akka.http.parsing.conflicting-content-type-header-processing-mode = first` with Akka HTTP v10.2.4 or later.
+As a workaround, you can use the config setting `akka.http.parsing.conflicting-content-type-header-processing-mode = first` with Apache Pekko HTTP v1.0.0 or later.
 
 @@@
 

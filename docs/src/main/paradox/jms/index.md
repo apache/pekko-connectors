@@ -8,7 +8,7 @@ The Java Message Service (JMS) API is a Java message-oriented middleware API for
 
 @@@
 
-The Apache Pekko Connectors JMS connector provides Akka Stream sources and sinks to connect to JMS providers.
+The Apache Pekko Connectors JMS connector provides Apache Pekko Stream sources and sinks to connect to JMS providers.
 
 @@project-info{ projectId="jms" }
 

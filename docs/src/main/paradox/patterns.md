@@ -1,7 +1,7 @@
 # Integration Patterns
 
-Many [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html) can be implemented with Akka Streams 
-(see @extref:[Akka Streams documentation](akka:stream/index.html)).
+Many [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html) can be implemented with Apache Pekko Streams 
+(see @extref:[Apache Pekko Streams documentation](pekko:stream/index.html)).
 
 # PassThrough
 

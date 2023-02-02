@@ -2,12 +2,12 @@
 
 The Apache Pekko Connectors JMS connector offers consuming JMS messages from topics or queues:
 
-* Read `javax.jms.Message`s from an Akka Streams source 
+* Read `javax.jms.Message`s from an Apache Pekko Streams source 
 * Allow for client acknowledgement to the JMS broker 
 * Allow for JMS transactions 
-* Read raw JVM types from an Akka Streams Source
+* Read raw JVM types from an Apache Pekko Streams Source
 
-The JMS message model supports several types of message bodies in (see @javadoc[javax.jms.Message](javax.jms.Message)), which may be created directly from the Akka Stream elements, or in wrappers to access more advanced features.
+The JMS message model supports several types of message bodies in (see @javadoc[javax.jms.Message](javax.jms.Message)), which may be created directly from the Apache Pekko Stream elements, or in wrappers to access more advanced features.
 
 
 ## Receiving messages

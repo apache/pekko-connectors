@@ -1,6 +1,6 @@
 # Elasticsearch
 
-The Apache Pekko Connectors Elasticsearch connector provides Akka Streams integration for Elasticsearch.
+The Apache Pekko Connectors Elasticsearch connector provides Apache Pekko Streams integration for Elasticsearch.
 
 For more information about Elasticsearch, please visit the [Elasticsearch documentation](https://www.elastic.co/guide/index.html).
 
@@ -15,7 +15,7 @@ For more information about Elasticsearch, please visit the [Elasticsearch docume
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 

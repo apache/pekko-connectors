@@ -4,5 +4,5 @@
 
 ## Apache Pekko gRPC
 
-Akka gRPC provides support for building Reactive Streams-compliant gRPC servers and clients on top of Akka Streams.
+Apache Pekko gRPC provides support for building Reactive Streams-compliant gRPC servers and clients on top of Apache Pekko Streams.
 Learn more about it in the [Apache Pekko gRPC documentation](https://doc.akka.io/docs/akka-grpc/current/).   

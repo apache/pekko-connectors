@@ -1,6 +1,6 @@
 # AWS Lambda
 
-The AWS Lambda connector provides Akka Flow for AWS Lambda integration.
+The AWS Lambda connector provides Apache Pekko Flow for AWS Lambda integration.
 
 For more information about AWS Lambda please visit the [AWS lambda documentation](https://docs.aws.amazon.com/lambda/index.html).
 
@@ -15,7 +15,7 @@ For more information about AWS Lambda please visit the [AWS lambda documentation
   symbol2=PekkoVersion
   value2=$akka.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -33,7 +33,7 @@ Scala
 Java
 : @@snip (/awslambda/src/test/java/docs/javadsl/Examples.java) { #init-client }
 
-The example above uses @extref:[Akka HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
+The example above uses @extref:[Apache Pekko HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
 
 We will need an @apidoc[akka.actor.ActorSystem].
 

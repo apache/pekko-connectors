@@ -2,11 +2,11 @@
 
 The Apache Pekko Connectors JMS connector offers producing JMS messages to topics or queues in three ways
 
-* JVM types to an Akka Streams Sink
-* `JmsMessage` sub-types to a Akka Streams Sink or Flow (using `JmsProducer.sink` or `JmsProducer.flow`)
-* `JmsEnvelope` sub-types to a Akka Streams Flow (using `JmsProducer.flexiFlow`) to support pass-throughs
+* JVM types to an Apache Pekko Streams Sink
+* `JmsMessage` sub-types to a Apache Pekko Streams Sink or Flow (using `JmsProducer.sink` or `JmsProducer.flow`)
+* `JmsEnvelope` sub-types to a Apache Pekko Streams Flow (using `JmsProducer.flexiFlow`) to support pass-throughs
 
-The JMS message model supports several types of message bodies in (see @javadoc[javax.jms.Message](javax.jms.Message)), which may be created directly from the Akka Stream elements, or in wrappers to access more advanced features.
+The JMS message model supports several types of message bodies in (see @javadoc[javax.jms.Message](javax.jms.Message)), which may be created directly from the Apache Pekko Stream elements, or in wrappers to access more advanced features.
 
 | Stream element type                                       | Apache Pekko Connectors producer         |
 |-----------------------------------------------------------|--------------------------|
