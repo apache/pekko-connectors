@@ -28,7 +28,7 @@ Read about the details in the @extref:[Apache Pekko documentation](pekko:common/
 
 ### Apache Pekko versions
 
-With Apache though, it is important to be strictly using one version (never blend eg. `pekko-actor 1.0.21` and `pekko-stream 1.0.12`), and do not use a Pekko version lower than the one the Apache Pekko Connectors dependency requires (sometimes Apache Pekko Connectors modules depend on features of the latest Apache Pekko release).
+With Apache Pekko though, it is important to be strictly using one version (never blend eg. `pekko-actor 1.0.21` and `pekko-stream 1.0.12`), and do not use a Pekko version lower than the one the Apache Pekko Connectors dependency requires (sometimes Apache Pekko Connectors modules depend on features of the latest Apache Pekko release).
 
 Apache Pekko Connectors’s Pekko and Pekko HTTP dependencies are upgraded only if that version brings features leveraged by Apache Pekko Connectors or important fixes. As Apache Pekko itself is binary-compatible, the Pekko version may be upgraded with an Apache Pekko Connectors patch release.
 See Apache Pekko's @extref:[Downstream upgrade strategy](pekko:project/downstream-upgrade-strategy.html) 
