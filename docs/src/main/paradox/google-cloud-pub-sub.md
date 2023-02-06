@@ -17,17 +17,17 @@ This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.g
   artifact=pekko-connectors-google-cloud-pub-sub_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
-  value3=$akka-http.version$
+  value3=$pekko-http.version$
   group3=org.apache.pekko
-  artifact3=akka-http_$scala.binary.version$
+  artifact3=pekko-http_$scala.binary.version$
   version3=PekkoHttpVersion
   group4=org.apache.pekko
-  artifact4=akka-http-spray-json_$scala.binary.version$
+  artifact4=pekko-http-spray-json_$scala.binary.version$
   version4=PekkoHttpVersion
 }
 
@@ -49,7 +49,7 @@ Scala
 Java
 : @@snip [snip](/google-cloud-pub-sub/src/test/java/docs/javadsl/ExampleUsageJava.java) { #init-system }
 
-To publish a single request, build the message with a base64 data payload and put it in a @scaladoc[PublishRequest](akka.stream.alpakka.googlecloud.pubsub.PublishRequest). Publishing creates a flow taking the messages and returning the accepted message ids.
+To publish a single request, build the message with a base64 data payload and put it in a @scaladoc[PublishRequest](org.apache.pekko.stream.connectors.googlecloud.pubsub.PublishRequest). Publishing creates a flow taking the messages and returning the accepted message ids.
 
 Scala
 : @@snip [snip](/google-cloud-pub-sub/src/test/scala/docs/scaladsl/ExampleUsage.scala) { #publish-single }
@@ -65,7 +65,7 @@ Scala
 Java
 : @@snip [snip](/google-cloud-pub-sub/src/test/java/docs/javadsl/ExampleUsageJava.java) { #publish-fast }
 
-To consume the messages from a subscription you must subscribe then acknowledge the received messages. @scaladoc[PublishRequest](akka.stream.alpakka.googlecloud.pubsub.ReceivedMessage)
+To consume the messages from a subscription you must subscribe then acknowledge the received messages. @scaladoc[PublishRequest](org.apache.pekko.stream.connectors.googlecloud.pubsub.ReceivedMessage)
 
 Scala
 : @@snip [snip](/google-cloud-pub-sub/src/test/scala/docs/scaladsl/ExampleUsage.scala) { #subscribe }

@@ -13,22 +13,22 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.pravega.{
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.pravega.{
   PravegaEvent,
   ReaderSettingsBuilder,
   TableWriterSettingsBuilder,
   WriterSettingsBuilder
 }
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import io.pravega.client.ClientConfig
 import io.pravega.client.stream.Serializer
 import io.pravega.client.stream.impl.UTF8StringSerializer
 
 import java.nio.ByteBuffer
-import akka.stream.alpakka.pravega.TableReaderSettingsBuilder
-import akka.stream.alpakka.pravega.scaladsl.PravegaTable
-import akka.stream.alpakka.pravega.scaladsl.Pravega
+import org.apache.pekko.stream.connectors.pravega.TableReaderSettingsBuilder
+import org.apache.pekko.stream.connectors.pravega.scaladsl.PravegaTable
+import org.apache.pekko.stream.connectors.pravega.scaladsl.Pravega
 import scala.util.Using
 import io.pravega.client.tables.TableKey
 

@@ -19,17 +19,17 @@ Apache Pekko Connectors Google Cloud BigQuery is marked as "API may change". Ple
   artifact=pekko-connectors-google-cloud-bigquery_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
-  value3=$akka-http.version$
+  value3=$pekko-http.version$
   group3=org.apache.pekko
-  artifact3=akka-http_$scala.binary.version$
+  artifact3=pekko-http_$scala.binary.version$
   version3=PekkoHttpVersion
   group4=org.apache.pekko
-  artifact4=akka-http-spray-json_$scala.binary.version$
+  artifact4=pekko-http-spray-json_$scala.binary.version$
   version4=PekkoHttpVersion
 }
 
@@ -37,9 +37,9 @@ To use the [Jackson JSON library](https://github.com/FasterXML/jackson) for mars
 
 @@dependency [sbt,Maven,Gradle] {
   symbol3=PekkoHttpVersion
-  value3=$akka-http.version$
+  value3=$pekko-http.version$
   group5=org.apache.pekko
-  artifact5=akka-http-jackson_$scala.binary.version$
+  artifact5=pekko-http-jackson_$scala.binary.version$
   version5=PekkoHttpVersion
 }
 
@@ -73,8 +73,8 @@ Java
 : @@snip [snip](/google-cloud-bigquery/src/test/java/docs/javadsl/BigQueryDoc.java) { #setup }
 
 @scala[
-  To enable automatic support for (un)marshalling `User` and `Address` as BigQuery table rows and query results we create implicit @scaladoc[BigQueryRootJsonFormat[T]](akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat) instances.
-  The `bigQueryJsonFormatN` methods are imported from @scaladoc[BigQueryJsonProtocol](akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol$), analogous to Spray’s @scaladoc[DefaultJsonProtocol](spray.json.DefaultJsonProtocol).
+  To enable automatic support for (un)marshalling `User` and `Address` as BigQuery table rows and query results we create implicit @scaladoc[BigQueryRootJsonFormat[T]](org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat) instances.
+  The `bigQueryJsonFormatN` methods are imported from @scaladoc[BigQueryJsonProtocol](org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol$), analogous to Spray’s @scaladoc[DefaultJsonProtocol](spray.json.DefaultJsonProtocol).
 ]
 @java[
   To enable support for (un)marshalling `User` and `Address` as BigQuery table rows and query results we use Jackson’s @javadoc[@JsonCreator](com.fasterxml.jackson.annotation.JsonCreator) and @javadoc[@JsonProperty](com.fasterxml.jackson.annotation.JsonProperty) annotations.
@@ -86,10 +86,10 @@ Java
 
 You can run a SQL query and stream the unmarshalled results with the @scala[@apidoc[BigQuery.query[Out]](BigQuery$)] @java[@apidoc[BigQuery.<Out>query](BigQuery$)] method.
 @scala[
-  The output type `Out` can be a tuple or any user-defined class for which an implicit @scaladoc[BigQueryRootJsonFormat[Out]](akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat) is available.
+  The output type `Out` can be a tuple or any user-defined class for which an implicit @scaladoc[BigQueryRootJsonFormat[Out]](org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat) is available.
   Note that the order and presence of fields in `Out` must strictly match your SQL query.
 ]
-@java[To create the unmarshaller, use the @scaladoc[BigQueryMarshallers.<Out>queryResponseUnmarshaller](akka.stream.alpakka.googlecloud.bigquery.javadsl.jackson.BigQueryMarshallers$) method.]
+@java[To create the unmarshaller, use the @scaladoc[BigQueryMarshallers.<Out>queryResponseUnmarshaller](org.apache.pekko.stream.connectors.googlecloud.bigquery.javadsl.jackson.BigQueryMarshallers$) method.]
 
 Scala
 : @@snip [snip](/google-cloud-bigquery/src/test/scala/docs/scaladsl/BigQueryDoc.scala) { #run-query }
@@ -132,13 +132,13 @@ Java
 As a cost-saving alternative to streaming inserts, you can also add data to a table via asynchronous load jobs.
 The @scala[@apidoc[BigQuery.insertAllAsync[In]](BigQuery$)] @java[@apidoc[BigQuery.<In>insertAllAsync](BigQuery$)] method creates a flow that starts a series of batch load jobs.
 By default, a new load job is created every minute to attempt to emulate near-real-time streaming inserts, although there is no guarantee when the job will actually run.
-The frequency with which new load jobs are created is controlled by the `alpakka.google.bigquery.load-job-per-table-quota` configuration setting.
+The frequency with which new load jobs are created is controlled by the `pekko.connectors.google.bigquery.load-job-per-table-quota` configuration setting.
 
 @@@warning
 
 Pending the resolution of [Google BigQuery issue 176002651](https://issuetracker.google.com/176002651), the `BigQuery.insertAllAsync` API may not work as expected.
 
-As a workaround, you can use the config setting `akka.http.parsing.conflicting-content-type-header-processing-mode = first` with Apache Pekko HTTP v1.0.0 or later.
+As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Apache Pekko HTTP v1.0.0 or later.
 
 @@@
 
@@ -167,7 +167,7 @@ Java
 : @@snip [snip](/google-cloud-bigquery/src/test/java/docs/javadsl/BigQueryDoc.java) { #dataset-methods #table-methods }
 
 Creating a table requires a little more work to specify the schema.
-@scala[To enable automatic schema generation, you can bring implicit @scaladoc[TableSchemaWriter[T]](akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter) instances for your classes into scope via the `bigQuerySchemaN` methods in @scaladoc[BigQuerySchemas](akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas$).]
+@scala[To enable automatic schema generation, you can bring implicit @scaladoc[TableSchemaWriter[T]](org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter) instances for your classes into scope via the `bigQuerySchemaN` methods in @scaladoc[BigQuerySchemas](org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas$).]
 
 Scala
 : @@snip [snip](/google-cloud-bigquery/src/test/scala/docs/scaladsl/BigQueryDoc.scala) { #create-table }
@@ -177,7 +177,7 @@ Java
 
 ## Apply custom settings to a part of the stream
 
-In certain situations it may be desirable to modify the @apidoc[akka.stream.alpakka.google.GoogleSettings] applied to a part of the stream, for example to change the project ID or use different @apidoc[akka.stream.alpakka.google.RetrySettings].
+In certain situations it may be desirable to modify the @apidoc[org.apache.pekko.stream.connectors.google.GoogleSettings] applied to a part of the stream, for example to change the project ID or use different @apidoc[org.apache.pekko.stream.connectors.google.RetrySettings].
 
 Scala
 : @@snip [snip](/google-cloud-bigquery/src/test/scala/docs/scaladsl/BigQueryDoc.scala) { #custom-settings }

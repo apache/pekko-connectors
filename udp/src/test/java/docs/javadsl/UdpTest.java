@@ -13,29 +13,28 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.io.Inet;
-import akka.io.UdpSO;
-import akka.japi.Pair;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.alpakka.udp.Datagram;
-import akka.stream.alpakka.udp.javadsl.Udp;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Source;
-import akka.stream.testkit.TestPublisher;
-import akka.stream.testkit.TestSubscriber;
-import akka.stream.testkit.javadsl.TestSink;
-import akka.stream.testkit.javadsl.TestSource;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.io.Inet;
+import org.apache.pekko.io.UdpSO;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.udp.Datagram;
+import org.apache.pekko.stream.connectors.udp.javadsl.Udp;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.TestPublisher;
+import org.apache.pekko.stream.testkit.TestSubscriber;
+import org.apache.pekko.stream.testkit.javadsl.TestSink;
+import org.apache.pekko.stream.testkit.javadsl.TestSource;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.net.*;
-import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;

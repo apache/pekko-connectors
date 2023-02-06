@@ -13,27 +13,27 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
-import akka.stream.IOResult;
-import akka.stream.Materializer;
-import akka.stream.alpakka.file.ArchiveMetadata;
-import akka.stream.alpakka.file.TarArchiveMetadata;
-import akka.stream.alpakka.file.ZipArchiveMetadata;
-import akka.stream.alpakka.file.javadsl.Archive;
-import akka.stream.alpakka.file.javadsl.Directory;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.FileIO;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.connectors.file.ArchiveMetadata;
+import org.apache.pekko.stream.connectors.file.TarArchiveMetadata;
+import org.apache.pekko.stream.connectors.file.ZipArchiveMetadata;
+import org.apache.pekko.stream.connectors.file.javadsl.Archive;
+import org.apache.pekko.stream.connectors.file.javadsl.Directory;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.FileIO;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.junit.*;
 
-import static akka.util.ByteString.emptyByteString;
+import static org.apache.pekko.util.ByteString.emptyByteString;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -186,7 +186,7 @@ public class ArchiveTest {
         FileIO.toPath(Paths.get("logo.tar.gz"));
     CompletionStage<IOResult> ioResultGz =
         source
-            .via(Archive.tar().via(akka.stream.javadsl.Compression.gzip()))
+            .via(Archive.tar().via(org.apache.pekko.stream.javadsl.Compression.gzip()))
             .runWith(fileSinkGz, system);
     // #sample-tar-gz
 

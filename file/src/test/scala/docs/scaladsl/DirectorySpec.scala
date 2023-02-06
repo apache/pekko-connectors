@@ -15,12 +15,12 @@ package docs.scaladsl
 
 import java.nio.file.{ Files, Path }
 
-import akka.NotUsed
-import akka.actor.ActorSystem
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.testkit.TestKit
+import org.apache.pekko.NotUsed
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.testkit.TestKit
 import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -50,7 +50,7 @@ class DirectorySpec
       }
 
       // #ls
-      import akka.stream.alpakka.file.scaladsl.Directory
+      import org.apache.pekko.stream.connectors.file.scaladsl.Directory
 
       val source: Source[Path, NotUsed] = Directory.ls(dir)
       // #ls
@@ -72,7 +72,7 @@ class DirectorySpec
       Files.createFile(file2)
 
       // #walk
-      import akka.stream.alpakka.file.scaladsl.Directory
+      import org.apache.pekko.stream.connectors.file.scaladsl.Directory
       import java.nio.file.FileVisitOption
 
       val files: Source[Path, NotUsed] = Directory.walk(root)
@@ -92,7 +92,7 @@ class DirectorySpec
       Files.deleteIfExists(dir)
       Files.createDirectories(dir)
       // #mkdirs
-      import akka.stream.alpakka.file.scaladsl.Directory
+      import org.apache.pekko.stream.connectors.file.scaladsl.Directory
 
       val flow: Flow[Path, Path, NotUsed] = Directory.mkdirs()
 
@@ -111,7 +111,7 @@ class DirectorySpec
       val dir = fs.getPath("mkdirsScaladsl2")
       Files.deleteIfExists(dir)
       Files.createDirectories(dir)
-      import akka.stream.alpakka.file.scaladsl.Directory
+      import org.apache.pekko.stream.connectors.file.scaladsl.Directory
       // #mkdirs
 
       val flowWithContext: FlowWithContext[Path, SomeContext, Path, SomeContext, NotUsed] =

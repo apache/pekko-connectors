@@ -13,9 +13,10 @@
 
 package docs.scaladsl
 
-import akka.stream.alpakka.couchbase.scaladsl.CouchbaseSession
-import akka.stream.alpakka.couchbase.testing.CouchbaseSupport
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupport
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.couchbase.client.java.document.JsonDocument
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -41,9 +42,6 @@ class CouchbaseSessionExamplesSpec
   "a Couchbasesession" should {
     "be managed by the registry" in {
       // #registry
-      import akka.stream.alpakka.couchbase.CouchbaseSessionRegistry
-      import akka.stream.alpakka.couchbase.CouchbaseSessionSettings
-      import akka.stream.alpakka.couchbase.scaladsl.CouchbaseSession
       import com.couchbase.client.java.env.{ CouchbaseEnvironment, DefaultCouchbaseEnvironment }
 
       // Akka extension (singleton per actor system)
@@ -64,8 +62,6 @@ class CouchbaseSessionExamplesSpec
 
     "be created from settings" in {
       // #create
-      import akka.stream.alpakka.couchbase.CouchbaseSessionSettings
-      import akka.stream.alpakka.couchbase.scaladsl.CouchbaseSession
 
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       val sessionSettings = CouchbaseSessionSettings(actorSystem)

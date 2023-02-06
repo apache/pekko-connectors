@@ -15,14 +15,14 @@ queue and set other queue as subscribers. More information about that could be f
   artifact=pekko-connectors-ironmq_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
-  value3=$akka-http.version$
+  value3=$pekko-http.version$
   group3=org.apache.pekko
-  artifact3=akka-http_$scala.binary.version$
+  artifact3=pekko-http_$scala.binary.version$
   version3=PekkoHttpVersion
 }
 
@@ -44,7 +44,7 @@ Committing the message will cause the message to be deleted from the queue.
 
 ### At most once
 
-The consumer source is instantiated using the @scala[@scaladoc[IronMqConsumer](akka.stream.alpakka.ironmq.scaladsl.IronMqConsumer$)]@java[@scaladoc[IronMqConsumer](akka.stream.alpakka.ironmq.javadsl.IronMqConsumer$)].
+The consumer source is instantiated using the @scala[@scaladoc[IronMqConsumer](org.apache.pekko.stream.connectors.ironmq.scaladsl.IronMqConsumer$)]@java[@scaladoc[IronMqConsumer](org.apache.pekko.stream.connectors.ironmq.javadsl.IronMqConsumer$)].
 
 Scala
 : @@snip [snip](/ironmq/src/test/scala/docs/scaladsl/IronMqDocsSpec.scala) { #atMostOnce }
@@ -69,15 +69,15 @@ Java
 The producer is very trivial at this time, it does not provide any batching mechanism, but sends messages to IronMq as
 soon as they arrive to the stage.
 
-The producer is instantiated using the @scala[@scaladoc[IronMqProducer](akka.stream.alpakka.ironmq.scaladsl.IronMqProducer$)]@java[@scaladoc[IronMqProducer](akka.stream.alpakka.ironmq.javadsl.IronMqProducer$)].
+The producer is instantiated using the @scala[@scaladoc[IronMqProducer](org.apache.pekko.stream.connectors.ironmq.scaladsl.IronMqProducer$)]@java[@scaladoc[IronMqProducer](org.apache.pekko.stream.connectors.ironmq.javadsl.IronMqProducer$)].
 It provides methods to obtain either a @scala[`Flow[PushMessage, Messages.Id, NotUsed]`]@java[`Flow<PushMessage, Messages.Id, NotUsed>`] or a @scala[`Sink[PushMessage, NotUsed]`]@java[`Sink<PushMessage, NotUsed>`].
 
 
 ### Flow
 
-The @scaladoc[PushMessage](akka.stream.alpakka.ironmq.PushMessage) allows to specify the delay per individual message. The message expiration is set a queue level.
+The @scaladoc[PushMessage](org.apache.pekko.stream.connectors.ironmq.PushMessage) allows to specify the delay per individual message. The message expiration is set a queue level.
 
-When using the `Flow` the returned @scala[@scaladoc[Messages.Ids](akka.stream.alpakka.ironmq.Message$$Id)]@java[`String`] contains the ID of the pushed message, that can be used to manipulate the message. For each `PushMessage` from the upstream you will have exactly one @scala[`Message.Id`]@java[`String`] in downstream in the same order.
+When using the `Flow` the returned @scala[@scaladoc[Messages.Ids](org.apache.pekko.stream.connectors.ironmq.Message$$Id)]@java[`String`] contains the ID of the pushed message, that can be used to manipulate the message. For each `PushMessage` from the upstream you will have exactly one @scala[`Message.Id`]@java[`String`] in downstream in the same order.
 
 Scala
 : @@snip [snip](/ironmq/src/test/scala/docs/scaladsl/IronMqDocsSpec.scala) { #flow }

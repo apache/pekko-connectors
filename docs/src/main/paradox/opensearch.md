@@ -13,7 +13,7 @@ For more information about Opensearch, please visit the [Opensearch documentatio
   artifact=pekko-connectors-elasticsearch_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion

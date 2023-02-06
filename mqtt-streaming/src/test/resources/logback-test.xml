@@ -13,16 +13,16 @@
         </encoder>
     </appender>
 
-    <appender name="CapturingAppender" class="akka.stream.alpakka.testkit.CapturingAppender"/>
+    <appender name="CapturingAppender" class="org.apache.pekko.stream.connectors.testkit.CapturingAppender"/>
 
-    <logger name="akka.stream.alpakka.testkit.CapturingAppenderDelegate">
+    <logger name="org.apache.pekko.stream.connectors.testkit.CapturingAppenderDelegate">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="akka" level="INFO"/>
-    <logger name="akka.stream" level="INFO" />
-    <logger name="akka.stream.alpakka" level="debug" />
-    <logger name="akka.stream.alpakka.mqtt.streaming.impl" level="info" />
+    <logger name="org.apache.pekko" level="INFO"/>
+    <logger name="org.apache.pekko.stream" level="INFO" />
+    <logger name="org.apache.pekko.stream.connectors" level="debug" />
+    <logger name="org.apache.pekko.stream.connectors.mqtt.streaming.impl" level="info" />
 
     <root level="debug">
         <appender-ref ref="CapturingAppender"/>

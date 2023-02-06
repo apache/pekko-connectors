@@ -13,12 +13,12 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.mongodb.{ DocumentReplace, DocumentUpdate }
-import akka.stream.alpakka.mongodb.scaladsl.MongoSink
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
+import org.apache.pekko.stream.connectors.mongodb.scaladsl.MongoSink
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import com.mongodb.client.model.{ Filters, InsertManyOptions, Updates }
 import com.mongodb.reactivestreams.client.{ MongoClients, MongoCollection }
 import org.bson.Document

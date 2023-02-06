@@ -13,13 +13,17 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.stream.alpakka.sqs.*;
-import akka.stream.alpakka.sqs.javadsl.BaseSqsTest;
-import akka.stream.alpakka.sqs.javadsl.SqsPublishFlow;
-import akka.stream.alpakka.sqs.javadsl.SqsPublishSink;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.Done;
+import org.apache.pekko.stream.connectors.sqs.SqsPublishBatchSettings;
+import org.apache.pekko.stream.connectors.sqs.SqsPublishGroupedSettings;
+import org.apache.pekko.stream.connectors.sqs.SqsPublishResult;
+import org.apache.pekko.stream.connectors.sqs.SqsPublishResultEntry;
+import org.apache.pekko.stream.connectors.sqs.SqsPublishSettings;
+import org.apache.pekko.stream.connectors.sqs.javadsl.BaseSqsTest;
+import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishFlow;
+import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishSink;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import org.junit.Test;
 import software.amazon.awssdk.services.sqs.model.*;
 

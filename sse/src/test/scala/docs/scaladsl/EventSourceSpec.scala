@@ -15,28 +15,28 @@ package docs.scaladsl
 
 import java.net.InetSocketAddress
 import java.nio.charset.StandardCharsets.UTF_8
-import akka.actor.{ Actor, ActorLogging, ActorSystem, Props, Status }
-import akka.http.scaladsl.coding.Coders
-import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling
-import akka.http.scaladsl.model.MediaTypes.`text/event-stream`
-import akka.http.scaladsl.model.StatusCodes.BadRequest
-import akka.http.scaladsl.model.headers.`Last-Event-ID`
-import akka.http.scaladsl.server.{ Directives, Route }
-import akka.pattern.pipe
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.stream.ThrottleMode
-import akka.testkit.SocketUtil
-import akka.{ Done, NotUsed }
+import org.apache.pekko.actor.{ Actor, ActorLogging, ActorSystem, Props, Status }
+import org.apache.pekko.http.scaladsl.coding.Coders
+import org.apache.pekko.http.scaladsl.marshalling.sse.EventStreamMarshalling
+import org.apache.pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
+import org.apache.pekko.http.scaladsl.model.StatusCodes.BadRequest
+import org.apache.pekko.http.scaladsl.model.headers.`Last-Event-ID`
+import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
+import org.apache.pekko.pattern.pipe
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.ThrottleMode
+import org.apache.pekko.testkit.SocketUtil
+import org.apache.pekko.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ Await, Future }
 //#event-source
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.sse.ServerSentEvent
-import akka.http.scaladsl.model.{ HttpEntity, HttpRequest, HttpResponse, Uri }
-import akka.stream.alpakka.sse.scaladsl.EventSource
+import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko.http.scaladsl.model.sse.ServerSentEvent
+import org.apache.pekko.http.scaladsl.model.{ HttpEntity, HttpRequest, HttpResponse, Uri }
+import org.apache.pekko.stream.connectors.sse.scaladsl.EventSource
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 

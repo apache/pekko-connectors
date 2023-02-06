@@ -13,11 +13,11 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.stream.Graph;
-import akka.stream.alpakka.google.GoogleAttributes;
-import akka.stream.alpakka.google.GoogleSettings;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.Graph;
+import org.apache.pekko.stream.connectors.google.GoogleAttributes;
+import org.apache.pekko.stream.connectors.google.GoogleSettings;
+import org.apache.pekko.stream.javadsl.Source;
 
 public class GoogleCommonDoc {
 

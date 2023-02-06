@@ -15,8 +15,8 @@ package docs.javadsl;
 
 // #configure-custom-ssh-client
 
-import akka.stream.alpakka.ftp.javadsl.Sftp;
-import akka.stream.alpakka.ftp.javadsl.SftpApi;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
+import org.apache.pekko.stream.connectors.ftp.javadsl.SftpApi;
 import net.schmizz.sshj.DefaultConfig;
 import net.schmizz.sshj.SSHClient;
 

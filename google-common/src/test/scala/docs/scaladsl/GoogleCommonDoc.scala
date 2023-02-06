@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.Graph
-import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
-import akka.stream.scaladsl.Source
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.Graph
+import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import org.apache.pekko.stream.scaladsl.Source
 
 import scala.annotation.nowarn
 

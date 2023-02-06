@@ -13,9 +13,9 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.stream.alpakka.geode.javadsl.Geode;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.Done;
+import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.junit.Rule;
 import org.junit.Test;
 

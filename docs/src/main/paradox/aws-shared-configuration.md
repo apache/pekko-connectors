@@ -3,12 +3,12 @@
 ## Underlying HTTP client
 
 Scala
-: @@snip [snip](/sqs/src/test/scala/akka/stream/alpakka/sqs/scaladsl/DefaultTestContext.scala) { #init-client }
+: @@snip [snip](/sqs/src/test/scala/org/apache/pekko/stream/connectors/sqs/scaladsl/DefaultTestContext.scala) { #init-client }
 
 Java
-: @@snip [snip](/sqs/src/test/java/akka/stream/alpakka/sqs/javadsl/BaseSqsTest.java) { #init-client }
+: @@snip [snip](/sqs/src/test/java/org/apache/pekko/stream/connectors/sqs/javadsl/BaseSqsTest.java) { #init-client }
 
-The example snippets show how the AWS clients are setup to use @extref:[Apache Pekko HTTP](akka-http:) as the default HTTP client implementation via the thin adapter library [AWS Apache Pekko-Http SPI implementation](https://github.com/matsluni/aws-spi-akka-http). By setting the `httpClient` explicitly (as above) the Apache Pekko actor system is reused.  If it is not set explicitly then a separate actor system will be created internally.
+The example snippets show how the AWS clients are setup to use @extref:[Apache Pekko HTTP](pekko-http:) as the default HTTP client implementation via the thin adapter library [AWS Apache Pekko-Http SPI implementation](https://github.com/matsluni/aws-spi-akka-http). By setting the `httpClient` explicitly (as above) the Apache Pekko actor system is reused.  If it is not set explicitly then a separate actor system will be created internally.
 
 
 ### Using Netty

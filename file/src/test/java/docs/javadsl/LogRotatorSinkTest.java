@@ -13,18 +13,18 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.function.Creator;
-import akka.japi.function.Function;
-import akka.stream.Materializer;
-import akka.stream.alpakka.file.javadsl.LogRotatorSink;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.*;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.function.Creator;
+import org.apache.pekko.japi.function.Function;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.connectors.file.javadsl.LogRotatorSink;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.*;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.junit.*;
 
 import java.nio.file.FileSystems;
@@ -125,7 +125,7 @@ public class LogRotatorSinkTest {
 
     /*
     // #sample
-    import akka.stream.alpakka.file.javadsl.LogRotatorSink;
+    import org.apache.pekko.stream.connectors.file.javadsl.LogRotatorSink;
 
     Creator<Function<ByteString, Optional<Path>>> triggerFunctionCreator = ...;
 

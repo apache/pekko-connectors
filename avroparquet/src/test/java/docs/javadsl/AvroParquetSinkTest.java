@@ -13,15 +13,15 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.actor.ActorSystem;
-import akka.stream.Materializer;
-import akka.stream.alpakka.avroparquet.javadsl.AvroParquetSink;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.Done;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.connectors.avroparquet.javadsl.AvroParquetSink;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import com.google.common.collect.Lists;
 import org.apache.parquet.avro.AvroParquetReader;
 import org.apache.parquet.avro.AvroParquetWriter;

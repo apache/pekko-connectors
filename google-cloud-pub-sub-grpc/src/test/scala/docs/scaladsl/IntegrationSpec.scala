@@ -13,17 +13,17 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.actor.{ ActorSystem, Cancellable }
-import akka.stream.alpakka.googlecloud.pubsub.grpc.PubSubSettings
-import akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.{ GrpcPublisher, PubSubAttributes }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
+import org.apache.pekko.Done
+import org.apache.pekko.actor.{ ActorSystem, Cancellable }
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GrpcPublisher, PubSubAttributes }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.scalatest.OptionValues
 
 //#publish-single
-import akka.NotUsed
-import akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
-import akka.stream.scaladsl._
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
+import org.apache.pekko.stream.scaladsl._
 
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub._

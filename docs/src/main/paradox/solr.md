@@ -21,9 +21,9 @@ For more information about Solr please visit the [Solr documentation](https://lu
   artifact=pekko-connectors-solr_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -46,7 +46,7 @@ Java
 
 ## Reading from Solr
 
-Create a Solr @javadoc[TupleStream](org.apache.solr.client.solrj.io.stream.TupleStream) (eg. via @javadoc[CloudSolrStream](org.apache.solr.client.solrj.io.stream.CloudSolrStream)) and use `SolrSource.fromTupleStream` (@scala[@scaladoc[API](akka.stream.alpakka.solr.scaladsl.SolrSource$)]@java[@scaladoc[API](akka.stream.alpakka.solr.javadsl.SolrSource$)]) to create a source.
+Create a Solr @javadoc[TupleStream](org.apache.solr.client.solrj.io.stream.TupleStream) (eg. via @javadoc[CloudSolrStream](org.apache.solr.client.solrj.io.stream.CloudSolrStream)) and use `SolrSource.fromTupleStream` (@scala[@scaladoc[API](org.apache.pekko.stream.connectors.solr.scaladsl.SolrSource$)]@java[@scaladoc[API](org.apache.pekko.stream.connectors.solr.javadsl.SolrSource$)]) to create a source.
 
 Scala
 : @@snip [snip](/solr/src/test/scala/docs/scaladsl/SolrSpec.scala) { #tuple-stream }
@@ -109,8 +109,8 @@ Java
 Use `SolrSink.documents`, `SolrFlow.documents` or `SolrFlow.documentsWithPassThrough` to stream `SolrInputDocument`s to Solr.
 
 A `SolrClient` must be provided to
-@scala[@scaladoc[SolrSink](akka.stream.alpakka.solr.scaladsl.SolrSink$) implicitly.]
-@java[@scaladoc[SolrSink](akka.stream.alpakka.solr.javadsl.SolrSink$).]
+@scala[@scaladoc[SolrSink](org.apache.pekko.stream.connectors.solr.scaladsl.SolrSink$) implicitly.]
+@java[@scaladoc[SolrSink](org.apache.pekko.stream.connectors.solr.javadsl.SolrSink$).]
 
 Scala
 : @@snip [snip](/solr/src/test/scala/docs/scaladsl/SolrSpec.scala) { #run-document }
@@ -152,8 +152,8 @@ Java
 #### Using a flow with custom binding
 
 You can also build flow stages with
-@scala[@scaladoc[SolrFlow](akka.stream.alpakka.solr.scaladsl.SolrFlow$).]
-@java[@scaladoc[SolrFlow](akka.stream.alpakka.solr.javadsl.SolrFlow$).]
+@scala[@scaladoc[SolrFlow](org.apache.pekko.stream.connectors.solr.scaladsl.SolrFlow$).]
+@java[@scaladoc[SolrFlow](org.apache.pekko.stream.connectors.solr.javadsl.SolrFlow$).]
 
 Scala
 : @@snip [snip](/solr/src/test/scala/docs/scaladsl/SolrSpec.scala) { #typeds-flow }

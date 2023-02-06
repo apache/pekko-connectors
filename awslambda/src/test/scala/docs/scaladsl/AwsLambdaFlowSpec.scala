@@ -15,13 +15,13 @@ package docs.scaladsl
 
 import java.util.concurrent.CompletableFuture
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.awslambda.scaladsl.AwsLambdaFlow
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Keep, Sink }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.TestSource
-import akka.testkit.TestKit
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.testkit.scaladsl.TestSource
+import org.apache.pekko.testkit.TestKit
 import org.mockito.ArgumentMatchers.{ any => mockitoAny, eq => mockitoEq }
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock

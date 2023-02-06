@@ -22,9 +22,9 @@ The binding and connecting APIs are extremely similar to the `Tcp` Apache Pekko 
   artifact=pekko-connectors-unix-domain-socket_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 

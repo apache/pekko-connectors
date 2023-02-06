@@ -13,18 +13,18 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.http.javadsl.Http;
-import akka.http.javadsl.model.ContentTypes;
-import akka.http.javadsl.model.HttpRequest;
-import akka.stream.alpakka.elasticsearch.ApiVersion;
-import akka.stream.alpakka.elasticsearch.ApiVersionBase;
-import akka.stream.alpakka.elasticsearch.ElasticsearchConnectionSettings;
-import akka.stream.alpakka.elasticsearch.ElasticsearchParams;
-import akka.stream.alpakka.elasticsearch.OpensearchApiVersion;
-import akka.stream.alpakka.elasticsearch.OpensearchParams;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.http.javadsl.Http;
+import org.apache.pekko.http.javadsl.model.ContentTypes;
+import org.apache.pekko.http.javadsl.model.HttpRequest;
+import org.apache.pekko.stream.connectors.elasticsearch.ApiVersion;
+import org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase;
+import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings;
+import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchParams;
+import org.apache.pekko.stream.connectors.elasticsearch.OpensearchApiVersion;
+import org.apache.pekko.stream.connectors.elasticsearch.OpensearchParams;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -64,7 +64,7 @@ public class ElasticsearchTestBase {
   }
 
   protected static void prepareIndex(
-      int port, akka.stream.alpakka.elasticsearch.ApiVersionBase version) throws IOException {
+      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase version) throws IOException {
     connectionSettings =
         ElasticsearchConnectionSettings.create(String.format("http://localhost:%d", port));
 

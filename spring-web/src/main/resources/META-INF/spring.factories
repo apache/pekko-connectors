@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-akka.stream.alpakka.spring.web.SpringWebAkkaStreamsConfiguration
+org.apache.pekko.stream.connectors.spring.web.SpringWebPekkoStreamsConfiguration

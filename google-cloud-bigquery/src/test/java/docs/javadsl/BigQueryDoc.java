@@ -15,34 +15,34 @@ package docs.javadsl;
 
 // #imports
 
-import akka.Done;
-import akka.NotUsed;
-import akka.http.javadsl.marshallers.jackson.Jackson;
-import akka.http.javadsl.marshalling.Marshaller;
-import akka.http.javadsl.model.HttpEntity;
-import akka.http.javadsl.model.RequestEntity;
-import akka.http.javadsl.unmarshalling.Unmarshaller;
-import akka.stream.alpakka.google.GoogleAttributes;
-import akka.stream.alpakka.google.GoogleSettings;
-import akka.stream.alpakka.googlecloud.bigquery.InsertAllRetryPolicy;
-import akka.stream.alpakka.googlecloud.bigquery.javadsl.BigQuery;
-import akka.stream.alpakka.googlecloud.bigquery.javadsl.jackson.BigQueryMarshallers;
-import akka.stream.alpakka.googlecloud.bigquery.model.Dataset;
-import akka.stream.alpakka.googlecloud.bigquery.model.Job;
-import akka.stream.alpakka.googlecloud.bigquery.model.JobReference;
-import akka.stream.alpakka.googlecloud.bigquery.model.JobState;
-import akka.stream.alpakka.googlecloud.bigquery.model.QueryResponse;
-import akka.stream.alpakka.googlecloud.bigquery.model.Table;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableDataInsertAllRequest;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableDataListResponse;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchema;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaMode;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableFieldSchemaType;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableListResponse;
-import akka.stream.alpakka.googlecloud.bigquery.model.TableSchema;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.http.javadsl.marshallers.jackson.Jackson;
+import org.apache.pekko.http.javadsl.marshalling.Marshaller;
+import org.apache.pekko.http.javadsl.model.HttpEntity;
+import org.apache.pekko.http.javadsl.model.RequestEntity;
+import org.apache.pekko.http.javadsl.unmarshalling.Unmarshaller;
+import org.apache.pekko.stream.connectors.google.GoogleAttributes;
+import org.apache.pekko.stream.connectors.google.GoogleSettings;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.javadsl.BigQuery;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.javadsl.jackson.BigQueryMarshallers;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Job;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobReference;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobState;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Table;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllRequest;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableDataListResponse;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchema;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableListResponse;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableSchema;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -64,7 +64,7 @@ import java.util.stream.Collectors;
 
 public class BigQueryDoc {
 
-  akka.actor.ActorSystem system = null;
+  org.apache.pekko.actor.ActorSystem system = null;
 
   // #setup
   ObjectMapper objectMapper = new ObjectMapper();

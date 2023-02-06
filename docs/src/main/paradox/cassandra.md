@@ -27,7 +27,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Sessions
 
-Cassandra is accessed through @apidoc[akka.stream.alpakka.cassandra.*.CassandraSession]s which are managed by the @apidoc[CassandraSessionRegistry$] Apache Pekko extension. This way a session is shared across all usages within the actor system and properly shut down after the actor system is shut down.
+Cassandra is accessed through @apidoc[org.apache.pekko.stream.connectors.cassandra.*.CassandraSession]s which are managed by the @apidoc[CassandraSessionRegistry$] Apache Pekko extension. This way a session is shared across all usages within the actor system and properly shut down after the actor system is shut down.
 
 @scala[The `CassandraSession` is provided to the stream factory methods as an `implicit` parameter.]
 
@@ -90,9 +90,9 @@ Java
 
 ## Custom Session creation
 
-Session creation and configuration is controlled via settings in `application.conf`. The @apidoc[akka.stream.alpakka.cassandra.CassandraSessionSettings] accept a full path to a configuration section which needs to specify a `session-provider` setting. The @apidoc[CassandraSessionRegistry] expects a fully qualified class name to a class implementing @apidoc[CqlSessionProvider].
+Session creation and configuration is controlled via settings in `application.conf`. The @apidoc[org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings] accept a full path to a configuration section which needs to specify a `session-provider` setting. The @apidoc[CassandraSessionRegistry] expects a fully qualified class name to a class implementing @apidoc[CqlSessionProvider].
 
-Apache Pekko Connectors Cassandra includes a default implementation @apidoc[DefaultSessionProvider], which is referenced in the default configuration `alpakka.cassandra`.
+Apache Pekko Connectors Cassandra includes a default implementation @apidoc[DefaultSessionProvider], which is referenced in the default configuration `pekko.connectors.cassandra`.
 
 The @apidoc[DefaultSessionProvider] config section must contain:
 
@@ -110,25 +110,25 @@ application.conf
 
 ### Using Apache Pekko Discovery
 
-To use @extref[Apache Pekko Discovery](pekko:discovery/) make sure the `akka-discovery` dependency is on you classpath.
+To use @extref[Apache Pekko Discovery](pekko:discovery/) make sure the `pekko-discovery` dependency is on you classpath.
 
 @@dependency [sbt,Maven,Gradle] {
   symbolAkka=PekkoVersion
-  valueAkka="$akka.version$"
-  group="com.typesafe.akka"
-  artifact="akka-discovery_$scala.binary.version$"
+  valueAkka="$pekko.version$"
+  group="org.apache.pekko"
+  artifact="pekko-discovery_$scala.binary.version$"
   version=PekkoVersion
 }
 
-To enable @extref[Apache Pekko Discovery](pekko:discovery/) with the @apidoc[DefaultSessionProvider], set up the desired service name in the discovery mechanism of your choice and pass that name in `service-discovery.name`. The example below extends the `alpakka.cassandra` config section and only overwrites the service name.
+To enable @extref[Apache Pekko Discovery](pekko:discovery/) with the @apidoc[DefaultSessionProvider], set up the desired service name in the discovery mechanism of your choice and pass that name in `service-discovery.name`. The example below extends the `pekko.connectors.cassandra` config section and only overwrites the service name.
 
 application.conf
-: @@snip [snip](/cassandra/src/test/resources/application.conf) { #akka-discovery-docs }
+: @@snip [snip](/cassandra/src/test/resources/application.conf) { #pekko-discovery-docs }
 
-Use the full config section path to create the @apidoc[akka.stream.alpakka.cassandra.CassandraSessionSettings$].
+Use the full config section path to create the @apidoc[org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings$].
 
 Scala
-: @@snip [snip](/cassandra/src/test/scala/docs/scaladsl/AkkaDiscoverySpec.scala) { #discovery }
+: @@snip [snip](/cassandra/src/test/scala/docs/scaladsl/PekkoDiscoverySpec.scala) { #discovery }
 
 Java
 : @@snip [snip](/cassandra/src/test/java/docs/javadsl/CassandraSourceTest.java) { #discovery }

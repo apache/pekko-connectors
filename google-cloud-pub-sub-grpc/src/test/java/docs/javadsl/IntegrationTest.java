@@ -13,19 +13,19 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.Cancellable;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.Cancellable;
 
-import akka.actor.ActorSystem;
+import org.apache.pekko.actor.ActorSystem;
 
 // #publish-single
-import akka.stream.alpakka.googlecloud.pubsub.grpc.PubSubSettings;
-import akka.stream.alpakka.googlecloud.pubsub.grpc.javadsl.GooglePubSub;
-import akka.stream.alpakka.googlecloud.pubsub.grpc.javadsl.GrpcPublisher;
-import akka.stream.alpakka.googlecloud.pubsub.grpc.javadsl.PubSubAttributes;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.*;
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings;
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GooglePubSub;
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GrpcPublisher;
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.PubSubAttributes;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.*;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.*;
 

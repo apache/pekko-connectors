@@ -13,20 +13,20 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.stream.SystemMaterializer;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.SystemMaterializer;
 // #import
-import akka.stream.alpakka.csv.javadsl.CsvFormatting;
-import akka.stream.alpakka.csv.javadsl.CsvQuotingStyle;
+import org.apache.pekko.stream.connectors.csv.javadsl.CsvFormatting;
+import org.apache.pekko.stream.connectors.csv.javadsl.CsvQuotingStyle;
 
 // #import
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.junit.*;
 
 import java.nio.charset.Charset;

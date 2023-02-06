@@ -21,7 +21,7 @@ The Apache Pekko Connectors OrientDB connector provides Apache Pekko Stream sour
   artifact=pekko-connectors-orientdb_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -45,7 +45,7 @@ Java
 ## Reading `ODocument` from OrientDB
 
 Now we can stream messages which contain OrientDB's `ODocument` (in Scala or Java) from or to OrientDB by providing the `ODatabaseDocumentTx` to the
-@scala[@scaladoc[OrientDbSource](akka.stream.alpakka.orientdb.scaladsl.OrientDbSource$)]@java[@scaladoc[OrientDbSource](akka.stream.alpakka.orientdb.javadsl.OrientDbSource$)].
+@scala[@scaladoc[OrientDbSource](org.apache.pekko.stream.connectors.orientdb.scaladsl.OrientDbSource$)]@java[@scaladoc[OrientDbSource](org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSource$)].
 
 Scala
 : @@snip [snip](/orientdb/src/test/scala/docs/scaladsl/OrientDbSpec.scala) { #run-odocument }

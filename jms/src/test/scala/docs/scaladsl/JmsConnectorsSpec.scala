@@ -18,11 +18,11 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ CountDownLatch, LinkedBlockingQueue, ThreadLocalRandom, TimeUnit }
 
-import akka.stream._
-import akka.stream.alpakka.jms._
-import akka.stream.alpakka.jms.scaladsl._
-import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import akka.{ Done, NotUsed }
+import org.apache.pekko.stream._
+import org.apache.pekko.stream.connectors.jms._
+import org.apache.pekko.stream.connectors.jms.scaladsl._
+import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import org.apache.pekko.{ Done, NotUsed }
 import javax.jms._
 
 import org.apache.activemq.command.ActiveMQQueue
@@ -191,7 +191,7 @@ class JmsConnectorsSpec extends JmsSpec {
 
         // #create-messages-with-properties
         val msgsIn = (1 to 10).toList.map { n =>
-          akka.stream.alpakka.jms
+          org.apache.pekko.stream.connectors.jms
             .JmsTextMessage(n.toString)
             .withProperty("Number", n)
             .withProperty("IsOdd", n % 2 == 1)
@@ -1156,7 +1156,7 @@ class JmsConnectorsSpec extends JmsSpec {
     connection.start()
     val session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)
     val tempQueue = session.createTemporaryQueue()
-    val tempQueueDest = alpakka.jms.Destination(tempQueue)
+    val tempQueueDest = connectors.jms.Destination(tempQueue)
     val message = "ThisIsATest"
     val correlationId = UUID.randomUUID().toString
 

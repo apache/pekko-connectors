@@ -14,14 +14,14 @@
 package docs.javadsl;
 
 // #important-imports
-import akka.stream.javadsl.*;
-import akka.stream.alpakka.slick.javadsl.*;
+import org.apache.pekko.stream.javadsl.*;
+import org.apache.pekko.stream.connectors.slick.javadsl.*;
 // #important-imports
 
 import java.util.concurrent.CompletionStage;
 
-import akka.Done;
-import akka.actor.ActorSystem;
+import org.apache.pekko.Done;
+import org.apache.pekko.actor.ActorSystem;
 
 public class DocSnippetSource {
   public static void main(String[] args) throws Exception {

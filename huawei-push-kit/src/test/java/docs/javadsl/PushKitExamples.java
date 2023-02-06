@@ -13,24 +13,24 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
+import org.apache.pekko.actor.ActorSystem;
 
 // #imports
-import akka.stream.alpakka.huawei.pushkit.*;
-import akka.stream.alpakka.huawei.pushkit.javadsl.HmsPushKit;
-import akka.stream.alpakka.huawei.pushkit.models.AndroidConfig;
-import akka.stream.alpakka.huawei.pushkit.models.AndroidNotification;
-import akka.stream.alpakka.huawei.pushkit.models.BasicNotification;
-import akka.stream.alpakka.huawei.pushkit.models.ClickAction;
-import akka.stream.alpakka.huawei.pushkit.models.ErrorResponse;
-import akka.stream.alpakka.huawei.pushkit.models.PushKitNotification;
-import akka.stream.alpakka.huawei.pushkit.models.PushKitResponse;
-import akka.stream.alpakka.huawei.pushkit.models.Response;
-import akka.stream.alpakka.huawei.pushkit.models.Tokens;
+import org.apache.pekko.stream.connectors.huawei.pushkit.*;
+import org.apache.pekko.stream.connectors.huawei.pushkit.javadsl.HmsPushKit;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.AndroidConfig;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.AndroidNotification;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.BasicNotification;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.ClickAction;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.ErrorResponse;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.PushKitNotification;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.PushKitResponse;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.Response;
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.Tokens;
 
 // #imports
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import scala.collection.immutable.Set;
 
 import java.util.List;

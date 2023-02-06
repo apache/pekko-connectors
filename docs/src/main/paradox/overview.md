@@ -12,10 +12,10 @@ There are a few blog posts and presentations about Apache Pekko Connectors out t
 
 The code in this documentation is compiled against:
 
-* Apache Pekko Connectors $project.version$ ([Github](https://github.com/apache/incubator-pekko-connectors), [API docs](https://doc.akka.io/api/alpakka/current/akka/stream/alpakka/index.html))
+* Apache Pekko Connectors $project.version$ ([Github](https://github.com/apache/incubator-pekko-connectors), [API docs](https://doc.akka.io/api/alpakka/current/org/apache/pekko/stream/connectors/index.html))
 * Scala $scala.binary.version$ (all modules are available for Scala 2.13)
-* Apache Pekko Streams $akka.version$+ (@extref:[Reference](pekko:stream/index.html), [Github](https://github.com/apache/incubator-pekko))
-* Apache Pekko HTTP $akka-http.version$+ (@extref:[Reference](akka-http:), [Github](https://github.com/apache/incubator-pekko-http))
+* Apache Pekko Streams $pekko.version$+ (@extref:[Reference](pekko:stream/index.html), [Github](https://github.com/apache/incubator-pekko))
+* Apache Pekko HTTP $pekko-http.version$+ (@extref:[Reference](pekko-http:), [Github](https://github.com/apache/incubator-pekko-http))
 
 See @ref:[Apache Pekko Connectors versioning](other-docs/versioning.md) for more details.
 
@@ -29,11 +29,11 @@ Please feel free to contribute to Apache Pekko Connectors by reporting issues yo
 
 We want Apache Pekko and Apache Pekko Connectors to strive in a welcoming and open atmosphere and expect all contributors to respect our [code of conduct](https://www.lightbend.com/conduct).
 
-[![alpakka]][alpakka-scaladex] Feel free to tag your project with *akka-streams* keyword in Scaladex for easier discoverability.
+[![alpakka]][alpakka-scaladex] Feel free to tag your project with *pekko-streams* keyword in Scaladex for easier discoverability.
 
-[alpakka]: https://index.scala-lang.org/count.svg?q=topics:akka-streams&amp;subject=akka-streams&amp;style=flat-square
+[alpakka]: https://index.scala-lang.org/count.svg?q=topics:pekko-streams&amp;subject=pekko-streams&amp;style=flat-square
 
-[alpakka-scaladex]: https://index.scala-lang.org/search?q=topics:akka-streams
+[alpakka-scaladex]: https://index.scala-lang.org/search?q=topics:pekko-streams
 
 
 @@ toc { .main depth=2 }

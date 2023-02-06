@@ -13,24 +13,24 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 //#imports
-import akka.stream.alpakka.huawei.pushkit._
-import akka.stream.alpakka.huawei.pushkit.scaladsl.HmsPushKit
-import akka.stream.alpakka.huawei.pushkit.models.AndroidConfig
-import akka.stream.alpakka.huawei.pushkit.models.AndroidNotification
-import akka.stream.alpakka.huawei.pushkit.models.BasicNotification
-import akka.stream.alpakka.huawei.pushkit.models.ClickAction
-import akka.stream.alpakka.huawei.pushkit.models.Condition
-import akka.stream.alpakka.huawei.pushkit.models.ErrorResponse
-import akka.stream.alpakka.huawei.pushkit.models.PushKitNotification
-import akka.stream.alpakka.huawei.pushkit.models.PushKitResponse
-import akka.stream.alpakka.huawei.pushkit.models.Response
-import akka.stream.alpakka.huawei.pushkit.models.Tokens
+import org.apache.pekko.stream.connectors.huawei.pushkit._
+import org.apache.pekko.stream.connectors.huawei.pushkit.scaladsl.HmsPushKit
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.AndroidConfig
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.AndroidNotification
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.BasicNotification
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.ClickAction
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.Condition
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.ErrorResponse
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.PushKitNotification
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.PushKitResponse
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.Response
+import org.apache.pekko.stream.connectors.huawei.pushkit.models.Tokens
 
 //#imports
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.stream.scaladsl.Sink
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -78,7 +78,7 @@ class PushKitExamples {
   // #asFlow-send
 
   // #condition-builder
-  import akka.stream.alpakka.huawei.pushkit.models.Condition.{ Topic => CTopic }
+  import org.apache.pekko.stream.connectors.huawei.pushkit.models.Condition.{ Topic => CTopic }
   val condition = Condition(CTopic("TopicA") && (CTopic("TopicB") || (CTopic("TopicC") && !CTopic("TopicD"))))
   // #condition-builder
 }

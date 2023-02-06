@@ -13,16 +13,16 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.actor.ClassicActorSystemProvider;
-import akka.stream.alpakka.file.TarArchiveMetadata;
-import akka.stream.alpakka.file.javadsl.Archive;
-import akka.stream.alpakka.file.javadsl.Directory;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.*;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.actor.ClassicActorSystemProvider;
+import org.apache.pekko.stream.connectors.file.TarArchiveMetadata;
+import org.apache.pekko.stream.connectors.file.javadsl.Archive;
+import org.apache.pekko.stream.connectors.file.javadsl.Directory;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.*;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.AfterClass;

@@ -13,7 +13,7 @@ Azure Storage Queue is a queuing service similar to Amazon's SQS. It is designed
   artifact=pekko-connectors-azure-storage-queue_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion

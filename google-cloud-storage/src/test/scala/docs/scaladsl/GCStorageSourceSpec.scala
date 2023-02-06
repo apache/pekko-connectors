@@ -13,15 +13,15 @@
 
 package docs.scaladsl
 
-import akka.http.scaladsl.model.ContentTypes
-import akka.stream.alpakka.googlecloud.storage.scaladsl.{ GCStorage, GCStorageWiremockBase }
-import akka.stream.alpakka.googlecloud.storage.{ Bucket, StorageObject }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.stream.Attributes
-import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
-import akka.util.ByteString
-import akka.{ Done, NotUsed }
+import org.apache.pekko.http.scaladsl.model.ContentTypes
+import org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl.{ GCStorage, GCStorageWiremockBase }
+import org.apache.pekko.stream.connectors.googlecloud.storage.{ Bucket, StorageObject }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.Attributes
+import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import org.apache.pekko.util.ByteString
+import org.apache.pekko.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.matchers.should.Matchers
@@ -327,7 +327,7 @@ class GCStorageSourceSpec
     }
 
     "download file when file exists" in {
-      // Ensure file content is above the size limit set by akka.http.client.parsing.max-content-length
+      // Ensure file content is above the size limit set by pekko.http.client.parsing.max-content-length
       val fileContent = "Google storage file content" + ("x" * 10000)
       val fileContentGeneration = "Google storage file content (archived)"
 

@@ -17,16 +17,16 @@ object Dependencies {
   val Scala213 = "2.13.8" // update even in link-validator.conf
   val ScalaVersions = Seq(Scala213)
 
-  val AkkaVersion = "2.6.19"
+  val PekkoVersion = "0.0.0+26610-defddc6a-SNAPSHOT"
   val AkkaBinaryVersion = "2.6"
 
   val InfluxDBJavaVersion = "2.15"
 
   val AwsSdk2Version = "2.17.113"
-  val AwsSpiAkkaHttpVersion = "0.0.11"
+  // val AwsSpiAkkaHttpVersion = "0.0.11"
   // Sync with plugins.sbt
-  val AkkaGrpcBinaryVersion = "2.1"
-  val AkkaHttpVersion = "10.2.9"
+  val PekkoGrpcBinaryVersion = "2.1"
+  val PekkoHttpVersion = "0.0.0+4311-07201517-SNAPSHOT"
   val AkkaHttpBinaryVersion = "10.2"
   val ScalaTestVersion = "3.2.11"
   val TestContainersScalaTestVersion = "0.40.3"
@@ -44,14 +44,14 @@ object Dependencies {
   val Common = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-stream" % AkkaVersion))
+      "org.apache.pekko" %% "pekko-stream" % PekkoVersion))
 
   val testkit = Seq(
     libraryDependencies := Seq(
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0",
-      "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
-      "com.typesafe.akka" %% "akka-stream-testkit" % AkkaVersion,
-      "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion,
+      "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
       "ch.qos.logback" % "logback-classic" % "1.2.3", // Eclipse Public License 1.0
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
@@ -82,10 +82,10 @@ object Dependencies {
   /* see https://github.com/apache/incubator-pekko-connectors/issues/34
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion, // ApacheV2
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
 
-        ExclusionRule(organization = "com.typesafe.akka")),
+        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "lambda" % AwsSdk2Version).excludeAll( // ApacheV2
 
         ExclusionRule("software.amazon.awssdk", "apache-client"),
@@ -107,22 +107,22 @@ object Dependencies {
         .exclude("com.github.spotbugs", "spotbugs-annotations")
         .exclude("org.apache.tinkerpop", "*") // https://github.com/akka/alpakka/issues/2200
         .exclude("com.esri.geometry", "esri-geometry-api"), // https://github.com/akka/alpakka/issues/2225
-      "com.typesafe.akka" %% "akka-discovery" % AkkaVersion % Provided))
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
   val Couchbase = Seq(
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion, // ApacheV2
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1", // ApacheV2
-      "com.typesafe.akka" %% "akka-discovery" % AkkaVersion % Provided, // Apache V2
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided, // Apache V2
       "com.typesafe.play" %% "play-json" % "2.9.2" % Test, // Apache V2
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion % Test // Apache V2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test // Apache V2
     ))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion,
-      "com.typesafe.akka" %% "akka-stream-testkit" % AkkaVersion % Test,
-      "com.typesafe.akka" %% "akka-stream-kafka" % "3.0.0" % Test,
+      "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
+      "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1708-6e5cb74d-SNAPSHOT" % Test,
       "junit" % "junit" % "4.13.2" % Test, // Eclipse Public License 1.0
       "org.scalatest" %% "scalatest" % "3.2.11" % Test // ApacheV2
     ))
@@ -132,19 +132,19 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
 
-        ExclusionRule(organization = "com.typesafe.akka")),
+        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version).excludeAll( // ApacheV2
 
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion // ApacheV2
     ))
    */
 
   val Elasticsearch = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.slf4j" % "jcl-over-slf4j" % jclOverSlf4jVersion % Test) ++ JacksonDatabindDependencies)
 
   val File = Seq(
@@ -182,8 +182,8 @@ object Dependencies {
 
   val GoogleCommon = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4", // ApacheV2
       "com.google.auth" % "google-auth-library-credentials" % "0.24.1", // BSD 3-clause
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
@@ -191,9 +191,9 @@ object Dependencies {
 
   val GoogleBigQuery = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-jackson" % AkkaHttpVersion % Provided,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-jackson" % PekkoHttpVersion % Provided,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "io.spray" %% "spray-json" % "1.3.6",
       "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonDatabindVersion,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion % Test,
@@ -206,16 +206,17 @@ object Dependencies {
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src", // ApacheV2
       "org.apache.avro" % "avro" % "1.9.2" % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
-      "io.grpc" % "grpc-auth" % akka.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http2-support" % AkkaHttpVersion,
+      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-parsing" % PekkoHttpVersion,
       "org.apache.arrow" % "arrow-memory-netty" % "4.0.1" % Test,
-      "com.typesafe.akka" %% "akka-discovery" % AkkaVersion) ++ Mockito)
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion) ++ Mockito)
 
   val GooglePubSub = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test // ApacheV2
     ) ++ Mockito)
 
@@ -224,20 +225,20 @@ object Dependencies {
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
       "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src", // ApacheV2
-      "io.grpc" % "grpc-auth" % akka.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
+      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
       "com.google.auth" % "google-auth-library-oauth2-http" % "0.22.2", // BSD 3-clause
-      // pull in Akka Discovery for our Akka version
-      "com.typesafe.akka" %% "akka-discovery" % AkkaVersion))
+      // pull in Pekko Discovery for our Pekko version
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
 
   val GoogleFcm = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion) ++ Mockito)
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion) ++ Mockito)
 
   val GoogleStorage = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
     ) ++ Mockito)
 
@@ -275,8 +276,8 @@ object Dependencies {
 
   val HuaweiPushKit = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4" // ApacheV2
     ) ++ Mockito)
 
@@ -287,8 +288,8 @@ object Dependencies {
 
   val IronMq = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "de.heikoseeberger" %% "akka-http-circe" % "1.29.1" // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "com.github.pjfanning" %% "pekko-http-circe" % "1.40.0-RC3_17-0a23ccd2-SNAPSHOT" // ApacheV2
     ))
 
   val Jms = Seq(
@@ -311,9 +312,9 @@ object Dependencies {
   /*
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion, // ApacheV2
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll(ExclusionRule(
-        organization = "com.typesafe.akka"))) ++ Seq(
+        organization = "org.apache.pekko"))) ++ Seq(
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version, // ApacheV2
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version, // ApacheV2
       "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.0" // ApacheV2
@@ -342,10 +343,10 @@ object Dependencies {
 
   val MqttStreaming = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion, // ApacheV2
-      "com.typesafe.akka" %% "akka-actor-testkit-typed" % AkkaVersion % Test, // ApacheV2
-      "com.typesafe.akka" %% "akka-stream-typed" % AkkaVersion, // ApacheV2
-      "com.typesafe.akka" %% "akka-stream-testkit" % AkkaVersion % Test // ApacheV2
+      "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test, // ApacheV2
+      "org.apache.pekko" %% "pekko-stream-typed" % PekkoVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test // ApacheV2
     ))
 
   val OrientDB = Seq(
@@ -373,8 +374,8 @@ object Dependencies {
 
   val S3 = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-xml" % AkkaHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-xml" % PekkoHttpVersion,
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.2" % Test, // ApacheV2
@@ -407,24 +408,24 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
 
-        ExclusionRule(organization = "com.typesafe.akka")),
+        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "eventbridge" % AwsSdk2Version).excludeAll( // ApacheV2
 
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion // ApacheV2
     ) ++ Mockito)
 
   val Sns = Seq(
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
 
-        ExclusionRule(organization = "com.typesafe.akka")),
+        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "sns" % AwsSdk2Version).excludeAll( // ApacheV2
 
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion // ApacheV2
     ) ++ Mockito)
    */
 
@@ -445,20 +446,20 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
 
-        ExclusionRule(organization = "com.typesafe.akka")),
+        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll( // ApacheV2
 
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion, // ApacheV2
       "org.mockito" % "mockito-inline" % mockitoVersion % Test // MIT
     ) ++ Mockito)
    */
 
   val Sse = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-testkit" % AkkaHttpVersion % Test))
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http-testkit" % PekkoHttpVersion % Test))
 
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(

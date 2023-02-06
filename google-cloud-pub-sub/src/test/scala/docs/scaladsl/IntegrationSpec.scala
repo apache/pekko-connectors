@@ -17,14 +17,14 @@ import java.time.Instant
 import java.util.Base64
 import java.util.concurrent.TimeoutException
 
-import akka.Done
-import akka.actor.ActorSystem
-import akka.stream.alpakka.googlecloud.pubsub.scaladsl.GooglePubSub
-import akka.stream.alpakka.googlecloud.pubsub._
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Keep, Sink, Source }
-import akka.stream.testkit.scaladsl.TestSink
-import akka.testkit.TestKit
+import org.apache.pekko.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.scaladsl.GooglePubSub
+import org.apache.pekko.stream.connectors.googlecloud.pubsub._
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko.testkit.TestKit
 import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

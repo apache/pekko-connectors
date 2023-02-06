@@ -15,19 +15,19 @@ package docs.scaladsl
 
 import java.net.URI
 
-import akka.NotUsed
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ FlowWithContext, SourceWithContext }
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ FlowWithContext, SourceWithContext }
 
 import scala.util.{ Failure, Success, Try }
 //#init-client
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 
 //#init-client
-import akka.stream.alpakka.dynamodb.DynamoDbOp._
-import akka.stream.alpakka.dynamodb.scaladsl._
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.testkit.TestKit
+import org.apache.pekko.stream.connectors.dynamodb.DynamoDbOp._
+import org.apache.pekko.stream.connectors.dynamodb.scaladsl._
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.testkit.TestKit
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 //#init-client

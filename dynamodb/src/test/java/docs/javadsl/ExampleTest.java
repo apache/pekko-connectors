@@ -13,20 +13,20 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
+import org.apache.pekko.NotUsed;
 // #init-client
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
 
 // #init-client
-import akka.stream.alpakka.dynamodb.DynamoDbOp;
-import akka.stream.alpakka.dynamodb.javadsl.DynamoDb;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.FlowWithContext;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.stream.javadsl.SourceWithContext;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.stream.connectors.dynamodb.DynamoDbOp;
+import org.apache.pekko.stream.connectors.dynamodb.javadsl.DynamoDb;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.FlowWithContext;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.SourceWithContext;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.*;
 // #init-client
 import com.github.matsluni.akkahttpspi.AkkaHttpClient;

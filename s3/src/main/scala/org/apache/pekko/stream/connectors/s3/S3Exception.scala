@@ -1,0 +1,52 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
+/*
+ * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
+ */
+
+package org.apache.pekko.stream.connectors.s3
+
+import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
+import org.apache.pekko.http.scaladsl.model.StatusCode
+
+import scala.xml.XML
+
+/**
+ * Represents AWS S3 error responses [[https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html]].
+ */
+@DoNotInherit
+class S3Exception @InternalApi private[s3] (val statusCode: StatusCode,
+    val code: String,
+    val message: String,
+    val requestId: String,
+    val resource: String)
+    extends RuntimeException(message) {
+
+  override def toString: String =
+    s"${super.toString} (Status code: $statusCode, Code: $code, RequestId: $requestId, Resource: $resource)"
+
+}
+
+object S3Exception {
+  def apply(response: String, statusCode: StatusCode): S3Exception = {
+    try {
+      val xmlResponse = XML.loadString(response)
+      new S3Exception(
+        statusCode,
+        (xmlResponse \ "Code").text,
+        (xmlResponse \ "Message").text,
+        (xmlResponse \ "RequestId").text,
+        (xmlResponse \ "Resource").text)
+    } catch {
+      case e: Exception =>
+        new S3Exception(statusCode, statusCode.toString, response, "-", "-")
+    }
+  }
+}

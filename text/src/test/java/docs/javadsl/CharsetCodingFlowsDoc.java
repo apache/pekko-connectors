@@ -13,16 +13,16 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
+import org.apache.pekko.actor.ActorSystem;
 
 // #encoding
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.alpakka.text.javadsl.TextFlow;
-import akka.stream.IOResult;
-import akka.stream.javadsl.FileIO;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.util.ByteString;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.text.javadsl.TextFlow;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.javadsl.FileIO;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.ByteString;
 
 import java.nio.charset.StandardCharsets;
 

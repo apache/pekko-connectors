@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.mqtt.MqttConnectionSettings
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.testkit.TestKit
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.mqtt.MqttConnectionSettings
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.testkit.TestKit
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.BeforeAndAfterAll

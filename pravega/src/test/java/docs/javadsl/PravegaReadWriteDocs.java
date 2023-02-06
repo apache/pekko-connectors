@@ -13,15 +13,15 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.japi.Pair;
-import akka.stream.alpakka.pravega.*;
-import akka.stream.alpakka.pravega.PravegaReaderGroupManager;
-import akka.stream.alpakka.pravega.javadsl.Pravega;
-import akka.stream.alpakka.pravega.javadsl.PravegaTable;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.Done;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.pravega.*;
+import org.apache.pekko.stream.connectors.pravega.PravegaReaderGroupManager;
+import org.apache.pekko.stream.connectors.pravega.javadsl.Pravega;
+import org.apache.pekko.stream.connectors.pravega.javadsl.PravegaTable;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import io.pravega.client.stream.ReaderGroup;
 import io.pravega.client.stream.Serializer;
 import io.pravega.client.stream.impl.JavaSerializer;
@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-public class PravegaReadWriteDocs extends PravegaAkkaTestCaseSupport {
+public class PravegaReadWriteDocs extends PravegaPekkoTestCaseSupport {
 
   public static void docs() {
     WriterSettings<String> writerSettings =

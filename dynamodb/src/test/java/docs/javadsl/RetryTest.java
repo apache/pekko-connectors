@@ -13,9 +13,9 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import com.github.matsluni.akkahttpspi.AkkaHttpClient;
 import org.junit.Rule;
 import org.junit.Test;

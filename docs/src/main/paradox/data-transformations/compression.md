@@ -1,6 +1,6 @@
 ## Compressing/decompressing
 
-Apache Pekko Stream contains support for compressing and decompressing streams of @apidoc[ByteString](akka.util.ByteString)
+Apache Pekko Stream contains support for compressing and decompressing streams of @apidoc[ByteString](org.apache.pekko.util.ByteString)
 elements.
 
 Use @apidoc[Compression](Compression$) as described in the Apache Pekko Stream documentation:

@@ -16,19 +16,19 @@ package docs.javadsl;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.junit.*;
 
-import akka.actor.ActorSystem;
-import akka.stream.Materializer;
-import akka.stream.alpakka.influxdb.InfluxDbReadSettings;
-import akka.stream.alpakka.influxdb.javadsl.InfluxDbSource;
-import akka.stream.javadsl.Sink;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings;
+import org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSource;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import static docs.javadsl.TestUtils.cleanDatabase;
 import static docs.javadsl.TestUtils.dropDatabase;
 import static docs.javadsl.TestUtils.populateDatabase;

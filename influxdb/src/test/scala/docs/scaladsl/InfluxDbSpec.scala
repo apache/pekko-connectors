@@ -13,21 +13,21 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
 import org.influxdb.{ InfluxDB, InfluxDBFactory }
 import org.influxdb.dto.{ Point, Query, QueryResult }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.{ Done, NotUsed }
-import akka.stream.alpakka.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMessage }
-import akka.stream.alpakka.influxdb.scaladsl.{ InfluxDbSink, InfluxDbSource }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.testkit.TestKit
-import docs.javadsl.TestUtils._
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.connectors.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMessage }
+import org.apache.pekko.stream.connectors.influxdb.scaladsl.{ InfluxDbSink, InfluxDbSource }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.stream.scaladsl.Sink
 
 import scala.jdk.CollectionConverters._
+import docs.javadsl.TestUtils._
 import docs.javadsl.TestConstants.{ INFLUXDB_URL, PASSWORD, USERNAME }
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec

@@ -13,7 +13,7 @@ For more information about Hadoop, please visit the [Hadoop documentation](https
   artifact=pekko-connectors-hdfs_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -45,8 +45,8 @@ Java
 ## Writing
 
 The connector provides three Flows. Each flow requires `RotationStrategy` and `SyncStrategy` to run.
-@scala[@scaladoc[HdfsFlow](akka.stream.alpakka.hdfs.scaladsl.HdfsFlow$).]
-@java[@scaladoc[HdfsFlow](akka.stream.alpakka.hdfs.javadsl.HdfsFlow$).]
+@scala[@scaladoc[HdfsFlow](org.apache.pekko.stream.connectors.hdfs.scaladsl.HdfsFlow$).]
+@java[@scaladoc[HdfsFlow](org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsFlow$).]
 
 The flows push `OutgoingMessage` to a downstream.
 
@@ -160,7 +160,7 @@ Java
 
 ### File path generator
 
-@scaladoc[FilePathGenerator](akka.stream.alpakka.hdfs.FilePathGenerator$) provides a functionality to generate rotation path in HDFS. 
+@scaladoc[FilePathGenerator](org.apache.pekko.stream.connectors.hdfs.FilePathGenerator$) provides a functionality to generate rotation path in HDFS. 
 
 Scala
 : @@snip [snip](/hdfs/src/test/scala/docs/scaladsl//HdfsWriterSpec.scala) { #define-generator }
@@ -172,18 +172,18 @@ Java
 ### Rotation Strategy
 
 
-@scaladoc[RotationStrategy](akka.stream.alpakka.hdfs.RotationStrategy$) provides a functionality to decide when to rotate files.
+@scaladoc[RotationStrategy](org.apache.pekko.stream.connectors.hdfs.RotationStrategy$) provides a functionality to decide when to rotate files.
 
 ### Sync Strategy
 
 
-@scaladoc[SyncStrategy](akka.stream.alpakka.hdfs.SyncStrategy$) provides a functionality to decide when to synchronize the output.
+@scaladoc[SyncStrategy](org.apache.pekko.stream.connectors.hdfs.SyncStrategy$) provides a functionality to decide when to synchronize the output.
 
 ## Reading
 
 Use `HdfsSource` to read from HDFS.
-@scala[@scaladoc[HdfsSource](akka.stream.alpakka.hdfs.scaladsl.HdfsSource$).]
-@java[@scaladoc[HdfsSource](akka.stream.alpakka.hdfs.javadsl.HdfsSource$).]
+@scala[@scaladoc[HdfsSource](org.apache.pekko.stream.connectors.hdfs.scaladsl.HdfsSource$).]
+@java[@scaladoc[HdfsSource](org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsSource$).]
 
 
 ### Data Reader

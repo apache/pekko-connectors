@@ -13,22 +13,27 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.stream.alpakka.couchbase.{ CouchbaseDeleteFailure, CouchbaseDeleteResult }
-import akka.stream.alpakka.couchbase.scaladsl.CouchbaseFlow
-import akka.stream.alpakka.couchbase.testing.{ CouchbaseSupport, TestObject }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.couchbase.{
+  CouchbaseDeleteFailure,
+  CouchbaseDeleteResult,
+  CouchbaseWriteFailure,
+  CouchbaseWriteResult,
+  CouchbaseWriteSettings
+}
+import org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
+import org.apache.pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, TestObject }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import com.couchbase.client.java.error.DocumentDoesNotExistException
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest._
 
 //#write-settings
-import akka.stream.alpakka.couchbase.CouchbaseWriteSettings
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 //#write-settings
 
-import akka.stream.testkit.scaladsl.StreamTestKit._
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit._
 import com.couchbase.client.java.document.{ BinaryDocument, RawJsonDocument, StringDocument }
 
 import scala.collection.immutable
@@ -483,7 +488,6 @@ class CouchbaseFlowSpec
   "Couchbase upsert with result" should {
     "write documents" in assertAllStagesStopped {
       // #upsertDocWithResult
-      import akka.stream.alpakka.couchbase.{ CouchbaseWriteFailure, CouchbaseWriteResult }
 
       val result: Future[immutable.Seq[CouchbaseWriteResult[RawJsonDocument]]] =
         Source(sampleSequence)
@@ -506,7 +510,6 @@ class CouchbaseFlowSpec
     }
 
     "expose failures in-stream" in assertAllStagesStopped {
-      import akka.stream.alpakka.couchbase.{ CouchbaseWriteFailure, CouchbaseWriteResult }
 
       val result: Future[immutable.Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
         .map(toJsonDocument)
@@ -568,7 +571,6 @@ class CouchbaseFlowSpec
       upsertSampleData(bucketName)
 
       // #replaceDocWithResult
-      import akka.stream.alpakka.couchbase.{ CouchbaseWriteFailure, CouchbaseWriteResult }
 
       val result: Future[immutable.Seq[CouchbaseWriteResult[RawJsonDocument]]] =
         Source(sampleSequence)
@@ -593,8 +595,6 @@ class CouchbaseFlowSpec
     "expose failures in-stream" in assertAllStagesStopped {
 
       cleanAllInBucket(bucketName)
-
-      import akka.stream.alpakka.couchbase.{ CouchbaseWriteFailure, CouchbaseWriteResult }
 
       val result: Future[immutable.Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
         .map(toJsonDocument)

@@ -13,12 +13,12 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.slick.javadsl.Slick;
-import akka.stream.alpakka.slick.javadsl.SlickSession;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.Done;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.slick.javadsl.Slick;
+import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 
 import java.sql.PreparedStatement;
 import java.util.List;

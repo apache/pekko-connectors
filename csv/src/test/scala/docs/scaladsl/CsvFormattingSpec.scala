@@ -15,9 +15,9 @@ package docs.scaladsl
 
 import java.nio.charset.StandardCharsets
 
-import akka.stream.scaladsl.{ Flow, Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.util.ByteString
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.util.ByteString
 
 import scala.collection.immutable
 
@@ -25,7 +25,7 @@ class CsvFormattingSpec extends CsvSpec {
 
   def documentation(): Unit = {
     // #flow-type
-    import akka.stream.alpakka.csv.scaladsl.{ CsvFormatting, CsvQuotingStyle }
+    import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvFormatting, CsvQuotingStyle }
 
     // #flow-type
     import CsvFormatting._
@@ -51,7 +51,7 @@ class CsvFormattingSpec extends CsvSpec {
   "CSV Formatting" should {
     "format simple value" in assertAllStagesStopped {
       // #formatting
-      import akka.stream.alpakka.csv.scaladsl.CsvFormatting
+      import org.apache.pekko.stream.connectors.csv.scaladsl.CsvFormatting
 
       // #formatting
       val fut =
@@ -68,7 +68,7 @@ class CsvFormattingSpec extends CsvSpec {
 
     "include Byte Order Mark" in assertAllStagesStopped {
       // #formatting-bom
-      import akka.stream.alpakka.csv.scaladsl.{ ByteOrderMark, CsvFormatting }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ ByteOrderMark, CsvFormatting }
 
       // #formatting-bom
       val fut =

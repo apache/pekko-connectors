@@ -1,0 +1,50 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
+/*
+ * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
+ */
+
+package org.apache.pekko.stream.connectors.google.firebase.fcm.javadsl
+
+import org.apache.pekko.japi.Pair
+import org.apache.pekko.stream.connectors.google.firebase.fcm.impl.FcmFlows
+import org.apache.pekko.stream.connectors.google.firebase.fcm.{ FcmNotification, FcmResponse, FcmSettings }
+import org.apache.pekko.stream.{ javadsl, scaladsl }
+import org.apache.pekko.{ Done, NotUsed }
+
+import java.util.concurrent.CompletionStage
+
+object GoogleFcm {
+
+  /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm" */
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "3.0.2")
+  @Deprecated
+  def sendWithPassThrough[T](conf: FcmSettings): javadsl.Flow[Pair[FcmNotification, T], Pair[FcmResponse, T], NotUsed] =
+    scaladsl
+      .Flow[Pair[FcmNotification, T]]
+      .map(_.toScala)
+      .via(FcmFlows.fcmWithData[T](conf))
+      .map(t => Pair(t._1, t._2))
+      .asJava
+
+  /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm" */
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "3.0.2")
+  @Deprecated
+  def send(conf: FcmSettings): javadsl.Flow[FcmNotification, FcmResponse, NotUsed] =
+    FcmFlows.fcm(conf).asJava
+
+  /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm" */
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "3.0.2")
+  @Deprecated
+  def fireAndForget(conf: FcmSettings): javadsl.Sink[FcmNotification, CompletionStage[Done]] =
+    send(conf)
+      .toMat(javadsl.Sink.ignore(), javadsl.Keep.right[NotUsed, CompletionStage[Done]])
+
+}

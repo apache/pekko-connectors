@@ -13,20 +13,20 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
-import akka.stream.IOResult;
-import akka.stream.alpakka.hdfs.*;
-import akka.stream.alpakka.hdfs.javadsl.HdfsFlow;
-import akka.stream.alpakka.hdfs.javadsl.HdfsSource;
-import akka.stream.alpakka.hdfs.util.JavaTestUtils;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.connectors.hdfs.*;
+import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsFlow;
+import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsSource;
+import org.apache.pekko.stream.connectors.hdfs.util.JavaTestUtils;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;

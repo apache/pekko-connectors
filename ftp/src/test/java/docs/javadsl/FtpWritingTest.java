@@ -15,28 +15,28 @@ package docs.javadsl;
 
 // #storing
 // #create-settings
-import akka.stream.alpakka.ftp.javadsl.Ftp;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
 // #create-settings
-import akka.stream.IOResult;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Compression;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.util.ByteString;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Compression;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.util.ByteString;
 import java.util.concurrent.CompletionStage;
 // #storing
 import java.io.PrintWriter;
 
 // #create-settings
-import akka.stream.alpakka.ftp.FtpSettings;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.stream.connectors.ftp.FtpSettings;
+import org.apache.pekko.stream.javadsl.Source;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import java.net.InetAddress;
 
 // #create-settings
-import akka.stream.alpakka.ftp.BaseFtpSupport;
-import akka.stream.Materializer;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.stream.connectors.ftp.BaseFtpSupport;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.*;
 
 import static org.junit.Assert.assertTrue;

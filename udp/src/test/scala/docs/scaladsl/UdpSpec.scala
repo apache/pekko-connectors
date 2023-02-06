@@ -14,16 +14,16 @@
 package docs.scaladsl
 
 import java.net.InetSocketAddress
-import akka.actor.ActorSystem
-import akka.io.UdpSO
-import akka.stream.Materializer
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.alpakka.udp.Datagram
-import akka.stream.alpakka.udp.scaladsl.Udp
-import akka.stream.scaladsl.{ Flow, Keep, Source }
-import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
-import akka.testkit.TestKit
-import akka.util.ByteString
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.io.UdpSO
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.connectors.udp.Datagram
+import org.apache.pekko.stream.connectors.udp.scaladsl.Udp
+import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Source }
+import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 

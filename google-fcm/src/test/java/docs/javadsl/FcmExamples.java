@@ -13,16 +13,16 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
 // #imports
-import akka.stream.alpakka.google.firebase.fcm.FcmSettings;
-import akka.stream.alpakka.google.firebase.fcm.v1.models.*;
-import akka.stream.alpakka.google.firebase.fcm.v1.javadsl.GoogleFcm;
+import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSettings;
+import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.*;
+import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm;
 
 // #imports
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 
 import java.util.List;
 import java.util.concurrent.CompletionStage;

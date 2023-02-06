@@ -13,12 +13,12 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
 
-import akka.stream.ThrottleMode;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.stream.ThrottleMode;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -27,10 +27,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.concurrent.CompletionStage;
 
-import akka.http.javadsl.Http;
-import akka.http.javadsl.model.*;
-import akka.http.javadsl.model.sse.ServerSentEvent;
-import akka.stream.alpakka.sse.javadsl.EventSource;
+import org.apache.pekko.http.javadsl.Http;
+import org.apache.pekko.http.javadsl.model.*;
+import org.apache.pekko.http.javadsl.model.sse.ServerSentEvent;
+import org.apache.pekko.stream.connectors.sse.javadsl.EventSource;
 // #event-source
 
 public class EventSourceTest {

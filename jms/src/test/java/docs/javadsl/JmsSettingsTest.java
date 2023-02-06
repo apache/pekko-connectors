@@ -13,8 +13,8 @@
 
 package docs.javadsl;
 
-import akka.stream.alpakka.jms.*;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.jms.*;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import com.typesafe.config.ConfigFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.Rule;
@@ -41,7 +41,7 @@ public class JmsSettingsTest {
 
     Config config = ConfigFactory.load();
     // #retry-settings
-    Config connectionRetryConfig = config.getConfig("alpakka.jms.connection-retry");
+    Config connectionRetryConfig = config.getConfig("pekko.connectors.jms.connection-retry");
     // reiterating the values from reference.conf
     ConnectionRetrySettings retrySettings =
         ConnectionRetrySettings.create(connectionRetryConfig)
@@ -56,7 +56,7 @@ public class JmsSettingsTest {
     assertEquals(retrySettings.toString(), retrySettings2.toString());
 
     // #send-retry-settings
-    Config sendRetryConfig = config.getConfig("alpakka.jms.send-retry");
+    Config sendRetryConfig = config.getConfig("pekko.connectors.jms.send-retry");
     // reiterating the values from reference.conf
     SendRetrySettings sendRetrySettings =
         SendRetrySettings.create(sendRetryConfig)
@@ -84,7 +84,7 @@ public class JmsSettingsTest {
   @Test
   public void consumerSettings() throws Exception {
     Config config = ConfigFactory.load();
-    Config connectionRetryConfig = config.getConfig("alpakka.jms.connection-retry");
+    Config connectionRetryConfig = config.getConfig("pekko.connectors.jms.connection-retry");
     ConnectionRetrySettings retrySettings = ConnectionRetrySettings.create(connectionRetryConfig);
 
     // #consumer-settings

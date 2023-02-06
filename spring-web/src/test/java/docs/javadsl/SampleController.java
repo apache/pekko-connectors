@@ -16,10 +16,10 @@ package docs.javadsl;
 // #use
 import javax.annotation.PostConstruct;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.event.LoggingAdapter;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.event.LoggingAdapter;
+import org.apache.pekko.stream.javadsl.Source;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
 @RestController
 public class SampleController {
 
-  @Value("${akka.stream.alpakka.spring.web.actor-system-name}")
+  @Value("${org.apache.pekko.stream.connectors.spring.web.actor-system-name}")
   private String actorSystemName;
 
   @Autowired private ActorSystem system;

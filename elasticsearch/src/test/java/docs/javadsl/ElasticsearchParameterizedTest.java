@@ -13,12 +13,12 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.stream.alpakka.elasticsearch.*;
-import akka.stream.alpakka.elasticsearch.javadsl.ElasticsearchFlow;
-import akka.stream.alpakka.elasticsearch.javadsl.ElasticsearchSource;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.connectors.elasticsearch.*;
+import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchFlow;
+import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSource;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +53,8 @@ public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
 
   @Parameterized.BeforeParam
   public static void beforeParam(
-      int port, akka.stream.alpakka.elasticsearch.ApiVersionBase esApiVersion) throws IOException {
+      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase esApiVersion)
+      throws IOException {
     prepareIndex(port, esApiVersion);
   }
 

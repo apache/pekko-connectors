@@ -13,7 +13,7 @@
 
 package docs.javadsl;
 
-import akka.util.ByteString;
+import org.apache.pekko.util.ByteString;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

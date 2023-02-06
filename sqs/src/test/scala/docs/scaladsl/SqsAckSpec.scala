@@ -16,13 +16,13 @@ package docs.scaladsl
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
 import java.util.function.Supplier
 
-import akka.Done
-import akka.stream.alpakka.sqs.scaladsl._
-import akka.stream.alpakka.sqs._
-import akka.stream.alpakka.sqs.SqsAckResult._
-import akka.stream.alpakka.sqs.SqsAckResultEntry._
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.sqs.scaladsl._
+import org.apache.pekko.stream.connectors.sqs._
+import org.apache.pekko.stream.connectors.sqs.SqsAckResult._
+import org.apache.pekko.stream.connectors.sqs.SqsAckResultEntry._
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{ spy, times, verify, when }
 import org.scalatest.flatspec.AnyFlatSpec

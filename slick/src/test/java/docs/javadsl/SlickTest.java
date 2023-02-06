@@ -13,18 +13,18 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.function.Function2;
-import akka.stream.alpakka.slick.javadsl.Slick;
-import akka.stream.alpakka.slick.javadsl.SlickRow;
-import akka.stream.alpakka.slick.javadsl.SlickSession;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.function.Function2;
+import org.apache.pekko.stream.connectors.slick.javadsl.Slick;
+import org.apache.pekko.stream.connectors.slick.javadsl.SlickRow;
+import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

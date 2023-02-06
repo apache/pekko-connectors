@@ -13,13 +13,13 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
-import akka.stream.alpakka.azure.storagequeue._
-import akka.stream.alpakka.azure.storagequeue.scaladsl._
-import akka.stream.scaladsl._
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.testkit._
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
+import org.apache.pekko.stream.connectors.azure.storagequeue._
+import org.apache.pekko.stream.connectors.azure.storagequeue.scaladsl._
+import org.apache.pekko.stream.scaladsl._
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.testkit._
 import com.microsoft.azure.storage._
 import com.microsoft.azure.storage.queue._
 import org.scalatest._

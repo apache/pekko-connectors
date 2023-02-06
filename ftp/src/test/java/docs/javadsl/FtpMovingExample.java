@@ -14,11 +14,11 @@
 package docs.javadsl;
 
 // #moving
-import akka.stream.IOResult;
-import akka.stream.alpakka.ftp.FtpFile;
-import akka.stream.alpakka.ftp.FtpSettings;
-import akka.stream.alpakka.ftp.javadsl.Ftp;
-import akka.stream.javadsl.Sink;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.connectors.ftp.FtpFile;
+import org.apache.pekko.stream.connectors.ftp.FtpSettings;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
+import org.apache.pekko.stream.javadsl.Sink;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 

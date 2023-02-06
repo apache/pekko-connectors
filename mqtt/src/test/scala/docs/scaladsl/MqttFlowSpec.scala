@@ -13,11 +13,11 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.stream.alpakka.mqtt._
-import akka.stream.alpakka.mqtt.scaladsl.{ MqttFlow, MqttMessageWithAck }
-import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import akka.util.ByteString
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.mqtt._
+import org.apache.pekko.stream.connectors.mqtt.scaladsl.{ MqttFlow, MqttMessageWithAck }
+import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import org.apache.pekko.util.ByteString
 
 import scala.concurrent.{ Future, Promise }
 

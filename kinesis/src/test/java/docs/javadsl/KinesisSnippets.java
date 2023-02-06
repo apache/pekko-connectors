@@ -13,18 +13,18 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.kinesis.KinesisFlowSettings;
-import akka.stream.alpakka.kinesis.ShardIterators;
-import akka.stream.alpakka.kinesis.ShardSettings;
-import akka.stream.alpakka.kinesis.javadsl.KinesisFlow;
-import akka.stream.alpakka.kinesis.javadsl.KinesisSink;
-import akka.stream.alpakka.kinesis.javadsl.KinesisSource;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.FlowWithContext;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.kinesis.KinesisFlowSettings;
+import org.apache.pekko.stream.connectors.kinesis.ShardIterators;
+import org.apache.pekko.stream.connectors.kinesis.ShardSettings;
+import org.apache.pekko.stream.connectors.kinesis.javadsl.KinesisFlow;
+import org.apache.pekko.stream.connectors.kinesis.javadsl.KinesisSink;
+import org.apache.pekko.stream.connectors.kinesis.javadsl.KinesisSource;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.FlowWithContext;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 // #init-client
 import com.github.matsluni.akkahttpspi.AkkaHttpClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;

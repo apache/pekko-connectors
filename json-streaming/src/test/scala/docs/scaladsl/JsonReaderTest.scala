@@ -13,11 +13,11 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.json.scaladsl.JsonReader
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.util.ByteString
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.json.scaladsl.JsonReader
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.util.ByteString
 import org.jsfr.json.compiler.JsonPathCompiler
 import org.jsfr.json.exception.JsonSurfingException
 import org.scalatest.BeforeAndAfterAll

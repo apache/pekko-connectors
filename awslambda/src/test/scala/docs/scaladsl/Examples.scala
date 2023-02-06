@@ -13,14 +13,14 @@
 
 package docs.scaladsl
 
-import akka.stream.alpakka.awslambda.scaladsl.AwsLambdaFlow
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 
 object Examples {
 
   // #init-sys
-  import akka.actor.ActorSystem
+  import org.apache.pekko.actor.ActorSystem
 
   implicit val system: ActorSystem = ActorSystem()
   // #init-sys

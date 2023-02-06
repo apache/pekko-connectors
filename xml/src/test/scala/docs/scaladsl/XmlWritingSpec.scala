@@ -13,11 +13,11 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.alpakka.xml._
-import akka.stream.alpakka.xml.scaladsl.XmlWriting
-import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.connectors.xml._
+import org.apache.pekko.stream.connectors.xml.scaladsl.XmlWriting
+import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import javax.xml.stream.XMLOutputFactory
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.concurrent.ScalaFutures

@@ -13,9 +13,9 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.pravega.*;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.pravega.*;
+import org.apache.pekko.testkit.javadsl.TestKit;
 
 import io.pravega.client.stream.impl.UTF8StringSerializer;
 import org.junit.AfterClass;

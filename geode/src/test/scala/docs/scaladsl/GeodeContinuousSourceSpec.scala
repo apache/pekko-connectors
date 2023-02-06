@@ -13,9 +13,9 @@
 
 package docs.scaladsl
 
-import akka.NotUsed
-import akka.stream.alpakka.geode.scaladsl.{ Geode, PoolSubscription }
-import akka.stream.scaladsl.{ Flow, Sink }
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.connectors.geode.scaladsl.{ Geode, PoolSubscription }
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink }
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await

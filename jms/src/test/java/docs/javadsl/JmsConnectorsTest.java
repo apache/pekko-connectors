@@ -13,22 +13,22 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
-import akka.stream.alpakka.jms.Destination;
-import akka.stream.alpakka.jms.*;
-import akka.stream.alpakka.jms.javadsl.JmsConsumer;
-import akka.stream.alpakka.jms.javadsl.JmsConsumerControl;
-import akka.stream.alpakka.jms.javadsl.JmsProducer;
-import akka.stream.alpakka.jms.javadsl.JmsProducerStatus;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.jms.Destination;
+import org.apache.pekko.stream.connectors.jms.*;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducerStatus;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import com.typesafe.config.Config;
 import jmstestkit.JmsBroker;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -114,7 +114,7 @@ public class JmsConnectorsTest {
 
       // #create-messages-with-properties
       JmsTextMessage message =
-          akka.stream.alpakka.jms.JmsTextMessage.create(n.toString())
+          org.apache.pekko.stream.connectors.jms.JmsTextMessage.create(n.toString())
               .withProperty("Number", n)
               .withProperty("IsOdd", n % 2 == 1)
               .withProperty("IsEven", n % 2 == 0);
@@ -892,7 +892,7 @@ public class JmsConnectorsTest {
           Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
           TemporaryQueue tempQueue = session.createTemporaryQueue();
           Destination tempQueueDest =
-              akka.stream.alpakka.jms.Destination.createDestination(tempQueue);
+              org.apache.pekko.stream.connectors.jms.Destination.createDestination(tempQueue);
           String message = "ThisIsATest";
           Function<String, String> reverse = (in) -> new StringBuilder(in).reverse().toString();
           String correlationId = UUID.randomUUID().toString();

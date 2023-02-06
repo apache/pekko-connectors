@@ -14,7 +14,7 @@ For more information about HBase, please visit the [HBase documentation](https:/
   artifact=pekko-connectors-hbase_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -77,7 +77,7 @@ The list of mutations are not applied in an transaction, each mutation is indepe
 
 ## Settings
 
-HBase combinators require @scaladoc[HTableSettings](akka.stream.alpakka.hbase.HTableSettings).
+HBase combinators require @scaladoc[HTableSettings](org.apache.pekko.stream.connectors.hbase.HTableSettings).
 If the table referenced in the settings does not exist, it will be created on demand.
 
 Scala

@@ -13,12 +13,12 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.actor.ActorSystem
-import akka.stream.alpakka.slick.scaladsl.{ Slick, SlickSession }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl._
-import akka.testkit.TestKit
+import org.apache.pekko.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.slick.scaladsl.{ Slick, SlickSession }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl._
+import org.apache.pekko.testkit.TestKit
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import slick.basic.DatabaseConfig

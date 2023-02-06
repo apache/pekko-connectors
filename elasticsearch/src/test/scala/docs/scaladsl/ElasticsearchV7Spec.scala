@@ -13,13 +13,17 @@
 
 package docs.scaladsl
 
-import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
-import akka.stream.alpakka.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
-import akka.stream.alpakka.elasticsearch._
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.testkit.TestKit
-import akka.{ Done, NotUsed }
+import org.apache.pekko.http.scaladsl.model.Uri.Path
+import org.apache.pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
+import org.apache.pekko.stream.connectors.elasticsearch.scaladsl.{
+  ElasticsearchFlow,
+  ElasticsearchSink,
+  ElasticsearchSource
+}
+import org.apache.pekko.stream.connectors.elasticsearch._
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.{ Done, NotUsed }
 import spray.json.jsonReader
 
 import scala.collection.immutable

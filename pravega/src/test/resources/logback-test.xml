@@ -14,13 +14,13 @@
         </encoder>
     </appender>
 
-    <appender name="CapturingAppender" class="akka.stream.alpakka.testkit.CapturingAppender"/>
+    <appender name="CapturingAppender" class="org.apache.pekko.stream.connectors.testkit.CapturingAppender"/>
 
-    <logger name="akka.stream.alpakka.testkit.CapturingAppenderDelegate">
+    <logger name="org.apache.pekko.stream.connectors.testkit.CapturingAppenderDelegate">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="akka.stream.alpakka.pravega" level="debug" />
+    <logger name="org.apache.pekko.stream.connectors.pravega" level="debug" />
     <logger name="docs.scaladsl" level="debug" />
     <logger name="docs.javadsl" level="debug" />
 

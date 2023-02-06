@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 import java.util.logging.{ Level, Logger }
-import akka.actor.{ ActorSystem, Cancellable }
-import akka.stream.DelayOverflowStrategy
-import akka.stream.alpakka.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.actor.{ ActorSystem, Cancellable }
+import org.apache.pekko.stream.DelayOverflowStrategy
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub.{ PublishRequest, PubsubMessage, StreamingPullRequest }
 import com.typesafe.config.ConfigFactory
@@ -33,7 +33,7 @@ object ExampleApp {
   def main(args: Array[String]): Unit = {
 
     val config = ConfigFactory.parseString("""
-        |akka.loglevel = INFO
+        |pekko.loglevel = INFO
       """.stripMargin)
 
     implicit val sys = ActorSystem("ExampleApp", config)

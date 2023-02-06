@@ -13,16 +13,16 @@
 
 package docs.scaladsl
 
-import akka.http.scaladsl.model.headers.ByteRange
-import akka.http.scaladsl.model.{ ContentType, ContentTypes, HttpEntity, HttpResponse, IllegalUriException }
-import akka.stream.Attributes
-import akka.stream.alpakka.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
-import akka.stream.alpakka.s3._
-import akka.stream.alpakka.s3.headers.ServerSideEncryption
-import akka.stream.alpakka.s3.scaladsl.{ S3, S3ClientIntegrationSpec, S3WireMockBase }
-import akka.stream.scaladsl.{ Keep, Sink, Source }
-import akka.util.ByteString
-import akka.{ Done, NotUsed }
+import org.apache.pekko.http.scaladsl.model.headers.ByteRange
+import org.apache.pekko.http.scaladsl.model.{ ContentType, ContentTypes, HttpEntity, HttpResponse, IllegalUriException }
+import org.apache.pekko.stream.Attributes
+import org.apache.pekko.stream.connectors.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
+import org.apache.pekko.stream.connectors.s3._
+import org.apache.pekko.stream.connectors.s3.headers.ServerSideEncryption
+import org.apache.pekko.stream.connectors.s3.scaladsl.{ S3, S3ClientIntegrationSpec, S3WireMockBase }
+import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko.util.ByteString
+import org.apache.pekko.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers._
 

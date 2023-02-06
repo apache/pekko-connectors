@@ -15,18 +15,18 @@ package docs.scaladsl
 
 import java.nio.charset.StandardCharsets
 
-import akka.NotUsed
-import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
-import akka.stream.scaladsl.{ Flow, Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.util.ByteString
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.util.ByteString
 
 class CsvToMapSpec extends CsvSpec {
 
   def documentation(): Unit = {
     // format: off
     // #flow-type
-    import akka.stream.alpakka.csv.scaladsl.CsvToMap
+    import org.apache.pekko.stream.connectors.csv.scaladsl.CsvToMap
 
     // keep values as ByteString
     val flow1: Flow[List[ByteString], Map[String, ByteString], NotUsed]
@@ -63,7 +63,7 @@ class CsvToMapSpec extends CsvSpec {
   "CSV to Map" should {
     "parse header line and data line into map" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -143,7 +143,7 @@ class CsvToMapSpec extends CsvSpec {
 
     "use column names and data line into map" in assertAllStagesStopped {
       // #column-names
-      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #column-names
       val future =
@@ -197,7 +197,7 @@ class CsvToMapSpec extends CsvSpec {
 
     "parse header and decode data line. Be OK with more headers column than data (including the header in the result)" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -226,7 +226,7 @@ class CsvToMapSpec extends CsvSpec {
 
     "parse header and decode data line. Be OK when there are more data than header column, set a default header in the result" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -255,7 +255,7 @@ class CsvToMapSpec extends CsvSpec {
 
     "parse header and decode data line. Be OK when there are more data than header column, set the user configured header in the result" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -284,7 +284,7 @@ class CsvToMapSpec extends CsvSpec {
 
     "parse header and decode data line. Be OK when there are more headers than data column, set the user configured field value in the result" in assertAllStagesStopped {
       // #header-line
-      import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+      import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
       // #header-line
       val future =
@@ -314,7 +314,7 @@ class CsvToMapSpec extends CsvSpec {
 
   "be OK with more headers column than data (including the header in the result)" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+    import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -351,7 +351,7 @@ class CsvToMapSpec extends CsvSpec {
 
   "be OK when there are more data than header column, set a default header in the result" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+    import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -384,7 +384,7 @@ class CsvToMapSpec extends CsvSpec {
 
   "be OK when there are more data than header column, set the user configured header in the result" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+    import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =
@@ -413,7 +413,7 @@ class CsvToMapSpec extends CsvSpec {
 
   "be OK when there are more headers than data column, set the user configured field value in the result" in assertAllStagesStopped {
     // #header-line
-    import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
+    import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
     // #header-line
     val future =

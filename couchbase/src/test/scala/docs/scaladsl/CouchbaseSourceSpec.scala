@@ -13,11 +13,11 @@
 
 package docs.scaladsl
 
-import akka.stream.alpakka.couchbase.scaladsl.{ CouchbaseSession, CouchbaseSource }
-import akka.stream.alpakka.couchbase.testing.CouchbaseSupport
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.Sink
-import akka.stream.testkit.scaladsl.StreamTestKit._
+import org.apache.pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, CouchbaseSource }
+import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupport
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit._
 import com.couchbase.client.java.auth.PasswordAuthenticator
 import com.couchbase.client.java.{ Bucket, CouchbaseCluster }
 import com.couchbase.client.java.document.json.JsonObject

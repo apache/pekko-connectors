@@ -26,9 +26,9 @@ then
   echo "execute_build=true" >> $GITHUB_ENV
 elif [ "$DIFF_EXIT_CODE" -eq 1 ]
 then
-  echo "Changes in Alpakka ${CONNECTOR}"
+  echo "Changes in Connector ${CONNECTOR}"
   echo "execute_build=true" >> $GITHUB_ENV
 else
-  echo "No changes in Alpakka ${CONNECTOR}"
+  echo "No changes in Connector ${CONNECTOR}"
   echo "execute_build=false" >> $GITHUB_ENV
 fi

@@ -15,7 +15,7 @@ package docs.scaladsl
 
 import java.io.File
 
-import akka.testkit.TestKit
+import org.apache.pekko.testkit.TestKit
 import com.sksamuel.avro4s.RecordFormat
 import org.apache.avro.Schema
 import org.apache.avro.generic.{ GenericRecord, GenericRecordBuilder }

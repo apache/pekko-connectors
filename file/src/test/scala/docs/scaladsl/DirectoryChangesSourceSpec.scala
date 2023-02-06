@@ -14,7 +14,7 @@
 package docs.scaladsl
 import java.nio.file.FileSystems
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 
 import scala.concurrent.duration._
 
@@ -26,7 +26,7 @@ object DirectoryChangesSourceSpec {
     implicit val system: ActorSystem = ActorSystem()
 
     // #minimal-sample
-    import akka.stream.alpakka.file.scaladsl.DirectoryChangesSource
+    import org.apache.pekko.stream.connectors.file.scaladsl.DirectoryChangesSource
 
     val fs = FileSystems.getDefault
     val changes = DirectoryChangesSource(fs.getPath(path), pollInterval = 1.second, maxBufferSize = 1000)

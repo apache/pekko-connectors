@@ -13,14 +13,14 @@
 
 package docs.scaladsl
 
-import akka.stream.alpakka.ironmq.PushMessage
-import akka.stream.alpakka.ironmq.impl.IronMqClientForTests
-import akka.stream.alpakka.ironmq.scaladsl._
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Flow, Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.testkit.TestKit
-import akka.{ Done, NotUsed }
+import org.apache.pekko.stream.connectors.ironmq.PushMessage
+import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClientForTests
+import org.apache.pekko.stream.connectors.ironmq.scaladsl._
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.{ Done, NotUsed }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
@@ -46,7 +46,7 @@ class IronMqDocsSpec
   "IronMqConsumer" should {
     "read messages" in assertAllStagesStopped {
       val queueName = givenQueue().futureValue
-      import akka.stream.alpakka.ironmq.PushMessage
+      import org.apache.pekko.stream.connectors.ironmq.PushMessage
 
       val messages = (1 to 100).map(i => s"test-$i")
       val produced = Source(messages)
@@ -55,7 +55,7 @@ class IronMqDocsSpec
       produced.futureValue shouldBe Done
 
       // #atMostOnce
-      import akka.stream.alpakka.ironmq.Message
+      import org.apache.pekko.stream.connectors.ironmq.Message
 
       val source: Source[Message, NotUsed] =
         IronMqConsumer.atMostOnceSource(queueName, ironMqSettings)
@@ -70,7 +70,7 @@ class IronMqDocsSpec
     "read messages and allow committing" in assertAllStagesStopped {
       val queueName = givenQueue().futureValue
 
-      import akka.stream.alpakka.ironmq.PushMessage
+      import org.apache.pekko.stream.connectors.ironmq.PushMessage
       val messages = (1 to 100).map(i => s"test-$i")
       val produced = Source(messages)
         .map(PushMessage(_))
@@ -78,8 +78,8 @@ class IronMqDocsSpec
       produced.futureValue shouldBe Done
 
       // #atLeastOnce
-      import akka.stream.alpakka.ironmq.scaladsl.CommittableMessage
-      import akka.stream.alpakka.ironmq.Message
+      import org.apache.pekko.stream.connectors.ironmq.scaladsl.CommittableMessage
+      import org.apache.pekko.stream.connectors.ironmq.Message
 
       val source: Source[CommittableMessage, NotUsed] =
         IronMqConsumer.atLeastOnceSource(queueName, ironMqSettings)
@@ -104,7 +104,7 @@ class IronMqDocsSpec
 
       val messageCount = 10
       // #flow
-      import akka.stream.alpakka.ironmq.{ Message, PushMessage }
+      import org.apache.pekko.stream.connectors.ironmq.{ Message, PushMessage }
 
       val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
       val producedIds: Future[immutable.Seq[Message.Id]] = Source(messages)
@@ -134,8 +134,8 @@ class IronMqDocsSpec
       produced.futureValue shouldBe Done
 
       // #atLeastOnceFlow
-      import akka.stream.alpakka.ironmq.{ Message, PushMessage }
-      import akka.stream.alpakka.ironmq.scaladsl.Committable
+      import org.apache.pekko.stream.connectors.ironmq.{ Message, PushMessage }
+      import org.apache.pekko.stream.connectors.ironmq.scaladsl.Committable
 
       val pushAndCommit: Flow[(PushMessage, Committable), Message.Id, NotUsed] =
         IronMqProducer.atLeastOnceFlow(targetQueue, ironMqSettings)
@@ -164,7 +164,7 @@ class IronMqDocsSpec
 
       val messageCount = 10
       // #sink
-      import akka.stream.alpakka.ironmq.{ Message, PushMessage }
+      import org.apache.pekko.stream.connectors.ironmq.{ Message, PushMessage }
 
       val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
       val producedIds: Future[Done] = Source(messages)

@@ -15,18 +15,17 @@ package docs.javadsl;
 
 // #init-session
 
-import akka.actor.ActorSystem;
-import akka.stream.Materializer;
-import akka.stream.alpakka.cassandra.CassandraSessionSettings;
-import akka.stream.alpakka.cassandra.javadsl.CassandraSession;
-import akka.stream.alpakka.cassandra.javadsl.CassandraSessionRegistry;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings;
+import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSession;
+import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSessionRegistry;
 // #init-session
 // #cql
-import akka.stream.alpakka.cassandra.javadsl.CassandraSource;
+import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSource;
 // #cql
-import akka.stream.alpakka.cassandra.scaladsl.CassandraAccess;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Sink;
+import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraAccess;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Sink;
 // #statement
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.Statement;
@@ -158,7 +157,7 @@ public class CassandraSourceTest {
     ActorSystem system = helper.system;
     // #discovery
     CassandraSessionSettings sessionSettings =
-        CassandraSessionSettings.create("example-with-akka-discovery");
+        CassandraSessionSettings.create("example-with-pekko-discovery");
     CassandraSession session = CassandraSessionRegistry.get(system).sessionFor(sessionSettings);
     // #discovery
     session.close(system.dispatcher());

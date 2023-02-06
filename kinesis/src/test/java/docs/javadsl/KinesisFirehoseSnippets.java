@@ -13,13 +13,13 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.kinesisfirehose.KinesisFirehoseFlowSettings;
-import akka.stream.alpakka.kinesisfirehose.javadsl.KinesisFirehoseFlow;
-import akka.stream.alpakka.kinesisfirehose.javadsl.KinesisFirehoseSink;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings;
+import org.apache.pekko.stream.connectors.kinesisfirehose.javadsl.KinesisFirehoseFlow;
+import org.apache.pekko.stream.connectors.kinesisfirehose.javadsl.KinesisFirehoseSink;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
 // #init-client
 import com.github.matsluni.akkahttpspi.AkkaHttpClient;
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient;

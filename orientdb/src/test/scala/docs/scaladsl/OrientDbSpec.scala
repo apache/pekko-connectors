@@ -13,19 +13,19 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.actor.ActorSystem
-import akka.stream.alpakka.orientdb.scaladsl._
-import akka.stream.alpakka.orientdb.{
+import org.apache.pekko.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.orientdb.scaladsl._
+import org.apache.pekko.stream.connectors.orientdb.{
   OrientDbReadResult,
   OrientDbSourceSettings,
   OrientDbWriteMessage,
   OrientDbWriteSettings
 }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.testkit.TestKit
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.testkit.TestKit
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.client.remote.OServerAdmin
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx

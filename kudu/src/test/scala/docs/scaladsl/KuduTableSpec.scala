@@ -13,13 +13,13 @@
 
 package docs.scaladsl
 
-import akka.{ Done, NotUsed }
-import akka.actor.ActorSystem
-import akka.stream.alpakka.kudu.{ KuduAttributes, KuduTableSettings }
-import akka.stream.alpakka.kudu.scaladsl.KuduTable
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Flow, Sink, Source }
-import akka.testkit.TestKit
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.kudu.{ KuduAttributes, KuduTableSettings }
+import org.apache.pekko.stream.connectors.kudu.scaladsl.KuduTable
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
+import org.apache.pekko.testkit.TestKit
 import org.apache.kudu.client.{ CreateTableOptions, KuduClient, PartialRow }
 import org.apache.kudu.{ ColumnSchema, Schema, Type }
 import org.scalatest.concurrent.ScalaFutures

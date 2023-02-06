@@ -14,11 +14,11 @@
 package docs.javadsl;
 
 // #retrieving
-import akka.stream.IOResult;
-import akka.stream.alpakka.ftp.FtpSettings;
-import akka.stream.alpakka.ftp.javadsl.Ftp;
-import akka.stream.javadsl.Source;
-import akka.util.ByteString;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.connectors.ftp.FtpSettings;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.ByteString;
 import java.util.concurrent.CompletionStage;
 
 public class FtpRetrievingExample {

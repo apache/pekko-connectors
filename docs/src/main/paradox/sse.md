@@ -11,14 +11,14 @@ The SSE connector provides a continuous source of server-sent events recovering 
   artifact=pekko-connectors-sse_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
-  value3=$akka-http.version$
+  value3=$pekko-http.version$
   group3=org.apache.pekko
-  artifact3=akka-http_$scala.binary.version$
+  artifact3=pekko-http_$scala.binary.version$
   version3=PekkoHttpVersion
 }
 

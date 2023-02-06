@@ -13,12 +13,12 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.avroparquet.javadsl.AvroParquetFlow;
-import akka.stream.alpakka.avroparquet.javadsl.AvroParquetSource;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.avroparquet.javadsl.AvroParquetFlow;
+import org.apache.pekko.stream.connectors.avroparquet.javadsl.AvroParquetSource;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.avro.AvroParquetWriter;
 import org.apache.parquet.hadoop.ParquetWriter;
@@ -29,7 +29,7 @@ import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.hadoop.fs.Path;
 import org.apache.avro.Schema;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.Source;
 import org.apache.parquet.avro.AvroParquetReader;
 // #init-reader
 

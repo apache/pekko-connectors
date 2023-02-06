@@ -16,9 +16,9 @@ about the technology the connector is using.
   artifact=pekko-connectors-reference_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -31,11 +31,11 @@ The table below shows direct dependencies of this module and the second tab show
 
 Give a brief description of the usage of this connector. If you want to mention a
 class name, make sure to link to the API docs:
-@scaladoc[ReferenceReadResult](akka.stream.alpakka.reference.ReferenceReadResult).
+@scaladoc[ReferenceReadResult](org.apache.pekko.stream.connectors.reference.ReferenceReadResult).
 
 If any of the API classes are different between Scala and Java, link to both API docs:
-@scala[@scaladoc[Reference](akka.stream.alpakka.reference.scaladsl.Reference$)]
-@java[@scaladoc[Reference](akka.stream.alpakka.reference.javadsl.Reference$)].
+@scala[@scaladoc[Reference](org.apache.pekko.stream.connectors.reference.scaladsl.Reference$)]
+@java[@scaladoc[Reference](org.apache.pekko.stream.connectors.reference.javadsl.Reference$)].
 
 Show an example code snippet of how a source of this connector can be created.
 

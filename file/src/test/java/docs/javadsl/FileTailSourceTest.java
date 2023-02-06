@@ -13,21 +13,21 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.pf.PFBuilder;
-import akka.stream.KillSwitches;
-import akka.stream.Materializer;
-import akka.stream.UniqueKillSwitch;
-import akka.stream.alpakka.file.DirectoryChange;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.stream.testkit.TestSubscriber;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.pf.PFBuilder;
+import org.apache.pekko.stream.KillSwitches;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.UniqueKillSwitch;
+import org.apache.pekko.stream.connectors.file.DirectoryChange;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.TestSubscriber;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 import org.junit.*;
@@ -77,7 +77,7 @@ public class FileTailSourceTest {
     Files.write(path, dataInFile.getBytes(UTF_8));
 
     final Source<ByteString, NotUsed> source =
-        akka.stream.alpakka.file.javadsl.FileTailSource.create(
+        org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.create(
             path,
             8192, // chunk size
             0, // starting position
@@ -104,7 +104,7 @@ public class FileTailSourceTest {
     Files.write(path, "a\n".getBytes(UTF_8));
 
     final Source<String, NotUsed> source =
-        akka.stream.alpakka.file.javadsl.FileTailSource.createLines(
+        org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.createLines(
             path,
             8192, // chunk size
             Duration.ofMillis(250),
@@ -145,7 +145,7 @@ public class FileTailSourceTest {
 
     final Duration checkInterval = Duration.ofSeconds(1);
     final Source<String, NotUsed> fileCheckSource =
-        akka.stream.alpakka.file.javadsl.DirectoryChangesSource.create(
+        org.apache.pekko.stream.connectors.file.javadsl.DirectoryChangesSource.create(
                 path.getParent(), checkInterval, 8192)
             .mapConcat(
                 pair -> {
@@ -161,7 +161,7 @@ public class FileTailSourceTest {
                     .build());
 
     final Source<String, NotUsed> source =
-        akka.stream.alpakka.file.javadsl.FileTailSource.createLines(
+        org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.createLines(
                 path,
                 8192, // chunk size
                 Duration.ofMillis(250))
@@ -190,7 +190,7 @@ public class FileTailSourceTest {
     // #shutdown-on-idle-timeout
 
     Source<String, NotUsed> stream =
-        akka.stream.alpakka.file.javadsl.FileTailSource.createLines(
+        org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.createLines(
                 path,
                 8192, // chunk size
                 Duration.ofMillis(250))
@@ -233,7 +233,7 @@ public class FileTailSourceTest {
     final int maxLineSize = 8192;
 
     final Source<String, NotUsed> lines =
-        akka.stream.alpakka.file.javadsl.FileTailSource.createLines(
+        org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.createLines(
             fs.getPath(path), maxLineSize, pollingInterval);
 
     lines.runForeach(System.out::println, system);
