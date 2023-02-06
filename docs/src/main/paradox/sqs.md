@@ -8,7 +8,7 @@ For more information about AWS SQS please visit the [official documentation](htt
 
 @@@
 
-The AWS SQS connector provides Akka Stream sources and sinks for AWS SQS queues.
+The AWS SQS connector provides Apache Pekko Stream sources and sinks for AWS SQS queues.
 
 @@project-info{ projectId="sqs" }
 
@@ -19,16 +19,16 @@ The AWS SQS connector provides Akka Stream sources and sinks for AWS SQS queues.
   group=org.apache.pekko
   artifact=pekko-connectors-sqs_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  symbol3=AkkaHttpVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
+  symbol3=PekkoHttpVersion
   value3=$akka-http.version$
-  group3=com.typesafe.akka
+  group3=org.apache.pekko
   artifact3=akka-http_$scala.binary.version$
-  version3=AkkaHttpVersion
+  version3=PekkoHttpVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -57,7 +57,7 @@ Scala
 Java
 : @@snip [snip](/sqs/src/test/java/akka/stream/alpakka/sqs/javadsl/BaseSqsTest.java) { #init-client }
 
-The example above uses @extref:[Akka HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
+The example above uses @extref:[Apache Pekko HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md) for more details.
 
 ## Read from an SQS queue
 
@@ -69,7 +69,7 @@ Scala
 Java
 : @@snip [snip](/sqs/src/test/java/docs/javadsl/SqsSourceTest.java) { #run }
 
-In this example we use the `closeOnEmptyReceive` to let the stream complete when there are no more messages on the queue. In realistic scenarios, you should add a `KillSwitch` to the stream, see ["Controlling stream completion with KillSwitch" in the Akka documentation](https://doc.akka.io/docs/akka/current/stream/stream-dynamic.html#controlling-stream-completion-with-killswitch).
+In this example we use the `closeOnEmptyReceive` to let the stream complete when there are no more messages on the queue. In realistic scenarios, you should add a `KillSwitch` to the stream, see @extref:["Controlling stream completion with KillSwitch" in the Apache Pekko documentation](pekko:stream/stream-dynamic.html#controlling-stream-completion-with-killswitch).
 
 
 ### Source configuration
@@ -336,7 +336,7 @@ Options:
 
 ## Integration testing
 
-For integration testing without touching Amazon SQS, Alpakka uses [ElasticMQ](https://github.com/softwaremill/elasticmq), 
+For integration testing without touching Amazon SQS, Apache Pekko Connectors uses [ElasticMQ](https://github.com/softwaremill/elasticmq), 
 a queuing service which serves an AWS SQS compatible API.
 
 @@@ index

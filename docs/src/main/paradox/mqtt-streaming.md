@@ -10,15 +10,15 @@ Further information on [mqtt.org](https://mqtt.org/).
 
 @@@ note { title="Paho Differences" }
 
-Alpakka contains @ref[another MQTT connector](mqtt.md) which is based on the Eclipse Paho client. Unlike the Paho version, this library has no dependencies other than those of Akka Streams i.e. it is entirely reactive. As such, there should be a significant performance advantage given its pure-Akka foundations in terms of memory usage given its diligent use of threads.
+Apache Pekko Connectors contains @ref[another MQTT connector](mqtt.md) which is based on the Eclipse Paho client. Unlike the Paho version, this library has no dependencies other than those of Apache Pekko Streams i.e. it is entirely reactive. As such, there should be a significant performance advantage given its pure-Apache Pekko foundations in terms of memory usage given its diligent use of threads.
 
 This library also differs in that it separates out the concern of how MQTT is connected. Unlike Paho, where TCP is assumed, this library can join in any flow. The end result is that by using this library, Unix Domain Sockets, TCP, UDP or anything else can be used to transport MQTT.
 
 @@@
 
-The Alpakka MQTT Streaming connector provides an Akka Stream flow to connect to MQTT brokers. In addition, a flow is provided so that you can implement your own MQTT server in the case where you do not wish to use a broker--MQTT is a fine protocol for directed client/server interactions, as well as having an intermediary broker.
+The Apache Pekko Connectors MQTT Streaming connector provides an Apache Pekko Stream flow to connect to MQTT brokers. In addition, a flow is provided so that you can implement your own MQTT server in the case where you do not wish to use a broker--MQTT is a fine protocol for directed client/server interactions, as well as having an intermediary broker.
 
-Alpakka MQTT Streaming implements the [MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) protocol.
+Apache Pekko Connectors MQTT Streaming implements the [MQTT 3.1.1](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html) protocol.
 
 @@project-info{ projectId="mqtt-streaming" }
 
@@ -28,14 +28,14 @@ Alpakka MQTT Streaming implements the [MQTT 3.1.1](https://docs.oasis-open.org/m
   group=org.apache.pekko
   artifact=pekko-connectors-mqtt-streaming_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  group3=com.typesafe.akka
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
+  group3=org.apache.pekko
   artifact3=akka-actor-typed_$scala.binary.version$
-  version3=AkkaVersion
+  version3=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.

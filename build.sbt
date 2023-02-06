@@ -307,10 +307,10 @@ lazy val unixdomainsocket =
 lazy val xml = pekkoConnectorProject("xml", "xml", Dependencies.Xml)
 
 lazy val docs = project
-  .enablePlugins(AkkaParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
+  .enablePlugins(ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
   .disablePlugins(MimaPlugin)
   .settings(
-    Compile / paradox / name := "Alpakka",
+    Compile / paradox / name := "Apache Pekko Connectors",
     publish / skip := true,
     makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
@@ -326,9 +326,9 @@ lazy val docs = project
       "akka.version" -> Dependencies.AkkaVersion,
       "akka-http.version" -> Dependencies.AkkaHttpVersion,
       "hadoop.version" -> Dependencies.HadoopVersion,
-      "extref.github.base_url" -> s"https://github.com/akka/alpakka/tree/${if (isSnapshot.value) "master"
+      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-connectors/tree/${if (isSnapshot.value) "master"
         else "v" + version.value}/%s",
-      "extref.akka.base_url" -> s"https://doc.akka.io/docs/akka/${Dependencies.AkkaBinaryVersion}/%s",
+      "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
       "scaladoc.akka.base_url" -> s"https://doc.akka.io/api/akka/${Dependencies.AkkaBinaryVersion}",
       "javadoc.akka.base_url" -> s"https://doc.akka.io/japi/akka/${Dependencies.AkkaBinaryVersion}/",
       "javadoc.akka.link_style" -> "direct",

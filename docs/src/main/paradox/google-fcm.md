@@ -8,7 +8,7 @@ Using FCM, you can notify a client app that new email or other data is available
 
 @@@
 
-The Alpakka Google Firebase Cloud Messaging connector provides a way to send notifications with [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/).
+The Apache Pekko Connectors Google Firebase Cloud Messaging connector provides a way to send notifications with [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/).
 
 @@project-info{ projectId="google-fcm" }
 
@@ -18,19 +18,19 @@ The Alpakka Google Firebase Cloud Messaging connector provides a way to send not
   group=org.apache.pekko
   artifact=pekko-connectors-google-fcm_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  symbol3=AkkaHttpVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
+  symbol3=PekkoHttpVersion
   value3=$akka-http.version$
-  group3=com.typesafe.akka
+  group3=org.apache.pekko
   artifact3=akka-http_$scala.binary.version$
-  version3=AkkaHttpVersion
-  group4=com.typesafe.akka
+  version3=PekkoHttpVersion
+  group4=org.apache.pekko
   artifact4=akka-http-spray-json_$scala.binary.version$
-  version4=AkkaHttpVersion
+  version4=PekkoHttpVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -40,7 +40,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Settings
 
-The FCM connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The FCM connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 Additional FCM-specific configuration settings can be found in its own @github[reference.conf](/google-fcm/src/main/resources/reference.conf).
 You can send test notifications [(so called validate only).](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send)
 And you can set the number of maximum concurrent connections.
@@ -61,7 +61,7 @@ Java
 With this type of send you can get responses from the server.
 These responses can be @scaladoc[FcmSuccessResponse](akka.stream.alpakka.google.firebase.fcm.FcmSuccessResponse) or @scaladoc[FcmErrorResponse](akka.stream.alpakka.google.firebase.fcm.FcmErrorResponse).
 You can choose what you want to do with this information, but keep in mind
-if you try to resend the failed messages you will need to use exponential backoff! (see [Akka docs `RestartFlow.onFailuresWithBackoff`](https://doc.akka.io/docs/akka/current/stream/operators/RestartFlow/onFailuresWithBackoff.html))
+if you try to resend the failed messages you will need to use exponential backoff! (see @extref:[Apache Pekko docs `RestartFlow.onFailuresWithBackoff`](pekko:stream/operators/RestartFlow/onFailuresWithBackoff.html))
 
 If you don't care if the notification was sent successfully, you may use `fireAndForget`.
 

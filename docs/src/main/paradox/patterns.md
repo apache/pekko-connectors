@@ -1,7 +1,7 @@
 # Integration Patterns
 
-Many [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html) can be implemented with Akka Streams 
-(see @extref:[Akka Streams documentation](akka:stream/index.html)).
+Many [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/patterns/messaging/toc.html) can be implemented with Apache Pekko Streams 
+(see @extref:[Apache Pekko Streams documentation](pekko:stream/index.html)).
 
 # PassThrough
 
@@ -58,7 +58,7 @@ Scala
 Java
 : @@snip [snip](/doc-examples/src/test/java/akka/stream/alpakka/eip/javadsl/PassThroughExamples.java) { #PassThroughWithKeep }
 
-This pattern is useful when integrating Alpakka connectors together. Here an example with Kafka:
+This pattern is useful when integrating Apache Pekko Connectors connectors together. Here an example with Kafka:
 
 Scala
 : @@snip [snip](/doc-examples/src/test/scala/akka/stream/alpakka/eip/scaladsl/PassThroughExamples.scala) { #passThroughKafkaFlow }

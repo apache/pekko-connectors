@@ -11,11 +11,11 @@ XML parsing module offers Flows for parsing, processing and writing XML document
   group=org.apache.pekko
   artifact=pekko-connectors-xml_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.

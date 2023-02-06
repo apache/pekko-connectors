@@ -1,12 +1,12 @@
 ## Compressing/decompressing
 
-Akka Stream contains support for compressing and decompressing streams of @apidoc[ByteString](akka.util.ByteString)
+Apache Pekko Stream contains support for compressing and decompressing streams of @apidoc[ByteString](akka.util.ByteString)
 elements.
 
-Use @apidoc[Compression](Compression$) as described in the Akka Stream documentation:
+Use @apidoc[Compression](Compression$) as described in the Apache Pekko Stream documentation:
 
-@extref:[Akka documentation](akka:stream/stream-cookbook.html#dealing-with-compressed-data-streams)
+@extref:[Apache Pekko documentation](pekko:stream/stream-cookbook.html#dealing-with-compressed-data-streams)
 
 ### ZIP
 
-@ref[Alpakka File](../file.md#zip-archive) supports creating flows in ZIP-format.
+@ref[Apache Pekko Connectors File](../file.md#zip-archive) supports creating flows in ZIP-format.

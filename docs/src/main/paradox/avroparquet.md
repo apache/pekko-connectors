@@ -1,6 +1,6 @@
 # Avro Parquet
 
-The Avro Parquet connector provides an Akka Stream Source, Sink and Flow for push and pull data to and from Parquet files.
+The Avro Parquet connector provides an Apache Pekko Stream Source, Sink and Flow for push and pull data to and from Parquet files.
 
 For more information about Apache Parquet please visit the [official documentation](https://parquet.apache.org/docs/).
 
@@ -12,11 +12,11 @@ For more information about Apache Parquet please visit the [official documentati
   group=org.apache.pekko
   artifact=pekko-connectors-avroparquet_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -45,7 +45,7 @@ Java
 
 ## Sink Initiation
 
-On the other hand, you can use `AvroParquetWriter` as the Akka Streams Sink implementation for writing to Parquet. 
+On the other hand, you can use `AvroParquetWriter` as the Apache Pekko Streams Sink implementation for writing to Parquet. 
 In that case, its initialisation would require an instance of `org.apache.parquet.hadoop.ParquetWriter`. It will also expect any subtype of `GenericRecord` to be passed.
  
 Scala

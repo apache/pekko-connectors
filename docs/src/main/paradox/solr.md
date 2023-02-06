@@ -8,7 +8,7 @@ Solr (pronounced "solar") is an open source enterprise search platform, written 
  
 @@@
 
-Alpakka Solr provides Akka Stream sources and sinks for Apache Solr.
+Apache Pekko Connectors Solr provides Apache Pekko Stream sources and sinks for Apache Solr.
 
 For more information about Solr please visit the [Solr documentation](https://lucene.apache.org/solr/resources.html).
 
@@ -20,11 +20,11 @@ For more information about Solr please visit the [Solr documentation](https://lu
   group=org.apache.pekko
   artifact=pekko-connectors-solr_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
+  group2=org.apache.pekko
   artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -57,9 +57,9 @@ Java
 
 ## Writing to Solr
 
-Alpakka Solr batches updates to Solr by sending all updates of the same operation type at once to Solr. These batches are extracted from the elements within one collection sent to a Solr flow or sink. Updates of different types may be contained in a single collection sent, though. In case streams don't have natural batches of updates, you may use the `groupedWithin` operator to create count or time-based batches.
+Apache Pekko Connectors Solr batches updates to Solr by sending all updates of the same operation type at once to Solr. These batches are extracted from the elements within one collection sent to a Solr flow or sink. Updates of different types may be contained in a single collection sent, though. In case streams don't have natural batches of updates, you may use the `groupedWithin` operator to create count or time-based batches.
 
-Alpakka Solr offers three styles for writing to Apache Solr:
+Apache Pekko Connectors Solr offers three styles for writing to Apache Solr:
 
 1. Using @javadoc[SolrInputDocument](org.apache.solr.common.SolrInputDocument) (via `SolrSink.documents`, `SolrFlow.documents` and `SolrFlow.documentsWithPassThrough`)
 1. Annotated *Java Bean* classes supported by Solr's @javadoc[DocumentObjectBinder](org.apache.solr.client.solrj.beans.DocumentObjectBinder) (via `SolrSink.beans`, `SolrFlow.beans` and `SolrFlow.beansWithPassThrough`)
@@ -73,7 +73,7 @@ In all variations the data is wrapped into `WriteMessage`s.
 Data sent to Solr is not searchable until it has been committed to the index. These are the major options for handling commits:
 
 1. The Solr installation can be configured to use **auto-commit**.
-2. Specify **commit-within** in `SolrUpdateSettings` to trigger commits after every write through Alpakka Solr.
+2. Specify **commit-within** in `SolrUpdateSettings` to trigger commits after every write through Apache Pekko Connectors Solr.
 3. Use explicit committing via the `SolrClient.commit` methods on stream completion as most examples show. As `commit` is a blocking operation, choose an appropriate execution context (preferably *not* `system.dispatcher`).
 
 Configuration of Solr committing is described in @extref[UpdateHandlers in SolrConfig](solr:updatehandlers-in-solrconfig.html#commits).

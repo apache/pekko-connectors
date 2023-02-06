@@ -1,6 +1,6 @@
 # FTP
 
-The FTP connector provides Akka Stream sources to connect to FTP, FTPs and SFTP servers. Currently, two kinds of sources are provided:
+The FTP connector provides Apache Pekko Stream sources to connect to FTP, FTPs and SFTP servers. Currently, two kinds of sources are provided:
 
 * one for browsing or traversing the server recursively and,
 * another for retrieving files as a stream of bytes.
@@ -13,11 +13,11 @@ The FTP connector provides Akka Stream sources to connect to FTP, FTPs and SFTP 
   group=org.apache.pekko
   artifact=pekko-connectors-ftp_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -136,7 +136,7 @@ Typical use-case for this would be listing files from a ftp location, do some pr
 
 In order to create a directory the user has to specify a parent directory (also known as base path) and directory's name.
 
-Alpakka provides a materialized API `mkdirAsync` (based on @scala[Future]@java[Completion Stage]) and unmaterialized API `mkdir` (using Sources) to let the user choose when the action will be executed.
+Apache Pekko Connectors provides a materialized API `mkdirAsync` (based on @scala[Future]@java[Completion Stage]) and unmaterialized API `mkdir` (using Sources) to let the user choose when the action will be executed.
 
 Scala
 : @@snip [snip](/ftp/src/test/scala/docs/scaladsl/scalaExamples.scala) { #mkdir-source }

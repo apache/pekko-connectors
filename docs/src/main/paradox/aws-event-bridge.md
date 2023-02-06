@@ -24,7 +24,7 @@ The `detail` is JSON as a string and `detailType` is the name of the event for r
 
 @@@
 
-The Alpakka AWS EventBridge connector provides Akka Stream flows and sinks to publish to AWS EventBridge event buses.
+The Apache Pekko Connectors AWS EventBridge connector provides Apache Pekko Stream flows and sinks to publish to AWS EventBridge event buses.
 
 
 @@project-info{ projectId="aws-event-bridge" }
@@ -65,7 +65,7 @@ Scala
 Java
 : @@snip [snip](/aws-event-bridge/src/test/java/docs/javadsl/EventBridgePublisherTest.java) { #init-client }
 
-The example above uses @extref:[Akka HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md).
+The example above uses @extref:[Apache Pekko HTTP](akka-http:) as the default HTTP client implementation. For more details about the HTTP client, configuring request retrying and best practices for credentials, see @ref[AWS client configuration](aws-shared-configuration.md).
 
 
 
@@ -116,7 +116,7 @@ Messages published in a batch using @apidoc[EventBridgePublisher.flowSeq](EventB
 
 ## Integration testing
 
-For integration testing without connecting directly to Amazon EventBridge, Alpakka uses [Localstack](https://github.com/localstack/localstack), which comes as a docker image - and has a corresponding service `amazoneventbridge` in the `docker-compose.yml` file. Which needs to be started before running the integration tests `docker-compose up amazoneventbridge`.
+For integration testing without connecting directly to Amazon EventBridge, Apache Pekko Connectors uses [Localstack](https://github.com/localstack/localstack), which comes as a docker image - and has a corresponding service `amazoneventbridge` in the `docker-compose.yml` file. Which needs to be started before running the integration tests `docker-compose up amazoneventbridge`.
 
 @@@ index
 

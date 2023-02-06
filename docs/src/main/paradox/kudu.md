@@ -1,6 +1,6 @@
 # Apache Kudu
 
-The Alpakka Kudu connector supports writing to [Apache Kudu](https://kudu.apache.org) tables.
+The Apache Pekko Connectors Kudu connector supports writing to [Apache Kudu](https://kudu.apache.org) tables.
 
 Apache Kudu is a free and open source column-oriented data store in the Apache Hadoop ecosystem.
 
@@ -13,11 +13,11 @@ Apache Kudu is a free and open source column-oriented data store in the Apache H
   group=org.apache.pekko
   artifact=pekko-connectors-kudu_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -31,7 +31,7 @@ To connect to Kudu you need:
 1. Describe the Kudu @javadoc[Schema](org.apache.kudu.Schema)
 1. Define a converter function to map your data type to a @javadoc[PartialRow](org.apache.kudu.client.PartialRow)
 1. Specify Kudu @javadoc[CreateTableOptions](org.apache.kudu.client.CreateTableOptions)
-1. Set up Alpakka's @scaladoc[KuduTableSettings](akka.stream.alpakka.kudu.KuduTableSettings)
+1. Set up Apache Pekko Connectors's @scaladoc[KuduTableSettings](akka.stream.alpakka.kudu.KuduTableSettings)
 
 Scala
 :   @@snip [snip](/kudu/src/test/scala/docs/scaladsl/KuduTableSpec.scala) { #configure }

@@ -10,11 +10,11 @@ Further information on [mqtt.org](https://mqtt.org/).
 
 @@@ note { title="Streaming Differences" }
 
-Alpakka contains @ref[another MQTT connector](mqtt-streaming.md) which is _not_ based on the Eclipse Paho client, unlike this one. Please refer to the other connector where the differences are expanded on.
+Apache Pekko Connectors contains @ref[another MQTT connector](mqtt-streaming.md) which is _not_ based on the Eclipse Paho client, unlike this one. Please refer to the other connector where the differences are expanded on.
 
 @@@
 
-The Alpakka MQTT connector provides an Akka Stream source, sink and flow to connect to MQTT brokers. It is based on the [Eclipse Paho Java client](https://www.eclipse.org/paho/clients/java/).
+The Apache Pekko Connectors MQTT connector provides an Apache Pekko Stream source, sink and flow to connect to MQTT brokers. It is based on the [Eclipse Paho Java client](https://www.eclipse.org/paho/clients/java/).
 
 @@project-info{ projectId="mqtt" }
 
@@ -24,11 +24,11 @@ The Alpakka MQTT connector provides an Akka Stream source, sink and flow to conn
   group=org.apache.pekko
   artifact=pekko-connectors-mqtt_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -53,7 +53,7 @@ Java
 Most settings are passed on to Paho's `MqttConnectOptions` (@javadoc[API](org.eclipse.paho.client.mqttv3.MqttConnectOptions)) and documented there. 
 
 @@@ warning { title='Use delayed stream restarts' }
-Note that the following examples do not provide any connection management and are designed to get you going quickly. Consider empty client IDs to auto-generate unique identifiers and the use of [delayed stream restarts](https://doc.akka.io/docs/akka/current/stream/stream-error.html?language=scala#delayed-restarts-with-a-backoff-stage). The underlying Paho library's auto-reconnect feature [does not handle initial connections by design](https://github.com/eclipse/paho.mqtt.golang/issues/77).
+Note that the following examples do not provide any connection management and are designed to get you going quickly. Consider empty client IDs to auto-generate unique identifiers and the use of @extref:[delayed stream restarts](pekko:stream/stream-error.html?language=scala#delayed-restarts-with-a-backoff-stage). The underlying Paho library's auto-reconnect feature [does not handle initial connections by design](https://github.com/eclipse/paho.mqtt.golang/issues/77).
 @@@
 
 

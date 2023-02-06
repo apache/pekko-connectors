@@ -8,7 +8,7 @@ For more information about OrientDB please visit the [official documentation](ht
 
 @@@
 
-The Alpakka OrientDB connector provides Akka Stream sources and sinks for OrientDB.
+The Apache Pekko Connectors OrientDB connector provides Apache Pekko Stream sources and sinks for OrientDB.
 
 
 @@project-info{ projectId="orientdb" }
@@ -20,11 +20,11 @@ The Alpakka OrientDB connector provides Akka Stream sources and sinks for Orient
   group=org.apache.pekko
   artifact=pekko-connectors-orientdb_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.

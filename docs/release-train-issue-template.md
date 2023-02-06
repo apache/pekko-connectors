@@ -72,8 +72,8 @@ Key links:
 
 ### Afterwards
 
-- [ ] If Couchbase has relevant changes, create/update PR in [Akka Persistence Couchbase](https://github.com/akka/akka-persistence-couchbase/) to upgrade to $VERSION$
-- [ ] If Cassandra has relevant changes, create/update PR in [Akka Persistence Cassandra](https://github.com/akka/akka-persistence-cassandra/) to upgrade to $VERSION$
+- [ ] If Couchbase has relevant changes, create/update PR in [Apache Pekko Persistence Couchbase](https://github.com/akka/akka-persistence-couchbase/) to upgrade to $VERSION$
+- [ ] If Cassandra has relevant changes, create/update PR in [Apache Pekko Persistence Cassandra](https://github.com/akka/akka-persistence-cassandra/) to upgrade to $VERSION$
 - [ ] Update version for [Lightbend Supported Modules](https://developer.lightbend.com/docs/lightbend-platform/introduction/getting-help/build-dependencies.html#_alpakka) in [private project](https://github.com/lightbend/lightbend-platform-docs/blob/master/docs/modules/getting-help/examples/build.sbt)
 - [ ] Create an issue or PR to upgrade projects in [Alpakka Samples](https://github.com/apache/incubator-pekko-connectors-samples)
 - Close this issue

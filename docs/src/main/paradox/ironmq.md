@@ -1,6 +1,6 @@
 # IronMQ
 
-The IronMQ connector provides an Akka stream source and sink to connect to the [IronMQ](https://www.iron.io/) queue.
+The IronMQ connector provides an Apache Pekko Stream source and sink to connect to the [IronMQ](https://www.iron.io/) queue.
 
 IronMQ is a simple point-to-point queue, but it is possible to implement a fan-out semantic by configure the queue as push
 queue and set other queue as subscribers. More information about that could be found on
@@ -14,16 +14,16 @@ queue and set other queue as subscribers. More information about that could be f
   group=org.apache.pekko
   artifact=pekko-connectors-ironmq_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  symbol3=AkkaHttpVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
+  symbol3=PekkoHttpVersion
   value3=$akka-http.version$
-  group3=com.typesafe.akka
+  group3=org.apache.pekko
   artifact3=akka-http_$scala.binary.version$
-  version3=AkkaHttpVersion
+  version3=PekkoHttpVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.

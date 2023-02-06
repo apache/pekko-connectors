@@ -6,7 +6,7 @@ Google Cloud Pub/Sub provides many-to-many, asynchronous messaging that decouple
 Further information at the official [Google Cloud documentation website](https://cloud.google.com/pubsub/docs/overview).
 @@@
 
-This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.googleapis.com`). For a connector that uses gRPC for the communication, take a look at the alternative @ref[Alpakka Google Cloud Pub/Sub gRPC](google-cloud-pub-sub-grpc.md) connector.
+This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.googleapis.com`). For a connector that uses gRPC for the communication, take a look at the alternative @ref[Apache Pekko Connectors Google Cloud Pub/Sub gRPC](google-cloud-pub-sub-grpc.md) connector.
 
 @@project-info{ projectId="google-cloud-pub-sub" }
 
@@ -16,19 +16,19 @@ This connector communicates to Pub/Sub via HTTP requests (i.e. `https://pubsub.g
   group=org.apache.pekko
   artifact=pekko-connectors-google-cloud-pub-sub_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  symbol3=AkkaHttpVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
+  symbol3=PekkoHttpVersion
   value3=$akka-http.version$
-  group3=com.typesafe.akka
+  group3=org.apache.pekko
   artifact3=akka-http_$scala.binary.version$
-  version3=AkkaHttpVersion
-  group4=com.typesafe.akka
+  version3=PekkoHttpVersion
+  group4=org.apache.pekko
   artifact4=akka-http-spray-json_$scala.binary.version$
-  version4=AkkaHttpVersion
+  version4=PekkoHttpVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -38,7 +38,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Usage
 
-The Pub/Sub connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The Pub/Sub connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 Additional Pub/Sub-specific configuration settings can be found in its own @github[reference.conf](/google-cloud-pub-sub/src/main/resources/reference.conf).
 
 And prepare the actor system.

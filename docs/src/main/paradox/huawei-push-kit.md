@@ -6,7 +6,7 @@ Huawei Push Kit is a messaging service provided for you. It establishes a messag
 
 @@@
 
-The Alpakka Huawei Push Kit connector provides a way to send notifications with [Huawei Push Kit](https://developer.huawei.com/consumer/en/hms/huawei-pushkit).
+The Apache Pekko Connectors Huawei Push Kit connector provides a way to send notifications with [Huawei Push Kit](https://developer.huawei.com/consumer/en/hms/huawei-pushkit).
 
 @@project-info{ projectId="huawei-push-kit" }
 
@@ -16,19 +16,19 @@ The Alpakka Huawei Push Kit connector provides a way to send notifications with 
 group=org.apache.pekko
 artifact=pekko-connectors-huawei-push-kit_$scala.binary.version$
 version=$project.version$
-symbol2=AkkaVersion
+symbol2=PekkoVersion
 value2=$akka.version$
-group2=com.typesafe.akka
-artifact2=akka-stream_$scala.binary.version$
-version2=AkkaVersion
-symbol3=AkkaHttpVersion
+group2=org.apache.pekko
+artifact2=pekko-stream_$scala.binary.version$
+version2=PekkoVersion
+symbol3=PekkoHttpVersion
 value3=$akka-http.version$
-group3=com.typesafe.akka
+group3=org.apache.pekko
 artifact3=akka-http_$scala.binary.version$
-version3=AkkaHttpVersion
-group4=com.typesafe.akka
+version3=PekkoHttpVersion
+group4=org.apache.pekko
 artifact4=akka-http-spray-json_$scala.binary.version$
-version4=AkkaHttpVersion
+version4=PekkoHttpVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -58,7 +58,7 @@ Java
 With this type of send you can get responses from the server.
 These responses can be @scaladoc[PushKitResponse](akka.stream.alpakka.huawei.pushkit.PushKitResponse) or @scaladoc[ErrorResponse](akka.stream.alpakka.huawei.pushkit.ErrorResponse).
 You can choose what you want to do with this information, but keep in mind
-if you try to resend the failed messages you will need to use exponential backoff! (see @extref[[Akka docs `RestartFlow.onFailuresWithBackoff`](akka:stream/operators/RestartFlow/onFailuresWithBackoff.html))
+if you try to resend the failed messages you will need to use exponential backoff! (see @extref[[Apache Pekko docs `RestartFlow.onFailuresWithBackoff`](pekko:stream/operators/RestartFlow/onFailuresWithBackoff.html))
 
 If you don't care if the notification was sent successfully, you may use `fireAndForget`.
 

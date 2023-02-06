@@ -6,7 +6,7 @@ as conversion of the character set in binary text data in the form of ByteString
 
 The main use case for these flows is the transcoding of text read from a
 source with a certain character set, which may not be usable with other flows
-or sinks. For example may CSV data arrive in UTF-16 encoding, but the Alpakka CSV
+or sinks. For example may CSV data arrive in UTF-16 encoding, but the Apache Pekko Connectors CSV
 parser does only support UTF-8.
 
 @@project-info{ projectId="text" }
@@ -18,11 +18,11 @@ parser does only support UTF-8.
   group=org.apache.pekko
   artifact=pekko-connectors-text_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 

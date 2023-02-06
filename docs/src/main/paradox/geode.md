@@ -2,7 +2,7 @@
 
 [Apache Geode](https://geode.apache.org) is a distributed datagrid (formerly called ["Gemfire" which used to be Pivotal's packaging of Geode and now is VMware Tanzu](https://tanzu.vmware.com/gemfire)).
 
-Alpakka Geode provides flows and sinks to put elements into Geode, and a source to retrieve elements from it. It stores key-value-pairs. Keys and values must be serialized with Geode's support for it.
+Apache Pekko Connectors Geode provides flows and sinks to put elements into Geode, and a source to retrieve elements from it. It stores key-value-pairs. Keys and values must be serialized with Geode's support for it.
 
 @@project-info{ projectId="geode" }
 
@@ -12,11 +12,11 @@ Alpakka Geode provides flows and sinks to put elements into Geode, and a source 
   group=org.apache.pekko
   artifact=pekko-connectors-geode_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -37,7 +37,7 @@ Scala
 Java
 : @@snip [snip](/geode/src/test/java/docs/javadsl/GeodeBaseTestCase.java) { #connection }
 
-Apache Geode supports continuous queries. Continuous query rely on server events, thus Alpakka Geode needs to listen to those events. This behaviour -- as it consumes more resources  -- is isolated in a Scala trait and/or an specialized Java class.
+Apache Geode supports continuous queries. Continuous query rely on server events, thus Apache Pekko Connectors Geode needs to listen to those events. This behaviour -- as it consumes more resources  -- is isolated in a Scala trait and/or an specialized Java class.
 
 Scala
 : @@snip [snip](/geode/src/test/scala/docs/scaladsl/GeodeContinuousSourceSpec.scala) { #connection-with-pool }
@@ -58,7 +58,7 @@ Java
 
 ### Serialization
 
-Objects must be serialized to be stored in or retrieved from Geode. Only **PDX format** is available with Alpakka Geode.
+Objects must be serialized to be stored in or retrieved from Geode. Only **PDX format** is available with Apache Pekko Connectors Geode.
 `PDXEncoder`s support many options as described in @extref[Geode PDX Serialization](geode:/developing/data_serialization/gemfire_pdx_serialization.html).
 A `PdxSerializer` must be provided to Geode when reading from or writing to a region.
 
@@ -69,7 +69,7 @@ Java
 :   @@snip [snip](/geode/src/test/java/docs/javadsl/PersonPdxSerializer.java) { #person-pdx-serializer }
 
 
-This Alpakka Geode provides a generic solution for Scala users based on [Shapeless](https://github.com/milessabin/shapeless) which may generate serializers for case classes at compile time.
+This Apache Pekko Connectors Geode provides a generic solution for Scala users based on [Shapeless](https://github.com/milessabin/shapeless) which may generate serializers for case classes at compile time.
 
 Java users need to implement custom serializers manually, or use runtime reflection as described in @extref[Using Automatic Reflection-Based PDX Serialization](geode:/developing/data_serialization/auto_serialization.html).
 

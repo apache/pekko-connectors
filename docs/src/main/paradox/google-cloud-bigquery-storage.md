@@ -4,27 +4,27 @@ The BigQuery Storage API offers fast access to BigQuery-managed storage using an
 It is seen as an improvement over the REST API, and bulk data `extract` jobs for accessing BigQuery-managed table data, but doesn't offer any functionality around managing BigQuery resources.
 Further information at the official [Google Cloud documentation website](https://cloud.google.com/bigquery/docs/reference/storage).
 
-This connector communicates to the BigQuery Storage API via the gRPC protocol. The integration between Akka Stream and gRPC is handled by the
-@extref:[Akka gRPC library](akka-grpc:/). Currently, this connector only supports returning each row as an Avro GenericRecord.
+This connector communicates to the BigQuery Storage API via the gRPC protocol. The integration between Apache Pekko Stream and gRPC is handled by the
+@extref:[Apache Pekko gRPC library](akka-grpc:/). Currently, this connector only supports returning each row as an Avro GenericRecord.
 
 @@project-info{ projectId="google-cloud-bigquery-storage" }
 
 ## Artifacts
 
-Akka gRPC uses Akka Discovery internally. Make sure to add Akka Discovery with the same Akka version that the application uses.
+Apache Pekko gRPC uses Apache Pekko Discovery internally. Make sure to add Apache Pekko Discovery with the same Apache Pekko version that the application uses.
 
 @@dependency [sbt,Maven,Gradle] {
   group=org.apache.pekko
   artifact=pekko-connectors-google-cloud-bigquery-storage_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
-  artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
-  group3=com.typesafe.akka
+  group2=org.apache.pekko
+  artifact2=pekko-stream_$scala.binary.version$
+  version2=PekkoVersion
+  group3=org.apache.pekko
   artifact3=akka-discovery_$scala.binary.version$
-  version3=AkkaVersion
+  version3=PekkoVersion
 }
 
 The table below shows direct dependencies of this module and the second tab shows all libraries it depends on transitively.
@@ -33,7 +33,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Build setup
 
-The Alpakka Google Cloud BigQuery Storage library contains the classes generated from [Google's protobuf specification](https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1).
+The Apache Pekko Connectors Google Cloud BigQuery Storage library contains the classes generated from [Google's protobuf specification](https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1).
 
 @@@note { title="ALPN on JDK 8" }
 
@@ -47,7 +47,7 @@ yourself, but we recommend upgrading.
 
 ## Configuration
 
-The BigQuery Storage connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Alpakka.
+The BigQuery Storage connector @ref[shares its basic configuration](google-common.md) with all the Google connectors in Apache Pekko Connectors.
 
 Example Test Configuration
 ```
@@ -59,7 +59,7 @@ alpakka.google.cloud.bigquery.grpc {
 }
 ```
 
-For more configuration details consider the underlying configuration for @extref:[Akka gRPC](akka-grpc:/client/configuration.html).
+For more configuration details consider the underlying configuration for @extref:[Apache Pekko gRPC](akka-grpc:/client/configuration.html).
 
 A manually initialized @scala[`akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader`]@java[`akka.stream.alpakka.googlecloud.bigquery.storage.javadsl.GrpcBigQueryStorageReader`] can be used by providing it as an attribute to the stream:
 

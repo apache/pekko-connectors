@@ -10,11 +10,11 @@ The Slick connector provides Scala and Java DSLs to create a `Source` to stream 
   group=org.apache.pekko
   artifact=pekko-connectors-slick_$scala.binary.version$
   version=$project.version$
-  symbol2=AkkaVersion
+  symbol2=PekkoVersion
   value2=$akka.version$
-  group2=com.typesafe.akka
+  group2=org.apache.pekko
   artifact2=akka-stream_$scala.binary.version$
-  version2=AkkaVersion
+  version2=PekkoVersion
 }
 
 You will also need to add the JDBC driver(s) for the specific relational database(s) to your project. Most of those databases have drivers that are not available from public repositories so unfortunately some manual steps will probably be required. The Slick documentation has @extref[information on where to download the drivers](slick:supported-databases.html).
@@ -108,7 +108,7 @@ Java
 
 ## Using a Slick Source
 
-The Slick connector allows you to perform a SQL query and expose the resulting stream of results as an Akka Streams `Source[T]`. Where `T` is any type that can be constructed using a database row.
+The Slick connector allows you to perform a SQL query and expose the resulting stream of results as an Apache Pekko Streams `Source[T]`. Where `T` is any type that can be constructed using a database row.
 
 @@@ warning
 Some database systems, such as PostgreSQL, require session parameters to be set in a certain way to support streaming without caching all data at once in memory on the client side, see [Slick documentation](https://scala-slick.org/doc/3.2.0/dbio.html#streaming).
