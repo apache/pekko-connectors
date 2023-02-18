@@ -53,7 +53,7 @@ import scala.util.Success
   @volatile
   private var upstreamEnded = false;
 
-  private val asyncMessageSendCallback: AsyncCallback[(Try[TableEntry])] = getAsyncCallback { p =>
+  private val asyncMessageSendCallback: AsyncCallback[Try[TableEntry]] = getAsyncCallback { p =>
     p match {
       case Failure(exception) =>
         log.error(exception, s"Failed to send message {}")
