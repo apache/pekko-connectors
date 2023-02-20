@@ -1,4 +1,13 @@
 /*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
+/*
  * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
  */
 
@@ -506,8 +515,8 @@ import scala.util.{ Failure, Success, Try }
         implicit val materializer: Materializer = mat
         implicit val attributes: Attributes = attr
         Source
-          .unfoldAsync[ListObjectVersionsState,
-            (Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers], Seq[CommonPrefixes])](
+          .unfoldAsync[ListObjectVersionsState, (Seq[ListObjectVersionsResultVersions], Seq[DeleteMarkers], Seq[
+                  CommonPrefixes])](
             Starting()) {
             case Finished()     => Future.successful(None)
             case Starting()     => listObjectVersionsCallVersionsAndDeleteMarkersAndCommonPrefixes(None)
@@ -1191,8 +1200,8 @@ import scala.util.{ Failure, Success, Try }
                 }
             }
 
-        val retriableFlow: Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C]),
-          ((Try[HttpResponse], (MultipartUpload, Int)), immutable.Iterable[C]), NotUsed] =
+        val retriableFlow: Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C]), ((Try[HttpResponse], (
+                      MultipartUpload, Int)), immutable.Iterable[C]), NotUsed] =
           Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C])]
             .map {
               case ((chunkedPayload, (uploadInfo, chunkIndex)), allContext) =>
