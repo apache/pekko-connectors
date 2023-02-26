@@ -43,8 +43,8 @@ trait CopyrightHeader extends AutoPlugin {
             HeaderFileType.conf -> hashLineComment)))
     }
 
-
-  override def projectSettings: Seq[Def.Setting[_]] = Def.settings(headerMappingSettings, confHeaderMappingSettings, additional)
+  override def projectSettings: Seq[Def.Setting[_]] =
+    Def.settings(headerMappingSettings, confHeaderMappingSettings, additional)
 
   def additional: Seq[Def.Setting[_]] =
     Def.settings(Compile / compile := {
