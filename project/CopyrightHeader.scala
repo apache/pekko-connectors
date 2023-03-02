@@ -34,7 +34,17 @@ trait CopyrightHeader extends AutoPlugin {
             HeaderFileType("template") -> cStyleComment)))
     }
 
-  override def projectSettings: Seq[Def.Setting[_]] = Def.settings(headerMappingSettings, additional)
+  private def confHeaderMappingSettings: Seq[Def.Setting[_]] =
+    Seq(Compile, Test).flatMap { config =>
+      inConfig(config)(
+        Seq(
+          headerLicense := Some(HeaderLicense.Custom(apacheSpdxHeader)),
+          headerMappings := headerMappings.value ++ Map(
+            HeaderFileType.conf -> hashLineComment)))
+    }
+
+  override def projectSettings: Seq[Def.Setting[_]] =
+    Def.settings(headerMappingSettings, confHeaderMappingSettings, additional)
 
   def additional: Seq[Def.Setting[_]] =
     Def.settings(Compile / compile := {
@@ -55,6 +65,8 @@ trait CopyrightHeader extends AutoPlugin {
       |This file is part of the Apache Pekko project, derived from Akka.
       |""".stripMargin
 
+  val apacheSpdxHeader: String = "SPDX-License-Identifier: Apache-2.0"
+
   val cStyleComment = HeaderCommentStyle.cStyleBlockComment.copy(commentCreator = new CommentCreator() {
 
     override def apply(text: String, existingText: Option[String]): String = {
@@ -72,12 +84,30 @@ trait CopyrightHeader extends AutoPlugin {
     }
   })
 
+  val hashLineComment = HeaderCommentStyle.hashLineComment.copy(commentCreator = new CommentCreator() {
+
+    override def apply(text: String, existingText: Option[String]): String = {
+      val formatted = existingText match {
+        case Some(currentText) if isApacheCopyrighted(currentText) || isGenerated(currentText) =>
+          currentText
+        case Some(currentText) if isOnlyLightbendCopyrightAnnotated(currentText) =>
+          HeaderCommentStyle.hashLineComment.commentCreator(text, existingText) + NewLine * 2 + currentText
+        case Some(currentText) =>
+          throw new IllegalStateException(s"Unable to detect copyright for header: [${currentText}]")
+        case None =>
+          HeaderCommentStyle.hashLineComment.commentCreator(text, existingText)
+      }
+      formatted.trim
+    }
+  })
+
   private def isGenerated(text: String): Boolean =
     StringUtils.contains(text, "DO NOT EDIT DIRECTLY")
 
   private def isApacheCopyrighted(text: String): Boolean =
     StringUtils.containsIgnoreCase(text, "licensed to the apache software foundation (asf)") ||
-    StringUtils.containsIgnoreCase(text, "www.apache.org/licenses/license-2.0")
+    StringUtils.containsIgnoreCase(text, "www.apache.org/licenses/license-2.0") ||
+    StringUtils.contains(text, "Apache-2.0")
 
   private def isLightbendCopyrighted(text: String): Boolean =
     StringUtils.containsIgnoreCase(text, "lightbend inc.")
