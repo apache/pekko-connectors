@@ -1,3 +1,12 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
 import sbt._
 import Keys._
 
@@ -58,8 +67,8 @@ object Dependencies {
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
-  // This should align with the Jackson minor version used in Akka 2.6.x
-  // https://github.com/akka/akka/blob/master/project/Dependencies.scala#L23
+  // This should align with the Jackson minor version used in Pekko 1.0.x
+  // https://github.com/apache/incubator-pekko/blob/main/project/Dependencies.scala
   val JacksonDatabindVersion = "2.11.4"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonDatabindVersion,

@@ -1,3 +1,12 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
 package akka.stream.alpakka
 
 import scala.collection.immutable
@@ -11,12 +20,12 @@ object TestChanged extends AutoPlugin {
   override def requires = plugins.JvmPlugin
 
   val changedDirectories = taskKey[immutable.Set[String]]("List of touched modules in this PR branch")
-  val testChanged = taskKey[Unit]("Test all subprojects with changes compared to master")
+  val testChanged = taskKey[Unit]("Test all subprojects with changes compared to main branch")
 
   override lazy val buildSettings = Seq(
     changedDirectories := {
       val log = streams.value.log
-      val target = "origin/master"
+      val target = "origin/main"
 
       // TODO could use jgit
       val diffOutput = s"git diff $target --name-only".!!.split("\n")

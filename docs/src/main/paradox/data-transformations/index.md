@@ -17,7 +17,7 @@ Data transformation is an important part of integration with external systems.
 
 @@ toc { .main depth=2 }
 
-[Contributions](https://github.com/apache/incubator-pekko-connectors/blob/master/CONTRIBUTING.md) are very welcome.
+[Contributions](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md) are very welcome.
 [Creating an issue](https://github.com/apache/incubator-pekko-connectors/issues) for discussion is a good first step for such contributions.
 
 

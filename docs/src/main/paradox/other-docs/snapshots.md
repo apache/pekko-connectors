@@ -3,7 +3,7 @@
 [snapshots-badge]:  https://img.shields.io/nexus/s/org.pekko/pekko-connectors-csv_2.13?server=https%3A%2F%2Foss.sonatype.org
 [snapshots]:        https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/pekko-connectors-csv_2.13/
 
-Snapshots are published to the Sonatype Snapshot repository after every successful build on master.
+Snapshots are published to the Sonatype Snapshot repository after every successful build on 'main' branch.
 Add the following to your project build definition to resolve Apache Pekko Connectors snapshots:
 
 ## Configure repository

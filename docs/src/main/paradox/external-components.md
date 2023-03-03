@@ -2,7 +2,7 @@
 
 Below is a non-complete list of stream components that are maintained by other projects.
 
-[Contributions](https://github.com/apache/incubator-pekko-connectors/blob/master/CONTRIBUTING.md) are very welcome.
+[Contributions](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md) are very welcome.
 [Creating an issue](https://github.com/apache/incubator-pekko-connectors/issues) for discussion is a good first step for such contributions.
 
 ## Buffers
