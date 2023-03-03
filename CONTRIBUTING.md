@@ -56,7 +56,7 @@ For a Pull Request to be considered at all it has to meet these requirements:
 
 1. Do not use ``@author`` tags since it does not encourage [Collective Code Ownership](http://www.extremeprogramming.org/rules/collective.html). Contributors get the credit they deserve in the release notes.
 
-If these requirements are not met then the code should **not** be merged into master, or even reviewed - regardless of how good or important it is. No exceptions.
+If these requirements are not met then the code should **not** be merged into 'main' branch, or even reviewed - regardless of how good or important it is. No exceptions.
 
 
 ## Creating Commits And Writing Commit Messages

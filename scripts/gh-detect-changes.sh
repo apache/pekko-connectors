@@ -8,10 +8,10 @@ if [ "$GITHUB_EVENT_NAME" == "pull_request" ]
 then
   COMPARE_TO="origin/${GITHUB_BASE_REF}"
 else
-  # for non-pr (master) builds, comparison for changes is made against the previous commit,
+  # for non-pr (main branch) builds, comparison for changes is made against the previous commit,
   # which might be:
   # * merge commit, then HEAD^ is the last commit before branching out
-  # * squash commit, then HEAD^ is the previous state of master
+  # * squash commit, then HEAD^ is the previous state of main branch
   COMPARE_TO="HEAD^"
 fi
 

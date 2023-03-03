@@ -326,7 +326,7 @@ lazy val docs = project
       "akka.version" -> Dependencies.AkkaVersion,
       "akka-http.version" -> Dependencies.AkkaHttpVersion,
       "hadoop.version" -> Dependencies.HadoopVersion,
-      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-connectors/tree/${if (isSnapshot.value) "master"
+      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
       "scaladoc.akka.base_url" -> s"https://doc.akka.io/api/akka/${Dependencies.AkkaBinaryVersion}",

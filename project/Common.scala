@@ -1,3 +1,12 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, derived from Akka.
+ */
+
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
@@ -73,7 +82,7 @@ object Common extends AutoPlugin {
     Compile / doc / scalacOptions ++=
       Seq(
         "-doc-source-url", {
-          val branch = if (isSnapshot.value) "master" else s"v${version.value}"
+          val branch = if (isSnapshot.value) "main" else s"v${version.value}"
           s"https://github.com/apache/incubator-pekko-connectors/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
         },
         "-doc-canonical-base-url",
