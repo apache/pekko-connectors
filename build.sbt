@@ -101,8 +101,6 @@ TaskKey[Unit]("verifyCodeFmt") := {
   }
 }
 
-addCommandAlias("verifyCodeStyle", "headerCheck; verifyCodeFmt")
-
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
 lazy val avroparquet =
