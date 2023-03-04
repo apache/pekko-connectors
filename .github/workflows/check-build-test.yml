@@ -37,11 +37,11 @@ jobs:
           jvm: adopt:8
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.3.3
+        uses: coursier/cache-action@v6.4.0
 
       # temporarily remove mima checks
-      - name: "Code style, compile tests, MiMa. Run locally with: sbt +~2.13 \"verifyCodeStyle; Test/compile; mimaReportBinaryIssues\""
-        run: sbt +~2.13 "verifyCodeStyle; Test/compile"
+      - name: "Code style, compile tests, MiMa. Run locally with: sbt +~2.13 \"headerCheckAll; verifyCodeFmt; Test/compile; mimaReportBinaryIssues\""
+        run: sbt +~2.13 "headerCheckAll; verifyCodeFmt; Test/compile"
 
   documentation:
     name: ScalaDoc, Documentation with Paradox
@@ -65,7 +65,7 @@ jobs:
           jvm: adopt:11
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.3.3
+        uses: coursier/cache-action@v6.4.0
 
       - name: "Create all API docs and create site with Paradox"
         run: sbt docs/makeSite
@@ -153,7 +153,7 @@ jobs:
 
       - name: Cache Coursier cache
         if: env.execute_build == 'true'
-        uses: coursier/cache-action@v6.3.3
+        uses: coursier/cache-action@v6.4.0
 
       - name: ${{ matrix.connector }}
         if: env.execute_build == 'true'
