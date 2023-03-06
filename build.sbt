@@ -5,14 +5,14 @@ lazy val `pekko-connectors` = project
   .aggregate(
     amqp,
     avroparquet,
-    awslambda,
+    // awsLambda,
     azureStorageQueue,
     cassandra,
     couchbase,
     csv,
-    dynamodb,
+    // dynamodb,
     elasticsearch,
-    eventbridge,
+    // eventbridge,
     files,
     ftp,
     geode,
@@ -30,7 +30,7 @@ lazy val `pekko-connectors` = project
     ironmq,
     jms,
     jsonStreaming,
-    kinesis,
+    // kinesis,
     kudu,
     mongodb,
     mqtt,
@@ -42,9 +42,9 @@ lazy val `pekko-connectors` = project
     springWeb,
     simpleCodecs,
     slick,
-    sns,
+    // sns,
     solr,
-    sqs,
+    // sqs,
     sse,
     text,
     udp,
@@ -106,7 +106,8 @@ lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 lazy val avroparquet =
   pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
 
-lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
+// https://github.com/apache/incubator-pekko-connectors/issues/34
+// lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
 
 lazy val azureStorageQueue = pekkoConnectorProject(
   "azure-storage-queue",
@@ -125,7 +126,7 @@ lazy val csvBench = internalProject("csv-bench")
   .dependsOn(csv)
   .enablePlugins(JmhPlugin)
 
-lazy val dynamodb = pekkoConnectorProject("dynamodb", "aws.dynamodb", Dependencies.DynamoDB)
+//lazy val dynamodb = pekkoConnectorProject("dynamodb", "aws.dynamodb", Dependencies.DynamoDB)
 
 lazy val elasticsearch = pekkoConnectorProject(
   "elasticsearch",
@@ -241,7 +242,7 @@ lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 
 lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
 
-lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
+//lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
 
 lazy val kudu = pekkoConnectorProject("kudu", "kudu", Dependencies.Kudu)
 
@@ -284,14 +285,14 @@ lazy val simpleCodecs = pekkoConnectorProject("simple-codecs", "simplecodecs")
 
 lazy val slick = pekkoConnectorProject("slick", "slick", Dependencies.Slick)
 
-lazy val eventbridge =
-  pekkoConnectorProject("aws-event-bridge", "aws.eventbridge", Dependencies.Eventbridge)
+//lazy val eventbridge =
+//  pekkoConnectorProject("aws-event-bridge", "aws.eventbridge", Dependencies.Eventbridge)
 
-lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
+//lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
 
 lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr)
 
-lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
+//lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
 
 lazy val sse = pekkoConnectorProject("sse", "sse", Dependencies.Sse)
 
@@ -378,6 +379,7 @@ lazy val docs = project
       "examples/ftp-samples.html",
       "examples/jms-samples.html",
       "examples/mqtt-samples.html",
+      "aws-shared-configuration.html",
       "index.html"),
     resolvers += Resolver.jcenterRepo,
     publishRsyncArtifacts += makeSite.value -> "www/",
