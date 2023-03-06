@@ -37,7 +37,7 @@ See Apache Pekko's @extref:[Downstream upgrade strategy](pekko:project/downstrea
 
 Users are recommended to upgrade to the latest Apache Pekko version later than the one required by Apache Pekko Connectors at their convenience. 
 
-Apache Pekko Connectors's nightly tests verify compatibility with the upcoming Apache Pekko's 1.0 release.
+Apache Pekko Connectors' nightly tests verify compatibility with the upcoming Apache Pekko's 1.0 release.
 
 @@@
 

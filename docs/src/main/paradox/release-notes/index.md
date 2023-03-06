@@ -1,6 +1,6 @@
 # Release Notes
 
-To understand the forces on version numbers, read about @ref:[Apache Pekko Connectors's versioning scheme](../other-docs/versioning.md).
+To understand the forces on version numbers, read about @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
 
 @@toc { depth=2 }
 
