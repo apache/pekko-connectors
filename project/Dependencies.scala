@@ -79,6 +79,7 @@ object Dependencies {
       "com.rabbitmq" % "amqp-client" % "5.14.2" // APLv2
     ) ++ Mockito)
 
+  /* see https://github.com/apache/incubator-pekko-connectors/issues/34
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion, // ApacheV2
@@ -89,6 +90,7 @@ object Dependencies {
 
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
+   */
 
   val AzureStorageQueue = Seq(
     libraryDependencies ++= Seq(
@@ -125,6 +127,7 @@ object Dependencies {
       "org.scalatest" %% "scalatest" % "3.2.11" % Test // ApacheV2
     ))
 
+  /*
   val DynamoDB = Seq(
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
@@ -136,6 +139,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion // ApacheV2
     ))
+   */
 
   val Elasticsearch = Seq(
     libraryDependencies ++= Seq(
@@ -304,6 +308,7 @@ object Dependencies {
       "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0" // MIT
     ) ++ JacksonDatabindDependencies)
 
+  /*
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion, // ApacheV2
@@ -316,6 +321,7 @@ object Dependencies {
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
+   */
 
   val KuduVersion = "1.7.1"
   val Kudu = Seq(
@@ -395,6 +401,8 @@ object Dependencies {
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion, // BSD 2-clause "Simplified" License
       "com.h2database" % "h2" % "2.1.210" % Test // Eclipse Public License 1.0
     ))
+
+  /*
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
@@ -418,6 +426,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion // ApacheV2
     ) ++ Mockito)
+   */
 
   val SolrjVersion = "7.7.3"
   val SolrVersionForDocs = "7_7"
@@ -431,6 +440,7 @@ object Dependencies {
     ),
     resolvers += ("restlet".at("https://maven.restlet.talend.com")))
 
+  /*
   val Sqs = Seq(
     libraryDependencies ++= Seq(
       ("com.github.matsluni" %% "aws-spi-akka-http" % AwsSpiAkkaHttpVersion).excludeAll( // ApacheV2
@@ -443,6 +453,7 @@ object Dependencies {
       "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion, // ApacheV2
       "org.mockito" % "mockito-inline" % mockitoVersion % Test // MIT
     ) ++ Mockito)
+   */
 
   val Sse = Seq(
     libraryDependencies ++= Seq(
