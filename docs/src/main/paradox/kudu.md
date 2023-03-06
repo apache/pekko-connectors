@@ -31,7 +31,7 @@ To connect to Kudu you need:
 1. Describe the Kudu @javadoc[Schema](org.apache.kudu.Schema)
 1. Define a converter function to map your data type to a @javadoc[PartialRow](org.apache.kudu.client.PartialRow)
 1. Specify Kudu @javadoc[CreateTableOptions](org.apache.kudu.client.CreateTableOptions)
-1. Set up Apache Pekko Connectors's @scaladoc[KuduTableSettings](akka.stream.alpakka.kudu.KuduTableSettings)
+1. Set up Apache Pekko Connectors' @scaladoc[KuduTableSettings](akka.stream.alpakka.kudu.KuduTableSettings)
 
 Scala
 :   @@snip [snip](/kudu/src/test/scala/docs/scaladsl/KuduTableSpec.scala) { #configure }
