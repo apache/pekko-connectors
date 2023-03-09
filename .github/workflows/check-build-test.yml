@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # temporarily do full checkout
       #  with: # https://github.com/olafurpg/setup-scala#faster-checkout-of-big-repos
       #    fetch-depth: 100
@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # temporarily do full checkout
       #  with: # https://github.com/olafurpg/setup-scala#faster-checkout-of-big-repos
       #    fetch-depth: 100
@@ -135,7 +135,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       # temporarily do full checkout
       #  with: # gh-detect-changes.sh compares with the target branch
       #    fetch-depth: 0
