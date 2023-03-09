@@ -30,5 +30,5 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6.4.0
 
-      - name: "Run all tests. Run locally with: sbt +~2.13 \"test\""
-        run: sbt +~2.13 "test"
+      - name: "Run all tests. Run locally with: sbt \"test\""
+        run: sbt "test"
