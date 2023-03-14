@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 
-import akka.NotUsed
-import akka.stream.alpakka.geode.GeodeSettings
-import akka.stream.alpakka.geode.scaladsl.Geode
-import akka.stream.scaladsl.{ Flow, Sink }
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.connectors.geode.GeodeSettings
+import org.apache.pekko.stream.connectors.geode.scaladsl.Geode
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink }
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt

@@ -13,7 +13,7 @@ For more information about Apache Parquet please visit the [official documentati
   artifact=pekko-connectors-avroparquet_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion

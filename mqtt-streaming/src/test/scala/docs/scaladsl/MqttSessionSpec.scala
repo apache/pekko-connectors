@@ -13,22 +13,22 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.actor.ActorSystem
-import akka.pattern.ask
-import akka.stream.alpakka.mqtt.streaming._
-import akka.stream.alpakka.mqtt.streaming.scaladsl.{
+import org.apache.pekko.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.pattern.ask
+import org.apache.pekko.stream.connectors.mqtt.streaming._
+import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{
   ActorMqttClientSession,
   ActorMqttServerSession,
   Mqtt,
   MqttServerSession
 }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.OverflowStrategy
-import akka.testkit._
-import akka.util.{ ByteString, Timeout }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.OverflowStrategy
+import org.apache.pekko.testkit._
+import org.apache.pekko.util.{ ByteString, Timeout }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{ Millis, Span }
@@ -953,7 +953,7 @@ class MqttSessionSpec
 
       server.expectMsg(publishBytes)
       // This reply triggers an error showing in the logs which hinders proper shutdown
-      //   7   │ 2019-03-06 11:28:23,035 ERROR [mqtt-spec-akka.actor.default-dispatcher-3] [akka.actor.OneForOneStrategy]  56 (of class java.lang.Integer)
+      //   7   │ 2019-03-06 11:28:23,035 ERROR [mqtt-spec-org.apache.pekko.actor.default-dispatcher-3] [org.apache.pekko.actor.OneForOneStrategy]  56 (of class java.lang.Integer)
       //   8   │ scala.MatchError: 56 (of class java.lang.Integer)
       //   9   │     at akka.stream.impl.fusing.GraphInterpreter.$anonfun$toSnapshot$4(GraphInterpreter.scala:662)
       server.reply(connAckBytes) // It doesn't matter what the message is - our test machinery here just wants a reply

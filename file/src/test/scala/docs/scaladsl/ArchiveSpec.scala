@@ -15,14 +15,14 @@ package docs.scaladsl
 
 import java.io._
 import java.nio.file.{ Files, Path, Paths }
-import akka.actor.ActorSystem
-import akka.stream.alpakka.file.ArchiveMetadata
-import akka.stream.alpakka.file.scaladsl.Archive
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ FileIO, Sink, Source }
-import akka.testkit.TestKit
-import akka.util.ByteString
-import akka.NotUsed
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.file.ArchiveMetadata
+import org.apache.pekko.stream.connectors.file.scaladsl.Archive
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ FileIO, Sink, Source }
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.util.ByteString
+import org.apache.pekko.NotUsed
 import docs.javadsl.ArchiveHelper
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }

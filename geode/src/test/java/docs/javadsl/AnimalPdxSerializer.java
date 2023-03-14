@@ -13,12 +13,12 @@
 
 package docs.javadsl;
 
-import akka.stream.alpakka.geode.AkkaPdxSerializer;
+import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.geode.pdx.PdxReader;
 import org.apache.geode.pdx.PdxWriter;
 
 // #animal-pdx-serializer
-public class AnimalPdxSerializer implements AkkaPdxSerializer<Animal> {
+public class AnimalPdxSerializer implements PekkoPdxSerializer<Animal> {
   @Override
   public Class<Animal> clazz() {
     return Animal.class;

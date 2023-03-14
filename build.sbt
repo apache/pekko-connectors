@@ -1,3 +1,6 @@
+ThisBuild / resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
+ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+
 lazy val `pekko-connectors` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
@@ -171,17 +174,17 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   "google-cloud-bigquery-storage",
   "google.cloud.bigquery.storage",
   Dependencies.GoogleBigQueryStorage,
-  akkaGrpcCodeGeneratorSettings ~= { _.filterNot(_ == "flat_package") },
-  akkaGrpcCodeGeneratorSettings += "server_power_apis",
+  pekkoGrpcCodeGeneratorSettings ~= { _.filterNot(_ == "flat_package") },
+  pekkoGrpcCodeGeneratorSettings += "server_power_apis",
   // FIXME only generate the server for the tests again
-  akkaGrpcGeneratedSources := Seq(AkkaGrpc.Client, AkkaGrpc.Server),
-  // Test / akkaGrpcGeneratedSources := Seq(AkkaGrpc.Server),
-  akkaGrpcGeneratedLanguages := Seq(AkkaGrpc.Scala, AkkaGrpc.Java),
+  pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client, PekkoGrpc.Server),
+  // Test / pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Server),
+  pekkoGrpcGeneratedLanguages := Seq(PekkoGrpc.Scala, PekkoGrpc.Java),
   Compile / scalacOptions ++= Seq(
-    "-Wconf:src=.+/akka-grpc/main/.+:s",
-    "-Wconf:src=.+/akka-grpc/test/.+:s"),
+    "-Wconf:src=.+/pekko-grpc/main/.+:s",
+    "-Wconf:src=.+/pekko-grpc/test/.+:s"),
   compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")).dependsOn(
-  googleCommon).enablePlugins(AkkaGrpcPlugin)
+  googleCommon).enablePlugins(PekkoGrpcPlugin)
 
 lazy val googleCloudPubSub = pekkoConnectorProject(
   "google-cloud-pub-sub",
@@ -196,16 +199,16 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   "google-cloud-pub-sub-grpc",
   "google.cloud.pubsub.grpc",
   Dependencies.GooglePubSubGrpc,
-  akkaGrpcCodeGeneratorSettings ~= { _.filterNot(_ == "flat_package") },
-  akkaGrpcGeneratedSources := Seq(AkkaGrpc.Client),
-  akkaGrpcGeneratedLanguages := Seq(AkkaGrpc.Scala, AkkaGrpc.Java),
+  pekkoGrpcCodeGeneratorSettings ~= { _.filterNot(_ == "flat_package") },
+  pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client),
+  pekkoGrpcGeneratedLanguages := Seq(PekkoGrpc.Scala, PekkoGrpc.Java),
   // for the ExampleApp in the tests
   run / connectInput := true,
   Compile / scalacOptions ++= Seq(
-    "-Wconf:src=.+/akka-grpc/main/.+:s",
-    "-Wconf:src=.+/akka-grpc/test/.+:s"),
+    "-Wconf:src=.+/pekko-grpc/main/.+:s",
+    "-Wconf:src=.+/pekko-grpc/test/.+:s"),
   compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")).enablePlugins(
-  AkkaGrpcPlugin).dependsOn(googleCommon)
+  PekkoGrpcPlugin).dependsOn(googleCommon)
 
 lazy val googleCloudStorage = pekkoConnectorProject(
   "google-cloud-storage",
@@ -322,8 +325,8 @@ lazy val docs = project
       ("https://javadoc\\.io/page/".r, _ => "https://javadoc\\.io/static/")),
     Paradox / siteSubdirName := s"docs/alpakka/${projectInfoVersion.value}",
     paradoxProperties ++= Map(
-      "akka.version" -> Dependencies.AkkaVersion,
-      "akka-http.version" -> Dependencies.AkkaHttpVersion,
+      "pekko.version" -> Dependencies.PekkoVersion,
+      "pekko-http.version" -> Dependencies.PekkoHttpVersion,
       "hadoop.version" -> Dependencies.HadoopVersion,
       "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
@@ -331,12 +334,12 @@ lazy val docs = project
       "scaladoc.akka.base_url" -> s"https://doc.akka.io/api/akka/${Dependencies.AkkaBinaryVersion}",
       "javadoc.akka.base_url" -> s"https://doc.akka.io/japi/akka/${Dependencies.AkkaBinaryVersion}/",
       "javadoc.akka.link_style" -> "direct",
-      "extref.akka-http.base_url" -> s"https://doc.akka.io/docs/akka-http/${Dependencies.AkkaHttpBinaryVersion}/%s",
+      "extref.pekko-http.base_url" -> s"https://doc.akka.io/docs/akka-http/${Dependencies.AkkaHttpBinaryVersion}/%s",
       "scaladoc.akka.http.base_url" -> s"https://doc.akka.io/api/akka-http/${Dependencies.AkkaHttpBinaryVersion}/",
       "javadoc.akka.http.base_url" -> s"https://doc.akka.io/japi/akka-http/${Dependencies.AkkaHttpBinaryVersion}/",
       // Akka gRPC
-      "akka-grpc.version" -> Dependencies.AkkaGrpcBinaryVersion,
-      "extref.akka-grpc.base_url" -> s"https://doc.akka.io/docs/akka-grpc/${Dependencies.AkkaGrpcBinaryVersion}/%s",
+      "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
+      "extref.pekko-grpc.base_url" -> s"https://doc.akka.io/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
       // Couchbase
       "couchbase.version" -> Dependencies.CouchbaseVersion,
       "extref.couchbase.base_url" -> s"https://docs.couchbase.com/java-sdk/${Dependencies.CouchbaseVersionForDocs}/%s",
@@ -372,8 +375,8 @@ lazy val docs = project
       "javadoc.org.eclipse.paho.client.mqttv3.base_url" -> "https://www.eclipse.org/paho/files/javadoc/",
       "javadoc.org.bson.codecs.configuration.base_url" -> "https://mongodb.github.io/mongo-java-driver/3.7/javadoc/",
       "scaladoc.scala.base_url" -> s"https://www.scala-lang.org/api/${scalaBinaryVersion.value}.x/",
-      "scaladoc.akka.stream.alpakka.base_url" -> s"/${(Preprocess / siteSubdirName).value}/",
-      "javadoc.akka.stream.alpakka.base_url" -> ""),
+      "scaladoc.org.apache.pekko.stream.connectors.base_url" -> s"/${(Preprocess / siteSubdirName).value}/",
+      "javadoc.org.apache.pekko.stream.connectors.base_url" -> ""),
     paradoxGroups := Map("Language" -> Seq("Java", "Scala")),
     paradoxRoots := List("examples/elasticsearch-samples.html",
       "examples/ftp-samples.html",
@@ -384,7 +387,7 @@ lazy val docs = project
     resolvers += Resolver.jcenterRepo,
     publishRsyncArtifacts += makeSite.value -> "www/",
     publishRsyncHost := "akkarepo@gustav.akka.io",
-    apidocRootPackage := "akka")
+    apidocRootPackage := "org.apache.pekko")
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
 
@@ -406,7 +409,7 @@ def pekkoConnectorProject(projectId: String,
     .settings(
       name := s"pekko-connectors-$projectId",
       licenses := List(License.Apache2),
-      AutomaticModuleName.settings(s"akka.stream.alpakka.$moduleName"),
+      AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := Set(
         organization.value %% name.value % previousStableVersion.value
           .getOrElse("0.0.0")),

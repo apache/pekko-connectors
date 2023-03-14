@@ -13,15 +13,21 @@
 
 package docs.scaladsl
 
-import akka.{ Done, NotUsed }
-import akka.stream.KillSwitches
-import akka.stream.alpakka.amqp._
-import akka.stream.alpakka.amqp.scaladsl.{ AmqpFlow, AmqpRpcFlow, AmqpSink, AmqpSource, CommittableReadResult }
-import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import akka.stream.testkit.TestSubscriber
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.TestSink
-import akka.util.ByteString
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.stream.KillSwitches
+import org.apache.pekko.stream.connectors.amqp._
+import org.apache.pekko.stream.connectors.amqp.scaladsl.{
+  AmqpFlow,
+  AmqpRpcFlow,
+  AmqpSink,
+  AmqpSource,
+  CommittableReadResult
+}
+import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import org.apache.pekko.stream.testkit.TestSubscriber
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko.util.ByteString
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future, Promise }

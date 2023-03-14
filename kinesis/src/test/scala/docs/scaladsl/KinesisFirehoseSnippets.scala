@@ -13,11 +13,11 @@
 
 package docs.scaladsl
 
-import akka.NotUsed
-import akka.actor.ActorSystem
-import akka.stream.alpakka.kinesisfirehose.KinesisFirehoseFlowSettings
-import akka.stream.alpakka.kinesisfirehose.scaladsl.{ KinesisFirehoseFlow, KinesisFirehoseSink }
-import akka.stream.scaladsl.{ Flow, Sink }
+import org.apache.pekko.NotUsed
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
+import org.apache.pekko.stream.connectors.kinesisfirehose.scaladsl.{ KinesisFirehoseFlow, KinesisFirehoseSink }
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink }
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchResponseEntry, Record }
 
 object KinesisFirehoseSnippets {

@@ -14,7 +14,7 @@
 package docs.scaladsl
 
 import java.net.URI
-import akka.stream.alpakka.pravega.{
+import org.apache.pekko.stream.connectors.pravega.{
   PravegaBaseSpec,
   ReaderSettingsBuilder,
   TableReaderSettingsBuilder,

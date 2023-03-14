@@ -16,17 +16,17 @@ package docs.javadsl;
 import java.net.URI;
 import java.util.UUID;
 
-import akka.stream.alpakka.pravega.PravegaAkkaTestCaseSupport;
+import org.apache.pekko.stream.connectors.pravega.PravegaPekkoTestCaseSupport;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
 
 import io.pravega.client.admin.StreamManager;
 import io.pravega.client.stream.ScalingPolicy;
 import io.pravega.client.stream.StreamConfiguration;
 
-public abstract class PravegaBaseTestCase extends PravegaAkkaTestCaseSupport {
+public abstract class PravegaBaseTestCase extends PravegaPekkoTestCaseSupport {
 
   protected String newGroup() {
     return "java-test-group-" + UUID.randomUUID().toString();

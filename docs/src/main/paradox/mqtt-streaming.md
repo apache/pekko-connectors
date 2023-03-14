@@ -29,12 +29,12 @@ Apache Pekko Connectors MQTT Streaming implements the [MQTT 3.1.1](https://docs.
   artifact=pekko-connectors-mqtt-streaming_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   group3=org.apache.pekko
-  artifact3=akka-actor-typed_$scala.binary.version$
+  artifact3=pekko-actor-typed_$scala.binary.version$
   version3=PekkoVersion
 }
 

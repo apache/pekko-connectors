@@ -13,14 +13,14 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
+import org.apache.pekko.NotUsed;
 // #init-sys
-import akka.actor.ActorSystem;
+import org.apache.pekko.actor.ActorSystem;
 // #init-sys
-import akka.stream.alpakka.awslambda.javadsl.AwsLambdaFlow;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.stream.connectors.awslambda.javadsl.AwsLambdaFlow;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 // #init-client
 import com.github.matsluni.akkahttpspi.AkkaHttpClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;

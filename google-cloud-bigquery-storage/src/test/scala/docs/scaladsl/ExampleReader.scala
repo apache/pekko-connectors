@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
-import akka.stream.alpakka.googlecloud.bigquery.storage.{ BigQueryRecord, BigQueryStorageSettings }
-import akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.{
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{ BigQueryRecord, BigQueryStorageSettings }
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.{
   BigQueryArrowStorage,
   BigQueryAvroStorage,
   BigQueryStorageAttributes,
@@ -25,12 +25,12 @@ import akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.{
 import org.scalatestplus.mockito.MockitoSugar.mock
 
 //#read-all
-import akka.NotUsed
+import org.apache.pekko.NotUsed
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse
 import com.google.cloud.bigquery.storage.v1.DataFormat
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
-import akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.BigQueryStorage
-import akka.stream.scaladsl.Source
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.BigQueryStorage
+import org.apache.pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 import scala.concurrent.Future
 

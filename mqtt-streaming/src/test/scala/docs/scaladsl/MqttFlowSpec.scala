@@ -13,19 +13,23 @@
 
 package docs.scaladsl
 
-import akka.{ Done, NotUsed }
-import akka.actor.ActorSystem
-import akka.actor.typed.scaladsl.Behaviors
-import akka.actor.typed.scaladsl.adapter._
-import akka.event.{ Logging, LoggingAdapter }
-import akka.stream.alpakka.mqtt.streaming._
-import akka.stream.alpakka.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession, Mqtt }
-import akka.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete, Tcp }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream._
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.testkit.TestKit
-import akka.util.ByteString
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.actor.typed.scaladsl.Behaviors
+import org.apache.pekko.actor.typed.scaladsl.adapter._
+import org.apache.pekko.event.{ Logging, LoggingAdapter }
+import org.apache.pekko.stream.connectors.mqtt.streaming._
+import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{
+  ActorMqttClientSession,
+  ActorMqttServerSession,
+  Mqtt
+}
+import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete, Tcp }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream._
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.util.ByteString
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 
@@ -42,7 +46,7 @@ class UntypedMqttFlowSpec
 class TypedMqttFlowSpec
     extends ParametrizedTestKit("typed-flow-spec/flow",
       "typed-flow-spec/topic1",
-      akka.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
+      org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
     with MqttFlowSpec
 
 class ParametrizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)

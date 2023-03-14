@@ -11,9 +11,9 @@ The Slick connector provides Scala and Java DSLs to create a `Source` to stream 
   artifact=pekko-connectors-slick_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -26,7 +26,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Initialization
 
-As always, before we get started we will need an @apidoc[akka.actor.ActorSystem].
+As always, before we get started we will need an @apidoc[org.apache.pekko.actor.ActorSystem].
 
 Scala
 : @@snip [snip](/slick/src/test/scala/docs/scaladsl/SlickSpec.scala) { #init-mat }

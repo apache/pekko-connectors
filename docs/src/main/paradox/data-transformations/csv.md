@@ -27,7 +27,7 @@ Lines are separated by either Line Feed (`\n` = ASCII 10) or Carriage Return and
   artifact=pekko-connectors-csv_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -40,7 +40,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## CSV parsing
 
-CSV parsing offers a flow that takes a stream of `akka.util.ByteString` and issues a stream of lists of `ByteString`.
+CSV parsing offers a flow that takes a stream of `org.apache.pekko.util.ByteString` and issues a stream of lists of `ByteString`.
 
 The incoming data must contain line ends to allow line base framing. The CSV special characters
 can be specified (as bytes), suitable values are available as constants in `CsvParsing`.

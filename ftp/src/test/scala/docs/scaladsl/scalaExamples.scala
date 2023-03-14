@@ -12,13 +12,13 @@
  */
 
 package docs.scaladsl
-import akka.stream.alpakka.ftp.{ FtpFile, FtpSettings, SftpSettings }
+import org.apache.pekko.stream.connectors.ftp.{ FtpFile, FtpSettings, SftpSettings }
 
 object scalaExamples {
 
   object sshConfigure {
     // #configure-custom-ssh-client
-    import akka.stream.alpakka.ftp.scaladsl.{ Sftp, SftpApi }
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.{ Sftp, SftpApi }
     import net.schmizz.sshj.{ DefaultConfig, SSHClient }
 
     val sshClient: SSHClient = new SSHClient(new DefaultConfig)
@@ -28,9 +28,9 @@ object scalaExamples {
 
   object traversing {
     // #traversing
-    import akka.NotUsed
-    import akka.stream.alpakka.ftp.scaladsl.Ftp
-    import akka.stream.scaladsl.Source
+    import org.apache.pekko.NotUsed
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+    import org.apache.pekko.stream.scaladsl.Source
 
     def listFiles(basePath: String, settings: FtpSettings): Source[FtpFile, NotUsed] =
       Ftp.ls(basePath, settings)
@@ -40,10 +40,10 @@ object scalaExamples {
 
   object retrieving {
     // #retrieving
-    import akka.stream.IOResult
-    import akka.stream.alpakka.ftp.scaladsl.Ftp
-    import akka.stream.scaladsl.Source
-    import akka.util.ByteString
+    import org.apache.pekko.stream.IOResult
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.util.ByteString
 
     import scala.concurrent.Future
 
@@ -55,10 +55,10 @@ object scalaExamples {
 
   object retrievingUnconfirmedReads {
     // #retrieving-with-unconfirmed-reads
-    import akka.stream.IOResult
-    import akka.stream.alpakka.ftp.scaladsl.Sftp
-    import akka.stream.scaladsl.Source
-    import akka.util.ByteString
+    import org.apache.pekko.stream.IOResult
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Sftp
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.util.ByteString
 
     import scala.concurrent.Future
 
@@ -70,9 +70,9 @@ object scalaExamples {
 
   object removing {
     // #removing
-    import akka.stream.IOResult
-    import akka.stream.alpakka.ftp.scaladsl.Ftp
-    import akka.stream.scaladsl.Sink
+    import org.apache.pekko.stream.IOResult
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+    import org.apache.pekko.stream.scaladsl.Sink
 
     import scala.concurrent.Future
 
@@ -83,9 +83,9 @@ object scalaExamples {
 
   object move {
     // #moving
-    import akka.stream.IOResult
-    import akka.stream.alpakka.ftp.scaladsl.Ftp
-    import akka.stream.scaladsl.Sink
+    import org.apache.pekko.stream.IOResult
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+    import org.apache.pekko.stream.scaladsl.Sink
 
     import scala.concurrent.Future
 
@@ -97,10 +97,10 @@ object scalaExamples {
   object mkdir {
     // #mkdir-source
 
-    import akka.NotUsed
-    import akka.stream.scaladsl.Source
-    import akka.stream.alpakka.ftp.scaladsl.Ftp
-    import akka.Done
+    import org.apache.pekko.NotUsed
+    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+    import org.apache.pekko.Done
 
     def mkdir(basePath: String, directoryName: String, settings: FtpSettings): Source[Done, NotUsed] =
       Ftp.mkdir(basePath, directoryName, settings)
@@ -112,9 +112,9 @@ object scalaExamples {
     // #processAndMove
     import java.nio.file.Files
 
-    import akka.NotUsed
-    import akka.stream.alpakka.ftp.scaladsl.Ftp
-    import akka.stream.scaladsl.{ FileIO, RunnableGraph }
+    import org.apache.pekko.NotUsed
+    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+    import org.apache.pekko.stream.scaladsl.{ FileIO, RunnableGraph }
 
     def processAndMove(sourcePath: String,
         destinationPath: FtpFile => String,

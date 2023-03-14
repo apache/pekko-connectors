@@ -16,17 +16,17 @@ package docs.scaladsl
 import java.nio.file._
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import akka.Done
-import akka.actor.ActorSystem
-import akka.stream.{ Attributes, Inlet, SinkShape }
-import akka.stream.alpakka.file.scaladsl.LogRotatorSink
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Compression, FileIO, Flow, Keep, Sink, Source }
-import akka.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.TestSource
-import akka.testkit.TestKit
-import akka.util.ByteString
+import org.apache.pekko.Done
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.{ Attributes, Inlet, SinkShape }
+import org.apache.pekko.stream.connectors.file.scaladsl.LogRotatorSink
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Compression, FileIO, Flow, Keep, Sink, Source }
+import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.testkit.scaladsl.TestSource
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.util.ByteString
 import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -106,7 +106,7 @@ class LogRotatorSinkSpec
 
     "work for size-based rotation " in assertAllStagesStopped {
       // #size
-      import akka.stream.alpakka.file.scaladsl.LogRotatorSink
+      import org.apache.pekko.stream.connectors.file.scaladsl.LogRotatorSink
 
       val fileSizeTriggerCreator: () => ByteString => Option[Path] = () => {
         val max = 10 * 1024 * 1024
@@ -358,7 +358,7 @@ class LogRotatorSinkSpec
       exactly(
         1,
         List(exception, // Akka 2.5 throws nio exception directly
-          exception.getCause) // Akka 2.6 wraps nio exception in a akka.stream.IOOperationIncompleteException
+          exception.getCause) // Akka 2.6 wraps nio exception in a org.apache.pekko.stream.IOOperationIncompleteException
       ) shouldBe a[java.nio.channels.NonWritableChannelException]
     }
 
@@ -398,7 +398,7 @@ class LogRotatorSinkSpec
     exactly(
       1,
       List(exception, // Akka 2.5 throws nio exception directly
-        exception.getCause) // Akka 2.6 wraps nio exception in a akka.stream.IOOperationIncompleteException
+        exception.getCause) // Akka 2.6 wraps nio exception in a org.apache.pekko.stream.IOOperationIncompleteException
     ) shouldBe a[IllegalArgumentException]
   }
 

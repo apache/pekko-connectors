@@ -17,14 +17,14 @@ import java.io._
 import java.nio.file.{ Files, Path, Paths }
 import java.time.Instant
 import java.util.Comparator
-import akka.{ Done, NotUsed }
-import akka.actor.ActorSystem
-import akka.stream.alpakka.file.scaladsl.{ Archive, Directory }
-import akka.stream.alpakka.file.{ TarArchiveMetadata, TarReaderException }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ FileIO, Flow, Sink, Source }
-import akka.testkit.TestKit
-import akka.util.ByteString
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.file.scaladsl.{ Archive, Directory }
+import org.apache.pekko.stream.connectors.file.{ TarArchiveMetadata, TarReaderException }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ FileIO, Flow, Sink, Source }
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
@@ -97,7 +97,7 @@ class TarArchiveSpec
 
       // #sample-tar-gz
       val resultGz = filesStream
-        .via(Archive.tar().via(akka.stream.scaladsl.Compression.gzip))
+        .via(Archive.tar().via(org.apache.pekko.stream.scaladsl.Compression.gzip))
         .runWith(FileIO.toPath(Paths.get("result.tar.gz")))
       // #sample-tar-gz
 

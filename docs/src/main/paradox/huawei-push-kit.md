@@ -17,17 +17,17 @@ group=org.apache.pekko
 artifact=pekko-connectors-huawei-push-kit_$scala.binary.version$
 version=$project.version$
 symbol2=PekkoVersion
-value2=$akka.version$
+value2=$pekko.version$
 group2=org.apache.pekko
 artifact2=pekko-stream_$scala.binary.version$
 version2=PekkoVersion
 symbol3=PekkoHttpVersion
-value3=$akka-http.version$
+value3=$pekko-http.version$
 group3=org.apache.pekko
-artifact3=akka-http_$scala.binary.version$
+artifact3=pekko-http_$scala.binary.version$
 version3=PekkoHttpVersion
 group4=org.apache.pekko
-artifact4=akka-http-spray-json_$scala.binary.version$
+artifact4=pekko-http-spray-json_$scala.binary.version$
 version4=PekkoHttpVersion
 }
 
@@ -41,7 +41,7 @@ All of the configuration settings for Huawei Push Kit can be found in the @githu
 
 @@snip [snip](/huawei-push-kit/src/test/resources/application.conf) { #init-credentials }
 
-The `test` and `maxConcurrentConnections`  parameters in @scaladoc[HmsSettings](akka.stream.alpakka.huawei.pushkit.HmsSettings) are the predefined values.
+The `test` and `maxConcurrentConnections`  parameters in @scaladoc[HmsSettings](org.apache.pekko.stream.connectors.huawei.pushkit.HmsSettings) are the predefined values.
 You can send test notifications [(so called validate only).](https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5)
 And you can set the number of maximum concurrent connections.
 
@@ -56,7 +56,7 @@ Java
 : @@snip [snip](/huawei-push-kit/src/test/java/docs/javadsl/PushKitExamples.java) { #imports #asFlow-send }
 
 With this type of send you can get responses from the server.
-These responses can be @scaladoc[PushKitResponse](akka.stream.alpakka.huawei.pushkit.PushKitResponse) or @scaladoc[ErrorResponse](akka.stream.alpakka.huawei.pushkit.ErrorResponse).
+These responses can be @scaladoc[PushKitResponse](org.apache.pekko.stream.connectors.huawei.pushkit.PushKitResponse) or @scaladoc[ErrorResponse](org.apache.pekko.stream.connectors.huawei.pushkit.ErrorResponse).
 You can choose what you want to do with this information, but keep in mind
 if you try to resend the failed messages you will need to use exponential backoff! (see @extref[[Apache Pekko docs `RestartFlow.onFailuresWithBackoff`](pekko:stream/operators/RestartFlow/onFailuresWithBackoff.html))
 

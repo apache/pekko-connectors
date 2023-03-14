@@ -14,10 +14,10 @@
 package docs.scaladsl
 
 //#imports
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.stream.alpakka.google.{ GoogleAttributes, GoogleSettings }
-import akka.stream.alpakka.googlecloud.bigquery.InsertAllRetryPolicy
-import akka.stream.alpakka.googlecloud.bigquery.model.{
+import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
   Dataset,
   Job,
   JobReference,
@@ -27,11 +27,11 @@ import akka.stream.alpakka.googlecloud.bigquery.model.{
   TableDataListResponse,
   TableListResponse
 }
-import akka.stream.alpakka.googlecloud.bigquery.scaladsl.BigQuery
-import akka.stream.alpakka.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
-import akka.stream.alpakka.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
-import akka.stream.scaladsl.{ Flow, Sink, Source }
-import akka.{ Done, NotUsed }
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
+import org.apache.pekko.{ Done, NotUsed }
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
@@ -41,7 +41,7 @@ import scala.concurrent.Future
 class BigQueryDoc {
 
   @nowarn("msg=dead code")
-  implicit val system: akka.actor.ActorSystem = ???
+  implicit val system: org.apache.pekko.actor.ActorSystem = ???
   import system.dispatcher
 
   // #setup

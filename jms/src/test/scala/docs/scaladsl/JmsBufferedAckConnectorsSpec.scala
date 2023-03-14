@@ -15,12 +15,12 @@ package docs.scaladsl
 
 import java.util.concurrent.{ LinkedBlockingQueue, TimeUnit }
 
-import akka.Done
-import akka.stream.alpakka.jms._
-import akka.stream.alpakka.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
-import akka.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import akka.stream.testkit.scaladsl.TestSink
-import akka.stream.{ KillSwitches, ThrottleMode }
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.jms._
+import org.apache.pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko.stream.{ KillSwitches, ThrottleMode }
 import org.apache.activemq.ActiveMQSession
 import javax.jms.{ JMSException, TextMessage }
 import org.scalatest.Inspectors._

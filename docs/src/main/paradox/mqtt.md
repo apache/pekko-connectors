@@ -25,7 +25,7 @@ The Apache Pekko Connectors MQTT connector provides an Apache Pekko Stream sourc
   artifact=pekko-connectors-mqtt_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -38,7 +38,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Settings
 
-The required `MqttConnectionSettings` (@scaladoc[API](akka.stream.alpakka.mqtt.MqttConnectionSettings$)) settings to connect to an MQTT server are 
+The required `MqttConnectionSettings` (@scaladoc[API](org.apache.pekko.stream.connectors.mqtt.MqttConnectionSettings$)) settings to connect to an MQTT server are 
 
 1. the MQTT broker address
 1. a unique ID for the client (setting it to the empty string should let the MQTT broker assign it, but not all do; you might want to generate it)
@@ -101,7 +101,7 @@ Java
 : @@snip [snip](/mqtt/src/test/java/docs/javadsl/MqttSourceTest.java) { #create-source-with-manualacks }
 
 
-The `atLeastOnce` source returns @scala[@scaladoc[MqttMessageWithAck](akka.stream.alpakka.mqtt.scaladsl.MqttMessageWithAck)]@java[@scaladoc[MqttMessageWithAck](akka.stream.alpakka.mqtt.javadsl.MqttMessageWithAck)] so you can acknowledge them by calling `ack()`.
+The `atLeastOnce` source returns @scala[@scaladoc[MqttMessageWithAck](org.apache.pekko.stream.connectors.mqtt.scaladsl.MqttMessageWithAck)]@java[@scaladoc[MqttMessageWithAck](org.apache.pekko.stream.connectors.mqtt.javadsl.MqttMessageWithAck)] so you can acknowledge them by calling `ack()`.
 
 Scala
 : @@snip [snip](/mqtt/src/test/scala/docs/scaladsl/MqttSourceSpec.scala) { #run-source-with-manualacks }
@@ -112,7 +112,7 @@ Java
 
 ## Publishing to MQTT
 
-To publish messages to the MQTT server create a sink be specifying `MqttConnectionSettings` (@scaladoc[API](akka.stream.alpakka.mqtt.MqttConnectionSettings$)) and a default Quality of Service-level.
+To publish messages to the MQTT server create a sink be specifying `MqttConnectionSettings` (@scaladoc[API](org.apache.pekko.stream.connectors.mqtt.MqttConnectionSettings$)) and a default Quality of Service-level.
 
 Scala
 : @@snip [snip](/mqtt/src/test/scala/docs/scaladsl/MqttSourceSpec.scala) { #run-sink }

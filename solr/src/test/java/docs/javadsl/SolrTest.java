@@ -13,20 +13,20 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
 // #solr-update-settings
-import akka.stream.alpakka.solr.SolrUpdateSettings;
+import org.apache.pekko.stream.connectors.solr.SolrUpdateSettings;
 // #solr-update-settings
-import akka.stream.alpakka.solr.WriteMessage;
-import akka.stream.alpakka.solr.javadsl.SolrFlow;
-import akka.stream.alpakka.solr.javadsl.SolrSink;
-import akka.stream.alpakka.solr.javadsl.SolrSource;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.stream.connectors.solr.WriteMessage;
+import org.apache.pekko.stream.connectors.solr.javadsl.SolrFlow;
+import org.apache.pekko.stream.connectors.solr.javadsl.SolrSink;
+import org.apache.pekko.stream.connectors.solr.javadsl.SolrSource;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;

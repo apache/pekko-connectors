@@ -13,9 +13,9 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.{ Http, HttpExt }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

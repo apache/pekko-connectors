@@ -14,9 +14,9 @@
 package docs.scaladsl
 import java.nio.file.FileSystems
 
-import akka.NotUsed
-import akka.actor.ActorSystem
-import akka.stream.scaladsl.Source
+import org.apache.pekko.NotUsed
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.scaladsl.Source
 
 import scala.concurrent.duration._
 
@@ -30,7 +30,7 @@ object FileTailSourceSpec {
     implicit val system: ActorSystem = ActorSystem()
 
     // #simple-lines
-    import akka.stream.alpakka.file.scaladsl.FileTailSource
+    import org.apache.pekko.stream.connectors.file.scaladsl.FileTailSource
 
     val fs = FileSystems.getDefault
     val lines: Source[String, NotUsed] = FileTailSource.lines(

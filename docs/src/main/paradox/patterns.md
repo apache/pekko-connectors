@@ -31,18 +31,18 @@ a=>(a, a)=>unzip -                     zip=>(a1, a)=> a
 ```
 
 Scala
-: @@snip [snip](/doc-examples/src/test/scala/akka/stream/alpakka/eip/scaladsl/PassThroughExamples.scala) { #PassThrough }
+: @@snip [snip](/doc-examples/src/test/scala/org/apache/pekko/stream/connectors/eip/scaladsl/PassThroughExamples.scala) { #PassThrough }
 
 Java
-: @@snip [snip](/doc-examples/src/test/java/akka/stream/alpakka/eip/javadsl/PassThroughExamples.java) { #PassThrough }
+: @@snip [snip](/doc-examples/src/test/java/org/apache/pekko/stream/connectors/eip/javadsl/PassThroughExamples.java) { #PassThrough }
 
 A sample usage:
  
 Scala
-: @@snip [snip](/doc-examples/src/test/scala/akka/stream/alpakka/eip/scaladsl/PassThroughExamples.scala) { #PassThroughTuple }
+: @@snip [snip](/doc-examples/src/test/scala/org/apache/pekko/stream/connectors/eip/scaladsl/PassThroughExamples.scala) { #PassThroughTuple }
 
 Java
-: @@snip [snip](/doc-examples/src/test/java/akka/stream/alpakka/eip/javadsl/PassThroughExamples.java) { #PassThroughTuple }
+: @@snip [snip](/doc-examples/src/test/java/org/apache/pekko/stream/connectors/eip/javadsl/PassThroughExamples.java) { #PassThroughTuple }
 
 Using `Keep` you can choose what it the return value:
 
@@ -53,15 +53,15 @@ Using `Keep` you can choose what it the return value:
 You can also write your own output function to combine in different ways the two outputs.
 
 Scala
-: @@snip [snip](/doc-examples/src/test/scala/akka/stream/alpakka/eip/scaladsl/PassThroughExamples.scala) { #PassThroughWithKeep }
+: @@snip [snip](/doc-examples/src/test/scala/org/apache/pekko/stream/connectors/eip/scaladsl/PassThroughExamples.scala) { #PassThroughWithKeep }
 
 Java
-: @@snip [snip](/doc-examples/src/test/java/akka/stream/alpakka/eip/javadsl/PassThroughExamples.java) { #PassThroughWithKeep }
+: @@snip [snip](/doc-examples/src/test/java/org/apache/pekko/stream/connectors/eip/javadsl/PassThroughExamples.java) { #PassThroughWithKeep }
 
 This pattern is useful when integrating Apache Pekko Connectors connectors together. Here an example with Kafka:
 
 Scala
-: @@snip [snip](/doc-examples/src/test/scala/akka/stream/alpakka/eip/scaladsl/PassThroughExamples.scala) { #passThroughKafkaFlow }
+: @@snip [snip](/doc-examples/src/test/scala/org/apache/pekko/stream/connectors/eip/scaladsl/PassThroughExamples.scala) { #passThroughKafkaFlow }
 
 Java
-: @@snip [snip](/doc-examples/src/test/java/akka/stream/alpakka/eip/javadsl/PassThroughExamples.java) { #passThroughKafkaFlow }
+: @@snip [snip](/doc-examples/src/test/java/org/apache/pekko/stream/connectors/eip/javadsl/PassThroughExamples.java) { #passThroughKafkaFlow }

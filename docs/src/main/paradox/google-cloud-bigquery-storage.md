@@ -5,7 +5,7 @@ It is seen as an improvement over the REST API, and bulk data `extract` jobs for
 Further information at the official [Google Cloud documentation website](https://cloud.google.com/bigquery/docs/reference/storage).
 
 This connector communicates to the BigQuery Storage API via the gRPC protocol. The integration between Apache Pekko Stream and gRPC is handled by the
-@extref:[Apache Pekko gRPC library](akka-grpc:/). Currently, this connector only supports returning each row as an Avro GenericRecord.
+@extref:[Apache Pekko gRPC library](pekko-grpc:/). Currently, this connector only supports returning each row as an Avro GenericRecord.
 
 @@project-info{ projectId="google-cloud-bigquery-storage" }
 
@@ -18,12 +18,12 @@ Apache Pekko gRPC uses Apache Pekko Discovery internally. Make sure to add Apach
   artifact=pekko-connectors-google-cloud-bigquery-storage_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   group3=org.apache.pekko
-  artifact3=akka-discovery_$scala.binary.version$
+  artifact3=pekko-discovery_$scala.binary.version$
   version3=PekkoVersion
 }
 
@@ -51,7 +51,7 @@ The BigQuery Storage connector @ref[shares its basic configuration](google-commo
 
 Example Test Configuration
 ```
-alpakka.google.cloud.bigquery.grpc {
+pekko.connectors.google.cloud.bigquery.grpc {
   host = "localhost"
   port = 21000
   rootCa = "none"
@@ -59,9 +59,9 @@ alpakka.google.cloud.bigquery.grpc {
 }
 ```
 
-For more configuration details consider the underlying configuration for @extref:[Apache Pekko gRPC](akka-grpc:/client/configuration.html).
+For more configuration details consider the underlying configuration for @extref:[Apache Pekko gRPC](pekko-grpc:/client/configuration.html).
 
-A manually initialized @scala[`akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader`]@java[`akka.stream.alpakka.googlecloud.bigquery.storage.javadsl.GrpcBigQueryStorageReader`] can be used by providing it as an attribute to the stream:
+A manually initialized @scala[`org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader`]@java[`org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl.GrpcBigQueryStorageReader`] can be used by providing it as an attribute to the stream:
 
 Scala
 : @@snip (/google-cloud-bigquery-storage/src/test/scala/docs/scaladsl/ExampleReader.scala) { #attributes }
@@ -147,7 +147,7 @@ Java
 
 
 ## Running the test code
-The tests use a [`BigQueryMockServer`](/google-cloud-bigquery-storage/src/test/scala/akka/stream/alpakka/bigquery/storage/mock/BigQueryMockServer.scala) that implements the server defined in the protobuf for the Storage API. It essentially provides a mock table on which to query.
+The tests use a [`BigQueryMockServer`](/google-cloud-bigquery-storage/src/test/scala/org/apache/pekko/stream/connectors/bigquery/storage/mock/BigQueryMockServer.scala) that implements the server defined in the protobuf for the Storage API. It essentially provides a mock table on which to query.
 Tests can be started from sbt by running:
 
 sbt

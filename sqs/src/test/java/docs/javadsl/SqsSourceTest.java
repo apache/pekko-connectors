@@ -13,16 +13,16 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.stream.alpakka.sqs.MessageAttributeName;
-import akka.stream.alpakka.sqs.MessageSystemAttributeName;
-import akka.stream.alpakka.sqs.SqsPublishBatchSettings;
-import akka.stream.alpakka.sqs.SqsSourceSettings;
-import akka.stream.alpakka.sqs.javadsl.BaseSqsTest;
-import akka.stream.alpakka.sqs.javadsl.SqsPublishSink;
-import akka.stream.alpakka.sqs.javadsl.SqsSource;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.Done;
+import org.apache.pekko.stream.connectors.sqs.MessageAttributeName;
+import org.apache.pekko.stream.connectors.sqs.MessageSystemAttributeName;
+import org.apache.pekko.stream.connectors.sqs.SqsPublishBatchSettings;
+import org.apache.pekko.stream.connectors.sqs.SqsSourceSettings;
+import org.apache.pekko.stream.connectors.sqs.javadsl.BaseSqsTest;
+import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishSink;
+import org.apache.pekko.stream.connectors.sqs.javadsl.SqsSource;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import com.github.matsluni.akkahttpspi.AkkaHttpClient;
 import org.junit.Test;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;

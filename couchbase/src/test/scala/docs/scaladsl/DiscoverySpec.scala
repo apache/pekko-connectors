@@ -13,8 +13,10 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
+import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.couchbase.client.java.document.JsonDocument
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
@@ -41,8 +43,6 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
   "a Couchbasesession" should {
     "be managed by the registry" in {
       // #registry
-      import akka.stream.alpakka.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
-      import akka.stream.alpakka.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 
       val registry = CouchbaseSessionRegistry(actorSystem)
 
@@ -55,8 +55,6 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
     "be created from settings" in {
       // #create
-      import akka.stream.alpakka.couchbase.CouchbaseSessionSettings
-      import akka.stream.alpakka.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
 
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       val sessionSettings = CouchbaseSessionSettings(actorSystem)

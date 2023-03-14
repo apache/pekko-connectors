@@ -13,14 +13,14 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 //#imports
-import akka.stream.alpakka.google.firebase.fcm.FcmSettings
-import akka.stream.alpakka.google.firebase.fcm.v1.models._
-import akka.stream.alpakka.google.firebase.fcm.v1.scaladsl.GoogleFcm
+import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSettings
+import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models._
+import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm
 
 //#imports
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 
 import scala.collection.immutable
 import scala.concurrent.Future

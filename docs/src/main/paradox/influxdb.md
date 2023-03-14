@@ -33,7 +33,7 @@ Furthermore, the major InfluxDB update to [version 2.0](https://www.influxdata.c
   artifact=pekko-connectors-influxdb_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -57,11 +57,11 @@ Java
 ## InfluxDB as Source and Sink
 
 Now we can stream messages from or to InfluxDB by providing the `InfluxDB` to the
-@scala[@scaladoc[InfluxDbSource](akka.stream.alpakka.influxdb.scaladsl.InfluxDbSource$)]
-@java[@scaladoc[InfluxDbSource](akka.stream.alpakka.influxdb.javadsl.InfluxDbSource$)]
+@scala[@scaladoc[InfluxDbSource](org.apache.pekko.stream.connectors.influxdb.scaladsl.InfluxDbSource$)]
+@java[@scaladoc[InfluxDbSource](org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSource$)]
 or the
-@scala[@scaladoc[InfluxDbSink](akka.stream.alpakka.influxdb.scaladsl.InfluxDbSink$).]
-@java[@scaladoc[InfluxDbSink](akka.stream.alpakka.influxdb.javadsl.InfluxDbSink$).]
+@scala[@scaladoc[InfluxDbSink](org.apache.pekko.stream.connectors.influxdb.scaladsl.InfluxDbSink$).]
+@java[@scaladoc[InfluxDbSink](org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSink$).]
 
 
 Scala
@@ -97,8 +97,8 @@ TODO
 ### Writing to InfluxDB
 
 You can also build flow stages. 
-@scala[@scaladoc[InfluxDbFlow](akka.stream.alpakka.influxdb.scaladsl.InfluxDbFlow$).]
-@java[@scaladoc[InfluxDbFlow](akka.stream.alpakka.influxdb.javadsl.InfluxDbFlow$).]
+@scala[@scaladoc[InfluxDbFlow](org.apache.pekko.stream.connectors.influxdb.scaladsl.InfluxDbFlow$).]
+@java[@scaladoc[InfluxDbFlow](org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbFlow$).]
 The API is similar to creating Sinks.
 
 Scala

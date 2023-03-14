@@ -13,8 +13,8 @@
 
 package docs.scaladsl
 
-import akka.stream.alpakka.geode.scaladsl.Geode
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.stream.connectors.geode.scaladsl.Geode
+import org.apache.pekko.stream.scaladsl.Sink
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await

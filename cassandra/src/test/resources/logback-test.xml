@@ -15,14 +15,14 @@
         </encoder>
     </appender>
 
-    <appender name="CapturingAppender" class="akka.stream.alpakka.testkit.CapturingAppender"/>
+    <appender name="CapturingAppender" class="org.apache.pekko.stream.connectors.testkit.CapturingAppender"/>
 
-    <logger name="akka.stream.alpakka.testkit.CapturingAppenderDelegate">
+    <logger name="org.apache.pekko.stream.connectors.testkit.CapturingAppenderDelegate">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="akka" level="INFO" />
-    <logger name="akka.stream.alpakka" level="DEBUG" />
+    <logger name="org.apache.pekko" level="INFO" />
+    <logger name="org.apache.pekko.stream.connectors" level="DEBUG" />
     <logger name="org.apache.cassandra" level="ERROR" />
     <logger name="com.datastax" level="INFO" />
     <logger name="io.netty" level="ERROR" />

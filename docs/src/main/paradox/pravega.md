@@ -44,9 +44,9 @@ Two categories of properties can/must be provided to configure the connector.
 
 **Pravega internals** properties that are forwarded to Pravega configuration builders:
 
-  - @javadoc[ClientConfig](io.pravega.client.ClientConfig)  `akka.alpakka.pravega.defaults.client-config`
-  - @javadoc[EventWriterConfig](io.pravega.client.stream.EventWriterConfig) `akka.alpakka.pravega.writer.config`
-  - @javadoc[ReaderConfig](io.pravega.client.stream.ReaderConfig) `akka.alpakka.pravega.reader.config`
+  - @javadoc[ClientConfig](io.pravega.client.ClientConfig)  `pekko.connectors.pravega.defaults.client-config`
+  - @javadoc[EventWriterConfig](io.pravega.client.stream.EventWriterConfig) `pekko.connectors.pravega.writer.config`
+  - @javadoc[ReaderConfig](io.pravega.client.stream.ReaderConfig) `pekko.connectors.pravega.reader.config`
 
 **Apache Pekko Connectors Connector** properties (all others).
 
@@ -64,8 +64,8 @@ for all communication.
 
 It can be overridden in an `application.conf` file at the following configuration paths:
 
- - reader: `akka.alpakka.pravega.reader.client-config`
- - writer: `akka.alpakka.pravega.writer.client-config` 
+ - reader: `pekko.connectors.pravega.reader.client-config`
+ - writer: `pekko.connectors.pravega.writer.client-config` 
 
 It can be customised programmatically, see below.
 
@@ -176,7 +176,7 @@ Java
 Or a Flow
 
 Scala
-:   @@snip[snip](/pravega/src/test/scala/akka/stream/alpakka/pravega/PravegaStreamAndTableSpec.scala) { #table-reading-flow }
+:   @@snip[snip](/pravega/src/test/scala/org/apache/pekko/stream/connectors/pravega/PravegaStreamAndTableSpec.scala) { #table-reading-flow }
 
 
 ## Support

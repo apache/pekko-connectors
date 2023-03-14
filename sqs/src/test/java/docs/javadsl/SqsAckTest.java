@@ -13,14 +13,19 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.stream.alpakka.sqs.*;
-import akka.stream.alpakka.sqs.javadsl.BaseSqsTest;
-import akka.stream.alpakka.sqs.javadsl.SqsAckFlow;
-import akka.stream.alpakka.sqs.javadsl.SqsAckSink;
-import akka.stream.javadsl.Source;
-import akka.stream.javadsl.Sink;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.connectors.sqs.MessageAction;
+import org.apache.pekko.stream.connectors.sqs.SqsAckBatchSettings;
+import org.apache.pekko.stream.connectors.sqs.SqsAckGroupedSettings;
+import org.apache.pekko.stream.connectors.sqs.SqsAckResult;
+import org.apache.pekko.stream.connectors.sqs.SqsAckResultEntry;
+import org.apache.pekko.stream.connectors.sqs.SqsAckSettings;
+import org.apache.pekko.stream.connectors.sqs.javadsl.BaseSqsTest;
+import org.apache.pekko.stream.connectors.sqs.javadsl.SqsAckFlow;
+import org.apache.pekko.stream.connectors.sqs.javadsl.SqsAckSink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.Sink;
 import org.junit.Test;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.*;

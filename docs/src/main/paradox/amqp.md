@@ -13,7 +13,7 @@ AMQP 1.0 is currently not supported (Qpid, ActiveMQ, Solace, etc.).
   artifact=pekko-connectors-amqp_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -81,7 +81,7 @@ For @apidoc[FlowWithContext$] counterparts of above flows see @apidoc[AmqpFlowWi
 
 ### With sink
 
-Create a sink, that accepts and forwards @apidoc[akka.util.ByteString]s to the AMQP server.
+Create a sink, that accepts and forwards @apidoc[org.apache.pekko.util.ByteString]s to the AMQP server.
 
 @apidoc[AmqpSink$] is a collection of factory methods that facilitates creation of sinks. Here we created a *simple* sink, which means that we are able to pass `ByteString`s to the sink instead of wrapping data into @apidoc[amqp.WriteMessage]s.
 

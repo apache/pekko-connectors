@@ -16,12 +16,12 @@ package docs.scaladsl
 import java.time.Instant
 import java.util.Base64
 
-import akka.actor.{ ActorSystem, Cancellable }
-import akka.stream.RestartSettings
-import akka.stream.alpakka.googlecloud.pubsub._
-import akka.stream.alpakka.googlecloud.pubsub.scaladsl.GooglePubSub
-import akka.stream.scaladsl.{ Flow, FlowWithContext, RestartFlow, Sink, Source }
-import akka.{ Done, NotUsed }
+import org.apache.pekko.actor.{ ActorSystem, Cancellable }
+import org.apache.pekko.stream.RestartSettings
+import org.apache.pekko.stream.connectors.googlecloud.pubsub._
+import org.apache.pekko.stream.connectors.googlecloud.pubsub.scaladsl.GooglePubSub
+import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, RestartFlow, Sink, Source }
+import org.apache.pekko.{ Done, NotUsed }
 
 import scala.collection.immutable.Seq
 import scala.concurrent.duration._

@@ -1,18 +1,18 @@
 {  
     "properties":[  
        {  
-          "name":"akka.stream.alpakka.spring.web.actorSystemName",
+          "name":"org.apache.pekko.stream.connectors.spring.web.actorSystemName",
           "type":"java.lang.String",
           "description":"Set the ActorSystem name",
-          "defaultValue":"SpringWebAkkaStreamsSystem"
+          "defaultValue":"Pekko SpringWebPekkoStreamsSystem"
        }
     ],
     "hints":[  
        {  
-          "name":"akka.stream.alpakka.spring.web.actorSystemName",
+          "name":"org.apache.pekko.stream.connectors.spring.web.actorSystemName",
           "values":[  
              {  
-                "value":"SpringWebAkkaStreamsSystem",
+                "value":"Pekko SpringWebPekkoStreamsSystem",
                 "description":"Common Name."
              }
           ]

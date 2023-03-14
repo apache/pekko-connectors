@@ -15,21 +15,21 @@ simple and easy to use.
 
 ### Flows
 
-> Reference connector [model classes](reference/src/main/scala/akka/stream/alpakka/reference/model.scala)
+> Reference connector [model classes](reference/src/main/scala/org/apache/pekko/stream/connectors/reference/model.scala)
 
 When designing Flows, consider adding an extra field to the in- and out-messages which is passed through. A common
 use case we see, is committing a Kafka offset after passing data to another system.
 
 ### Implementing the Java API in Scala
 
-> Reference connector [Java API factory methods](reference/src/main/scala/akka/stream/alpakka/reference/javadsl/Reference.scala)
+> Reference connector [Java API factory methods](reference/src/main/scala/org/apache/pekko/stream/connectors/reference/javadsl/Reference.scala)
 
 Apache Pekko Connectors, same as Apache Pekko, aims to keep 100% feature parity between the various language DSLs. Implementing even the API for Java in Scala has proven the most viable way to do it, as long as you keep the following in mind:
 
 
 1. Keep entry points separated in `javadsl` and `scaladsl`
 
-1. Provide factory methods for Sources, Flows and Sinks in the `javadsl` package wrapping all the methods in the Scala API. The Pekko Stream Scala instances have a `.asJava` method to convert to the `akka.stream.javadsl` counterparts.
+1. Provide factory methods for Sources, Flows and Sinks in the `javadsl` package wrapping all the methods in the Scala API. The Pekko Stream Scala instances have a `.asJava` method to convert to the `org.apache.pekko.stream.javadsl` counterparts.
 
 1. When using Scala `object` instances, offer a `getInstance()` method.
 
@@ -41,7 +41,7 @@ Apache Pekko Connectors, same as Apache Pekko, aims to keep 100% feature parity 
 
 1. Complement any methods with Scala collections with a Java collection version
 
-1. Use the `akka.japi.Pair` class to return tuples
+1. Use the `org.apache.pekko.japi.Pair` class to return tuples
 
 1. If the underlying Scala code requires an `ExecutionContext`, make the Java API take an `Executor` and use `ExecutionContext.fromExecutor(executor)` for conversion.
 
@@ -64,9 +64,9 @@ leverage variance in the parameter or return types:
 
 | Scala | Java |
 |-------|------|
-| `T => Unit` | `akka.japi.function.Procedure<T>` |
-| `() => R` (`scala.Function0[R]`) | `akka.japi.function.Creator<R>` |
-| `T => R` (`scala.Function1[T, R]`) | `akka.japi.function.Function<T, R>` |
+| `T => Unit` | `org.apache.pekko.japi.function.Procedure<T>` |
+| `() => R` (`scala.Function0[R]`) | `org.apache.pekko.japi.function.Creator<R>` |
+| `T => R` (`scala.Function1[T, R]`) | `org.apache.pekko.japi.function.Function<T, R>` |
 
 Functions, if you don't want to allow the function to throw checked exceptions
 (unlike Scala functions):
@@ -80,7 +80,7 @@ Functions, if you don't want to allow the function to throw checked exceptions
 
 ### Settings
 
-> Reference connector [settings classes](reference/src/main/scala/akka/stream/alpakka/reference/settings.scala)
+> Reference connector [settings classes](reference/src/main/scala/org/apache/pekko/stream/connectors/reference/settings.scala)
 
 Most technologies will have a couple of configuration settings that will be needed for several Sinks, Flows, or Sinks. 
 Create case classes collecting these settings instead of passing them in every method.
@@ -91,7 +91,7 @@ Add `withXxxx` methods to specify certain fields in the settings instance.
 
 In case you see the need to support reading the settings from `Config`, offer a method taking the `Config` instance so
 that the user can apply a proper namespace.
-Refrain from using `akka.stream.alpakka` as Config prefix, prefer `alpakka` as root namespace.
+Refrain from using `org.apache.pekko.stream.connectors` as Config prefix, prefer `alpakka` as root namespace.
 
 
 ## Implementation details
@@ -127,14 +127,14 @@ Use `private`, `private[connector]` and `final` extensively to limit the API sur
 
 | Package                                  | Purpose
 | -----------------------------------------|------------------------
-| `akka.stream.alpakka.connector.javadsl`  | Java-only part of the API, normally factories for Sources, Flows and Sinks
-| `akka.stream.alpakka.connector.scaladsl` | Scala-only part of the API, normally factories for Sources, Flows and Sinks
-| `akka.stream.alpakka.connector`          | Shared API, eg. settings classes
-| `akka.stream.alpakka.connector.impl`     | Internal implementation in separate package
+| `org.apache.pekko.stream.connectors.connector.javadsl`  | Java-only part of the API, normally factories for Sources, Flows and Sinks
+| `org.apache.pekko.stream.connectors.connector.scaladsl` | Scala-only part of the API, normally factories for Sources, Flows and Sinks
+| `org.apache.pekko.stream.connectors.connector`          | Shared API, eg. settings classes
+| `org.apache.pekko.stream.connectors.connector.impl`     | Internal implementation in separate package
 
 ### Graph stage checklist
 
-> Reference connector [operator implementations](reference/src/main/scala/akka/stream/alpakka/reference/impl/)
+> Reference connector [operator implementations](reference/src/main/scala/org/apache/pekko/stream/connectors/reference/impl/)
 
 * Keep mutable state within the `GraphStageLogic` only 
 * Open connections in `preStart`
@@ -192,7 +192,7 @@ unused methods.
 
 Use ScalaDoc if you see the need to describe the API usage better than the naming does.
 The `@apidoc` Paradox directive automatically creates links to the corresponding Scaladoc page for both `scaladsl` and `javadsl`. Be sure to add a `$` at the end of the name if you point to an `object`.
-`@apidoc[AmqpSink$]` will link to `akka/stream/alpakka/amqp/scaladsl/AmqpSink$.html` when viewing "Scala" and `akka/stream/alpakka/amqp/javadsl/AmqpSink$.html` for "Java".
+`@apidoc[AmqpSink$]` will link to `org/apache/pekko/stream/connectors/amqp/scaladsl/AmqpSink$.html` when viewing "Scala" and `org/apache/pekko/stream/connectors/amqp/javadsl/AmqpSink$.html` for "Java".
 
 ```
 

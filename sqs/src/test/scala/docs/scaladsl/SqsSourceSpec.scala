@@ -16,12 +16,12 @@ package docs.scaladsl
 import java.net.URI
 import java.util.concurrent.TimeUnit
 
-import akka.Done
-import akka.stream.KillSwitches
-import akka.stream.alpakka.sqs._
-import akka.stream.alpakka.sqs.scaladsl.{ DefaultTestContext, SqsSource }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Keep, Sink }
+import org.apache.pekko.Done
+import org.apache.pekko.stream.KillSwitches
+import org.apache.pekko.stream.connectors.sqs._
+import org.apache.pekko.stream.connectors.sqs.scaladsl.{ DefaultTestContext, SqsSource }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
 import com.github.matsluni.akkahttpspi.AkkaHttpClient
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec

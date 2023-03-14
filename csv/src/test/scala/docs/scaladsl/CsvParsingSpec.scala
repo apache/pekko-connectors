@@ -15,12 +15,12 @@ package docs.scaladsl
 
 import java.nio.file.Paths
 
-import akka.NotUsed
-import akka.stream.alpakka.csv.scaladsl.{ CsvParsing, CsvToMap }
-import akka.stream.scaladsl.{ FileIO, Flow, Keep, Sink, Source }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.stream.testkit.scaladsl.{ TestSink, TestSource }
-import akka.util.ByteString
+import org.apache.pekko.NotUsed
+import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
+import org.apache.pekko.stream.scaladsl.{ FileIO, Flow, Keep, Sink, Source }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import org.apache.pekko.util.ByteString
 
 import scala.collection.immutable.Seq
 import scala.concurrent.duration.DurationInt
@@ -34,7 +34,7 @@ class CsvParsingSpec extends CsvSpec {
     val escapeChar: Byte = Backslash
     // format: off
     // #flow-type
-    import akka.stream.alpakka.csv.scaladsl.CsvParsing
+    import org.apache.pekko.stream.connectors.csv.scaladsl.CsvParsing
 
     val flow: Flow[ByteString, List[ByteString], NotUsed]
       = CsvParsing.lineScanner(delimiter, quoteChar, escapeChar)
@@ -46,7 +46,7 @@ class CsvParsingSpec extends CsvSpec {
   "CSV parsing" should {
     "parse one line" in assertAllStagesStopped {
       // #line-scanner
-      import akka.stream.alpakka.csv.scaladsl.CsvParsing
+      import org.apache.pekko.stream.connectors.csv.scaladsl.CsvParsing
 
       // #line-scanner
       val fut =
@@ -66,7 +66,7 @@ class CsvParsingSpec extends CsvSpec {
 
     "parse one line and map to String" in assertAllStagesStopped {
       // #line-scanner-string
-      import akka.stream.alpakka.csv.scaladsl.CsvParsing
+      import org.apache.pekko.stream.connectors.csv.scaladsl.CsvParsing
 
       // #line-scanner-string
       val fut =

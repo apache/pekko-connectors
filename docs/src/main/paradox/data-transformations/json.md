@@ -2,7 +2,7 @@
 
 ## JSON Framing
 
-Use Apache Pekko Stream JsonFraming to split a stream of @apidoc[akka.util.ByteString] elements into 
+Use Apache Pekko Stream JsonFraming to split a stream of @apidoc[org.apache.pekko.util.ByteString] elements into 
 ByteString snippets of valid JSON objects. 
 
 See @apidoc[JsonFraming$]
@@ -68,7 +68,7 @@ even: only the `doc` inside each element of the array.
   artifact=pekko-connectors-json-streaming_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion

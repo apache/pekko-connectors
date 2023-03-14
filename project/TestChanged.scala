@@ -7,7 +7,7 @@
  * This file is part of the Apache Pekko project, derived from Akka.
  */
 
-package akka.stream.alpakka
+package org.apache.pekko.stream.connectors
 
 import scala.collection.immutable
 import scala.sys.process._

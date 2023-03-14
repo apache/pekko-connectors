@@ -13,16 +13,22 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.alpakka.xml.*;
-import akka.stream.alpakka.xml.javadsl.XmlWriting;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.xml.Characters;
+import org.apache.pekko.stream.connectors.xml.EndDocument;
+import org.apache.pekko.stream.connectors.xml.EndElement;
+import org.apache.pekko.stream.connectors.xml.Namespace;
+import org.apache.pekko.stream.connectors.xml.ParseEvent;
+import org.apache.pekko.stream.connectors.xml.StartDocument;
+import org.apache.pekko.stream.connectors.xml.StartElement;
+import org.apache.pekko.stream.connectors.xml.javadsl.XmlWriting;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;

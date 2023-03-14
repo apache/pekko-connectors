@@ -13,13 +13,13 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.stream.alpakka.kinesis.CommittableRecord;
-import akka.stream.alpakka.kinesis.KinesisSchedulerCheckpointSettings;
-import akka.stream.alpakka.kinesis.KinesisSchedulerSourceSettings;
-import akka.stream.alpakka.kinesis.javadsl.KinesisSchedulerSource;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.connectors.kinesis.CommittableRecord;
+import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerCheckpointSettings;
+import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerSourceSettings;
+import org.apache.pekko.stream.connectors.kinesis.javadsl.KinesisSchedulerSource;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Source;
 import software.amazon.kinesis.coordinator.Scheduler;
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory;
 import software.amazon.kinesis.retrieval.KinesisClientRecord;

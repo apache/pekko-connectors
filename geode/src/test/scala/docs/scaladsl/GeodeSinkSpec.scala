@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.stream.alpakka.geode.RegionSettings
-import akka.stream.alpakka.geode.scaladsl.{ Geode, PoolSubscription }
-import akka.stream.scaladsl.Sink
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.geode.RegionSettings
+import org.apache.pekko.stream.connectors.geode.scaladsl.{ Geode, PoolSubscription }
+import org.apache.pekko.stream.scaladsl.Sink
 
 import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration.DurationInt

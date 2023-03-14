@@ -15,12 +15,12 @@ package docs.scaladsl
 
 import java.nio.ByteBuffer
 
-import akka.NotUsed
-import akka.actor.ActorSystem
-import akka.stream.alpakka.kinesis.scaladsl.{ KinesisFlow, KinesisSink, KinesisSource }
-import akka.stream.alpakka.kinesis.{ KinesisFlowSettings, ShardIterator, ShardSettings }
-import akka.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
-import akka.util.ByteString
+import org.apache.pekko.NotUsed
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.kinesis.scaladsl.{ KinesisFlow, KinesisSink, KinesisSource }
+import org.apache.pekko.stream.connectors.kinesis.{ KinesisFlowSettings, ShardIterator, ShardSettings }
+import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
+import org.apache.pekko.util.ByteString
 import software.amazon.awssdk.services.kinesis.model.{ PutRecordsRequestEntry, PutRecordsResultEntry, Record }
 
 import scala.concurrent.duration._

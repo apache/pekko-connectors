@@ -13,7 +13,7 @@ For more information about Elasticsearch, please visit the [Elasticsearch docume
   artifact=pekko-connectors-elasticsearch_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion

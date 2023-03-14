@@ -13,15 +13,15 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
+import org.apache.pekko.actor.ActorSystem;
 // #registry
-import akka.stream.alpakka.couchbase.CouchbaseSessionRegistry;
-import akka.stream.alpakka.couchbase.CouchbaseSessionSettings;
-import akka.stream.alpakka.couchbase.javadsl.DiscoverySupport;
-import akka.stream.alpakka.couchbase.javadsl.CouchbaseSession;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
+import org.apache.pekko.stream.connectors.couchbase.javadsl.DiscoverySupport;
+import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 // #registry
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.junit.AfterClass;

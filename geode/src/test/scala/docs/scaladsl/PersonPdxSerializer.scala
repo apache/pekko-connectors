@@ -15,11 +15,11 @@ package docs.scaladsl
 
 import java.util.Date
 
-import akka.stream.alpakka.geode.AkkaPdxSerializer
+import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer
 import org.apache.geode.pdx.{ PdxReader, PdxWriter }
 
 //#person-pdx-serializer
-object PersonPdxSerializer extends AkkaPdxSerializer[Person] {
+object PersonPdxSerializer extends PekkoPdxSerializer[Person] {
   override def clazz: Class[Person] = classOf[Person]
 
   override def toData(o: scala.Any, out: PdxWriter): Boolean =

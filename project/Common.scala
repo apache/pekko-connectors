@@ -38,7 +38,7 @@ object Common extends AutoPlugin {
       "git@github.com:apache/incubator-pekko-connectors.git")),
     developers += Developer("contributors",
       "Contributors",
-      "",
+      "dev@pekko.apache.org",
       url("https://github.com/apache/incubator-pekko-connectors/graphs/contributors")),
     licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0"))),
     description := "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Pekko.",
@@ -74,7 +74,7 @@ object Common extends AutoPlugin {
       "-sourcepath",
       (ThisBuild / baseDirectory).value.toString,
       "-skip-packages",
-      "akka.pattern:" + // for some reason Scaladoc creates this
+      "org.apache.pekko.pattern:" + // for some reason Scaladoc creates this
       "org.mongodb.scala:" + // this one is a mystery as well
       // excluding generated grpc classes, except the model ones (com.google.pubsub)
       "com.google.api:com.google.cloud:com.google.iam:com.google.logging:" +

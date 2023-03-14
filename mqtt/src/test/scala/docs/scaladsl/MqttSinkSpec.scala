@@ -13,12 +13,12 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.stream.alpakka.mqtt
-import akka.stream.alpakka.mqtt._
-import akka.stream.alpakka.mqtt.scaladsl.{ MqttSink, MqttSource }
-import akka.stream.scaladsl.{ Keep, Sink, Source }
-import akka.util.ByteString
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.mqtt
+import org.apache.pekko.stream.connectors.mqtt._
+import org.apache.pekko.stream.connectors.mqtt.scaladsl.{ MqttSink, MqttSource }
+import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko.util.ByteString
 import org.eclipse.paho.client.mqttv3.{ MqttException, MqttSecurityException }
 
 import scala.concurrent.Await

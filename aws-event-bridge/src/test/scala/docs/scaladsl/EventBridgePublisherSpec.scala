@@ -13,10 +13,10 @@
 
 package docs.scaladsl
 
-import akka.Done
-import akka.stream.alpakka.aws.eventbridge.IntegrationTestContext
-import akka.stream.alpakka.aws.eventbridge.scaladsl.EventBridgePublisher
-import akka.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.aws.eventbridge.IntegrationTestContext
+import org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
+import org.apache.pekko.stream.scaladsl.{ Sink, Source }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec._
 import org.scalatest.matchers.should.Matchers

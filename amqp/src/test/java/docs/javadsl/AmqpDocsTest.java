@@ -13,29 +13,29 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
-import akka.stream.KillSwitches;
-import akka.stream.Materializer;
-import akka.stream.UniqueKillSwitch;
-import akka.stream.alpakka.amqp.*;
-import akka.stream.alpakka.amqp.javadsl.AmqpFlow;
-import akka.stream.alpakka.amqp.javadsl.AmqpRpcFlow;
-import akka.stream.alpakka.amqp.javadsl.AmqpSink;
-import akka.stream.alpakka.amqp.javadsl.AmqpSource;
-import akka.stream.alpakka.amqp.javadsl.CommittableReadResult;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Flow;
-import akka.stream.javadsl.Keep;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.stream.testkit.TestSubscriber;
-import akka.stream.testkit.javadsl.StreamTestKit;
-import akka.stream.testkit.javadsl.TestSink;
-import akka.testkit.javadsl.TestKit;
-import akka.util.ByteString;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.KillSwitches;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.UniqueKillSwitch;
+import org.apache.pekko.stream.connectors.amqp.*;
+import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpFlow;
+import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpRpcFlow;
+import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpSink;
+import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpSource;
+import org.apache.pekko.stream.connectors.amqp.javadsl.CommittableReadResult;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.TestSubscriber;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.stream.testkit.javadsl.TestSink;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 
 import org.junit.*;
 

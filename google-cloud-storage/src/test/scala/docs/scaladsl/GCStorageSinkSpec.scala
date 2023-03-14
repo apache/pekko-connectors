@@ -13,12 +13,12 @@
 
 package docs.scaladsl
 
-import akka.http.scaladsl.model.ContentTypes
-import akka.stream.alpakka.googlecloud.storage.StorageObject
-import akka.stream.alpakka.googlecloud.storage.scaladsl.{ GCStorage, GCStorageWiremockBase }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.Source
-import akka.util.ByteString
+import org.apache.pekko.http.scaladsl.model.ContentTypes
+import org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject
+import org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl.{ GCStorage, GCStorageWiremockBase }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent._
 import org.scalatest.matchers.should.Matchers

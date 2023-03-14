@@ -25,7 +25,7 @@ The Couchbase connector supports all document formats which are supported by the
   artifact=pekko-connectors-couchbase_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -47,14 +47,14 @@ Apache Pekko Connectors Couchbase offers both @ref:[Apache Pekko Streams APIs](#
 
 All operations use the `CouchbaseSession` internally. A session is configured with @apidoc[CouchbaseSessionSettings$] and a Couchbase bucket name. The Apache Pekko Stream factory methods create and access the corresponding session instance behind the scenes.
 
-By default the `CouchbaseSessionSettings` are read from the `alpakka.couchbase.session` section from the configuration eg. in your `application.conf`.
+By default the `CouchbaseSessionSettings` are read from the `pekko.connectors.couchbase.session` section from the configuration eg. in your `application.conf`.
 
 Settings
 : @@snip [snip](/couchbase/src/test/resources/application.conf) { #settings }
 
 ## Using Apache Pekko Discovery
 
-To delegate the configuration of Couchbase nodes to any of @extref:[Apache Pekko Discovery's lookup mechanisms](pekko:discovery/index.html), specify a service name and lookup timeout in the Couchbase section, and pass in @apidoc[akka.stream.alpakka.couchbase.(\w+).DiscoverySupport] nodes lookup to `enrichAsync` and configure Apache Pekko Discovery accordingly.
+To delegate the configuration of Couchbase nodes to any of @extref:[Apache Pekko Discovery's lookup mechanisms](pekko:discovery/index.html), specify a service name and lookup timeout in the Couchbase section, and pass in @apidoc[org.apache.pekko.stream.connectors.couchbase.(\w+).DiscoverySupport] nodes lookup to `enrichAsync` and configure Apache Pekko Discovery accordingly.
 
 **The Apache Pekko Discovery dependency has to be added explicitly**.
 

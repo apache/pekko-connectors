@@ -13,12 +13,17 @@
 
 package docs.scaladsl
 
-import akka.{ Done, NotUsed }
-import akka.actor.ActorSystem
-import akka.stream.alpakka.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
-import akka.stream.alpakka.cassandra.scaladsl.{ CassandraFlow, CassandraSession, CassandraSource, CassandraSpecBase }
-import akka.stream.scaladsl.{ Sink, Source, SourceWithContext }
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
+import org.apache.pekko.stream.connectors.cassandra.scaladsl.{
+  CassandraFlow,
+  CassandraSession,
+  CassandraSource,
+  CassandraSpecBase
+}
+import org.apache.pekko.stream.scaladsl.{ Sink, Source, SourceWithContext }
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -29,7 +34,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
   case class ToInsert(id: Integer, cc: Integer)
   // #element-to-insert
 
-  val sessionSettings = CassandraSessionSettings("alpakka.cassandra")
+  val sessionSettings = CassandraSessionSettings("pekko.connectors.cassandra")
   val data = 1 until 103
 
   override val lifecycleSession: CassandraSession = sessionRegistry.sessionFor(sessionSettings)
@@ -71,8 +76,8 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       }.futureValue mustBe Done
 
       // #prepared
-      import akka.stream.alpakka.cassandra.CassandraWriteSettings
-      import akka.stream.alpakka.cassandra.scaladsl.CassandraFlow
+      import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings
+      import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraFlow
       import com.datastax.oss.driver.api.core.cql.{ BoundStatement, PreparedStatement }
 
       case class Person(id: Int, name: String, city: String)

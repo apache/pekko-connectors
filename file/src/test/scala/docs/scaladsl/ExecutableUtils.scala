@@ -16,7 +16,7 @@ package docs.scaladsl
 import java.io.{ BufferedInputStream, File => JavaFile, InputStream, OutputStream }
 import java.nio.file.{ Files, Path, Paths }
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 
 import scala.concurrent.Future
 import scala.sys.process.{ BasicIO, Process }

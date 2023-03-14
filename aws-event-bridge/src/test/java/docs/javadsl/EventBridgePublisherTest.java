@@ -13,14 +13,14 @@
 
 package docs.javadsl;
 
-import akka.Done;
+import org.apache.pekko.Done;
 // #init-system
-import akka.actor.ActorSystem;
+import org.apache.pekko.actor.ActorSystem;
 // #init-system
-import akka.stream.alpakka.aws.eventbridge.javadsl.EventBridgePublisher;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.stream.connectors.aws.eventbridge.javadsl.EventBridgePublisher;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
 
 // #init-client
 import java.net.URI;

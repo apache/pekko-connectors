@@ -19,17 +19,17 @@ The Apache Pekko Connectors Google Firebase Cloud Messaging connector provides a
   artifact=pekko-connectors-google-fcm_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
   symbol3=PekkoHttpVersion
-  value3=$akka-http.version$
+  value3=$pekko-http.version$
   group3=org.apache.pekko
-  artifact3=akka-http_$scala.binary.version$
+  artifact3=pekko-http_$scala.binary.version$
   version3=PekkoHttpVersion
   group4=org.apache.pekko
-  artifact4=akka-http-spray-json_$scala.binary.version$
+  artifact4=pekko-http-spray-json_$scala.binary.version$
   version4=PekkoHttpVersion
 }
 
@@ -45,7 +45,7 @@ Additional FCM-specific configuration settings can be found in its own @github[r
 You can send test notifications [(so called validate only).](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages/send)
 And you can set the number of maximum concurrent connections.
 There is a limitation in the docs; from one IP you can have maximum 1k pending connections,
-and you may need to configure `akka.http.host-connection-pool.max-open-requests` in your application.conf.
+and you may need to configure `pekko.http.host-connection-pool.max-open-requests` in your application.conf.
 
 
 ## Sending notifications
@@ -59,7 +59,7 @@ Java
 : @@snip [snip](/google-fcm/src/test/java/docs/javadsl/FcmExamples.java) { #imports #asFlow-send }
 
 With this type of send you can get responses from the server.
-These responses can be @scaladoc[FcmSuccessResponse](akka.stream.alpakka.google.firebase.fcm.FcmSuccessResponse) or @scaladoc[FcmErrorResponse](akka.stream.alpakka.google.firebase.fcm.FcmErrorResponse).
+These responses can be @scaladoc[FcmSuccessResponse](org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSuccessResponse) or @scaladoc[FcmErrorResponse](org.apache.pekko.stream.connectors.google.firebase.fcm.FcmErrorResponse).
 You can choose what you want to do with this information, but keep in mind
 if you try to resend the failed messages you will need to use exponential backoff! (see @extref:[Apache Pekko docs `RestartFlow.onFailuresWithBackoff`](pekko:stream/operators/RestartFlow/onFailuresWithBackoff.html))
 

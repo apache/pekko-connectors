@@ -19,9 +19,9 @@ This Apache Pekko Connectors module makes it possible to directly return a `Sour
   artifact=pekko-connectors-spring-web_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 
@@ -57,13 +57,13 @@ to adapt those types in your applications as well.
 The automatically enabled configuration is as follows:
 
 Java
-: @@snip [snip](/spring-web/src/main/java/akka/stream/alpakka/spring/web/SpringWebAkkaStreamsConfiguration.java) { #configure }
+: @@snip [snip](/spring-web/src/main/java/org/apache/pekko/stream/connectors/spring/web/SpringWebPekkoStreamsConfiguration.java) { #configure }
 
 In case you'd like to manually configure it slightly differently.
 
 ## Shameless plug: Apache Pekko HTTP 
 
 While the integration presented here works, it's not quite the optimal way of using Apache Pekko in conjunction with serving HTTP apps.
-If you're new to reactive systems and picking technologies, you may want to have a look at @extref[Apache Pekko HTTP](akka-http:).
+If you're new to reactive systems and picking technologies, you may want to have a look at @extref[Apache Pekko HTTP](pekko-http:).
 
 If, for some reason, you decided use Spring MVC this integration should help you achieve the basic streaming scenarios though.

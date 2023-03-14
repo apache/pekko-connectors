@@ -15,12 +15,12 @@ package docs.scaladsl
 import java.io.PrintWriter
 import java.net.InetAddress
 
-import akka.stream.Materializer
-import akka.stream.alpakka.ftp.{ BaseFtpSupport, FtpSettings }
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.Source
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import akka.testkit.TestKit
+import org.apache.pekko.stream.Materializer
+import org.apache.pekko.stream.connectors.ftp.{ BaseFtpSupport, FtpSettings }
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.testkit.TestKit
 import org.apache.commons.net.PrintCommandListener
 import org.apache.commons.net.ftp.FTPClient
 import org.scalatest.concurrent.ScalaFutures
@@ -65,9 +65,9 @@ class FtpExamplesSpec
   "a file" should {
     "be stored" in assertAllStagesStopped {
       // #storing
-      import akka.stream.IOResult
-      import akka.stream.alpakka.ftp.scaladsl.Ftp
-      import akka.util.ByteString
+      import org.apache.pekko.stream.IOResult
+      import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+      import org.apache.pekko.util.ByteString
       import scala.concurrent.Future
 
       val result: Future[IOResult] = Source
@@ -84,15 +84,15 @@ class FtpExamplesSpec
     }
 
     "be gzipped" in assertAllStagesStopped {
-      import akka.stream.IOResult
-      import akka.stream.alpakka.ftp.scaladsl.Ftp
-      import akka.util.ByteString
+      import org.apache.pekko.stream.IOResult
+      import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
+      import org.apache.pekko.util.ByteString
       import scala.concurrent.Future
 
       // #storing
 
       // Create a gzipped target file
-      import akka.stream.scaladsl.Compression
+      import org.apache.pekko.stream.scaladsl.Compression
       val result: Future[IOResult] = Source
         .single(ByteString("this is the file contents" * 50))
         .via(Compression.gzip)

@@ -16,24 +16,24 @@ package docs.javadsl;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.stream.ActorMaterializer;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.ActorMaterializer;
 // #read-all
-import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryRecord;
-import akka.stream.alpakka.googlecloud.bigquery.storage.BigQueryStorageSettings;
-import akka.stream.alpakka.googlecloud.bigquery.storage.javadsl.BigQueryArrowStorage;
-import akka.stream.alpakka.googlecloud.bigquery.storage.javadsl.BigQueryAvroStorage;
-import akka.stream.alpakka.googlecloud.bigquery.storage.javadsl.BigQueryStorage;
-import akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.BigQueryStorageAttributes;
-import akka.stream.alpakka.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader;
-import akka.stream.javadsl.Source;
-import akka.util.ByteString;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl.BigQueryArrowStorage;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl.BigQueryAvroStorage;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl.BigQueryStorage;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.BigQueryStorageAttributes;
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.ByteString;
 import scala.Tuple2;
 import com.google.cloud.bigquery.storage.v1.DataFormat;
 import com.google.cloud.bigquery.storage.v1.ReadSession;
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse;
-import akka.http.javadsl.unmarshalling.Unmarshaller;
+import org.apache.pekko.http.javadsl.unmarshalling.Unmarshaller;
 
 // #read-all
 

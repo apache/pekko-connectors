@@ -13,16 +13,16 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.influxdb.InfluxDbReadSettings
-import akka.stream.alpakka.influxdb.scaladsl.InfluxDbSource
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.Sink
-import akka.testkit.TestKit
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings
+import org.apache.pekko.stream.connectors.influxdb.scaladsl.InfluxDbSource
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko.testkit.TestKit
 import org.influxdb.{ InfluxDB, InfluxDBException }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
-import akka.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import docs.javadsl.TestUtils._
 import org.influxdb.dto.Query
 import org.scalatest.matchers.must.Matchers

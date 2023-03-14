@@ -14,11 +14,11 @@
 package docs.javadsl;
 
 // #mkdir-source
-import akka.Done;
-import akka.NotUsed;
-import akka.stream.alpakka.ftp.FtpSettings;
-import akka.stream.alpakka.ftp.javadsl.Ftp;
-import akka.stream.javadsl.Source;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.connectors.ftp.FtpSettings;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
+import org.apache.pekko.stream.javadsl.Source;
 
 public class FtpMkdirExample {
   public Source<Done, NotUsed> mkdir(

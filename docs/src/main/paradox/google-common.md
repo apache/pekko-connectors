@@ -9,7 +9,7 @@ group=org.apache.pekko
 artifact=pekko-connectors-google-common_$scala.binary.version$
 version=$project.version$
 symbol2=PekkoVersion
-value2=$akka.version$
+value2=$pekko.version$
 group2=org.apache.pekko
 artifact2=pekko-stream_$scala.binary.version$
 version2=PekkoVersion
@@ -21,7 +21,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Configuration
 
-Shared settings for all Google connectors are read by default from the `alpakka.google` configuration section in your `application.conf`.
+Shared settings for all Google connectors are read by default from the `pekko.connectors.google` configuration section in your `application.conf`.
 The available options and their default values are documented in the `reference.conf`.
 If you use a non-standard configuration path or need multiple different configurations please refer to the sections below.
 
@@ -39,7 +39,7 @@ Credentials can also be specified manually in your configuration file.
 ## Accessing settings
 
 @apidoc[GoogleSettings$] provides methods to retrieve settings from your configuration and @apidoc[GoogleAttributes$] to access the settings attached to a stream.
-@scala[Additionally, if there is an implicit @apidoc[akka.actor.ActorSystem] in scope, then so will be an implicit instance of the default @apidoc[GoogleSettings].]
+@scala[Additionally, if there is an implicit @apidoc[org.apache.pekko.actor.ActorSystem] in scope, then so will be an implicit instance of the default @apidoc[GoogleSettings].]
 
 Scala
 
@@ -51,7 +51,7 @@ Java
 
 ## Apply custom settings to a part of the stream
 
-In certain situations it may be desirable to modify the @apidoc[GoogleSettings] applied to a part of the stream, for example to use different credentials or change the @apidoc[akka.stream.alpakka.google.RetrySettings].
+In certain situations it may be desirable to modify the @apidoc[GoogleSettings] applied to a part of the stream, for example to use different credentials or change the @apidoc[org.apache.pekko.stream.connectors.google.RetrySettings].
 This is accomplished by adding @apidoc[GoogleAttributes$] to your stream.
 
 Scala
@@ -64,7 +64,7 @@ Java
 
 ## Interop with Google Java client libraries
 
-Instances of the @apidoc[akka.stream.alpakka.google.auth.Credentials] class can be converted via the `toGoogle()` method to @javadoc[Credentials](com.google.auth.Credentials) compatible with Google Java client libraries.
+Instances of the @apidoc[org.apache.pekko.stream.connectors.google.auth.Credentials] class can be converted via the `toGoogle()` method to @javadoc[Credentials](com.google.auth.Credentials) compatible with Google Java client libraries.
 
 ## Accessing other Google APIs
 

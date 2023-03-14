@@ -13,12 +13,12 @@
 
 package docs.javadsl;
 
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.cassandra.CassandraSessionSettings;
-import akka.stream.alpakka.cassandra.javadsl.CassandraSession;
-import akka.stream.alpakka.cassandra.javadsl.CassandraSessionRegistry;
-import akka.stream.alpakka.cassandra.scaladsl.CassandraAccess;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings;
+import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSession;
+import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSessionRegistry;
+import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraAccess;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
@@ -39,7 +39,8 @@ public class CassandraTestHelper {
   public CassandraTestHelper(String TEST_NAME) {
     system = ActorSystem.create(TEST_NAME);
     CassandraSessionRegistry sessionRegistry = CassandraSessionRegistry.get(system);
-    CassandraSessionSettings sessionSettings = CassandraSessionSettings.create("alpakka.cassandra");
+    CassandraSessionSettings sessionSettings =
+        CassandraSessionSettings.create("pekko.connectors.cassandra");
     cassandraSession = sessionRegistry.sessionFor(sessionSettings);
 
     cassandraAccess = new CassandraAccess(cassandraSession.delegate());

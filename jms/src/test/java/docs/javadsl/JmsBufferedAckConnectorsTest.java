@@ -13,17 +13,17 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.actor.ActorSystem;
-import akka.japi.Pair;
-import akka.stream.alpakka.jms.*;
-import akka.stream.alpakka.jms.javadsl.JmsConsumer;
-import akka.stream.alpakka.jms.javadsl.JmsConsumerControl;
-import akka.stream.alpakka.jms.javadsl.JmsProducer;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.Done;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.jms.*;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import jmstestkit.JmsBroker;
 import com.typesafe.config.Config;
 import org.apache.activemq.command.ActiveMQQueue;
@@ -132,7 +132,7 @@ public class JmsBufferedAckConnectorsTest {
           Source.from(msgsIn).runWith(jmsSink, system);
 
           // #source
-          Source<akka.stream.alpakka.jms.AckEnvelope, JmsConsumerControl> jmsSource =
+          Source<org.apache.pekko.stream.connectors.jms.AckEnvelope, JmsConsumerControl> jmsSource =
               JmsConsumer.ackSource(
                   JmsConsumerSettings.create(system, connectionFactory)
                       .withSessionCount(5)

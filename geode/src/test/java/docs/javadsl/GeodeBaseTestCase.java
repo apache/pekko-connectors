@@ -13,15 +13,15 @@
 
 package docs.javadsl;
 
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.geode.GeodeSettings;
-import akka.stream.alpakka.geode.RegionSettings;
-import akka.stream.alpakka.geode.javadsl.Geode;
-import akka.stream.alpakka.geode.javadsl.GeodeWithPoolSubscription;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Source;
-import akka.testkit.javadsl.TestKit;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.geode.GeodeSettings;
+import org.apache.pekko.stream.connectors.geode.RegionSettings;
+import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
+import org.apache.pekko.stream.connectors.geode.javadsl.GeodeWithPoolSubscription;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 

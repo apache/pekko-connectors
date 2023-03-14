@@ -13,14 +13,14 @@
 
 package docs.scaladsl
 
-import akka.actor.ActorSystem
-import akka.stream.alpakka.reference._
-import akka.stream.alpakka.reference.scaladsl.Reference
-import akka.stream.alpakka.testkit.scaladsl.LogCapturing
-import akka.stream.scaladsl.{ Flow, Sink, Source }
-import akka.testkit.TestKit
-import akka.util.ByteString
-import akka.{ Done, NotUsed }
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.connectors.reference._
+import org.apache.pekko.stream.connectors.reference.scaladsl.Reference
+import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
+import org.apache.pekko.testkit.TestKit
+import org.apache.pekko.util.ByteString
+import org.apache.pekko.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers

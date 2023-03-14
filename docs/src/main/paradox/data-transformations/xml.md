@@ -12,7 +12,7 @@ XML parsing module offers Flows for parsing, processing and writing XML document
   artifact=pekko-connectors-xml_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
   artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
@@ -25,7 +25,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## XML parsing
 
-XML processing pipeline starts with an @apidoc[XmlParsing.parser](XmlParsing$) flow which parses a stream of @apidoc[akka.util.ByteString]s to XML parser events.
+XML processing pipeline starts with an @apidoc[XmlParsing.parser](XmlParsing$) flow which parses a stream of @apidoc[org.apache.pekko.util.ByteString]s to XML parser events.
 
 Scala
 : @@snip [snip](/xml/src/test/scala/docs/scaladsl/XmlProcessingSpec.scala) { #parser }
@@ -52,7 +52,7 @@ Java
 
 ## XML writing
 
-XML processing pipeline ends with an @apidoc[XmlWriting.writer](XmlWriting$) flow which writes a stream of XML parser events to @apidoc[akka.util.ByteString]s.
+XML processing pipeline ends with an @apidoc[XmlWriting.writer](XmlWriting$) flow which writes a stream of XML parser events to @apidoc[org.apache.pekko.util.ByteString]s.
 
 Scala
 : @@snip [snip](/xml/src/test/scala/docs/scaladsl/XmlWritingSpec.scala) { #writer }

@@ -11,9 +11,9 @@ The UDP connector provides Apache Pekko Stream flows that allow for sending and 
   artifact=pekko-connectors-udp_$scala.binary.version$
   version=$project.version$
   symbol2=PekkoVersion
-  value2=$akka.version$
+  value2=$pekko.version$
   group2=org.apache.pekko
-  artifact2=akka-stream_$scala.binary.version$
+  artifact2=pekko-stream_$scala.binary.version$
   version2=PekkoVersion
 }
 

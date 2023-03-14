@@ -175,9 +175,9 @@ Java
 
 ## Producer Settings
 
-The Apache Pekko Connectors JMS producer is configured via default settings in the [HOCON](https://github.com/lightbend/config#using-hocon-the-json-superset) config file section `alpakka.jms.producer` in your `application.conf`, and settings may be tweaked in the code using the `withXyz` methods.
+The Apache Pekko Connectors JMS producer is configured via default settings in the [HOCON](https://github.com/lightbend/config#using-hocon-the-json-superset) config file section `pekko.connectors.jms.producer` in your `application.conf`, and settings may be tweaked in the code using the `withXyz` methods.
 
-The `JmsProducerSettings` factories allow for passing the actor system to read from the default  `alpakka.jms.producer` section, or you may pass a `Config` instance which is resolved to a section of the same structure. 
+The `JmsProducerSettings` factories allow for passing the actor system to read from the default  `pekko.connectors.jms.producer` section, or you may pass a `Config` instance which is resolved to a section of the same structure. 
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsSettingsSpec.scala) { #producer-settings }

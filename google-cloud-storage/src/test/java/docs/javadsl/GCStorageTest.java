@@ -13,22 +13,22 @@
 
 package docs.javadsl;
 
-import akka.Done;
-import akka.NotUsed;
-import akka.actor.ActorSystem;
-import akka.http.javadsl.model.ContentType;
-import akka.http.javadsl.model.ContentTypes;
-import akka.stream.Attributes;
-import akka.stream.alpakka.google.GoogleAttributes;
-import akka.stream.alpakka.google.GoogleSettings;
-import akka.stream.alpakka.googlecloud.storage.Bucket;
-import akka.stream.alpakka.googlecloud.storage.StorageObject;
-import akka.stream.alpakka.googlecloud.storage.javadsl.GCStorage;
-import akka.stream.alpakka.googlecloud.storage.scaladsl.GCStorageWiremockBase;
-import akka.stream.alpakka.testkit.javadsl.LogCapturingJunit4;
-import akka.stream.javadsl.Sink;
-import akka.stream.javadsl.Source;
-import akka.util.ByteString;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.http.javadsl.model.ContentType;
+import org.apache.pekko.http.javadsl.model.ContentTypes;
+import org.apache.pekko.stream.Attributes;
+import org.apache.pekko.stream.connectors.google.GoogleAttributes;
+import org.apache.pekko.stream.connectors.google.GoogleSettings;
+import org.apache.pekko.stream.connectors.googlecloud.storage.Bucket;
+import org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject;
+import org.apache.pekko.stream.connectors.googlecloud.storage.javadsl.GCStorage;
+import org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl.GCStorageWiremockBase;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.ByteString;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -799,7 +799,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
       source.runWith(sink, system()).toCompletableFuture().get(5, TimeUnit.SECONDS);
     } catch (Exception e) {
       assertEquals(
-          "akka.stream.alpakka.googlecloud.storage.FailedUpload: Uploading part failed with status 400 Bad Request: Chunk upload failed",
+          "org.apache.pekko.stream.connectors.googlecloud.storage.FailedUpload: Uploading part failed with status 400 Bad Request: Chunk upload failed",
           e.getMessage());
     }
   }

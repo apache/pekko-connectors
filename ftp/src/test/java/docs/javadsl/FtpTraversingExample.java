@@ -14,9 +14,9 @@
 package docs.javadsl;
 
 // #traversing
-import akka.actor.ActorSystem;
-import akka.stream.alpakka.ftp.FtpSettings;
-import akka.stream.alpakka.ftp.javadsl.Ftp;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.ftp.FtpSettings;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
 
 public class FtpTraversingExample {
 
