@@ -53,8 +53,11 @@ class MongoSinkSpec
 
   implicit val system = ActorSystem()
 
-  override protected def beforeAll(): Unit =
+  override protected def beforeAll(): Unit = {
+    implicit val patienceConfig =
+      PatienceConfig(timeout = 2.seconds, interval = 100.millis)
     Source.fromPublisher(db.drop()).runWith(Sink.headOption).futureValue
+  }
 
   private val client = MongoClients.create(s"mongodb://localhost:27017")
   private val db = client.getDatabase("MongoSinkSpec").withCodecRegistry(codecRegistry)
