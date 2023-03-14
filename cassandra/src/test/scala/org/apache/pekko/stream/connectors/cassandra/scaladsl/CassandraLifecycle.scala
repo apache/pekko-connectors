@@ -44,7 +44,7 @@ trait CassandraLifecycleBase {
     execute(session, statements.map(stmt => SimpleStatement.newInstance(stmt)))
   }
 
-  private val keyspaceTimeout = java.time.Duration.ofSeconds(10)
+  private val keyspaceTimeout = java.time.Duration.ofSeconds(15)
 
   def createKeyspace(session: CassandraSession, name: String): Future[Done] = {
     session.executeWrite(

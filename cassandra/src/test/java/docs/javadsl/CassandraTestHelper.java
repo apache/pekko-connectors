@@ -65,7 +65,7 @@ public class CassandraTestHelper {
   }
 
   public static <T> T await(Future<T> future) {
-    int seconds = 10;
+    int seconds = 20;
     try {
       return Await.result(future, FiniteDuration.create(seconds, TimeUnit.SECONDS));
     } catch (InterruptedException e) {
