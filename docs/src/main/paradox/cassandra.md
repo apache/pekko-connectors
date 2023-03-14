@@ -113,8 +113,8 @@ application.conf
 To use @extref[Apache Pekko Discovery](pekko:discovery/) make sure the `pekko-discovery` dependency is on you classpath.
 
 @@dependency [sbt,Maven,Gradle] {
-  symbolAkka=PekkoVersion
-  valueAkka="$pekko.version$"
+  symbolPekko=PekkoVersion
+  valuePekko="$pekko.version$"
   group="org.apache.pekko"
   artifact="pekko-discovery_$scala.binary.version$"
   version=PekkoVersion

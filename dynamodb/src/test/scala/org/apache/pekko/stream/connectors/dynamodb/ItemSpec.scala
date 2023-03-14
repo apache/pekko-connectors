@@ -18,7 +18,7 @@ import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.connectors.dynamodb.scaladsl._
 import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.testkit.TestKit
-import com.github.matsluni.akkahttpspi.AkkaHttpClient
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
@@ -39,7 +39,7 @@ class ItemSpec extends TestKit(ActorSystem("ItemSpec")) with AsyncWordSpecLike w
     .builder()
     .region(Region.AWS_GLOBAL)
     .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("x", "x")))
-    .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+    .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
     .endpointOverride(new URI("http://localhost:8001/"))
     .build()
 

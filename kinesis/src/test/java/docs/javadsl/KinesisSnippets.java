@@ -26,7 +26,7 @@ import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 // #init-client
-import com.github.matsluni.akkahttpspi.AkkaHttpClient;
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 // #init-client
 import software.amazon.awssdk.services.kinesis.model.PutRecordsRequestEntry;
@@ -48,7 +48,7 @@ public class KinesisSnippets {
 
     final software.amazon.awssdk.services.kinesis.KinesisAsyncClient amazonKinesisAsync =
         KinesisAsyncClient.builder()
-            .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+            .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
             // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
             // .overrideConfiguration(...)

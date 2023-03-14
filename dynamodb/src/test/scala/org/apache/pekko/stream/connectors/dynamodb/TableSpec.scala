@@ -18,7 +18,7 @@ import java.net.URI
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.connectors.dynamodb.scaladsl.DynamoDb
 import org.apache.pekko.testkit.TestKit
-import com.github.matsluni.akkahttpspi.AkkaHttpClient
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
@@ -38,7 +38,7 @@ class TableSpec extends TestKit(ActorSystem("TableSpec")) with AsyncWordSpecLike
     .builder()
     .region(Region.AWS_GLOBAL)
     .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("x", "x")))
-    .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+    .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
     .endpointOverride(new URI("http://localhost:8001/"))
     .build()
 

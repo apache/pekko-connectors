@@ -61,7 +61,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
     // #init-client
     import java.net.URI
 
-    import com.github.matsluni.akkahttpspi.AkkaHttpClient
+    import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
     import software.amazon.awssdk.services.sns.SnsAsyncClient
     import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
     import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
@@ -78,7 +78,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
         .endpointOverride(URI.create(endEndpoint))
         // #init-client
         .region(Region.EU_CENTRAL_1)
-        .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+        .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
         // Possibility to configure the retry policy
         // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
         // .overrideConfiguration(...)

@@ -21,7 +21,7 @@ import org.apache.pekko.stream.connectors.kinesisfirehose.javadsl.KinesisFirehos
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 // #init-client
-import com.github.matsluni.akkahttpspi.AkkaHttpClient;
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient;
 // #init-client
 import software.amazon.awssdk.services.firehose.model.PutRecordBatchResponseEntry;
@@ -36,7 +36,7 @@ public class KinesisFirehoseSnippets {
 
     final software.amazon.awssdk.services.firehose.FirehoseAsyncClient amazonFirehoseAsync =
         FirehoseAsyncClient.builder()
-            .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+            .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
             // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
             // .overrideConfiguration(...)
