@@ -16,8 +16,8 @@ import com.lightbend.paradox.projectinfo.ParadoxProjectInfoPluginKeys._
 import com.lightbend.sbt.JavaFormatterPlugin.autoImport.javafmtOnCompile
 import com.typesafe.tools.mima.plugin.MimaKeys._
 import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
-import org.mdedetrich.apache.sonatype.SonatypeApachePlugin.autoImport._
-import xerial.sbt.Sonatype.autoImport.sonatypeProfileName
+import sbtdynver.DynVerPlugin
+import sbtdynver.DynVerPlugin.autoImport.dynverSonatypeSnapshots
 
 object Common extends AutoPlugin {
 
@@ -28,10 +28,9 @@ object Common extends AutoPlugin {
 
   override def trigger = allRequirements
 
-  override def requires = JvmPlugin && HeaderPlugin && SonatypeApachePlugin
+  override def requires = JvmPlugin && HeaderPlugin && SonatypeApachePlugin && DynVerPlugin
 
   override def globalSettings = Seq(
-    apacheSonatypeProjectProfile := "pekko",
     scmInfo := Some(ScmInfo(url("https://github.com/apache/incubator-pekko-connectors"),
       "git@github.com:apache/incubator-pekko-connectors.git")),
     developers += Developer("contributors",
@@ -118,6 +117,8 @@ object Common extends AutoPlugin {
     // timeout.
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-F", "4"),
     scalafmtOnCompile := false,
-    javafmtOnCompile := false,
-    sonatypeProfileName := "org.apache.pekko")
+    javafmtOnCompile := false)
+
+  override lazy val buildSettings = Seq(
+    dynverSonatypeSnapshots := true)
 }
