@@ -1,21 +1,15 @@
-name: Publish
+name: Publish Nightly
 
 on:
-  push:
-    branches:
-      - master
-      - main
-      - release-*
-    tags: ["v*"]
-  release:
-    types: [published]
+  workflow_dispatch:
+  schedule:
+    - cron: "22 0 * * *"
 
 jobs:
-  release:
+  publish:
     # runs on main repo only
     if: github.repository == 'apache/incubator-pekko-connectors'
-    name: Release
-    environment: release
+    name: Publish
     runs-on: ubuntu-20.04
     env:
       JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -37,14 +31,3 @@ jobs:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_PW: ${{ secrets.NEXUS_PW }}
         run: sbt +publish
-
-# TODO: fix after documentation deploy
-#      - name: Publish API and reference documentation
-#        env:
-#          GUSTAV_KEY: ${{ secrets.GUSTAV_KEY }}
-#        run: |+
-#          eval "$(ssh-agent -s)"
-#          echo $GUSTAV_KEY | base64 -di > .github/id_rsa
-#          chmod 600 .github/id_rsa
-#          ssh-add .github/id_rsa
-#          sbt +~2.13 docs/publishRsync
