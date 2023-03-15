@@ -417,7 +417,6 @@ def pekkoConnectorProject(projectId: String,
         ProblemFilters.exclude[Problem]("com.google.*")),
       Test / parallelExecution := false)
     .settings(additionalSettings: _*)
-    .settings(MetaInfLicenseNoticeCopy.settings)
     .dependsOn(testkit % Test)
 }
 
