@@ -22,7 +22,7 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 // #init-client
-import com.github.matsluni.akkahttpspi.AkkaHttpClient;
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient;
@@ -53,7 +53,7 @@ public class Examples {
     LambdaAsyncClient awsLambdaClient =
         LambdaAsyncClient.builder()
             .credentialsProvider(credentialsProvider)
-            .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+            .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
             // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
             // .overrideConfiguration(...)

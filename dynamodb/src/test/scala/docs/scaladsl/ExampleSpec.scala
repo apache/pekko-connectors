@@ -31,7 +31,7 @@ import org.apache.pekko.testkit.TestKit
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 //#init-client
-import com.github.matsluni.akkahttpspi.AkkaHttpClient
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
@@ -64,7 +64,7 @@ class ExampleSpec
     .builder()
     .region(Region.AWS_GLOBAL)
     .credentialsProvider(credentialsProvider)
-    .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+    .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
     // Possibility to configure the retry policy
     // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
     // .overrideConfiguration(...)

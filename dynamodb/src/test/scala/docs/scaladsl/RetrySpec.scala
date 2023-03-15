@@ -16,7 +16,7 @@ package docs.scaladsl
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.apache.pekko.testkit.TestKit
-import com.github.matsluni.akkahttpspi.AkkaHttpClient
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 // #awsRetryConfiguration
@@ -42,7 +42,7 @@ class RetrySpec
     .builder()
     .region(Region.AWS_GLOBAL)
     .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("x", "x")))
-    .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+    .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
     // #awsRetryConfiguration
     .overrideConfiguration(
       ClientOverrideConfiguration

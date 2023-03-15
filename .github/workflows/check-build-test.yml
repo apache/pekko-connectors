@@ -83,15 +83,13 @@ jobs:
         include:
           - { connector: amqp,                         pre_cmd: 'docker-compose up -d amqp' }
           - { connector: avroparquet }
-          # currently not supported because of dependency on aws-spi-akka-http
-          # - { connector: awslambda }
-          # - { connector: aws-event-bridge,             pre_cmd: 'docker-compose up -d amazoneventbridge' }
+          - { connector: awslambda }
+          - { connector: aws-event-bridge,             pre_cmd: 'docker-compose up -d amazoneventbridge' }
           - { connector: azure-storage-queue }
           - { connector: cassandra,                    pre_cmd: 'docker-compose up -d cassandra' }
           - { connector: couchbase,                    pre_cmd: 'docker-compose up -d couchbase_prep' }
           - { connector: csv }
-          # currently not supported because of dependency on aws-spi-akka-http
-          # - { connector: dynamodb,                     pre_cmd: 'docker-compose up -d dynamodb' }
+          - { connector: dynamodb,                     pre_cmd: 'docker-compose up -d dynamodb' }
           - { connector: elasticsearch,                pre_cmd: 'docker-compose up -d elasticsearch6 elasticsearch7 opensearch1' }
           - { connector: file }
           - { connector: ftp,                          pre_cmd: './scripts/ftp-servers.sh' }
@@ -111,8 +109,7 @@ jobs:
           - { connector: ironmq,                       pre_cmd: 'docker-compose up -d ironauth ironmq' }
           - { connector: jms,                          pre_cmd: 'docker-compose up -d ibmmq' }
           - { connector: json-streaming }
-          # currently not supported because of dependency on aws-spi-akka-http
-          # - { connector: kinesis }
+          - { connector: kinesis }
           - { connector: kudu,                         pre_cmd: 'docker-compose up -d kudu-master-data kudu-tserver-data kudu-master kudu-tserver' }
           - { connector: mongodb,                      pre_cmd: 'docker-compose up -d mongo' }
           - { connector: mqtt,                         pre_cmd: 'docker-compose up -d mqtt' }
@@ -124,11 +121,9 @@ jobs:
           - { connector: spring-web }
           - { connector: simple-codecs }
           - { connector: slick }
-          # currently not supported because of dependency on aws-spi-akka-http
-          # - { connector: sns,                          pre_cmd: 'docker-compose up -d amazonsns' }
+          - { connector: sns,                          pre_cmd: 'docker-compose up -d amazonsns' }
           - { connector: solr }
-          # currently not supported because of dependency on aws-spi-akka-http
-          # - { connector: sqs,                          pre_cmd: 'docker-compose up -d elasticmq' }
+          - { connector: sqs,                          pre_cmd: 'docker-compose up -d elasticmq' }
           - { connector: sse }
           - { connector: text }
           - { connector: udp }

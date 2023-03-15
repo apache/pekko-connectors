@@ -22,7 +22,7 @@ import org.apache.pekko.stream.connectors.sqs._
 import org.apache.pekko.stream.connectors.sqs.scaladsl.{ DefaultTestContext, SqsSource }
 import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
-import com.github.matsluni.akkahttpspi.AkkaHttpClient
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -252,7 +252,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
     val customClient: SdkAsyncHttpClient = NettyNioAsyncHttpClient.builder().maxConcurrency(100).build()
     // #init-custom-client
        */
-      val customClient: SdkAsyncHttpClient = AkkaHttpClient.builder().withActorSystem(system).build()
+      val customClient: SdkAsyncHttpClient = PekkoHttpClient.builder().withActorSystem(system).build()
 
       // #init-custom-client
       implicit val customSqsClient = SqsAsyncClient

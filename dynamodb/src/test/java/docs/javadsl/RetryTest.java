@@ -16,7 +16,7 @@ package docs.javadsl;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.github.matsluni.akkahttpspi.AkkaHttpClient;
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import org.junit.Rule;
 import org.junit.Test;
 // #clientRetryConfig
@@ -46,7 +46,7 @@ public class RetryTest {
             .region(Region.AWS_GLOBAL)
             .credentialsProvider(
                 StaticCredentialsProvider.create(AwsBasicCredentials.create("x", "x")))
-            .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+            .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // #awsRetryConfiguration
             .overrideConfiguration(
                 ClientOverrideConfiguration.builder()

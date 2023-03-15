@@ -23,7 +23,7 @@ import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishSink;
 import org.apache.pekko.stream.connectors.sqs.javadsl.SqsSource;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import com.github.matsluni.akkahttpspi.AkkaHttpClient;
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import org.junit.Test;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -107,7 +107,7 @@ public class SqsSourceTest extends BaseSqsTest {
     SdkAsyncHttpClient customClient = NettyNioAsyncHttpClient.builder().maxConcurrency(100).build();
     // #init-custom-client
     */
-    SdkAsyncHttpClient customClient = AkkaHttpClient.builder().withActorSystem(system).build();
+    SdkAsyncHttpClient customClient = PekkoHttpClient.builder().withActorSystem(system).build();
     // #init-custom-client
     final SqsAsyncClient customSqsClient =
         SqsAsyncClient.builder()

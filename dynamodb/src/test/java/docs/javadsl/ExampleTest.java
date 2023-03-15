@@ -29,7 +29,7 @@ import org.apache.pekko.stream.javadsl.SourceWithContext;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.*;
 // #init-client
-import com.github.matsluni.akkahttpspi.AkkaHttpClient;
+import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import scala.util.Try;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -67,7 +67,7 @@ public class ExampleTest {
         DynamoDbAsyncClient.builder()
             .credentialsProvider(credentialsProvider)
             .region(Region.AWS_GLOBAL)
-            .httpClient(AkkaHttpClient.builder().withActorSystem(system).build())
+            .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
             // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
             // .overrideConfiguration(...)
