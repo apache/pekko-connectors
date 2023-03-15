@@ -9,23 +9,20 @@
 
 import sbt.Keys._
 import sbt._
+import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
+import org.mdedetrich.apache.sonatype.SonatypeApachePlugin.autoImport._
 
 /**
  * Copies LICENSE and NOTICE files into jar META-INF dir
  */
-object MetaInfLicenseNoticeCopy {
+object MetaInfLicenseNoticeCopy extends AutoPlugin {
 
-  val settings: Seq[Setting[_]] = inConfig(Compile)(
-    Seq(
-      resourceGenerators += copyFileToMetaInf(resourceManaged, "LICENSE"),
-      resourceGenerators += copyFileToMetaInf(resourceManaged, "NOTICE"),
-      resourceGenerators += copyFileToMetaInf(resourceManaged, "DISCLAIMER")))
+  private lazy val baseDir = LocalRootProject / baseDirectory
 
-  def copyFileToMetaInf(dir: SettingKey[File], fileName: String) = Def.task[Seq[File]] {
-    val fromFile = (LocalRootProject / baseDirectory).value / fileName
-    val toFile = resourceManaged.value / "META-INF" / fileName
-    IO.copyFile(fromFile, toFile)
-    Seq(toFile)
-  }
+  override lazy val projectSettings = Seq(
+    apacheSonatypeDisclaimerFile := Some(baseDir.value / "DISCLAIMER"))
 
+  override def trigger = allRequirements
+
+  override def requires = SonatypeApachePlugin
 }

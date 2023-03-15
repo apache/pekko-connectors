@@ -12,10 +12,11 @@ import sbt.Keys._
 import sbt.plugins.JvmPlugin
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import de.heikoseeberger.sbtheader._
-import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
 import com.lightbend.paradox.projectinfo.ParadoxProjectInfoPluginKeys._
 import com.lightbend.sbt.JavaFormatterPlugin.autoImport.javafmtOnCompile
 import com.typesafe.tools.mima.plugin.MimaKeys._
+import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
+import org.mdedetrich.apache.sonatype.SonatypeApachePlugin.autoImport._
 import xerial.sbt.Sonatype.autoImport.sonatypeProfileName
 
 object Common extends AutoPlugin {
@@ -27,20 +28,16 @@ object Common extends AutoPlugin {
 
   override def trigger = allRequirements
 
-  override def requires = JvmPlugin && HeaderPlugin
+  override def requires = JvmPlugin && HeaderPlugin && SonatypeApachePlugin
 
   override def globalSettings = Seq(
-    organization := "org.apache.pekko",
-    organizationName := "Apache Pekko",
-    organizationHomepage := Some(url("https://www.apache.org/")),
-    homepage := Some(url("https://pekko.apache.org/")),
+    apacheSonatypeProjectProfile := "pekko",
     scmInfo := Some(ScmInfo(url("https://github.com/apache/incubator-pekko-connectors"),
       "git@github.com:apache/incubator-pekko-connectors.git")),
     developers += Developer("contributors",
       "Contributors",
       "dev@pekko.apache.org",
       url("https://github.com/apache/incubator-pekko-connectors/graphs/contributors")),
-    licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0"))),
     description := "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Pekko.",
     fatalWarnings := true,
     mimaReportSignatureProblems := true,
