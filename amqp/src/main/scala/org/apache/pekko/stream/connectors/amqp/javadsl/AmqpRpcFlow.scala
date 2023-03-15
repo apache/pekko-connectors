@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.amqp.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.amqp._
+import pekko.stream.javadsl.Flow
+import pekko.util.ByteString
 
 import scala.compat.java8.FutureConverters._
 
@@ -34,7 +35,7 @@ object AmqpRpcFlow {
    */
   def createSimple(settings: AmqpWriteSettings,
       repliesPerMessage: Int): Flow[ByteString, ByteString, CompletionStage[String]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
+    pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .simple(settings, repliesPerMessage)
       .mapMaterializedValue(f => f.toJava)
       .asJava
@@ -46,7 +47,7 @@ object AmqpRpcFlow {
    */
   def atMostOnceFlow(settings: AmqpWriteSettings,
       bufferSize: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
+    pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .atMostOnceFlow(settings, bufferSize)
       .mapMaterializedValue(f => f.toJava)
       .asJava
@@ -59,7 +60,7 @@ object AmqpRpcFlow {
   def atMostOnceFlow(settings: AmqpWriteSettings,
       bufferSize: Int,
       repliesPerMessage: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
+    pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .atMostOnceFlow(settings, bufferSize, repliesPerMessage)
       .mapMaterializedValue(f => f.toJava)
       .asJava
@@ -79,7 +80,7 @@ object AmqpRpcFlow {
       settings: AmqpWriteSettings,
       bufferSize: Int,
       repliesPerMessage: Int = 1): Flow[WriteMessage, CommittableReadResult, CompletionStage[String]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
+    pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .committableFlow(settings, bufferSize, repliesPerMessage)
       .mapMaterializedValue(f => f.toJava)
       .map(cm => new CommittableReadResult(cm))

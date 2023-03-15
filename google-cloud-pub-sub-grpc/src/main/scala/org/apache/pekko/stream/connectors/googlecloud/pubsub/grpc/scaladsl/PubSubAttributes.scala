@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.Attributes.Attribute
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.Attributes
+import pekko.stream.Attributes.Attribute
 
 /**
  * Akka Stream attributes that are used when materializing PubSub stream blueprints.

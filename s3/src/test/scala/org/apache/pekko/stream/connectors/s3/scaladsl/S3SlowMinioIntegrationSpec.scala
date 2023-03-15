@@ -15,14 +15,15 @@ package org.apache.pekko.stream.connectors.s3.scaladsl
 
 import java.time.{ Duration, Instant }
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model.MediaTypes
-import org.apache.pekko.stream.connectors.s3._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.model.MediaTypes
+import pekko.stream.connectors.s3._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Source
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures

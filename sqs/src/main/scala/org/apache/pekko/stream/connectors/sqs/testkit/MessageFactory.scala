@@ -12,17 +12,15 @@
  */
 
 package org.apache.pekko.stream.connectors.sqs.testkit
-import org.apache.pekko.stream.connectors.sqs.SqsAckResult.{
-  SqsChangeMessageVisibilityResult,
-  SqsDeleteResult,
-  SqsIgnoreResult
-}
-import org.apache.pekko.stream.connectors.sqs.SqsAckResultEntry.{
+
+import org.apache.pekko
+import pekko.stream.connectors.sqs.SqsAckResult.{ SqsChangeMessageVisibilityResult, SqsDeleteResult, SqsIgnoreResult }
+import pekko.stream.connectors.sqs.SqsAckResultEntry.{
   SqsChangeMessageVisibilityResultEntry,
   SqsDeleteResultEntry,
   SqsIgnoreResultEntry
 }
-import org.apache.pekko.stream.connectors.sqs.{ MessageAction, SqsPublishResult, SqsPublishResultEntry, SqsResult }
+import pekko.stream.connectors.sqs.{ MessageAction, SqsPublishResult, SqsPublishResultEntry, SqsResult }
 import software.amazon.awssdk.services.sqs.model._
 
 /**

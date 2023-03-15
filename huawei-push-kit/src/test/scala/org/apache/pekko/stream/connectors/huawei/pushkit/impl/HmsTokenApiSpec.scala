@@ -13,16 +13,17 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit.impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.event.LoggingAdapter
-import org.apache.pekko.http.scaladsl.{ HttpExt, HttpsConnectionContext }
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpRequest, HttpResponse }
-import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.event.LoggingAdapter
+import pekko.http.scaladsl.{ HttpExt, HttpsConnectionContext }
+import pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpRequest, HttpResponse }
+import pekko.http.scaladsl.settings.ConnectionPoolSettings
+import pekko.http.scaladsl.unmarshalling.Unmarshal
 import HmsTokenApi.AccessTokenExpiry
-import org.apache.pekko.stream.connectors.huawei.pushkit.HmsSettings
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import pekko.stream.connectors.huawei.pushkit.HmsSettings
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{ verify, when }

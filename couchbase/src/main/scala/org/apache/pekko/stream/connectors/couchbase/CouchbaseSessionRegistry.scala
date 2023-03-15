@@ -15,17 +15,12 @@ package org.apache.pekko.stream.connectors.couchbase
 
 import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicReference
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.couchbase.impl.CouchbaseClusterRegistry
-import org.apache.pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JCouchbaseSession }
-import org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.couchbase.impl.CouchbaseClusterRegistry
+import pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JCouchbaseSession }
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 
 import scala.annotation.tailrec
 import scala.compat.java8.FutureConverters._
@@ -49,7 +44,7 @@ object CouchbaseSessionRegistry extends ExtensionId[CouchbaseSessionRegistry] wi
   /**
    * Java API: Get the session registry with the classic actors API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): CouchbaseSessionRegistry =
+  override def get(system: pekko.actor.ActorSystem): CouchbaseSessionRegistry =
     super.apply(system)
 
   override def lookup: ExtensionId[CouchbaseSessionRegistry] = this

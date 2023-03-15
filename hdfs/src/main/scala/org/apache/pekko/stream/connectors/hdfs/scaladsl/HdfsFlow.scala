@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.hdfs.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.hdfs._
-import org.apache.pekko.stream.connectors.hdfs.impl.HdfsFlowStage
-import org.apache.pekko.stream.connectors.hdfs.impl.writer.{ CompressedDataWriter, DataWriter, SequenceWriter }
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.hdfs._
+import pekko.stream.connectors.hdfs.impl.HdfsFlowStage
+import pekko.stream.connectors.hdfs.impl.writer.{ CompressedDataWriter, DataWriter, SequenceWriter }
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 import org.apache.hadoop.fs.{ FSDataOutputStream, FileSystem }
 import org.apache.hadoop.io.SequenceFile.CompressionType
 import org.apache.hadoop.io.compress.CompressionCodec

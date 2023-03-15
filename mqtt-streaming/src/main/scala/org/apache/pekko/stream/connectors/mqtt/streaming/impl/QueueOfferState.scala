@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.mqtt.streaming.impl
 
-import org.apache.pekko.actor.typed.Behavior
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.apache.pekko.stream.QueueOfferResult
+import org.apache.pekko
+import pekko.actor.typed.Behavior
+import pekko.actor.typed.scaladsl.Behaviors
+import pekko.stream.QueueOfferResult
 import scala.collection.immutable.Seq
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }

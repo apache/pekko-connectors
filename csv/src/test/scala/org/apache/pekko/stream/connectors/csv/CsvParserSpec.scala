@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.csv
 
 import java.nio.charset.{ StandardCharsets, UnsupportedCharsetException }
 
-import org.apache.pekko.stream.connectors.csv.impl.CsvParser
-import org.apache.pekko.stream.connectors.csv.scaladsl.ByteOrderMark
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.csv.impl.CsvParser
+import pekko.stream.connectors.csv.scaladsl.ByteOrderMark
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.util.ByteString
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

@@ -16,9 +16,10 @@ package org.apache.pekko.stream.connectors.file.scaladsl
 import java.nio.charset.{ Charset, StandardCharsets }
 import java.nio.file.Path
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.scaladsl.Source
+import pekko.util.ByteString
 
 import scala.concurrent.duration.FiniteDuration
 
@@ -43,9 +44,8 @@ object FileTailSource {
       maxChunkSize: Int,
       startingPosition: Long,
       pollingInterval: FiniteDuration): Source[ByteString, NotUsed] =
-    Source.fromGraph(
-      new org.apache.pekko.stream.connectors.file.impl.FileTailSource(path, maxChunkSize, startingPosition,
-        pollingInterval))
+    Source.fromGraph(new pekko.stream.connectors.file.impl.FileTailSource(path, maxChunkSize, startingPosition,
+      pollingInterval))
 
   /**
    * Scala API: Read the entire contents of a file as text lines, and then when the end is reached, keep reading
@@ -67,7 +67,7 @@ object FileTailSource {
       lf: String = System.getProperty("line.separator"),
       charset: Charset = StandardCharsets.UTF_8): Source[String, NotUsed] =
     apply(path, maxLineSize, 0, pollingInterval)
-      .via(org.apache.pekko.stream.scaladsl.Framing.delimiter(ByteString.fromString(lf, charset.name), maxLineSize,
+      .via(pekko.stream.scaladsl.Framing.delimiter(ByteString.fromString(lf, charset.name), maxLineSize,
         false))
       .map(_.decodeString(charset))
 

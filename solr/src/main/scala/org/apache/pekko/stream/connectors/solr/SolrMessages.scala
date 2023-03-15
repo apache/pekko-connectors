@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.solr
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
 
 import scala.jdk.CollectionConverters._
 

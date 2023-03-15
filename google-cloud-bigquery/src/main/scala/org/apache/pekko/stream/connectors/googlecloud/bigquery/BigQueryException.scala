@@ -13,17 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery
 
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.model.StatusCodes.Forbidden
-import org.apache.pekko.http.scaladsl.model.{ ErrorInfo, ExceptionWithErrorInfo, HttpResponse }
-import org.apache.pekko.http.scaladsl.unmarshalling.{
-  FromResponseUnmarshaller,
-  PredefinedFromEntityUnmarshallers,
-  Unmarshaller
-}
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.stream.connectors.google.util.Retry
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.ErrorProto
+import org.apache.pekko
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.model.StatusCodes.Forbidden
+import pekko.http.scaladsl.model.{ ErrorInfo, ExceptionWithErrorInfo, HttpResponse }
+import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, PredefinedFromEntityUnmarshallers, Unmarshaller }
+import pekko.stream.connectors.google.implicits._
+import pekko.stream.connectors.google.util.Retry
+import pekko.stream.connectors.googlecloud.bigquery.model.ErrorProto
 import spray.json.DefaultJsonProtocol._
 import spray.json.{ enrichAny, RootJsonFormat }
 

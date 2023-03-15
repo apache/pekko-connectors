@@ -15,15 +15,16 @@ package org.apache.pekko.stream.connectors.sqs.scaladsl
 
 import java.util.concurrent.CompletionException
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.{ ApiMayChange, InternalApi }
-import org.apache.pekko.dispatch.ExecutionContexts.parasitic
-import org.apache.pekko.stream.FlowShape
-import org.apache.pekko.stream.connectors.sqs.MessageAction._
-import org.apache.pekko.stream.connectors.sqs.SqsAckResult._
-import org.apache.pekko.stream.connectors.sqs.SqsAckResultEntry._
-import org.apache.pekko.stream.connectors.sqs._
-import org.apache.pekko.stream.scaladsl.{ Flow, GraphDSL, Merge, Partition }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.{ ApiMayChange, InternalApi }
+import pekko.dispatch.ExecutionContexts.parasitic
+import pekko.stream.FlowShape
+import pekko.stream.connectors.sqs.MessageAction._
+import pekko.stream.connectors.sqs.SqsAckResult._
+import pekko.stream.connectors.sqs.SqsAckResultEntry._
+import pekko.stream.connectors.sqs._
+import pekko.stream.scaladsl.{ Flow, GraphDSL, Merge, Partition }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
@@ -39,7 +40,7 @@ import scala.concurrent.Future
 object SqsAckFlow {
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def apply(queueUrl: String, settings: SqsAckSettings = SqsAckSettings.Defaults)(
       implicit sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResult, NotUsed] = {
@@ -79,7 +80,7 @@ object SqsAckFlow {
   }
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def grouped(queueUrl: String, settings: SqsAckGroupedSettings = SqsAckGroupedSettings.Defaults)(
       implicit sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResultEntry, NotUsed] = {

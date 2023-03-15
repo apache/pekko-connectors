@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.sqs.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.sqs.SqsSourceSettings
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.sqs.SqsSourceSettings
+import pekko.stream.javadsl.Source
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.Message
 
@@ -25,9 +26,9 @@ import software.amazon.awssdk.services.sqs.model.Message
 object SqsSource {
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Source Source]] for a SQS queue using [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Source Source]] for a SQS queue using [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def create(queueUrl: String, settings: SqsSourceSettings, sqs: SqsAsyncClient): Source[Message, NotUsed] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsSource(queueUrl, settings)(sqs).asJava
+    pekko.stream.connectors.sqs.scaladsl.SqsSource(queueUrl, settings)(sqs).asJava
 
 }

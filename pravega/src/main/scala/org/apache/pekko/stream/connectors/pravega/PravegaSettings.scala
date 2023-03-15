@@ -16,7 +16,8 @@ package org.apache.pekko.stream.connectors.pravega
 import java.net.URI
 import java.time.Duration
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
 import io.pravega.client.stream.{ EventWriterConfig, ReaderConfig, Serializer }
 import io.pravega.client.ClientConfig
@@ -98,7 +99,7 @@ class ReaderSettingsBuilder(config: Config,
 }
 
 /**
- * Reader settings that must be provided to @see [[org.apache.pekko.stream.connectors.pravega.scaladsl.Pravega#source]]
+ * Reader settings that must be provided to @see [[pekko.stream.connectors.pravega.scaladsl.Pravega#source]]
  *
  * Built with @see [[ReaderSettingsBuilder]]
  *
@@ -551,8 +552,8 @@ private[pravega] class ReaderBasicSetting(
 }
 
 /**
- * Writer settings that must be provided to @see Sink [[org.apache.pekko.stream.connectors.pravega.scaladsl.Pravega#sink]]
- * or @see Flow [[org.apache.pekko.stream.connectors.pravega.scaladsl.Pravega#flow]]
+ * Writer settings that must be provided to @see Sink [[pekko.stream.connectors.pravega.scaladsl.Pravega#sink]]
+ * or @see Flow [[pekko.stream.connectors.pravega.scaladsl.Pravega#flow]]
  *
  * Built with @see [[WriterSettingsBuilder]]
  *
@@ -569,8 +570,8 @@ class WriterSettings[Message](val clientConfig: ClientConfig,
     val maximumInflightMessages: Int)
 
 /**
- * Table Writer settings that must be provided to @see Sink [[org.apache.pekko.stream.connectors.pravega.scaladsl.PravegaTable.sink]]
- * or @see Flow [[org.apache.pekko.stream.connectors.pravega.scaladsl.PravegaTable.writeFlow]]
+ * Table Writer settings that must be provided to @see Sink [[pekko.stream.connectors.pravega.scaladsl.PravegaTable.sink]]
+ * or @see Flow [[pekko.stream.connectors.pravega.scaladsl.PravegaTable.writeFlow]]
  *
  * Built with @see [[WriterSettingsBuilder]]
  */

@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.geode.impl.stage
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.stage._
+import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import org.apache.geode.cache.client.ClientCache
 
 import scala.concurrent.{ Future, Promise }

@@ -13,16 +13,13 @@
 
 package org.apache.pekko.stream.connectors.geode.scaladsl
 
-import org.apache.pekko.stream.connectors.geode.impl._
-import org.apache.pekko.stream.connectors.geode.impl.pdx.{ PdxDecoder, PdxEncoder, ShapelessPdxSerializer }
-import org.apache.pekko.stream.connectors.geode.impl.stage.{
-  GeodeContinuousSourceStage,
-  GeodeFiniteSourceStage,
-  GeodeFlowStage
-}
-import org.apache.pekko.stream.connectors.geode.{ GeodeSettings, PekkoPdxSerializer, RegionSettings }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.geode.impl._
+import pekko.stream.connectors.geode.impl.pdx.{ PdxDecoder, PdxEncoder, ShapelessPdxSerializer }
+import pekko.stream.connectors.geode.impl.stage.{ GeodeContinuousSourceStage, GeodeFiniteSourceStage, GeodeFlowStage }
+import pekko.stream.connectors.geode.{ GeodeSettings, PekkoPdxSerializer, RegionSettings }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 import org.apache.geode.cache.client.ClientCacheFactory
 
 import scala.concurrent.Future

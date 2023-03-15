@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.cassandra.CassandraWriteSettings
+import pekko.stream.scaladsl.{ Flow, FlowWithContext }
 import com.datastax.oss.driver.api.core.cql.{ BatchStatement, BoundStatement, PreparedStatement }
 
 import scala.jdk.CollectionConverters._

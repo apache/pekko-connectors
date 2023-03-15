@@ -23,14 +23,15 @@ import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.ExecutionContext
-import org.apache.pekko.Done
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.LoggingAdapter
-import org.apache.pekko.stream.connectors.cassandra.CassandraServerMetaData
-import org.apache.pekko.stream.connectors.cassandra.{ scaladsl, CqlSessionProvider }
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.Done
+import pekko.NotUsed
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.annotation.InternalApi
+import pekko.event.LoggingAdapter
+import pekko.stream.connectors.cassandra.CassandraServerMetaData
+import pekko.stream.connectors.cassandra.{ scaladsl, CqlSessionProvider }
+import pekko.stream.javadsl.Source
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql.BatchStatement
 import com.datastax.oss.driver.api.core.cql.PreparedStatement

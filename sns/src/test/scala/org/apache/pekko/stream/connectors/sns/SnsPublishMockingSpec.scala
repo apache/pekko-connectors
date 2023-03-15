@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.sns
 
 import java.util.concurrent.CompletableFuture
 
-import org.apache.pekko.stream.connectors.sns.scaladsl.SnsPublisher
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
-import org.apache.pekko.stream.testkit.scaladsl.TestSource
+import org.apache.pekko
+import pekko.stream.connectors.sns.scaladsl.SnsPublisher
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.stream.testkit.scaladsl.TestSource
 import org.mockito.ArgumentMatchers.{ any, eq => meq }
 import org.mockito.Mockito._
 import org.scalatest.flatspec.AnyFlatSpec

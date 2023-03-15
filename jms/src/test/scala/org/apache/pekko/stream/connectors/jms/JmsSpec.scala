@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.jms
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import javax.jms._
 import jmstestkit.JmsBroker
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }

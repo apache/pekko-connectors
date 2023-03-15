@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.google.RequestSettings
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.stream.Materializer
+import pekko.stream.connectors.google.RequestSettings
 import com.typesafe.config.Config
 import spray.json.DefaultJsonProtocol._
 import spray.json.{ JsonParser, RootJsonFormat }

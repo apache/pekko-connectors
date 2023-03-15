@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.jms.impl
+
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.{ AtomicBoolean, AtomicReference }
 

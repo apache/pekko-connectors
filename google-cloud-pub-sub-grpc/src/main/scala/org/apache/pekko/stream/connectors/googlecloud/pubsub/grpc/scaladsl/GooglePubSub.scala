@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl
 
-import org.apache.pekko.actor.Cancellable
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.Cancellable
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.{ Attributes, Materializer }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1.pubsub._
 
 import scala.concurrent.duration._

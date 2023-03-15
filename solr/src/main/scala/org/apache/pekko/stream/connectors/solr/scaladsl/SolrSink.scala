@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.solr.scaladsl
 
-import org.apache.pekko.stream.connectors.solr.{ SolrUpdateSettings, WriteMessage }
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.solr.{ SolrUpdateSettings, WriteMessage }
+import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.{ Done, NotUsed }
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
 

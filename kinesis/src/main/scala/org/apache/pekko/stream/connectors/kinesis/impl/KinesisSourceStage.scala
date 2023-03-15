@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.kinesis.impl
 
-import org.apache.pekko.actor.ActorRef
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts.parasitic
-import org.apache.pekko.stream.connectors.kinesis.{ KinesisErrors => Errors, ShardSettings }
-import org.apache.pekko.stream.stage.GraphStageLogic.StageActor
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.actor.ActorRef
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts.parasitic
+import pekko.stream.connectors.kinesis.{ KinesisErrors => Errors, ShardSettings }
+import pekko.stream.stage.GraphStageLogic.StageActor
+import pekko.stream.stage._
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model._
 

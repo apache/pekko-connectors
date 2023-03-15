@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.s3
 
-import org.apache.pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
-import org.apache.pekko.stream.connectors.s3.scaladsl.{ S3ClientIntegrationSpec, S3WireMockBase }
+import org.apache.pekko
+import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import pekko.stream.connectors.s3.scaladsl.{ S3ClientIntegrationSpec, S3WireMockBase }
 import com.typesafe.config.ConfigFactory
 import org.scalatest.OptionValues
 import software.amazon.awssdk.auth.credentials._

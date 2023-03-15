@@ -16,16 +16,17 @@ package docs.javadsl
 import java.util
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings
-import org.apache.pekko.stream.connectors.cassandra.javadsl
-import org.apache.pekko.stream.connectors.cassandra.scaladsl
-import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraSpecBase
-import org.apache.pekko.stream.javadsl.Sink
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.event.Logging
+import pekko.stream.connectors.cassandra.CassandraSessionSettings
+import pekko.stream.connectors.cassandra.javadsl
+import pekko.stream.connectors.cassandra.scaladsl
+import pekko.stream.connectors.cassandra.scaladsl.CassandraSpecBase
+import pekko.stream.javadsl.Sink
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.TestSink
 import com.datastax.oss.driver.api.core.cql.Row
 
 import scala.jdk.CollectionConverters._

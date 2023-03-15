@@ -13,11 +13,12 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.cassandra.scaladsl.{ CassandraSession, CassandraSource, CassandraSpecBase }
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.cassandra.scaladsl.{ CassandraSession, CassandraSource, CassandraSpecBase }
+import pekko.stream.scaladsl.Sink
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -28,7 +29,7 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
   case class ToInsert(id: Integer, cc: Integer)
   // #element-to-insert
 
-  val sessionSettings = org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings()
+  val sessionSettings = pekko.stream.connectors.cassandra.CassandraSessionSettings()
   val data = 1 until 103
   def intTable = keyspaceName + ".idtable"
 
@@ -42,9 +43,10 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
   "Retrieving a session" must {
     "be documented" in {
       // #init-session
-      import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings
-      import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraSession
-      import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraSessionRegistry
+      import org.apache.pekko
+      import pekko.stream.connectors.cassandra.CassandraSessionSettings
+      import pekko.stream.connectors.cassandra.scaladsl.CassandraSession
+      import pekko.stream.connectors.cassandra.scaladsl.CassandraSessionRegistry
 
       val system: ActorSystem = // ???
         // #init-session

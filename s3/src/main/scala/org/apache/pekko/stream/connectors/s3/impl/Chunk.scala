@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.s3.impl
 
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, RequestEntity }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.scaladsl.Source
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, RequestEntity }
+import pekko.util.ByteString
 
 /**
  * Internal Api

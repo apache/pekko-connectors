@@ -12,16 +12,12 @@
  */
 
 package org.apache.pekko.stream.connectors.pravega.scaladsl
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.pravega.impl.{ PravegaFlow, PravegaSource }
-import org.apache.pekko.stream.connectors.pravega.{
-  PravegaEvent,
-  PravegaReaderGroupManager,
-  ReaderSettings,
-  WriterSettings
-}
+import org.apache.pekko
+import pekko.annotation.ApiMayChange
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.pravega.impl.{ PravegaFlow, PravegaSource }
+import pekko.stream.connectors.pravega.{ PravegaEvent, PravegaReaderGroupManager, ReaderSettings, WriterSettings }
 import io.pravega.client.ClientConfig
 import io.pravega.client.stream.ReaderGroup
 

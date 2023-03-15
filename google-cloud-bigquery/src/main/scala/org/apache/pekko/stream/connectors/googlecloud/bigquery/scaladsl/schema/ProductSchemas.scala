@@ -13,12 +13,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.Record
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
-  TableFieldSchema,
-  TableFieldSchemaMode,
-  TableSchema
-}
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.Record
+import pekko.stream.connectors.googlecloud.bigquery.model.{ TableFieldSchema, TableFieldSchemaMode, TableSchema }
 import spray.json.{ AdditionalFormats, ProductFormats, StandardFormats }
 
 import scala.collection.immutable.Seq

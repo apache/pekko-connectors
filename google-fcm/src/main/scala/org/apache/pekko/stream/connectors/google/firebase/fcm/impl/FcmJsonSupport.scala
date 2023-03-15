@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.impl
 
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.stream.connectors.google.firebase.fcm.{ FcmErrorResponse, FcmResponse, FcmSuccessResponse }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmNotification
-import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmNotificationModels._
+import org.apache.pekko
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.stream.connectors.google.firebase.fcm.{ FcmErrorResponse, FcmResponse, FcmSuccessResponse }
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.google.firebase.fcm.FcmNotification
+import pekko.stream.connectors.google.firebase.fcm.FcmNotificationModels._
 import spray.json._
 
 /**

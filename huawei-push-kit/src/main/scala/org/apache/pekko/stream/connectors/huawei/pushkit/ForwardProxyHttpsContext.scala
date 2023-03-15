@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 
 import java.io.FileInputStream
 import java.security.KeyStore

@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.ironmq._
-import org.apache.pekko.stream.connectors.ironmq.impl.IronMqPullStage
-import org.apache.pekko.stream.scaladsl._
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.ironmq._
+import pekko.stream.connectors.ironmq.impl.IronMqPullStage
+import pekko.stream.scaladsl._
 
 object IronMqConsumer {
 

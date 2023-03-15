@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.model.HttpMethods.POST
-import org.apache.pekko.http.scaladsl.model.{ FormData, HttpRequest }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.google.http.GoogleHttp
-import org.apache.pekko.stream.connectors.google.{ implicits, RequestSettings }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.model.HttpMethods.POST
+import pekko.http.scaladsl.model.{ FormData, HttpRequest }
+import pekko.stream.Materializer
+import pekko.stream.connectors.google.http.GoogleHttp
+import pekko.stream.connectors.google.{ implicits, RequestSettings }
 import pdi.jwt.JwtAlgorithm.RS256
 import pdi.jwt.{ JwtClaim, JwtSprayJson }
 import spray.json.DefaultJsonProtocol._

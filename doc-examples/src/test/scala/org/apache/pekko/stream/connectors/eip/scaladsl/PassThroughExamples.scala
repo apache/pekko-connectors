@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.eip.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.kafka.scaladsl.Consumer.DrainingControl
-import org.apache.pekko.kafka.scaladsl.{ Committer, Consumer }
-import org.apache.pekko.kafka.{ CommitterSettings, ConsumerMessage, ConsumerSettings, Subscriptions }
-import org.apache.pekko.stream.scaladsl._
-import org.apache.pekko.stream.{ FlowShape, Graph }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.kafka.scaladsl.Consumer.DrainingControl
+import pekko.kafka.scaladsl.{ Committer, Consumer }
+import pekko.kafka.{ CommitterSettings, ConsumerMessage, ConsumerSettings, Subscriptions }
+import pekko.stream.scaladsl._
+import pekko.stream.{ FlowShape, Graph }
 import org.apache.kafka.common.serialization.{ ByteArrayDeserializer, StringDeserializer }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures

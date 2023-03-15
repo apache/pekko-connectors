@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.influxdb.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.influxdb.{ impl, InfluxDbWriteMessage, InfluxDbWriteResult }
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.influxdb.{ impl, InfluxDbWriteMessage, InfluxDbWriteResult }
+import pekko.stream.scaladsl.Flow
 import org.influxdb.InfluxDB
 import org.influxdb.dto.Point
 

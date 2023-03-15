@@ -14,13 +14,14 @@
 package org.apache.pekko.stream.connectors.couchbase.impl
 
 import java.util.concurrent.TimeUnit
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteSettings
-import org.apache.pekko.stream.connectors.couchbase.javadsl
-import org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.couchbase.CouchbaseWriteSettings
+import pekko.stream.connectors.couchbase.javadsl
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import pekko.stream.scaladsl.Source
+import pekko.{ Done, NotUsed }
 import com.couchbase.client.java.bucket.AsyncBucketManager
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }

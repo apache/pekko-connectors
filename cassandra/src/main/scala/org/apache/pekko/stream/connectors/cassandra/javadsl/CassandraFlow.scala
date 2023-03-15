@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.cassandra.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings
-import org.apache.pekko.stream.connectors.cassandra.scaladsl
-import org.apache.pekko.stream.javadsl.{ Flow, FlowWithContext }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.cassandra.CassandraWriteSettings
+import pekko.stream.connectors.cassandra.scaladsl
+import pekko.stream.javadsl.{ Flow, FlowWithContext }
 import com.datastax.oss.driver.api.core.cql.{ BoundStatement, PreparedStatement }
 
 /**
@@ -37,7 +38,7 @@ object CassandraFlow {
   def create[T](session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: org.apache.pekko.japi.Function2[T, PreparedStatement, BoundStatement]): Flow[T, T, NotUsed] =
+      statementBinder: pekko.japi.Function2[T, PreparedStatement, BoundStatement]): Flow[T, T, NotUsed] =
     scaladsl.CassandraFlow
       .create(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
         session.delegate)
@@ -58,7 +59,7 @@ object CassandraFlow {
       session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: org.apache.pekko.japi.Function2[T, PreparedStatement, BoundStatement])
+      statementBinder: pekko.japi.Function2[T, PreparedStatement, BoundStatement])
       : FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
     scaladsl.CassandraFlow
       .withContext(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
@@ -91,7 +92,7 @@ object CassandraFlow {
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: (T, PreparedStatement) => BoundStatement,
-      groupingKey: org.apache.pekko.japi.Function[T, K]): Flow[T, T, NotUsed] = {
+      groupingKey: pekko.japi.Function[T, K]): Flow[T, T, NotUsed] = {
     scaladsl.CassandraFlow
       .createBatch(writeSettings,
         cqlStatement,

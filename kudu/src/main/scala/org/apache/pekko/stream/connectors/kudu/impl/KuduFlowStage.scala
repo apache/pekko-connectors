@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.kudu.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.kudu.KuduTableSettings
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.kudu.KuduTableSettings
+import pekko.stream.stage._
 import org.apache.kudu.Schema
 import org.apache.kudu.Type._
 import org.apache.kudu.client.{ KuduClient, KuduTable, PartialRow }

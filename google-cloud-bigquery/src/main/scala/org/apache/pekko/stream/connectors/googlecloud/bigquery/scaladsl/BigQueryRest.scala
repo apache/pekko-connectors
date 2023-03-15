@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
-import org.apache.pekko.stream.connectors.google.scaladsl.Google
-import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.Done
+import pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
+import pekko.stream.connectors.google.scaladsl.Google
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import pekko.stream.scaladsl.Source
 
 import scala.concurrent.Future
 

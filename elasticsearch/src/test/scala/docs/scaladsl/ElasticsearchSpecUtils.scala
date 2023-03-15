@@ -13,12 +13,13 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.HttpExt
-import org.apache.pekko.http.scaladsl.model.Uri.Path
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
-import org.apache.pekko.stream.connectors.elasticsearch.scaladsl.ElasticsearchSource
-import org.apache.pekko.stream.connectors.elasticsearch.{
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.HttpExt
+import pekko.http.scaladsl.model.Uri.Path
+import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
+import pekko.stream.connectors.elasticsearch.scaladsl.ElasticsearchSource
+import pekko.stream.connectors.elasticsearch.{
   ApiVersionBase,
   ElasticsearchConnectionSettings,
   ElasticsearchParams,
@@ -26,7 +27,7 @@ import org.apache.pekko.stream.connectors.elasticsearch.{
   OpensearchParams,
   SourceSettingsBase
 }
-import org.apache.pekko.stream.scaladsl.Sink
+import pekko.stream.scaladsl.Sink
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -94,9 +95,9 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
   def constructElasticsearchParams(indexName: String,
       typeName: String,
       apiVersion: ApiVersionBase): ElasticsearchParams = {
-    if (apiVersion == org.apache.pekko.stream.connectors.elasticsearch.ApiVersion.V5) {
+    if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V5) {
       ElasticsearchParams.V5(indexName, typeName)
-    } else if (apiVersion == org.apache.pekko.stream.connectors.elasticsearch.ApiVersion.V7) {
+    } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V7) {
       ElasticsearchParams.V7(indexName)
     } else if (apiVersion == OpensearchApiVersion.V1) {
       OpensearchParams.V1(indexName)

@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.s3.impl
 
 import java.security.MessageDigest
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 
 package object auth {
 

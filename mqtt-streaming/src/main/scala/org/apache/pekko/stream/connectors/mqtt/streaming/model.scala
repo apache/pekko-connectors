@@ -17,11 +17,12 @@ import java.nio.charset.StandardCharsets
 import java.util.{ NoSuchElementException, Optional }
 import java.util.concurrent.{ CompletionStage, ForkJoinPool, TimeUnit }
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.japi.{ Pair => AkkaPair }
-import org.apache.pekko.stream.connectors.mqtt.streaming.Connect.ProtocolLevel
-import org.apache.pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.japi.{ Pair => AkkaPair }
+import pekko.stream.connectors.mqtt.streaming.Connect.ProtocolLevel
+import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._

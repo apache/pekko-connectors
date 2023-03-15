@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.ftp.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.ftp.RemoteFileSettings
-import org.apache.pekko.stream.stage.{ GraphStageLogic, OutHandler }
-import org.apache.pekko.stream.Attributes
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.ftp.RemoteFileSettings
+import pekko.stream.stage.{ GraphStageLogic, OutHandler }
+import pekko.stream.Attributes
 
 @InternalApi
 private[ftp] trait FtpDirectoryOperationsGraphStage[FtpClient, S <: RemoteFileSettings]

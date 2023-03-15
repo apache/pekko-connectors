@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSettings
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.{ FcmNotification, FcmResponse }
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.stream.connectors.google.GoogleAttributes
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.Http
+import pekko.stream.connectors.google.firebase.fcm.FcmSettings
+import pekko.stream.connectors.google.firebase.fcm.v1.models.{ FcmNotification, FcmResponse }
+import pekko.stream.scaladsl.Flow
+import pekko.stream.connectors.google.GoogleAttributes
 
 import scala.concurrent.Future
 

@@ -17,13 +17,14 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.{ Arrays, Optional }
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.solr._
-import org.apache.pekko.stream.connectors.solr.scaladsl.{ SolrFlow, SolrSink, SolrSource }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.solr._
+import pekko.stream.connectors.solr.scaladsl.{ SolrFlow, SolrSink, SolrSource }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.TestKit
 import org.apache.solr.client.solrj.embedded.JettyConfig
 import org.apache.solr.client.solrj.impl.{ CloudSolrClient, ZkClientClusterStateProvider }
 import org.apache.solr.client.solrj.io.stream.expr.{ StreamExpressionParser, StreamFactory }

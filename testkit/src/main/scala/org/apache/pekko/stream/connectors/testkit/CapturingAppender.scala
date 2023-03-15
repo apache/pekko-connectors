@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.testkit
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase
 import org.slf4j.LoggerFactory
@@ -55,8 +56,8 @@ import org.slf4j.LoggerFactory
  * the captured logging events are flushed to the appenders defined for the
  * org.apache.pekko.actor.testkit.typed.internal.CapturingAppenderDelegate logger.
  *
- * The flushing on test failure is handled by [[org.apache.pekko.actor.testkit.typed.scaladsl.LogCapturing]]
- * for ScalaTest and [[org.apache.pekko.actor.testkit.typed.javadsl.LogCapturing]] for JUnit.
+ * The flushing on test failure is handled by [[pekko.actor.testkit.typed.scaladsl.LogCapturing]]
+ * for ScalaTest and [[pekko.actor.testkit.typed.javadsl.LogCapturing]] for JUnit.
  *
  * Use configuration like the following the logback-test.xml:
  *

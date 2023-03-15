@@ -13,16 +13,17 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings
-import org.apache.pekko.stream.connectors.influxdb.scaladsl.InfluxDbSource
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.influxdb.InfluxDbReadSettings
+import pekko.stream.connectors.influxdb.scaladsl.InfluxDbSource
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Sink
+import pekko.testkit.TestKit
 import org.influxdb.{ InfluxDB, InfluxDBException }
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import docs.javadsl.TestUtils._
 import org.influxdb.dto.Query
 import org.scalatest.matchers.must.Matchers

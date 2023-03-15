@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl
 
 import java.time.Duration
 import java.util.concurrent.{ CompletableFuture, CompletionStage }
-import org.apache.pekko.actor.Cancellable
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.stream.javadsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.Cancellable
+import pekko.stream.{ Attributes, Materializer }
+import pekko.stream.javadsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1._
 
 /**

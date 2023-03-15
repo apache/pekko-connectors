@@ -14,12 +14,13 @@
 package docs.scaladsl
 
 import java.nio.file.Paths
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption }
-import org.apache.pekko.stream.connectors.s3.scaladsl.{ S3, S3ClientIntegrationSpec, S3WireMockBase }
-import org.apache.pekko.stream.connectors.s3._
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption }
+import pekko.stream.connectors.s3.scaladsl.{ S3, S3ClientIntegrationSpec, S3WireMockBase }
+import pekko.stream.connectors.s3._
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.util.ByteString
 import com.github.tomakehurst.wiremock.client.WireMock.{
   headRequestedFor,
   postRequestedFor,

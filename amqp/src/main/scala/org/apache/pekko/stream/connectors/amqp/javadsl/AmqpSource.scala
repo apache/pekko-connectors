@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.amqp.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.amqp.{ AmqpSourceSettings, ReadResult }
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.amqp.{ AmqpSourceSettings, ReadResult }
+import pekko.stream.javadsl.Source
 
 object AmqpSource {
 
@@ -24,7 +25,7 @@ object AmqpSource {
    * before it is emitted downstream.
    */
   def atMostOnceSource(settings: AmqpSourceSettings, bufferSize: Int): Source[ReadResult, NotUsed] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpSource
+    pekko.stream.connectors.amqp.scaladsl.AmqpSource
       .atMostOnceSource(settings, bufferSize)
       .asJava
 
@@ -40,7 +41,7 @@ object AmqpSource {
    * Compared to auto-commit, this gives exact control over when a message is considered consumed.
    */
   def committableSource(settings: AmqpSourceSettings, bufferSize: Int): Source[CommittableReadResult, NotUsed] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpSource
+    pekko.stream.connectors.amqp.scaladsl.AmqpSource
       .committableSource(settings, bufferSize)
       .map(cm => new CommittableReadResult(cm))
       .asJava

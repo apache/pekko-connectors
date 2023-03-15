@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl
 
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSettings
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models._
-import org.apache.pekko.stream.{ javadsl, scaladsl }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.japi.Pair
+import pekko.stream.connectors.google.firebase.fcm.FcmSettings
+import pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows
+import pekko.stream.connectors.google.firebase.fcm.v1.models._
+import pekko.stream.{ javadsl, scaladsl }
+import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 

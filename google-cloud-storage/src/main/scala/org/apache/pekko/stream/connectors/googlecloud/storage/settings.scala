@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
 
 import java.util.Objects
@@ -49,7 +50,7 @@ object GCSSettings {
   def apply()(implicit system: ClassicActorSystemProvider): GCSSettings = apply(system.classicSystem)
 
   /**
-   * Scala API: Creates [[GCSSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Scala API: Creates [[GCSSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def apply(system: ActorSystem): GCSSettings = apply(system.settings.config.getConfig(ConfigPath))
 
@@ -59,7 +60,7 @@ object GCSSettings {
   def create(system: ClassicActorSystemProvider): GCSSettings = apply(system.classicSystem)
 
   /**
-   * Java API: Creates [[GCSSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Java API: Creates [[GCSSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def create(system: ActorSystem): GCSSettings = apply(system)
 }

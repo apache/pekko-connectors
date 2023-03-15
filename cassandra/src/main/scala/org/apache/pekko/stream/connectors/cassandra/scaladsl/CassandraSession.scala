@@ -13,18 +13,15 @@
 
 package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
-import org.apache.pekko.actor.NoSerializationVerificationNeeded
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.LoggingAdapter
-import org.apache.pekko.stream.connectors.cassandra.{
-  CassandraMetricsRegistry,
-  CassandraServerMetaData,
-  CqlSessionProvider
-}
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
-import org.apache.pekko.util.OptionVal
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.NoSerializationVerificationNeeded
+import pekko.annotation.InternalApi
+import pekko.event.LoggingAdapter
+import pekko.stream.connectors.cassandra.{ CassandraMetricsRegistry, CassandraServerMetaData, CqlSessionProvider }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.util.OptionVal
+import pekko.{ Done, NotUsed }
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql._
 import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException
@@ -46,7 +43,7 @@ import scala.util.control.NonFatal
  *
  * All methods are non-blocking.
  */
-final class CassandraSession(system: org.apache.pekko.actor.ActorSystem,
+final class CassandraSession(system: pekko.actor.ActorSystem,
     sessionProvider: CqlSessionProvider,
     executionContext: ExecutionContext,
     log: LoggingAdapter,

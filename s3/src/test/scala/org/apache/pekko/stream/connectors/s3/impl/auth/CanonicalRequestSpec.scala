@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.s3.impl.auth
 
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.model.headers._
+import org.apache.pekko
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.model.headers._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

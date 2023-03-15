@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.HttpExt
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.model.headers.BasicHttpCredentials
-import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.HttpExt
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.model.headers.BasicHttpCredentials
+import pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings
 
 import scala.concurrent.Future
 

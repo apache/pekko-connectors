@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.amqp.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.amqp._
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.amqp._
 
 import scala.compat.java8.FutureConverters._
 
@@ -29,8 +30,8 @@ object AmqpFlowWithContext {
    */
   def create[T](
       settings: AmqpWriteSettings)
-      : org.apache.pekko.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpFlowWithContext
+      : pekko.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpFlowWithContext
       .apply(settings)
       .mapMaterializedValue(_.toJava)
       .asJava
@@ -46,8 +47,8 @@ object AmqpFlowWithContext {
    */
   def createWithConfirm[T](
       settings: AmqpWriteSettings)
-      : org.apache.pekko.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpFlowWithContext
+      : pekko.stream.javadsl.FlowWithContext[WriteMessage, T, WriteResult, T, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpFlowWithContext
       .withConfirm(settings)
       .mapMaterializedValue(_.toJava)
       .asJava

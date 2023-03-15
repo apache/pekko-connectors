@@ -15,12 +15,13 @@ package org.apache.pekko.stream.connectors.ironmq.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.ironmq._
-import org.apache.pekko.stream.javadsl.{ Flow, Sink }
-import org.apache.pekko.stream.scaladsl.{ Flow => ScalaFlow, Keep }
-import org.apache.pekko.stream.connectors.ironmq.scaladsl.{ IronMqProducer => ScalaIronMqProducer }
+import org.apache.pekko
+import pekko.japi.Pair
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.ironmq._
+import pekko.stream.javadsl.{ Flow, Sink }
+import pekko.stream.scaladsl.{ Flow => ScalaFlow, Keep }
+import pekko.stream.connectors.ironmq.scaladsl.{ IronMqProducer => ScalaIronMqProducer }
 
 import scala.compat.java8.FutureConverters
 

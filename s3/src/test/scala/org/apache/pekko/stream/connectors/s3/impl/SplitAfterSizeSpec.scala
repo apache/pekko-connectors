@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.s3.impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Flow, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike

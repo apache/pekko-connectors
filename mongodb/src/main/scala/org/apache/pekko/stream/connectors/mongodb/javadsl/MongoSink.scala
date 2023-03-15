@@ -15,16 +15,17 @@ package org.apache.pekko.stream.connectors.mongodb.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
-import org.apache.pekko.stream.connectors.mongodb.scaladsl.MongoFlow.{
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
+import pekko.stream.connectors.mongodb.scaladsl.MongoFlow.{
   DefaultDeleteOptions,
   DefaultInsertManyOptions,
   DefaultInsertOneOptions,
   DefaultReplaceOptions,
   DefaultUpdateOptions
 }
-import org.apache.pekko.stream.javadsl.{ Keep, Sink }
+import pekko.stream.javadsl.{ Keep, Sink }
 import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.conversions.Bson
@@ -32,7 +33,7 @@ import org.bson.conversions.Bson
 object MongoSink {
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will insert documents into a collection.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will insert documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    */
@@ -40,7 +41,7 @@ object MongoSink {
     insertOne(collection, DefaultInsertOneOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will insert documents into a collection.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will insert documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    * @param options options to apply to the operation
@@ -49,7 +50,7 @@ object MongoSink {
     MongoFlow.insertOne(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will insert batches of documents into a collection.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will insert batches of documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    */
@@ -57,7 +58,7 @@ object MongoSink {
     insertMany(collection, DefaultInsertManyOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will insert batches of documents into a collection.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will insert batches of documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    * @param options options to apply to the operation
@@ -67,7 +68,7 @@ object MongoSink {
     MongoFlow.insertMany(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will update documents as defined by a [[org.apache.pekko.stream.connectors.mongodb.DocumentUpdate]].
+   * A [[pekko.stream.javadsl.Sink Sink]] that will update documents as defined by a [[pekko.stream.connectors.mongodb.DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    */
@@ -75,7 +76,7 @@ object MongoSink {
     updateOne(collection, DefaultUpdateOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will update documents as defined by a [[org.apache.pekko.stream.connectors.mongodb.DocumentUpdate]].
+   * A [[pekko.stream.javadsl.Sink Sink]] that will update documents as defined by a [[pekko.stream.connectors.mongodb.DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -85,7 +86,7 @@ object MongoSink {
     MongoFlow.updateOne(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will update many documents as defined by a [[DocumentUpdate]].
+   * A [[pekko.stream.javadsl.Sink Sink]] that will update many documents as defined by a [[DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    */
@@ -93,7 +94,7 @@ object MongoSink {
     updateMany(collection, DefaultUpdateOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will update many documents as defined by a [[DocumentUpdate]].
+   * A [[pekko.stream.javadsl.Sink Sink]] that will update many documents as defined by a [[DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -103,7 +104,7 @@ object MongoSink {
     MongoFlow.updateMany(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    */
@@ -111,7 +112,7 @@ object MongoSink {
     deleteOne(collection, DefaultDeleteOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -120,7 +121,7 @@ object MongoSink {
     MongoFlow.deleteOne(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    */
@@ -128,7 +129,7 @@ object MongoSink {
     deleteMany(collection, DefaultDeleteOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.javadsl.Sink Sink]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -137,7 +138,7 @@ object MongoSink {
     MongoFlow.deleteMany(collection, options).toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will replace document as defined by a [[org.apache.pekko.stream.connectors.mongodb.DocumentReplace]].
+   * A [[pekko.stream.javadsl.Sink Sink]] that will replace document as defined by a [[pekko.stream.connectors.mongodb.DocumentReplace]].
    *
    * @param collection the mongo db collection to update.
    */
@@ -145,7 +146,7 @@ object MongoSink {
     replaceOne(collection, DefaultReplaceOptions)
 
   /**
-   * A [[org.apache.pekko.stream.javadsl.Sink Sink]] that will replace document as defined by a [[org.apache.pekko.stream.connectors.mongodb.DocumentReplace]].
+   * A [[pekko.stream.javadsl.Sink Sink]] that will replace document as defined by a [[pekko.stream.connectors.mongodb.DocumentReplace]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation

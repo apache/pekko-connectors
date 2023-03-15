@@ -14,11 +14,12 @@
 package org.apache.pekko.stream.connectors.couchbase.impl
 
 import java.util.concurrent.atomic.AtomicReference
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings
-import org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import com.couchbase.client.java.AsyncCluster
 
 import scala.annotation.tailrec

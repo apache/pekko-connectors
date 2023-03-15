@@ -13,11 +13,12 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.connectors.xml.scaladsl.XmlParsing
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.connectors.xml.scaladsl.XmlParsing
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.util.ByteString
 import docs.javadsl.XmlHelper
 import org.scalatest.BeforeAndAfterAll
 

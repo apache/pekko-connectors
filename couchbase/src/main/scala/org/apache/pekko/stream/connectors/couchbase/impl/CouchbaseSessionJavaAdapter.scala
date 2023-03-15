@@ -16,13 +16,14 @@ package org.apache.pekko.stream.connectors.couchbase.impl
 import java.time.Duration
 import java.util.Optional
 import java.util.concurrent.CompletionStage
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteSettings
-import org.apache.pekko.stream.connectors.couchbase.javadsl
-import org.apache.pekko.stream.connectors.couchbase.scaladsl
-import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.couchbase.CouchbaseWriteSettings
+import pekko.stream.connectors.couchbase.javadsl
+import pekko.stream.connectors.couchbase.scaladsl
+import pekko.stream.javadsl.Source
+import pekko.{ Done, NotUsed }
 import com.couchbase.client.java.AsyncBucket
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }
@@ -95,10 +96,10 @@ private[couchbase] final class CouchbaseSessionJavaAdapter(delegate: scaladsl.Co
   override def remove(id: String, writeSettings: CouchbaseWriteSettings): CompletionStage[Done] =
     delegate.remove(id, writeSettings).toJava
 
-  override def streamedQuery(query: N1qlQuery): Source[JsonObject, _root_.org.apache.pekko.NotUsed] =
+  override def streamedQuery(query: N1qlQuery): Source[JsonObject, pekko.NotUsed] =
     delegate.streamedQuery(query).asJava
 
-  override def streamedQuery(query: Statement): Source[JsonObject, _root_.org.apache.pekko.NotUsed] =
+  override def streamedQuery(query: Statement): Source[JsonObject, pekko.NotUsed] =
     delegate.streamedQuery(query).asJava
 
   override def singleResponseQuery(query: Statement): CompletionStage[Optional[JsonObject]] =

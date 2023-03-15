@@ -15,12 +15,13 @@ package docs.scaladsl
 
 import java.nio.file.Paths
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.IOResult
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.IOResult
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -47,8 +48,9 @@ class CharsetCodingFlowsDoc
       // #encoding
       import java.nio.charset.StandardCharsets
 
-      import org.apache.pekko.stream.connectors.text.scaladsl.TextFlow
-      import org.apache.pekko.stream.scaladsl.FileIO
+      import org.apache.pekko
+      import pekko.stream.connectors.text.scaladsl.TextFlow
+      import pekko.stream.scaladsl.FileIO
 
       // #encoding
       import scala.jdk.CollectionConverters._
@@ -105,8 +107,9 @@ class CharsetCodingFlowsDoc
       // #transcoding
       import java.nio.charset.StandardCharsets
 
-      import org.apache.pekko.stream.connectors.text.scaladsl.TextFlow
-      import org.apache.pekko.stream.scaladsl.FileIO
+      import org.apache.pekko
+      import pekko.stream.connectors.text.scaladsl.TextFlow
+      import pekko.stream.scaladsl.FileIO
 
       // #transcoding
       val utf16bytes = ByteString("äåûßêëé", StandardCharsets.UTF_16)

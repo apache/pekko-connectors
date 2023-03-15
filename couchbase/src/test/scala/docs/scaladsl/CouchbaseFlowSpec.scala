@@ -13,18 +13,19 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.couchbase.{
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.couchbase.{
   CouchbaseDeleteFailure,
   CouchbaseDeleteResult,
   CouchbaseWriteFailure,
   CouchbaseWriteResult,
   CouchbaseWriteSettings
 }
-import org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
-import org.apache.pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, TestObject }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
+import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, TestObject }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
 import com.couchbase.client.java.error.DocumentDoesNotExistException
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest._
@@ -33,7 +34,7 @@ import org.scalatest._
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 //#write-settings
 
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit._
+import pekko.stream.testkit.scaladsl.StreamTestKit._
 import com.couchbase.client.java.document.{ BinaryDocument, RawJsonDocument, StringDocument }
 
 import scala.collection.immutable

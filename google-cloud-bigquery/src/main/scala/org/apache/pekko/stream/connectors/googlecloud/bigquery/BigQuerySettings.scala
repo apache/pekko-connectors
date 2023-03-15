@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.util.JavaDurationConverters._
 import com.typesafe.config.Config
 
 import java.time
@@ -41,7 +42,7 @@ object BigQuerySettings {
   def apply()(implicit system: ClassicActorSystemProvider, dummy: DummyImplicit): BigQuerySettings = apply(system)
 
   /**
-   * Scala API: Creates [[BigQuerySettings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Scala API: Creates [[BigQuerySettings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def apply(system: ClassicActorSystemProvider): BigQuerySettings = BigQueryExt(system.classicSystem).settings
 

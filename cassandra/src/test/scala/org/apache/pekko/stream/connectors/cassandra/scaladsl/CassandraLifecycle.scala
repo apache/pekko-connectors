@@ -16,8 +16,9 @@ package org.apache.pekko.stream.connectors.cassandra.scaladsl
 import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.Done
-import org.apache.pekko.testkit.TestKitBase
+import org.apache.pekko
+import pekko.Done
+import pekko.testkit.TestKitBase
 import com.datastax.oss.driver.api.core.cql._
 import org.scalatest._
 import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }

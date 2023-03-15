@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.google.scaladsl
 
-import org.apache.pekko.http.javadsl.{ model => jm }
-import org.apache.pekko.http.scaladsl.model.headers.{ ModeledCustomHeader, ModeledCustomHeaderCompanion }
-import org.apache.pekko.http.scaladsl.model.{ ContentType, ErrorInfo, IllegalHeaderException }
-import org.apache.pekko.stream.connectors.google.javadsl.XUploadContentType
+import org.apache.pekko
+import pekko.http.javadsl.{ model => jm }
+import pekko.http.scaladsl.model.headers.{ ModeledCustomHeader, ModeledCustomHeaderCompanion }
+import pekko.http.scaladsl.model.{ ContentType, ErrorInfo, IllegalHeaderException }
+import pekko.stream.connectors.google.javadsl.XUploadContentType
 
 import scala.util.{ Failure, Success, Try }
 

@@ -13,15 +13,16 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.connectors.unixdomainsocket.UnixSocketAddress
-import org.apache.pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.stream.{ Materializer, OverflowStrategy }
-import org.apache.pekko.testkit._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.connectors.unixdomainsocket.UnixSocketAddress
+import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.{ Materializer, OverflowStrategy }
+import pekko.testkit._
+import pekko.util.ByteString
 import org.scalatest._
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers

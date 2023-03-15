@@ -15,14 +15,15 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub
 
 import java.time.Instant
 import java.util.Base64
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.HttpExt
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.impl.PubSubApi
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.scaladsl.GooglePubSub
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.HttpExt
+import pekko.stream.connectors.googlecloud.pubsub.impl.PubSubApi
+import pekko.stream.connectors.googlecloud.pubsub.scaladsl.GooglePubSub
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
+import pekko.testkit.TestKit
+import pekko.{ Done, NotUsed }
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures

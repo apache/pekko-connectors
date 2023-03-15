@@ -12,10 +12,12 @@
  */
 
 package org.apache.pekko.stream.connectors.jms
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms.impl.InternalConnectionState
-import org.apache.pekko.stream.scaladsl.Source
+
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms.impl.InternalConnectionState
+import pekko.stream.scaladsl.Source
 
 import scala.util.{ Failure, Success }
 

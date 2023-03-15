@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch
 
-import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings
-import org.apache.pekko.stream.connectors.elasticsearch.RetryLogic
+import org.apache.pekko
+import pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings
+import pekko.stream.connectors.elasticsearch.RetryLogic
 
 /**
  * Configure Elasticsearch/OpenSearch sinks and flows.

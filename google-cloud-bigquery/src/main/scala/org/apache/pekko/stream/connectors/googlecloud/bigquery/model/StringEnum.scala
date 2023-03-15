@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.model
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
 import spray.json.{ deserializationError, JsString, JsValue, JsonFormat }
 
 import scala.reflect.ClassTag

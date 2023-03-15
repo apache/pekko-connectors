@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.mqtt.streaming.impl
 
-import org.apache.pekko.actor.typed.scaladsl.{ ActorContext, Behaviors }
-import org.apache.pekko.actor.typed.{ Behavior, Signal }
+import org.apache.pekko
+import pekko.actor.typed.scaladsl.{ ActorContext, Behaviors }
+import pekko.actor.typed.{ Behavior, Signal }
 
 import scala.collection.immutable.Seq
 

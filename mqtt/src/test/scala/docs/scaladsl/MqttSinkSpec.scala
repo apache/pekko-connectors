@@ -13,12 +13,13 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mqtt
-import org.apache.pekko.stream.connectors.mqtt._
-import org.apache.pekko.stream.connectors.mqtt.scaladsl.{ MqttSink, MqttSource }
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.mqtt
+import pekko.stream.connectors.mqtt._
+import pekko.stream.connectors.mqtt.scaladsl.{ MqttSink, MqttSource }
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.util.ByteString
 import org.eclipse.paho.client.mqttv3.{ MqttException, MqttSecurityException }
 
 import scala.concurrent.Await

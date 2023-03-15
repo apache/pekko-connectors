@@ -13,17 +13,18 @@
 
 package org.apache.pekko.stream.connectors.google.http
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.Http.HostConnectionPool
-import org.apache.pekko.http.scaladsl.model.headers.Authorization
-import org.apache.pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal }
-import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
-import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, RequestSettings, RetrySettings }
-import org.apache.pekko.stream.connectors.google.util.Retry
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.Http.HostConnectionPool
+import pekko.http.scaladsl.model.headers.Authorization
+import pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
+import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal }
+import pekko.http.scaladsl.{ Http, HttpExt }
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, RequestSettings, RetrySettings }
+import pekko.stream.connectors.google.util.Retry
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
 
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
@@ -60,7 +61,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
 
   /**
    * Sends a single [[HttpRequest]] and returns the [[Unmarshal]]led response.
-   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[org.apache.pekko.stream.connectors.google.util.Retry]].
+   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[pekko.stream.connectors.google.util.Retry]].
    */
   def singleRequest[T](request: HttpRequest)(
       implicit settings: RequestSettings,
@@ -70,7 +71,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
 
   /**
    * Adds an Authorization header and sends a single [[HttpRequest]] and returns the [[Unmarshal]]led response.
-   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[org.apache.pekko.stream.connectors.google.util.Retry]].
+   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[pekko.stream.connectors.google.util.Retry]].
    */
   def singleAuthenticatedRequest[T](request: HttpRequest)(
       implicit settings: GoogleSettings,
@@ -82,7 +83,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
   /**
    * Creates a cached host connection pool that sends requests and emits the [[Unmarshal]]led response.
    * If `authenticate = true` adds an Authorization header to each request.
-   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[org.apache.pekko.stream.connectors.google.util.Retry]].
+   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[pekko.stream.connectors.google.util.Retry]].
    */
   def cachedHostConnectionPool[T: FromResponseUnmarshaller](
       host: String,
@@ -99,7 +100,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
   /**
    * Creates a cached host connection pool that sends requests and emits the [[Unmarshal]]led response.
    * If `authenticate = true` adds an Authorization header to each request.
-   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[org.apache.pekko.stream.connectors.google.util.Retry]].
+   * Retries the request if the [[FromResponseUnmarshaller]] throws a [[pekko.stream.connectors.google.util.Retry]].
    */
   def cachedHostConnectionPoolWithContext[T: FromResponseUnmarshaller, Ctx](
       host: String,

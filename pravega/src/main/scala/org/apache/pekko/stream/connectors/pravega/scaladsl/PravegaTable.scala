@@ -13,15 +13,16 @@
 
 package org.apache.pekko.stream.connectors.pravega.scaladsl
 
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.pravega.impl.{ PravegaTableSource, PravegaTableWriteFlow }
-import org.apache.pekko.stream.connectors.pravega.{ TableReaderSettings, TableSettings, TableWriterSettings }
+import org.apache.pekko
+import pekko.annotation.ApiMayChange
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.pravega.impl.{ PravegaTableSource, PravegaTableWriteFlow }
+import pekko.stream.connectors.pravega.{ TableReaderSettings, TableSettings, TableWriterSettings }
 
 import scala.concurrent.Future
-import org.apache.pekko.stream.connectors.pravega.impl.PravegaTableReadFlow
-import org.apache.pekko.stream.connectors.pravega.TableEntry
+import pekko.stream.connectors.pravega.impl.PravegaTableReadFlow
+import pekko.stream.connectors.pravega.TableEntry
 
 @ApiMayChange
 object PravegaTable {

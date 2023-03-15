@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl
 
-import org.apache.pekko.actor.{
+import org.apache.pekko
+import pekko.actor.{
   ActorSystem,
   ClassicActorSystemProvider,
   ExtendedActorSystem,
@@ -21,10 +22,10 @@ import org.apache.pekko.actor.{
   ExtensionId,
   ExtensionIdProvider
 }
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.impl.PekkoGrpcSettings
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
+import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.PekkoGrpcSettings
 import com.google.pubsub.v1.pubsub.{ PublisherClient => ScalaPublisherClient }
 
 /**
@@ -79,7 +80,7 @@ object GrpcPublisherExt extends ExtensionId[GrpcPublisherExt] with ExtensionIdPr
   /**
    * Access to the extension from the classic actors API.
    */
-  override def apply(system: org.apache.pekko.actor.ActorSystem): GrpcPublisherExt = super.apply(system)
+  override def apply(system: pekko.actor.ActorSystem): GrpcPublisherExt = super.apply(system)
 
   /**
    * Java API

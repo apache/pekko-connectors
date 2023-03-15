@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.kinesis
 
 import java.time.Instant
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
 import software.amazon.kinesis.exceptions.ShutdownException
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.retrieval.KinesisClientRecord
@@ -86,7 +87,7 @@ object CommittableRecord {
     Ordering[(String, Long)].on(cr => (cr.sequenceNumber, cr.subSequenceNumber))
 
   /**
-   * See [[org.apache.pekko.stream.connectors.kinesis.impl.ShardProcessor]]
+   * See [[pekko.stream.connectors.kinesis.impl.ShardProcessor]]
    */
   final class ShardProcessorData(
       val shardId: String,
@@ -94,7 +95,7 @@ object CommittableRecord {
       val pendingCheckpointSequenceNumber: ExtendedSequenceNumber)
 
   /**
-   * See [[org.apache.pekko.stream.connectors.kinesis.impl.ShardProcessor]]
+   * See [[pekko.stream.connectors.kinesis.impl.ShardProcessor]]
    */
   final class BatchData(
       val cacheEntryTime: Instant,

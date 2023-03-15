@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

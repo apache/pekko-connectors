@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.kinesis.impl
 
 import java.util.concurrent.Semaphore
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.kinesis.CommittableRecord
-import org.apache.pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.kinesis.CommittableRecord
+import pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.lifecycle.events._
 import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }

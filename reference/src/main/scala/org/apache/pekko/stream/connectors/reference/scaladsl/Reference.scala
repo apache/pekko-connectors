@@ -13,16 +13,17 @@
 
 package org.apache.pekko.stream.connectors.reference.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.reference.impl.{
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.Attributes
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.reference.impl.{
   ReferenceFlowStage,
   ReferenceSourceStage,
   ReferenceWithResourceFlowStage
 }
-import org.apache.pekko.stream.connectors.reference._
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
+import pekko.stream.connectors.reference._
+import pekko.stream.scaladsl.{ Flow, Source }
 
 import scala.concurrent.{ ExecutionContext, Future }
 

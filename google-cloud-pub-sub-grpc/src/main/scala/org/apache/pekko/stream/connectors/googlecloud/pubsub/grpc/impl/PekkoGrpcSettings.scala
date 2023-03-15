@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.grpc.GrpcClientSettings
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.grpc.GrpcClientSettings
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
 import com.typesafe.config.ConfigFactory
 import io.grpc.auth.MoreCallCredentials
 

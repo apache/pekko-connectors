@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.s3.impl
 
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.stream.connectors.s3.{ MetaHeaders, S3Headers }
-import org.apache.pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
+import org.apache.pekko
+import pekko.http.scaladsl.model.headers.RawHeader
+import pekko.stream.connectors.s3.{ MetaHeaders, S3Headers }
+import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

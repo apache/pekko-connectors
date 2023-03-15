@@ -14,9 +14,10 @@
 package org.apache.pekko.stream.connectors.ftp
 package impl
 
-import org.apache.pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
-import org.apache.pekko.stream.stage.{ GraphStageWithMaterializedValue, InHandler, OutHandler }
-import org.apache.pekko.stream.{
+import org.apache.pekko
+import pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
+import pekko.stream.stage.{ GraphStageWithMaterializedValue, InHandler, OutHandler }
+import pekko.stream.{
   Attributes,
   IOOperationIncompleteException,
   IOResult,
@@ -26,12 +27,12 @@ import org.apache.pekko.stream.{
   SinkShape,
   SourceShape
 }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.util.ByteString.ByteString1C
+import pekko.util.ByteString
+import pekko.util.ByteString.ByteString1C
 
 import scala.concurrent.{ Future, Promise }
 import java.io.{ IOException, InputStream, OutputStream }
-import org.apache.pekko.annotation.InternalApi
+import pekko.annotation.InternalApi
 
 import scala.util.control.NonFatal
 

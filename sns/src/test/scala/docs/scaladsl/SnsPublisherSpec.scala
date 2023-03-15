@@ -13,11 +13,12 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.sns.IntegrationTestContext
-import org.apache.pekko.stream.connectors.sns.scaladsl.SnsPublisher
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.sns.IntegrationTestContext
+import pekko.stream.connectors.sns.scaladsl.SnsPublisher
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

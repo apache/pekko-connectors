@@ -17,14 +17,15 @@ import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.Files
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.file.DirectoryChange
-import org.apache.pekko.stream.connectors.file.scaladsl.{ DirectoryChangesSource, FileTailSource }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.file.DirectoryChange
+import pekko.stream.connectors.file.scaladsl.{ DirectoryChangesSource, FileTailSource }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.testkit.TestKit
 import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll

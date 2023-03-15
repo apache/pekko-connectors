@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.hdfs.impl.writer
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.hdfs.FilePathGenerator
-import org.apache.pekko.stream.connectors.hdfs.impl.writer.HdfsWriter._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.hdfs.FilePathGenerator
+import pekko.stream.connectors.hdfs.impl.writer.HdfsWriter._
 import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.io.SequenceFile.{ CompressionType, Writer }
 import org.apache.hadoop.io.compress.CompressionCodec

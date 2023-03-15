@@ -13,18 +13,19 @@
 
 package org.apache.pekko.stream.connectors.s3.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.scaladsl.SubFlow
-import org.apache.pekko.stream.stage.GraphStage
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.stream.FlowShape
-import org.apache.pekko.stream.Inlet
-import org.apache.pekko.stream.Outlet
-import org.apache.pekko.stream.stage.GraphStageLogic
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.stage.OutHandler
-import org.apache.pekko.stream.stage.InHandler
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.scaladsl.SubFlow
+import pekko.stream.stage.GraphStage
+import pekko.util.ByteString
+import pekko.stream.FlowShape
+import pekko.stream.Inlet
+import pekko.stream.Outlet
+import pekko.stream.stage.GraphStageLogic
+import pekko.stream.Attributes
+import pekko.stream.stage.OutHandler
+import pekko.stream.stage.InHandler
+import pekko.stream.scaladsl.Flow
 
 import scala.annotation.tailrec
 

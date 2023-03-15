@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
 
 import scala.collection.mutable
 import scala.ref.SoftReference

@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.kudu.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.stream.connectors.kudu.KuduTableSettings
-import org.apache.pekko.stream.javadsl.{ Flow, Keep, Sink }
-import org.apache.pekko.stream.connectors.kudu.scaladsl
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.kudu.KuduTableSettings
+import pekko.stream.javadsl.{ Flow, Keep, Sink }
+import pekko.stream.connectors.kudu.scaladsl
+import pekko.{ Done, NotUsed }
 
 /**
  * Java API

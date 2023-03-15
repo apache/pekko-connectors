@@ -13,12 +13,13 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.avroparquet.scaladsl.AvroParquetSink
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.avroparquet.scaladsl.AvroParquetSink
+import pekko.stream.scaladsl.Source
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.testkit.TestKit
 import com.sksamuel.avro4s.{ Record, RecordFormat }
 import org.scalatest.concurrent.ScalaFutures
 import org.apache.avro.generic.GenericRecord

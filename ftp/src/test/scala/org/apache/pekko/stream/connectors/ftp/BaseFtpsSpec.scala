@@ -12,13 +12,15 @@
  */
 
 package org.apache.pekko.stream.connectors.ftp
+
 import java.net.InetAddress
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.IOResult
-import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftps
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.IOResult
+import pekko.stream.connectors.ftp.scaladsl.Ftps
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.util.ByteString
 
 import scala.concurrent.Future
 

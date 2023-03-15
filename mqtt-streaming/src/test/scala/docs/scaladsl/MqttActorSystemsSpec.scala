@@ -13,14 +13,15 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.apache.pekko.stream.connectors.mqtt.streaming.MqttSessionSettings
-import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession }
+import org.apache.pekko
+import pekko.actor.typed.scaladsl.Behaviors
+import pekko.stream.connectors.mqtt.streaming.MqttSessionSettings
+import pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession }
 import org.scalatest.wordspec.AnyWordSpec
 
 class MqttTypedActorSystemSpec extends AnyWordSpec {
 
-  implicit val actorSystem = org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "MqttTypedActorSystemSpec")
+  implicit val actorSystem = pekko.actor.typed.ActorSystem(Behaviors.ignore, "MqttTypedActorSystemSpec")
 
   "A typed actor system" should {
     "allow client creation" in {
@@ -40,7 +41,7 @@ class MqttTypedActorSystemSpec extends AnyWordSpec {
 
 class MqttClassicActorSystemSpec extends AnyWordSpec {
 
-  implicit val actorSystem = org.apache.pekko.actor.ActorSystem("MqttClassicActorSystemSpec")
+  implicit val actorSystem = pekko.actor.ActorSystem("MqttClassicActorSystemSpec")
 
   "A typed actor system" should {
     "allow client creation" in {

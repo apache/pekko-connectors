@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.mqtt
 
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.util.JavaDurationConverters._
 import org.eclipse.paho.client.mqttv3.{ MqttClientPersistence, MqttConnectOptions }
 
 import scala.jdk.CollectionConverters._
@@ -105,7 +106,7 @@ final class MqttSubscriptions private (
     new MqttSubscriptions(subscriptions)
 
   /** Java API */
-  def withSubscriptions(subscriptions: java.util.List[org.apache.pekko.japi.Pair[String, MqttQoS]]): MqttSubscriptions =
+  def withSubscriptions(subscriptions: java.util.List[pekko.japi.Pair[String, MqttQoS]]): MqttSubscriptions =
     new MqttSubscriptions(subscriptions.asScala.map(_.toScala).toMap)
 
   /** Add this subscription to the map of subscriptions configured already. */
@@ -132,7 +133,7 @@ object MqttSubscriptions {
     new MqttSubscriptions(Map(subscription))
 
   /** Java API */
-  def create(subscriptions: java.util.List[org.apache.pekko.japi.Pair[String, MqttQoS]]): MqttSubscriptions =
+  def create(subscriptions: java.util.List[pekko.japi.Pair[String, MqttQoS]]): MqttSubscriptions =
     new MqttSubscriptions(subscriptions.asScala.map(_.toScala).toMap)
 
   /** Java API */

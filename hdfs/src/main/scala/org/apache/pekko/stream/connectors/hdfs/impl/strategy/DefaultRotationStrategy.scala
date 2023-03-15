@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.hdfs.impl.strategy
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.hdfs.RotationStrategy
-import org.apache.pekko.stream.connectors.hdfs.impl.HdfsFlowLogic
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.hdfs.RotationStrategy
+import pekko.stream.connectors.hdfs.impl.HdfsFlowLogic
 
 import scala.concurrent.duration.FiniteDuration
 

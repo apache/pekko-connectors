@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.mongodb.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.javadsl.Source
 import org.reactivestreams.Publisher
 
 object MongoSource {

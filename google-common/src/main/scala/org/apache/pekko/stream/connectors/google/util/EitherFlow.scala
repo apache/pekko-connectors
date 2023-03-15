@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.google.util
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.FlowShape
-import org.apache.pekko.stream.scaladsl.{ Flow, GraphDSL, Keep, Merge, Partition }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.FlowShape
+import pekko.stream.scaladsl.{ Flow, GraphDSL, Keep, Merge, Partition }
 
 @InternalApi
 private[google] object EitherFlow {

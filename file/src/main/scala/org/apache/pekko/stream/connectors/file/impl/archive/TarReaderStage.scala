@@ -14,14 +14,15 @@
 package org.apache.pekko.stream.connectors.file.impl.archive
 
 import java.util.concurrent.TimeUnit
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.ActorAttributes.StreamSubscriptionTimeout
-import org.apache.pekko.stream.connectors.file.{ TarArchiveMetadata, TarReaderException }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.stream._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.ActorAttributes.StreamSubscriptionTimeout
+import pekko.stream.connectors.file.{ TarArchiveMetadata, TarReaderException }
+import pekko.stream.scaladsl.Source
+import pekko.stream.stage._
+import pekko.stream._
+import pekko.util.ByteString
 
 import scala.concurrent.duration.FiniteDuration
 

@@ -15,14 +15,15 @@ package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import java.net.ConnectException
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.scaladsl.{ GraphDSL, Keep, Merge, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.{ TestPublisher, TestSubscriber }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream._
+import pekko.stream.connectors.amqp._
+import pekko.stream.scaladsl.{ GraphDSL, Keep, Merge, Sink, Source }
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.{ TestPublisher, TestSubscriber }
+import pekko.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.AuthenticationFailureException
 

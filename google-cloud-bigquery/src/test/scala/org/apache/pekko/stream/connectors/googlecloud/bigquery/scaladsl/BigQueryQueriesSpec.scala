@@ -14,15 +14,16 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
 import _root_.spray.json._
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import org.apache.pekko.stream.connectors.google.auth.NoCredentials
-import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobReference
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, HoverflySupport }
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import pekko.stream.connectors.google.auth.NoCredentials
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import pekko.stream.connectors.googlecloud.bigquery.model.JobReference
+import pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse
+import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, HoverflySupport }
+import pekko.stream.scaladsl.Sink
+import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.service
 import io.specto.hoverfly.junit.dsl.ResponseCreators.success

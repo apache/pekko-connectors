@@ -12,9 +12,11 @@
  */
 
 package org.apache.pekko.stream.connectors.google.auth
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.headers.OAuth2BearerToken
-import org.apache.pekko.stream.connectors.google.RequestSettings
+
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.headers.OAuth2BearerToken
+import pekko.stream.connectors.google.RequestSettings
 import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 

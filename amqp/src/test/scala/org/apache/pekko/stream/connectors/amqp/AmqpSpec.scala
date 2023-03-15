@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.amqp
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers

@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.geode.impl.stage
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.SourceShape
-import org.apache.pekko.stream.stage.{ AsyncCallback, GraphStageLogic }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.SourceShape
+import pekko.stream.stage.{ AsyncCallback, GraphStageLogic }
 import org.apache.geode.cache.client.ClientCache
 
 import scala.util.{ Failure, Success, Try }

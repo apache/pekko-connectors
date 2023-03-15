@@ -16,13 +16,14 @@ package org.apache.pekko.stream.connectors.udp.javadsl
 import java.net.InetSocketAddress
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.io.Inet.SocketOption
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.stream.connectors.udp.Datagram
-import org.apache.pekko.stream.javadsl.{ Flow, Sink }
-import org.apache.pekko.stream.connectors.udp.scaladsl
-import org.apache.pekko.util.ccompat.JavaConverters._
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.io.Inet.SocketOption
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.stream.connectors.udp.Datagram
+import pekko.stream.javadsl.{ Flow, Sink }
+import pekko.stream.connectors.udp.scaladsl
+import pekko.util.ccompat.JavaConverters._
 
 import scala.compat.java8.FutureConverters._
 

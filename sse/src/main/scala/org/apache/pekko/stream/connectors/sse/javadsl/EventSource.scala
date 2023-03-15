@@ -14,17 +14,18 @@
 package org.apache.pekko.stream.connectors.sse
 package javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.http.javadsl.model.{ HttpRequest, HttpResponse, Uri }
-import org.apache.pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.http.javadsl.model.sse.ServerSentEvent
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.http.javadsl.model.{ HttpRequest, HttpResponse, Uri }
+import pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
+import pekko.stream.Materializer
+import pekko.stream.javadsl.Source
+import pekko.http.javadsl.model.sse.ServerSentEvent
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 import java.util.function.{ Function => JFunction }
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
+import pekko.actor.ClassicActorSystemProvider
 
 import scala.compat.java8.FutureConverters
 import scala.compat.java8.OptionConverters

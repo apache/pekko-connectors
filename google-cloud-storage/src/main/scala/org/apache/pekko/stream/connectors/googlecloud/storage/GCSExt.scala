@@ -13,13 +13,8 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 
 /**
  * Manages one [[GCSSettings]] per `ActorSystem`.
@@ -38,7 +33,7 @@ object GCSExt extends ExtensionId[GCSExt] with ExtensionIdProvider {
    * Java API.
    * Get the GCS extension with the classic actors API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): GCSExt = super.apply(system)
+  override def get(system: pekko.actor.ActorSystem): GCSExt = super.apply(system)
 
   /**
    * Java API.

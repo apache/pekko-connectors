@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.file.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.file.{ scaladsl, ArchiveMetadata, TarArchiveMetadata, ZipArchiveMetadata }
-import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.stream.connectors.file.impl.archive.{ TarReaderStage, ZipSource }
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.file.{ scaladsl, ArchiveMetadata, TarArchiveMetadata, ZipArchiveMetadata }
+import pekko.stream.javadsl.Flow
+import pekko.util.ByteString
+import pekko.japi.Pair
+import pekko.stream.connectors.file.impl.archive.{ TarReaderStage, ZipSource }
+import pekko.stream.javadsl.Source
 
 import java.io.File
 import java.nio.charset.{ Charset, StandardCharsets }
@@ -84,7 +85,7 @@ object Archive {
           Pair(metadata, source.asJava)
       })
 
-  private def func[T, R](f: T => R) = new org.apache.pekko.japi.function.Function[T, R] {
+  private def func[T, R](f: T => R) = new pekko.japi.function.Function[T, R] {
     override def apply(param: T): R = f(param)
   }
 }

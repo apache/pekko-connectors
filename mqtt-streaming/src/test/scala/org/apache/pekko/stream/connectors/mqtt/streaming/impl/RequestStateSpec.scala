@@ -14,9 +14,10 @@
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package impl
 
-import org.apache.pekko.actor.testkit.typed.scaladsl.ActorTestKit
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.testkit.typed.scaladsl.ActorTestKit
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 

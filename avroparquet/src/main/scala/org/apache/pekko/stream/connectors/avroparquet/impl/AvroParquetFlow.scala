@@ -12,9 +12,11 @@
  */
 
 package org.apache.pekko.stream.connectors.avroparquet.impl
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetWriter
 

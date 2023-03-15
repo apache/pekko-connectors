@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.influxdb.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings
-import org.apache.pekko.stream.connectors.influxdb.impl.{ InfluxDbRawSourceStage, InfluxDbSourceStage }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.influxdb.InfluxDbReadSettings
+import pekko.stream.connectors.influxdb.impl.{ InfluxDbRawSourceStage, InfluxDbSourceStage }
+import pekko.stream.scaladsl.Source
 import org.influxdb.InfluxDB
 import org.influxdb.dto.{ Query, QueryResult }
 
@@ -30,7 +31,7 @@ import org.influxdb.dto.{ Query, QueryResult }
 object InfluxDbSource {
 
   /**
-   * Scala API: creates an [[org.apache.pekko.stream.connectors.influxdb.impl.InfluxDbRawSourceStage]] from a given statement.
+   * Scala API: creates an [[pekko.stream.connectors.influxdb.impl.InfluxDbRawSourceStage]] from a given statement.
    */
   def apply(influxDB: InfluxDB, query: Query): Source[QueryResult, NotUsed] =
     Source.fromGraph(new InfluxDbRawSourceStage(query, influxDB))

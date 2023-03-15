@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.kinesisfirehose.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
-import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
+import pekko.stream.scaladsl.Sink
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 import software.amazon.awssdk.services.firehose.model.Record
 

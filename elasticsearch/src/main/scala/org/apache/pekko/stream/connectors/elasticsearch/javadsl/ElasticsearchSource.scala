@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
-import org.apache.pekko.stream.connectors.elasticsearch.{ impl, _ }
-import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.stream.{ Attributes, Materializer }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.{ Http, HttpExt }
+import pekko.stream.connectors.elasticsearch.{ impl, _ }
+import pekko.stream.javadsl.Source
+import pekko.stream.{ Attributes, Materializer }
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.{ ArrayNode, NumericNode }
 
@@ -31,7 +32,7 @@ import scala.concurrent.ExecutionContext
 object ElasticsearchSource {
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
    * Using default objectMapper
    */
   def create(elasticsearchParams: ElasticsearchParams,
@@ -40,7 +41,7 @@ object ElasticsearchSource {
     create(elasticsearchParams, query, settings, new ObjectMapper())
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
    * Using custom objectMapper
    */
   def create(elasticsearchParams: ElasticsearchParams,
@@ -66,7 +67,7 @@ object ElasticsearchSource {
       .mapMaterializedValue(_ => NotUsed)
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
    * Using custom objectMapper.
    *
    * Example of searchParams-usage:
@@ -97,7 +98,7 @@ object ElasticsearchSource {
       .mapMaterializedValue(_ => NotUsed)
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
    * Using default objectMapper
    */
   def typed[T](elasticsearchParams: ElasticsearchParams,
@@ -107,7 +108,7 @@ object ElasticsearchSource {
     typed[T](elasticsearchParams, query, settings, clazz, new ObjectMapper())
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
    * Using custom objectMapper
    */
   def typed[T](elasticsearchParams: ElasticsearchParams,
@@ -133,7 +134,7 @@ object ElasticsearchSource {
       .mapMaterializedValue(_ => NotUsed)
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
    * Using custom objectMapper
    *
    * Example of searchParams-usage:

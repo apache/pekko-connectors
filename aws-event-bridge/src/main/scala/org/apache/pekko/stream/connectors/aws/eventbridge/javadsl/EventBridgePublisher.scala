@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.aws.eventbridge.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings
-import org.apache.pekko.stream.javadsl.{ Flow, Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings
+import pekko.stream.javadsl.{ Flow, Keep, Sink }
+import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient
 import software.amazon.awssdk.services.eventbridge.model._
 
@@ -28,72 +29,72 @@ import software.amazon.awssdk.services.eventbridge.model._
 object EventBridgePublisher {
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
    *
-   * @param settings [[org.apache.pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
+   * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def flow(settings: EventBridgePublishSettings,
       eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequestEntry, PutEventsResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.flow(settings)(
+    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.flow(settings)(
       eventBridgeClient).asJava
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def flow(eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequestEntry, PutEventsResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
+    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
       .flow(EventBridgePublishSettings())(eventBridgeClient)
       .asJava
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
    *
-   * @param settings [[org.apache.pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
+   * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def flowSeq(
       settings: EventBridgePublishSettings,
       eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequestEntry, PutEventsResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.flow(settings)(
+    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.flow(settings)(
       eventBridgeClient).asJava
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def flowSeq(
       eventBridgeClient: EventBridgeAsyncClient): Flow[Seq[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
+    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
       .flowSeq(EventBridgePublishSettings())(eventBridgeClient)
       .asJava
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
    *
-   * @param settings [[org.apache.pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
+   * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def publishFlow(settings: EventBridgePublishSettings,
       eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.publishFlow(settings)(
+    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.publishFlow(settings)(
       eventBridgeClient).asJava
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish a message to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish a message to an EventBridge.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def publishFlow(eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
+    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
       .publishFlow(EventBridgePublishSettings())(eventBridgeClient)
       .asJava
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish a message to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Sink Sink]] to publish a message to an EventBridge.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
@@ -102,9 +103,9 @@ object EventBridgePublisher {
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish a message to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Sink Sink]] to publish a message to an EventBridge.
    *
-   * @param settings [[org.apache.pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
+   * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def sink(settings: EventBridgePublishSettings,
@@ -113,9 +114,9 @@ object EventBridgePublisher {
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Sink Sink]] to publish messages to an EventBridge.
    *
-   * @param settings [[org.apache.pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
+   * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
   def publishSink(settings: EventBridgePublishSettings,
@@ -124,7 +125,7 @@ object EventBridgePublisher {
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
-   * Creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Sink Sink]] to publish messages to an EventBridge.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */

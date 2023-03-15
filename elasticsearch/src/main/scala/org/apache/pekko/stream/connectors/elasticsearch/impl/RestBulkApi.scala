@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.elasticsearch.Operation.{ Create, Delete, Index, Nop, Update, Upsert }
-import org.apache.pekko.stream.connectors.elasticsearch.{ WriteMessage, WriteResult }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.elasticsearch.Operation.{ Create, Delete, Index, Nop, Update, Upsert }
+import pekko.stream.connectors.elasticsearch.{ WriteMessage, WriteResult }
 import spray.json._
 
 import scala.collection.immutable

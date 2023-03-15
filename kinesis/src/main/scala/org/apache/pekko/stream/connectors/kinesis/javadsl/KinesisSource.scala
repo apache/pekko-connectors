@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.kinesis.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesis.{ scaladsl, ShardSettings }
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesis.{ scaladsl, ShardSettings }
+import pekko.stream.javadsl.Source
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.Record
 

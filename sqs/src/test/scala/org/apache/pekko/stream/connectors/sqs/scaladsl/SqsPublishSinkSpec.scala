@@ -17,11 +17,12 @@ import java.util.UUID
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
 import java.util.function.Supplier
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.sqs._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Keep
-import org.apache.pekko.stream.testkit.scaladsl.TestSource
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.sqs._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Keep
+import pekko.stream.testkit.scaladsl.TestSource
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.flatspec.AnyFlatSpec

@@ -15,15 +15,16 @@ package org.apache.pekko.stream.connectors.csv.impl
 
 import java.nio.charset.UnsupportedCharsetException
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.csv.MalformedCsvException
-import org.apache.pekko.stream.connectors.csv.scaladsl.ByteOrderMark
-import org.apache.pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.csv.MalformedCsvException
+import pekko.stream.connectors.csv.scaladsl.ByteOrderMark
+import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
 
 import scala.collection.mutable
 
 /**
- * INTERNAL API: Use [[org.apache.pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.
+ * INTERNAL API: Use [[pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.
  */
 @InternalApi private[csv] object CsvParser {
 
@@ -44,7 +45,7 @@ import scala.collection.mutable
 }
 
 /**
- * INTERNAL API: Use [[org.apache.pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.
+ * INTERNAL API: Use [[pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.
  */
 @InternalApi private[csv] final class CsvParser(delimiter: Byte,
     quoteChar: Byte,
@@ -80,7 +81,7 @@ import scala.collection.mutable
    * Perf:
    * We need to track this in order to call [[dropReadBuffer()]] after each field instead of each line.
    * We want to call [[dropReadBuffer()]] ASAP to convert [[buffer]] from a
-   * [[org.apache.pekko.util.ByteString.ByteStrings]] to a [[org.apache.pekko.util.ByteString.ByteString1]]
+   * [[pekko.util.ByteString.ByteStrings]] to a [[pekko.util.ByteString.ByteString1]]
    * to exploit the much faster [[ByteString.slice()]] implementation.
    */
   private[this] var lineBytesDropped = 0
@@ -109,7 +110,7 @@ import scala.collection.mutable
    * Current iterator being parsed.
    *
    * Previous implementation indexed into [[buffer.apply()]] for each byte,
-   * which is slow against [[org.apache.pekko.util.ByteString.ByteStrings]].
+   * which is slow against [[pekko.util.ByteString.ByteStrings]].
    *
    * We fully parse each chunk before getting the next, so we only need to track one [[ByteIterator]] at a time.
    */

@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.sqs.scaladsl
 
 import java.util.concurrent.CompletableFuture
 
-import org.apache.pekko.stream.connectors.sqs.SqsSourceSettings
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
+import org.apache.pekko
+import pekko.stream.connectors.sqs.SqsSourceSettings
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.testkit.scaladsl.TestSink
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.{ atMost => atMostTimes, _ }
 import org.mockito.invocation.InvocationOnMock
@@ -74,7 +75,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
     when(sqsClient.receiveMessage(any[ReceiveMessageRequest]))
       .thenAnswer(new Answer[CompletableFuture[ReceiveMessageResponse]] {
         def answer(invocation: InvocationOnMock) =
-          org.apache.pekko.pattern
+          pekko.pattern
             .after(timeout, system.scheduler) {
               Future.successful(
                 ReceiveMessageResponse
@@ -115,7 +116,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
           requestsCounter += 1
 
           if (requestsCounter > firstWithDataCount && requestsCounter <= firstWithDataCount + thenEmptyCount) {
-            org.apache.pekko.pattern
+            pekko.pattern
               .after(timeout, system.scheduler) {
                 Future.successful(
                   ReceiveMessageResponse

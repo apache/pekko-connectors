@@ -13,15 +13,16 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.couchbase.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.couchbase.{
   scaladsl,
   CouchbaseDeleteResult,
   CouchbaseSessionSettings,
   CouchbaseWriteResult,
   CouchbaseWriteSettings
 }
-import org.apache.pekko.stream.javadsl.Flow
+import pekko.stream.javadsl.Flow
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 
 /**

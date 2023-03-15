@@ -18,11 +18,12 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ CountDownLatch, LinkedBlockingQueue, ThreadLocalRandom, TimeUnit }
 
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.scaladsl._
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream._
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.scaladsl._
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 import javax.jms._
 
 import org.apache.activemq.command.ActiveMQQueue

@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.reference.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.stream.connectors.reference.{ ReferenceWriteMessage, ReferenceWriteResult }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.stream.connectors.reference.{ ReferenceWriteMessage, ReferenceWriteResult }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 /**
  * INTERNAL API

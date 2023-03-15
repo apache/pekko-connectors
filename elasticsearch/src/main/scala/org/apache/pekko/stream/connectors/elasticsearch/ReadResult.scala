@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
 
 import scala.compat.java8.OptionConverters._
 
@@ -21,7 +22,7 @@ import scala.compat.java8.OptionConverters._
  * Stream element type emitted by Elasticsearch sources.
  *
  * The constructor is INTERNAL API, but you may construct instances for testing by using
- * [[org.apache.pekko.stream.connectors.elasticsearch.testkit.MessageFactory]].
+ * [[pekko.stream.connectors.elasticsearch.testkit.MessageFactory]].
  */
 final class ReadResult[T] @InternalApi private[elasticsearch] (val id: String,
     val source: T,

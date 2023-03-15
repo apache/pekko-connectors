@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.amqp.impl
-import org.apache.pekko.stream.connectors.amqp.{ AmqpSourceSettings, ReadResult }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.amqp.impl
+import pekko.stream.connectors.amqp.{ AmqpSourceSettings, ReadResult }
+import pekko.stream.scaladsl.Source
 
 object AmqpSource {
   private implicit val executionContext = ExecutionContexts.parasitic

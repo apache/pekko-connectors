@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.elasticsearch.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.stream.connectors.elasticsearch._
-import org.apache.pekko.stream.javadsl._
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.elasticsearch._
+import pekko.stream.javadsl._
+import pekko.{ Done, NotUsed }
 import com.fasterxml.jackson.databind.ObjectMapper
 
 /**
@@ -26,13 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 object ElasticsearchSink {
 
   /**
-   * Create a sink to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
+   * Create a sink to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
    */
   def create[T](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper)
-      : org.apache.pekko.stream.javadsl.Sink[WriteMessage[T, NotUsed], CompletionStage[Done]] =
+      objectMapper: ObjectMapper): pekko.stream.javadsl.Sink[WriteMessage[T, NotUsed], CompletionStage[Done]] =
     ElasticsearchFlow
       .create(elasticsearchParams, settings, objectMapper)
       .toMat(Sink.ignore[WriteResult[T, NotUsed]](), Keep.right[NotUsed, CompletionStage[Done]])

@@ -13,16 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.javadsl
 
-import org.apache.pekko.actor.Cancellable
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.scaladsl.{ GooglePubSub => GPubSub }
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.{
-  AcknowledgeRequest,
-  PubSubConfig,
-  PublishRequest,
-  ReceivedMessage
-}
-import org.apache.pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.Cancellable
+import pekko.stream.connectors.googlecloud.pubsub.scaladsl.{ GooglePubSub => GPubSub }
+import pekko.stream.connectors.googlecloud.pubsub.{ AcknowledgeRequest, PubSubConfig, PublishRequest, ReceivedMessage }
+import pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
+import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 import scala.compat.java8.FutureConverters._

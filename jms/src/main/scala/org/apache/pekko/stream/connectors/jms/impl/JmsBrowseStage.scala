@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms.{ Destination, JmsBrowseSettings }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms.{ Destination, JmsBrowseSettings }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import javax.jms
 
 /**

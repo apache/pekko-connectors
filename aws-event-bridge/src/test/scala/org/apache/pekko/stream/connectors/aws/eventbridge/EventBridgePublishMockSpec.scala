@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.aws.eventbridge
 
 import java.util.concurrent.CompletableFuture
 
-import org.apache.pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
-import org.apache.pekko.stream.testkit.scaladsl.TestSource
+import org.apache.pekko
+import pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
+import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.stream.testkit.scaladsl.TestSource
 import org.mockito.ArgumentMatchers.{ any, eq => meq }
 import org.mockito.Mockito._
 import org.scalatest.flatspec._

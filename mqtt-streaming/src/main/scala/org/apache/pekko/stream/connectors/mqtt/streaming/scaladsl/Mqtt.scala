@@ -14,11 +14,12 @@
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.{ Attributes, BidiShape, Inlet, Outlet }
-import org.apache.pekko.stream.scaladsl.BidiFlow
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.{ Attributes, BidiShape, Inlet, Outlet }
+import pekko.stream.scaladsl.BidiFlow
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.util.ByteString
 
 object Mqtt {
 

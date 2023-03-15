@@ -14,9 +14,10 @@
 package docs.scaladsl
 import java.nio.ByteOrder
 
-import org.apache.pekko.stream.connectors.mqtt.streaming._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.util.{ ByteString, ByteStringBuilder }
+import org.apache.pekko
+import pekko.stream.connectors.mqtt.streaming._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.util.{ ByteString, ByteStringBuilder }
 
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers

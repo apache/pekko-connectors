@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.kinesis.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesis.{ scaladsl, CommittableRecord, _ }
-import org.apache.pekko.stream.javadsl.{ Flow, Sink, Source, SubSource }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesis.{ scaladsl, CommittableRecord, _ }
+import pekko.stream.javadsl.{ Flow, Sink, Source, SubSource }
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 import software.amazon.kinesis.retrieval.KinesisClientRecord

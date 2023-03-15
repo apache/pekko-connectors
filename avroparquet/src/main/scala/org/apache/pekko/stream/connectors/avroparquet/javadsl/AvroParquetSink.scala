@@ -14,8 +14,9 @@
 package org.apache.pekko.stream.connectors.avroparquet.javadsl
 
 import java.util.concurrent.CompletionStage
-import org.apache.pekko.stream.javadsl.{ Flow, Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.javadsl.{ Flow, Keep, Sink }
+import pekko.{ Done, NotUsed }
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetWriter
 
@@ -23,7 +24,7 @@ object AvroParquetSink {
 
   def create[T <: GenericRecord](writer: ParquetWriter[T]): Sink[T, CompletionStage[Done]] =
     Flow
-      .fromGraph(new org.apache.pekko.stream.connectors.avroparquet.impl.AvroParquetFlow(writer: ParquetWriter[T]))
+      .fromGraph(new pekko.stream.connectors.avroparquet.impl.AvroParquetFlow(writer: ParquetWriter[T]))
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
 }

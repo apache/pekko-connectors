@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.kudu.scaladsl
 
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.stream.connectors.kudu.{ KuduAttributes, KuduClientExt, KuduTableSettings }
-import org.apache.pekko.stream.connectors.kudu.impl.KuduFlowStage
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.{ Attributes, Materializer }
+import pekko.stream.connectors.kudu.{ KuduAttributes, KuduClientExt, KuduTableSettings }
+import pekko.stream.connectors.kudu.impl.KuduFlowStage
+import pekko.stream.scaladsl.{ Flow, Keep, Sink }
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

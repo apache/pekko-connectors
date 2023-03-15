@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.ironmq.impl
 
-import org.apache.pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko
+import pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

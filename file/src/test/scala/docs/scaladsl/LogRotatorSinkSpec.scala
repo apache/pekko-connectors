@@ -16,17 +16,18 @@ package docs.scaladsl
 import java.nio.file._
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.{ Attributes, Inlet, SinkShape }
-import org.apache.pekko.stream.connectors.file.scaladsl.LogRotatorSink
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Compression, FileIO, Flow, Keep, Sink, Source }
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.TestSource
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.{ Attributes, Inlet, SinkShape }
+import pekko.stream.connectors.file.scaladsl.LogRotatorSink
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Compression, FileIO, Flow, Keep, Sink, Source }
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.TestSource
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll

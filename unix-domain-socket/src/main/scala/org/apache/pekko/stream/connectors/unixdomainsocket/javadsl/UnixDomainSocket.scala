@@ -20,17 +20,12 @@ import java.util.concurrent.CompletionStage
 
 import scala.compat.java8.OptionConverters._
 import scala.compat.java8.FutureConverters._
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
-import org.apache.pekko.stream.javadsl.{ Flow, Source }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.stream.javadsl.{ Flow, Source }
+import pekko.stream.Materializer
+import pekko.util.ByteString
 
 import scala.concurrent.duration.Duration
 
@@ -42,13 +37,13 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
   final class ServerBinding private[pekko] (delegate: scaladsl.UnixDomainSocket.ServerBinding) {
 
     /**
-     * The local address of the endpoint bound by the materialization of the `connections` [[org.apache.pekko.stream.javadsl.Source Source]].
+     * The local address of the endpoint bound by the materialization of the `connections` [[pekko.stream.javadsl.Source Source]].
      */
     def localAddress: UnixSocketAddress = delegate.localAddress
 
     /**
      * Asynchronously triggers the unbinding of the port that was bound by the materialization of the `connections`
-     * [[org.apache.pekko.stream.javadsl.Source Source]].
+     * [[pekko.stream.javadsl.Source Source]].
      *
      * The produced [[java.util.concurrent.CompletionStage]] is fulfilled when the unbinding has been completed.
      */
@@ -105,7 +100,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
   /**
    * Get the UnixDomainSocket extension with the classic actors API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): UnixDomainSocket = super.apply(system)
+  override def get(system: pekko.actor.ActorSystem): UnixDomainSocket = super.apply(system)
 
   /**
    * Get the UnixDomainSocket extension with the new actors API.
@@ -119,9 +114,9 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
     new UnixDomainSocket(system)
 }
 
-final class UnixDomainSocket(system: ExtendedActorSystem) extends org.apache.pekko.actor.Extension {
+final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Extension {
   import UnixDomainSocket._
-  import org.apache.pekko.dispatch.ExecutionContexts.parasitic
+  import pekko.dispatch.ExecutionContexts.parasitic
 
   private lazy val delegate: scaladsl.UnixDomainSocket = scaladsl.UnixDomainSocket.apply(system)
 
@@ -129,7 +124,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends org.apache.pek
    * Creates a [[UnixDomainSocket.ServerBinding]] instance which represents a prospective UnixDomainSocket server binding on the given `endpoint`.
    *
    * Please note that the startup of the server is asynchronous, i.e. after materializing the enclosing
-   * [[org.apache.pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the materialized future
+   * [[pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the materialized future
    * completes is the server ready to accept client connections.
    *
    * TODO: Support idleTimeout as per Tcp.
@@ -158,7 +153,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends org.apache.pek
    * It represents a prospective UnixDomainSocket server binding on the given `endpoint`.
    *
    * Please note that the startup of the server is asynchronous, i.e. after materializing the enclosing
-   * [[org.apache.pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the materialized future
+   * [[pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the materialized future
    * completes is the server ready to accept client connections.
    */
   def bind(path: Path): Source[IncomingConnection, CompletionStage[ServerBinding]] =
@@ -173,7 +168,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends org.apache.pek
    *
    * Note that the ByteString chunk boundaries are not retained across the network,
    * to achieve application level chunks you have to introduce explicit framing in your streams,
-   * for example using the [[org.apache.pekko.stream.javadsl.Framing]] stages.
+   * for example using the [[pekko.stream.javadsl.Framing]] stages.
    *
    * TODO: Support idleTimeout as per Tcp.
    *
@@ -206,7 +201,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends org.apache.pek
    *
    * Note that the ByteString chunk boundaries are not retained across the network,
    * to achieve application level chunks you have to introduce explicit framing in your streams,
-   * for example using the [[org.apache.pekko.stream.javadsl.Framing]] stages.
+   * for example using the [[pekko.stream.javadsl.Framing]] stages.
    */
   def outgoingConnection(path: Path): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
     Flow.fromGraph(

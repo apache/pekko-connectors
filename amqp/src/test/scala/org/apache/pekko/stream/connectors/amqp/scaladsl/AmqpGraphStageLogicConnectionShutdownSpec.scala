@@ -16,18 +16,19 @@ package org.apache.pekko.stream.connectors.amqp.scaladsl
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.amqp.{
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.amqp.{
   AmqpCachedConnectionProvider,
   AmqpConnectionFactoryConnectionProvider,
   AmqpProxyConnection,
   AmqpWriteSettings,
   QueueDeclaration
 }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Source
+import pekko.util.ByteString
 import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, ShutdownListener }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach

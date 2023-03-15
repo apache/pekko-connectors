@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit.javadsl
 
-import org.apache.pekko.stream.connectors.huawei.pushkit._
-import org.apache.pekko.stream.connectors.huawei.pushkit.impl.PushKitFlows
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.{ PushKitNotification, Response }
-import org.apache.pekko.stream.javadsl
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.huawei.pushkit._
+import pekko.stream.connectors.huawei.pushkit.impl.PushKitFlows
+import pekko.stream.connectors.huawei.pushkit.models.{ PushKitNotification, Response }
+import pekko.stream.javadsl
+import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 

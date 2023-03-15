@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.orientdb.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.orientdb._
-import org.apache.pekko.stream.connectors.orientdb.impl.OrientDbFlowStage
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.orientdb._
+import pekko.stream.connectors.orientdb.impl.OrientDbFlowStage
+import pekko.stream.scaladsl.Flow
 import com.orientechnologies.orient.core.record.impl.ODocument
 import scala.collection.immutable
 

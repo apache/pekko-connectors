@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch
 
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
-import org.apache.pekko.http.scaladsl.model.HttpHeader
-import org.apache.pekko.http.scaladsl.model.HttpHeader.ParsingResult
-import org.apache.pekko.japi.Util
+import org.apache.pekko
+import pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
+import pekko.http.scaladsl.model.HttpHeader
+import pekko.http.scaladsl.model.HttpHeader.ParsingResult
+import pekko.japi.Util
 
 import scala.jdk.CollectionConverters._
 import javax.net.ssl.SSLContext
@@ -42,7 +43,7 @@ final class ElasticsearchConnectionSettings private (
 
   /** Java API */
   def withHeaders(
-      headers: java.util.List[org.apache.pekko.http.javadsl.model.HttpHeader]): ElasticsearchConnectionSettings = {
+      headers: java.util.List[pekko.http.javadsl.model.HttpHeader]): ElasticsearchConnectionSettings = {
     val scalaHeaders = headers.asScala
       .map(x => {
         HttpHeader.parse(x.name(), x.value()) match {
@@ -66,7 +67,7 @@ final class ElasticsearchConnectionSettings private (
   @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "3.1.0")
   @Deprecated
   def withConnectionContext(
-      connectionContext: org.apache.pekko.http.javadsl.HttpsConnectionContext): ElasticsearchConnectionSettings = {
+      connectionContext: pekko.http.javadsl.HttpsConnectionContext): ElasticsearchConnectionSettings = {
     val scalaContext = new HttpsConnectionContext(
       connectionContext.getSslContext,
       None,

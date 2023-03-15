@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.sqs.scaladsl
 
-import org.apache.pekko.stream.connectors.sqs.MessageAttributeName
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.stream.connectors.sqs.MessageAttributeName
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

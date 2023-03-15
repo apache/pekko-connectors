@@ -16,11 +16,12 @@ package org.apache.pekko.stream.connectors.s3.impl
 import java.net.URLEncoder
 import java.time.Instant
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.marshallers.xml.ScalaXmlSupport
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpCharsets, MediaTypes, Uri }
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
-import org.apache.pekko.stream.connectors.s3._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.marshallers.xml.ScalaXmlSupport
+import pekko.http.scaladsl.model.{ ContentTypes, HttpCharsets, MediaTypes, Uri }
+import pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, Unmarshaller }
+import pekko.stream.connectors.s3._
 
 import scala.util.Try
 import scala.xml.NodeSeq

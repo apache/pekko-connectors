@@ -12,16 +12,18 @@
  */
 
 package org.apache.pekko.stream.connectors.s3.scaladsl
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.model.headers.ByteRange
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.connectors.s3._
-import org.apache.pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption }
-import org.apache.pekko.stream.connectors.s3.impl._
-import org.apache.pekko.stream.scaladsl.{ RunnableGraph, Sink, Source }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.model.headers.ByteRange
+import pekko.stream.Attributes
+import pekko.stream.connectors.s3._
+import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption }
+import pekko.stream.connectors.s3.impl._
+import pekko.stream.scaladsl.{ RunnableGraph, Sink, Source }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -37,7 +39,7 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param method the [[org.apache.pekko.http.scaladsl.model.HttpMethod HttpMethod]] to use when making the request
+   * @param method the [[pekko.http.scaladsl.model.HttpMethod HttpMethod]] to use when making the request
    * @param versionId optional version id of the object
    * @param s3Headers any headers you want to add
    * @return a raw HTTP response from S3
@@ -56,7 +58,7 @@ object S3 {
    * @param key the s3 object key
    * @param versionId optional version id of the object
    * @param sse the server side encryption to use
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] containing an [[scala.Option]] that will be [[scala.None]] in case the object does not exist
+   * @return A [[pekko.stream.scaladsl.Source Source]] containing an [[scala.Option]] that will be [[scala.None]] in case the object does not exist
    */
   def getObjectMetadata(
       bucket: String,
@@ -72,7 +74,7 @@ object S3 {
    * @param key the s3 object key
    * @param versionId optional version id of the object
    * @param s3Headers any headers you want to add
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] containing an [[scala.Option]] that will be [[scala.None]] in case the object does not exist
+   * @return A [[pekko.stream.scaladsl.Source Source]] containing an [[scala.Option]] that will be [[scala.None]] in case the object does not exist
    */
   def getObjectMetadata(
       bucket: String,
@@ -87,7 +89,7 @@ object S3 {
    * @param bucket the s3 bucket name
    * @param key the s3 object key
    * @param versionId optional version id of the object
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteObject(bucket: String, key: String, versionId: Option[String] = None): Source[Done, NotUsed] =
     deleteObject(bucket, key, versionId, S3Headers.empty)
@@ -99,7 +101,7 @@ object S3 {
    * @param key the s3 object key
    * @param versionId optional version id of the object
    * @param s3Headers any headers you want to add
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteObject(bucket: String,
       key: String,
@@ -112,7 +114,7 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param prefix optional s3 objects prefix
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteObjectsByPrefix(bucket: String, prefix: Option[String]): Source[Done, NotUsed] =
     deleteObjectsByPrefix(bucket, prefix, S3Headers.empty)
@@ -123,7 +125,7 @@ object S3 {
    * @param bucket the s3 bucket name
    * @param prefix optional s3 objects prefix
    * @param deleteAllVersions Whether to delete all object versions as well (applies to versioned buckets)
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteObjectsByPrefix(bucket: String, prefix: Option[String], deleteAllVersions: Boolean): Source[Done, NotUsed] =
     deleteObjectsByPrefix(bucket, prefix, deleteAllVersions, S3Headers.empty)
@@ -134,7 +136,7 @@ object S3 {
    * @param bucket the s3 bucket name
    * @param prefix optional s3 objects prefix
    * @param s3Headers any headers you want to add
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteObjectsByPrefix(bucket: String, prefix: Option[String], s3Headers: S3Headers): Source[Done, NotUsed] =
     deleteObjectsByPrefix(bucket, prefix, deleteAllVersions = false, s3Headers)
@@ -146,7 +148,7 @@ object S3 {
    * @param prefix optional s3 objects prefix
    * @param deleteAllVersions Whether to delete all object versions as well (applies to versioned buckets)
    * @param s3Headers any headers you want to add
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteObjectsByPrefix(bucket: String,
       prefix: Option[String],
@@ -158,7 +160,7 @@ object S3 {
    * Deletes all S3 Objects within the given bucket
    *
    * @param bucket the s3 bucket name
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteBucketContents(bucket: String): Source[Done, NotUsed] =
     deleteObjectsByPrefix(bucket, None, S3Headers.empty)
@@ -168,7 +170,7 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param deleteAllVersions Whether to delete all object versions as well (applies to versioned buckets)
-   * @return A [[org.apache.pekko.stream.scaladsl.Source Source]] that will emit [[org.apache.pekko.Done]] when operation is completed
+   * @return A [[pekko.stream.scaladsl.Source Source]] that will emit [[pekko.Done]] when operation is completed
    */
   def deleteBucketContents(bucket: String, deleteAllVersions: Boolean): Source[Done, NotUsed] =
     deleteObjectsByPrefix(bucket, None, deleteAllVersions, S3Headers.empty)
@@ -182,7 +184,7 @@ object S3 {
    * @param contentLength the number of bytes that will be uploaded (required!)
    * @param contentType an optional [[ContentType]]
    * @param s3Headers any headers you want to add
-   * @return a [[org.apache.pekko.stream.scaladsl.Source Source]] containing the [[ObjectMetadata]] of the uploaded S3 Object
+   * @return a [[pekko.stream.scaladsl.Source Source]] containing the [[ObjectMetadata]] of the uploaded S3 Object
    */
   def putObject(bucket: String,
       key: String,
@@ -197,7 +199,7 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param range [optional] the [[org.apache.pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
+   * @param range [optional] the [[pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
    * @param sse [optional] the server side encryption used on upload
    * @return The source will emit an empty [[scala.Option Option]] if an object can not be found.
    *         Otherwise [[scala.Option Option]] will contain a tuple of object's data and metadata.
@@ -217,7 +219,7 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param range [optional] the [[org.apache.pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
+   * @param range [optional] the [[pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
    * @param s3Headers any headers you want to add
    * @return The source will emit an empty [[scala.Option Option]] if an object can not be found.
    *         Otherwise [[scala.Option Option]] will contain a tuple of object's data and metadata.
@@ -236,10 +238,10 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param range [optional] the [[org.apache.pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
+   * @param range [optional] the [[pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
    * @param sse [optional] the server side encryption used on upload
-   * @return A [[org.apache.pekko.stream.scaladsl.Source]] containing the objects data as a [[org.apache.pekko.util.ByteString]] along with a materialized value containing the
-   *         [[org.apache.pekko.stream.connectors.s3.ObjectMetadata]]
+   * @return A [[pekko.stream.scaladsl.Source]] containing the objects data as a [[pekko.util.ByteString]] along with a materialized value containing the
+   *         [[pekko.stream.connectors.s3.ObjectMetadata]]
    */
   def getObject(
       bucket: String,
@@ -254,10 +256,10 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param range [optional] the [[org.apache.pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
+   * @param range [optional] the [[pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
    * @param s3Headers any headers you want to add
-   * @return A [[org.apache.pekko.stream.scaladsl.Source]] containing the objects data as a [[org.apache.pekko.util.ByteString]] along with a materialized value containing the
-   *         [[org.apache.pekko.stream.connectors.s3.ObjectMetadata]]
+   * @return A [[pekko.stream.scaladsl.Source]] containing the objects data as a [[pekko.util.ByteString]] along with a materialized value containing the
+   *         [[pekko.stream.connectors.s3.ObjectMetadata]]
    */
   def getObject(
       bucket: String,
@@ -271,7 +273,7 @@ object S3 {
    * Will return a list containing all of the buckets for the current AWS account
    *
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListBucketsResultContents]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListBucketsResultContents]]
    */
   def listBuckets(): Source[ListBucketsResultContents, NotUsed] =
     listBuckets(S3Headers.empty)
@@ -281,7 +283,7 @@ object S3 {
    *
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListBucketsResultContents]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListBucketsResultContents]]
    */
   def listBuckets(s3Headers: S3Headers): Source[ListBucketsResultContents, NotUsed] =
     S3Stream.listBuckets(s3Headers)
@@ -296,7 +298,7 @@ object S3 {
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html (version 1 API)
    * @param bucket Which bucket that you list object metadata for
    * @param prefix Prefix of the keys you want to list under passed bucket
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
    */
   def listBucket(bucket: String, prefix: Option[String]): Source[ListBucketResultContents, NotUsed] =
     listBucket(bucket, prefix, S3Headers.empty)
@@ -312,7 +314,7 @@ object S3 {
    * @param bucket Which bucket that you list object metadata for
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
    */
   def listBucket(bucket: String,
       prefix: Option[String],
@@ -330,7 +332,7 @@ object S3 {
    * @param bucket Which bucket that you list object metadata for
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListBucketResultContents]]
    */
   def listBucket(bucket: String,
       delimiter: String,
@@ -353,7 +355,7 @@ object S3 {
    * @param delimiter Delimiter to use for listing only one level of hierarchy
    * @param prefix    Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListBucketResultContents ListBucketResultContents]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListBucketResultContents ListBucketResultContents]])
+   * @return [[pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListBucketResultContents ListBucketResultContents]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListBucketResultContents ListBucketResultContents]])
    */
   def listBucketAndCommonPrefixes(
       bucket: String,
@@ -369,7 +371,7 @@ object S3 {
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html
    * @param bucket Which bucket that you list in-progress multipart uploads for
    * @param prefix Prefix of the keys you want to list under passed bucket
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListMultipartUploadResultUploads]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListMultipartUploadResultUploads]]
    */
   def listMultipartUpload(bucket: String, prefix: Option[String]): Source[ListMultipartUploadResultUploads, NotUsed] =
     listMultipartUpload(bucket, prefix, S3Headers.empty)
@@ -381,7 +383,7 @@ object S3 {
    * @param bucket Which bucket that you list in-progress multipart uploads for
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListMultipartUploadResultUploads]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListMultipartUploadResultUploads]]
    */
   def listMultipartUpload(bucket: String,
       prefix: Option[String],
@@ -396,7 +398,7 @@ object S3 {
    * @param delimiter Delimiter to use for listing only one level of hierarchy
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListMultipartUploadResultUploads ListMultipartUploadResultUploads]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
+   * @return [[pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListMultipartUploadResultUploads ListMultipartUploadResultUploads]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
    */
   def listMultipartUploadAndCommonPrefixes(
       bucket: String,
@@ -413,7 +415,7 @@ object S3 {
    * @param bucket Under which bucket the upload parts are contained
    * @param key They key where the parts were uploaded to
    * @param uploadId Unique identifier of the upload for which you want to list the uploaded parts
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListPartsResultParts]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListPartsResultParts]]
    */
   def listParts(bucket: String, key: String, uploadId: String): Source[ListPartsResultParts, NotUsed] =
     listParts(bucket, key, uploadId, S3Headers.empty)
@@ -426,7 +428,7 @@ object S3 {
    * @param key They key where the parts were uploaded to
    * @param uploadId Unique identifier of the upload for which you want to list the uploaded parts
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of [[ListPartsResultParts]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[ListPartsResultParts]]
    */
   def listParts(bucket: String,
       key: String,
@@ -440,7 +442,7 @@ object S3 {
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html
    * @param bucket Which bucket that you list object versions for
    * @param prefix Prefix of the keys you want to list under passed bucket
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]])
+   * @return [[pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]])
    */
   def listObjectVersions(
       bucket: String,
@@ -454,7 +456,7 @@ object S3 {
    * @param bucket Which bucket that you list object versions for
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]])
+   * @return [[pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]])
    */
   def listObjectVersions(
       bucket: String,
@@ -470,7 +472,7 @@ object S3 {
    * @param delimiter Delimiter to use for listing only one level of hierarchy
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]])
+   * @return [[pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]])
    */
   def listObjectVersions(
       bucket: String,
@@ -490,7 +492,7 @@ object S3 {
    * @param delimiter Delimiter to use for listing only one level of hierarchy
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]], [[scala.collection.Seq Seq]] of [[org.apache.pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
+   * @return [[pekko.stream.scaladsl.Source Source]] of ([[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]], [[scala.collection.Seq Seq]] of [[pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
    */
   def listObjectVersionsAndCommonPrefixes(bucket: String,
       delimiter: String,
@@ -504,12 +506,12 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
    * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts [[ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts [[ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUpload(
       bucket: String,
@@ -530,11 +532,11 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
    * @param s3Headers any headers you want to add
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts [[org.apache.pekko.util.ByteString ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts [[pekko.util.ByteString ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithHeaders(
       bucket: String,
@@ -569,12 +571,12 @@ object S3 {
    *                        backpressure is applied to the upload stream if `chunkUploadSink` is too slow, likewise any
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
    * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithContext[C](
       bucket: String,
@@ -615,11 +617,11 @@ object S3 {
    *                        backpressure is applied to the upload stream if `chunkUploadSink` is too slow, likewise any
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
    * @param s3Headers any headers you want to add
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithHeadersAndContext[C](
       bucket: String,
@@ -645,12 +647,12 @@ object S3 {
    * @param key the s3 object key
    * @param uploadId the upload that you want to resume
    * @param previousParts The previously uploaded parts ending just before when this upload will commence
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
    * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts [[ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts [[ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUpload(
       bucket: String,
@@ -696,12 +698,12 @@ object S3 {
    *                        backpressure is applied to the upload stream if `chunkUploadSink` is too slow, likewise any
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
    * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithContext[C](
       bucket: String,
@@ -738,11 +740,11 @@ object S3 {
    * @param key the s3 object key
    * @param uploadId the upload that you want to resume
    * @param previousParts The previously uploaded parts ending just before when this upload will commence
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
    * @param s3Headers any headers you want to add
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts [[org.apache.pekko.util.ByteString ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts [[pekko.util.ByteString ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithHeaders(
       bucket: String,
@@ -784,11 +786,11 @@ object S3 {
    *                        backpressure is applied to the upload stream if `chunkUploadSink` is too slow, likewise any
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
-   * @param contentType an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
    * @param s3Headers any headers you want to add
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithHeadersAndContext[C](
       bucket: String,
@@ -858,7 +860,7 @@ object S3 {
    * @param targetBucket target s3 bucket name
    * @param targetKey    target s3 key
    * @param sourceVersionId optional version id of source object, if the versioning is enabled in source bucket
-   * @param contentType  an optional [[org.apache.pekko.http.scaladsl.model.ContentType ContentType]]
+   * @param contentType  an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param s3Headers any headers you want to add
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
@@ -915,7 +917,7 @@ object S3 {
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html
    *
    * @param bucketName bucket name
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def makeBucketSource(bucketName: String): Source[Done, NotUsed] =
     makeBucketSource(bucketName, S3Headers.empty)
@@ -927,7 +929,7 @@ object S3 {
    *
    * @param bucketName bucket name
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def makeBucketSource(bucketName: String, s3Headers: S3Headers): Source[Done, NotUsed] =
     S3Stream.makeBucketSource(bucketName, s3Headers)
@@ -964,7 +966,7 @@ object S3 {
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html
    *
    * @param bucketName bucket name
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteBucketSource(bucketName: String): Source[Done, NotUsed] =
     deleteBucketSource(bucketName, S3Headers.empty)
@@ -976,7 +978,7 @@ object S3 {
    *
    * @param bucketName bucket name
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteBucketSource(bucketName: String, s3Headers: S3Headers): Source[Done, NotUsed] =
     S3Stream.deleteBucketSource(bucketName, s3Headers)
@@ -1013,7 +1015,7 @@ object S3 {
    * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html
    *
    * @param bucketName bucket name
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[BucketAccess]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[BucketAccess]]
    */
   def checkIfBucketExistsSource(bucketName: String): Source[BucketAccess, NotUsed] =
     checkIfBucketExistsSource(bucketName, S3Headers.empty)
@@ -1025,7 +1027,7 @@ object S3 {
    *
    * @param bucketName bucket name
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[BucketAccess]]
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[BucketAccess]]
    */
   def checkIfBucketExistsSource(bucketName: String, s3Headers: S3Headers): Source[BucketAccess, NotUsed] =
     S3Stream.checkIfBucketExistsSource(bucketName, s3Headers)
@@ -1069,7 +1071,7 @@ object S3 {
    * @param bucketName Which bucket the upload is inside
    * @param key The key for the upload
    * @param uploadId Unique identifier of the upload
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteUploadSource(bucketName: String, key: String, uploadId: String): Source[Done, NotUsed] =
     deleteUploadSource(bucketName, key, uploadId, S3Headers.empty)
@@ -1083,7 +1085,7 @@ object S3 {
    * @param key The key for the upload
    * @param uploadId Unique identifier of the upload
    * @param s3Headers any headers you want to add
-   * @return [[org.apache.pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   * @return [[pekko.stream.scaladsl.Source Source]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteUploadSource(bucketName: String,
       key: String,

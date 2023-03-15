@@ -14,15 +14,16 @@
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ClassicActorSystemProvider
+import pekko.stream.connectors.mqtt.streaming.scaladsl.{
   ActorMqttClientSession => ScalaActorMqttClientSession,
   ActorMqttServerSession => ScalaActorMqttServerSession,
   MqttClientSession => ScalaMqttClientSession,
   MqttServerSession => ScalaMqttServerSession
 }
-import org.apache.pekko.stream.javadsl.Source
+import pekko.stream.javadsl.Source
 
 /**
  * Represents MQTT session state for both clients or servers. Session

@@ -12,8 +12,9 @@
  */
 
 package org.apache.pekko.stream.connectors.avroparquet.scaladsl
-import org.apache.pekko.Done
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.scaladsl.{ Flow, Keep, Sink }
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetWriter
 
@@ -22,7 +23,7 @@ import scala.concurrent.Future
 object AvroParquetSink {
 
   def apply[T <: GenericRecord](writer: ParquetWriter[T]): Sink[T, Future[Done]] =
-    Flow.fromGraph(new org.apache.pekko.stream.connectors.avroparquet.impl.AvroParquetFlow(writer)).toMat(Sink.ignore)(
+    Flow.fromGraph(new pekko.stream.connectors.avroparquet.impl.AvroParquetFlow(writer)).toMat(Sink.ignore)(
       Keep.right)
 
 }

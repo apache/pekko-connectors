@@ -17,8 +17,9 @@ import java.io.{ File, InputStream, StringWriter }
 import java.nio.ByteBuffer
 import java.util
 
-import org.apache.pekko.stream.connectors.hdfs.RotationMessage
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.hdfs.RotationMessage
+import pekko.util.ByteString
 import org.apache.commons.io.IOUtils
 import org.apache.hadoop.fs.{ FileStatus, FileSystem, Path }
 import org.apache.hadoop.hdfs.{ HdfsConfiguration, MiniDFSCluster }
@@ -181,7 +182,7 @@ object ScalaTestUtils extends TestUtils with Matchers {
 
 object JavaTestUtils extends TestUtils {
   type Sequence[A] = java.util.List[A]
-  type Pair[A, B] = org.apache.pekko.japi.Pair[A, B]
+  type Pair[A, B] = pekko.japi.Pair[A, B]
   type Assertion = Unit
 
   import org.junit.Assert._
@@ -191,7 +192,7 @@ object JavaTestUtils extends TestUtils {
   val books: util.List[ByteString] = ScalaTestUtils.books.asJava
 
   val booksForSequenceWriter: util.List[Pair[Text, Text]] =
-    ScalaTestUtils.booksForSequenceWriter.map { case (k, v) => org.apache.pekko.japi.Pair(k, v) }.asJava
+    ScalaTestUtils.booksForSequenceWriter.map { case (k, v) => pekko.japi.Pair(k, v) }.asJava
 
   def getFiles(fs: FileSystem): Sequence[FileStatus] =
     ScalaTestUtils.getFiles(fs).asJava
@@ -224,14 +225,14 @@ object JavaTestUtils extends TestUtils {
   }
 
   def readSequenceFile(fs: FileSystem, log: RotationMessage): Sequence[Pair[Text, Text]] =
-    ScalaTestUtils.readSequenceFile(fs, log).map { case (k, v) => org.apache.pekko.japi.Pair(k, v) }.asJava
+    ScalaTestUtils.readSequenceFile(fs, log).map { case (k, v) => pekko.japi.Pair(k, v) }.asJava
 
   def verifySequenceFile(fs: FileSystem, content: Sequence[Pair[Text, Text]], logs: Sequence[RotationMessage]): Unit =
     assertArrayEquals(logs.asScala.flatMap(readSequenceFile(fs, _).asScala).asJava.toArray, content.toArray)
 
   def generateFakeContentForSequence(count: Double, bytes: Long): Sequence[Pair[Text, Text]] =
     ScalaTestUtils.generateFakeContentForSequence(count, bytes).map { case (k, v) =>
-      org.apache.pekko.japi.Pair(k, v)
+      pekko.japi.Pair(k, v)
     }.asJava
 
   def readLogsWithCodec(fs: FileSystem, logs: Sequence[RotationMessage], codec: CompressionCodec): Sequence[String] =

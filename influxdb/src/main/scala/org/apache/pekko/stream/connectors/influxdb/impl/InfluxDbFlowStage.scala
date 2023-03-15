@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.influxdb.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import org.influxdb.InfluxDB
 
 import scala.collection.immutable

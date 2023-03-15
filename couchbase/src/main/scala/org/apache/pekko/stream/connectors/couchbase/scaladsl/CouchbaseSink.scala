@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import pekko.stream.scaladsl.{ Keep, Sink }
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 
 import scala.concurrent.Future

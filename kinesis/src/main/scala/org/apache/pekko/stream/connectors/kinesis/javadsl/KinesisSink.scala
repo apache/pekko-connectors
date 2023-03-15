@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.kinesis.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesis.{ scaladsl, KinesisFlowSettings }
-import org.apache.pekko.stream.javadsl.Sink
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesis.{ scaladsl, KinesisFlowSettings }
+import pekko.stream.javadsl.Sink
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.PutRecordsRequestEntry
 

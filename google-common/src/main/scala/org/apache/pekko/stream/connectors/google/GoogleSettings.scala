@@ -13,18 +13,19 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.javadsl.{ model => jm }
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model.headers.BasicHttpCredentials
-import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
-import org.apache.pekko.http.scaladsl.{ Http, HttpsConnectionContext }
-import org.apache.pekko.http.{ javadsl => jh }
-import org.apache.pekko.stream.connectors.google.auth.Credentials
-import org.apache.pekko.stream.connectors.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.http.javadsl.{ model => jm }
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model.headers.BasicHttpCredentials
+import pekko.http.scaladsl.settings.ConnectionPoolSettings
+import pekko.http.scaladsl.{ Http, HttpsConnectionContext }
+import pekko.http.{ javadsl => jh }
+import pekko.stream.connectors.google.auth.Credentials
+import pekko.stream.connectors.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
+import pekko.stream.connectors.google.implicits._
+import pekko.util.JavaDurationConverters._
 import com.typesafe.config.Config
 
 import java.time
@@ -70,7 +71,7 @@ object GoogleSettings {
   def apply()(implicit system: ClassicActorSystemProvider, dummy: DummyImplicit): GoogleSettings = apply(system)
 
   /**
-   * Scala API: Creates [[GoogleSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Scala API: Creates [[GoogleSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def apply(system: ClassicActorSystemProvider): GoogleSettings = GoogleExt(system.classicSystem).settings
 

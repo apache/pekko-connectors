@@ -14,19 +14,20 @@
 package org.apache.pekko.stream.connectors.sse
 package scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.http.scaladsl.client.RequestBuilding.Get
-import org.apache.pekko.http.scaladsl.coding.Coders
-import org.apache.pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
-import org.apache.pekko.http.scaladsl.model.headers.{ `Last-Event-ID`, Accept }
-import org.apache.pekko.http.scaladsl.model.sse.ServerSentEvent
-import org.apache.pekko.http.scaladsl.model.sse.ServerSentEvent.heartbeat
-import org.apache.pekko.http.scaladsl.model.{ HttpRequest, HttpResponse, Uri }
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-import org.apache.pekko.http.scaladsl.unmarshalling.sse.EventStreamUnmarshalling
-import org.apache.pekko.stream.SourceShape
-import org.apache.pekko.stream.scaladsl.{ Broadcast, Flow, GraphDSL, Merge, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.http.scaladsl.client.RequestBuilding.Get
+import pekko.http.scaladsl.coding.Coders
+import pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
+import pekko.http.scaladsl.model.headers.{ `Last-Event-ID`, Accept }
+import pekko.http.scaladsl.model.sse.ServerSentEvent
+import pekko.http.scaladsl.model.sse.ServerSentEvent.heartbeat
+import pekko.http.scaladsl.model.{ HttpRequest, HttpResponse, Uri }
+import pekko.http.scaladsl.unmarshalling.Unmarshal
+import pekko.http.scaladsl.unmarshalling.sse.EventStreamUnmarshalling
+import pekko.stream.SourceShape
+import pekko.stream.scaladsl.{ Broadcast, Flow, GraphDSL, Merge, Source }
 
 import scala.concurrent.Future
 import scala.concurrent.duration.{ Duration, FiniteDuration }

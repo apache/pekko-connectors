@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
+import pekko.stream.Materializer
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
+import pekko.util.ByteString
 import com.google.cloud.bigquery.storage.v1.arrow.ArrowSchema
 import org.apache.arrow.memory.RootAllocator
 import org.apache.arrow.vector.ipc.ReadChannel

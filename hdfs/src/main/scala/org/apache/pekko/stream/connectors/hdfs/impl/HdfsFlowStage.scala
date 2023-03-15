@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.hdfs.impl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.hdfs._
-import org.apache.pekko.stream.connectors.hdfs.impl.HdfsFlowLogic.{ FlowState, FlowStep, LogicState }
-import org.apache.pekko.stream.connectors.hdfs.impl.writer.HdfsWriter
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream._
+import pekko.stream.connectors.hdfs._
+import pekko.stream.connectors.hdfs.impl.HdfsFlowLogic.{ FlowState, FlowStep, LogicState }
+import pekko.stream.connectors.hdfs.impl.writer.HdfsWriter
+import pekko.stream.stage._
 import cats.data.State
 
 import scala.concurrent.duration.FiniteDuration

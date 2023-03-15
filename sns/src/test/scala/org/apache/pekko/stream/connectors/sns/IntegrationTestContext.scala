@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.sns
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.Http
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.Http
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ BeforeAndAfterAll, Suite }
 import software.amazon.awssdk.services.sns.SnsAsyncClient

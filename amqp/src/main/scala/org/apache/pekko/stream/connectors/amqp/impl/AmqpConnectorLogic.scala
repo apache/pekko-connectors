@@ -13,13 +13,9 @@
 
 package org.apache.pekko.stream.connectors.amqp.impl
 
-import org.apache.pekko.stream.connectors.amqp.{
-  AmqpConnectorSettings,
-  BindingDeclaration,
-  ExchangeDeclaration,
-  QueueDeclaration
-}
-import org.apache.pekko.stream.stage.{ AsyncCallback, GraphStageLogic }
+import org.apache.pekko
+import pekko.stream.connectors.amqp.{ AmqpConnectorSettings, BindingDeclaration, ExchangeDeclaration, QueueDeclaration }
+import pekko.stream.stage.{ AsyncCallback, GraphStageLogic }
 import com.rabbitmq.client._
 
 import scala.util.control.NonFatal

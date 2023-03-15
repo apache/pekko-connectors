@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.orientdb.impl
 
 import java.util
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.orientdb.{ OrientDbReadResult, OrientDbSourceSettings }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.orientdb.{ OrientDbReadResult, OrientDbSourceSettings }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery

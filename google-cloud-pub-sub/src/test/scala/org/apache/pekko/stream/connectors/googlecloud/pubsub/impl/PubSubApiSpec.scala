@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, Http }
-import org.apache.pekko.stream.connectors.googlecloud.pubsub._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.{ ConnectionContext, Http }
+import pekko.stream.connectors.googlecloud.pubsub._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{ aResponse, urlEqualTo }

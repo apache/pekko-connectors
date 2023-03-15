@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
 import com.typesafe.config.Config
 
 object HmsSettings {

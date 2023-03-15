@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings
-import org.apache.pekko.stream.connectors.couchbase.scaladsl
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.stream.connectors.couchbase.scaladsl
+import pekko.stream.javadsl.Source
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 

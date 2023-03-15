@@ -16,13 +16,14 @@ package org.apache.pekko.stream.connectors.couchbase.javadsl
 import java.time.Duration
 import java.util.Optional
 import java.util.concurrent.{ CompletionStage, Executor }
-import org.apache.pekko.annotation.DoNotInherit
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
-import org.apache.pekko.stream.connectors.couchbase.impl.CouchbaseSessionJavaAdapter
-import org.apache.pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
-import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.annotation.DoNotInherit
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import pekko.stream.connectors.couchbase.impl.CouchbaseSessionJavaAdapter
+import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
+import pekko.stream.javadsl.Source
+import pekko.{ Done, NotUsed }
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
@@ -35,7 +36,7 @@ import scala.concurrent.ExecutionContext
 /**
  * Java API: Gives access to Couchbase.
  *
- * @see [[org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry]]
+ * @see [[pekko.stream.connectors.couchbase.CouchbaseSessionRegistry]]
  */
 object CouchbaseSession {
 

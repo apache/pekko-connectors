@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.hdfs.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.stream.connectors.hdfs._
-import org.apache.pekko.stream.connectors.hdfs.scaladsl.{ HdfsFlow => ScalaHdfsFlow }
-import org.apache.pekko.stream.javadsl
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.japi.Pair
+import pekko.stream.connectors.hdfs._
+import pekko.stream.connectors.hdfs.scaladsl.{ HdfsFlow => ScalaHdfsFlow }
+import pekko.stream.javadsl
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 import org.apache.hadoop.fs.FileSystem
 import org.apache.hadoop.io.SequenceFile.CompressionType
 import org.apache.hadoop.io.Writable

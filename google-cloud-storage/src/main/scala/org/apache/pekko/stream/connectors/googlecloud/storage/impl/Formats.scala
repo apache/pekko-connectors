@@ -15,13 +15,14 @@ package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
 import java.time.OffsetDateTime
 
-import org.apache.pekko.http.scaladsl.model.{ ContentType, ContentTypes }
-import org.apache.pekko.stream.connectors.googlecloud.storage._
+import org.apache.pekko
+import pekko.http.scaladsl.model.{ ContentType, ContentTypes }
+import pekko.stream.connectors.googlecloud.storage._
 import spray.json.{ DefaultJsonProtocol, JsObject, JsValue, RootJsonFormat, RootJsonReader }
 
 import scala.util.Try
 
-@org.apache.pekko.annotation.InternalApi
+@pekko.annotation.InternalApi
 object Formats extends DefaultJsonProtocol {
 
   private final case class CustomerEncryption(encryptionAlgorithm: String, keySha256: String)
@@ -255,12 +256,12 @@ object Formats extends DefaultJsonProtocol {
       componentCount,
       kmsKeyName,
       customerEncryption.map(ce =>
-        org.apache.pekko.stream.connectors.googlecloud.storage
+        pekko.stream.connectors.googlecloud.storage
           .CustomerEncryption(ce.encryptionAlgorithm, ce.keySha256)),
-      owner.map(o => org.apache.pekko.stream.connectors.googlecloud.storage.Owner(o.entity, o.entityId)),
+      owner.map(o => pekko.stream.connectors.googlecloud.storage.Owner(o.entity, o.entityId)),
       acl.map(
         _.map(a =>
-          org.apache.pekko.stream.connectors.googlecloud.storage.ObjectAccessControls(
+          pekko.stream.connectors.googlecloud.storage.ObjectAccessControls(
             a.kind,
             a.id,
             a.selfLink,
@@ -272,7 +273,7 @@ object Formats extends DefaultJsonProtocol {
             a.email,
             a.entityId,
             a.domain,
-            org.apache.pekko.stream.connectors.googlecloud.storage
+            pekko.stream.connectors.googlecloud.storage
               .ProjectTeam(a.projectTeam.projectNumber, a.projectTeam.team),
             a.etag))))
   }

@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.jms.impl
 
 import java.util.concurrent.Semaphore
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.jms._
+import pekko.stream.stage._
 import javax.jms
 
 /**

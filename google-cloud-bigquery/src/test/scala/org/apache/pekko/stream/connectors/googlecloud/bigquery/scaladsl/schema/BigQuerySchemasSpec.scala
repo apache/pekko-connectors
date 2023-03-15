@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.model._
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType._
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode._
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 

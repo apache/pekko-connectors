@@ -12,8 +12,10 @@
  */
 
 package org.apache.pekko.stream.connectors.elasticsearch.testkit
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.elasticsearch.{ ReadResult, WriteMessage, WriteResult }
+
+import org.apache.pekko
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.elasticsearch.{ ReadResult, WriteMessage, WriteResult }
 
 import scala.compat.java8.OptionConverters._
 

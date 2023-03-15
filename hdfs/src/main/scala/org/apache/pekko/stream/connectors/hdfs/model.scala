@@ -15,12 +15,13 @@ package org.apache.pekko.stream.connectors.hdfs
 
 import java.util.function.BiFunction
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.hdfs.impl.HdfsFlowLogic
-import org.apache.pekko.stream.connectors.hdfs.impl.strategy.DefaultRotationStrategy._
-import org.apache.pekko.stream.connectors.hdfs.impl.strategy.DefaultSyncStrategy._
-import org.apache.pekko.stream.connectors.hdfs.impl.strategy.Strategy
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.hdfs.impl.HdfsFlowLogic
+import pekko.stream.connectors.hdfs.impl.strategy.DefaultRotationStrategy._
+import pekko.stream.connectors.hdfs.impl.strategy.DefaultSyncStrategy._
+import pekko.stream.connectors.hdfs.impl.strategy.Strategy
+import pekko.util.ByteString
 import org.apache.hadoop.fs.Path
 
 import scala.concurrent.duration.FiniteDuration

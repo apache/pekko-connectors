@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.elasticsearch.{ scaladsl, _ }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.elasticsearch.{ scaladsl, _ }
 import com.fasterxml.jackson.databind.ObjectMapper
 
 import scala.jdk.CollectionConverters._
@@ -26,8 +27,8 @@ import scala.jdk.CollectionConverters._
 object ElasticsearchFlow {
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -38,12 +39,12 @@ object ElasticsearchFlow {
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
       objectMapper: ObjectMapper)
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
+      : pekko.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
     create(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -54,15 +55,15 @@ object ElasticsearchFlow {
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
       messageWriter: MessageWriter[T])
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
+      : pekko.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
     scaladsl.ElasticsearchFlow
       .create(elasticsearchParams, settings, messageWriter)
       .asJava
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -72,14 +73,13 @@ object ElasticsearchFlow {
   def createWithPassThrough[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper)
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
+      objectMapper: ObjectMapper): pekko.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
     createWithPassThrough(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -89,17 +89,16 @@ object ElasticsearchFlow {
   def createWithPassThrough[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      messageWriter: MessageWriter[T])
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
+      messageWriter: MessageWriter[T]): pekko.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
     scaladsl.ElasticsearchFlow
       .createWithPassThrough(elasticsearchParams, settings, messageWriter)
       .asJava
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[java.util.List[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * [[java.util.List[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[java.util.List[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]]
+   * The result status is part of the [[java.util.List[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]]
    * and must be checked for successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -109,15 +108,15 @@ object ElasticsearchFlow {
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      objectMapper: ObjectMapper): org.apache.pekko.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]],
+      objectMapper: ObjectMapper): pekko.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]],
     java.util.List[WriteResult[T, C]], NotUsed] =
     createBulk(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[java.util.List[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * [[java.util.List[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[java.util.List[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]]
+   * The result status is part of the [[java.util.List[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]]
    * and must be checked for successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -127,21 +126,20 @@ object ElasticsearchFlow {
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
-      messageWriter: MessageWriter[T]): org.apache.pekko.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]],
-    java.util.List[WriteResult[T, C]], NotUsed] =
-    org.apache.pekko.stream.scaladsl
-      .Flow[java.util.List[WriteMessage[T, C]]]
-      .map(_.asScala.toIndexedSeq)
-      .via(
-        scaladsl.ElasticsearchFlow
-          .createBulk(elasticsearchParams, settings, messageWriter))
-      .map(_.asJava)
-      .asJava
+      messageWriter: MessageWriter[T]): pekko.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]],
+    java.util.List[WriteResult[T, C]], NotUsed] = pekko.stream.scaladsl
+    .Flow[java.util.List[WriteMessage[T, C]]]
+    .map(_.asScala.toIndexedSeq)
+    .via(
+      scaladsl.ElasticsearchFlow
+        .createBulk(elasticsearchParams, settings, messageWriter))
+    .map(_.asJava)
+    .asJava
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `context` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * @param objectMapper Jackson object mapper converting type `T` to JSON
@@ -152,13 +150,13 @@ object ElasticsearchFlow {
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
       objectMapper: ObjectMapper)
-      : org.apache.pekko.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
+      : pekko.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
     createWithContext(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `context` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * @param messageWriter converts type `T` to a `String` containing valid JSON
@@ -169,7 +167,7 @@ object ElasticsearchFlow {
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[_, _],
       messageWriter: MessageWriter[T])
-      : org.apache.pekko.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
+      : pekko.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
     scaladsl.ElasticsearchFlow
       .createWithContext(elasticsearchParams, settings, messageWriter)
       .asJava

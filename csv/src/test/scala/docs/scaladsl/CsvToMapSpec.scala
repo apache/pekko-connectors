@@ -15,11 +15,12 @@ package docs.scaladsl
 
 import java.nio.charset.StandardCharsets
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
+import pekko.stream.scaladsl.{ Flow, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.util.ByteString
 
 class CsvToMapSpec extends CsvSpec {
 

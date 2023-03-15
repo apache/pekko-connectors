@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.pravega
 
-import org.apache.pekko.stream.KillSwitches
+import org.apache.pekko
+import pekko.stream.KillSwitches
 
-import org.apache.pekko.stream.connectors.pravega.scaladsl.Pravega
-import org.apache.pekko.stream.connectors.testkit.scaladsl.Repeated
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.stream.connectors.pravega.scaladsl.Pravega
+import pekko.stream.connectors.testkit.scaladsl.Repeated
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import com.typesafe.config.ConfigFactory
 import io.pravega.client.stream.impl.UTF8StringSerializer
 

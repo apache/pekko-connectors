@@ -12,13 +12,9 @@
  */
 
 package org.apache.pekko.stream.connectors.s3
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
+
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 
 /**
  * Manages one [[S3Settings]] per `ActorSystem`.
@@ -37,7 +33,7 @@ object S3Ext extends ExtensionId[S3Ext] with ExtensionIdProvider {
    * Java API.
    * Get the S3 extension with the classic actors API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): S3Ext = super.apply(system)
+  override def get(system: pekko.actor.ActorSystem): S3Ext = super.apply(system)
 
   /**
    * Java API.

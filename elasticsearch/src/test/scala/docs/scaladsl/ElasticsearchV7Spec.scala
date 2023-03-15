@@ -13,17 +13,14 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.http.scaladsl.model.Uri.Path
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
-import org.apache.pekko.stream.connectors.elasticsearch.scaladsl.{
-  ElasticsearchFlow,
-  ElasticsearchSink,
-  ElasticsearchSource
-}
-import org.apache.pekko.stream.connectors.elasticsearch._
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.http.scaladsl.model.Uri.Path
+import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
+import pekko.stream.connectors.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
+import pekko.stream.connectors.elasticsearch._
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.TestKit
+import pekko.{ Done, NotUsed }
 import spray.json.jsonReader
 
 import scala.collection.immutable

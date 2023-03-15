@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.actor.{
+import org.apache.pekko
+import pekko.actor.{
   ActorSystem,
   ClassicActorSystemProvider,
   ExtendedActorSystem,
@@ -21,7 +22,7 @@ import org.apache.pekko.actor.{
   ExtensionId,
   ExtensionIdProvider
 }
-import org.apache.pekko.annotation.InternalApi
+import pekko.annotation.InternalApi
 
 import scala.collection.immutable.ListMap
 

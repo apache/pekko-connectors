@@ -12,14 +12,16 @@
  */
 
 package org.apache.pekko.stream.connectors.avroparquet.scaladsl
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Source
+
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.scaladsl.Source
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetReader
 
 object AvroParquetSource {
 
   def apply[T <: GenericRecord](reader: ParquetReader[T]): Source[T, NotUsed] =
-    Source.fromGraph(new org.apache.pekko.stream.connectors.avroparquet.impl.AvroParquetSource(reader))
+    Source.fromGraph(new pekko.stream.connectors.avroparquet.impl.AvroParquetSource(reader))
 
 }

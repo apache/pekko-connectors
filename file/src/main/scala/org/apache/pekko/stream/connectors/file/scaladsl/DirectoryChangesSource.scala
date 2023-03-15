@@ -16,9 +16,10 @@ package org.apache.pekko.stream.connectors.file.scaladsl
 import java.nio.file.Path
 import java.util.function.BiFunction
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.file.DirectoryChange
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.file.DirectoryChange
+import pekko.stream.scaladsl.Source
 
 import scala.concurrent.duration.FiniteDuration
 
@@ -40,7 +41,7 @@ object DirectoryChangesSource {
       pollInterval: FiniteDuration,
       maxBufferSize: Int): Source[(Path, DirectoryChange), NotUsed] =
     Source.fromGraph(
-      new org.apache.pekko.stream.connectors.file.impl.DirectoryChangesSource(directoryPath, pollInterval,
+      new pekko.stream.connectors.file.impl.DirectoryChangesSource(directoryPath, pollInterval,
         maxBufferSize, tupler))
 
 }

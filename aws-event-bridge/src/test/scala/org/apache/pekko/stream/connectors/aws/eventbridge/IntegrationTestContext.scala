@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.aws.eventbridge
 
 import java.util.UUID
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.testkit.TestKit
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ BeforeAndAfterAll, Suite }
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient

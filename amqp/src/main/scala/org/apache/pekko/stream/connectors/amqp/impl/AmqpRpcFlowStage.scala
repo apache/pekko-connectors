@@ -15,13 +15,14 @@ package org.apache.pekko.stream.connectors.amqp.impl
 
 import java.util.Collections
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.connectors.amqp.scaladsl.CommittableReadResult
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.amqp._
+import pekko.stream.connectors.amqp.scaladsl.CommittableReadResult
+import pekko.stream.stage._
+import pekko.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client._
 
@@ -33,7 +34,7 @@ import scala.util.Success
  * This stage materializes to a `Future[String]`, which is the name of the private exclusive queue used for RPC communication
  *
  * @param responsesPerMessage The number of responses that should be expected for each message placed on the queue. This
- *                            can be overridden per message by including `expectedReplies` in the the header of the [[org.apache.pekko.stream.connectors.amqp.WriteMessage]]
+ *                            can be overridden per message by including `expectedReplies` in the the header of the [[pekko.stream.connectors.amqp.WriteMessage]]
  */
 @InternalApi
 private[amqp] final class AmqpRpcFlowStage(settings: AmqpWriteSettings, bufferSize: Int, responsesPerMessage: Int = 1)

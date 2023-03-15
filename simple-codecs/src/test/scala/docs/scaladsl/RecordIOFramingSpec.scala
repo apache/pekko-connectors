@@ -13,16 +13,17 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 //#run-via-scanner
 import org.apache.pekko.stream.connectors.recordio.scaladsl.RecordIOFraming
 //#run-via-scanner
-import org.apache.pekko.stream.scaladsl.Framing.FramingException
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import pekko.stream.scaladsl.Framing.FramingException
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 

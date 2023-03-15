@@ -16,15 +16,16 @@ package org.apache.pekko.stream.connectors.googlecloud.storage.javadsl
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.javadsl.model.ContentType
-import org.apache.pekko.http.scaladsl.model.{ ContentType => ScalaContentType }
-import org.apache.pekko.stream.connectors.googlecloud.storage.impl.GCStorageStream
-import org.apache.pekko.stream.connectors.googlecloud.storage.{ Bucket, StorageObject }
-import org.apache.pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.javadsl.model.ContentType
+import pekko.http.scaladsl.model.{ ContentType => ScalaContentType }
+import pekko.stream.connectors.googlecloud.storage.impl.GCStorageStream
+import pekko.stream.connectors.googlecloud.storage.{ Bucket, StorageObject }
+import pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
+import pekko.stream.{ Attributes, Materializer }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 
 import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
@@ -408,7 +409,7 @@ object GCStorage {
   def deleteObjectsByPrefix(bucket: String, prefix: String): Source[java.lang.Boolean, NotUsed] =
     GCStorageStream.deleteObjectsByPrefixSource(bucket, Option(prefix)).map(boolean2Boolean).asJava
 
-  private def func[T, R](f: T => R) = new org.apache.pekko.japi.function.Function[T, R] {
+  private def func[T, R](f: T => R) = new pekko.japi.function.Function[T, R] {
     override def apply(param: T): R = f(param)
   }
 }

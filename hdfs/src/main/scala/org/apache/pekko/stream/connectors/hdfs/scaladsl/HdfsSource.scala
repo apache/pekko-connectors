@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.hdfs.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.ActorAttributes.IODispatcher
-import org.apache.pekko.stream.scaladsl.{ Source, StreamConverters }
-import org.apache.pekko.stream.{ Attributes, IOResult }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.ActorAttributes.IODispatcher
+import pekko.stream.scaladsl.{ Source, StreamConverters }
+import pekko.stream.{ Attributes, IOResult }
+import pekko.util.ByteString
 import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.io.compress.CompressionCodec
 import org.apache.hadoop.io.{ SequenceFile, Writable }

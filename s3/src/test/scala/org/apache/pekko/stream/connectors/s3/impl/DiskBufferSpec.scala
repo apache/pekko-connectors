@@ -16,11 +16,12 @@ package org.apache.pekko.stream.connectors.s3.impl
 import java.nio.BufferOverflowException
 import java.nio.file.Files
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.{ EventFilter, TestKit }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.{ EventFilter, TestKit }
+import pekko.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.flatspec.AnyFlatSpecLike

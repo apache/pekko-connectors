@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.dynamodb
 
 import java.net.URI
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.dynamodb.scaladsl.DynamoDb
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.dynamodb.scaladsl.DynamoDb
+import pekko.testkit.TestKit
 import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }

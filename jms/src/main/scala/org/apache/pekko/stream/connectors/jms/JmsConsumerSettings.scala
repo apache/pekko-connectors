@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.jms
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.util.JavaDurationConverters._
 import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * Settings for [[org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer]] and [[org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer]].
+ * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsConsumer]] and [[pekko.stream.connectors.jms.javadsl.JmsConsumer]].
  */
 final class JmsConsumerSettings private (
     val connectionFactory: javax.jms.ConnectionFactory,
@@ -36,7 +37,7 @@ final class JmsConsumerSettings private (
     val maxPendingAcks: Int,
     val failStreamOnAckTimeout: Boolean,
     val connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration)
-    extends org.apache.pekko.stream.connectors.jms.JmsSettings {
+    extends pekko.stream.connectors.jms.JmsSettings {
 
   /** Factory to use for creating JMS connections. */
   def withConnectionFactory(value: javax.jms.ConnectionFactory): JmsConsumerSettings = copy(connectionFactory = value)
@@ -55,7 +56,7 @@ final class JmsConsumerSettings private (
   def withDurableTopic(name: String, subscriberName: String): JmsConsumerSettings =
     copy(destination = Some(DurableTopic(name, subscriberName)))
 
-  /** Set a JMS to subscribe to. Allows for custom handling with [[org.apache.pekko.stream.connectors.jms.CustomDestination CustomDestination]]. */
+  /** Set a JMS to subscribe to. Allows for custom handling with [[pekko.stream.connectors.jms.CustomDestination CustomDestination]]. */
   def withDestination(value: Destination): JmsConsumerSettings = copy(destination = Option(value))
 
   /** Set JMS broker credentials. */

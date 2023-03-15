@@ -13,23 +13,20 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.apache.pekko.actor.typed.scaladsl.adapter._
-import org.apache.pekko.event.{ Logging, LoggingAdapter }
-import org.apache.pekko.stream.connectors.mqtt.streaming._
-import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{
-  ActorMqttClientSession,
-  ActorMqttServerSession,
-  Mqtt
-}
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete, Tcp }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.actor.ActorSystem
+import pekko.actor.typed.scaladsl.Behaviors
+import pekko.actor.typed.scaladsl.adapter._
+import pekko.event.{ Logging, LoggingAdapter }
+import pekko.stream.connectors.mqtt.streaming._
+import pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession, Mqtt }
+import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete, Tcp }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 

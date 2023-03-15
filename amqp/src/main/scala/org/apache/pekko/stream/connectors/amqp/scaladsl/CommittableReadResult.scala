@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.amqp.ReadResult
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.amqp.ReadResult
 
 import scala.concurrent.Future
 

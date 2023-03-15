@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.ironmq.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.ironmq._
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.ironmq._
+import pekko.stream.stage._
 
 import scala.concurrent.{ ExecutionContext, Future }
 

@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.json.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.json.impl.JsonStreamReader
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.json.impl.JsonStreamReader
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 import org.jsfr.json.compiler.JsonPathCompiler
 import org.jsfr.json.path.JsonPath
 

@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.sqs.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.sqs._
-import org.apache.pekko.stream.javadsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.sqs._
+import pekko.stream.javadsl.Flow
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 
 /**
@@ -26,18 +27,18 @@ import software.amazon.awssdk.services.sqs.SqsAsyncClient
 object SqsAckFlow {
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * creates a [[pekko.stream.javadsl.Flow Flow]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def create(queueUrl: String,
       settings: SqsAckSettings,
       sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResult, NotUsed] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsAckFlow.apply(queueUrl, settings)(sqsClient).asJava
+    pekko.stream.connectors.sqs.scaladsl.SqsAckFlow.apply(queueUrl, settings)(sqsClient).asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * creates a [[pekko.stream.javadsl.Flow Flow]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def grouped(queueUrl: String,
       settings: SqsAckGroupedSettings,
       sqsClient: SqsAsyncClient): Flow[MessageAction, SqsAckResultEntry, NotUsed] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsAckFlow.grouped(queueUrl, settings)(sqsClient).asJava
+    pekko.stream.connectors.sqs.scaladsl.SqsAckFlow.grouped(queueUrl, settings)(sqsClient).asJava
 }

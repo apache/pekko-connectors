@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.sqs.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.sqs.{ MessageAction, SqsAckGroupedSettings, SqsAckSettings }
-import org.apache.pekko.stream.javadsl.Sink
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.sqs.{ MessageAction, SqsAckGroupedSettings, SqsAckSettings }
+import pekko.stream.javadsl.Sink
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 
 import scala.compat.java8.FutureConverters.FutureOps
@@ -28,23 +29,23 @@ import scala.compat.java8.FutureConverters.FutureOps
 object SqsAckSink {
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * creates a [[pekko.stream.javadsl.Sink Sink]] for ack a single SQS message at a time using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def create(queueUrl: String,
       settings: SqsAckSettings,
       sqsClient: SqsAsyncClient): Sink[MessageAction, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsAckSink
+    pekko.stream.connectors.sqs.scaladsl.SqsAckSink
       .apply(queueUrl, settings)(sqsClient)
       .mapMaterializedValue(_.toJava)
       .asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * creates a [[pekko.stream.javadsl.Sink Sink]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def createGrouped(queueUrl: String,
       settings: SqsAckGroupedSettings,
       sqsClient: SqsAsyncClient): Sink[MessageAction, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsAckSink
+    pekko.stream.connectors.sqs.scaladsl.SqsAckSink
       .grouped(queueUrl, settings)(sqsClient)
       .mapMaterializedValue(_.toJava)
       .asJava

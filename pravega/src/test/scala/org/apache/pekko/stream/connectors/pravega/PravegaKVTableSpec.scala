@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.pravega
 
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 
 import scala.concurrent.Await
 
-import org.apache.pekko.stream.connectors.testkit.scaladsl.Repeated
-import org.apache.pekko.stream.connectors.pravega.scaladsl.PravegaTable
+import pekko.stream.connectors.testkit.scaladsl.Repeated
+import pekko.stream.connectors.pravega.scaladsl.PravegaTable
 import io.pravega.client.tables.TableKey
 
 import docs.scaladsl.Person

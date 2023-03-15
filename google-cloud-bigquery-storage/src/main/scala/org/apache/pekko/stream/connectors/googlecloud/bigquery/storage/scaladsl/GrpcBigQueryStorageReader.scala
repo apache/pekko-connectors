@@ -13,16 +13,11 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl.PekkoGrpcSettings
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings
+import pekko.stream.connectors.googlecloud.bigquery.storage.impl.PekkoGrpcSettings
 import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 
 /**

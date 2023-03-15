@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.Attributes.Attribute
+import org.apache.pekko
+import pekko.stream.Attributes
+import pekko.stream.Attributes.Attribute
 
 /**
  * Akka Stream attributes that are used when materializing GCStorage stream blueprints.
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleAttributes]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
 @Deprecated
@@ -36,14 +37,14 @@ object GCStorageAttributes {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleAttributes]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
 @Deprecated
 final class GCStorageSettingsPath private (val path: String) extends Attribute
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleAttributes]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
 @Deprecated
@@ -54,14 +55,14 @@ object GCStorageSettingsPath {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleAttributes]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
 @Deprecated
 final class GCStorageSettingsValue private (val settings: GCStorageSettings) extends Attribute
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleAttributes]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
 @Deprecated

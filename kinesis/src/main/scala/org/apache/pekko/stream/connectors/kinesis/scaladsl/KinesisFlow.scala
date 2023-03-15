@@ -14,14 +14,15 @@
 package org.apache.pekko.stream.connectors.kinesis.scaladsl
 
 import java.nio.ByteBuffer
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts.parasitic
-import org.apache.pekko.stream.ThrottleMode
-import org.apache.pekko.stream.connectors.kinesis.KinesisFlowSettings
-import org.apache.pekko.stream.connectors.kinesis.KinesisErrors.FailurePublishingRecords
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts.parasitic
+import pekko.stream.ThrottleMode
+import pekko.stream.connectors.kinesis.KinesisFlowSettings
+import pekko.stream.connectors.kinesis.KinesisErrors.FailurePublishingRecords
+import pekko.stream.scaladsl.{ Flow, FlowWithContext }
+import pekko.util.ByteString
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.{

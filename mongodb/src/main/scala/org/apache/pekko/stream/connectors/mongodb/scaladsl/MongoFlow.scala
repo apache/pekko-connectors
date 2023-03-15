@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.mongodb.scaladsl
 
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
+import org.apache.pekko
+import pekko.stream.scaladsl.{ Flow, Source }
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
 import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
 import com.mongodb.client.result.{ DeleteResult, UpdateResult }
 import com.mongodb.reactivestreams.client.MongoCollection
@@ -42,7 +43,7 @@ object MongoFlow {
   @InternalApi private[mongodb] val DefaultReplaceOptions = new ReplaceOptions()
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will insert documents into a collection.
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will insert documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    * @param options options to apply to the operation
@@ -53,7 +54,7 @@ object MongoFlow {
       .flatMapConcat(doc => Source.fromPublisher(collection.insertOne(doc, options)).map(_ => doc))
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will insert batches documents into a collection.
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will insert batches documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    * @param options options to apply to the operation
@@ -63,7 +64,7 @@ object MongoFlow {
     Flow[Seq[T]].flatMapConcat(docs => Source.fromPublisher(collection.insertMany(docs.asJava, options)).map(_ => docs))
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will update documents as defined by a [[DocumentUpdate]].
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will update documents as defined by a [[DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -77,7 +78,7 @@ object MongoFlow {
         .map(_ -> documentUpdate))
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will update many documents as defined by a [[DocumentUpdate]].
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will update many documents as defined by a [[DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -91,7 +92,7 @@ object MongoFlow {
         .map(_ -> documentUpdate))
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -101,7 +102,7 @@ object MongoFlow {
     Flow[Bson].flatMapConcat(bson => Source.fromPublisher(collection.deleteOne(bson, options)).map(_ -> bson))
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -111,7 +112,7 @@ object MongoFlow {
     Flow[Bson].flatMapConcat(bson => Source.fromPublisher(collection.deleteMany(bson, options)).map(_ -> bson))
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Flow Flow]] that will replace document as defined by a [[DocumentReplace]].
+   * A [[pekko.stream.scaladsl.Flow Flow]] that will replace document as defined by a [[DocumentReplace]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation

@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.ironmq
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.ironmq.scaladsl.{
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.ironmq.scaladsl.{
   Committable => ScalaCommittable,
   CommittableMessage => ScalaCommittableMessage
 }

@@ -13,16 +13,17 @@
 
 package org.apache.pekko.stream.connectors.kinesis.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.kinesis.impl.KinesisSchedulerSourceStage
-import org.apache.pekko.stream.connectors.kinesis.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.stream._
+import pekko.stream.connectors.kinesis.impl.KinesisSchedulerSourceStage
+import pekko.stream.connectors.kinesis.{
   CommittableRecord,
   KinesisSchedulerCheckpointSettings,
   KinesisSchedulerSourceSettings
 }
-import org.apache.pekko.stream.scaladsl.{ Flow, RunnableGraph, Sink, Source, SubFlow }
+import pekko.stream.scaladsl.{ Flow, RunnableGraph, Sink, Source, SubFlow }
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 import software.amazon.kinesis.retrieval.KinesisClientRecord

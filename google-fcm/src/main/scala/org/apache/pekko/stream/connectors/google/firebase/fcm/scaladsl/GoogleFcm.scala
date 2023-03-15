@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.scaladsl
 
-import org.apache.pekko.stream.connectors.google.firebase.fcm.impl.FcmFlows
-import org.apache.pekko.stream.connectors.google.firebase.fcm.{ FcmNotification, FcmResponse, FcmSettings }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.google.firebase.fcm.impl.FcmFlows
+import pekko.stream.connectors.google.firebase.fcm.{ FcmNotification, FcmResponse, FcmSettings }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink }
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

@@ -12,7 +12,8 @@
  */
 
 package org.apache.pekko.stream.connectors.reference
-import org.apache.pekko.actor.{
+import org.apache.pekko
+import pekko.actor.{
   ActorSystem,
   ClassicActorSystemProvider,
   ExtendedActorSystem,
@@ -20,8 +21,8 @@ import org.apache.pekko.actor.{
   ExtensionId,
   ExtensionIdProvider
 }
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 import com.typesafe.config.Config
 
 /**

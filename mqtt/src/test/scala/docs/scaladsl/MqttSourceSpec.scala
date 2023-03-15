@@ -13,13 +13,14 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.mqtt._
-import org.apache.pekko.stream.connectors.mqtt.scaladsl.{ MqttMessageWithAck, MqttSink, MqttSource }
-import org.apache.pekko.stream.scaladsl._
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream._
+import pekko.stream.connectors.mqtt._
+import pekko.stream.connectors.mqtt.scaladsl.{ MqttMessageWithAck, MqttSink, MqttSource }
+import pekko.stream.scaladsl._
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 import javax.net.ssl.SSLContext
 import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence

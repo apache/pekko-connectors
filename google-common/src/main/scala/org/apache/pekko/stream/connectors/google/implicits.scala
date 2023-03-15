@@ -13,18 +13,14 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.HttpResponse
-import org.apache.pekko.http.scaladsl.model.StatusCodes._
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.unmarshalling.{
-  FromEntityUnmarshaller,
-  FromResponseUnmarshaller,
-  Unmarshal,
-  Unmarshaller
-}
-import org.apache.pekko.http.scaladsl.util.FastFuture.EnhancedFuture
-import org.apache.pekko.stream.connectors.google.util.Retry
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.HttpResponse
+import pekko.http.scaladsl.model.StatusCodes._
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller, Unmarshal, Unmarshaller }
+import pekko.http.scaladsl.util.FastFuture.EnhancedFuture
+import pekko.stream.connectors.google.util.Retry
 
 @InternalApi
 private[connectors] object implicits {

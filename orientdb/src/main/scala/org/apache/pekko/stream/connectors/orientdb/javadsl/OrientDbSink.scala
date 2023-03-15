@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.orientdb.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.orientdb._
-import org.apache.pekko.stream.javadsl._
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.orientdb._
+import pekko.stream.javadsl._
 import com.orientechnologies.orient.core.record.impl.ODocument
 
 /**

@@ -13,10 +13,11 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import pekko.stream.scaladsl.{ Sink, Source }
 import com.ibm.mq.jms.{ MQQueueConnectionFactory, MQQueueSession, MQTopicConnectionFactory }
 import com.ibm.msg.client.wmq.common.CommonConstants
 import javax.jms.{ Session, TextMessage }

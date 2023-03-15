@@ -7,17 +7,14 @@ package org.apache.pekko.stream.connectors.mqtt.streaming
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.mqtt.streaming
-import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{
-  ActorMqttClientSession,
-  ActorMqttServerSession,
-  Mqtt
-}
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, Tcp }
-import org.apache.pekko.stream.OverflowStrategy
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.mqtt.streaming
+import pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession, Mqtt }
+import pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, Tcp }
+import pekko.stream.OverflowStrategy
+import pekko.util.ByteString
 import org.openjdk.jmh.annotations._
 
 import scala.concurrent.{ Await, Promise }

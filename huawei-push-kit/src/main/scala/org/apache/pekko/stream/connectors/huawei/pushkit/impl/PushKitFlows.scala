@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit.impl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.connectors.huawei.pushkit.HmsSettings
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.{ PushKitNotification, Response }
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.Http
+import pekko.stream.connectors.huawei.pushkit.HmsSettings
+import pekko.stream.connectors.huawei.pushkit.models.{ PushKitNotification, Response }
+import pekko.stream.scaladsl.Flow
 
 /**
  * INTERNAL API

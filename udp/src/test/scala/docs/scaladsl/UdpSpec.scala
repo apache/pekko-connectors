@@ -14,16 +14,17 @@
 package docs.scaladsl
 
 import java.net.InetSocketAddress
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.io.UdpSO
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.connectors.udp.Datagram
-import org.apache.pekko.stream.connectors.udp.scaladsl.Udp
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Source }
-import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.io.UdpSO
+import pekko.stream.Materializer
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.connectors.udp.Datagram
+import pekko.stream.connectors.udp.scaladsl.Udp
+import pekko.stream.scaladsl.{ Flow, Keep, Source }
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 

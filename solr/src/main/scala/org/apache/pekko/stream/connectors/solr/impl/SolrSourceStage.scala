@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.solr.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 import org.apache.solr.client.solrj.io.Tuple
 import org.apache.solr.client.solrj.io.stream.TupleStream
 

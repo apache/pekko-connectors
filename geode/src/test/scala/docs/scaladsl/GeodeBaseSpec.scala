@@ -15,10 +15,11 @@ package docs.scaladsl
 
 import java.util.{ Date, UUID }
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.geode.{ GeodeSettings, RegionSettings }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.geode.{ GeodeSettings, RegionSettings }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Source
 import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.Await

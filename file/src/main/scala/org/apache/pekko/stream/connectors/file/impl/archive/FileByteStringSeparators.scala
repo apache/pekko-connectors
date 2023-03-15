@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.file.impl.archive
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.util.ByteString
 
 /**
  * INTERNAL API

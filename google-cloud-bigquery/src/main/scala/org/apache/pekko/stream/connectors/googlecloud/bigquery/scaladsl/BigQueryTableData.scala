@@ -13,29 +13,26 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
-import org.apache.pekko.http.scaladsl.model.HttpMethods.POST
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller }
-import org.apache.pekko.stream.connectors.google.GoogleAttributes
-import org.apache.pekko.stream.connectors.google.http.GoogleHttp
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
+import pekko.http.scaladsl.model.HttpMethods.POST
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
+import pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller }
+import pekko.stream.connectors.google.GoogleAttributes
+import pekko.stream.connectors.google.http.GoogleHttp
+import pekko.stream.connectors.google.implicits._
+import pekko.stream.connectors.googlecloud.bigquery.model.{
   Row,
   TableDataInsertAllRequest,
   TableDataInsertAllResponse,
   TableDataListResponse
 }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.{
-  BigQueryEndpoints,
-  BigQueryException,
-  InsertAllRetryPolicy
-}
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException, InsertAllRetryPolicy }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 
 import java.util.{ SplittableRandom, UUID }
 import scala.collection.immutable.Seq
@@ -53,7 +50,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    * @param maxResults row limit of the table
    * @param selectedFields subset of fields to return, supports select into sub fields. Example: `selectedFields = Seq("a", "e.d.f")`
    * @tparam Out the data model of each row
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row in the table
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row in the table
    */
   def tableData[Out](datasetId: String,
       tableId: String,
@@ -78,10 +75,10 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    *
    * @param datasetId dataset id of the table to insert into
    * @param tableId table id of the table to insert into
-   * @param retryPolicy [[org.apache.pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy]] determining whether to retry and deduplicate
+   * @param retryPolicy [[pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy]] determining whether to retry and deduplicate
    * @param templateSuffix if specified, treats the destination table as a base template, and inserts the rows into an instance table named "{destination}{templateSuffix}"
    * @tparam In the data model for each record
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink]] that inserts each batch of [[In]] into the table
+   * @return a [[pekko.stream.scaladsl.Sink]] that inserts each batch of [[In]] into the table
    */
   def insertAll[In](
       datasetId: String,
@@ -125,7 +122,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    * @param tableId table ID of the table to insert into
    * @param retryFailedRequests whether to retry failed requests
    * @tparam In the data model for each record
-   * @return a [[org.apache.pekko.stream.scaladsl.Flow]] that sends each [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllRequest]] and emits a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllResponse]] for each
+   * @return a [[pekko.stream.scaladsl.Flow]] that sends each [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllRequest]] and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllResponse]] for each
    */
   def insertAll[In](datasetId: String, tableId: String, retryFailedRequests: Boolean)(
       implicit m: ToEntityMarshaller[TableDataInsertAllRequest[In]])

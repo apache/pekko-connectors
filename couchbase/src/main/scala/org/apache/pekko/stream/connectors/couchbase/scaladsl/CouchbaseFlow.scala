@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.couchbase.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.couchbase.{
   CouchbaseDeleteFailure,
   CouchbaseDeleteResult,
   CouchbaseDeleteSuccess,
@@ -25,7 +26,7 @@ import org.apache.pekko.stream.connectors.couchbase.{
   CouchbaseWriteSettings,
   CouchbaseWriteSuccess
 }
-import org.apache.pekko.stream.scaladsl.Flow
+import pekko.stream.scaladsl.Flow
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 
 /**

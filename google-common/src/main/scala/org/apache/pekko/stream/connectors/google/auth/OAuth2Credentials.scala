@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.model.headers.OAuth2BearerToken
-import org.apache.pekko.stream.connectors.google.RequestSettings
-import org.apache.pekko.stream.connectors.google.auth.OAuth2Credentials.{ ForceRefresh, TokenRequest }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.{ CompletionStrategy, Materializer, OverflowStrategy }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.model.headers.OAuth2BearerToken
+import pekko.stream.connectors.google.RequestSettings
+import pekko.stream.connectors.google.auth.OAuth2Credentials.{ ForceRefresh, TokenRequest }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.{ CompletionStrategy, Materializer, OverflowStrategy }
 import com.google.auth.{ Credentials => GoogleCredentials }
 
 import java.time.Clock

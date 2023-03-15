@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettings
-import org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl.GCStorageWiremockBase._
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.googlecloud.storage.GCStorageSettings
+import pekko.stream.connectors.googlecloud.storage.scaladsl.GCStorageWiremockBase._
+import pekko.testkit.TestKit
 import com.typesafe.config.ConfigFactory
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.core.{ Hoverfly, HoverflyConfig, HoverflyMode, SimulationSource }

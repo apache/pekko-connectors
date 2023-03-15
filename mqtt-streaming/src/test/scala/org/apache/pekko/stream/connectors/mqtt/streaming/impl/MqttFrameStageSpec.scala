@@ -14,13 +14,14 @@
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Source }
-import org.apache.pekko.stream.testkit.javadsl.TestSink
-import org.apache.pekko.stream.testkit.scaladsl.TestSource
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Source }
+import pekko.stream.testkit.javadsl.TestSink
+import pekko.stream.testkit.scaladsl.TestSource
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike

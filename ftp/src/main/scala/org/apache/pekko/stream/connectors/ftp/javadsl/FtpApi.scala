@@ -13,17 +13,18 @@
 
 package org.apache.pekko.stream.connectors.ftp.javadsl
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
 import java.util.concurrent.CompletionStage
 import java.util.function._
 
-import org.apache.pekko.annotation.DoNotInherit
-import org.apache.pekko.stream.connectors.ftp._
-import org.apache.pekko.stream.connectors.ftp.impl._
-import org.apache.pekko.stream.javadsl.{ Sink, Source }
-import org.apache.pekko.stream.{ IOResult, Materializer }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.annotation.DoNotInherit
+import pekko.stream.connectors.ftp._
+import pekko.stream.connectors.ftp.impl._
+import pekko.stream.javadsl.{ Sink, Source }
+import pekko.stream.{ IOResult, Materializer }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
@@ -33,33 +34,33 @@ import scala.compat.java8.FunctionConverters._
 sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[FtpClient, S] =>
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
    * By default, `anonymous` credentials will be used.
    *
    * @param host FTP, FTPs or SFTP host
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(host: String): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    * By default, `anonymous` credentials will be used.
    *
    * @param host FTP, FTPs or SFTP host
    * @param basePath Base path from which traverse the remote file server
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(
       host: String,
       basePath: String): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
    *
    * @param host FTP, FTPs or SFTP host
    * @param username username
    * @param password password
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(
       host: String,
@@ -67,13 +68,13 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       password: String): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    *
    * @param host FTP, FTPs or SFTP host
    * @param username username
    * @param password password
    * @param basePath Base path from which traverse the remote file server
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(
       host: String,
@@ -82,18 +83,18 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       basePath: String): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    *
    * @param basePath Base path from which traverse the remote file server
    * @param connectionSettings connection settings
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(
       basePath: String,
       connectionSettings: S): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    *
    * @param basePath Base path from which traverse the remote file server
    * @param connectionSettings connection settings
@@ -105,12 +106,12 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
    *                       Calling [[ls(basePath,connectionSettings,f->false)]] will emit only the files and folder in
    *                       non-recursive fashion
    *
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(basePath: String, connectionSettings: S, branchSelector: Predicate[FtpFile]): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    *
    * @param basePath Base path from which traverse the remote file server
    * @param connectionSettings connection settings
@@ -123,7 +124,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
    *                       non-recursive fashion
    * @param emitTraversedDirectories whether to include entered directories in the stream
    *
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(basePath: String,
       connectionSettings: S,
@@ -131,24 +132,24 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       emitTraversedDirectories: Boolean): Source[FtpFile, NotUsed]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] from some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
    * @param host FTP, FTPs or SFTP host
    * @param path the file path
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def fromPath(
       host: String,
       path: String): Source[ByteString, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] from some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
    * @param host FTP, FTPs or SFTP host
    * @param username username
    * @param password password
    * @param path the file path
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def fromPath(
       host: String,
@@ -157,23 +158,23 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       path: String): Source[ByteString, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] from some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
    * @param path the file path
    * @param connectionSettings connection settings
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def fromPath(
       path: String,
       connectionSettings: S): Source[ByteString, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] from some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
    * @param path the file path
    * @param connectionSettings connection settings
-   * @param chunkSize the size of transmitted [[org.apache.pekko.util.ByteString ByteString]] chunks
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @param chunkSize the size of transmitted [[pekko.util.ByteString ByteString]] chunks
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def fromPath(
       path: String,
@@ -181,13 +182,13 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       chunkSize: Int = DefaultChunkSize): Source[ByteString, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] from some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
    * @param path the file path
    * @param connectionSettings connection settings
-   * @param chunkSize the size of transmitted [[org.apache.pekko.util.ByteString ByteString]] chunks
+   * @param chunkSize the size of transmitted [[pekko.util.ByteString ByteString]] chunks
    * @param offset the offset into the remote file at which to start the file transfer
-   * @return A [[org.apache.pekko.stream.javadsl.Source Source]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def fromPath(
       path: String,
@@ -201,7 +202,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
    * @param basePath path to start with
    * @param name name of a directory to create
    * @param connectionSettings connection settings
-   * @return [[org.apache.pekko.stream.javadsl.Source Source]] of [[Done]]
+   * @return [[pekko.stream.javadsl.Source Source]] of [[Done]]
    */
   def mkdir(basePath: String, name: String, connectionSettings: S): Source[Done, NotUsed]
 
@@ -212,7 +213,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
    * @param name name of a directory to create
    * @param connectionSettings connection settings
    * @param materializer materializer
-   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of [[org.apache.pekko.Done]] indicating a materialized, asynchronous request
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of [[pekko.Done]] indicating a materialized, asynchronous request
    * @deprecated pass in the actor system instead of the materializer, since 3.0.0
    */
   @Deprecated
@@ -225,7 +226,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
    * @param name name of a directory to create
    * @param connectionSettings connection settings
    * @param system actor system
-   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of [[org.apache.pekko.Done]] indicating a materialized, asynchronous request
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of [[pekko.Done]] indicating a materialized, asynchronous request
    */
   def mkdirAsync(basePath: String,
       name: String,
@@ -233,12 +234,12 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       system: ClassicActorSystemProvider): CompletionStage[Done]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] of [[org.apache.pekko.util.ByteString ByteString]] to some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Sink Sink]] of [[pekko.util.ByteString ByteString]] to some file path.
    *
    * @param path the file path
    * @param connectionSettings connection settings
    * @param append append data if a file already exists, overwrite the file if not
-   * @return A [[org.apache.pekko.stream.javadsl.Sink Sink]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Sink Sink]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def toPath(
       path: String,
@@ -246,36 +247,36 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
       append: Boolean): Sink[ByteString, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] of [[org.apache.pekko.util.ByteString ByteString]] to some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Sink Sink]] of [[pekko.util.ByteString ByteString]] to some file path.
    * If a file already exists at the specified target path, it will get overwritten.
    *
    * @param path the file path
    * @param connectionSettings connection settings
-   * @return A [[org.apache.pekko.stream.javadsl.Sink Sink]] of [[org.apache.pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Sink Sink]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def toPath(
       path: String,
       connectionSettings: S): Sink[ByteString, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] of a [[FtpFile]] that moves a file to some file path.
+   * Java API: creates a [[pekko.stream.javadsl.Sink Sink]] of a [[FtpFile]] that moves a file to some file path.
    *
    * @param destinationPath a function that returns path to where the [[FtpFile]] is moved.
    * @param connectionSettings connection settings
-   * @return A [[org.apache.pekko.stream.javadsl.Sink Sink]] of [[FtpFile]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Sink Sink]] of [[FtpFile]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def move(destinationPath: Function[FtpFile, String], connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]]
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] of a [[FtpFile]] that removes a file.
+   * Java API: creates a [[pekko.stream.javadsl.Sink Sink]] of a [[FtpFile]] that removes a file.
    *
    * @param connectionSettings connection settings
-   * @return A [[org.apache.pekko.stream.javadsl.Sink Sink]] of [[FtpFile]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
+   * @return A [[pekko.stream.javadsl.Sink Sink]] of [[FtpFile]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
   def remove(connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]]
 
-  protected[javadsl] def func[T, R](f: T => R): org.apache.pekko.japi.function.Function[T, R] =
-    new org.apache.pekko.japi.function.Function[T, R] {
+  protected[javadsl] def func[T, R](f: T => R): pekko.japi.function.Function[T, R] =
+    new pekko.japi.function.Function[T, R] {
       override def apply(param: T): R = f(param)
     }
 }
@@ -566,10 +567,10 @@ class SftpApi extends FtpApi[SSHClient, SftpSettings] with SftpSourceParams {
 object Sftp extends SftpApi {
 
   /**
-   * Java API: creates a [[org.apache.pekko.stream.connectors.ftp.javadsl.SftpApi]]
+   * Java API: creates a [[pekko.stream.connectors.ftp.javadsl.SftpApi]]
    *
    * @param customSshClient custom ssh client
-   * @return A [[org.apache.pekko.stream.connectors.ftp.javadsl.SftpApi]]
+   * @return A [[pekko.stream.connectors.ftp.javadsl.SftpApi]]
    */
   def create(customSshClient: SSHClient): SftpApi =
     new SftpApi {

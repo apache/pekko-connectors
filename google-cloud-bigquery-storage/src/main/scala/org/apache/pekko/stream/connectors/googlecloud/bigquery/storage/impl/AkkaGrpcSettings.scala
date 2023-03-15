@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.grpc.GrpcClientSettings
-import org.apache.pekko.stream.connectors.google.RequestSettings
-import org.apache.pekko.stream.connectors.google.auth.Credentials
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.InternalApi
+import pekko.grpc.GrpcClientSettings
+import pekko.stream.connectors.google.RequestSettings
+import pekko.stream.connectors.google.auth.Credentials
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings
 import com.typesafe.config.{ Config, ConfigFactory }
 import io.grpc.auth.MoreCallCredentials
 

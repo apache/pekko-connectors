@@ -13,7 +13,8 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.stream.connectors.jms._
+import org.apache.pekko
+import pekko.stream.connectors.jms._
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.scalatest.OptionValues

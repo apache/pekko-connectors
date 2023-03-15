@@ -16,14 +16,15 @@ package scaladsl
 
 import java.util.concurrent.atomic.AtomicLong
 
-import org.apache.pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem }
-import org.apache.pekko.actor.typed.scaladsl.adapter._
-import org.apache.pekko.event.{ Logging, LoggingAdapter }
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.mqtt.streaming.impl._
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Source }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem }
+import pekko.actor.typed.scaladsl.adapter._
+import pekko.event.{ Logging, LoggingAdapter }
+import pekko.stream._
+import pekko.stream.connectors.mqtt.streaming.impl._
+import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Source }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.{ Future, Promise }
 import scala.util.control.NoStackTrace

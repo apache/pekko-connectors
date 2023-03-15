@@ -13,8 +13,9 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow
+import pekko.stream.scaladsl.{ Sink, Source }
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 
 object Examples {

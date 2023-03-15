@@ -15,12 +15,13 @@ package org.apache.pekko.stream.connectors.dynamodb.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.dynamodb.{ scaladsl, DynamoDbOp, DynamoDbPaginatedOp }
-import org.apache.pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.ApiMayChange
+import pekko.stream.Materializer
+import pekko.stream.connectors.dynamodb.{ scaladsl, DynamoDbOp, DynamoDbPaginatedOp }
+import pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
 import software.amazon.awssdk.core.async.SdkPublisher
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model.{ DynamoDbRequest, DynamoDbResponse }

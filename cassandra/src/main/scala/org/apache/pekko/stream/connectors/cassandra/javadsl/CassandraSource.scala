@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.cassandra.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.javadsl.Source
 import com.datastax.oss.driver.api.core.cql.{ Row, Statement }
 
 import scala.annotation.varargs
@@ -36,7 +37,7 @@ object CassandraSource {
     session.select(cqlStatement, bindValues: _*)
 
   /**
-   * Create a [[org.apache.pekko.stream.javadsl.Source Source]] from a given statement.
+   * Create a [[pekko.stream.javadsl.Source Source]] from a given statement.
    *
    * See <a href="https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/queriesTOC.html">Querying data</a>.
    */
@@ -44,7 +45,7 @@ object CassandraSource {
     session.select(stmt)
 
   /**
-   * Create a [[org.apache.pekko.stream.javadsl.Source Source]] from a given statement.
+   * Create a [[pekko.stream.javadsl.Source Source]] from a given statement.
    *
    * See <a href="https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/queriesTOC.html">Querying data</a>.
    */

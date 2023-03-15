@@ -13,21 +13,18 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.event.LoggingAdapter
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.settings.ConnectionPoolSettings
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-import org.apache.pekko.http.scaladsl.{ HttpExt, HttpsConnectionContext }
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSettings
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.{
-  FcmErrorResponse,
-  FcmNotification,
-  FcmSuccessResponse
-}
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.event.LoggingAdapter
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.settings.ConnectionPoolSettings
+import pekko.http.scaladsl.unmarshalling.Unmarshal
+import pekko.http.scaladsl.{ HttpExt, HttpsConnectionContext }
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.google.firebase.fcm.FcmSettings
+import pekko.stream.connectors.google.firebase.fcm.v1.models.{ FcmErrorResponse, FcmNotification, FcmSuccessResponse }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{ doReturn, verify, when }

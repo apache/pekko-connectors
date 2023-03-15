@@ -17,11 +17,12 @@ import java.util
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicReference
 
-import org.apache.pekko.stream.connectors.kinesis.scaladsl.KinesisSource
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.kinesis.scaladsl.KinesisSource
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.util.ByteString
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock

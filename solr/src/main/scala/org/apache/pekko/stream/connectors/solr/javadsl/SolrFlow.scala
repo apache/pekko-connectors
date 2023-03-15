@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.solr.javadsl
 
 import java.util.function.Function
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.solr.{ scaladsl, SolrUpdateSettings, WriteMessage, WriteResult }
-import org.apache.pekko.stream.javadsl
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.solr.{ scaladsl, SolrUpdateSettings, WriteMessage, WriteResult }
+import pekko.stream.javadsl
+import pekko.stream.scaladsl.Flow
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
 

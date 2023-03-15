@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.amqp._
+import pekko.stream.scaladsl.{ Flow, Keep }
+import pekko.util.ByteString
 
 import scala.concurrent.Future
 

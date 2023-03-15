@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.orientdb.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.orientdb._
-import org.apache.pekko.stream.connectors.orientdb.impl.OrientDbSourceStage
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.orientdb._
+import pekko.stream.connectors.orientdb.impl.OrientDbSourceStage
+import pekko.stream.javadsl.Source
 import com.orientechnologies.orient.core.record.impl.ODocument
 
 /**

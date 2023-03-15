@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.sqs.scaladsl
 
 import java.util.concurrent.CompletionException
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.dispatch.ExecutionContexts.parasitic
-import org.apache.pekko.stream.connectors.sqs._
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.dispatch.ExecutionContexts.parasitic
+import pekko.stream.connectors.sqs._
+import pekko.stream.scaladsl.{ Flow, Source }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
@@ -33,7 +34,7 @@ import scala.compat.java8.FutureConverters._
 object SqsPublishFlow {
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def apply(queueUrl: String, settings: SqsPublishSettings)(
       implicit sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResult, NotUsed] =
@@ -42,14 +43,14 @@ object SqsPublishFlow {
       .via(apply(settings))
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def apply(queueUrl: String)(
       implicit sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResult, NotUsed] =
     apply(queueUrl, SqsPublishSettings.Defaults)
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to SQS queues based on the message queue url using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to SQS queues based on the message queue url using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def apply(settings: SqsPublishSettings = SqsPublishSettings.Defaults)(
       implicit sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResult, NotUsed] = {
@@ -65,7 +66,7 @@ object SqsPublishFlow {
   }
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    *
    * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
@@ -77,7 +78,7 @@ object SqsPublishFlow {
       .mapConcat(identity)
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def batch(queueUrl: String, settings: SqsPublishBatchSettings = SqsPublishBatchSettings.Defaults)(
       implicit sqsClient: SqsAsyncClient): Flow[Iterable[SendMessageRequest], List[SqsPublishResultEntry], NotUsed] = {

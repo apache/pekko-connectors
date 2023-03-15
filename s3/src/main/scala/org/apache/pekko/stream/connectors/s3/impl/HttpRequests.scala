@@ -16,16 +16,17 @@ package org.apache.pekko.stream.connectors.s3.impl
 import java.net.{ URLDecoder, URLEncoder }
 import java.nio.charset.StandardCharsets
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.marshallers.xml.ScalaXmlSupport._
-import org.apache.pekko.http.scaladsl.marshalling.Marshal
-import org.apache.pekko.http.scaladsl.model.Uri.{ Authority, Query }
-import org.apache.pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
-import org.apache.pekko.http.scaladsl.model.{ RequestEntity, _ }
-import org.apache.pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
-import org.apache.pekko.stream.connectors.s3.{ ApiVersion, MultipartUpload, S3Settings }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.marshallers.xml.ScalaXmlSupport._
+import pekko.http.scaladsl.marshalling.Marshal
+import pekko.http.scaladsl.model.Uri.{ Authority, Query }
+import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
+import pekko.http.scaladsl.model.{ RequestEntity, _ }
+import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import pekko.stream.connectors.s3.{ ApiVersion, MultipartUpload, S3Settings }
+import pekko.stream.scaladsl.Source
+import pekko.util.ByteString
 import software.amazon.awssdk.regions.Region
 
 import scala.collection.immutable.Seq

@@ -14,9 +14,10 @@
 package org.apache.pekko.stream.connectors.ftp
 package impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.stage.OutHandler
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.Attributes
+import pekko.stream.stage.OutHandler
 
 /**
  * INTERNAL API

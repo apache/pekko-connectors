@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode.Repeated
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.Bytes
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode.Repeated
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.Bytes
+import pekko.util.ByteString
 
 import scala.collection.Iterable
 

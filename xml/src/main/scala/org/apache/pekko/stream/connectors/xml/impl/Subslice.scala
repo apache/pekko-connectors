@@ -12,10 +12,12 @@
  */
 
 package org.apache.pekko.stream.connectors.xml.impl
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.stream.connectors.xml.{ EndElement, ParseEvent, StartElement }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.stream.connectors.xml.{ EndElement, ParseEvent, StartElement }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 import scala.collection.immutable
 

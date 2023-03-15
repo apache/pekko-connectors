@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
 import javax.jms
 
 import scala.concurrent.Future

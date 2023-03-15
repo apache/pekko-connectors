@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.ironmq.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings
-import org.apache.pekko.stream.connectors.ironmq._
-import org.apache.pekko.stream.connectors.ironmq.scaladsl.CommittableMessage
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings
+import pekko.stream.connectors.ironmq._
+import pekko.stream.connectors.ironmq.scaladsl.CommittableMessage
+import pekko.stream.stage._
 
 import scala.concurrent.{ ExecutionContextExecutor, Future }
 import scala.util.{ Failure, Success }
@@ -36,9 +37,9 @@ private[ironmq] object IronMqPullStage {
  * This stage will fetch messages from IronMq and buffer them internally.
  *
  * It is implemented as a timed loop, each invocation will fetch new messages from IronMq if the amount of buffered
- * messages is lower than [[org.apache.pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings.bufferMinSize]].
+ * messages is lower than [[pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings.bufferMinSize]].
  *
- * The frequency of the loop is controlled by [[org.apache.pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings.fetchInterval]] while the amount of time the client is
+ * The frequency of the loop is controlled by [[pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings.fetchInterval]] while the amount of time the client is
  * blocked on the HTTP request waiting for messages is controlled by [[ConsumerSettings.pollTimeout]].
  *
  * Keep in mind that the IronMq time unit is the second, so any value below the second is considered 0.

@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.s3.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
-import org.apache.pekko.stream.connectors.s3.S3Ext
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
+import pekko.stream.connectors.s3.S3Ext
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers

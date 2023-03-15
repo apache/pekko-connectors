@@ -15,9 +15,10 @@ package docs.scaladsl
 
 import java.nio.charset.StandardCharsets
 
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.scaladsl.{ Flow, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.util.ByteString
 
 import scala.collection.immutable
 

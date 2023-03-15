@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.mock
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.grpc.GrpcServiceException
-import org.apache.pekko.grpc.scaladsl.Metadata
-import org.apache.pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.grpc.GrpcServiceException
+import pekko.grpc.scaladsl.Metadata
+import pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
+import pekko.http.scaladsl.Http
+import pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.avro.AvroSchema
 import com.google.cloud.bigquery.storage.v1.storage._

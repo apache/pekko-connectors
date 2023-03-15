@@ -13,20 +13,21 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.HttpExt
-import org.apache.pekko.http.scaladsl.model.Uri.Path
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-import org.apache.pekko.stream.connectors.elasticsearch.{
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.HttpExt
+import pekko.http.scaladsl.model.Uri.Path
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.unmarshalling.Unmarshal
+import pekko.stream.connectors.elasticsearch.{
   ApiVersion,
   ElasticsearchParams,
   OpensearchApiVersion,
   ReadResult,
   SourceSettingsBase
 }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
-import org.apache.pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
+import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 

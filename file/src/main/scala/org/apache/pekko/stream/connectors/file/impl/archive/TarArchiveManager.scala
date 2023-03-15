@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.file.impl.archive
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.file.TarArchiveMetadata
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.file.TarArchiveMetadata
+import pekko.stream.scaladsl.{ Flow, Source }
+import pekko.util.ByteString
 
 /**
  * INTERNAL API

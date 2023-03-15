@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.impl.DeprecatedCredentials
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.DeprecatedCredentials
 import com.google.auth.oauth2.GoogleCredentials
 import com.typesafe.config.Config
 import io.grpc.CallCredentials
@@ -32,7 +33,7 @@ final class PubSubSettings private (
     val port: Int,
     val useTls: Boolean,
     val rootCa: Option[String],
-    /** @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] */
+    /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "3.0.0") @Deprecated val callCredentials: Option[
@@ -57,7 +58,7 @@ final class PubSubSettings private (
 
   /**
    * Credentials that are going to be used for gRPC call authorization.
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
@@ -106,7 +107,7 @@ object PubSubSettings {
   /**
    * Create settings from a classic ActorSystem's config.
    */
-  def apply(system: org.apache.pekko.actor.ActorSystem): PubSubSettings =
+  def apply(system: pekko.actor.ActorSystem): PubSubSettings =
     PubSubSettings(system.settings.config.getConfig("pekko.connectors.google.cloud.pubsub.grpc"))
 
   /**
@@ -138,6 +139,6 @@ object PubSubSettings {
    *
    * Create settings from a classic ActorSystem's config.
    */
-  def create(system: org.apache.pekko.actor.ActorSystem): PubSubSettings =
+  def create(system: pekko.actor.ActorSystem): PubSubSettings =
     PubSubSettings(system)
 }

@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.jms
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.{ Config, ConfigValueType }
 
 /**
- * Settings for [[org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.browse]] and [[org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer.browse]].
+ * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsConsumer.browse]] and [[pekko.stream.connectors.jms.javadsl.JmsConsumer.browse]].
  */
 final class JmsBrowseSettings private (
     val connectionFactory: javax.jms.ConnectionFactory,
@@ -37,7 +38,7 @@ final class JmsBrowseSettings private (
   /** Set a queue name to browse from. */
   def withQueue(name: String): JmsBrowseSettings = copy(destination = Some(Queue(name)))
 
-  /** Set a JMS to subscribe to. Allows for custom handling with [[org.apache.pekko.stream.connectors.jms.CustomDestination CustomDestination]]. */
+  /** Set a JMS to subscribe to. Allows for custom handling with [[pekko.stream.connectors.jms.CustomDestination CustomDestination]]. */
   def withDestination(value: Destination): JmsBrowseSettings = copy(destination = Option(value))
 
   /** Set JMS broker credentials. */

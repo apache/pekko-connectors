@@ -13,21 +13,22 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.marshalling.Marshal
-import org.apache.pekko.http.scaladsl.model.HttpMethods.POST
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
-import org.apache.pekko.http.scaladsl.unmarshalling.FromEntityUnmarshaller
-import org.apache.pekko.stream.RestartSettings
-import org.apache.pekko.stream.connectors.google.GoogleAttributes
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobReference
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{ QueryRequest, QueryResponse }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException }
-import org.apache.pekko.stream.scaladsl.{ Keep, RestartSource, Sink, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.marshalling.Marshal
+import pekko.http.scaladsl.model.HttpMethods.POST
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
+import pekko.http.scaladsl.unmarshalling.FromEntityUnmarshaller
+import pekko.stream.RestartSettings
+import pekko.stream.connectors.google.GoogleAttributes
+import pekko.stream.connectors.google.implicits._
+import pekko.stream.connectors.googlecloud.bigquery.model.JobReference
+import pekko.stream.connectors.googlecloud.bigquery.model.{ QueryRequest, QueryResponse }
+import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException }
+import pekko.stream.scaladsl.{ Keep, RestartSource, Sink, Source }
 
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
@@ -43,8 +44,8 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    * @param dryRun if set to `true` BigQuery doesn't run the job and instead returns statistics about the job such as how many bytes would be processed
    * @param useLegacySql specifies whether to use BigQuery's legacy SQL dialect for this query
    * @tparam Out the data model of the query results
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the result and materializes
-   *         a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the result and materializes
+   *         a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def query[Out](query: String, dryRun: Boolean = false, useLegacySql: Boolean = true)(
       implicit um: FromEntityUnmarshaller[QueryResponse[Out]]): Source[Out, Future[QueryResponse[Out]]] = {
@@ -56,11 +57,11 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    * Runs a BigQuery SQL query.
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query BigQuery reference]]
    *
-   * @param query the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryRequest]]
+   * @param query the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryRequest]]
    * @tparam Out the data model of the query results
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the results and materializes
-   *         a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobReference]] and
-   *         a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the results and materializes
+   *         a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.JobReference]] and
+   *         a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def query[Out](query: QueryRequest)(
       implicit um: FromEntityUnmarshaller[QueryResponse[Out]])
@@ -133,7 +134,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    * @param timeout specifies the maximum amount of time that the client is willing to wait for the query to complete
    * @param location the geographic location of the job. Required except for US and EU
    * @tparam Out the data model of the query results
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the results and materializes a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the results and materializes a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def queryResults[Out](
       jobId: String,

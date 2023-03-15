@@ -14,23 +14,18 @@
 package org.apache.pekko.stream.connectors.pravega.impl
 
 import java.util.function.Consumer
-import org.apache.pekko.stream.stage.{
-  AsyncCallback,
-  GraphStageLogic,
-  GraphStageWithMaterializedValue,
-  OutHandler,
-  StageLogging
-}
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
+import org.apache.pekko
+import pekko.stream.stage.{ AsyncCallback, GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.event.Logging
 
 import scala.concurrent.{ Future, Promise }
 import scala.util.control.NonFatal
-import org.apache.pekko.stream.ActorAttributes
+import pekko.stream.ActorAttributes
 
-import org.apache.pekko.stream.connectors.pravega.TableReaderSettings
+import pekko.stream.connectors.pravega.TableReaderSettings
 import io.pravega.client.KeyValueTableFactory
 import io.pravega.client.tables.{
   IteratorItem,
@@ -39,7 +34,7 @@ import io.pravega.client.tables.{
   TableEntry => JTableEntry
 }
 
-import org.apache.pekko.stream.connectors.pravega.TableEntry
+import pekko.stream.connectors.pravega.TableEntry
 
 import scala.collection.mutable
 import java.util.concurrent.Semaphore

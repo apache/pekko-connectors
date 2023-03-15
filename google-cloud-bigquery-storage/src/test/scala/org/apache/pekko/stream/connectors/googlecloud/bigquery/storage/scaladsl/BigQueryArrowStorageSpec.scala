@@ -13,13 +13,11 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl.SimpleRowReader
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{
-  BigQueryStorageSettings,
-  BigQueryStorageSpecBase
-}
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.storage.impl.SimpleRowReader
+import pekko.stream.connectors.googlecloud.bigquery.storage.{ BigQueryStorageSettings, BigQueryStorageSpecBase }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Sink
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers

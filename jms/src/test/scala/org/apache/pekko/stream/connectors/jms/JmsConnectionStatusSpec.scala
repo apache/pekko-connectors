@@ -15,15 +15,11 @@ package org.apache.pekko.stream.connectors.jms
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.stream.OverflowStrategy
-import org.apache.pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
-import org.apache.pekko.stream.connectors.jms.scaladsl.{
-  JmsConnectorState,
-  JmsConsumer,
-  JmsProducer,
-  JmsProducerStatus
-}
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
+import org.apache.pekko
+import pekko.stream.OverflowStrategy
+import pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
+import pekko.stream.connectors.jms.scaladsl.{ JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
 import javax.jms._
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito._

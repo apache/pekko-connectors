@@ -13,15 +13,12 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import org.apache.pekko.http.scaladsl.model.{ ErrorInfo, ExceptionWithErrorInfo, HttpResponse }
-import org.apache.pekko.http.scaladsl.unmarshalling.{
-  FromResponseUnmarshaller,
-  PredefinedFromEntityUnmarshallers,
-  Unmarshaller
-}
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.stream.connectors.google.util.Retry
+import org.apache.pekko
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import pekko.http.scaladsl.model.{ ErrorInfo, ExceptionWithErrorInfo, HttpResponse }
+import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, PredefinedFromEntityUnmarshallers, Unmarshaller }
+import pekko.stream.connectors.google.implicits._
+import pekko.stream.connectors.google.util.Retry
 import spray.json.DefaultJsonProtocol._
 import spray.json.RootJsonFormat
 
