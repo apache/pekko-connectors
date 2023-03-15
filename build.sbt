@@ -309,11 +309,12 @@ lazy val unixdomainsocket =
 lazy val xml = pekkoConnectorProject("xml", "xml", Dependencies.Xml)
 
 lazy val docs = project
-  .enablePlugins(ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
+  .enablePlugins(PekkoParadoxPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
   .disablePlugins(MimaPlugin)
   .settings(
     Compile / paradox / name := "Apache Pekko Connectors",
     publish / skip := true,
+    pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-connectors"),
     makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
     Preprocess / siteSubdirName := s"api/alpakka/${projectInfoVersion.value}",
