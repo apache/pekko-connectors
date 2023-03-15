@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.google.http
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 
 import java.io.FileInputStream
 import java.security.KeyStore

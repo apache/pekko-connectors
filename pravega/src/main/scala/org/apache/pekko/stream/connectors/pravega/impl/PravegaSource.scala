@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.pravega.impl
 
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.connectors.pravega.{ PravegaEvent, ReaderSettings }
+import org.apache.pekko
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.connectors.pravega.{ PravegaEvent, ReaderSettings }
 import io.pravega.client.ClientConfig
 
 import scala.concurrent.{ Future, Promise }
@@ -26,8 +27,8 @@ import scala.concurrent.duration.DurationLong
 import io.pravega.client.stream.{ EventStreamReader, ReaderGroup }
 
 import scala.util.control.NonFatal
-import org.apache.pekko.stream.ActorAttributes
-import org.apache.pekko.stream.stage.AsyncCallback
+import pekko.stream.ActorAttributes
+import pekko.stream.stage.AsyncCallback
 
 import java.util.UUID
 import scala.util.{ Failure, Success, Try }

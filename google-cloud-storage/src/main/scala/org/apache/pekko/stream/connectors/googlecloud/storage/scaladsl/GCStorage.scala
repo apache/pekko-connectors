@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl
 
-import org.apache.pekko.http.scaladsl.model.ContentType
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.stream.connectors.googlecloud.storage.impl.GCStorageStream
-import org.apache.pekko.stream.connectors.googlecloud.storage.{ Bucket, StorageObject }
-import org.apache.pekko.stream.scaladsl.{ RunnableGraph, Sink, Source }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.http.scaladsl.model.ContentType
+import pekko.stream.{ Attributes, Materializer }
+import pekko.stream.connectors.googlecloud.storage.impl.GCStorageStream
+import pekko.stream.connectors.googlecloud.storage.{ Bucket, StorageObject }
+import pekko.stream.scaladsl.{ RunnableGraph, Sink, Source }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

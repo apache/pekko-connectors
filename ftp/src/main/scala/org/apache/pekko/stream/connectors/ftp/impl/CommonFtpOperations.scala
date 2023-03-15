@@ -18,8 +18,9 @@ import java.nio.file.Paths
 import java.nio.file.attribute.PosixFilePermission
 import java.util.TimeZone
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.ftp.FtpFile
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.ftp.FtpFile
 import org.apache.commons.net.ftp.{ FTPClient, FTPFile }
 
 import scala.collection.immutable

@@ -14,11 +14,12 @@
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
 import java.util.concurrent.CompletionStage
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.discovery.Discovery
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.annotation.InternalApi
+import pekko.discovery.Discovery
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.util.JavaDurationConverters._
 import com.typesafe.config.Config
 
 import scala.collection.immutable

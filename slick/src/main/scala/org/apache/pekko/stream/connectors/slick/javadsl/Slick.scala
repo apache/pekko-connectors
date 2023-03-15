@@ -19,11 +19,12 @@ import java.util.concurrent.CompletionStage
 import java.util.function.{ Function => JFunction }
 import java.util.function.{ BiFunction => JBiFunction }
 
-import org.apache.pekko.Done
-import org.apache.pekko.NotUsed
-import org.apache.pekko.japi.function.Function2
-import org.apache.pekko.stream.connectors.slick.scaladsl.{ Slick => ScalaSlick }
-import org.apache.pekko.stream.javadsl._
+import org.apache.pekko
+import pekko.Done
+import pekko.NotUsed
+import pekko.japi.function.Function2
+import pekko.stream.connectors.slick.scaladsl.{ Slick => ScalaSlick }
+import pekko.stream.javadsl._
 import slick.dbio.DBIO
 import slick.jdbc.GetResult
 import slick.jdbc.SQLActionBuilder

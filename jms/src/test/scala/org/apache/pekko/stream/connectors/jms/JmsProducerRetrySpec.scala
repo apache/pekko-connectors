@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.jms
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko
+import pekko.stream._
+import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsProducer }
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import javax.jms.{ JMSException, Message, TextMessage }
 import org.mockito.ArgumentMatchers.{ any, anyInt, anyLong }
 import org.mockito.Mockito.when

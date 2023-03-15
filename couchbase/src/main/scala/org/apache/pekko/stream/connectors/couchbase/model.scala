@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.couchbase
 
 import java.util.concurrent.{ CompletionStage, TimeUnit }
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.annotation.InternalApi
 import com.couchbase.client.java.document.Document
 import com.couchbase.client.java.env.CouchbaseEnvironment
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }

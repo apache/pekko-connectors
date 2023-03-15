@@ -15,15 +15,16 @@ package org.apache.pekko.stream.connectors.reference.javadsl
 
 import java.util.concurrent.{ CompletionStage, Executor }
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.reference.scaladsl
-import org.apache.pekko.stream.connectors.reference.{
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.reference.scaladsl
+import pekko.stream.connectors.reference.{
   ReferenceReadResult,
   ReferenceWriteMessage,
   ReferenceWriteResult,
   SourceSettings
 }
-import org.apache.pekko.stream.javadsl.{ Flow, Source }
+import pekko.stream.javadsl.{ Flow, Source }
 
 import scala.concurrent.ExecutionContext
 

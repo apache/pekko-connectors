@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.reference
 
 import java.util.{ Optional, OptionalInt }
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.util.ByteString
 
 import scala.collection.immutable
 import scala.jdk.CollectionConverters._
@@ -27,7 +28,7 @@ import scala.util.{ Success, Try }
  * Use "Read" in message data types to signify that the message was read from outside.
  *
  * The constructor is INTERNAL API, but you may construct instances for testing by using
- * [[org.apache.pekko.stream.connectors.reference.testkit.MessageFactory]].
+ * [[pekko.stream.connectors.reference.testkit.MessageFactory]].
  */
 final class ReferenceReadResult @InternalApi private[reference] (
     val data: immutable.Seq[ByteString] = immutable.Seq.empty,
@@ -136,7 +137,7 @@ object ReferenceWriteMessage {
  * the constructor is marked as INTERNAL API.
  *
  * The constructor is INTERNAL API, but you may construct instances for testing by using
- * [[org.apache.pekko.stream.connectors.reference.testkit.MessageFactory]].
+ * [[pekko.stream.connectors.reference.testkit.MessageFactory]].
  */
 final class ReferenceWriteResult @InternalApi private[reference] (val message: ReferenceWriteMessage,
     val metrics: Map[String, Long],

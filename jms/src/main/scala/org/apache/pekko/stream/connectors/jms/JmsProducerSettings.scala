@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.jms
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.util.JavaDurationConverters._
 import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * Settings for [[org.apache.pekko.stream.connectors.jms.scaladsl.JmsProducer]] and [[org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer]].
+ * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsProducer]] and [[pekko.stream.connectors.jms.javadsl.JmsProducer]].
  */
 final class JmsProducerSettings private (
     val connectionFactory: javax.jms.ConnectionFactory,
@@ -31,7 +32,7 @@ final class JmsProducerSettings private (
     val sessionCount: Int,
     val timeToLive: Option[scala.concurrent.duration.Duration],
     val connectionStatusSubscriptionTimeout: scala.concurrent.duration.FiniteDuration)
-    extends org.apache.pekko.stream.connectors.jms.JmsSettings {
+    extends pekko.stream.connectors.jms.JmsSettings {
 
   /** Factory to use for creating JMS connections. */
   def withConnectionFactory(value: javax.jms.ConnectionFactory): JmsProducerSettings = copy(connectionFactory = value)
@@ -49,7 +50,7 @@ final class JmsProducerSettings private (
   /** Set a topic name as JMS destination. */
   def withTopic(name: String): JmsProducerSettings = copy(destination = Some(Topic(name)))
 
-  /** Set a JMS destination. Allows for custom handling with [[org.apache.pekko.stream.connectors.jms.CustomDestination CustomDestination]]. */
+  /** Set a JMS destination. Allows for custom handling with [[pekko.stream.connectors.jms.CustomDestination CustomDestination]]. */
   def withDestination(value: Destination): JmsProducerSettings = copy(destination = Option(value))
 
   /** Set JMS broker credentials. */

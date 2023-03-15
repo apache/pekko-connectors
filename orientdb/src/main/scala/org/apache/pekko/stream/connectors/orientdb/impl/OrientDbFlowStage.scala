@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.orientdb.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.orientdb.{ OrientDbWriteMessage, OrientDbWriteSettings }
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.orientdb.{ OrientDbWriteMessage, OrientDbWriteSettings }
+import pekko.stream.stage._
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.record.ORecord

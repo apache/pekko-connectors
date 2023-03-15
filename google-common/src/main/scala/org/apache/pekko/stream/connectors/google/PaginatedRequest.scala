@@ -13,16 +13,17 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.model.HttpMethods.GET
-import org.apache.pekko.http.scaladsl.model.HttpRequest
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.unmarshalling.FromResponseUnmarshaller
-import org.apache.pekko.stream.connectors.google.http.GoogleHttp
-import org.apache.pekko.stream.connectors.google.scaladsl.Paginated
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.model.HttpMethods.GET
+import pekko.http.scaladsl.model.HttpRequest
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.unmarshalling.FromResponseUnmarshaller
+import pekko.stream.connectors.google.http.GoogleHttp
+import pekko.stream.connectors.google.scaladsl.Paginated
+import pekko.stream.scaladsl.Source
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -33,11 +34,11 @@ private[connectors] object PaginatedRequest {
 
   /**
    * Makes a series of authenticated requests to page through a resource.
-   * Requests are retried if the unmarshaller throws a [[org.apache.pekko.stream.connectors.google.util.Retry]].
+   * Requests are retried if the unmarshaller throws a [[pekko.stream.connectors.google.util.Retry]].
    *
    * @param request the [[HttpRequest]] to make; must be a GET request
    * @tparam Out the data model for each page of the resource
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits an `Out` for each page of the resource
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an `Out` for each page of the resource
    */
   def apply[Out: FromResponseUnmarshaller](request: HttpRequest)(
       implicit paginated: Paginated[Out]): Source[Out, NotUsed] = {

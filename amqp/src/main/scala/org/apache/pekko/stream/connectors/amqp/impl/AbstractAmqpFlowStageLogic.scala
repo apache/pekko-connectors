@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.amqp.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
-import org.apache.pekko.stream.stage.{ GraphStageLogic, InHandler, OutHandler, StageLogging }
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
+import pekko.stream.stage.{ GraphStageLogic, InHandler, OutHandler, StageLogging }
 
 import scala.concurrent.Promise
 

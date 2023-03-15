@@ -13,7 +13,8 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl
 
-import org.apache.pekko.actor.{
+import org.apache.pekko
+import pekko.actor.{
   ActorSystem,
   ClassicActorSystemProvider,
   ExtendedActorSystem,
@@ -21,10 +22,10 @@ import org.apache.pekko.actor.{
   ExtensionId,
   ExtensionIdProvider
 }
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.impl.PekkoGrpcSettings
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
+import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.PekkoGrpcSettings
 import com.google.pubsub.v1.{ SubscriberClient => JavaSubscriberClient }
 
 /**

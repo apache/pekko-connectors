@@ -15,11 +15,12 @@ package docs.scaladsl
 
 import java.util.concurrent.TimeUnit
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.sqs._
-import org.apache.pekko.stream.connectors.sqs.scaladsl._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.sqs._
+import pekko.stream.connectors.sqs.scaladsl._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.sqs.SqsAsyncClient

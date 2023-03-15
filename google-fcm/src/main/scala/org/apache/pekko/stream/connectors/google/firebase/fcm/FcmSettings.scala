@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.http.scaladsl.model.headers.BasicHttpCredentials
-import org.apache.pekko.stream.connectors.google.{ ForwardProxy => CommonForwardProxy }
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.http.scaladsl.model.headers.BasicHttpCredentials
+import pekko.stream.connectors.google.{ ForwardProxy => CommonForwardProxy }
 
 import java.util.Objects
 import scala.annotation.nowarn
@@ -23,41 +24,41 @@ import scala.compat.java8.OptionConverters._
 
 @nowarn("msg=deprecated")
 final class FcmSettings private (
-    /** Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] */
+    /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "3.0.0") @Deprecated val clientEmail: String,
-    /** Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] */
+    /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "3.0.0") @Deprecated val privateKey: String,
-    /** Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] */
+    /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "3.0.0") @Deprecated val projectId: String,
     val isTest: Boolean,
     val maxConcurrentConnections: Int,
-    /** Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] */
+    /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "3.0.0") @Deprecated val forwardProxy: Option[ForwardProxy] = Option.empty) {
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
   def withClientEmail(value: String): FcmSettings = copy(clientEmail = value)
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
   def withPrivateKey(value: String): FcmSettings = copy(privateKey = value)
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
@@ -68,7 +69,7 @@ final class FcmSettings private (
   def withMaxConcurrentConnections(value: Int): FcmSettings = copy(maxConcurrentConnections = value)
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
@@ -94,7 +95,7 @@ final class FcmSettings private (
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.ForwardProxy]]
+ * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
 @Deprecated
@@ -111,7 +112,7 @@ object ForwardProxyTrustPem {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.ForwardProxy]]
+ * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
 @Deprecated
@@ -136,7 +137,7 @@ final class ForwardProxyTrustPem private (val pemPath: String) {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.ForwardProxy]]
+ * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
 @Deprecated
@@ -153,7 +154,7 @@ object ForwardProxyCredentials {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.ForwardProxy]]
+ * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
 @Deprecated
@@ -190,7 +191,7 @@ final class ForwardProxyCredentials private (val username: String, val password:
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.ForwardProxy]]
+ * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
 @Deprecated
@@ -225,7 +226,7 @@ object ForwardProxy {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.ForwardProxy]]
+ * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
 @Deprecated
@@ -295,7 +296,7 @@ object FcmSettings {
 
   /**
    * Scala API
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
@@ -310,7 +311,7 @@ object FcmSettings {
     maxConcurrentConnections = 100)
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
@@ -328,7 +329,7 @@ object FcmSettings {
 
   /**
    * Java API
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated
@@ -337,7 +338,7 @@ object FcmSettings {
   }
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
   @Deprecated

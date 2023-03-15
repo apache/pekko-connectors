@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.jms.impl
 
 import javax.jms
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms._
+import pekko.util.ByteString
 import scala.annotation.tailrec
 import scala.jdk.CollectionConverters._
 
@@ -25,7 +26,7 @@ import scala.jdk.CollectionConverters._
 private[jms] object JmsMessageReader {
 
   /**
-   * Read a [[org.apache.pekko.util.ByteString]] from a [[javax.jms.BytesMessage]]
+   * Read a [[pekko.util.ByteString]] from a [[javax.jms.BytesMessage]]
    */
   def readBytes(message: jms.BytesMessage, bufferSize: Int = 4096): ByteString = {
     if (message.getBodyLength > Int.MaxValue)

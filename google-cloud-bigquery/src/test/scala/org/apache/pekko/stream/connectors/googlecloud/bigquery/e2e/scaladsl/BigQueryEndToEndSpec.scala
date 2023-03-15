@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.{ pattern, Done }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.HoverflySupport
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.{ A, B, C }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobState
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableReference
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.{ pattern, Done }
+import pekko.stream.connectors.googlecloud.bigquery.HoverflySupport
+import pekko.stream.connectors.googlecloud.bigquery.e2e.{ A, B, C }
+import pekko.stream.connectors.googlecloud.bigquery.model.JobState
+import pekko.stream.connectors.googlecloud.bigquery.model.TableReference
+import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.{ HoverflyMode, SimulationSource }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
@@ -59,11 +60,11 @@ class BigQueryEndToEndSpec
 
   "BigQuery Scala DSL" should {
 
-    import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-    import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
-    import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
-    import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
-    import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+    import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+    import pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
+    import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
+    import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
+    import pekko.stream.scaladsl.{ Sink, Source }
 
     implicit val cFormat = bigQueryJsonFormat5(C)
     implicit val bFormat = bigQueryJsonFormat3(B)

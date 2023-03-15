@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.impl.JmsConnector.FlushAcknowledgementsTimerKey
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.impl.JmsConnector.FlushAcknowledgementsTimerKey
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 import javax.jms
 
 /**

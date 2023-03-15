@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.xml.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.xml.ParseEvent
-import org.apache.pekko.stream.connectors.xml.impl
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.xml.ParseEvent
+import pekko.stream.connectors.xml.impl
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 import com.fasterxml.aalto.AsyncXMLInputFactory
 import org.w3c.dom.Element
 

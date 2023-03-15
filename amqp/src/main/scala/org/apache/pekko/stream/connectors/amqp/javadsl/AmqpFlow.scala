@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.amqp.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.scaladsl.Keep
+import org.apache.pekko
+import pekko.Done
+import pekko.japi.Pair
+import pekko.stream.connectors.amqp._
+import pekko.stream.scaladsl.Keep
 
 import scala.compat.java8.FutureConverters._
 
@@ -36,9 +37,8 @@ object AmqpFlow {
    * @param settings `bufferSize` and `confirmationTimeout` properties are ignored by this connector
    */
   def create(
-      settings: AmqpWriteSettings)
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpFlow(settings).mapMaterializedValue(f => f.toJava).asJava
+      settings: AmqpWriteSettings): pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpFlow(settings).mapMaterializedValue(f => f.toJava).asJava
 
   /**
    * Creates an `AmqpFlow` that accepts `WriteMessage` elements and emits `WriteResult`.
@@ -59,9 +59,8 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def createWithConfirm(
-      settings: AmqpWriteSettings)
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpFlow
+      settings: AmqpWriteSettings): pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpFlow
       .withConfirm(settings = settings)
       .mapMaterializedValue(_.toJava)
       .asJava
@@ -85,9 +84,8 @@ object AmqpFlow {
    * supposed to be used with another AMQP brokers.
    */
   def createWithConfirmUnordered(
-      settings: AmqpWriteSettings)
-      : org.apache.pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpFlow
+      settings: AmqpWriteSettings): pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpFlow
       .withConfirmUnordered(settings)
       .mapMaterializedValue(_.toJava)
       .asJava
@@ -103,12 +101,12 @@ object AmqpFlow {
    */
   def createWithConfirmAndPassThroughUnordered[T](
       settings: AmqpWriteSettings)
-      : org.apache.pekko.stream.javadsl.Flow[Pair[WriteMessage, T], Pair[WriteResult, T], CompletionStage[Done]] =
-    org.apache.pekko.stream.scaladsl
+      : pekko.stream.javadsl.Flow[Pair[WriteMessage, T], Pair[WriteResult, T], CompletionStage[Done]] =
+    pekko.stream.scaladsl
       .Flow[Pair[WriteMessage, T]]
       .map((p: Pair[WriteMessage, T]) => p.toScala)
       .viaMat(
-        org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpFlow
+        pekko.stream.connectors.amqp.scaladsl.AmqpFlow
           .withConfirmAndPassThroughUnordered[T](settings = settings))(Keep.right)
       .map { case (writeResult, passThrough) => Pair(writeResult, passThrough) }
       .mapMaterializedValue(_.toJava)

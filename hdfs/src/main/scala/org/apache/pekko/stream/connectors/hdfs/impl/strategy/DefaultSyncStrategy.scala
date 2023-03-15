@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.hdfs.impl.strategy
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.hdfs.SyncStrategy
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.hdfs.SyncStrategy
 
 /**
  * Internal API

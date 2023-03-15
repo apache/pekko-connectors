@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.geode.impl.stage
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.SourceShape
-import org.apache.pekko.stream.stage.StageLogging
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.SourceShape
+import pekko.stream.stage.StageLogging
 import org.apache.geode.cache.client.ClientCache
 import org.apache.geode.cache.query.SelectResults
 

@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl.{ AvroDecoder, SimpleRowReader }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.storage.impl.{ AvroDecoder, SimpleRowReader }
+import pekko.stream.connectors.googlecloud.bigquery.storage.{
   BigQueryRecord,
   BigQueryStorageSettings,
   BigQueryStorageSpecBase
 }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Sink
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Sink
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.avro.AvroSchema
 import com.google.cloud.bigquery.storage.v1.DataFormat

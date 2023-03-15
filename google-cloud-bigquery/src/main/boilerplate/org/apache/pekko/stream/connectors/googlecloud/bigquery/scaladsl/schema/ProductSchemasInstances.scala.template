@@ -4,8 +4,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchema
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode.Required
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchema
+import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaMode.Required
 
 import scala.collection.immutable.Seq
 import scala.reflect.{classTag, ClassTag}

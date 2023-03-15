@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.google.util
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.scaladsl.{ Flow, Source }
 
 @InternalApi
 private[google] object MaybeLast {

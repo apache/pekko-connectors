@@ -12,13 +12,14 @@
  */
 
 package org.apache.pekko.stream.connectors.avroparquet.scaladsl
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.scaladsl.Flow
 import org.apache.avro.generic.GenericRecord
 import org.apache.parquet.hadoop.ParquetWriter
 
 object AvroParquetFlow {
 
   def apply[T <: GenericRecord](writer: ParquetWriter[T]): Flow[T, T, NotUsed] =
-    Flow.fromGraph(new org.apache.pekko.stream.connectors.avroparquet.impl.AvroParquetFlow(writer))
+    Flow.fromGraph(new pekko.stream.connectors.avroparquet.impl.AvroParquetFlow(writer))
 }

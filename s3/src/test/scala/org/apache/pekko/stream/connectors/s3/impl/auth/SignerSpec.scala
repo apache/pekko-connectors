@@ -15,12 +15,13 @@ package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import java.time.{ LocalDateTime, ZoneOffset, ZonedDateTime }
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
+import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Sink
+import pekko.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
 import org.scalatest.concurrent.ScalaFutures

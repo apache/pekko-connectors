@@ -16,9 +16,10 @@ package org.apache.pekko.stream.connectors.sqs.scaladsl
 import java.net.URI
 import java.util.concurrent.TimeUnit
 
-import org.apache.pekko.actor.{ ActorSystem, Terminated }
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.connectors.sqs.SqsSourceSettings
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, Terminated }
+import pekko.http.scaladsl.Http
+import pekko.stream.connectors.sqs.SqsSourceSettings
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{ BeforeAndAfterAll, Suite, Tag }

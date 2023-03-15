@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
-import org.apache.pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionImpl, RxUtilities }
-import org.apache.pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JavaDslCouchbaseSession }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.annotation.{ DoNotInherit, InternalApi }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionImpl, RxUtilities }
+import pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JavaDslCouchbaseSession }
+import pekko.stream.scaladsl.Source
+import pekko.{ Done, NotUsed }
 import com.couchbase.client.java._
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }
@@ -31,7 +32,7 @@ import scala.concurrent.duration.FiniteDuration
 /**
  * Scala API: Gives access to Couchbase.
  *
- * @see [[org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry]]
+ * @see [[pekko.stream.connectors.couchbase.CouchbaseSessionRegistry]]
  */
 object CouchbaseSession {
 

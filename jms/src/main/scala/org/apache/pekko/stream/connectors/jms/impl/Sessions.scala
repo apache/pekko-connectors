@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.jms.impl
 
 import java.util.concurrent.ArrayBlockingQueue
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms.{ Destination, DurableTopic }
-import org.apache.pekko.util.OptionVal
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms.{ Destination, DurableTopic }
+import pekko.util.OptionVal
 import javax.jms
 
 import scala.annotation.tailrec

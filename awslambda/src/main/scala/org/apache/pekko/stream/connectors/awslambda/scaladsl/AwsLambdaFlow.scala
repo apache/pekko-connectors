@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.awslambda.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.scaladsl.Flow
 import software.amazon.awssdk.services.lambda.model.{ InvokeRequest, InvokeResponse }
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 import scala.compat.java8.FutureConverters._

@@ -13,12 +13,13 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.slick.scaladsl.{ Slick, SlickSession }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl._
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.slick.scaladsl.{ Slick, SlickSession }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl._
+import pekko.testkit.TestKit
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import slick.basic.DatabaseConfig

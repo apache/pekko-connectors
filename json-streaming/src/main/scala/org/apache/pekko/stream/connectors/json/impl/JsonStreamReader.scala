@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.json.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.util.ByteString
 import org.jsfr.json.exception.JsonSurfingException
 import org.jsfr.json.path.JsonPath
 import org.jsfr.json.{ JsonPathListener, JsonSurferJackson, ParsingContext }

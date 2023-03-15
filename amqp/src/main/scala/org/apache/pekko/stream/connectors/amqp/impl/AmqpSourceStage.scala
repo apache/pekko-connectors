@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.amqp.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.connectors.amqp.impl.AmqpSourceStage.AutoAckedReadResult
-import org.apache.pekko.stream.connectors.amqp.scaladsl.CommittableReadResult
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.amqp._
+import pekko.stream.connectors.amqp.impl.AmqpSourceStage.AutoAckedReadResult
+import pekko.stream.connectors.amqp.scaladsl.CommittableReadResult
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.{ DefaultConsumer, Envelope, ShutdownSignalException }
 

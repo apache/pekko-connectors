@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.ClientTransport
-import org.apache.pekko.http.scaladsl.model.headers.BasicHttpCredentials
-import org.apache.pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.ClientTransport
+import pekko.http.scaladsl.model.headers.BasicHttpCredentials
+import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 
 import java.net.InetSocketAddress
 

@@ -16,13 +16,14 @@ package org.apache.pekko.stream.connectors.text.scaladsl
 import java.nio.charset.{ Charset, StandardCharsets, UnmappableCharacterException }
 import java.nio.file.Paths
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.IOResult
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.IOResult
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -71,7 +72,7 @@ class CharsetCodingFlowsSpec
     "be illustrated in a documentation example" in {
       import java.nio.charset.StandardCharsets
 
-      import org.apache.pekko.stream.scaladsl.FileIO
+      import pekko.stream.scaladsl.FileIO
 
       // #encoding
       import scala.jdk.CollectionConverters._
@@ -109,7 +110,7 @@ class CharsetCodingFlowsSpec
     "be illustrated in a documentation example" in {
       import java.nio.charset.StandardCharsets
 
-      import org.apache.pekko.stream.scaladsl.FileIO
+      import pekko.stream.scaladsl.FileIO
 
       val utf16bytes = ByteString("äåûßêëé", StandardCharsets.UTF_16)
       val targetFile = Paths.get("target/outdata-transcoding.txt")

@@ -16,18 +16,19 @@ package docs.scaladsl
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
+import org.apache.pekko
 import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMessage, InfluxDbWriteResult }
-import org.apache.pekko.stream.connectors.influxdb.scaladsl.{ InfluxDbFlow, InfluxDbSource }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.TestKit
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMessage, InfluxDbWriteResult }
+import pekko.stream.connectors.influxdb.scaladsl.{ InfluxDbFlow, InfluxDbSource }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.TestKit
 import org.influxdb.InfluxDB
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import docs.javadsl.TestUtils._
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import org.influxdb.dto.{ Point, Query }
 
 import scala.concurrent.duration._

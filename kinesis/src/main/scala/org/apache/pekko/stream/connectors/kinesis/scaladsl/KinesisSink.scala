@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.kinesis.scaladsl
 
 import java.nio.ByteBuffer
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesis.KinesisFlowSettings
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesis.KinesisFlowSettings
+import pekko.stream.scaladsl.Sink
+import pekko.util.ByteString
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.PutRecordsRequestEntry
 

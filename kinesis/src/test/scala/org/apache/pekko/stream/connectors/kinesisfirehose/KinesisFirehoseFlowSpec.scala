@@ -15,13 +15,14 @@ package org.apache.pekko.stream.connectors.kinesisfirehose
 
 import java.util.concurrent.CompletableFuture
 
-import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
-import org.apache.pekko.stream.connectors.kinesisfirehose.scaladsl.KinesisFirehoseFlow
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.Keep
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
+import pekko.stream.connectors.kinesisfirehose.scaladsl.KinesisFirehoseFlow
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.Keep
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import pekko.util.ByteString
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock

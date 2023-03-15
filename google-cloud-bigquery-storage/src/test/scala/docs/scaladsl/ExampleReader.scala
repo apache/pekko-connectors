@@ -13,10 +13,11 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{ BigQueryRecord, BigQueryStorageSettings }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.{
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
+import pekko.stream.connectors.googlecloud.bigquery.storage.{ BigQueryRecord, BigQueryStorageSettings }
+import pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.{
   BigQueryArrowStorage,
   BigQueryAvroStorage,
   BigQueryStorageAttributes,
@@ -25,12 +26,13 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.
 import org.scalatestplus.mockito.MockitoSugar.mock
 
 //#read-all
-import org.apache.pekko.NotUsed
+import org.apache.pekko
+import pekko.NotUsed
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse
 import com.google.cloud.bigquery.storage.v1.DataFormat
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.BigQueryStorage
-import org.apache.pekko.stream.scaladsl.Source
+import pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.BigQueryStorage
+import pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 import scala.concurrent.Future
 

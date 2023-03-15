@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.mqtt.streaming.impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.actor.testkit.typed.scaladsl.{ ActorTestKit, BehaviorTestKit, TestInbox }
-import org.apache.pekko.actor.typed.ActorRef
-import org.apache.pekko.actor.typed.scaladsl.Behaviors
-import org.apache.pekko.stream.connectors.mqtt.streaming.impl.QueueOfferState.QueueOfferCompleted
-import org.apache.pekko.stream.QueueOfferResult
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.actor.testkit.typed.scaladsl.{ ActorTestKit, BehaviorTestKit, TestInbox }
+import pekko.actor.typed.ActorRef
+import pekko.actor.typed.scaladsl.Behaviors
+import pekko.stream.connectors.mqtt.streaming.impl.QueueOfferState.QueueOfferCompleted
+import pekko.stream.QueueOfferResult
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.{ ExecutionContext, Future, Promise }

@@ -13,14 +13,15 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.stream.connectors.ironmq.PushMessage
-import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClientForTests
-import org.apache.pekko.stream.connectors.ironmq.scaladsl._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.ironmq.PushMessage
+import pekko.stream.connectors.ironmq.impl.IronMqClientForTests
+import pekko.stream.connectors.ironmq.scaladsl._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Flow, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.testkit.TestKit
+import pekko.{ Done, NotUsed }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
@@ -46,7 +47,7 @@ class IronMqDocsSpec
   "IronMqConsumer" should {
     "read messages" in assertAllStagesStopped {
       val queueName = givenQueue().futureValue
-      import org.apache.pekko.stream.connectors.ironmq.PushMessage
+      import pekko.stream.connectors.ironmq.PushMessage
 
       val messages = (1 to 100).map(i => s"test-$i")
       val produced = Source(messages)
@@ -70,7 +71,7 @@ class IronMqDocsSpec
     "read messages and allow committing" in assertAllStagesStopped {
       val queueName = givenQueue().futureValue
 
-      import org.apache.pekko.stream.connectors.ironmq.PushMessage
+      import pekko.stream.connectors.ironmq.PushMessage
       val messages = (1 to 100).map(i => s"test-$i")
       val produced = Source(messages)
         .map(PushMessage(_))
@@ -78,8 +79,9 @@ class IronMqDocsSpec
       produced.futureValue shouldBe Done
 
       // #atLeastOnce
-      import org.apache.pekko.stream.connectors.ironmq.scaladsl.CommittableMessage
-      import org.apache.pekko.stream.connectors.ironmq.Message
+      import org.apache.pekko
+      import pekko.stream.connectors.ironmq.scaladsl.CommittableMessage
+      import pekko.stream.connectors.ironmq.Message
 
       val source: Source[CommittableMessage, NotUsed] =
         IronMqConsumer.atLeastOnceSource(queueName, ironMqSettings)
@@ -134,8 +136,9 @@ class IronMqDocsSpec
       produced.futureValue shouldBe Done
 
       // #atLeastOnceFlow
-      import org.apache.pekko.stream.connectors.ironmq.{ Message, PushMessage }
-      import org.apache.pekko.stream.connectors.ironmq.scaladsl.Committable
+      import org.apache.pekko
+      import pekko.stream.connectors.ironmq.{ Message, PushMessage }
+      import pekko.stream.connectors.ironmq.scaladsl.Committable
 
       val pushAndCommit: Flow[(PushMessage, Committable), Message.Id, NotUsed] =
         IronMqProducer.atLeastOnceFlow(targetQueue, ironMqSettings)

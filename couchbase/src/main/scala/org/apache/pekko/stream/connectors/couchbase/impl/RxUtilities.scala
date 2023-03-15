@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.couchbase.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseResponseException
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.couchbase.CouchbaseResponseException
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.query.{ AsyncN1qlQueryResult, AsyncN1qlQueryRow }
 import rx.functions.Func1

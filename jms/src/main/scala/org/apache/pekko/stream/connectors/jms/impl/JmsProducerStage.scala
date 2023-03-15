@@ -13,15 +13,16 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.ActorAttributes.SupervisionStrategy
-import org.apache.pekko.stream._
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.impl.Buffer
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.util.OptionVal
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.ActorAttributes.SupervisionStrategy
+import pekko.stream._
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms._
+import pekko.stream.impl.Buffer
+import pekko.stream.scaladsl.Source
+import pekko.stream.stage._
+import pekko.util.OptionVal
 import javax.jms
 
 import scala.concurrent.Future

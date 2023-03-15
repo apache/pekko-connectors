@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.sqs.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.sqs._
-import org.apache.pekko.stream.javadsl.Sink
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.sqs._
+import pekko.stream.javadsl.Sink
+import pekko.stream.scaladsl.{ Flow, Keep }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 
@@ -31,7 +32,7 @@ import scala.compat.java8.FutureConverters.FutureOps
 object SqsPublishSink {
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] that accepts strings and publishes them as messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] that accepts strings and publishes them as messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def create(queueUrl: String,
       settings: SqsPublishSettings,
@@ -39,7 +40,7 @@ object SqsPublishSink {
     scaladsl.SqsPublishSink.apply(queueUrl, settings)(sqsClient).mapMaterializedValue(_.toJava).asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def messageSink(queueUrl: String,
       settings: SqsPublishSettings,
@@ -50,7 +51,7 @@ object SqsPublishSink {
       .asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish messages to SQS queues based on the message queue url using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] to publish messages to SQS queues based on the message queue url using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def messageSink(settings: SqsPublishSettings,
       sqsClient: SqsAsyncClient): Sink[SendMessageRequest, CompletionStage[Done]] =
@@ -60,7 +61,7 @@ object SqsPublishSink {
       .asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] that groups strings and publishes them as messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] that groups strings and publishes them as messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def grouped(queueUrl: String,
@@ -69,7 +70,7 @@ object SqsPublishSink {
     scaladsl.SqsPublishSink.grouped(queueUrl, settings)(sqsClient).mapMaterializedValue(_.toJava).asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def groupedMessageSink(queueUrl: String,
@@ -81,7 +82,7 @@ object SqsPublishSink {
       .asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] that accepts an iterable of strings and publish them as messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] that accepts an iterable of strings and publish them as messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def batch[B <: java.lang.Iterable[String]](queueUrl: String,
@@ -94,7 +95,7 @@ object SqsPublishSink {
       .asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Sink Sink]] to publish messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.javadsl.Sink Sink]] to publish messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def batchedMessageSink[B <: java.lang.Iterable[SendMessageRequest]](
       queueUrl: String,

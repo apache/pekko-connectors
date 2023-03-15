@@ -13,17 +13,18 @@
 
 package org.apache.pekko.stream.connectors.csv.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.util.ByteString
 
 import scala.annotation.tailrec
 import scala.util.control.NonFatal
 
 /**
- * Internal API: Use [[org.apache.pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.
+ * Internal API: Use [[pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.
  */
 @InternalApi private[csv] class CsvParsingStage(delimiter: Byte,
     quoteChar: Byte,

@@ -13,16 +13,13 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings
-import org.apache.pekko.stream.connectors.cassandra.scaladsl.{
-  CassandraSession,
-  CassandraSessionRegistry,
-  CassandraSpecBase
-}
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.cassandra.CassandraSessionSettings
+import pekko.stream.connectors.cassandra.scaladsl.{ CassandraSession, CassandraSessionRegistry, CassandraSpecBase }
+import pekko.stream.scaladsl.Sink
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.concurrent.Future
 

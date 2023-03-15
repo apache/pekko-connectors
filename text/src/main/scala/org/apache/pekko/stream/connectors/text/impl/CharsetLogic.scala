@@ -16,10 +16,11 @@ package org.apache.pekko.stream.connectors.text.impl
 import java.nio.{ ByteBuffer, CharBuffer }
 import java.nio.charset.{ Charset, CharsetDecoder, CharsetEncoder }
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.{ FlowShape, Inlet, Outlet }
-import org.apache.pekko.stream.stage.{ GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.{ FlowShape, Inlet, Outlet }
+import pekko.stream.stage.{ GraphStageLogic, InHandler, OutHandler }
+import pekko.util.ByteString
 
 /**
  * ByteBuffer to CharBuffer decoding logic.

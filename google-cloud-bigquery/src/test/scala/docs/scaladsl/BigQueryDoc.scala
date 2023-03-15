@@ -14,10 +14,11 @@
 package docs.scaladsl
 
 //#imports
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
+import org.apache.pekko
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
+import pekko.stream.connectors.googlecloud.bigquery.model.{
   Dataset,
   Job,
   JobReference,
@@ -27,11 +28,11 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
   TableDataListResponse,
   TableListResponse
 }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
+import pekko.stream.scaladsl.{ Flow, Sink, Source }
+import pekko.{ Done, NotUsed }
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
@@ -41,7 +42,7 @@ import scala.concurrent.Future
 class BigQueryDoc {
 
   @nowarn("msg=dead code")
-  implicit val system: org.apache.pekko.actor.ActorSystem = ???
+  implicit val system: pekko.actor.ActorSystem = ???
   import system.dispatcher
 
   // #setup

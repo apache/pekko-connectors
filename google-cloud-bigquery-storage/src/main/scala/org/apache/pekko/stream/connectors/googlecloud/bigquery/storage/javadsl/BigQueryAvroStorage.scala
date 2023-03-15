@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage, BigQueryRecord }
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage, BigQueryRecord }
+import pekko.stream.javadsl.Source
 import com.google.cloud.bigquery.storage.v1.avro.{ AvroRows, AvroSchema }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 

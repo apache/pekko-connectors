@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.csv.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.csv.impl.CsvParsingStage
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.csv.impl.CsvParsingStage
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 
 object CsvParsing {
 
@@ -30,7 +31,7 @@ object CsvParsing {
 
   /**
    * Creates CSV parsing flow that reads CSV lines from incoming
-   * [[org.apache.pekko.util.ByteString]] objects.
+   * [[pekko.util.ByteString]] objects.
    */
   def lineScanner(delimiter: Byte = Comma,
       quoteChar: Byte = DoubleQuote,

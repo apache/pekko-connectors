@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.unmarshalling.Unmarshaller
 import pdi.jwt.JwtTime
 import spray.json.RootJsonFormat
 

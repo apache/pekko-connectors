@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.{ ApiMayChange, InternalApi }
-import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
-import org.apache.pekko.stream.connectors.elasticsearch.{ impl, _ }
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, RetryFlow }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.annotation.{ ApiMayChange, InternalApi }
+import pekko.http.scaladsl.{ Http, HttpExt }
+import pekko.stream.connectors.elasticsearch.{ impl, _ }
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, RetryFlow }
 import spray.json._
 
 import scala.collection.immutable
@@ -30,8 +31,8 @@ import scala.concurrent.ExecutionContextExecutor
 object ElasticsearchFlow {
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
-   * The result status is port of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
+   * The result status is port of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * This factory method requires an implicit Spray JSON writer for `T`.
@@ -41,8 +42,8 @@ object ElasticsearchFlow {
     create[T](elasticsearchParams, settings, new SprayJsonWriter[T]()(sprayJsonWriter))
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
-   * The result status is port of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
+   * The result status is port of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    */
   def create[T](elasticsearchParams: ElasticsearchParams,
@@ -55,9 +56,9 @@ object ElasticsearchFlow {
   }
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * This factory method requires an implicit Spray JSON writer for `T`.
@@ -67,9 +68,9 @@ object ElasticsearchFlow {
     createWithPassThrough[T, C](elasticsearchParams, settings, new SprayJsonWriter[T]()(sprayJsonWriter))
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    */
   def createWithPassThrough[T, C](elasticsearchParams: ElasticsearchParams,
@@ -83,9 +84,9 @@ object ElasticsearchFlow {
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[immutable.Seq[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]]s containing type `T`
+   * [[immutable.Seq[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the immutable.Seq[[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]
+   * The result status is part of the immutable.Seq[[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]
    * and must be checked for successful execution.
    *
    * This factory method requires an implicit Spray JSON writer for `T`.
@@ -97,9 +98,9 @@ object ElasticsearchFlow {
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[immutable.Seq[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]]s containing type `T`
+   * [[immutable.Seq[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]]s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the immutable.Seq[[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]
+   * The result status is part of the immutable.Seq[[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]
    * and must be checked for successful execution.
    */
   def createBulk[T, C](
@@ -110,9 +111,9 @@ object ElasticsearchFlow {
   }
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `context` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    *
    * This factory method requires an implicit Spray JSON writer for `T`.
@@ -124,9 +125,9 @@ object ElasticsearchFlow {
     createWithContext[T, C](elasticsearchParams, settings, new SprayJsonWriter[T]()(sprayJsonWriter))
 
   /**
-   * Create a flow to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * Create a flow to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
    * with `context` of type `C`.
-   * The result status is part of the [[org.apache.pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
+   * The result status is part of the [[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]] and must be checked for
    * successful execution.
    */
   @ApiMayChange

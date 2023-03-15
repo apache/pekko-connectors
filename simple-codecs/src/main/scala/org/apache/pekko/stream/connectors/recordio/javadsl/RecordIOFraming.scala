@@ -13,15 +13,16 @@
 
 package org.apache.pekko.stream.connectors.recordio.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.recordio.impl.RecordIOFramingStage
-import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.recordio.impl.RecordIOFramingStage
+import pekko.stream.javadsl.Flow
+import pekko.util.ByteString
 
 /**
  * Java API
  *
- * Provides a flow that can separate records from an incoming RecordIO-formatted [[org.apache.pekko.util.ByteString]] stream.
+ * Provides a flow that can separate records from an incoming RecordIO-formatted [[pekko.util.ByteString]] stream.
  */
 object RecordIOFraming {
 

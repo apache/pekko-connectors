@@ -13,14 +13,9 @@
 
 package org.apache.pekko.stream.connectors.cassandra
 
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.annotation.InternalApi
 import com.codahale.metrics.MetricRegistry
 
 import scala.jdk.CollectionConverters._
@@ -58,7 +53,7 @@ object CassandraMetricsRegistry extends ExtensionId[CassandraMetricsRegistry] wi
    * Java API.
    * Get the CassandraMetricsRegistry extension with the classic actors API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): CassandraMetricsRegistry = super.apply(system)
+  override def get(system: pekko.actor.ActorSystem): CassandraMetricsRegistry = super.apply(system)
 
   /**
    * Java API.

@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
 import com.google.protobuf.ByteString
 import org.apache.avro.Schema
 import org.apache.avro.file.SeekableByteArrayInput

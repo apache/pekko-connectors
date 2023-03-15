@@ -14,10 +14,11 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
 import java.util.UUID
-import org.apache.pekko.http.scaladsl.model.ContentTypes
-import org.apache.pekko.stream.connectors.googlecloud.storage.WithMaterializerGlobal
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.http.scaladsl.model.ContentTypes
+import pekko.stream.connectors.googlecloud.storage.WithMaterializerGlobal
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.util.ByteString
 import org.scalatest.BeforeAndAfter
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
@@ -26,8 +27,8 @@ import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.Random
-import org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettings
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.connectors.googlecloud.storage.GCStorageSettings
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 
 import scala.annotation.nowarn
 import scala.concurrent.Future

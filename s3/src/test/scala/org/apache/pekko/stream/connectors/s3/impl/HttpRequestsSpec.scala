@@ -15,16 +15,17 @@ package org.apache.pekko.stream.connectors.s3.impl
 
 import java.util.UUID
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, ByteRange, RawHeader }
-import org.apache.pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
-import org.apache.pekko.stream.connectors.s3._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.{ SocketUtil, TestKit, TestProbe }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.Http
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, ByteRange, RawHeader }
+import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
+import pekko.stream.connectors.s3._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.{ SocketUtil, TestKit, TestProbe }
+import pekko.util.ByteString
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -404,7 +405,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
       val probe = TestProbe()
       val address = SocketUtil.temporaryServerAddress()
 
-      import org.apache.pekko.http.scaladsl.server.Directives._
+      import pekko.http.scaladsl.server.Directives._
 
       Http()
         .newServerAt(address.getHostName, address.getPort)

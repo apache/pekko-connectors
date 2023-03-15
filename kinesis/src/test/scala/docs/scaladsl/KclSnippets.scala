@@ -15,10 +15,11 @@ package docs.scaladsl
 
 import java.util.UUID
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.kinesis.scaladsl.KinesisSchedulerSource
-import org.apache.pekko.stream.connectors.kinesis.{ KinesisSchedulerCheckpointSettings, KinesisSchedulerSourceSettings }
-import org.apache.pekko.stream.scaladsl.Sink
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.kinesis.scaladsl.KinesisSchedulerSource
+import pekko.stream.connectors.kinesis.{ KinesisSchedulerCheckpointSettings, KinesisSchedulerSourceSettings }
+import pekko.stream.scaladsl.Sink
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient

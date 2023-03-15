@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.kinesisfirehose.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesisfirehose.{ scaladsl, KinesisFirehoseFlowSettings }
-import org.apache.pekko.stream.javadsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesisfirehose.{ scaladsl, KinesisFirehoseFlowSettings }
+import pekko.stream.javadsl.Flow
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchResponseEntry, Record }
 

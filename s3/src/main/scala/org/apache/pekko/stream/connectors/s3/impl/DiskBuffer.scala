@@ -18,28 +18,29 @@ import java.nio.BufferOverflowException
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.ActorAttributes
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.FlowShape
-import org.apache.pekko.stream.Inlet
-import org.apache.pekko.stream.Outlet
-import org.apache.pekko.stream.scaladsl.FileIO
-import org.apache.pekko.stream.stage.GraphStage
-import org.apache.pekko.stream.stage.GraphStageLogic
-import org.apache.pekko.stream.stage.InHandler
-import org.apache.pekko.stream.stage.OutHandler
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.ActorAttributes
+import pekko.stream.Attributes
+import pekko.stream.FlowShape
+import pekko.stream.Inlet
+import pekko.stream.Outlet
+import pekko.stream.scaladsl.FileIO
+import pekko.stream.stage.GraphStage
+import pekko.stream.stage.GraphStageLogic
+import pekko.stream.stage.InHandler
+import pekko.stream.stage.OutHandler
+import pekko.util.ByteString
 import java.nio.file.Path
 
-import org.apache.pekko.annotation.InternalApi
+import pekko.annotation.InternalApi
 
 /**
  * Internal Api
  *
  * Buffers the complete incoming stream into a file, which can then be read several times afterwards.
- *
+ * ``
  * The stage waits for the incoming stream to complete. After that, it emits a single Chunk item on its output. The Chunk
  * contains a bytestream source that can be materialized multiple times, and the total size of the file.
  *

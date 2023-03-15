@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.amqp.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.amqp.{ AmqpReplyToSinkSettings, WriteMessage }
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Inlet, SinkShape }
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.amqp.{ AmqpReplyToSinkSettings, WriteMessage }
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler }
+import pekko.stream.{ ActorAttributes, Attributes, Inlet, SinkShape }
 
 import scala.concurrent.{ Future, Promise }
 

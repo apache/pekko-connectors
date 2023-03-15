@@ -13,17 +13,18 @@
 
 package org.apache.pekko.stream.connectors.sqs.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.sqs.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.sqs.{
   SqsPublishBatchSettings,
   SqsPublishGroupedSettings,
   SqsPublishResult,
   SqsPublishResultEntry,
   SqsPublishSettings
 }
-import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.stream.scaladsl.{ Flow => SFlow }
+import pekko.stream.javadsl.Flow
+import pekko.stream.scaladsl.{ Flow => SFlow }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 
@@ -36,34 +37,34 @@ import scala.jdk.CollectionConverters._
 object SqsPublishFlow {
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
+   * creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
    */
   def create(queueUrl: String,
       settings: SqsPublishSettings,
       sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResult, NotUsed] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow.apply(queueUrl, settings)(sqsClient).asJava
+    pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow.apply(queueUrl, settings)(sqsClient).asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages to SQS queues based on the message queue url using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
+   * creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to SQS queues based on the message queue url using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
    */
   def create(settings: SqsPublishSettings,
       sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResult, NotUsed] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow.apply(settings)(sqsClient).asJava
+    pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow.apply(settings)(sqsClient).asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] that groups messages and publish them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
+   * creates a [[pekko.stream.javadsl.Flow Flow]] that groups messages and publish them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
    * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def grouped(
       queueUrl: String,
       settings: SqsPublishGroupedSettings,
       sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResultEntry, NotUsed] =
-    org.apache.pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow
+    pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow
       .grouped(queueUrl, settings)(sqsClient)
       .asJava
 
   /**
-   * creates a [[org.apache.pekko.stream.javadsl.Flow Flow]] to publish messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
+   * creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient AmazonSQSAsync]]
    */
   def batch[B <: java.lang.Iterable[SendMessageRequest]](
       queueUrl: String,
@@ -71,7 +72,7 @@ object SqsPublishFlow {
       sqsClient: SqsAsyncClient): Flow[B, java.util.List[SqsPublishResultEntry], NotUsed] =
     SFlow[java.lang.Iterable[SendMessageRequest]]
       .map(_.asScala)
-      .via(org.apache.pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow.batch(queueUrl, settings)(sqsClient))
+      .via(pekko.stream.connectors.sqs.scaladsl.SqsPublishFlow.batch(queueUrl, settings)(sqsClient))
       .map(_.asJava)
       .asJava
 }

@@ -14,10 +14,11 @@
 package org.apache.pekko.stream.connectors.azure.storagequeue.scaladsl
 
 import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
-import org.apache.pekko.stream.connectors.azure.storagequeue.AzureQueueSourceSettings
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSourceStage
+import org.apache.pekko
+import pekko.stream.connectors.azure.storagequeue.AzureQueueSourceSettings
+import pekko.stream.scaladsl.Source
+import pekko.NotUsed
+import pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSourceStage
 
 object AzureQueueSource {
 

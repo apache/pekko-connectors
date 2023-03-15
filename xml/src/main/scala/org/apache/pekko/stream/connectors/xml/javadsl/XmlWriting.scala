@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.xml.javadsl
 
 import java.nio.charset.{ Charset, StandardCharsets }
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.xml.ParseEvent
-import org.apache.pekko.stream.connectors.xml.impl
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.xml.ParseEvent
+import pekko.stream.connectors.xml.impl
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 
 import javax.xml.stream.XMLOutputFactory
 
@@ -29,14 +30,14 @@ object XmlWriting {
    * Writer Flow that takes a stream of XML events similar to SAX and write ByteStrings.
    * encoding UTF-8
    */
-  def writer(): org.apache.pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
+  def writer(): pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
     Flow.fromGraph(new impl.StreamingXmlWriter(StandardCharsets.UTF_8)).asJava
 
   /**
    * Writer Flow that takes a stream of XML events similar to SAX and write ByteStrings.
    * @param charset encoding of the stream
    */
-  def writer(charset: Charset): org.apache.pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
+  def writer(charset: Charset): pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
     Flow.fromGraph(new impl.StreamingXmlWriter(charset)).asJava
 
   /**
@@ -44,7 +45,7 @@ object XmlWriting {
    * @param xmlOutputFactory factory from which to get an XMLStreamWriter
    */
   def writer(
-      xmlOutputFactory: XMLOutputFactory): org.apache.pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
+      xmlOutputFactory: XMLOutputFactory): pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
     Flow.fromGraph(new impl.StreamingXmlWriter(StandardCharsets.UTF_8, xmlOutputFactory)).asJava
 
   /**
@@ -53,7 +54,7 @@ object XmlWriting {
    * @param xmlOutputFactory factory from which to get an XMLStreamWriter
    */
   def writer(charset: Charset,
-      xmlOutputFactory: XMLOutputFactory): org.apache.pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
+      xmlOutputFactory: XMLOutputFactory): pekko.stream.javadsl.Flow[ParseEvent, ByteString, NotUsed] =
     Flow.fromGraph(new impl.StreamingXmlWriter(charset, xmlOutputFactory)).asJava
 
 }

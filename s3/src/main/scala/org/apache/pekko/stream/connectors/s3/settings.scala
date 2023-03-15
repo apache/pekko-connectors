@@ -18,9 +18,10 @@ import java.time.{ Duration => JavaDuration }
 import java.util.concurrent.TimeUnit
 import java.util.{ Objects, Optional }
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.http.scaladsl.model.Uri
-import org.apache.pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.http.scaladsl.model.Uri
+import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
 import com.typesafe.config.Config
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.auth.credentials._
@@ -681,7 +682,7 @@ object S3Settings {
   def apply()(implicit system: ClassicActorSystemProvider): S3Settings = apply(system.classicSystem)
 
   /**
-   * Scala API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Scala API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def apply(system: ActorSystem): S3Settings = apply(system.settings.config.getConfig(ConfigPath))
 
@@ -691,7 +692,7 @@ object S3Settings {
   def create(system: ClassicActorSystemProvider): S3Settings = apply(system.classicSystem)
 
   /**
-   * Java API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Java API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def create(system: ActorSystem): S3Settings = apply(system)
 }

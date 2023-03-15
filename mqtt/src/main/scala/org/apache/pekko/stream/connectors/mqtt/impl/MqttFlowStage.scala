@@ -17,13 +17,14 @@ import java.util.Properties
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicInteger
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.{ Shape, _ }
-import org.apache.pekko.stream.connectors.mqtt._
-import org.apache.pekko.stream.connectors.mqtt.scaladsl.MqttMessageWithAck
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.{ Shape, _ }
+import pekko.stream.connectors.mqtt._
+import pekko.stream.connectors.mqtt.scaladsl.MqttMessageWithAck
+import pekko.stream.stage._
+import pekko.util.ByteString
 import org.eclipse.paho.client.mqttv3.{
   IMqttActionListener,
   IMqttAsyncClient,
@@ -41,7 +42,7 @@ import scala.concurrent.{ Future, Promise }
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions
-import org.apache.pekko.stream.connectors.mqtt.MqttOfflinePersistenceSettings
+import pekko.stream.connectors.mqtt.MqttOfflinePersistenceSettings
 
 /**
  * INTERNAL API
@@ -93,7 +94,7 @@ abstract class MqttFlowStageLogic[I](in: Inlet[I],
     with InHandler
     with OutHandler {
 
-  import org.apache.pekko.stream.connectors.mqtt.impl.MqttFlowStageLogic._
+  import pekko.stream.connectors.mqtt.impl.MqttFlowStageLogic._
 
   private val backpressurePahoClient = new Semaphore(bufferSize)
   private var pendingMsg = Option.empty[I]

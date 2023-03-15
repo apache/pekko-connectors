@@ -13,18 +13,19 @@
 
 package org.apache.pekko.stream.connectors.s3.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, StatusCodes }
-import org.apache.pekko.stream.{ Attributes, KillSwitches, SharedKillSwitch }
-import org.apache.pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
-import org.apache.pekko.stream.connectors.s3.BucketAccess.{ AccessGranted, NotExists }
-import org.apache.pekko.stream.connectors.s3._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
-import org.apache.pekko.testkit.{ TestKit, TestKitBase }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.Http
+import pekko.http.scaladsl.model.{ ContentTypes, StatusCodes }
+import pekko.stream.{ Attributes, KillSwitches, SharedKillSwitch }
+import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import pekko.stream.connectors.s3.BucketAccess.{ AccessGranted, NotExists }
+import pekko.stream.connectors.s3._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.testkit.{ TestKit, TestKitBase }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 import org.scalatest.Inspectors.forEvery
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
@@ -219,7 +220,7 @@ trait S3IntegrationSpec
       .deleteObject(defaultBucket, objectKey)
       .withAttributes(attributes)
       .runWith(Sink.head)
-    delete.futureValue shouldEqual org.apache.pekko.Done
+    delete.futureValue shouldEqual pekko.Done
   }
 
   it should "upload huge multipart with real credentials" in {
@@ -262,7 +263,7 @@ trait S3IntegrationSpec
     S3.deleteObject(defaultBucket, objectKey)
       .withAttributes(attributes)
       .runWith(Sink.head)
-      .futureValue shouldEqual org.apache.pekko.Done
+      .futureValue shouldEqual pekko.Done
   }
 
   it should "upload, download and delete with brackets in the key" in {
@@ -290,7 +291,7 @@ trait S3IntegrationSpec
     S3.deleteObject(defaultBucket, objectKey)
       .withAttributes(attributes)
       .runWith(Sink.head)
-      .futureValue shouldEqual org.apache.pekko.Done
+      .futureValue shouldEqual pekko.Done
   }
 
   it should "upload, download and delete with spaces in the key in non us-east-1 zone" in uploadDownloadAndDeleteInOtherRegionCase(
@@ -336,7 +337,7 @@ trait S3IntegrationSpec
         S3.deleteObjectsByPrefix(defaultBucket, Some("original"))
           .withAttributes(attributes)
           .runWith(Sink.ignore)
-          .futureValue shouldEqual org.apache.pekko.Done
+          .futureValue shouldEqual pekko.Done
         val numOfKeysForPrefix =
           S3.listBucket(defaultBucket, Some("original"))
             .withAttributes(attributes)
@@ -346,7 +347,7 @@ trait S3IntegrationSpec
         S3.deleteObject(defaultBucket, sourceKey3)
           .withAttributes(attributes)
           .runWith(Sink.head)
-          .futureValue shouldEqual org.apache.pekko.Done
+          .futureValue shouldEqual pekko.Done
     }
   }
 
@@ -450,7 +451,7 @@ trait S3IntegrationSpec
         S3.deleteObjectsByPrefix(defaultBucket, prefix = None)
           .withAttributes(attributes)
           .runWith(Sink.ignore)
-          .futureValue shouldEqual org.apache.pekko.Done
+          .futureValue shouldEqual pekko.Done
         val numOfKeysForPrefix =
           S3.listBucket(defaultBucket, None)
             .withAttributes(attributes)
@@ -546,7 +547,7 @@ trait S3IntegrationSpec
       slowSource.toMat(S3.multipartUpload(defaultBucket, sourceKey).withAttributes(attributes))(Keep.right).run()
 
     val results = for {
-      _ <- org.apache.pekko.pattern.after(25.seconds)(Future {
+      _ <- pekko.pattern.after(25.seconds)(Future {
         sharedKillSwitch.abort(AbortException)
       })
       _ <- multiPartUpload.recover {
@@ -598,7 +599,7 @@ trait S3IntegrationSpec
         .run()
 
     val results = for {
-      _ <- org.apache.pekko.pattern.after(25.seconds)(Future {
+      _ <- pekko.pattern.after(25.seconds)(Future {
         sharedKillSwitch.abort(AbortException)
       })
       _ <- multiPartUpload.recover {
@@ -622,7 +623,7 @@ trait S3IntegrationSpec
 
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
-      downloaded <- org.apache.pekko.pattern.after(5.seconds)(
+      downloaded <- pekko.pattern.after(5.seconds)(
         S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq))
 
       _ <- S3.deleteObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.head)
@@ -652,7 +653,7 @@ trait S3IntegrationSpec
         .run()
 
     val results = for {
-      _ <- org.apache.pekko.pattern.after(25.seconds)(Future {
+      _ <- pekko.pattern.after(25.seconds)(Future {
         sharedKillSwitch.abort(AbortException)
       })
       _ <- multiPartUpload.recover {
@@ -669,7 +670,7 @@ trait S3IntegrationSpec
       _ <- S3.completeMultipartUpload(defaultBucket, sourceKey, uploadId, parts.map(_.toPart))
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
-      downloaded <- org.apache.pekko.pattern.after(5.seconds)(
+      downloaded <- pekko.pattern.after(5.seconds)(
         S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq))
       _ <- S3.deleteObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.head)
     } yield downloaded
@@ -766,7 +767,7 @@ trait S3IntegrationSpec
         .run()
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
-      downloaded <- org.apache.pekko.pattern.after(5.seconds)(
+      downloaded <- pekko.pattern.after(5.seconds)(
         S3.getObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.seq))
       _ <- S3.deleteObject(defaultBucket, sourceKey).withAttributes(attributes).runWith(Sink.head)
 
@@ -946,7 +947,7 @@ trait S3IntegrationSpec
     S3.deleteObject(bucketWithDots, objectKey)
       .withAttributes(otherRegionSettingsPathStyleAccess)
       .runWith(Sink.head)
-      .futureValue shouldEqual org.apache.pekko.Done
+      .futureValue shouldEqual pekko.Done
   }
 
   private def uploadCopyDownload(sourceKey: String, targetKey: String): Assertion = {
@@ -976,11 +977,11 @@ trait S3IntegrationSpec
         S3.deleteObject(defaultBucket, sourceKey)
           .withAttributes(attributes)
           .runWith(Sink.head)
-          .futureValue shouldEqual org.apache.pekko.Done
+          .futureValue shouldEqual pekko.Done
         S3.deleteObject(defaultBucket, targetKey)
           .withAttributes(attributes)
           .runWith(Sink.head)
-          .futureValue shouldEqual org.apache.pekko.Done
+          .futureValue shouldEqual pekko.Done
     }
   }
 }

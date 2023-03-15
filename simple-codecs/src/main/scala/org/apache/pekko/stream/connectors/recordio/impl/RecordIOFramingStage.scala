@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.recordio.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Attributes.name
-import org.apache.pekko.stream.scaladsl.Framing.FramingException
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.Attributes.name
+import pekko.stream.scaladsl.Framing.FramingException
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.util.ByteString
 
 import scala.annotation.tailrec
 import scala.util.{ Failure, Success, Try }

@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.dynamodb.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.dispatch.ExecutionContexts
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ClassicActorSystemProvider
+import pekko.dispatch.ExecutionContexts
 
 import scala.annotation.implicitNotFound
-import org.apache.pekko.stream.connectors.dynamodb.{ DynamoDbOp, DynamoDbPaginatedOp }
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
+import pekko.stream.connectors.dynamodb.{ DynamoDbOp, DynamoDbPaginatedOp }
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model._
 

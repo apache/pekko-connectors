@@ -15,22 +15,23 @@ package docs.scaladsl
 
 import org.apache.pekko.actor.ActorSystem
 //#imports
-import org.apache.pekko.stream.connectors.huawei.pushkit._
-import org.apache.pekko.stream.connectors.huawei.pushkit.scaladsl.HmsPushKit
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.AndroidConfig
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.AndroidNotification
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.BasicNotification
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.ClickAction
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.Condition
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.ErrorResponse
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.PushKitNotification
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.PushKitResponse
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.Response
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.Tokens
+import org.apache.pekko
+import pekko.stream.connectors.huawei.pushkit._
+import pekko.stream.connectors.huawei.pushkit.scaladsl.HmsPushKit
+import pekko.stream.connectors.huawei.pushkit.models.AndroidConfig
+import pekko.stream.connectors.huawei.pushkit.models.AndroidNotification
+import pekko.stream.connectors.huawei.pushkit.models.BasicNotification
+import pekko.stream.connectors.huawei.pushkit.models.ClickAction
+import pekko.stream.connectors.huawei.pushkit.models.Condition
+import pekko.stream.connectors.huawei.pushkit.models.ErrorResponse
+import pekko.stream.connectors.huawei.pushkit.models.PushKitNotification
+import pekko.stream.connectors.huawei.pushkit.models.PushKitResponse
+import pekko.stream.connectors.huawei.pushkit.models.Response
+import pekko.stream.connectors.huawei.pushkit.models.Tokens
 
 //#imports
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.scaladsl.Sink
+import pekko.stream.scaladsl.Source
+import pekko.stream.scaladsl.Sink
 
 import scala.collection.immutable
 import scala.concurrent.Future

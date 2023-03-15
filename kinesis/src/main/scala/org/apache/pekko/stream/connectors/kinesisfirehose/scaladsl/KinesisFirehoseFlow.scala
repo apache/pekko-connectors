@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.kinesisfirehose.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.dispatch.ExecutionContexts.parasitic
-import org.apache.pekko.stream.ThrottleMode
-import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
-import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
-import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.dispatch.ExecutionContexts.parasitic
+import pekko.stream.ThrottleMode
+import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
+import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
+import pekko.stream.scaladsl.Flow
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchRequest, PutRecordBatchResponseEntry, Record }
 

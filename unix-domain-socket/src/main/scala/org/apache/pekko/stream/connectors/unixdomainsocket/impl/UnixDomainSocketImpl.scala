@@ -14,18 +14,19 @@
 package org.apache.pekko.stream.connectors.unixdomainsocket
 package impl
 
-import org.apache.pekko.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.{ Logging, LoggingAdapter }
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
+import org.apache.pekko
+import pekko.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
+import pekko.annotation.InternalApi
+import pekko.event.{ Logging, LoggingAdapter }
+import pekko.stream._
+import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
   IncomingConnection,
   OutgoingConnection,
   ServerBinding
 }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source, SourceQueueWithComplete }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 import jnr.enxio.channels.NativeSelectorProvider
 import jnr.unixsocket.{ UnixServerSocketChannel, UnixSocketAddress => JnrUnixSocketAddress, UnixSocketChannel }
 

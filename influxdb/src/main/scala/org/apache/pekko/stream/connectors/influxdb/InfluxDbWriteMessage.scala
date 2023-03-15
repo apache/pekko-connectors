@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.influxdb
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
 
 /**
  * API may change.

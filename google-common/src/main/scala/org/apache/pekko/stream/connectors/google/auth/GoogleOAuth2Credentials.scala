@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.google.RequestSettings
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.google.RequestSettings
 import com.google.auth.{ Credentials => GoogleCredentials, RequestMetadataCallback }
 
 import java.net.URI

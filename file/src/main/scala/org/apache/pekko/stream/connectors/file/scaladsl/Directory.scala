@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.file.scaladsl
 
 import java.nio.file.{ FileVisitOption, Files, Path }
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.ActorAttributes
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Source, StreamConverters }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.ActorAttributes
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, Source, StreamConverters }
 
 import scala.collection.immutable
 

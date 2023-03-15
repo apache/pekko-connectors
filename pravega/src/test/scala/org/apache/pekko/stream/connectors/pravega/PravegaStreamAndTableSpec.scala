@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.pravega
 
-import org.apache.pekko.stream.{ KillSwitches, SourceShape }
+import org.apache.pekko
+import pekko.stream.{ KillSwitches, SourceShape }
 
-import org.apache.pekko.stream.scaladsl.{ Broadcast, GraphDSL, Keep, Sink, Source, Zip }
+import pekko.stream.scaladsl.{ Broadcast, GraphDSL, Keep, Sink, Source, Zip }
 
-import org.apache.pekko.stream.connectors.testkit.scaladsl.Repeated
-import org.apache.pekko.stream.connectors.pravega.scaladsl.{ Pravega, PravegaTable }
+import pekko.stream.connectors.testkit.scaladsl.Repeated
+import pekko.stream.connectors.pravega.scaladsl.{ Pravega, PravegaTable }
 
 import scala.concurrent.{ Await, Promise }
 import scala.util.Using

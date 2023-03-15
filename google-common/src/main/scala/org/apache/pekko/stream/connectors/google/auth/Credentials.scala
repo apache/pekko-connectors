@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.annotation.DoNotInherit
-import org.apache.pekko.event.Logging
-import org.apache.pekko.http.scaladsl.model.headers.HttpCredentials
-import org.apache.pekko.stream.connectors.google.RequestSettings
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.annotation.DoNotInherit
+import pekko.event.Logging
+import pekko.http.scaladsl.model.headers.HttpCredentials
+import pekko.stream.connectors.google.RequestSettings
+import pekko.util.JavaDurationConverters._
 import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 

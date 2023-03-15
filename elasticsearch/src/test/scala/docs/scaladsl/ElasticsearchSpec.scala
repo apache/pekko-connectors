@@ -13,13 +13,14 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
-import org.apache.pekko.http.scaladsl.model.Uri.Path
-import org.apache.pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
-import org.apache.pekko.stream.connectors.elasticsearch._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.{ Http, HttpExt }
+import pekko.http.scaladsl.model.Uri.Path
+import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
+import pekko.stream.connectors.elasticsearch._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.scalatest.{ BeforeAndAfterAll, Inspectors }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers

@@ -13,17 +13,18 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
-import org.apache.pekko.stream.connectors.cassandra.scaladsl.{
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
+import pekko.stream.connectors.cassandra.scaladsl.{
   CassandraFlow,
   CassandraSession,
   CassandraSource,
   CassandraSpecBase
 }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source, SourceWithContext }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.scaladsl.{ Sink, Source, SourceWithContext }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -76,8 +77,9 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       }.futureValue mustBe Done
 
       // #prepared
-      import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings
-      import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraFlow
+      import org.apache.pekko
+      import pekko.stream.connectors.cassandra.CassandraWriteSettings
+      import pekko.stream.connectors.cassandra.scaladsl.CassandraFlow
       import com.datastax.oss.driver.api.core.cql.{ BoundStatement, PreparedStatement }
 
       case class Person(id: Int, name: String, city: String)

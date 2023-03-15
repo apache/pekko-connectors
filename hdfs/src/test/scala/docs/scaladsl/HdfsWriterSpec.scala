@@ -13,13 +13,14 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.hdfs._
-import org.apache.pekko.stream.connectors.hdfs.scaladsl.HdfsFlow
-import org.apache.pekko.stream.connectors.hdfs.util.ScalaTestUtils._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.hdfs._
+import pekko.stream.connectors.hdfs.scaladsl.HdfsFlow
+import pekko.stream.connectors.hdfs.util.ScalaTestUtils._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.util.ByteString
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.hdfs.MiniDFSCluster
 import org.apache.hadoop.io.SequenceFile.CompressionType

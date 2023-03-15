@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko
+import pekko.dispatch.ExecutionContexts
+import pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
+import pekko.stream.scaladsl.{ Flow, Sink, Source }
+import pekko.{ Done, NotUsed }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
 import scala.concurrent.{ ExecutionContext, Future }
 

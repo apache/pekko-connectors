@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.ironmq.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.ironmq.Message
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.ironmq.Message
 
 /**
  * Internal API. The message reserved from IronMq.

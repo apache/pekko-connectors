@@ -14,18 +14,19 @@
 package org.apache.pekko.stream.connectors.azure.storagequeue.javadsl
 
 import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
-import org.apache.pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSinkFunctions
-import org.apache.pekko.stream.javadsl.Sink
-import org.apache.pekko.Done
+import org.apache.pekko
+import pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSinkFunctions
+import pekko.stream.javadsl.Sink
+import pekko.Done
 import java.util.concurrent.CompletionStage
 import java.util.function.Supplier
 
-import org.apache.pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage
+import pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage
 
 object AzureQueueSink {
 
   /**
-   * JavaAPI: creates a [[org.apache.pekko.stream.javadsl.Sink]] which queues message to an Azure Storage Queue.
+   * JavaAPI: creates a [[pekko.stream.javadsl.Sink]] which queues message to an Azure Storage Queue.
    */
   def create(cloudQueue: Supplier[CloudQueue]): Sink[CloudQueueMessage, CompletionStage[Done]] =
     fromFunction(AzureQueueSinkFunctions.addMessage(() => cloudQueue.get)(_))
@@ -34,7 +35,7 @@ object AzureQueueSink {
    * Internal API
    */
   private[javadsl] def fromFunction[T](f: T => Unit): Sink[T, CompletionStage[Done]] = {
-    import org.apache.pekko.stream.connectors.azure.storagequeue.scaladsl.{ AzureQueueSink => AzureQueueSinkScalaDSL }
+    import pekko.stream.connectors.azure.storagequeue.scaladsl.{ AzureQueueSink => AzureQueueSinkScalaDSL }
     import scala.compat.java8.FutureConverters._
     AzureQueueSinkScalaDSL.fromFunction(f).mapMaterializedValue(_.toJava).asJava
   }
@@ -45,9 +46,9 @@ class MessageWithTimeouts(val message: CloudQueueMessage, val timeToLive: Int, v
 object AzureQueueWithTimeoutsSink {
 
   /**
-   * JavaAPI: creates an [[org.apache.pekko.stream.javadsl.Sink]] with queues message to an Azure Storage Queue.
+   * JavaAPI: creates an [[pekko.stream.javadsl.Sink]] with queues message to an Azure Storage Queue.
    * This is the same as [[AzureQueueSink.create]] expect that it takes instead
-   * of a [[com.microsoft.azure.storage.queue.CouldQueueMessage]] a [[MessageWithTimeouts]].
+   * of a [[com.microsoft.azure.storage.queue.CloudQueueMessage]] a [[MessageWithTimeouts]].
    */
   def create(cloudQueue: Supplier[CloudQueue]): Sink[MessageWithTimeouts, CompletionStage[Done]] =
     AzureQueueSink.fromFunction { input: MessageWithTimeouts =>
@@ -59,7 +60,7 @@ object AzureQueueWithTimeoutsSink {
 object AzureQueueDeleteSink {
 
   /**
-   * JavaAPI: creates a [[org.apache.pekko.stream.javadsl.Sink]] which deletes messages from an Azure Storage Queue.
+   * JavaAPI: creates a [[pekko.stream.javadsl.Sink]] which deletes messages from an Azure Storage Queue.
    */
   def create(cloudQueue: Supplier[CloudQueue]): Sink[CloudQueueMessage, CompletionStage[Done]] =
     AzureQueueSink.fromFunction[CloudQueueMessage](AzureQueueSinkFunctions.deleteMessage(() => cloudQueue.get)(_))
@@ -70,7 +71,7 @@ class MessageAndDeleteOrUpdate(val message: CloudQueueMessage, val op: DeleteOrU
 object AzureQueueDeleteOrUpdateSink {
 
   /**
-   * JavaAPI: creates a [[org.apache.pekko.stream.javadsl.Sink]] which deletes or updates the visibility timeout of messages
+   * JavaAPI: creates a [[pekko.stream.javadsl.Sink]] which deletes or updates the visibility timeout of messages
    * in an Azure Storage Queue.
    */
   def create(cloudQueue: Supplier[CloudQueue]): Sink[MessageAndDeleteOrUpdate, CompletionStage[Done]] =

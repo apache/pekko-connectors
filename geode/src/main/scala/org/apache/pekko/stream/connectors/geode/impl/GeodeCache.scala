@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.geode.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.geode.GeodeSettings
-import org.apache.pekko.stream.connectors.geode.impl.pdx.DelegatingPdxSerializer
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.geode.GeodeSettings
+import pekko.stream.connectors.geode.impl.pdx.DelegatingPdxSerializer
 import org.apache.geode.cache.client.{ ClientCache, ClientCacheFactory }
 import org.apache.geode.pdx.PdxSerializer
 

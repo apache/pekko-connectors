@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model.ErrorInfo
-import org.apache.pekko.http.scaladsl.model.headers.OAuth2BearerToken
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.google.{ GoogleSettings, RequestSettings }
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.model.ErrorInfo
+import pekko.http.scaladsl.model.headers.OAuth2BearerToken
+import pekko.stream.Materializer
+import pekko.stream.connectors.google.{ GoogleSettings, RequestSettings }
+import pekko.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.exceptions.TestFailedException

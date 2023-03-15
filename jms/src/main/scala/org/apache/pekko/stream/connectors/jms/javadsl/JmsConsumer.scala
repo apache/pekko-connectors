@@ -14,9 +14,10 @@
 package org.apache.pekko.stream.connectors.jms.javadsl
 
 import javax.jms.Message
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.jms._
+import pekko.stream.javadsl.Source
 
 import scala.jdk.CollectionConverters._
 
@@ -29,16 +30,16 @@ object JmsConsumer {
    * Creates a source emitting [[javax.jms.Message]] instances, and materializes a
    * control instance to shut down the consumer.
    */
-  def create(settings: JmsConsumerSettings): org.apache.pekko.stream.javadsl.Source[Message, JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.apply(settings).mapMaterializedValue(
+  def create(settings: JmsConsumerSettings): pekko.stream.javadsl.Source[Message, JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.apply(settings).mapMaterializedValue(
       toConsumerControl).asJava
 
   /**
    * Creates a source emitting Strings, and materializes a
    * control instance to shut down the consumer.
    */
-  def textSource(settings: JmsConsumerSettings): org.apache.pekko.stream.javadsl.Source[String, JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.textSource(settings).mapMaterializedValue(
+  def textSource(settings: JmsConsumerSettings): pekko.stream.javadsl.Source[String, JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.textSource(settings).mapMaterializedValue(
       toConsumerControl).asJava
 
   /**
@@ -46,8 +47,8 @@ object JmsConsumer {
    * control instance to shut down the consumer.
    */
   def bytesSource(
-      settings: JmsConsumerSettings): org.apache.pekko.stream.javadsl.Source[Array[Byte], JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.bytesSource(settings).mapMaterializedValue(
+      settings: JmsConsumerSettings): pekko.stream.javadsl.Source[Array[Byte], JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.bytesSource(settings).mapMaterializedValue(
       toConsumerControl).asJava
 
   /**
@@ -55,9 +56,8 @@ object JmsConsumer {
    * control instance to shut down the consumer.
    */
   def mapSource(
-      settings: JmsConsumerSettings)
-      : org.apache.pekko.stream.javadsl.Source[java.util.Map[String, Any], JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer
+      settings: JmsConsumerSettings): pekko.stream.javadsl.Source[java.util.Map[String, Any], JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer
       .mapSource(settings)
       .map(_.asJava)
       .mapMaterializedValue(toConsumerControl)
@@ -68,35 +68,35 @@ object JmsConsumer {
    * control instance to shut down the consumer.
    */
   def objectSource(
-      settings: JmsConsumerSettings): org.apache.pekko.stream.javadsl.Source[java.io.Serializable, JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.objectSource(settings).mapMaterializedValue(
+      settings: JmsConsumerSettings): pekko.stream.javadsl.Source[java.io.Serializable, JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.objectSource(settings).mapMaterializedValue(
       toConsumerControl).asJava
 
   /**
-   * Creates a source emitting [[org.apache.pekko.stream.connectors.jms.AckEnvelope AckEnvelope]] instances, and materializes a
+   * Creates a source emitting [[pekko.stream.connectors.jms.AckEnvelope AckEnvelope]] instances, and materializes a
    * control instance to shut down the consumer.
    * It requires explicit acknowledgements on the envelopes. The acknowledgements must be called on the envelope and not on the message inside.
    */
   def ackSource(
-      settings: JmsConsumerSettings): org.apache.pekko.stream.javadsl.Source[AckEnvelope, JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.ackSource(settings).mapMaterializedValue(
+      settings: JmsConsumerSettings): pekko.stream.javadsl.Source[AckEnvelope, JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.ackSource(settings).mapMaterializedValue(
       toConsumerControl).asJava
 
   /**
-   * Creates a source emitting [[org.apache.pekko.stream.connectors.jms.TxEnvelope TxEnvelope]] instances, and materializes a
+   * Creates a source emitting [[pekko.stream.connectors.jms.TxEnvelope TxEnvelope]] instances, and materializes a
    * control instance to shut down the consumer.
    * It requires explicit committing or rollback on the envelopes.
    */
-  def txSource(settings: JmsConsumerSettings): org.apache.pekko.stream.javadsl.Source[TxEnvelope, JmsConsumerControl] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.txSource(settings).mapMaterializedValue(
+  def txSource(settings: JmsConsumerSettings): pekko.stream.javadsl.Source[TxEnvelope, JmsConsumerControl] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.txSource(settings).mapMaterializedValue(
       toConsumerControl).asJava
 
   /**
    * Creates a source browsing a JMS destination (which does not consume the messages)
    * and emitting [[javax.jms.Message]] instances.
    */
-  def browse(settings: JmsBrowseSettings): org.apache.pekko.stream.javadsl.Source[Message, NotUsed] =
-    org.apache.pekko.stream.connectors.jms.scaladsl.JmsConsumer.browse(settings).asJava
+  def browse(settings: JmsBrowseSettings): pekko.stream.javadsl.Source[Message, NotUsed] =
+    pekko.stream.connectors.jms.scaladsl.JmsConsumer.browse(settings).asJava
 
   private def toConsumerControl(scalaControl: scaladsl.JmsConsumerControl) = new JmsConsumerControl {
 

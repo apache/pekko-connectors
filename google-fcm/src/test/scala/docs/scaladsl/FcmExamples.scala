@@ -15,12 +15,13 @@ package docs.scaladsl
 
 import org.apache.pekko.actor.ActorSystem
 //#imports
-import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmSettings
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models._
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm
+import org.apache.pekko
+import pekko.stream.connectors.google.firebase.fcm.FcmSettings
+import pekko.stream.connectors.google.firebase.fcm.v1.models._
+import pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm
 
 //#imports
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.scaladsl.{ Sink, Source }
 
 import scala.collection.immutable
 import scala.concurrent.Future

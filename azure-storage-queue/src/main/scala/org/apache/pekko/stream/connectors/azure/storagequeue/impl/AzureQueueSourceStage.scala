@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.azure.storagequeue.impl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.azure.storagequeue.AzureQueueSourceSettings
-import org.apache.pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, TimerGraphStageLogic }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.azure.storagequeue.AzureQueueSourceSettings
+import pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, TimerGraphStageLogic }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
 
 import scala.collection.mutable.Queue

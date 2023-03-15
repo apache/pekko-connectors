@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.s3.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.s3.S3Settings
-import org.apache.pekko.stream.connectors.s3.headers.ServerSideEncryption
-import org.apache.pekko.stream.connectors.s3.impl.S3Stream
-import org.apache.pekko.stream.connectors.s3.scaladsl.S3WireMockBase._
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.s3.S3Settings
+import pekko.stream.connectors.s3.headers.ServerSideEncryption
+import pekko.stream.connectors.s3.impl.S3Stream
+import pekko.stream.connectors.s3.scaladsl.S3WireMockBase._
+import pekko.testkit.TestKit
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.{ ResponseDefinitionBuilder, WireMock }
 import com.github.tomakehurst.wiremock.client.WireMock._

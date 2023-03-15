@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.sqs.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.ActorAttributes.SupervisionStrategy
-import org.apache.pekko.stream.Attributes.name
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.impl.fusing.MapAsync
-import org.apache.pekko.stream.impl.{ BoundedBuffer, Buffer, FixedSizeBuffer }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.ActorAttributes.SupervisionStrategy
+import pekko.stream.Attributes.name
+import pekko.stream._
+import pekko.stream.impl.fusing.MapAsync
+import pekko.stream.impl.{ BoundedBuffer, Buffer, FixedSizeBuffer }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
 import scala.annotation.tailrec
 import scala.concurrent.Future
@@ -86,7 +87,7 @@ import scala.util.{ Failure, Success }
           buffer.enqueue(holder)
 
           future.value match {
-            case None    => future.onComplete(holder)(org.apache.pekko.dispatch.ExecutionContexts.parasitic)
+            case None    => future.onComplete(holder)(pekko.dispatch.ExecutionContexts.parasitic)
             case Some(v) =>
               // #20217 the future is already here, optimization: avoid scheduling it on the dispatcher and
               // run the logic directly on this thread

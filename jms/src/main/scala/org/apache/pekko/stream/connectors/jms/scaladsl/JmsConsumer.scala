@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.jms.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.impl._
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.impl._
+import pekko.stream.scaladsl.Source
 import javax.jms
 
 import scala.jdk.CollectionConverters._
@@ -78,7 +79,7 @@ object JmsConsumer {
     apply(settings).map(msg => msg.asInstanceOf[jms.ObjectMessage].getObject)
 
   /**
-   * Creates a source emitting [[org.apache.pekko.stream.connectors.jms.AckEnvelope AckEnvelope]] instances, and materializes a
+   * Creates a source emitting [[pekko.stream.connectors.jms.AckEnvelope AckEnvelope]] instances, and materializes a
    * control instance to shut down the consumer.
    * It requires explicit acknowledgements on the envelopes. The acknowledgements must be called on the envelope and not on the message inside.
    */
@@ -89,7 +90,7 @@ object JmsConsumer {
   }
 
   /**
-   * Creates a source emitting [[org.apache.pekko.stream.connectors.jms.TxEnvelope TxEnvelope]] instances, and materializes a
+   * Creates a source emitting [[pekko.stream.connectors.jms.TxEnvelope TxEnvelope]] instances, and materializes a
    * control instance to shut down the consumer.
    * It requires explicit committing or rollback on the envelopes.
    */

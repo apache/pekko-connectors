@@ -13,13 +13,8 @@
 
 package org.apache.pekko.stream.connectors.kudu
 
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import org.apache.kudu.client.KuduClient
 
 /**
@@ -42,7 +37,7 @@ object KuduClientExt extends ExtensionId[KuduClientExt] with ExtensionIdProvider
    * Get the Kudu Client extension with the classic actors API.
    * Java API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): KuduClientExt = super.get(system)
+  override def get(system: pekko.actor.ActorSystem): KuduClientExt = super.get(system)
 
   /**
    * Get the Kudu Client extension with the new actors API.

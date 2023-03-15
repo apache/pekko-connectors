@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
+import pekko.stream.javadsl.Source
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
+import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 
 import java.util.concurrent.CompletionStage

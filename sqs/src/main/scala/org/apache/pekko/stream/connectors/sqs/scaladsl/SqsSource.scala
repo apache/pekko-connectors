@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.sqs.scaladsl
 
-import org.apache.pekko._
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.sqs.SqsSourceSettings
-import org.apache.pekko.stream.connectors.sqs.impl.BalancingMapAsync
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
+import org.apache.pekko
+import pekko._
+import pekko.stream._
+import pekko.stream.connectors.sqs.SqsSourceSettings
+import pekko.stream.connectors.sqs.impl.BalancingMapAsync
+import pekko.stream.scaladsl.{ Flow, Source }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
@@ -30,7 +31,7 @@ import scala.compat.java8.FutureConverters._
 object SqsSource {
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Source Source]] for a SQS queue using [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Source Source]] for a SQS queue using [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    */
   def apply(
       queueUrl: String,

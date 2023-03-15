@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.ironmq.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.ironmq._
-import org.apache.pekko.stream.connectors.ironmq.scaladsl.{ IronMqConsumer => ScalaIronMqConsumer }
-import org.apache.pekko.stream.javadsl._
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.ironmq._
+import pekko.stream.connectors.ironmq.scaladsl.{ IronMqConsumer => ScalaIronMqConsumer }
+import pekko.stream.javadsl._
 
 object IronMqConsumer {
 

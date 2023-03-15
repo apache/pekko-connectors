@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.mongodb.scaladsl
 
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
-import org.apache.pekko.stream.connectors.mongodb.scaladsl.MongoFlow.{
+import org.apache.pekko
+import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.Done
+import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
+import pekko.stream.connectors.mongodb.scaladsl.MongoFlow.{
   DefaultDeleteOptions,
   DefaultInsertManyOptions,
   DefaultInsertOneOptions,
@@ -32,7 +33,7 @@ import scala.concurrent.Future
 object MongoSink {
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will insert documents into a collection.
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will insert documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    * @param options options to apply to the operation
@@ -42,7 +43,7 @@ object MongoSink {
     MongoFlow.insertOne(collection, options).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will insert batches of documents into a collection.
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will insert batches of documents into a collection.
    *
    * @param collection mongo db collection to insert to.
    * @param options options to apply to the operation
@@ -52,7 +53,7 @@ object MongoSink {
     MongoFlow.insertMany(collection, options).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will update documents as defined by a [[org.apache.pekko.stream.connectors.mongodb.DocumentUpdate]].
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will update documents as defined by a [[pekko.stream.connectors.mongodb.DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -62,7 +63,7 @@ object MongoSink {
     MongoFlow.updateOne(collection, options).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will update many documents as defined by a [[DocumentUpdate]].
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will update many documents as defined by a [[DocumentUpdate]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -73,7 +74,7 @@ object MongoSink {
     MongoFlow.updateMany(collection, options).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will delete individual documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -83,7 +84,7 @@ object MongoSink {
     MongoFlow.deleteOne(collection, options).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will delete many documents as defined by a [[org.bson.conversions.Bson Bson]] filter query.
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
@@ -93,7 +94,7 @@ object MongoSink {
     MongoFlow.deleteMany(collection, options).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[org.apache.pekko.stream.scaladsl.Sink Sink]] that will replace document as defined by a [[org.apache.pekko.stream.connectors.mongodb.DocumentReplace]].
+   * A [[pekko.stream.scaladsl.Sink Sink]] that will replace document as defined by a [[pekko.stream.connectors.mongodb.DocumentReplace]].
    *
    * @param collection the mongo db collection to update.
    * @param options options to apply to the operation

@@ -15,13 +15,14 @@ package org.apache.pekko.stream.connectors.udp.impl
 
 import java.net.InetSocketAddress
 
-import org.apache.pekko.actor.{ ActorRef, ActorSystem }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.io.{ IO, Udp }
-import org.apache.pekko.io.Inet.SocketOption
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.stream.connectors.udp.Datagram
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.actor.{ ActorRef, ActorSystem }
+import pekko.annotation.InternalApi
+import pekko.io.{ IO, Udp }
+import pekko.io.Inet.SocketOption
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.stream.connectors.udp.Datagram
+import pekko.stream.stage._
 
 import scala.collection.immutable.Iterable
 import scala.concurrent.{ Future, Promise }

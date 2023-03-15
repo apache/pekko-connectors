@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.file.impl.archive
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.file.ZipArchiveMetadata
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.file.ZipArchiveMetadata
+import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.stream.scaladsl.Source
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import pekko.util.ByteString
 
 import java.io.{ File, FileInputStream }
 import java.nio.charset.{ Charset, StandardCharsets }

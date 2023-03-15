@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.influxdb.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.influxdb.InfluxDbReadSettings
+import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import org.influxdb.{ InfluxDB, InfluxDBException }
 import org.influxdb.dto.{ Query, QueryResult }
 

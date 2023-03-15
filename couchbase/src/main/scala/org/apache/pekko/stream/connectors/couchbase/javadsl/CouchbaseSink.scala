@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import org.apache.pekko
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 
 import java.util.concurrent.CompletionStage
-import org.apache.pekko.stream.javadsl.{ Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.stream.javadsl.{ Keep, Sink }
+import pekko.{ Done, NotUsed }
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 
 /**

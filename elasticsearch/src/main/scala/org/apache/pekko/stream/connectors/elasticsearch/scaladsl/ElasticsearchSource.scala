@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
-import org.apache.pekko.stream.connectors.elasticsearch.{ impl, _ }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.{ Http, HttpExt }
+import pekko.stream.connectors.elasticsearch.{ impl, _ }
+import pekko.stream.scaladsl.Source
 import spray.json._
 
 import scala.concurrent.ExecutionContextExecutor
@@ -28,7 +29,7 @@ import scala.concurrent.ExecutionContextExecutor
 object ElasticsearchSource {
 
   /**
-   * Creates a [[org.apache.pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
+   * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
    * of Spray's [[spray.json.JsObject]].
    * Alias of [[create]].
    */
@@ -39,7 +40,7 @@ object ElasticsearchSource {
     create(elasticsearchParams, query, settings)
 
   /**
-   * Creates a [[org.apache.pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
+   * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
    * of Spray's [[spray.json.JsObject]].
    * Alias of [[create]].
    *
@@ -53,7 +54,7 @@ object ElasticsearchSource {
     create(elasticsearchParams, searchParams, settings)
 
   /**
-   * Creates a [[org.apache.pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
+   * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
    * of Spray's [[spray.json.JsObject]].
    */
   def create(elasticsearchParams: ElasticsearchParams,
@@ -62,7 +63,7 @@ object ElasticsearchSource {
     create(elasticsearchParams, Map("query" -> query), settings)
 
   /**
-   * Creates a [[org.apache.pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
+   * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
    * of Spray's [[spray.json.JsObject]].
    *
    * Example of searchParams-usage:
@@ -89,7 +90,7 @@ object ElasticsearchSource {
       .mapMaterializedValue(_ => NotUsed)
 
   /**
-   * Creates a [[org.apache.pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`
+   * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`
    * converted by Spray's [[spray.json.JsonReader]]
    */
   def typed[T](elasticsearchParams: ElasticsearchParams, query: String, settings: SourceSettingsBase[_, _])(
@@ -97,7 +98,7 @@ object ElasticsearchSource {
     typed(elasticsearchParams, Map("query" -> query), settings)
 
   /**
-   * Creates a [[org.apache.pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`
+   * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`
    * converted by Spray's [[spray.json.JsonReader]]
    *
    * Example of searchParams-usage:

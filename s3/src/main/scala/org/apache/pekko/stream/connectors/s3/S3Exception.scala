@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.s3
 
-import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.pekko.http.scaladsl.model.StatusCode
+import org.apache.pekko
+import pekko.annotation.{ DoNotInherit, InternalApi }
+import pekko.http.scaladsl.model.StatusCode
 
 import scala.xml.XML
 

@@ -14,16 +14,17 @@
 package org.apache.pekko.stream.connectors.pravega.impl
 
 import java.util.concurrent.{ CompletableFuture, Semaphore }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import io.pravega.client.stream.EventStreamWriter
 
 import scala.util.control.NonFatal
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.apache.pekko.stream.connectors.pravega.WriterSettings
+import pekko.stream.connectors.pravega.WriterSettings
 
 import scala.util.{ Failure, Success, Try }
 @InternalApi private final class PravegaFlowStageLogic[A](val shape: FlowShape[A, A],

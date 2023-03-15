@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.text.impl
 
 import java.nio.charset.Charset
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic }
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.stage.{ GraphStage, GraphStageLogic }
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.util.ByteString
 
 /**
  * Decodes a stream of bytes into a stream of characters, using a supplied [[java.nio.charset.Charset]].

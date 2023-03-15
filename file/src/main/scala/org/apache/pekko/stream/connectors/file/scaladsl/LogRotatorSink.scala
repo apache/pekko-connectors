@@ -15,12 +15,13 @@ package org.apache.pekko.stream.connectors.file.scaladsl
 
 import java.nio.file.{ OpenOption, Path, StandardOpenOption }
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.impl.fusing.MapAsync.{ Holder, NotYetThere }
-import org.apache.pekko.stream.scaladsl.{ FileIO, Sink, Source }
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream._
+import pekko.stream.impl.fusing.MapAsync.{ Holder, NotYetThere }
+import pekko.stream.scaladsl.{ FileIO, Sink, Source }
+import pekko.stream.stage._
+import pekko.util.ByteString
 
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future, Promise }
@@ -113,8 +114,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
       if (sourceOut != null) {
         sourceOut.complete()
       }
-      implicit val executionContext: ExecutionContext =
-        org.apache.pekko.dispatch.ExecutionContexts.parasitic
+      implicit val executionContext: ExecutionContext = pekko.dispatch.ExecutionContexts.parasitic
       promise.completeWith(Future.sequence(sinkCompletions).map(_ => Done))
     }
 
@@ -170,7 +170,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
         implicit val ec = materializer.executionContext
         Future
           .sequence(sinkCompletions)
-          .map(_ => Done)(org.apache.pekko.dispatch.ExecutionContexts.parasitic)
+          .map(_ => Done)(pekko.dispatch.ExecutionContexts.parasitic)
       }
 
     def futureCB(newFuture: Future[R]) =
@@ -196,8 +196,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
 
       val holder = new Holder[R](NotYetThere, futureCB(newFuture))
 
-      newFuture.onComplete(holder)(
-        org.apache.pekko.dispatch.ExecutionContexts.parasitic)
+      newFuture.onComplete(holder)(pekko.dispatch.ExecutionContexts.parasitic)
 
       prevOut.foreach(_.complete())
     }

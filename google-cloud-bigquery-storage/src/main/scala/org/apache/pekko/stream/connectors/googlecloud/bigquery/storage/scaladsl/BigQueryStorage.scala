@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl.SDKClientSource
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ClassicActorSystemProvider
+import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
+import pekko.stream.connectors.googlecloud.bigquery.storage.impl.SDKClientSource
+import pekko.stream.scaladsl.Source
+import pekko.stream.{ Attributes, Materializer }
+import pekko.util.ByteString
 import com.google.cloud.bigquery.storage.v1.DataFormat
 import com.google.cloud.bigquery.storage.v1.storage.{ BigQueryReadClient, CreateReadSessionRequest, ReadRowsResponse }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions

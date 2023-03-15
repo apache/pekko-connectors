@@ -14,10 +14,11 @@
 package org.apache.pekko.stream.connectors.dynamodb
 
 import java.net.URI
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.dynamodb.scaladsl._
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.dynamodb.scaladsl._
+import pekko.stream.scaladsl.Sink
+import pekko.testkit.TestKit
 import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers

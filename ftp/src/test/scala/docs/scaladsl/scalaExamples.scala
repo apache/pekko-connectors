@@ -12,7 +12,9 @@
  */
 
 package docs.scaladsl
-import org.apache.pekko.stream.connectors.ftp.{ FtpFile, FtpSettings, SftpSettings }
+
+import org.apache.pekko
+import pekko.stream.connectors.ftp.{ FtpFile, FtpSettings, SftpSettings }
 
 object scalaExamples {
 
@@ -28,9 +30,10 @@ object scalaExamples {
 
   object traversing {
     // #traversing
-    import org.apache.pekko.NotUsed
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
-    import org.apache.pekko.stream.scaladsl.Source
+    import org.apache.pekko
+    import pekko.NotUsed
+    import pekko.stream.connectors.ftp.scaladsl.Ftp
+    import pekko.stream.scaladsl.Source
 
     def listFiles(basePath: String, settings: FtpSettings): Source[FtpFile, NotUsed] =
       Ftp.ls(basePath, settings)
@@ -40,10 +43,11 @@ object scalaExamples {
 
   object retrieving {
     // #retrieving
-    import org.apache.pekko.stream.IOResult
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
-    import org.apache.pekko.stream.scaladsl.Source
-    import org.apache.pekko.util.ByteString
+    import org.apache.pekko
+    import pekko.stream.IOResult
+    import pekko.stream.connectors.ftp.scaladsl.Ftp
+    import pekko.stream.scaladsl.Source
+    import pekko.util.ByteString
 
     import scala.concurrent.Future
 
@@ -55,10 +59,11 @@ object scalaExamples {
 
   object retrievingUnconfirmedReads {
     // #retrieving-with-unconfirmed-reads
-    import org.apache.pekko.stream.IOResult
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Sftp
-    import org.apache.pekko.stream.scaladsl.Source
-    import org.apache.pekko.util.ByteString
+    import org.apache.pekko
+    import pekko.stream.IOResult
+    import pekko.stream.connectors.ftp.scaladsl.Sftp
+    import pekko.stream.scaladsl.Source
+    import pekko.util.ByteString
 
     import scala.concurrent.Future
 
@@ -70,9 +75,10 @@ object scalaExamples {
 
   object removing {
     // #removing
-    import org.apache.pekko.stream.IOResult
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
-    import org.apache.pekko.stream.scaladsl.Sink
+    import org.apache.pekko
+    import pekko.stream.IOResult
+    import pekko.stream.connectors.ftp.scaladsl.Ftp
+    import pekko.stream.scaladsl.Sink
 
     import scala.concurrent.Future
 
@@ -83,9 +89,10 @@ object scalaExamples {
 
   object move {
     // #moving
-    import org.apache.pekko.stream.IOResult
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
-    import org.apache.pekko.stream.scaladsl.Sink
+    import org.apache.pekko
+    import pekko.stream.IOResult
+    import pekko.stream.connectors.ftp.scaladsl.Ftp
+    import pekko.stream.scaladsl.Sink
 
     import scala.concurrent.Future
 
@@ -97,10 +104,11 @@ object scalaExamples {
   object mkdir {
     // #mkdir-source
 
-    import org.apache.pekko.NotUsed
-    import org.apache.pekko.stream.scaladsl.Source
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
-    import org.apache.pekko.Done
+    import org.apache.pekko
+    import pekko.NotUsed
+    import pekko.stream.scaladsl.Source
+    import pekko.stream.connectors.ftp.scaladsl.Ftp
+    import pekko.Done
 
     def mkdir(basePath: String, directoryName: String, settings: FtpSettings): Source[Done, NotUsed] =
       Ftp.mkdir(basePath, directoryName, settings)
@@ -112,9 +120,10 @@ object scalaExamples {
     // #processAndMove
     import java.nio.file.Files
 
-    import org.apache.pekko.NotUsed
-    import org.apache.pekko.stream.connectors.ftp.scaladsl.Ftp
-    import org.apache.pekko.stream.scaladsl.{ FileIO, RunnableGraph }
+    import org.apache.pekko
+    import pekko.NotUsed
+    import pekko.stream.connectors.ftp.scaladsl.Ftp
+    import pekko.stream.scaladsl.{ FileIO, RunnableGraph }
 
     def processAndMove(sourcePath: String,
         destinationPath: FtpFile => String,

@@ -15,11 +15,12 @@ package docs.scaladsl
 
 import java.util.concurrent.{ ConcurrentHashMap, LinkedBlockingQueue, TimeUnit }
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, RestartSource, Sink, Source }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream._
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import pekko.stream.scaladsl.{ Flow, Keep, RestartSource, Sink, Source }
 import javax.jms.{ JMSException, TextMessage }
 import org.scalatest.Inspectors._
 import org.slf4j.LoggerFactory
@@ -679,7 +680,7 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
         }
         .runWith(Sink.head)
 
-      streamCompletion.failed.futureValue shouldBe a[org.apache.pekko.stream.connectors.jms.JmsTxAckTimeout]
+      streamCompletion.failed.futureValue shouldBe a[pekko.stream.connectors.jms.JmsTxAckTimeout]
 
       val streamCompletion2 = jmsSource
         .map { txEnvelope =>

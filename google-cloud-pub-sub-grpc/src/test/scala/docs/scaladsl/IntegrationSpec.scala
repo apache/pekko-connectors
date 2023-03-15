@@ -13,17 +13,19 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.{ ActorSystem, Cancellable }
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GrpcPublisher, PubSubAttributes }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.{ ActorSystem, Cancellable }
+import pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
+import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GrpcPublisher, PubSubAttributes }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.scalatest.OptionValues
 
 //#publish-single
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
-import org.apache.pekko.stream.scaladsl._
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
+import pekko.stream.scaladsl._
 
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub._

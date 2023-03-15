@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.cassandra
 
-import org.apache.pekko.ConfigurationException
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.discovery.Discovery
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko
+import pekko.ConfigurationException
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.discovery.Discovery
+import pekko.util.JavaDurationConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 

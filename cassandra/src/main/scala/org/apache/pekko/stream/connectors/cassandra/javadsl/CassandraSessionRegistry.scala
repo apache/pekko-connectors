@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.cassandra.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.stream.connectors.cassandra.{ scaladsl, CassandraSessionSettings }
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ClassicActorSystemProvider
+import pekko.stream.connectors.cassandra.{ scaladsl, CassandraSessionSettings }
 import com.datastax.oss.driver.api.core.CqlSession
 
 import scala.compat.java8.FutureConverters._
@@ -38,7 +39,7 @@ object CassandraSessionRegistry {
   /**
    * Get the session registry with the classic actors API.
    */
-  def get(system: org.apache.pekko.actor.ActorSystem): CassandraSessionRegistry =
+  def get(system: pekko.actor.ActorSystem): CassandraSessionRegistry =
     new CassandraSessionRegistry(scaladsl.CassandraSessionRegistry(system))
 
 }

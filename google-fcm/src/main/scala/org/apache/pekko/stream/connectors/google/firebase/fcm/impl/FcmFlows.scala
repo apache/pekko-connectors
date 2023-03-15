@@ -12,14 +12,16 @@
  */
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.impl
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.connectors.google.auth.{ Credentials, ServiceAccountCredentials }
-import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.stream.connectors.google.firebase.fcm._
-import org.apache.pekko.stream.scaladsl.Flow
+
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.Http
+import pekko.stream.connectors.google.auth.{ Credentials, ServiceAccountCredentials }
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import pekko.stream.{ Attributes, Materializer }
+import pekko.stream.connectors.google.firebase.fcm._
+import pekko.stream.scaladsl.Flow
 
 import scala.concurrent.Future
 

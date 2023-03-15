@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.http.scaladsl.model.HttpResponse
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshaller }
-import org.apache.pekko.stream.connectors.google.implicits._
+import org.apache.pekko
+import pekko.http.scaladsl.model.HttpResponse
+import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshaller }
+import pekko.stream.connectors.google.implicits._
 
 final case class GoogleHttpException() extends Exception
 

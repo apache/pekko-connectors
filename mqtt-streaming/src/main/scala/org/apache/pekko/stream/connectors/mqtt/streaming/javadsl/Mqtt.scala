@@ -14,11 +14,12 @@
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.mqtt.streaming.MqttCodec.DecodeError
-import org.apache.pekko.stream.javadsl.BidiFlow
-import org.apache.pekko.stream.scaladsl.{ BidiFlow => ScalaBidiFlow }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.mqtt.streaming.MqttCodec.DecodeError
+import pekko.stream.javadsl.BidiFlow
+import pekko.stream.scaladsl.{ BidiFlow => ScalaBidiFlow }
+import pekko.util.ByteString
 
 object Mqtt {
 

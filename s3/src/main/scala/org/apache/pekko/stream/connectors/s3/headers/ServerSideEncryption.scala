@@ -12,12 +12,14 @@
  */
 
 package org.apache.pekko.stream.connectors.s3.headers
+
 import java.util.Objects
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.HttpHeader
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.stream.connectors.s3.impl._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.HttpHeader
+import pekko.http.scaladsl.model.headers.RawHeader
+import pekko.stream.connectors.s3.impl._
 import software.amazon.awssdk.utils.BinaryUtils
 import software.amazon.awssdk.utils.Md5Utils
 

@@ -13,11 +13,13 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
 //#important-imports
-import org.apache.pekko.stream.connectors.slick.scaladsl._
-import org.apache.pekko.stream.scaladsl._
+import org.apache.pekko
+import pekko.stream.connectors.slick.scaladsl._
+import pekko.stream.scaladsl._
 import slick.jdbc.GetResult
 //#important-imports
 

@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
-import org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.google.scaladsl.Paginated
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.storage.StorageObject
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.google.scaladsl.Paginated
 
 @InternalApi
 private[impl] final case class BucketListResult(

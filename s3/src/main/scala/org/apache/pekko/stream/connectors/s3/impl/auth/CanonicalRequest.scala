@@ -13,15 +13,11 @@
 
 package org.apache.pekko.stream.connectors.s3.impl.auth
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.Uri.{ Path, Query }
-import org.apache.pekko.http.scaladsl.model.headers.{
-  `Raw-Request-URI`,
-  `Timeout-Access`,
-  `Tls-Session-Info`,
-  `X-Forwarded-For`
-}
-import org.apache.pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.Uri.{ Path, Query }
+import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, `Timeout-Access`, `Tls-Session-Info`, `X-Forwarded-For` }
+import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
 
 // Documentation: http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 @InternalApi private[impl] final case class CanonicalRequest(

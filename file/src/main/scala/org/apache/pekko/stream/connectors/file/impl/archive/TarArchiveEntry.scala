@@ -17,9 +17,10 @@ import java.lang.Long.toOctalString
 import java.lang.Long.parseUnsignedLong
 import java.time.Instant
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.file.TarArchiveMetadata
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.file.TarArchiveMetadata
+import pekko.util.ByteString
 
 /**
  * INTERNAL API

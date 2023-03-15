@@ -13,13 +13,14 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
-import org.apache.pekko.stream.connectors.azure.storagequeue._
-import org.apache.pekko.stream.connectors.azure.storagequeue.scaladsl._
-import org.apache.pekko.stream.scaladsl._
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.testkit._
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
+import pekko.stream.connectors.azure.storagequeue._
+import pekko.stream.connectors.azure.storagequeue.scaladsl._
+import pekko.stream.scaladsl._
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.testkit._
 import com.microsoft.azure.storage._
 import com.microsoft.azure.storage.queue._
 import org.scalatest._

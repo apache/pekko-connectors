@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import org.apache.pekko.http.scaladsl.model.HttpMethods.GET
-import org.apache.pekko.http.scaladsl.model.HttpRequest
-import org.apache.pekko.stream.connectors.google.scaladsl.Paginated
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import pekko.http.scaladsl.model.HttpMethods.GET
+import pekko.http.scaladsl.model.HttpRequest
+import pekko.stream.connectors.google.scaladsl.Paginated
+import pekko.stream.scaladsl.Sink
+import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.service
 import io.specto.hoverfly.junit.dsl.ResponseCreators.success

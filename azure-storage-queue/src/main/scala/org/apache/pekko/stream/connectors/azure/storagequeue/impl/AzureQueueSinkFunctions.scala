@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.azure.storagequeue.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage
-import org.apache.pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage
+import pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage.{ Delete, UpdateVisibility }
 import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
 
 /**

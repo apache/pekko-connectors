@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.mqtt.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.mqtt._
-import org.apache.pekko.stream.connectors.mqtt.scaladsl.MqttMessageWithAck
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.mqtt._
+import pekko.stream.connectors.mqtt.scaladsl.MqttMessageWithAck
+import pekko.stream.stage._
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 
 import scala.collection.mutable

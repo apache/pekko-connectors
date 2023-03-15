@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.ftp.impl
 
 import java.net.InetAddress
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.ftp.FtpCredentials
-import org.apache.pekko.stream.connectors.ftp._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.ftp.FtpCredentials
+import pekko.stream.connectors.ftp._
 import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 

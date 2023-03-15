@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.influxdb.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
-import org.apache.pekko.stream.javadsl.{ Keep, Sink }
+import org.apache.pekko
+import pekko.annotation.ApiMayChange
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
+import pekko.stream.javadsl.{ Keep, Sink }
 import org.influxdb.InfluxDB
 import org.influxdb.dto.Point
 
@@ -31,8 +32,8 @@ import org.influxdb.dto.Point
 object InfluxDbSink {
 
   def create(
-      influxDB: InfluxDB): org.apache.pekko.stream.javadsl.Sink[java.util.List[InfluxDbWriteMessage[Point, NotUsed]],
-    CompletionStage[Done]] =
+      influxDB: InfluxDB)
+      : pekko.stream.javadsl.Sink[java.util.List[InfluxDbWriteMessage[Point, NotUsed]], CompletionStage[Done]] =
     InfluxDbFlow
       .create(influxDB)
       .toMat(Sink.ignore[java.util.List[InfluxDbWriteResult[Point, NotUsed]]](),
@@ -41,7 +42,7 @@ object InfluxDbSink {
   def typed[T](
       clazz: Class[T],
       influxDB: InfluxDB)
-      : org.apache.pekko.stream.javadsl.Sink[java.util.List[InfluxDbWriteMessage[T, NotUsed]], CompletionStage[Done]] =
+      : pekko.stream.javadsl.Sink[java.util.List[InfluxDbWriteMessage[T, NotUsed]], CompletionStage[Done]] =
     InfluxDbFlow
       .typed(clazz, influxDB)
       .toMat(Sink.ignore[java.util.List[InfluxDbWriteResult[T, NotUsed]]](), Keep.right[NotUsed, CompletionStage[Done]])

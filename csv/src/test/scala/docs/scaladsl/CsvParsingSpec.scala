@@ -15,12 +15,13 @@ package docs.scaladsl
 
 import java.nio.file.Paths
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
-import org.apache.pekko.stream.scaladsl.{ FileIO, Flow, Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
+import pekko.stream.scaladsl.{ FileIO, Flow, Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import pekko.util.ByteString
 
 import scala.collection.immutable.Seq
 import scala.concurrent.duration.DurationInt

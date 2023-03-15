@@ -13,16 +13,12 @@
 
 package org.apache.pekko.stream.connectors.file.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.file.{ ArchiveMetadata, TarArchiveMetadata, ZipArchiveMetadata }
-import org.apache.pekko.stream.connectors.file.impl.archive.{
-  TarArchiveManager,
-  TarReaderStage,
-  ZipArchiveManager,
-  ZipSource
-}
-import org.apache.pekko.stream.scaladsl.{ Flow, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.file.{ ArchiveMetadata, TarArchiveMetadata, ZipArchiveMetadata }
+import pekko.stream.connectors.file.impl.archive.{ TarArchiveManager, TarReaderStage, ZipArchiveManager, ZipSource }
+import pekko.stream.scaladsl.{ Flow, Source }
+import pekko.util.ByteString
 
 import java.io.File
 import java.nio.charset.{ Charset, StandardCharsets }

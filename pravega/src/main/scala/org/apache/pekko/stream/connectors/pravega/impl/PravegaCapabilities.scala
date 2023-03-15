@@ -12,8 +12,10 @@
  */
 
 package org.apache.pekko.stream.connectors.pravega.impl
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.stage.StageLogging
+
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.stage.StageLogging
 import io.pravega.client.ClientConfig
 import io.pravega.client.EventStreamClientFactory
 

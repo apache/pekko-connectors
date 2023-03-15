@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.kinesis.impl
 
 import java.util.concurrent.Semaphore
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerErrors.SchedulerUnexpectedShutdown
-import org.apache.pekko.stream.connectors.kinesis.{ CommittableRecord, KinesisSchedulerSourceSettings }
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.kinesis.KinesisSchedulerErrors.SchedulerUnexpectedShutdown
+import pekko.stream.connectors.kinesis.{ CommittableRecord, KinesisSchedulerSourceSettings }
+import pekko.stream.stage._
+import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
 

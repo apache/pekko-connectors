@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.hbase.scaladsl
 
-import org.apache.pekko.stream.connectors.hbase.HTableSettings
-import org.apache.pekko.stream.connectors.hbase.impl.{ HBaseFlowStage, HBaseSourceStage }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.hbase.HTableSettings
+import pekko.stream.connectors.hbase.impl.{ HBaseFlowStage, HBaseSourceStage }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 import org.apache.hadoop.hbase.client.{ Result, Scan }
 
 import scala.concurrent.Future

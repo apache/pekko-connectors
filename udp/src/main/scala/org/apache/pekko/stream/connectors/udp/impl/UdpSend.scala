@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.udp.impl
 
-import org.apache.pekko.actor.{ ActorRef, ActorSystem, PoisonPill }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.io.{ IO, Udp }
-import org.apache.pekko.io.Inet.SocketOption
-import org.apache.pekko.stream.connectors.udp.Datagram
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.stream._
+import org.apache.pekko
+import pekko.actor.{ ActorRef, ActorSystem, PoisonPill }
+import pekko.annotation.InternalApi
+import pekko.io.{ IO, Udp }
+import pekko.io.Inet.SocketOption
+import pekko.stream.connectors.udp.Datagram
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.stream._
 
 import scala.collection.immutable.Iterable
 

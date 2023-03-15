@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.ftp
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.IOResult
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.IOResult
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.{ Args, BeforeAndAfter, BeforeAndAfterAll, Inside, Status, TestSuite, TestSuiteMixin }
 

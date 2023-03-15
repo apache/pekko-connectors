@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.csv
 
 import java.nio.charset.StandardCharsets
 
-import org.apache.pekko.stream.connectors.csv.impl.CsvFormatter
-import org.apache.pekko.stream.connectors.csv.scaladsl.CsvQuotingStyle
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.stream.connectors.csv.impl.CsvFormatter
+import pekko.stream.connectors.csv.scaladsl.CsvQuotingStyle
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -7,12 +7,13 @@ package org.apache.pekko.stream.connectors.mqtt
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.mqtt.scaladsl.MqttFlow
-import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttServerSession, Mqtt }
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, Tcp }
-import org.apache.pekko.stream.OverflowStrategy
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.mqtt.scaladsl.MqttFlow
+import pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttServerSession, Mqtt }
+import pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, Tcp }
+import pekko.stream.OverflowStrategy
+import pekko.util.ByteString
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.openjdk.jmh.annotations._
 

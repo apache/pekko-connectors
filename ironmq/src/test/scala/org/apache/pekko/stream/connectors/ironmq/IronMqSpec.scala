@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.ironmq
 
 import java.util.UUID
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClient
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.Materializer
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.ironmq.impl.IronMqClient
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.Materializer
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach

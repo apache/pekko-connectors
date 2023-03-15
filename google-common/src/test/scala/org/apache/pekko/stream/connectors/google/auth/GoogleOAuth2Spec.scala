@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.google.{ GoogleSettings, HoverflySupport }
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.google.{ GoogleSettings, HoverflySupport }
+import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.core.model.RequestFieldMatcher.newRegexMatcher
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.service

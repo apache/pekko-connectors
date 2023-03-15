@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.stream.Attributes.Attribute
-import org.apache.pekko.stream.{ Attributes, Materializer }
+import org.apache.pekko
+import pekko.stream.Attributes.Attribute
+import pekko.stream.{ Attributes, Materializer }
 
 /**
  * Akka Stream [[Attributes]] that are used when materializing stream blueprints containing Google connectors.

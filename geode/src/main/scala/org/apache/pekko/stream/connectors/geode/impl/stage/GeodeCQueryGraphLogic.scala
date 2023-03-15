@@ -16,9 +16,10 @@ package org.apache.pekko.stream.connectors.geode.impl.stage
 import java.util
 import java.util.concurrent.Semaphore
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.stage.{ AsyncCallback, StageLogging }
-import org.apache.pekko.stream.{ Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.stage.{ AsyncCallback, StageLogging }
+import pekko.stream.{ Outlet, SourceShape }
 import org.apache.geode.cache.client.ClientCache
 import org.apache.geode.cache.query.{ CqAttributesFactory, CqEvent, CqQuery, Struct }
 import org.apache.geode.cache.util.CqListenerAdapter

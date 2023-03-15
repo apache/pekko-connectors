@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.jms.scaladsl
 
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.impl.{ JmsProducerMatValue, JmsProducerStage }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.impl.{ JmsProducerMatValue, JmsProducerStage }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -27,7 +28,7 @@ import scala.concurrent.Future
 object JmsProducer {
 
   /**
-   * Create a flow to send [[org.apache.pekko.stream.connectors.jms.JmsMessage JmsMessage]] sub-classes to
+   * Create a flow to send [[pekko.stream.connectors.jms.JmsMessage JmsMessage]] sub-classes to
    * a JMS broker.
    */
   def flow[T <: JmsMessage](settings: JmsProducerSettings): Flow[T, T, JmsProducerStatus] =
@@ -40,7 +41,7 @@ object JmsProducer {
     }
 
   /**
-   * Create a flow to send [[org.apache.pekko.stream.connectors.jms.JmsEnvelope JmsEnvelope]] sub-classes to
+   * Create a flow to send [[pekko.stream.connectors.jms.JmsEnvelope JmsEnvelope]] sub-classes to
    * a JMS broker to support pass-through of data.
    */
   def flexiFlow[PassThrough](
@@ -54,7 +55,7 @@ object JmsProducer {
     }
 
   /**
-   * Create a sink to send [[org.apache.pekko.stream.connectors.jms.JmsMessage JmsMessage]] sub-classes to
+   * Create a sink to send [[pekko.stream.connectors.jms.JmsMessage JmsMessage]] sub-classes to
    * a JMS broker.
    */
   def sink(settings: JmsProducerSettings): Sink[JmsMessage, Future[Done]] =
@@ -73,7 +74,7 @@ object JmsProducer {
     Flow.fromFunction((s: Array[Byte]) => JmsByteMessage(s)).via(flow(settings)).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * Create a sink to send [[org.apache.pekko.util.ByteString ByteString]]s to a JMS broker.
+   * Create a sink to send [[pekko.util.ByteString ByteString]]s to a JMS broker.
    */
   def byteStringSink(settings: JmsProducerSettings): Sink[ByteString, Future[Done]] =
     Flow.fromFunction((s: ByteString) => JmsByteStringMessage(s)).via(flow(settings)).toMat(Sink.ignore)(Keep.right)

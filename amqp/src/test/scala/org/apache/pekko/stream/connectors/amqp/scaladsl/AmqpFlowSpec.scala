@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.amqp._
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import pekko.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.ConfirmCallback
 import org.mockito.ArgumentMatchers._

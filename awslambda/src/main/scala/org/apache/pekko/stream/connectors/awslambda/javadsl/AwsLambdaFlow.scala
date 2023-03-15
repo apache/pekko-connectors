@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.awslambda.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.javadsl.Flow
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.javadsl.Flow
 import software.amazon.awssdk.services.lambda.model.{ InvokeRequest, InvokeResponse }
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 
@@ -24,6 +25,6 @@ object AwsLambdaFlow {
    * Java API: creates a [[AwsLambdaFlowStage]] for a AWS Lambda function invocation using an [[LambdaAsyncClient]]
    */
   def create(awsLambdaClient: LambdaAsyncClient, parallelism: Int): Flow[InvokeRequest, InvokeResponse, NotUsed] =
-    org.apache.pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow.apply(parallelism)(awsLambdaClient).asJava
+    pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow.apply(parallelism)(awsLambdaClient).asJava
 
 }

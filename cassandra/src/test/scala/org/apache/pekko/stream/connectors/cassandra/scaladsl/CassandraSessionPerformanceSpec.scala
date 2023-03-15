@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
 import scala.concurrent.Await
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.event.Logging
+import pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import scala.concurrent.duration._
 
 final class CassandraSessionPerformanceSpec extends CassandraSpecBase(ActorSystem("CassandraSessionPerformanceSpec")) {

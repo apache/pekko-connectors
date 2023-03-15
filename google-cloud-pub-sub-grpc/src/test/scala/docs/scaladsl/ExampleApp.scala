@@ -13,10 +13,11 @@
 
 package docs.scaladsl
 import java.util.logging.{ Level, Logger }
-import org.apache.pekko.actor.{ ActorSystem, Cancellable }
-import org.apache.pekko.stream.DelayOverflowStrategy
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, Cancellable }
+import pekko.stream.DelayOverflowStrategy
+import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
+import pekko.stream.scaladsl.{ Sink, Source }
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub.{ PublishRequest, PubsubMessage, StreamingPullRequest }
 import com.typesafe.config.ConfigFactory

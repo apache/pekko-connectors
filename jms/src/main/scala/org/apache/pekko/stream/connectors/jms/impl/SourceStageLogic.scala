@@ -15,13 +15,14 @@ package org.apache.pekko.stream.connectors.jms.impl
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms.impl.InternalConnectionState.JmsConnectorStopping
-import org.apache.pekko.stream.connectors.jms.{ Destination, JmsConsumerSettings }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms.impl.InternalConnectionState.JmsConnectorStopping
+import pekko.stream.connectors.jms.{ Destination, JmsConsumerSettings }
+import pekko.stream.scaladsl.Source
+import pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.{ Done, NotUsed }
 
 import scala.collection.mutable
 import scala.util.{ Failure, Success }

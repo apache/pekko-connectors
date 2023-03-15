@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.s3
 
 import java.time.Instant
 import java.util.{ Objects, Optional }
-import org.apache.pekko.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Uri }
-import org.apache.pekko.http.scaladsl.model.headers._
-import org.apache.pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
+import org.apache.pekko
+import pekko.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Uri }
+import pekko.http.scaladsl.model.headers._
+import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
@@ -202,7 +203,7 @@ final class MultipartUploadResult private (
     val versionId: Option[String]) {
 
   /** Java API */
-  def getLocation: org.apache.pekko.http.javadsl.model.Uri = org.apache.pekko.http.javadsl.model.Uri.create(location)
+  def getLocation: pekko.http.javadsl.model.Uri = pekko.http.javadsl.model.Uri.create(location)
 
   /** Java API */
   def getBucket: String = bucket
@@ -289,7 +290,7 @@ object MultipartUploadResult {
 
   /** Java API */
   def create(
-      location: org.apache.pekko.http.javadsl.model.Uri,
+      location: pekko.http.javadsl.model.Uri,
       bucket: String,
       key: String,
       eTag: String,
@@ -1065,8 +1066,8 @@ final class ObjectMetadata private (
   /**
    * Java Api
    */
-  lazy val headers: java.util.List[org.apache.pekko.http.javadsl.model.HttpHeader] =
-    (metadata: immutable.Seq[org.apache.pekko.http.javadsl.model.HttpHeader]).asJava
+  lazy val headers: java.util.List[pekko.http.javadsl.model.HttpHeader] =
+    (metadata: immutable.Seq[pekko.http.javadsl.model.HttpHeader]).asJava
 
   /**
    * Gets the hex encoded 128-bit MD5 digest of the associated object

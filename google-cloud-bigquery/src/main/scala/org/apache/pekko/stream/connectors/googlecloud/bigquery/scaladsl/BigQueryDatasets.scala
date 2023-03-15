@@ -13,19 +13,20 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.marshalling.Marshal
-import org.apache.pekko.http.scaladsl.model.HttpMethods.{ DELETE, POST }
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{ Dataset, DatasetListResponse, DatasetReference }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.marshalling.Marshal
+import pekko.http.scaladsl.model.HttpMethods.{ DELETE, POST }
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.google.implicits._
+import pekko.stream.connectors.googlecloud.bigquery.model.{ Dataset, DatasetListResponse, DatasetReference }
+import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException }
+import pekko.stream.scaladsl.Source
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 
@@ -35,7 +36,7 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
    * Lists all datasets in the specified project to which the user has been granted the READER dataset role.
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list BigQuery reference]]
    *
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits each [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
+   * @return a [[pekko.stream.scaladsl.Source]] that emits each [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
    */
   def datasets: Source[Dataset, NotUsed] = datasets()
 
@@ -46,7 +47,7 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
    * @param maxResults the maximum number of results to return in a single response page
    * @param all whether to list all datasets, including hidden ones
    * @param filter a key, value [[scala.collection.immutable.Map]] for filtering the results of the request by label
-   * @return a [[org.apache.pekko.stream.scaladsl.Source]] that emits each [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
+   * @return a [[pekko.stream.scaladsl.Source]] that emits each [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
    */
   def datasets(maxResults: Option[Int] = None,
       all: Option[Boolean] = None,
@@ -67,7 +68,7 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/get BigQuery reference]]
    *
    * @param datasetId dataset ID of the requested dataset
-   * @return a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
+   * @return a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
    */
   def dataset(datasetId: String)(implicit system: ClassicActorSystemProvider,
       settings: GoogleSettings): Future[Dataset] = {
@@ -82,7 +83,7 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert BigQuery reference]]
    *
    * @param datasetId dataset ID of the new dataset
-   * @return a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
+   * @return a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
    */
   def createDataset(datasetId: String)(implicit system: ClassicActorSystemProvider,
       settings: GoogleSettings): Future[Dataset] = {
@@ -94,8 +95,8 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
    * Creates a new empty dataset.
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/insert BigQuery reference]]
    *
-   * @param dataset the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset]] to create
-   * @return a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
+   * @param dataset the [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]] to create
+   * @return a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
    */
   def createDataset(dataset: Dataset)(implicit system: ClassicActorSystemProvider,
       settings: GoogleSettings): Future[Dataset] = {
@@ -114,7 +115,7 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
    *
    * @param datasetId dataset ID of dataset being deleted
    * @param deleteContents if `true`, delete all the tables in the dataset; if `false` and the dataset contains tables, the request will fail
-   * @return a [[scala.concurrent.Future]] containing [[org.apache.pekko.Done]]
+   * @return a [[scala.concurrent.Future]] containing [[pekko.Done]]
    */
   def deleteDataset(datasetId: String, deleteContents: Boolean = false)(implicit system: ClassicActorSystemProvider,
       settings: GoogleSettings): Future[Done] = {

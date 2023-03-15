@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.hbase.impl
 
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.hbase.HTableSettings
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.stream._
+import pekko.stream.connectors.hbase.HTableSettings
+import pekko.stream.stage._
 import org.apache.hadoop.hbase.client.{ Attributes => _, _ }
 
 import scala.util.control.NonFatal

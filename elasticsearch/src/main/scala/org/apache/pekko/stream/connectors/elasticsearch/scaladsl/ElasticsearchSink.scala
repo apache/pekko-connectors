@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.scaladsl
 
-import org.apache.pekko.stream.connectors.elasticsearch._
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.elasticsearch._
+import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.{ Done, NotUsed }
 import spray.json.JsonWriter
 
 import scala.concurrent.Future
@@ -26,7 +27,7 @@ import scala.concurrent.Future
 object ElasticsearchSink {
 
   /**
-   * Create a sink to update Elasticsearch with [[org.apache.pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
+   * Create a sink to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
    */
   def create[T](elasticsearchParams: ElasticsearchParams, settings: WriteSettingsBase[_, _])(
       implicit sprayJsonWriter: JsonWriter[T]): Sink[WriteMessage[T, NotUsed], Future[Done]] =

@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.xml.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.xml
-import org.apache.pekko.stream.connectors.xml.ParseEvent
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.xml
+import pekko.stream.connectors.xml.ParseEvent
+import pekko.util.ByteString
 import com.fasterxml.aalto.AsyncXMLInputFactory
 import org.w3c.dom.Element
 
@@ -29,21 +30,20 @@ object XmlParsing {
   /**
    * Parser Flow that takes a stream of ByteStrings and parses them to XML events similar to SAX.
    */
-  def parser(): org.apache.pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
+  def parser(): pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.parser.asJava
 
   /**
    * Parser Flow that takes a stream of ByteStrings and parses them to XML events similar to SAX.
    */
-  def parser(ignoreInvalidChars: Boolean): org.apache.pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
+  def parser(ignoreInvalidChars: Boolean): pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.parser(ignoreInvalidChars).asJava
 
   /**
    * Parser Flow that takes a stream of ByteStrings and parses them to XML events similar to SAX.
    */
   def parser(
-      configureFactory: Consumer[AsyncXMLInputFactory])
-      : org.apache.pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
+      configureFactory: Consumer[AsyncXMLInputFactory]): pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.parser(false, configureFactory.accept(_)).asJava
 
   /**
@@ -51,15 +51,14 @@ object XmlParsing {
    */
   def parser(
       ignoreInvalidChars: Boolean,
-      configureFactory: Consumer[AsyncXMLInputFactory])
-      : org.apache.pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
+      configureFactory: Consumer[AsyncXMLInputFactory]): pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.parser(ignoreInvalidChars, configureFactory.accept(_)).asJava
 
   /**
    * A Flow that transforms a stream of XML ParseEvents. This stage coalesces consequitive CData and Characters
    * events into a single Characters event or fails if the buffered string is larger than the maximum defined.
    */
-  def coalesce(maximumTextLength: Int): org.apache.pekko.stream.javadsl.Flow[ParseEvent, ParseEvent, NotUsed] =
+  def coalesce(maximumTextLength: Int): pekko.stream.javadsl.Flow[ParseEvent, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.coalesce(maximumTextLength).asJava
 
   /**
@@ -68,13 +67,13 @@ object XmlParsing {
    * through.
    */
   def subslice(
-      path: java.util.Collection[String]): org.apache.pekko.stream.javadsl.Flow[ParseEvent, ParseEvent, NotUsed] =
+      path: java.util.Collection[String]): pekko.stream.javadsl.Flow[ParseEvent, ParseEvent, NotUsed] =
     xml.scaladsl.XmlParsing.subslice(path.asScala.toIndexedSeq).asJava
 
   /**
    * A Flow that transforms a stream of XML ParseEvents. This stage pushes elements of a certain path in
    * the XML document as org.w3c.dom.Element.
    */
-  def subtree(path: java.util.Collection[String]): org.apache.pekko.stream.javadsl.Flow[ParseEvent, Element, NotUsed] =
+  def subtree(path: java.util.Collection[String]): pekko.stream.javadsl.Flow[ParseEvent, Element, NotUsed] =
     xml.scaladsl.XmlParsing.subtree(path.asScala.toIndexedSeq).asJava
 }

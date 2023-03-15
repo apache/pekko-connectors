@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.google.http
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.ClientTransport
-import org.apache.pekko.http.scaladsl.Http.OutgoingConnection
-import org.apache.pekko.http.scaladsl.model.headers.BasicHttpCredentials
-import org.apache.pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
-import org.apache.pekko.stream.scaladsl.{ Flow, Tcp }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.ClientTransport
+import pekko.http.scaladsl.Http.OutgoingConnection
+import pekko.http.scaladsl.model.headers.BasicHttpCredentials
+import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
+import pekko.stream.scaladsl.{ Flow, Tcp }
+import pekko.util.ByteString
 
 import java.net.InetSocketAddress
 import scala.concurrent.Future

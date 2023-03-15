@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.s3
 
 import java.util.Objects
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.HttpHeader
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
-import org.apache.pekko.stream.connectors.s3.impl.S3Request
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.HttpHeader
+import pekko.http.scaladsl.model.headers.RawHeader
+import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
+import pekko.stream.connectors.s3.impl.S3Request
 
 import scala.collection.immutable.Seq
 import scala.jdk.CollectionConverters._

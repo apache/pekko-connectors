@@ -18,17 +18,12 @@ import java.util.concurrent.ConcurrentHashMap
 import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
-import org.apache.pekko.Done
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
-import org.apache.pekko.annotation.InternalStableApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CqlSessionProvider }
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.annotation.InternalStableApi
+import pekko.event.Logging
+import pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CqlSessionProvider }
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.Config
 

@@ -19,12 +19,13 @@ import java.nio.file.attribute.PosixFilePermission
 import java.nio.file.{ Files, Paths }
 import java.time.Instant
 import java.util.concurrent.TimeUnit
-import org.apache.pekko.stream.{ IOOperationIncompleteException, IOResult }
+import org.apache.pekko
+import pekko.stream.{ IOOperationIncompleteException, IOResult }
 import BaseSftpSupport.{ CLIENT_PRIVATE_KEY_PASSPHRASE => ClientPrivateKeyPassphrase }
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.util.ByteString
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.util.ByteString
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{ Millis, Seconds, Span }
 

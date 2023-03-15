@@ -16,23 +16,24 @@ package org.apache.pekko.stream.connectors.s3.impl
 import java.net.InetSocketAddress
 import java.time.{ Instant, ZoneOffset, ZonedDateTime }
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.Http.OutgoingConnection
-import org.apache.pekko.http.scaladsl.model.StatusCodes.{ NoContent, NotFound, OK }
-import org.apache.pekko.http.scaladsl.model.headers._
-import org.apache.pekko.http.scaladsl.model.{ headers => http, _ }
-import org.apache.pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
-import org.apache.pekko.http.scaladsl.unmarshalling.{ Unmarshal, Unmarshaller }
-import org.apache.pekko.http.scaladsl.{ ClientTransport, Http }
-import org.apache.pekko.stream.connectors.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
-import org.apache.pekko.stream.connectors.s3._
-import org.apache.pekko.stream.connectors.s3.impl.auth.{ CredentialScope, Signer, SigningKey }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, RunnableGraph, Sink, Source, Tcp }
-import org.apache.pekko.stream.{ Attributes, Materializer }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.Http.OutgoingConnection
+import pekko.http.scaladsl.model.StatusCodes.{ NoContent, NotFound, OK }
+import pekko.http.scaladsl.model.headers._
+import pekko.http.scaladsl.model.{ headers => http, _ }
+import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
+import pekko.http.scaladsl.unmarshalling.{ Unmarshal, Unmarshaller }
+import pekko.http.scaladsl.{ ClientTransport, Http }
+import pekko.stream.connectors.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
+import pekko.stream.connectors.s3._
+import pekko.stream.connectors.s3.impl.auth.{ CredentialScope, Signer, SigningKey }
+import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, RunnableGraph, Sink, Source, Tcp }
+import pekko.stream.{ Attributes, Materializer }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 
 import scala.collection.immutable

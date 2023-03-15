@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.orientdb.scaladsl
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.connectors.orientdb._
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.connectors.orientdb._
+import pekko.stream.scaladsl.{ Keep, Sink }
 import com.orientechnologies.orient.core.record.impl.ODocument
 
 import scala.concurrent.Future

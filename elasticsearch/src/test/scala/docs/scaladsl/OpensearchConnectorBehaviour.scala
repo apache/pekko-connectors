@@ -15,14 +15,15 @@ package docs.scaladsl
 
 import java.util.concurrent.TimeUnit
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.HttpExt
-import org.apache.pekko.http.scaladsl.model.Uri.Path
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
-import org.apache.pekko.stream.connectors.elasticsearch._
-import org.apache.pekko.stream.connectors.elasticsearch.scaladsl._
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.HttpExt
+import pekko.http.scaladsl.model.Uri.Path
+import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
+import pekko.stream.connectors.elasticsearch._
+import pekko.stream.connectors.elasticsearch.scaladsl._
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.{ Done, NotUsed }
 import org.scalatest.Inspectors
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers

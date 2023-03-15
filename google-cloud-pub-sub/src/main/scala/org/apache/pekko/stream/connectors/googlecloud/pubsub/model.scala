@@ -14,10 +14,11 @@
 package org.apache.pekko.stream.connectors.googlecloud.pubsub
 
 import java.time.Instant
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.google.auth.ServiceAccountCredentials
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.google.auth.ServiceAccountCredentials
 
 import scala.annotation.nowarn
 import scala.collection.immutable
@@ -29,7 +30,7 @@ import scala.jdk.CollectionConverters._
  * @param pullMaxMessagesPerInternalBatch when pulling messages, the maximum that will be in the batch of messages. Defaults to 1000.
  */
 class PubSubConfig private (
-    /** @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] */
+    /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "3.0.0") @Deprecated val projectId: String,
@@ -55,7 +56,7 @@ object PubSubConfig {
     apply(pullReturnImmediately, pullMaxMessagesPerInternalBatch)
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] to manage credentials
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated
@@ -73,7 +74,7 @@ object PubSubConfig {
               Seq("https://www.googleapis.com/auth/pubsub")))))
 
   /**
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] to manage credentials
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated
@@ -96,7 +97,7 @@ object PubSubConfig {
 
   /**
    * Java API
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] to manage credentials
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated
@@ -105,7 +106,7 @@ object PubSubConfig {
 
   /**
    * Java API
-   * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]] to manage credentials
+   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
   @Deprecated

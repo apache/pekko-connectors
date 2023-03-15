@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch.impl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.{ Http, HttpExt }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.elasticsearch._
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Keep, Source }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.{ Http, HttpExt }
+import pekko.stream.Materializer
+import pekko.stream.connectors.elasticsearch._
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Keep, Source }
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 

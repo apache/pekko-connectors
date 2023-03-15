@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.sqs
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
 import software.amazon.awssdk.awscore.DefaultAwsResponseMetadata
 import software.amazon.awssdk.services.sqs.model._
 
@@ -251,7 +252,7 @@ object SqsAckResult {
   /**
    * Ignore acknowledgment
    * No requests are executed on the SQS service for ignore messageAction.
-   * Its result is [[org.apache.pekko.NotUsed]] and the responseMetadata is always empty
+   * Its result is [[pekko.NotUsed]] and the responseMetadata is always empty
    * @param messageAction the ignore message action
    */
   final class SqsIgnoreResult @InternalApi private[sqs] (
@@ -346,7 +347,7 @@ object SqsAckResultEntry {
   /**
    * Ignore acknowledgment within a batch
    * No requests are executed on the SQS service for ignore messageAction.
-   * Its result is [[org.apache.pekko.NotUsed]] and the responseMetadata is always empty
+   * Its result is [[pekko.NotUsed]] and the responseMetadata is always empty
    * @param messageAction the ignore message action
    */
   final class SqsIgnoreResultEntry @InternalApi private[sqs] (

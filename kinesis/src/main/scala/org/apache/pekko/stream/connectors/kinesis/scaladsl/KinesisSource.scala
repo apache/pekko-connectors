@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.kinesis.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.kinesis.KinesisErrors.NoShardsError
-import org.apache.pekko.stream.connectors.kinesis.ShardSettings
-import org.apache.pekko.stream.connectors.kinesis.impl.KinesisSourceStage
-import org.apache.pekko.stream.scaladsl.{ Merge, Source }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.kinesis.KinesisErrors.NoShardsError
+import pekko.stream.connectors.kinesis.ShardSettings
+import pekko.stream.connectors.kinesis.impl.KinesisSourceStage
+import pekko.stream.scaladsl.{ Merge, Source }
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.Record
 

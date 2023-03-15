@@ -13,20 +13,17 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.HttpExt
-import org.apache.pekko.http.scaladsl.marshalling.Marshal
-import org.apache.pekko.http.scaladsl.model._
-import org.apache.pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, Unmarshaller }
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.{
-  FcmErrorResponse,
-  FcmResponse,
-  FcmSuccessResponse
-}
-import org.apache.pekko.stream.connectors.google.GoogleSettings
-import org.apache.pekko.stream.connectors.google.http.GoogleHttp
-import org.apache.pekko.stream.connectors.google.implicits._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.HttpExt
+import pekko.http.scaladsl.marshalling.Marshal
+import pekko.http.scaladsl.model._
+import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, Unmarshaller }
+import pekko.stream.Materializer
+import pekko.stream.connectors.google.firebase.fcm.v1.models.{ FcmErrorResponse, FcmResponse, FcmSuccessResponse }
+import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.google.http.GoogleHttp
+import pekko.stream.connectors.google.implicits._
 
 import scala.concurrent.Future
 

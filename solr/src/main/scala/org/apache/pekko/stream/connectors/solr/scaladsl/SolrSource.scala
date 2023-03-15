@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.solr.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.solr.impl.SolrSourceStage
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.solr.impl.SolrSourceStage
+import pekko.stream.scaladsl.Source
 import org.apache.solr.client.solrj.io.Tuple
 import org.apache.solr.client.solrj.io.stream.TupleStream
 

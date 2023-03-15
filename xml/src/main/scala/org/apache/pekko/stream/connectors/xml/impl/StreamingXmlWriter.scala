@@ -14,11 +14,12 @@
 package org.apache.pekko.stream.connectors.xml.impl
 import java.nio.charset.Charset
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.stream.connectors.xml._
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.util.{ ByteString, ByteStringBuilder }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.stream.connectors.xml._
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.util.{ ByteString, ByteStringBuilder }
 import javax.xml.stream.XMLOutputFactory
 
 /**

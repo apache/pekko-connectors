@@ -13,25 +13,26 @@
 
 package org.apache.pekko.stream.connectors.ironmq
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.http.scaladsl.model.Uri
-import org.apache.pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.http.scaladsl.model.Uri
+import pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings
 import com.typesafe.config.Config
 
 import scala.concurrent.duration.FiniteDuration
-import org.apache.pekko.util.JavaDurationConverters._
+import pekko.util.JavaDurationConverters._
 
 /**
  * IronMQ settings. To a detailed documentation please refer to the reference.conf.
  */
 final class IronMqSettings private (
-    val endpoint: org.apache.pekko.http.scaladsl.model.Uri,
+    val endpoint: pekko.http.scaladsl.model.Uri,
     val projectId: String,
     val token: String,
     val consumerSettings: ConsumerSettings) {
 
   /** The IronMq endpoint. It is available on the IronMQ project page and change based on availability zone and region. */
-  def withEndpoint(value: org.apache.pekko.http.scaladsl.model.Uri): IronMqSettings = copy(endpoint = value)
+  def withEndpoint(value: pekko.http.scaladsl.model.Uri): IronMqSettings = copy(endpoint = value)
 
   /** The IronMq project id, it is available on the IronMQ hud. */
   def withProjectId(value: String): IronMqSettings = copy(projectId = value)
@@ -43,7 +44,7 @@ final class IronMqSettings private (
   def withConsumerSettings(value: ConsumerSettings): IronMqSettings = copy(consumerSettings = value)
 
   private def copy(
-      endpoint: org.apache.pekko.http.scaladsl.model.Uri = endpoint,
+      endpoint: pekko.http.scaladsl.model.Uri = endpoint,
       projectId: String = projectId,
       token: String = token,
       consumerSettings: ConsumerSettings = consumerSettings): IronMqSettings = new IronMqSettings(

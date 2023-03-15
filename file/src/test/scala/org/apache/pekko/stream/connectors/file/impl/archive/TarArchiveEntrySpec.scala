@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.file.impl.archive
 
 import java.time.{ Instant, LocalDateTime, ZoneId, ZonedDateTime }
 
-import org.apache.pekko.stream.connectors.file.TarArchiveMetadata
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.file.TarArchiveMetadata
+import pekko.util.ByteString
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

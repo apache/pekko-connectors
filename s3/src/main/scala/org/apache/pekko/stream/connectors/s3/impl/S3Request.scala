@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.s3.impl
+
 import org.apache.pekko.annotation.InternalApi
 
 /**

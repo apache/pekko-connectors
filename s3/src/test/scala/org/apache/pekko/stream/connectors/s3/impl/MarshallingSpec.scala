@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.s3.impl
 
 import java.time.Instant
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.model.{ MediaTypes, _ }
-import org.apache.pekko.stream.connectors.s3.{ ListBucketResultCommonPrefixes, ListBucketResultContents }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.model.{ MediaTypes, _ }
+import pekko.stream.connectors.s3.{ ListBucketResultCommonPrefixes, ListBucketResultContents }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike

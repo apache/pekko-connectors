@@ -13,15 +13,16 @@
 
 package org.apache.pekko.stream.connectors.google
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import org.apache.pekko.http.scaladsl.model.HttpMethods.POST
-import org.apache.pekko.http.scaladsl.model.{ ContentTypes, HttpRequest, Uri }
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshaller
-import org.apache.pekko.stream.connectors.google.scaladsl.`X-Upload-Content-Type`
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import pekko.http.scaladsl.model.HttpMethods.POST
+import pekko.http.scaladsl.model.{ ContentTypes, HttpRequest, Uri }
+import pekko.http.scaladsl.unmarshalling.Unmarshaller
+import pekko.stream.connectors.google.scaladsl.`X-Upload-Content-Type`
+import pekko.stream.scaladsl.Source
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.service
 import io.specto.hoverfly.junit.dsl.ResponseCreators.{ created, serverError, success }

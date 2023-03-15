@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
+import pekko.stream.Materializer
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
+import pekko.util.ByteString
 import org.apache.avro.Schema
 import org.apache.avro.file.SeekableByteArrayInput
 import org.apache.avro.generic.{ GenericDatumReader, GenericRecord }

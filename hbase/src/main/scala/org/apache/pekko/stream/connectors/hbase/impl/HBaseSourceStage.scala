@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.hbase.impl
 
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
-import org.apache.pekko.stream.connectors.hbase.HTableSettings
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
+import org.apache.pekko
+import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.stream.connectors.hbase.HTableSettings
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
 import org.apache.hadoop.hbase.client.{ Result, Scan, Table }
 
 import scala.util.control.NonFatal

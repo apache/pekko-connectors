@@ -12,9 +12,11 @@
  */
 
 package org.apache.pekko.stream.connectors.sns.scaladsl
-import org.apache.pekko.stream.connectors.sns.SnsPublishSettings
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink }
-import org.apache.pekko.{ Done, NotUsed }
+
+import org.apache.pekko
+import pekko.stream.connectors.sns.SnsPublishSettings
+import pekko.stream.scaladsl.{ Flow, Keep, Sink }
+import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.{ PublishRequest, PublishResponse }
 
@@ -29,7 +31,7 @@ import scala.compat.java8.FutureConverters._
 object SnsPublisher {
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def flow(topicArn: String, settings: SnsPublishSettings = SnsPublishSettings())(
       implicit snsClient: SnsAsyncClient): Flow[String, PublishResponse, NotUsed] =
@@ -38,7 +40,7 @@ object SnsPublisher {
       .via(publishFlow(settings))
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def publishFlow(topicArn: String, settings: SnsPublishSettings = SnsPublishSettings())(
       implicit snsClient: SnsAsyncClient): Flow[PublishRequest, PublishResponse, NotUsed] =
@@ -47,7 +49,7 @@ object SnsPublisher {
       .via(publishFlow(settings))
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def publishFlow(
       settings: SnsPublishSettings)(
@@ -58,34 +60,34 @@ object SnsPublisher {
   }
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Flow Flow]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def publishFlow()(implicit snsClient: SnsAsyncClient): Flow[PublishRequest, PublishResponse, NotUsed] =
     publishFlow(SnsPublishSettings())
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Sink Sink]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Sink Sink]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def sink(topicArn: String, settings: SnsPublishSettings = SnsPublishSettings())(
       implicit snsClient: SnsAsyncClient): Sink[String, Future[Done]] =
     flow(topicArn, settings).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Sink Sink]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Sink Sink]] to publish messages to a SNS topic using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def publishSink(topicArn: String, settings: SnsPublishSettings = SnsPublishSettings())(
       implicit snsClient: SnsAsyncClient): Sink[PublishRequest, Future[Done]] =
     publishFlow(topicArn, settings).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Sink Sink]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Sink Sink]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def publishSink(
       settings: SnsPublishSettings)(implicit snsClient: SnsAsyncClient): Sink[PublishRequest, Future[Done]] =
     publishFlow(settings).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * creates a [[org.apache.pekko.stream.scaladsl.Sink Sink]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
+   * creates a [[pekko.stream.scaladsl.Sink Sink]] to publish messages to SNS topics based on the message topic arn using an [[software.amazon.awssdk.services.sns.SnsAsyncClient SnsAsyncClient]]
    */
   def publishSink()(implicit snsClient: SnsAsyncClient): Sink[PublishRequest, Future[Done]] =
     publishFlow(SnsPublishSettings()).toMat(Sink.ignore)(Keep.right)

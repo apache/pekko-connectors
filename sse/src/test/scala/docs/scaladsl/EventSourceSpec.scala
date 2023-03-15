@@ -15,28 +15,30 @@ package docs.scaladsl
 
 import java.net.InetSocketAddress
 import java.nio.charset.StandardCharsets.UTF_8
-import org.apache.pekko.actor.{ Actor, ActorLogging, ActorSystem, Props, Status }
-import org.apache.pekko.http.scaladsl.coding.Coders
-import org.apache.pekko.http.scaladsl.marshalling.sse.EventStreamMarshalling
-import org.apache.pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
-import org.apache.pekko.http.scaladsl.model.StatusCodes.BadRequest
-import org.apache.pekko.http.scaladsl.model.headers.`Last-Event-ID`
-import org.apache.pekko.http.scaladsl.server.{ Directives, Route }
-import org.apache.pekko.pattern.pipe
-import org.apache.pekko.stream.scaladsl.{ Sink, Source }
-import org.apache.pekko.stream.ThrottleMode
-import org.apache.pekko.testkit.SocketUtil
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.{ Actor, ActorLogging, ActorSystem, Props, Status }
+import pekko.http.scaladsl.coding.Coders
+import pekko.http.scaladsl.marshalling.sse.EventStreamMarshalling
+import pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
+import pekko.http.scaladsl.model.StatusCodes.BadRequest
+import pekko.http.scaladsl.model.headers.`Last-Event-ID`
+import pekko.http.scaladsl.server.{ Directives, Route }
+import pekko.pattern.pipe
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.ThrottleMode
+import pekko.testkit.SocketUtil
+import pekko.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ Await, Future }
 //#event-source
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.http.scaladsl.model.sse.ServerSentEvent
-import org.apache.pekko.http.scaladsl.model.{ HttpEntity, HttpRequest, HttpResponse, Uri }
-import org.apache.pekko.stream.connectors.sse.scaladsl.EventSource
+import org.apache.pekko
+import pekko.http.scaladsl.Http
+import pekko.http.scaladsl.model.sse.ServerSentEvent
+import pekko.http.scaladsl.model.{ HttpEntity, HttpRequest, HttpResponse, Uri }
+import pekko.stream.connectors.sse.scaladsl.EventSource
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpec
 

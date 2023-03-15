@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.hdfs.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.stream.connectors.hdfs.scaladsl.{ HdfsSource => ScalaHdfsSource }
-import org.apache.pekko.stream.{ javadsl, IOResult }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.japi.Pair
+import pekko.stream.connectors.hdfs.scaladsl.{ HdfsSource => ScalaHdfsSource }
+import pekko.stream.{ javadsl, IOResult }
+import pekko.util.ByteString
 import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.io.Writable
 import org.apache.hadoop.io.compress.CompressionCodec

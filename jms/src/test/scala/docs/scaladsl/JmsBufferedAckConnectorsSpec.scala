@@ -15,12 +15,13 @@ package docs.scaladsl
 
 import java.util.concurrent.{ LinkedBlockingQueue, TimeUnit }
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.jms._
-import org.apache.pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.{ KillSwitches, ThrottleMode }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.jms._
+import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.{ KillSwitches, ThrottleMode }
 import org.apache.activemq.ActiveMQSession
 import javax.jms.{ JMSException, TextMessage }
 import org.scalatest.Inspectors._

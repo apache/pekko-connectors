@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.influxdb.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
 import org.influxdb.InfluxDB
-import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.stream.connectors.influxdb.scaladsl
+import pekko.stream.javadsl.Flow
+import pekko.stream.connectors.influxdb.scaladsl
 import org.influxdb.dto.Point
 
 import scala.jdk.CollectionConverters._
@@ -32,7 +33,7 @@ object InfluxDbFlow {
   def create(
       influxDB: InfluxDB): Flow[java.util.List[InfluxDbWriteMessage[Point, NotUsed]],
     java.util.List[InfluxDbWriteResult[Point, NotUsed]], NotUsed] =
-    org.apache.pekko.stream.scaladsl
+    pekko.stream.scaladsl
       .Flow[java.util.List[InfluxDbWriteMessage[Point, NotUsed]]]
       .map(_.asScala.toList)
       .via(scaladsl.InfluxDbFlow.create()(influxDB))
@@ -43,7 +44,7 @@ object InfluxDbFlow {
       clazz: Class[T],
       influxDB: InfluxDB): Flow[java.util.List[InfluxDbWriteMessage[T, NotUsed]], java.util.List[InfluxDbWriteResult[T,
       NotUsed]], NotUsed] =
-    org.apache.pekko.stream.scaladsl
+    pekko.stream.scaladsl
       .Flow[java.util.List[InfluxDbWriteMessage[T, NotUsed]]]
       .map(_.asScala.toList)
       .via(scaladsl.InfluxDbFlow.typed(clazz)(influxDB))
@@ -53,7 +54,7 @@ object InfluxDbFlow {
   def createWithPassThrough[C](
       influxDB: InfluxDB)
       : Flow[java.util.List[InfluxDbWriteMessage[Point, C]], java.util.List[InfluxDbWriteResult[Point, C]], NotUsed] =
-    org.apache.pekko.stream.scaladsl
+    pekko.stream.scaladsl
       .Flow[java.util.List[InfluxDbWriteMessage[Point, C]]]
       .map(_.asScala.toList)
       .via(scaladsl.InfluxDbFlow.createWithPassThrough(influxDB))
@@ -64,7 +65,7 @@ object InfluxDbFlow {
       clazz: Class[T],
       influxDB: InfluxDB)
       : Flow[java.util.List[InfluxDbWriteMessage[T, C]], java.util.List[InfluxDbWriteResult[T, C]], NotUsed] =
-    org.apache.pekko.stream.scaladsl
+    pekko.stream.scaladsl
       .Flow[java.util.List[InfluxDbWriteMessage[T, C]]]
       .map(_.asScala.toList)
       .via(scaladsl.InfluxDbFlow.typedWithPassThrough(clazz)(influxDB))

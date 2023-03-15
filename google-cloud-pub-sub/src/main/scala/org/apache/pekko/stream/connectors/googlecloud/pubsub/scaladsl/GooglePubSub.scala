@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.scaladsl
 
-import org.apache.pekko.actor.Cancellable
-import org.apache.pekko.stream.Attributes
-import org.apache.pekko.stream.connectors.google.GoogleAttributes
-import org.apache.pekko.stream.connectors.googlecloud.pubsub._
-import org.apache.pekko.stream.connectors.googlecloud.pubsub.impl._
-import org.apache.pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.actor.Cancellable
+import pekko.stream.Attributes
+import pekko.stream.connectors.google.GoogleAttributes
+import pekko.stream.connectors.googlecloud.pubsub._
+import pekko.stream.connectors.googlecloud.pubsub.impl._
+import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 
 import scala.annotation.nowarn
 import scala.collection.immutable

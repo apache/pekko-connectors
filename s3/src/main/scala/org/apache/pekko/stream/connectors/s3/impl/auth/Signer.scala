@@ -17,11 +17,12 @@ import java.security.MessageDigest
 import java.time.format.DateTimeFormatter
 import java.time.ZonedDateTime
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.headers.RawHeader
+import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
+import pekko.stream.scaladsl.Source
 
 @InternalApi private[impl] object Signer {
   private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssX")

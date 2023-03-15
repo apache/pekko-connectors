@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.ftp.impl
 
-import org.apache.pekko.stream.connectors.ftp.RemoteFileSettings
-import org.apache.pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
-import org.apache.pekko.stream.stage.GraphStage
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.stream.connectors.ftp.RemoteFileSettings
+import pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
+import pekko.stream.stage.GraphStage
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 
 trait FtpGraphStage[FtpClient, S <: RemoteFileSettings, T] extends GraphStage[SourceShape[T]] {
   def name: String

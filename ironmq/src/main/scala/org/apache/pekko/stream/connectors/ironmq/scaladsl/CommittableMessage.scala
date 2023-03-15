@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.ironmq.Message
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.ironmq.Message
 
 import scala.concurrent.Future
 

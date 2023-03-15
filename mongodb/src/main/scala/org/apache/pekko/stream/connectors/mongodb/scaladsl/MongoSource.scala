@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.mongodb.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.scaladsl.Source
 import org.reactivestreams.Publisher
 
 object MongoSource {

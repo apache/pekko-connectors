@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms._
 import javax.jms
 
 /**

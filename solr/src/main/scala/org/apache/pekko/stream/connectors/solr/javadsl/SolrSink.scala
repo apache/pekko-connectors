@@ -16,10 +16,11 @@ package org.apache.pekko.stream.connectors.solr.javadsl
 import java.util.concurrent.CompletionStage
 import java.util.function.Function
 
-import org.apache.pekko.stream.connectors.solr.{ SolrUpdateSettings, WriteMessage, WriteResult }
-import org.apache.pekko.stream.javadsl
-import org.apache.pekko.stream.javadsl.Sink
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.solr.{ SolrUpdateSettings, WriteMessage, WriteResult }
+import pekko.stream.javadsl
+import pekko.stream.javadsl.Sink
+import pekko.{ Done, NotUsed }
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
 import java.util.{ List => JavaList }

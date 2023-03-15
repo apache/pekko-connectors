@@ -17,16 +17,17 @@ import java.nio.ByteBuffer
 import java.time.Instant
 import java.util.concurrent.Semaphore
 
-import org.apache.pekko.stream.KillSwitches
-import org.apache.pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
-import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerErrors.SchedulerUnexpectedShutdown
-import org.apache.pekko.stream.connectors.kinesis.SwitchMode.{ Close, Open }
-import org.apache.pekko.stream.connectors.kinesis.impl.ShardProcessor
-import org.apache.pekko.stream.connectors.kinesis.scaladsl.KinesisSchedulerSource
-import org.apache.pekko.stream.connectors.testkit.scaladsl.Repeated
-import org.apache.pekko.stream.scaladsl.Keep
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import org.apache.pekko
+import pekko.stream.KillSwitches
+import pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
+import pekko.stream.connectors.kinesis.KinesisSchedulerErrors.SchedulerUnexpectedShutdown
+import pekko.stream.connectors.kinesis.SwitchMode.{ Close, Open }
+import pekko.stream.connectors.kinesis.impl.ShardProcessor
+import pekko.stream.connectors.kinesis.scaladsl.KinesisSchedulerSource
+import pekko.stream.connectors.testkit.scaladsl.Repeated
+import pekko.stream.scaladsl.Keep
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer

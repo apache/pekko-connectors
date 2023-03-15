@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.influxdb.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.ApiMayChange
-import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings
-import org.apache.pekko.stream.javadsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.annotation.ApiMayChange
+import pekko.stream.connectors.influxdb.InfluxDbReadSettings
+import pekko.stream.javadsl.Source
 import org.influxdb.InfluxDB
 import org.influxdb.dto.{ Query, QueryResult }
-import org.apache.pekko.stream.connectors.influxdb.impl.{ InfluxDbRawSourceStage, InfluxDbSourceStage }
+import pekko.stream.connectors.influxdb.impl.{ InfluxDbRawSourceStage, InfluxDbSourceStage }
 
 /**
  * Java API to create InfluxDB sources.

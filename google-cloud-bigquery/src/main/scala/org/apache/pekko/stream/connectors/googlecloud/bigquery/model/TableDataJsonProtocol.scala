@@ -13,12 +13,10 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.model
 
-import org.apache.pekko.stream.connectors.google.scaladsl.Paginated
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.{
-  BigQueryRootJsonReader,
-  BigQueryRootJsonWriter
-}
+import org.apache.pekko
+import pekko.stream.connectors.google.scaladsl.Paginated
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.{ BigQueryRootJsonReader, BigQueryRootJsonWriter }
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation._
 import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter }

@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl.AvroSource
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.BigQueryStorage.{ readSession, reader }
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
+import pekko.stream.connectors.googlecloud.bigquery.storage.impl.AvroSource
+import pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.BigQueryStorage.{ readSession, reader }
+import pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.avro.{ AvroRows, AvroSchema }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 import com.google.cloud.bigquery.storage.v1.DataFormat

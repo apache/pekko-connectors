@@ -13,17 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
+import org.apache.pekko
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 
 /**
  * Manages one [[GCStorageSettings]] per `ActorSystem`.
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]].
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]].
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
 @Deprecated
@@ -34,7 +29,7 @@ final class GCStorageExt private (sys: ExtendedActorSystem) extends Extension {
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
 @Deprecated
@@ -46,7 +41,7 @@ object GCStorageExt extends ExtensionId[GCStorageExt] with ExtensionIdProvider {
    * Java API.
    * Get the GCS extension with the classic actors API.
    */
-  override def get(system: org.apache.pekko.actor.ActorSystem): GCStorageExt = super.apply(system)
+  override def get(system: pekko.actor.ActorSystem): GCStorageExt = super.apply(system)
 
   /**
    * Java API.

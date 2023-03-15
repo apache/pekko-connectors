@@ -13,19 +13,21 @@
 
 package org.apache.pekko.stream.connectors.mqtt
 
+import org.apache.pekko
+
 final class MqttMessage private (val topic: String,
     val payload: org.apache.pekko.util.ByteString,
     val qos: Option[MqttQoS],
     val retained: Boolean) {
 
   def withTopic(value: String): MqttMessage = copy(topic = value)
-  def withPayload(value: org.apache.pekko.util.ByteString): MqttMessage = copy(payload = value)
-  def withPayload(value: Array[Byte]): MqttMessage = copy(payload = org.apache.pekko.util.ByteString(value))
+  def withPayload(value: pekko.util.ByteString): MqttMessage = copy(payload = value)
+  def withPayload(value: Array[Byte]): MqttMessage = copy(payload = pekko.util.ByteString(value))
   def withQos(value: MqttQoS): MqttMessage = copy(qos = Option(value))
   def withRetained(value: Boolean): MqttMessage = if (retained == value) this else copy(retained = value)
 
   private def copy(topic: String = topic,
-      payload: org.apache.pekko.util.ByteString = payload,
+      payload: pekko.util.ByteString = payload,
       qos: Option[MqttQoS] = qos,
       retained: Boolean = retained): MqttMessage =
     new MqttMessage(topic = topic, payload = payload, qos = qos, retained = retained)
@@ -51,7 +53,7 @@ object MqttMessage {
   /** Scala API */
   def apply(
       topic: String,
-      payload: org.apache.pekko.util.ByteString): MqttMessage = new MqttMessage(
+      payload: pekko.util.ByteString): MqttMessage = new MqttMessage(
     topic,
     payload,
     qos = None,
@@ -60,7 +62,7 @@ object MqttMessage {
   /** Java API */
   def create(
       topic: String,
-      payload: org.apache.pekko.util.ByteString): MqttMessage = new MqttMessage(
+      payload: pekko.util.ByteString): MqttMessage = new MqttMessage(
     topic,
     payload,
     qos = None,

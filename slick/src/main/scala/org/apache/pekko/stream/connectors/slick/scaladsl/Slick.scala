@@ -15,13 +15,14 @@ package org.apache.pekko.stream.connectors.slick.scaladsl
 
 import scala.concurrent.Future
 
-import org.apache.pekko.Done
-import org.apache.pekko.NotUsed
+import org.apache.pekko
+import pekko.Done
+import pekko.NotUsed
 
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.stream.scaladsl.Keep
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.stream.scaladsl.Source
+import pekko.stream.scaladsl.Flow
+import pekko.stream.scaladsl.Keep
+import pekko.stream.scaladsl.Sink
+import pekko.stream.scaladsl.Source
 
 import slick.dbio.DBIO
 import slick.dbio.StreamingDBIO

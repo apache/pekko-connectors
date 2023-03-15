@@ -15,11 +15,12 @@ package org.apache.pekko.stream.connectors.file.impl.archive
 
 import java.util.zip.{ ZipEntry, ZipOutputStream }
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
-import org.apache.pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import org.apache.pekko.util.{ ByteString, ByteStringBuilder }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.util.{ ByteString, ByteStringBuilder }
 
 /**
  * INTERNAL API

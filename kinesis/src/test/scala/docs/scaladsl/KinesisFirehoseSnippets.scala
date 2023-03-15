@@ -13,11 +13,12 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
-import org.apache.pekko.stream.connectors.kinesisfirehose.scaladsl.{ KinesisFirehoseFlow, KinesisFirehoseSink }
-import org.apache.pekko.stream.scaladsl.{ Flow, Sink }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
+import pekko.stream.connectors.kinesisfirehose.scaladsl.{ KinesisFirehoseFlow, KinesisFirehoseSink }
+import pekko.stream.scaladsl.{ Flow, Sink }
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchResponseEntry, Record }
 
 object KinesisFirehoseSnippets {

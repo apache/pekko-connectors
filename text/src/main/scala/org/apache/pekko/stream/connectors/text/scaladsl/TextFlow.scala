@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.text.scaladsl
 
 import java.nio.charset.Charset
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.text.impl.{ CharsetDecodingFlow, CharsetTranscodingFlow }
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.text.impl.{ CharsetDecodingFlow, CharsetTranscodingFlow }
+import pekko.stream.scaladsl.Flow
+import pekko.util.ByteString
 
 /**
  * Scala DSL

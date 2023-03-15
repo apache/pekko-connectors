@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.pravega
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.testkit.TestKit
 
 import java.net.URI
 import java.util.UUID

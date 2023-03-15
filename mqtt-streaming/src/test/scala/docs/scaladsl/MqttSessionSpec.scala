@@ -13,22 +13,23 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.pattern.ask
-import org.apache.pekko.stream.connectors.mqtt.streaming._
-import org.apache.pekko.stream.connectors.mqtt.streaming.scaladsl.{
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.pattern.ask
+import pekko.stream.connectors.mqtt.streaming._
+import pekko.stream.connectors.mqtt.streaming.scaladsl.{
   ActorMqttClientSession,
   ActorMqttServerSession,
   Mqtt,
   MqttServerSession
 }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }
-import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import org.apache.pekko.stream.OverflowStrategy
-import org.apache.pekko.testkit._
-import org.apache.pekko.util.{ ByteString, Timeout }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.stream.OverflowStrategy
+import pekko.testkit._
+import pekko.util.{ ByteString, Timeout }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{ Millis, Span }

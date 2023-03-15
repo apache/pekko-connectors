@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.couchbase
+
 import org.apache.pekko.annotation.InternalApi
 import com.couchbase.client.java.document.json.JsonObject
 

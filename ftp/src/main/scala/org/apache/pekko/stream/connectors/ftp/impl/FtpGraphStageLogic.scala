@@ -16,9 +16,10 @@ package impl
 
 import java.io.IOException
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Shape
-import org.apache.pekko.stream.stage.GraphStageLogic
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.Shape
+import pekko.stream.stage.GraphStageLogic
 
 import scala.util.control.NonFatal
 

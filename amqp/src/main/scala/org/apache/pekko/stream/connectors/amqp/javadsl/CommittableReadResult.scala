@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.amqp.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.amqp.ReadResult
-import org.apache.pekko.stream.connectors.amqp.scaladsl
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.amqp.ReadResult
+import pekko.stream.connectors.amqp.scaladsl
 
 import scala.compat.java8.FutureConverters._
 

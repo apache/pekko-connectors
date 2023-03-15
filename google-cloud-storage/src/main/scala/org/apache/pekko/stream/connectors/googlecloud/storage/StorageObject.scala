@@ -16,7 +16,8 @@ package org.apache.pekko.stream.connectors.googlecloud.storage
 import java.time.OffsetDateTime
 import java.util.Optional
 
-import org.apache.pekko.http.scaladsl.model.ContentType
+import org.apache.pekko
+import pekko.http.scaladsl.model.ContentType
 import scala.compat.java8.OptionConverters._
 import scala.jdk.CollectionConverters._
 
@@ -96,7 +97,7 @@ final class StorageObject private (
     val acl: Option[List[ObjectAccessControls]]) {
 
   /** Java API */
-  def getContentType: org.apache.pekko.http.javadsl.model.ContentType = contentType.asInstanceOf[ContentType]
+  def getContentType: pekko.http.javadsl.model.ContentType = contentType.asInstanceOf[ContentType]
   def getTimeDeleted: Optional[OffsetDateTime] = timeDeleted.asJava
   def getContentDisposition: Optional[String] = contentDisposition.asJava
   def getContentEncoding: Optional[String] = contentEncoding.asJava
@@ -126,7 +127,7 @@ final class StorageObject private (
   def withContentType(value: ContentType): StorageObject = copy(contentType = value)
 
   /** Java API */
-  def withContentType(value: org.apache.pekko.http.javadsl.model.ContentType): StorageObject =
+  def withContentType(value: pekko.http.javadsl.model.ContentType): StorageObject =
     copy(maybeContentType = Option(value.asInstanceOf[ContentType]))
   def withSize(value: Long): StorageObject = copy(size = value)
   def withEtag(value: String): StorageObject = copy(etag = value)
@@ -421,7 +422,7 @@ object StorageObject {
       name: String,
       bucket: String,
       generation: Long,
-      contentType: org.apache.pekko.http.javadsl.model.ContentType,
+      contentType: pekko.http.javadsl.model.ContentType,
       size: Long,
       etag: String,
       md5Hash: String,

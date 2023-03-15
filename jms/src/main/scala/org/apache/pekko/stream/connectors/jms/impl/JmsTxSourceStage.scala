@@ -13,16 +13,11 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jms.{
-  AcknowledgeMode,
-  Destination,
-  JmsConsumerSettings,
-  JmsTxAckTimeout,
-  TxEnvelope
-}
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jms.{ AcknowledgeMode, Destination, JmsConsumerSettings, JmsTxAckTimeout, TxEnvelope }
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 import javax.jms
 
 import scala.concurrent.{ Await, TimeoutException }

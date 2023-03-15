@@ -16,18 +16,13 @@ package scaladsl
 
 import java.nio.file.Path
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.{
-  ClassicActorSystemProvider,
-  ExtendedActorSystem,
-  Extension,
-  ExtensionId,
-  ExtensionIdProvider
-}
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.unixdomainsocket.impl.UnixDomainSocketImpl
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.stream._
+import pekko.stream.connectors.unixdomainsocket.impl.UnixDomainSocketImpl
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.util.ByteString
 
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
@@ -42,7 +37,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
   /**
    * Get the UnixDomainSocket extension with the classic actors API.
    */
-  override def apply(system: org.apache.pekko.actor.ActorSystem): UnixDomainSocket = super.apply(system)
+  override def apply(system: pekko.actor.ActorSystem): UnixDomainSocket = super.apply(system)
 
   override def createExtension(system: ExtendedActorSystem) =
     new UnixDomainSocket(system)
@@ -95,7 +90,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    * server binding on the given `endpoint`.
    *
    * Please note that the startup of the server is asynchronous, i.e. after materializing the enclosing
-   * [[org.apache.pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the materialized future
+   * [[pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the materialized future
    * completes is the server ready to accept client connections.
    *
    * TODO: Support idleTimeout as per Tcp.
@@ -122,7 +117,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    * handling the incoming connections using the provided Flow.
    *
    * Please note that the startup of the server is asynchronous, i.e. after materializing the enclosing
-   * [[org.apache.pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the returned future
+   * [[pekko.stream.scaladsl.RunnableGraph]] the server is not immediately available. Only after the returned future
    * completes is the server ready to accept client connections.
    *
    * TODO: Support idleTimeout as per Tcp.
@@ -155,7 +150,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    *
    * Note that the ByteString chunk boundaries are not retained across the network,
    * to achieve application level chunks you have to introduce explicit framing in your streams,
-   * for example using the [[org.apache.pekko.stream.scaladsl.Framing]] stages.
+   * for example using the [[pekko.stream.scaladsl.Framing]] stages.
    *
    * TODO: Support idleTimeout as per Tcp.
    *
@@ -184,7 +179,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    *
    * Note that the ByteString chunk boundaries are not retained across the network,
    * to achieve application level chunks you have to introduce explicit framing in your streams,
-   * for example using the [[org.apache.pekko.stream.scaladsl.Framing]] stages.
+   * for example using the [[pekko.stream.scaladsl.Framing]] stages.
    */
   def outgoingConnection(path: Path): Flow[ByteString, ByteString, Future[OutgoingConnection]] =
     super.outgoingConnection(UnixSocketAddress(path))

@@ -13,31 +13,32 @@
 
 package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
-import org.apache.pekko.{ Done, NotUsed }
-import org.apache.pekko.stream.FlowShape
-import org.apache.pekko.stream.connectors.ironmq._
-import org.apache.pekko.stream.connectors.ironmq.impl.IronMqPushStage
-import org.apache.pekko.stream.scaladsl._
+import org.apache.pekko
+import pekko.{ Done, NotUsed }
+import pekko.stream.FlowShape
+import pekko.stream.connectors.ironmq._
+import pekko.stream.connectors.ironmq.impl.IronMqPushStage
+import pekko.stream.scaladsl._
 
 import scala.concurrent.Future
 
 object IronMqProducer {
 
   /**
-   * This is plain producer [[org.apache.pekko.stream.scaladsl.Flow Flow]] that consume [[PushMessage]] and emit [[Message.Id]] for each produced message.
+   * This is plain producer [[pekko.stream.scaladsl.Flow Flow]] that consume [[PushMessage]] and emit [[Message.Id]] for each produced message.
    */
   def flow(queueName: String, settings: IronMqSettings): Flow[PushMessage, Message.Id, NotUsed] =
     // The parallelism MUST be 1 to guarantee the order of the messages
     Flow.fromGraph(new IronMqPushStage(queueName, settings)).mapAsync(1)(identity).mapConcat(_.ids)
 
   /**
-   * A plain producer [[org.apache.pekko.stream.scaladsl.Sink Sink]] that consume [[PushMessage]] and push them on IronMq.
+   * A plain producer [[pekko.stream.scaladsl.Sink Sink]] that consume [[PushMessage]] and push them on IronMq.
    */
   def sink(queueName: String, settings: IronMqSettings): Sink[PushMessage, Future[Done]] =
     flow(queueName, settings).toMat(Sink.ignore)(Keep.right)
 
   /**
-   * A [[Committable]] aware producer [[org.apache.pekko.stream.scaladsl.Flow Flow]] that consume [[(PushMessage, Committable)]], push messages on IronMq and
+   * A [[Committable]] aware producer [[pekko.stream.scaladsl.Flow Flow]] that consume [[(PushMessage, Committable)]], push messages on IronMq and
    * commit the associated [[Committable]].
    */
   def atLeastOnceFlow(queueName: String,
@@ -46,14 +47,14 @@ object IronMqProducer {
     atLeastOnceFlow(queueName, settings, Flow[Committable].mapAsync(1)(_.commit())).map(_._1)
 
   /**
-   * A [[Committable]] aware producer [[org.apache.pekko.stream.scaladsl.Sink Sink]] that consume [[(PushMessage, Committable)]] push messages on IronMq and
+   * A [[Committable]] aware producer [[pekko.stream.scaladsl.Sink Sink]] that consume [[(PushMessage, Committable)]] push messages on IronMq and
    * commit the associated [[Committable]].
    */
   def atLeastOnceSink(queueName: String, settings: IronMqSettings): Sink[(PushMessage, Committable), NotUsed] =
     atLeastOnceFlow(queueName, settings).to(Sink.ignore)
 
   /**
-   * A more generic committable aware producer [[org.apache.pekko.stream.scaladsl.Flow Flow]] that can be used for other committable source, like Kafka. The
+   * A more generic committable aware producer [[pekko.stream.scaladsl.Flow Flow]] that can be used for other committable source, like Kafka. The
    * user is responsible to supply the committing flow. The result of the commit is emitted as well as the materialized
    * value of the committing flow.
    */
@@ -96,7 +97,7 @@ object IronMqProducer {
   }
 
   /**
-   * A more generic committable aware producer [[org.apache.pekko.stream.scaladsl.Sink Sink]] that can be used for other committable source, like Kafka. The
+   * A more generic committable aware producer [[pekko.stream.scaladsl.Sink Sink]] that can be used for other committable source, like Kafka. The
    * user is responsible to supply the committing flow. The materialized value of the committing flow is returned.
    */
   def atLeastOnceSink[ToCommit, CommitResult, CommitMat](

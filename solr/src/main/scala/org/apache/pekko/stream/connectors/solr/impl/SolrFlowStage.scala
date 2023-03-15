@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.solr.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.ActorAttributes.SupervisionStrategy
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.solr._
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.ActorAttributes.SupervisionStrategy
+import pekko.stream._
+import pekko.stream.connectors.solr._
+import pekko.stream.stage._
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.client.solrj.impl.CloudSolrClient
 import org.apache.solr.client.solrj.request.UpdateRequest

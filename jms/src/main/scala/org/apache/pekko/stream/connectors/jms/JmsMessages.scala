@@ -15,14 +15,15 @@ package org.apache.pekko.stream.connectors.jms
 
 import javax.jms
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.jms.impl.JmsMessageReader._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.jms.impl.JmsMessageReader._
+import pekko.util.ByteString
 import scala.jdk.CollectionConverters._
 import scala.compat.java8.OptionConverters._
 
 /**
- * Base interface for messages handled by JmsProducers. Sub-classes support pass-through or use [[org.apache.pekko.NotUsed]] as type for pass-through.
+ * Base interface for messages handled by JmsProducers. Sub-classes support pass-through or use [[pekko.NotUsed]] as type for pass-through.
  *
  * @tparam PassThrough the type of data passed through the `flexiFlow`
  */

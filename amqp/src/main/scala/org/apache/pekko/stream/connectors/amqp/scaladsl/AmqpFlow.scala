@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep }
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko
+import pekko.stream.connectors.amqp._
+import pekko.stream.scaladsl.{ Flow, Keep }
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

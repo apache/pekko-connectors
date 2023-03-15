@@ -14,9 +14,10 @@
 package org.apache.pekko.stream.connectors.ironmq.impl
 import java.util.UUID
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.ironmq.IronMqSettings
-import org.apache.pekko.stream.Materializer
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.ironmq.IronMqSettings
+import pekko.stream.Materializer
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.hashing.MurmurHash3

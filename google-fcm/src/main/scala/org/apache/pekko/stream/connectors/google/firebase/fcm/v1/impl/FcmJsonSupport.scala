@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models._
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.stream.connectors.google.firebase.fcm.v1.models._
 import spray.json._
 
 /**

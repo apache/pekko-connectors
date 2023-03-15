@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage
 
-import org.apache.pekko.Done
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.mock.{ BigQueryMockData, BigQueryMockServer }
+import org.apache.pekko
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.Http
+import pekko.stream.connectors.googlecloud.bigquery.storage.mock.{ BigQueryMockData, BigQueryMockServer }
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse.Rows.AvroRows
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.Schema.{ ArrowSchema, AvroSchema }
 import com.google.protobuf.ByteString

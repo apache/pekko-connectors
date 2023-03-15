@@ -16,7 +16,8 @@ package org.apache.pekko.stream.connectors.amqp
 import java.util.ConcurrentModificationException
 import java.util.concurrent.atomic.AtomicReference
 
-import org.apache.pekko.annotation.DoNotInherit
+import org.apache.pekko
+import pekko.annotation.DoNotInherit
 import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler }
 import javax.net.ssl.{ SSLContext, TrustManager }
 
@@ -90,7 +91,7 @@ final class AmqpDetailsConnectionProvider private (
     copy(hostAndPortList = hostAndPorts)
 
   def withHostsAndPorts(
-      hostAndPorts: java.util.List[org.apache.pekko.japi.Pair[String, Int]]): AmqpDetailsConnectionProvider =
+      hostAndPorts: java.util.List[pekko.japi.Pair[String, Int]]): AmqpDetailsConnectionProvider =
     copy(hostAndPortList = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
 
   def withCredentials(amqpCredentials: AmqpCredentials): AmqpDetailsConnectionProvider =
@@ -220,7 +221,7 @@ object AmqpDetailsConnectionProvider {
   def create(host: String, port: Int): AmqpDetailsConnectionProvider =
     AmqpDetailsConnectionProvider(host, port)
 
-  def create(hostAndPorts: java.util.List[org.apache.pekko.japi.Pair[String, Int]]): AmqpDetailsConnectionProvider =
+  def create(hostAndPorts: java.util.List[pekko.japi.Pair[String, Int]]): AmqpDetailsConnectionProvider =
     AmqpDetailsConnectionProvider(hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
 }
 
@@ -334,7 +335,7 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
    * Java API
    */
   def withHostsAndPorts(
-      hostAndPorts: java.util.List[org.apache.pekko.japi.Pair[String, Int]]): AmqpConnectionFactoryConnectionProvider =
+      hostAndPorts: java.util.List[pekko.japi.Pair[String, Int]]): AmqpConnectionFactoryConnectionProvider =
     copy(hostAndPorts = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
 
   override def get: Connection = {
@@ -368,7 +369,7 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
     val automaticRelease: Boolean = true)
     extends AmqpConnectionProvider {
 
-  import org.apache.pekko.stream.connectors.amqp.AmqpCachedConnectionProvider._
+  import pekko.stream.connectors.amqp.AmqpCachedConnectionProvider._
   private val state = new AtomicReference[State](Empty)
 
   def withAutomaticRelease(automaticRelease: Boolean): AmqpCachedConnectionProvider =

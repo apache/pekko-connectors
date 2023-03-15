@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.kinesis
 
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler, OutHandler }
-import org.apache.pekko.stream._
+import org.apache.pekko
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, InHandler, OutHandler }
+import pekko.stream._
 import SwitchMode.{ Close, Open }
 
 import scala.concurrent.{ Future, Promise }

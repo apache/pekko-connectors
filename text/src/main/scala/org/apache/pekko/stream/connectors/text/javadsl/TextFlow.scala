@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.text.javadsl
 
 import java.nio.charset.Charset
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.text.impl.{ CharsetDecodingFlow, CharsetTranscodingFlow }
-import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.text.impl.{ CharsetDecodingFlow, CharsetTranscodingFlow }
+import pekko.stream.javadsl.Flow
+import pekko.util.ByteString
 
 /**
  * Java DSL
@@ -29,7 +30,7 @@ object TextFlow {
    * Decodes a stream of bytes into a stream of characters, using the supplied charset.
    */
   def decoding(incoming: Charset): Flow[ByteString, String, NotUsed] =
-    org.apache.pekko.stream.scaladsl
+    pekko.stream.scaladsl
       .Flow[ByteString]
       .via(new CharsetDecodingFlow(incoming))
       .asJava
@@ -44,7 +45,7 @@ object TextFlow {
    * Translates a stream of bytes from one character encoding into another.
    */
   def transcoding(incoming: Charset, outgoing: Charset): Flow[ByteString, ByteString, NotUsed] =
-    org.apache.pekko.stream.scaladsl
+    pekko.stream.scaladsl
       .Flow[ByteString]
       .via(new CharsetTranscodingFlow(incoming, outgoing))
       .asJava

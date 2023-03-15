@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.Config
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
 @Deprecated
@@ -103,7 +104,7 @@ final class GCStorageSettings private (
 }
 
 /**
- * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
+ * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
 @Deprecated
@@ -186,7 +187,7 @@ object GCStorageSettings {
   def apply()(implicit system: ClassicActorSystemProvider): GCStorageSettings = apply(system.classicSystem)
 
   /**
-   * Scala API: Creates [[GCStorageSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Scala API: Creates [[GCStorageSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def apply(system: ActorSystem): GCStorageSettings = apply(system.settings.config.getConfig(ConfigPath))
 
@@ -196,7 +197,7 @@ object GCStorageSettings {
   def create(system: ClassicActorSystemProvider): GCStorageSettings = apply(system.classicSystem)
 
   /**
-   * Java API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[org.apache.pekko.actor.ActorSystem]].
+   * Java API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def create(system: ActorSystem): GCStorageSettings = apply(system)
 }

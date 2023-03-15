@@ -15,8 +15,9 @@ package org.apache.pekko.stream.connectors.ironmq.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.ironmq.Message
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.ironmq.Message
 
 /**
  * Commit an offset that is included in a [[CommittableMessage]].

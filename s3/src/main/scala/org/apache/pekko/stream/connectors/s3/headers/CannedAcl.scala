@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.s3.headers
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.model.HttpHeader
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.model.HttpHeader
+import pekko.http.scaladsl.model.headers.RawHeader
 
 /**
  * Documentation: http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl

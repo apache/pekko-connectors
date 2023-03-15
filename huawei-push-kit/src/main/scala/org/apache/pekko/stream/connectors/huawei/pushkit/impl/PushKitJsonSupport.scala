@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.stream.connectors.huawei.pushkit.models.{ ErrorResponse, PushKitResponse, Response }
-import org.apache.pekko.stream.connectors.huawei.pushkit.models._
-import org.apache.pekko.stream.connectors.huawei.pushkit.impl.HmsTokenApi.OAuthResponse
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.stream.connectors.huawei.pushkit.models.{ ErrorResponse, PushKitResponse, Response }
+import pekko.stream.connectors.huawei.pushkit.models._
+import pekko.stream.connectors.huawei.pushkit.impl.HmsTokenApi.OAuthResponse
 import spray.json._
 
 /**

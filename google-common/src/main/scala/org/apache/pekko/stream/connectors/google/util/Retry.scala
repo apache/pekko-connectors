@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.google.util
 
-import org.apache.pekko.actor.Scheduler
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.pattern
-import org.apache.pekko.stream.connectors.google.RetrySettings
-import org.apache.pekko.stream.scaladsl.{ Flow, RetryFlow }
+import org.apache.pekko
+import pekko.actor.Scheduler
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.pattern
+import pekko.stream.connectors.google.RetrySettings
+import pekko.stream.scaladsl.{ Flow, RetryFlow }
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.{ NoStackTrace, NonFatal }
@@ -47,7 +48,7 @@ object Retry {
   def create(ex: Throwable): Throwable = apply(ex)
 
   /**
-   * A wrapper around Akka's [[org.apache.pekko.pattern.RetrySupport]] which requires opt-in.
+   * A wrapper around Akka's [[pekko.pattern.RetrySupport]] which requires opt-in.
    * An exception will trigger a retry only if it is wrapped in [[Retry]].
    * Note that the exception will be unwrapped, should all the retry attempts fail
    * (i.e., this method will never raise a [[Retry]], only its underlying exception).

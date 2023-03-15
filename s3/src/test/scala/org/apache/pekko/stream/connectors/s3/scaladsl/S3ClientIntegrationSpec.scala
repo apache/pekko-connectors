@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.s3.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.Http
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpecLike

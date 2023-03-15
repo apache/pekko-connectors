@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.http.javadsl.unmarshalling.Unmarshaller
-import org.apache.pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.ProtobufConverters._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
-import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.http.javadsl.unmarshalling.Unmarshaller
+import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
+import pekko.stream.connectors.googlecloud.bigquery.storage.ProtobufConverters._
+import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
+import pekko.stream.javadsl.Source
+import pekko.util.ByteString
 import com.google.cloud.bigquery.storage.v1.DataFormat
 import com.google.cloud.bigquery.storage.v1.ReadSession.TableReadOptions
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse

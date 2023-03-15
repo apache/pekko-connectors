@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.mqtt.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.mqtt.MqttMessage
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.mqtt.MqttMessage
 
 import scala.compat.java8.FutureConverters
 import scala.concurrent.Future
@@ -44,7 +45,7 @@ trait MqttMessageWithAck {
  */
 @InternalApi
 private[scaladsl] object MqttMessageWithAck {
-  def fromJava(e: org.apache.pekko.stream.connectors.mqtt.javadsl.MqttMessageWithAck): MqttMessageWithAck =
+  def fromJava(e: pekko.stream.connectors.mqtt.javadsl.MqttMessageWithAck): MqttMessageWithAck =
     new MqttMessageWithAck {
       override val message: MqttMessage = e.message
 

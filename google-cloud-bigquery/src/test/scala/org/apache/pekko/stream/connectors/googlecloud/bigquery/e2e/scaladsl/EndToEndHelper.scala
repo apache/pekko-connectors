@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.scaladsl
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.{ A, B, C }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.e2e.{ A, B, C }
+import pekko.util.ByteString
 
 import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
 import scala.util.Random

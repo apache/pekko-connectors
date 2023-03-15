@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.hdfs.impl.writer
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.hdfs.FilePathGenerator
-import org.apache.pekko.stream.connectors.hdfs.impl.writer.HdfsWriter._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.hdfs.FilePathGenerator
+import pekko.stream.connectors.hdfs.impl.writer.HdfsWriter._
+import pekko.util.ByteString
 import org.apache.hadoop.fs.{ FSDataOutputStream, FileSystem, Path }
 
 /**

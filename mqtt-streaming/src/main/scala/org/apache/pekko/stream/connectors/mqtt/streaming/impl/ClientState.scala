@@ -14,13 +14,14 @@
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package impl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.typed._
-import org.apache.pekko.actor.typed.scaladsl.{ ActorContext, Behaviors }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.{ Materializer, OverflowStrategy, QueueOfferResult }
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Keep, Source, SourceQueueWithComplete }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.typed._
+import pekko.actor.typed.scaladsl.{ ActorContext, Behaviors }
+import pekko.annotation.InternalApi
+import pekko.stream.{ Materializer, OverflowStrategy, QueueOfferResult }
+import pekko.stream.scaladsl.{ BroadcastHub, Keep, Source, SourceQueueWithComplete }
+import pekko.util.ByteString
 
 import scala.collection.immutable.Seq
 import scala.concurrent.Promise

@@ -13,15 +13,16 @@
 
 package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 
 import scala.concurrent.ExecutionContext
-import org.apache.pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.stream.{ Materializer, SystemMaterializer }
 
 /**
  * All the tests must be run with a local Cassandra running on default port 9042.

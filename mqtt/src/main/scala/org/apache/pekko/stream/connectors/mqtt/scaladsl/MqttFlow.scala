@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.mqtt.scaladsl
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mqtt._
-import org.apache.pekko.stream.connectors.mqtt.impl.{ MqttFlowStage, MqttFlowStageWithAck }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.mqtt._
+import pekko.stream.connectors.mqtt.impl.{ MqttFlowStage, MqttFlowStageWithAck }
+import pekko.stream.scaladsl.{ Flow, Keep }
 
 import scala.concurrent.Future
 

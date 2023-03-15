@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.amqp.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.amqp._
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.amqp._
+import pekko.util.ByteString
 
 import scala.compat.java8.FutureConverters._
 
@@ -29,8 +30,8 @@ object AmqpSink {
    * This stage materializes to a `CompletionStage` of `Done`, which can be used to know when the Sink completes,
    * either normally or because of an amqp failure.
    */
-  def create(settings: AmqpWriteSettings): org.apache.pekko.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpSink(settings).mapMaterializedValue(f => f.toJava).asJava
+  def create(settings: AmqpWriteSettings): pekko.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpSink(settings).mapMaterializedValue(f => f.toJava).asJava
 
   /**
    * Creates an `AmqpSink` that accepts `ByteString` elements.
@@ -39,8 +40,8 @@ object AmqpSink {
    * either normally or because of an amqp failure.
    */
   def createSimple(
-      settings: AmqpWriteSettings): org.apache.pekko.stream.javadsl.Sink[ByteString, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpSink.simple(settings).mapMaterializedValue(f =>
+      settings: AmqpWriteSettings): pekko.stream.javadsl.Sink[ByteString, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpSink.simple(settings).mapMaterializedValue(f =>
       f.toJava).asJava
 
   /**
@@ -52,8 +53,8 @@ object AmqpSink {
    * either normally or because of an amqp failure.
    */
   def createReplyTo(
-      settings: AmqpReplyToSinkSettings): org.apache.pekko.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
-    org.apache.pekko.stream.connectors.amqp.scaladsl.AmqpSink.replyTo(settings).mapMaterializedValue(f =>
+      settings: AmqpReplyToSinkSettings): pekko.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
+    pekko.stream.connectors.amqp.scaladsl.AmqpSink.replyTo(settings).mapMaterializedValue(f =>
       f.toJava).asJava
 
 }

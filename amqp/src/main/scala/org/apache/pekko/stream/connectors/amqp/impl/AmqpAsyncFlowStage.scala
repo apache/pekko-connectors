@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.amqp.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream.connectors.amqp.impl.AbstractAmqpAsyncFlowStageLogic.DeliveryTag
-import org.apache.pekko.stream.connectors.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
-import org.apache.pekko.stream._
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream.connectors.amqp.impl.AbstractAmqpAsyncFlowStageLogic.DeliveryTag
+import pekko.stream.connectors.amqp.{ AmqpWriteSettings, WriteMessage, WriteResult }
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
+import pekko.stream._
 
 import scala.collection.immutable.TreeMap
 import scala.concurrent.{ Future, Promise }

@@ -13,33 +13,34 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.actor.ClassicActorSystemProvider
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
-import org.apache.pekko.http.scaladsl.model.ContentTypes.`application/octet-stream`
-import org.apache.pekko.http.scaladsl.model.HttpMethods.POST
-import org.apache.pekko.http.scaladsl.model.Uri.Query
-import org.apache.pekko.http.scaladsl.model.{ HttpEntity, HttpRequest, RequestEntity }
-import org.apache.pekko.http.scaladsl.unmarshalling.FromEntityUnmarshaller
-import org.apache.pekko.stream.FlowShape
-import org.apache.pekko.stream.connectors.google.implicits._
-import org.apache.pekko.stream.connectors.google.scaladsl.`X-Upload-Content-Type`
-import org.apache.pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery._
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.CreateDisposition.CreateNever
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.SourceFormat.NewlineDelimitedJsonFormat
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.actor.ClassicActorSystemProvider
+import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
+import pekko.http.scaladsl.model.ContentTypes.`application/octet-stream`
+import pekko.http.scaladsl.model.HttpMethods.POST
+import pekko.http.scaladsl.model.Uri.Query
+import pekko.http.scaladsl.model.{ HttpEntity, HttpRequest, RequestEntity }
+import pekko.http.scaladsl.unmarshalling.FromEntityUnmarshaller
+import pekko.stream.FlowShape
+import pekko.stream.connectors.google.implicits._
+import pekko.stream.connectors.google.scaladsl.`X-Upload-Content-Type`
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
+import pekko.stream.connectors.googlecloud.bigquery._
+import pekko.stream.connectors.googlecloud.bigquery.model.CreateDisposition.CreateNever
+import pekko.stream.connectors.googlecloud.bigquery.model.SourceFormat.NewlineDelimitedJsonFormat
+import pekko.stream.connectors.googlecloud.bigquery.model.{
   Job,
   JobCancelResponse,
   JobConfiguration,
   JobConfigurationLoad
 }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableReference
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.WriteDisposition.WriteAppend
-import org.apache.pekko.stream.scaladsl.{ Flow, GraphDSL, Keep, Sink }
-import org.apache.pekko.util.ByteString
+import pekko.stream.connectors.googlecloud.bigquery.model.TableReference
+import pekko.stream.connectors.googlecloud.bigquery.model.WriteDisposition.WriteAppend
+import pekko.stream.scaladsl.{ Flow, GraphDSL, Keep, Sink }
+import pekko.util.ByteString
 
 import scala.annotation.nowarn
 import scala.concurrent.Future
@@ -52,7 +53,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    *
    * @param jobId job ID of the requested job
    * @param location the geographic location of the job. Required except for US and EU
-   * @return a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Job]]
+   * @return a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.Job]]
    */
   def job(jobId: String, location: Option[String] = None)(implicit system: ClassicActorSystemProvider,
       settings: GoogleSettings): Future[Job] = {
@@ -69,7 +70,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    *
    * @param jobId job ID of the job to cancel
    * @param location the geographic location of the job. Required except for US and EU
-   * @return a [[scala.concurrent.Future]] containing the [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.JobCancelResponse]]
+   * @return a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.JobCancelResponse]]
    */
   def cancelJob(
       jobId: String,
@@ -83,20 +84,20 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
   }
 
   /**
-   * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[org.apache.pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
+   * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
    * @note WARNING: Pending the resolution of [[https://issuetracker.google.com/176002651 BigQuery issue 176002651]] this method may not work as expected.
    *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Akka HTTP v10.2.4 or later.
    *
    * @param datasetId dataset ID of the table to insert into
    * @param tableId table ID of the table to insert into
    * @tparam In the data model for each record
-   * @return a [[org.apache.pekko.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
+   * @return a [[pekko.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
    */
   def insertAllAsync[In: ToEntityMarshaller](datasetId: String, tableId: String): Flow[In, Job, NotUsed] =
     insertAllAsync(datasetId, tableId, None)
 
   /**
-   * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[org.apache.pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
+   * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
    * @note WARNING: Pending the resolution of [[https://issuetracker.google.com/176002651 BigQuery issue 176002651]] this method may not work as expected.
    *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Akka HTTP v10.2.4 or later.
    *
@@ -104,7 +105,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    * @param tableId table ID of the table to insert into
    * @param labels the labels associated with this job
    * @tparam In the data model for each record
-   * @return a [[org.apache.pekko.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
+   * @return a [[pekko.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
    */
   def insertAllAsync[In: ToEntityMarshaller](datasetId: String,
       tableId: String,
@@ -160,7 +161,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    *
    * @param job the job to start
    * @tparam Job the data model for a job
-   * @return a [[org.apache.pekko.stream.scaladsl.Sink]] that uploads bytes and materializes a [[scala.concurrent.Future]] containing the [[Job]] when completed
+   * @return a [[pekko.stream.scaladsl.Sink]] that uploads bytes and materializes a [[scala.concurrent.Future]] containing the [[Job]] when completed
    */
   def createLoadJob[@nowarn("msg=shadows") Job: ToEntityMarshaller: FromEntityUnmarshaller](
       job: Job): Sink[ByteString, Future[Job]] =

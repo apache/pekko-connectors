@@ -13,10 +13,11 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.couchbase.client.java.document.JsonDocument
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll

@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.scaladsl.Source
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.storage.{ BigQueryReadClient, ReadRowsRequest, ReadRowsResponse }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 

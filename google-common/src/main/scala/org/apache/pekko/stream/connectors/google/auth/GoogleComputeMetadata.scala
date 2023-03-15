@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.google.auth
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.http.scaladsl.Http
-import org.apache.pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import org.apache.pekko.http.scaladsl.model.HttpMethods.GET
-import org.apache.pekko.http.scaladsl.model.HttpRequest
-import org.apache.pekko.http.scaladsl.model.headers.RawHeader
-import org.apache.pekko.http.scaladsl.unmarshalling.Unmarshal
-import org.apache.pekko.stream.Materializer
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.http.scaladsl.Http
+import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import pekko.http.scaladsl.model.HttpMethods.GET
+import pekko.http.scaladsl.model.HttpRequest
+import pekko.http.scaladsl.model.headers.RawHeader
+import pekko.http.scaladsl.unmarshalling.Unmarshal
+import pekko.stream.Materializer
 
 import java.time.Clock
 import scala.concurrent.Future

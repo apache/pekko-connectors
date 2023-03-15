@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.reference.impl
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.event.Logging
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.reference.{ ReferenceReadResult, SourceSettings }
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler }
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.event.Logging
+import pekko.stream._
+import pekko.stream.connectors.reference.{ ReferenceReadResult, SourceSettings }
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler }
+import pekko.util.ByteString
 
 import scala.collection.immutable
 import scala.concurrent.{ Future, Promise }

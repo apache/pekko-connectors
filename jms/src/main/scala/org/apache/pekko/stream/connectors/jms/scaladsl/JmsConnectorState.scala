@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.jms.scaladsl
 
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.KillSwitch
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.connectors.jms.javadsl
-import org.apache.pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.KillSwitch
+import pekko.stream.scaladsl.Source
+import pekko.stream.connectors.jms.javadsl
+import pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
 
 trait JmsProducerStatus {
 

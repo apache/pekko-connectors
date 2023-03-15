@@ -17,11 +17,12 @@ import java.nio.charset.StandardCharsets._
 import java.nio.file.{ Files, Path }
 import java.security.{ DigestInputStream, MessageDigest }
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.stream.scaladsl.{ Sink, Source, StreamConverters }
-import org.apache.pekko.testkit.TestKit
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source, StreamConverters }
+import pekko.testkit.TestKit
+import pekko.util.ByteString
 import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures

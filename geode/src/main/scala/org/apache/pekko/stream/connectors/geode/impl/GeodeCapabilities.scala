@@ -13,9 +13,10 @@
 
 package org.apache.pekko.stream.connectors.geode.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.geode.RegionSettings
-import org.apache.pekko.stream.stage.StageLogging
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.geode.RegionSettings
+import pekko.stream.stage.StageLogging
 import org.apache.geode.cache.client.{ ClientCache, ClientRegionShortcut }
 
 import scala.util.control.NonFatal
