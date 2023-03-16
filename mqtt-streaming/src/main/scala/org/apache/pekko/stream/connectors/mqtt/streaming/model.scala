@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.mqtt.streaming
+
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
 import java.util.{ NoSuchElementException, Optional }

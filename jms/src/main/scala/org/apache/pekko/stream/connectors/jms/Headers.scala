@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.jms
+
 import java.util.concurrent.TimeUnit
 
 import scala.concurrent.duration.Duration

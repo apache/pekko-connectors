@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.xml.impl
+
 import java.nio.charset.Charset
 
 import org.apache.pekko
