@@ -175,12 +175,12 @@ import scala.util.{ Failure, Success, Try }
     Flow[ByteString].orElse(Source.single(ByteString.empty))
 
   // def because tokens can expire
-  private def signingKey(implicit settings: S3Settings) = {
+  private def signingKey(overrideRegion: Option[Region] = None)(implicit settings: S3Settings) = {
     val requestDate = ZonedDateTime.now(ZoneOffset.UTC)
     SigningKey(
       requestDate,
       settings.credentialsProvider,
-      CredentialScope(requestDate.toLocalDate, settings.s3RegionProvider.getRegion, "s3"))
+      CredentialScope(requestDate.toLocalDate, overrideRegion.getOrElse(settings.s3RegionProvider.getRegion), "s3"))
   }
 
   def download(
@@ -336,7 +336,9 @@ import scala.util.{ Failure, Success, Try }
         Source
           .future {
             signAndGetAs[ListBucketsResult](
-              HttpRequests.listBuckets(s3Headers.headers)).map { (res: ListBucketsResult) =>
+              // This request only works when its called from US_EAST_1. Note that buckets are region
+              // agnostic
+              HttpRequests.listBuckets(s3Headers.headers), Some(Region.US_EAST_1)).map { (res: ListBucketsResult) =>
               res.buckets
             }(ExecutionContexts.parasitic)
           }
@@ -1121,7 +1123,7 @@ import scala.util.{ Failure, Success, Try }
             }
             .flatMapConcat {
               case (req, info) =>
-                Signer.signedRequest(req, signingKey, conf.signAnonymousRequests).zip(Source.single(info))
+                Signer.signedRequest(req, signingKey(), conf.signAnonymousRequests).zip(Source.single(info))
             }
             .via(superPool[(MultipartUpload, Int)])
 
@@ -1213,7 +1215,7 @@ import scala.util.{ Failure, Success, Try }
             }
             .flatMapConcat {
               case ((req, info), allContext) =>
-                Signer.signedRequest(req, signingKey, conf.signAnonymousRequests).zip(Source.single(info)).map {
+                Signer.signedRequest(req, signingKey(), conf.signAnonymousRequests).zip(Source.single(info)).map {
                   case (httpRequest, data) => (httpRequest, (data, allContext))
                 }
             }
@@ -1352,12 +1354,13 @@ import scala.util.{ Failure, Success, Try }
       .mapMaterializedValue(_.flatMap(identity)(ExecutionContexts.parasitic))
 
   private def signAndGetAs[T](
-      request: HttpRequest)(
+      request: HttpRequest,
+      overrideRegion: Option[Region] = None)(
       implicit um: Unmarshaller[ResponseEntity, T], mat: Materializer, attr: Attributes): Future[T] = {
     import mat.executionContext
     implicit val sys: ActorSystem = mat.system
     for {
-      response <- signAndRequest(request).runWith(Sink.head)
+      response <- signAndRequest(request, overrideRegion).runWith(Sink.head)
       (entity, _) <- entityForSuccess(response)
       t <- Unmarshal(entity).to[T]
     } yield t
@@ -1378,14 +1381,15 @@ import scala.util.{ Failure, Success, Try }
   }
 
   private def signAndRequest(
-      request: HttpRequest)(
+      request: HttpRequest,
+      overrideRegion: Option[Region] = None)(
       implicit sys: ActorSystem, mat: Materializer, attr: Attributes): Source[HttpResponse, NotUsed] = {
     implicit val conf: S3Settings = resolveSettings(attr, sys)
     import conf.retrySettings._
     import mat.executionContext
 
     val retriableFlow = Flow[HttpRequest]
-      .flatMapConcat(req => Signer.signedRequest(req, signingKey, conf.signAnonymousRequests))
+      .flatMapConcat(req => Signer.signedRequest(req, signingKey(overrideRegion), conf.signAnonymousRequests))
       .mapAsync(parallelism = 1)(req =>
         singleRequest(req)
           .map(Success.apply)
@@ -1457,7 +1461,7 @@ import scala.util.{ Failure, Success, Try }
           .mapConcat(identity)
           .flatMapConcat {
             case (req, info) =>
-              Signer.signedRequest(req, signingKey, conf.signAnonymousRequests).zip(Source.single(info))
+              Signer.signedRequest(req, signingKey(), conf.signAnonymousRequests).zip(Source.single(info))
           }
       }
       .mapMaterializedValue(_ => NotUsed)
