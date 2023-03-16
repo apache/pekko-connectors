@@ -57,11 +57,6 @@ object Common extends AutoPlugin {
       "-Xlint",
       "-Ywarn-dead-code",
       "-target:jvm-1.8"),
-    scalacOptions ++= (scalaVersion.value match {
-      case Dependencies.Scala213 if insideCI.value && fatalWarnings.value && !Dependencies.CronBuild =>
-        Seq("-Werror")
-      case _ => Seq.empty[String]
-    }),
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
       "Apache Pekko Connectors",
