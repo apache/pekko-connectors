@@ -199,7 +199,7 @@ import scala.util.{ Failure, Success, Try }
           .mapAsync(parallelism = 1)(entityForSuccess)
           .map {
             case (entity, headers) =>
-              Some((entity.dataBytes.mapMaterializedValue(_ => NotUsed), computeMetaData(headers.toIndexedSeq, entity)))
+              Some((entity.dataBytes.mapMaterializedValue(_ => NotUsed), computeMetaData(headers, entity)))
           }
           .recover[Option[(Source[ByteString, NotUsed], ObjectMetadata)]] {
             case e: S3Exception if e.code == "NoSuchKey" => None
@@ -223,7 +223,7 @@ import scala.util.{ Failure, Success, Try }
           .mapAsync(parallelism = 1)(entityForSuccess)
           .flatMapConcat {
             case (entity, headers) =>
-              objectMetadataMat.success(computeMetaData(headers.toIndexedSeq, entity))
+              objectMetadataMat.success(computeMetaData(headers, entity))
               entity.dataBytes
           }
           .mapError {
@@ -1340,9 +1340,9 @@ import scala.util.{ Failure, Success, Try }
         import mat.executionContext
         Sink
           .seq[UploadPartResponse]
-          .mapMaterializedValue { responseFuture: Future[Seq[UploadPartResponse]] =>
+          .mapMaterializedValue { responseFuture: Future[immutable.Seq[UploadPartResponse]] =>
             responseFuture
-              .flatMap { responses: Seq[UploadPartResponse] =>
+              .flatMap { responses: immutable.Seq[UploadPartResponse] =>
                 val successes = responses.collect { case r: SuccessfulUploadPart => r }
                 val failures = responses.collect { case r: FailedUploadPart => r }
                 if (responses.isEmpty) {
@@ -1350,10 +1350,10 @@ import scala.util.{ Failure, Success, Try }
                 } else if (failures.isEmpty) {
                   Future.successful(successes.sortBy(_.partNumber))
                 } else {
-                  Future.failed(FailedUpload(failures.map(_.exception).toIndexedSeq))
+                  Future.failed(FailedUpload(failures.map(_.exception)))
                 }
               }
-              .flatMap(parts => completeMultipartUpload(s3Location, parts.toIndexedSeq, sse))
+              .flatMap(parts => completeMultipartUpload(s3Location, parts, sse))
           }
           .mapMaterializedValue(_.map(r => MultipartUploadResult(r.location, r.bucket, r.key, r.eTag, r.versionId)))
       }
@@ -1416,7 +1416,7 @@ import scala.util.{ Failure, Success, Try }
   }
 
   private def entityForSuccess(
-      resp: HttpResponse)(implicit mat: Materializer): Future[(ResponseEntity, Seq[HttpHeader])] = {
+      resp: HttpResponse)(implicit mat: Materializer): Future[(ResponseEntity, immutable.Seq[HttpHeader])] = {
     resp match {
       case HttpResponse(status, headers, entity, _) if status.isSuccess() && !status.isRedirection() =>
         Future.successful((entity, headers))
