@@ -26,7 +26,7 @@ import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.{ ExecutionContext, Promise }
 

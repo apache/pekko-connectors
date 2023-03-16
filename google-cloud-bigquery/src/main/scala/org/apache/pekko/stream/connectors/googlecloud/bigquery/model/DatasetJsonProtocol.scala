@@ -19,7 +19,7 @@ import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJ
 import spray.json.{ JsonFormat, RootJsonFormat }
 
 import java.util
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.compat.java8.OptionConverters._
 

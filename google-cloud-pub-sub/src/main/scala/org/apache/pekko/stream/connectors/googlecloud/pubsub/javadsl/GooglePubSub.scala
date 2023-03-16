@@ -23,7 +23,7 @@ import pekko.{ Done, NotUsed }
 import java.util.concurrent.CompletionStage
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 /**
  * Java DSL for Google Pub/Sub

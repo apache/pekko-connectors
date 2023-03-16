@@ -23,7 +23,7 @@ import pekko.stream.scaladsl.Flow
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchRequest, PutRecordBatchResponseEntry, Record }
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
 

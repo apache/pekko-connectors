@@ -27,7 +27,7 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit
 import pekko.stream.scaladsl.Sink
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import docs.javadsl.TestUtils._
 import docs.javadsl.TestConstants.{ INFLUXDB_URL, PASSWORD, USERNAME }
 import org.scalatest.matchers.must.Matchers

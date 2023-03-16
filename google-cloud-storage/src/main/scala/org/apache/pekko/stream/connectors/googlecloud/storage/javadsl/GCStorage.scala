@@ -27,7 +27,7 @@ import pekko.stream.{ Attributes, Materializer }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
 

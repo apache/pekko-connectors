@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.javadsl
 
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.scaladsl
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 abstract class EndToEndHelper extends scaladsl.EndToEndHelper {
 

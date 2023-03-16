@@ -22,7 +22,7 @@ import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstor
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 
 import java.util.concurrent.CompletionStage
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.compat.java8.FutureConverters.FutureOps
 
 /**

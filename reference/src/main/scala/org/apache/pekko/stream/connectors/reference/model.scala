@@ -20,7 +20,7 @@ import pekko.annotation.InternalApi
 import pekko.util.ByteString
 
 import scala.collection.immutable
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.compat.java8.OptionConverters._
 import scala.util.{ Success, Try }
 

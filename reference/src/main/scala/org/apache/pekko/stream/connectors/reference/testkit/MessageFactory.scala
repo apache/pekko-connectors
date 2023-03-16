@@ -19,7 +19,7 @@ import pekko.stream.connectors.reference.{ ReferenceReadResult, ReferenceWriteMe
 import pekko.util.ByteString
 
 import scala.collection.immutable
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.util.{ Failure, Success, Try }
 
 @ApiMayChange

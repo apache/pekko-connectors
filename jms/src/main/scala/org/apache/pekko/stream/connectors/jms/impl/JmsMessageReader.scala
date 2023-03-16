@@ -20,7 +20,7 @@ import pekko.annotation.InternalApi
 import pekko.stream.connectors.jms._
 import pekko.util.ByteString
 import scala.annotation.tailrec
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 @InternalApi
 private[jms] object JmsMessageReader {
