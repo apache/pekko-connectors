@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.avroparquet.scaladsl
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.scaladsl.Flow

@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.jms
+
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicInteger
 

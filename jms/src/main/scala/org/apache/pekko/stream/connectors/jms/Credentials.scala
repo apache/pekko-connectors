@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.jms
+
 import com.typesafe.config.Config
 
 final class Credentials private (

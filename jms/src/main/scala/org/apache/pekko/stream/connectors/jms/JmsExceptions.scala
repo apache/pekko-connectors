@@ -12,6 +12,7 @@
  */
 
 package org.apache.pekko.stream.connectors.jms
+
 import javax.jms
 
 import scala.concurrent.TimeoutException
