@@ -27,7 +27,7 @@ import com.couchbase.client.java.document.{ BinaryDocument, JsonDocument, RawJso
 import org.slf4j.LoggerFactory
 import play.api.libs.json.Json
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._

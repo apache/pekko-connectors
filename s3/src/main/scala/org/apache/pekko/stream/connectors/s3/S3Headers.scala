@@ -23,7 +23,7 @@ import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, Sto
 import pekko.stream.connectors.s3.impl.S3Request
 
 import scala.collection.immutable.Seq
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 final class MetaHeaders private (val metaHeaders: Map[String, String]) {
 

@@ -151,13 +151,21 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6.4.0
 
-      - name: ${{ matrix.connector }}
+      - name: ${{ matrix.connector }} (scala 2.12)
         env:
           CONNECTOR: ${{ matrix.connector }}
           PRE_CMD: ${{ matrix.pre_cmd }}
         run: |-
           $PRE_CMD
-          sbt "${CONNECTOR}/test"
+          sbt +~2.12 "${CONNECTOR}/test"
+
+      - name: ${{ matrix.connector }} (scala 2.13)
+        env:
+          CONNECTOR: ${{ matrix.connector }}
+          PRE_CMD: ${{ matrix.pre_cmd }}
+        run: |-
+          $PRE_CMD
+          sbt +~2.13 "${CONNECTOR}/test"
 
       - name: Print logs on failure
         if: failure()

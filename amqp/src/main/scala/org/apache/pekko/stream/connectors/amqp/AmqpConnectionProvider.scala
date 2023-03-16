@@ -23,7 +23,7 @@ import javax.net.ssl.{ SSLContext, TrustManager }
 
 import scala.annotation.tailrec
 import scala.collection.immutable
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 /**
  * Only for internal implementations
@@ -131,7 +131,7 @@ final class AmqpDetailsConnectionProvider private (
     copy(connectionName = Option(name))
 
   override def get: Connection = {
-    import scala.jdk.CollectionConverters._
+    import scala.collection.JavaConverters._
     val factory = new ConnectionFactory
     credentials.foreach { credentials =>
       factory.setUsername(credentials.username)
@@ -339,7 +339,7 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
     copy(hostAndPorts = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
 
   override def get: Connection = {
-    import scala.jdk.CollectionConverters._
+    import scala.collection.JavaConverters._
     factory.newConnection(hostAndPortList.map(hp => new Address(hp._1, hp._2)).asJava)
   }
 

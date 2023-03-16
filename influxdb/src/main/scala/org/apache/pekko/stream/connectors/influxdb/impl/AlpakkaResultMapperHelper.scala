@@ -26,7 +26,7 @@ import org.apache.pekko.annotation.InternalApi
 import org.influxdb.InfluxDBMapperException
 import org.influxdb.dto.Point
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 /**
  * Internal API.

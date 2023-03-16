@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.dynamodb
 
 import software.amazon.awssdk.services.dynamodb.model._
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 trait TestOps {
 

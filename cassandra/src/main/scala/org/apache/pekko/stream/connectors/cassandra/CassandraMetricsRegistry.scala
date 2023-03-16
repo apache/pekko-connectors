@@ -18,7 +18,7 @@ import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension,
 import pekko.annotation.InternalApi
 import com.codahale.metrics.MetricRegistry
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 /**
  * Retrieves Cassandra metrics registry for an actor system

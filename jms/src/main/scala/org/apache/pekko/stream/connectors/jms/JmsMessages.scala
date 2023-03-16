@@ -19,7 +19,7 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.jms.impl.JmsMessageReader._
 import pekko.util.ByteString
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 import scala.compat.java8.OptionConverters._
 
 /**

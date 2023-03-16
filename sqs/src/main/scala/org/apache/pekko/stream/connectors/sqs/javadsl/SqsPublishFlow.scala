@@ -28,7 +28,7 @@ import pekko.stream.scaladsl.{ Flow => SFlow }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 /**
  * Java API to create SQS flows.
