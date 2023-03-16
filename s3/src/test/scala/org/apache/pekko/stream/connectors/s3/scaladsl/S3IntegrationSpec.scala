@@ -113,6 +113,21 @@ trait S3IntegrationSpec
     buckets.map(_.name) should contain(defaultBucket)
   }
 
+  it should "list buckets in current AWS account using non US_EAST_1 region" in {
+    // Its only AWS that complains if listBuckets is called from a non US_EAST_1 region
+    assume(this.isInstanceOf[AWSS3IntegrationSpec])
+    val result = for {
+      buckets <- S3.listBuckets().withAttributes(
+        S3Attributes.settings(defaultS3Settings.withS3RegionProvider(new AwsRegionProvider {
+          override def getRegion: Region = Region.EU_CENTRAL_1
+        }))).runWith(Sink.seq)
+    } yield buckets
+
+    val buckets = result.futureValue
+
+    buckets.map(_.name) should contain(defaultBucket)
+  }
+
   it should "list with real credentials" in {
     val result = S3
       .listBucket(defaultBucket, None)
