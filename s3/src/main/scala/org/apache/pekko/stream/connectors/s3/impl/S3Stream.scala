@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.s3.impl
 
 import java.net.InetSocketAddress
 import java.time.{ Instant, ZoneOffset, ZonedDateTime }
-
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
@@ -36,6 +35,7 @@ import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 
+import scala.annotation.nowarn
 import scala.collection.immutable
 import scala.concurrent.{ Future, Promise }
 import scala.util.{ Failure, Success, Try }
@@ -1025,6 +1025,7 @@ import scala.util.{ Failure, Success, Try }
   /**
    * Initiates a multipart upload. Returns a source of the initiated upload with upload part indicess
    */
+  @nowarn("msg=deprecated")
   private def initiateUpload(s3Location: S3Location,
       contentType: ContentType,
       s3Headers: immutable.Seq[HttpHeader]): Source[(MultipartUpload, Int), NotUsed] =
@@ -1272,6 +1273,7 @@ import scala.util.{ Failure, Success, Try }
       .mapMaterializedValue(_ => NotUsed)
   }
 
+  @nowarn("msg=deprecated")
   private def requestInfoOrUploadState(s3Location: S3Location,
       contentType: ContentType,
       s3Headers: S3Headers,
