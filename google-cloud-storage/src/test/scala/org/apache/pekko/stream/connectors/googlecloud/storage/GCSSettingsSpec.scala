@@ -18,7 +18,7 @@ import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 class GCSSettingsSpec extends AnyFlatSpec with Matchers with LogCapturing {
   "GCSSettings" should "create settings from application config" in {

@@ -32,7 +32,7 @@ import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.firehose.model._
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 class KinesisFirehoseFlowSpec extends AnyWordSpec with Matchers with KinesisFirehoseMock with LogCapturing {
 

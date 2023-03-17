@@ -99,7 +99,7 @@ import org.slf4j.LoggerFactory
    * Also clears the buffer..
    */
   def flush(sourceActorSystem: Option[String]): Unit = synchronized {
-    import scala.collection.JavaConverters._
+    import org.apache.pekko.util.ccompat.JavaConverters._
     val logbackLogger = getLogbackLogger(classOf[CapturingAppender].getName + "Delegate")
     val appenders = logbackLogger.iteratorForAppenders().asScala.filterNot(_ == this).toList
     for (event <- buffer; appender <- appenders) {

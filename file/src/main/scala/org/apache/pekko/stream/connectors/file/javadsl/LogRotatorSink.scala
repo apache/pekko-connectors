@@ -25,7 +25,7 @@ import pekko.stream.javadsl.Sink
 import pekko.util.ByteString
 import pekko.japi.function
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.Future
 
 import scala.compat.java8.FutureConverters._

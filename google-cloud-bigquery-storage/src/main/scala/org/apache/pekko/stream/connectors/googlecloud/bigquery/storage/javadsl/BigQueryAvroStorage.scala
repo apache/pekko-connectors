@@ -21,7 +21,7 @@ import com.google.cloud.bigquery.storage.v1.avro.{ AvroRows, AvroSchema }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 
 import java.util.concurrent.CompletionStage
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters.FutureOps
 
 /**

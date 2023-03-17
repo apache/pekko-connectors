@@ -47,7 +47,7 @@ import software.amazon.kinesis.processor.{
 import software.amazon.kinesis.retrieval.KinesisClientRecord
 import software.amazon.kinesis.retrieval.kpl.ExtendedSequenceNumber
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.Random

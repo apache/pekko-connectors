@@ -23,7 +23,7 @@ import org.w3c.dom.Element
 
 import java.util.function.Consumer
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 object XmlParsing {
 

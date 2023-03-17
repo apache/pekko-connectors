@@ -19,7 +19,7 @@ import pekko.stream.connectors.orientdb._
 import pekko.stream.javadsl.Flow
 import com.orientechnologies.orient.core.record.impl.ODocument
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Java API.

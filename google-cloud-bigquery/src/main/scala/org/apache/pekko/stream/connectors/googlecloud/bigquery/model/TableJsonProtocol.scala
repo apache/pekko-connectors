@@ -25,7 +25,7 @@ import scala.annotation.nowarn
 import scala.annotation.varargs
 import scala.collection.immutable.Seq
 import scala.compat.java8.OptionConverters._
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Table resource model

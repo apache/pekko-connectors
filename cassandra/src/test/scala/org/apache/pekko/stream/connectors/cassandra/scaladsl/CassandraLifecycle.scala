@@ -23,7 +23,7 @@ import com.datastax.oss.driver.api.core.cql._
 import org.scalatest._
 import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }

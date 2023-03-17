@@ -22,7 +22,7 @@ import pekko.stream.scaladsl.{ Flow, Source }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters._
 
 /**

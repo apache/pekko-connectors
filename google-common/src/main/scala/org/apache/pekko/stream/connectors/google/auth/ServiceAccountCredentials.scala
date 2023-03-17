@@ -23,7 +23,7 @@ import spray.json.DefaultJsonProtocol._
 import spray.json.{ JsonParser, RootJsonFormat }
 
 import java.time.Clock
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.Future
 import scala.io.Source
 

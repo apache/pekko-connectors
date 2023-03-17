@@ -23,7 +23,7 @@ import pekko.stream.{ Attributes, Materializer }
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.{ ArrayNode, NumericNode }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.ExecutionContext
 
 /**

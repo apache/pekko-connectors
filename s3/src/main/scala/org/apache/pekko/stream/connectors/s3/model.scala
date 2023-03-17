@@ -23,7 +23,7 @@ import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 import scala.collection.immutable
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.OptionConverters._
 
 final class MultipartUpload private (val bucket: String, val key: String, val uploadId: String) {

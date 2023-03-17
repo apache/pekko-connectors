@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
 import java.util.concurrent.ConcurrentHashMap
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import org.apache.pekko

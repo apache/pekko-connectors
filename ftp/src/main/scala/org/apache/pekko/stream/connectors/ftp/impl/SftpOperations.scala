@@ -28,7 +28,7 @@ import net.schmizz.sshj.userauth.password.{ PasswordFinder, PasswordUtils, Resou
 import net.schmizz.sshj.xfer.FilePermission
 import org.apache.commons.net.DefaultSocketFactory
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.util.{ Failure, Try }
 

@@ -22,7 +22,7 @@ import pekko.stream.connectors.google.auth.ServiceAccountCredentials
 
 import scala.annotation.nowarn
 import scala.collection.immutable
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * @param projectId (deprecated) the project Id in the google account
