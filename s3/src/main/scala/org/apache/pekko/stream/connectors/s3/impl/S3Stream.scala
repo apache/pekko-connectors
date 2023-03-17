@@ -682,10 +682,10 @@ import scala.util.{ Failure, Success, Try }
       method: HttpMethod = HttpMethods.GET,
       rangeOption: Option[ByteRange] = None,
       versionId: Option[String] = None,
-      s3Headers: Seq[HttpHeader] = Seq.empty): Source[HttpResponse, NotUsed] =
+      s3Headers: immutable.Seq[HttpHeader] = Nil): Source[HttpResponse, NotUsed] =
     Source
       .fromMaterializer { (mat, attr) =>
-        issueRequest(s3Location, method, rangeOption, versionId, s3Headers.toIndexedSeq)(mat, attr)
+        issueRequest(s3Location, method, rangeOption, versionId, s3Headers)(mat, attr)
       }
       .mapMaterializedValue(_ => NotUsed)
 
