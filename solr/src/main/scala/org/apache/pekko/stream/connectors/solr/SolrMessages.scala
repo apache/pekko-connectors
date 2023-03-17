@@ -17,7 +17,7 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 object WriteMessage {
   def createUpsertMessage[T](source: T): WriteMessage[T, NotUsed] =

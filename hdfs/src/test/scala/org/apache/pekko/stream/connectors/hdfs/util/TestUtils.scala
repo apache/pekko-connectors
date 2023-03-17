@@ -187,7 +187,7 @@ object JavaTestUtils extends TestUtils {
 
   import org.junit.Assert._
 
-  import scala.collection.JavaConverters._
+  import org.apache.pekko.util.ccompat.JavaConverters._
 
   val books: util.List[ByteString] = ScalaTestUtils.books.asJava
 

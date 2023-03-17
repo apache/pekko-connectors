@@ -17,7 +17,7 @@ import org.apache.pekko
 import pekko.util.JavaDurationConverters._
 import org.eclipse.paho.client.mqttv3.{ MqttClientPersistence, MqttConnectOptions }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.collection.immutable.Map
 import scala.concurrent.duration.{ FiniteDuration, _ }

@@ -60,7 +60,7 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
       private var unackedMessages = 0
 
       override def whenConnected(): Unit = {
-        import scala.collection.JavaConverters._
+        import org.apache.pekko.util.ccompat.JavaConverters._
         channel.basicQos(bufferSize)
         val consumerCallback = getAsyncCallback(handleDelivery)
 

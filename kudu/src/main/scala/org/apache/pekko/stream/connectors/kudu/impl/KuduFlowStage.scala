@@ -22,7 +22,7 @@ import org.apache.kudu.Schema
 import org.apache.kudu.Type._
 import org.apache.kudu.client.{ KuduClient, KuduTable, PartialRow }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.util.control.NonFatal
 
 /**

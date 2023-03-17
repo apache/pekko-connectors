@@ -21,7 +21,7 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import org.influxdb.{ InfluxDB, InfluxDBException }
 import org.influxdb.dto.{ Query, QueryResult }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * INTERNAL API

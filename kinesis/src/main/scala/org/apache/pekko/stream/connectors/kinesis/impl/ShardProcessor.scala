@@ -24,7 +24,7 @@ import software.amazon.kinesis.lifecycle.events._
 import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }
 import software.amazon.kinesis.retrieval.KinesisClientRecord
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 @InternalApi
 private[kinesis] class ShardProcessor(

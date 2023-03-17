@@ -20,7 +20,7 @@ import pekko.stream.javadsl.Source
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.Record
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 object KinesisSource {
 

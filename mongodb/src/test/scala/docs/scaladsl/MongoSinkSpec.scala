@@ -29,7 +29,7 @@ import org.mongodb.scala.bson.codecs.Macros._
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.duration._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec

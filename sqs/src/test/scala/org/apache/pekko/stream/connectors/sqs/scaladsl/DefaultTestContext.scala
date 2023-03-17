@@ -32,7 +32,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest
 //#init-client
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.duration._
 import scala.util.Random
 

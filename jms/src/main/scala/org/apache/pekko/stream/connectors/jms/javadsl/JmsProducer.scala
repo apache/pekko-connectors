@@ -22,7 +22,7 @@ import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters
 
 /**

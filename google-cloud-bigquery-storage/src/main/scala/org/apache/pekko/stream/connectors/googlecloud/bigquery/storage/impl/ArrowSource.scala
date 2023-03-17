@@ -28,7 +28,7 @@ import org.apache.arrow.vector.util.ByteArrayReadableSeekableByteChannel
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 object ArrowSource {
 

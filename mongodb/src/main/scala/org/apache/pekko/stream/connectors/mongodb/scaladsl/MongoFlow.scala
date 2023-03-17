@@ -23,7 +23,7 @@ import com.mongodb.client.result.{ DeleteResult, UpdateResult }
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.conversions.Bson
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 object MongoFlow {
 

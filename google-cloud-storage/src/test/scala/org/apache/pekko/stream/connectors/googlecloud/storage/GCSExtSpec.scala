@@ -20,7 +20,7 @@ import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 class GCSExtSpec extends AnyFlatSpec with Matchers with LogCapturing {
   "GCSExt" should "reuse application config from actor system" in {

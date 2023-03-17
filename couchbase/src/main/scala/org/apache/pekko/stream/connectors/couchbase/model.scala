@@ -23,7 +23,7 @@ import com.couchbase.client.java.env.CouchbaseEnvironment
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 import com.typesafe.config.Config
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.compat.java8.FutureConverters._

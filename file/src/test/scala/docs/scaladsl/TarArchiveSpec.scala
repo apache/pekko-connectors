@@ -32,7 +32,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.annotation.nowarn
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 

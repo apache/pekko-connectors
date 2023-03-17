@@ -28,7 +28,7 @@ import org.apache.arrow.vector.util.ByteArrayReadableSeekableByteChannel
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 class ArrowByteStringDecoder(val schema: ArrowSchema) extends FromByteStringUnmarshaller[List[BigQueryRecord]] {
 

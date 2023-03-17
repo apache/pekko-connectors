@@ -42,7 +42,7 @@ private trait AmqpConnectorLogic { this: GraphStageLogic =>
       connection.addShutdownListener(shutdownListener)
       channel.addShutdownListener(shutdownListener)
 
-      import scala.collection.JavaConverters._
+      import org.apache.pekko.util.ccompat.JavaConverters._
 
       settings.declarations.foreach {
         case d: QueueDeclaration =>

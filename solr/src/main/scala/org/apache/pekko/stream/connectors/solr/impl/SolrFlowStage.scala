@@ -29,7 +29,7 @@ import scala.annotation.tailrec
 import scala.util.control.NonFatal
 
 import scala.collection.immutable
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Internal API

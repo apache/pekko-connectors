@@ -22,7 +22,7 @@ import pekko.stream.javadsl.Flow
 import pekko.stream.connectors.influxdb.scaladsl
 import org.influxdb.dto.Point
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * API may change.

@@ -26,7 +26,7 @@ import org.apache.avro.io.DecoderFactory
 import java.util
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 class AvroByteStringDecoder(schema: Schema) extends FromByteStringUnmarshaller[java.util.List[BigQueryRecord]] {
 

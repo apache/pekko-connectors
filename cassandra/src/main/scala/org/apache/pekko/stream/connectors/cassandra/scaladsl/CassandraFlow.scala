@@ -20,7 +20,7 @@ import pekko.stream.connectors.cassandra.CassandraWriteSettings
 import pekko.stream.scaladsl.{ Flow, FlowWithContext }
 import com.datastax.oss.driver.api.core.cql.{ BatchStatement, BoundStatement, PreparedStatement }
 
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.Future
 
 /**

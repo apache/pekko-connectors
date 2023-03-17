@@ -20,7 +20,7 @@ import spray.json.{ JsonFormat, RootJsonFormat }
 import java.util
 
 import scala.annotation.nowarn
-import scala.collection.JavaConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.compat.java8.OptionConverters._
 
