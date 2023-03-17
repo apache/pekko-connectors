@@ -56,8 +56,8 @@ object Common extends AutoPlugin {
       "-deprecation",
       "-Xlint",
       "-Ywarn-dead-code",
-      "-target:jvm-1.8",
-      "-Wconf:cat=unused-nowarn:s"),
+      "-Wconf:cat=unused-nowarn:s",
+      "-release:8"),
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
       "Apache Pekko Connectors",
