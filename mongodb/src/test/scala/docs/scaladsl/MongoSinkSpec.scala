@@ -20,6 +20,7 @@ import pekko.stream.connectors.mongodb.scaladsl.MongoSink
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.util.ccompat.JavaConverters._
 import com.mongodb.client.model.{ Filters, InsertManyOptions, Updates }
 import com.mongodb.reactivestreams.client.{ MongoClients, MongoCollection }
 import org.bson.Document
@@ -29,7 +30,6 @@ import org.mongodb.scala.bson.codecs.Macros._
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.duration._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec

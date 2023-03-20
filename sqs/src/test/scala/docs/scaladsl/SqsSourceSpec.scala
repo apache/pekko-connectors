@@ -23,6 +23,7 @@ import pekko.stream.connectors.sqs._
 import pekko.stream.connectors.sqs.scaladsl.{ DefaultTestContext, SqsSource }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.util.ccompat.JavaConverters._
 import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
@@ -39,7 +40,6 @@ import software.amazon.awssdk.services.sqs.model.{
   SendMessageRequest
 }
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._

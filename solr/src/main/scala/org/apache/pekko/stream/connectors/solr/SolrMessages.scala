@@ -16,8 +16,7 @@ package org.apache.pekko.stream.connectors.solr
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
-
-import org.apache.pekko.util.ccompat.JavaConverters._
+import pekko.util.ccompat.JavaConverters._
 
 object WriteMessage {
   def createUpsertMessage[T](source: T): WriteMessage[T, NotUsed] =

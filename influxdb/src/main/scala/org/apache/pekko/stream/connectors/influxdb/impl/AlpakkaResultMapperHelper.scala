@@ -22,11 +22,11 @@ import org.influxdb.annotation.{ Column, Measurement }
 import org.influxdb.dto.QueryResult
 
 import java.util.concurrent.TimeUnit
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.util.ccompat.JavaConverters._
 import org.influxdb.InfluxDBMapperException
 import org.influxdb.dto.Point
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Internal API.

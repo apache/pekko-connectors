@@ -15,9 +15,9 @@ package org.apache.pekko.stream.connectors.amqp
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.JavaDurationConverters._
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.duration._
 

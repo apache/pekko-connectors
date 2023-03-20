@@ -19,7 +19,6 @@ import java.util.concurrent.{ CompletionStage, Executor }
 import java.util.function.{ Function => JFunction }
 
 import scala.annotation.varargs
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.ExecutionContext
@@ -32,6 +31,7 @@ import pekko.event.LoggingAdapter
 import pekko.stream.connectors.cassandra.CassandraServerMetaData
 import pekko.stream.connectors.cassandra.{ scaladsl, CqlSessionProvider }
 import pekko.stream.javadsl.Source
+import pekko.util.ccompat.JavaConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql.BatchStatement
 import com.datastax.oss.driver.api.core.cql.PreparedStatement

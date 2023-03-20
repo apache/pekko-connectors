@@ -45,7 +45,7 @@ import scala.collection.mutable.Queue
       retrieveMessages()
 
     def retrieveMessages(): Unit = {
-      import org.apache.pekko.util.ccompat.JavaConverters._
+      import pekko.util.ccompat.JavaConverters._
       val res = cloudQueueBuilt
         .retrieveMessages(settings.batchSize, settings.initialVisibilityTimeout, null, null)
         .asScala

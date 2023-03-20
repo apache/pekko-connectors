@@ -22,6 +22,7 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Keep
 import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -31,8 +32,6 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.model._
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with LogCapturing {
 

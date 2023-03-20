@@ -16,10 +16,9 @@ package org.apache.pekko.stream.connectors.jms.javadsl
 import javax.jms.Message
 import org.apache.pekko
 import pekko.NotUsed
+import pekko.util.ccompat.JavaConverters._
 import pekko.stream.connectors.jms._
 import pekko.stream.javadsl.Source
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Factory methods to create JMS consumers.

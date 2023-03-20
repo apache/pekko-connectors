@@ -19,6 +19,7 @@ import pekko.actor.ActorSystem
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.util.ccompat.JavaConverters._
 import com.couchbase.client.deps.io.netty.buffer.Unpooled
 import com.couchbase.client.deps.io.netty.util.CharsetUtil
 import com.couchbase.client.java.ReplicateTo
@@ -27,7 +28,6 @@ import com.couchbase.client.java.document.{ BinaryDocument, JsonDocument, RawJso
 import org.slf4j.LoggerFactory
 import play.api.libs.json.Json
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._

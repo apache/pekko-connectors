@@ -17,6 +17,7 @@ import org.apache.pekko
 import pekko.stream.connectors.google.scaladsl.Paginated
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.{ BigQueryRootJsonReader, BigQueryRootJsonWriter }
+import pekko.util.ccompat.JavaConverters._
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation._
 import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter }
@@ -25,7 +26,6 @@ import java.{ lang, util }
 
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.compat.java8.OptionConverters._
 

@@ -19,6 +19,7 @@ import pekko.stream.ActorAttributes.SupervisionStrategy
 import pekko.stream._
 import pekko.stream.connectors.solr._
 import pekko.stream.stage._
+import pekko.util.ccompat.JavaConverters._
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.client.solrj.impl.CloudSolrClient
 import org.apache.solr.client.solrj.request.UpdateRequest
@@ -29,7 +30,6 @@ import scala.annotation.tailrec
 import scala.util.control.NonFatal
 
 import scala.collection.immutable
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Internal API

@@ -18,11 +18,11 @@ import pekko.annotation.InternalApi
 import pekko.stream._
 import pekko.stream.connectors.kudu.KuduTableSettings
 import pekko.stream.stage._
+import pekko.util.ccompat.JavaConverters._
 import org.apache.kudu.Schema
 import org.apache.kudu.Type._
 import org.apache.kudu.client.{ KuduClient, KuduTable, PartialRow }
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.util.control.NonFatal
 
 /**

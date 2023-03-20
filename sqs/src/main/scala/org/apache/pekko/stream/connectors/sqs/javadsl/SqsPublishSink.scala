@@ -20,10 +20,10 @@ import pekko.Done
 import pekko.stream.connectors.sqs._
 import pekko.stream.javadsl.Sink
 import pekko.stream.scaladsl.{ Flow, Keep }
+import pekko.util.ccompat.JavaConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters.FutureOps
 
 /**

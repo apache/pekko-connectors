@@ -24,6 +24,7 @@ import pekko.stream.connectors.s3._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.testkit.{ TestKit, TestKitBase }
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import org.scalatest.Inspectors.forEvery
@@ -40,7 +41,6 @@ import scala.annotation.tailrec
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 trait S3IntegrationSpec
     extends AnyFlatSpecLike

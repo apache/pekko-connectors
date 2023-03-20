@@ -25,9 +25,9 @@ import pekko.stream.connectors.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMes
 import pekko.stream.connectors.influxdb.scaladsl.{ InfluxDbSink, InfluxDbSource }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit
+import pekko.util.ccompat.JavaConverters._
 import pekko.stream.scaladsl.Sink
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import docs.javadsl.TestUtils._
 import docs.javadsl.TestConstants.{ INFLUXDB_URL, PASSWORD, USERNAME }
 import org.scalatest.matchers.must.Matchers

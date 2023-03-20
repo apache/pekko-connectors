@@ -18,8 +18,8 @@ import javax.jms
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.jms.impl.JmsMessageReader._
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.OptionConverters._
 
 /**

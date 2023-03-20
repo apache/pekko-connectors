@@ -17,11 +17,10 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
 import pekko.stream.connectors.s3.S3Ext
+import pekko.util.ccompat.JavaConverters._
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 class S3ExtSpec extends AnyFlatSpecLike with Matchers {
   it should "reuse application config from actor system" in {

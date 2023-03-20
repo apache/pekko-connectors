@@ -19,13 +19,13 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.dynamodb.scaladsl.DynamoDb
 import pekko.testkit.TestKit
+import pekko.util.ccompat.JavaConverters._
 import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
 

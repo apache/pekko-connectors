@@ -17,6 +17,7 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
 import pekko.stream.scaladsl.Source
+import pekko.util.ccompat.JavaConverters._
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
@@ -28,7 +29,6 @@ import org.apache.arrow.vector.util.ByteArrayReadableSeekableByteChannel
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 object ArrowSource {
 

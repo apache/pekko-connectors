@@ -16,8 +16,8 @@ package org.apache.pekko.stream.connectors.elasticsearch
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
+import pekko.util.ccompat.JavaConverters._
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.OptionConverters._
 
 /**

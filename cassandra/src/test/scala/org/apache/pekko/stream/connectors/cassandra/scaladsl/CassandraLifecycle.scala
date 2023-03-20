@@ -19,11 +19,11 @@ import java.util.concurrent.atomic.AtomicInteger
 import org.apache.pekko
 import pekko.Done
 import pekko.testkit.TestKitBase
+import pekko.util.ccompat.JavaConverters._
 import com.datastax.oss.driver.api.core.cql._
 import org.scalatest._
 import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }

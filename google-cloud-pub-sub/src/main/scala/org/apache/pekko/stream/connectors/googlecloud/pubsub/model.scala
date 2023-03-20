@@ -19,10 +19,10 @@ import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.google.GoogleSettings
 import pekko.stream.connectors.google.auth.ServiceAccountCredentials
+import pekko.util.ccompat.JavaConverters._
 
 import scala.annotation.nowarn
 import scala.collection.immutable
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * @param projectId (deprecated) the project Id in the google account

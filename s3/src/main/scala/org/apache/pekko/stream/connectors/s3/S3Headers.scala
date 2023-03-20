@@ -21,9 +21,9 @@ import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
 import pekko.stream.connectors.s3.impl.S3Request
+import pekko.util.ccompat.JavaConverters._
 
 import scala.collection.immutable.Seq
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 final class MetaHeaders private (val metaHeaders: Map[String, String]) {
 

@@ -18,9 +18,8 @@ import pekko.NotUsed
 import pekko.stream.connectors.jms._
 import pekko.stream.connectors.jms.impl._
 import pekko.stream.scaladsl.Source
+import pekko.util.ccompat.JavaConverters._
 import javax.jms
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Factory methods to create JMS consumers.

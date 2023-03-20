@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.xml
 import java.util.Optional
 
 import org.apache.pekko.util.ccompat.JavaConverters._
+
 import scala.compat.java8.OptionConverters._
 
 /**
