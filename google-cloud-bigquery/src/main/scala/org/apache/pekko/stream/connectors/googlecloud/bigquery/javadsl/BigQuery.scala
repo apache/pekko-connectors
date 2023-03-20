@@ -38,13 +38,13 @@ import pekko.stream.javadsl.{ Flow, Sink, Source }
 import pekko.stream.{ scaladsl => ss }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
+import pekko.util.ccompat.JavaConverters._
 
 import java.time.Duration
 import java.util.concurrent.CompletionStage
 import java.{ lang, util }
 
 import scala.annotation.nowarn
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration.{ FiniteDuration, MILLISECONDS }

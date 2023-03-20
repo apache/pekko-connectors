@@ -16,9 +16,9 @@ package org.apache.pekko.stream.connectors.sqs
 import java.time.temporal.ChronoUnit
 
 import software.amazon.awssdk.services.sqs.model
+import org.apache.pekko.util.ccompat.JavaConverters._
 
 import scala.collection.immutable
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.duration.FiniteDuration
 
 final class SqsSourceSettings private (

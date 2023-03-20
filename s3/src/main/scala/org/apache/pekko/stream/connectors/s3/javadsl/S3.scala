@@ -29,9 +29,9 @@ import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption }
 import pekko.stream.connectors.s3._
 import pekko.stream.connectors.s3.impl._
 import pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.OptionConverters._
 import scala.compat.java8.FutureConverters._
 

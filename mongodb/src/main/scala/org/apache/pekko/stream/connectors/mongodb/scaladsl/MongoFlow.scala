@@ -18,12 +18,11 @@ import pekko.stream.scaladsl.{ Flow, Source }
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
+import pekko.util.ccompat.JavaConverters._
 import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
 import com.mongodb.client.result.{ DeleteResult, UpdateResult }
 import com.mongodb.reactivestreams.client.MongoCollection
 import org.bson.conversions.Bson
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 object MongoFlow {
 

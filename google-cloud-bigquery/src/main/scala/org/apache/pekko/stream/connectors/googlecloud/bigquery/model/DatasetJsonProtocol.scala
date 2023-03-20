@@ -16,10 +16,10 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.model
 import org.apache.pekko
 import pekko.stream.connectors.google.scaladsl.Paginated
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
+import pekko.util.ccompat.JavaConverters._
 import spray.json.{ JsonFormat, RootJsonFormat }
 
 import java.util
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.compat.java8.OptionConverters._
 

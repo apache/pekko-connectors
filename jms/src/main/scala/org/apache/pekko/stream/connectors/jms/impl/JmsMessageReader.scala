@@ -18,9 +18,9 @@ import javax.jms
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.jms._
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import scala.annotation.tailrec
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 @InternalApi
 private[jms] object JmsMessageReader {

@@ -13,12 +13,12 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.util.ccompat.JavaConverters._
 import com.google.cloud.bigquery.storage.v1.ReadSession.TableReadOptions
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 import scalapb.UnknownFieldSet
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Internal API

@@ -27,9 +27,9 @@ import pekko.stream.connectors.cassandra.scaladsl.CassandraSpecBase
 import pekko.stream.javadsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.TestSink
+import pekko.util.ccompat.JavaConverters._
 import com.datastax.oss.driver.api.core.cql.Row
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._

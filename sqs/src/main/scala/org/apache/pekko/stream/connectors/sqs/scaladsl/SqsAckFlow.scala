@@ -25,10 +25,10 @@ import pekko.stream.connectors.sqs.SqsAckResult._
 import pekko.stream.connectors.sqs.SqsAckResultEntry._
 import pekko.stream.connectors.sqs._
 import pekko.stream.scaladsl.{ Flow, GraphDSL, Merge, Partition }
+import pekko.util.ccompat.JavaConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future

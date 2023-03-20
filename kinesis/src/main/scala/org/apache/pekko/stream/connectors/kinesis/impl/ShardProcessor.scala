@@ -19,12 +19,11 @@ import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.kinesis.CommittableRecord
 import pekko.stream.connectors.kinesis.CommittableRecord.{ BatchData, ShardProcessorData }
+import pekko.util.ccompat.JavaConverters._
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.lifecycle.events._
 import software.amazon.kinesis.processor.{ RecordProcessorCheckpointer, ShardRecordProcessor }
 import software.amazon.kinesis.retrieval.KinesisClientRecord
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 @InternalApi
 private[kinesis] class ShardProcessor(

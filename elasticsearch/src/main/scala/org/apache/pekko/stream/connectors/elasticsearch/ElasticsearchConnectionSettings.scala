@@ -18,8 +18,8 @@ import pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import pekko.japi.Util
+import pekko.util.ccompat.JavaConverters._
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import javax.net.ssl.SSLContext
 import scala.compat.java8.OptionConverters
 

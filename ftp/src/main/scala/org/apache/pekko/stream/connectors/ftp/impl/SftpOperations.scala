@@ -18,7 +18,9 @@ import java.io.{ File, IOException, InputStream, OutputStream }
 import java.nio.file.attribute.PosixFilePermission
 import java.nio.charset.StandardCharsets
 
-import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.util.ccompat.JavaConverters._
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.sftp.{ OpenMode, RemoteResourceInfo, SFTPClient }
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier
@@ -28,7 +30,6 @@ import net.schmizz.sshj.userauth.password.{ PasswordFinder, PasswordUtils, Resou
 import net.schmizz.sshj.xfer.FilePermission
 import org.apache.commons.net.DefaultSocketFactory
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.util.{ Failure, Try }
 

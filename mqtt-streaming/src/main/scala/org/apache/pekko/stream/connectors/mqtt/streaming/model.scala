@@ -23,11 +23,11 @@ import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.japi.{ Pair => AkkaPair }
 import pekko.stream.connectors.mqtt.streaming.Connect.ProtocolLevel
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.{ ExecutionContext, Promise }
 

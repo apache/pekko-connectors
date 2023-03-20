@@ -23,6 +23,7 @@ import pekko.stream._
 import pekko.stream.connectors.jms._
 import pekko.stream.connectors.jms.scaladsl._
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.util.ccompat.JavaConverters._
 import pekko.{ Done, NotUsed }
 import javax.jms._
 
@@ -34,7 +35,6 @@ import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 
 import scala.annotation.tailrec
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.collection.mutable
 import scala.concurrent.Future

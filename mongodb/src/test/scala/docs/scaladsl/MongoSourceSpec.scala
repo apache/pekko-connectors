@@ -20,12 +20,12 @@ import pekko.stream.connectors.mongodb.scaladsl.MongoSource
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
+import pekko.util.ccompat.JavaConverters._
 import com.mongodb.reactivestreams.client.MongoClients
 import org.bson.Document
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Seq
 import scala.concurrent._
 import scala.concurrent.duration._

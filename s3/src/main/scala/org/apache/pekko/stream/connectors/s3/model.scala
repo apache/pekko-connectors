@@ -19,11 +19,11 @@ import org.apache.pekko
 import pekko.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Uri }
 import pekko.http.scaladsl.model.headers._
 import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
+import pekko.util.ccompat.JavaConverters._
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 import scala.collection.immutable
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.OptionConverters._
 
 final class MultipartUpload private (val bucket: String, val key: String, val uploadId: String) {

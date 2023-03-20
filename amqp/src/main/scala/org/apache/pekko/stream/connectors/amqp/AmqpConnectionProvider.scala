@@ -18,12 +18,12 @@ import java.util.concurrent.atomic.AtomicReference
 
 import org.apache.pekko
 import pekko.annotation.DoNotInherit
+import pekko.util.ccompat.JavaConverters._
 import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler }
 import javax.net.ssl.{ SSLContext, TrustManager }
 
 import scala.annotation.tailrec
 import scala.collection.immutable
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 /**
  * Only for internal implementations
@@ -131,7 +131,7 @@ final class AmqpDetailsConnectionProvider private (
     copy(connectionName = Option(name))
 
   override def get: Connection = {
-    import org.apache.pekko.util.ccompat.JavaConverters._
+    import pekko.util.ccompat.JavaConverters._
     val factory = new ConnectionFactory
     credentials.foreach { credentials =>
       factory.setUsername(credentials.username)
@@ -339,7 +339,7 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
     copy(hostAndPorts = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
 
   override def get: Connection = {
-    import org.apache.pekko.util.ccompat.JavaConverters._
+    import pekko.util.ccompat.JavaConverters._
     factory.newConnection(hostAndPortList.map(hp => new Address(hp._1, hp._2)).asJava)
   }
 

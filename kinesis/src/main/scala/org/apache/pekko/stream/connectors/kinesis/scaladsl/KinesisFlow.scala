@@ -22,6 +22,7 @@ import pekko.stream.ThrottleMode
 import pekko.stream.connectors.kinesis.KinesisFlowSettings
 import pekko.stream.connectors.kinesis.KinesisErrors.FailurePublishingRecords
 import pekko.stream.scaladsl.{ Flow, FlowWithContext }
+import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
@@ -32,7 +33,6 @@ import software.amazon.awssdk.services.kinesis.model.{
   PutRecordsResultEntry
 }
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
 import scala.compat.java8.FutureConverters._

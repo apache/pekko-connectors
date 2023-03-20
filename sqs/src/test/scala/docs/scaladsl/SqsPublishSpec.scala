@@ -21,12 +21,12 @@ import pekko.stream.connectors.sqs._
 import pekko.stream.connectors.sqs.scaladsl._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.util.ccompat.JavaConverters._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.{ Message, ReceiveMessageRequest, SendMessageRequest }
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.duration._
 
 class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext with LogCapturing {

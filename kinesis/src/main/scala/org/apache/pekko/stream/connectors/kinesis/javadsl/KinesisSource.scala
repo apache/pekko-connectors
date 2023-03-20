@@ -17,10 +17,9 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.kinesis.{ scaladsl, ShardSettings }
 import pekko.stream.javadsl.Source
+import pekko.util.ccompat.JavaConverters._
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.Record
-
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 object KinesisSource {
 

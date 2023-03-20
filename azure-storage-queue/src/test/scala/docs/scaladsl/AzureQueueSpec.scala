@@ -21,11 +21,11 @@ import pekko.stream.connectors.azure.storagequeue.scaladsl._
 import pekko.stream.scaladsl._
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.testkit._
+import pekko.util.ccompat.JavaConverters._
 import com.microsoft.azure.storage._
 import com.microsoft.azure.storage.queue._
 import org.scalatest._
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.Properties

@@ -18,12 +18,12 @@ import java.util.concurrent.{ CompletionStage, TimeUnit }
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.annotation.InternalApi
+import pekko.util.ccompat.JavaConverters._
 import com.couchbase.client.java.document.Document
 import com.couchbase.client.java.env.CouchbaseEnvironment
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 import com.typesafe.config.Config
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.compat.java8.FutureConverters._

@@ -21,10 +21,10 @@ import pekko.annotation.ApiMayChange
 import pekko.dispatch.ExecutionContexts.parasitic
 import pekko.stream.connectors.sqs._
 import pekko.stream.scaladsl.{ Flow, Source }
+import pekko.util.ccompat.JavaConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters._
 
 /**

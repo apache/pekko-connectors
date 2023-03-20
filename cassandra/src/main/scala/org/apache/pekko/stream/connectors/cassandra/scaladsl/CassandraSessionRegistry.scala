@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
 import java.util.concurrent.ConcurrentHashMap
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import org.apache.pekko
@@ -24,6 +23,7 @@ import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension,
 import pekko.annotation.InternalStableApi
 import pekko.event.Logging
 import pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CqlSessionProvider }
+import pekko.util.ccompat.JavaConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.Config
 

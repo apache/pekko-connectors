@@ -20,6 +20,7 @@ import org.apache.pekko
 import pekko.actor.{ ActorSystem, Terminated }
 import pekko.http.scaladsl.Http
 import pekko.stream.connectors.sqs.SqsSourceSettings
+import pekko.util.ccompat.JavaConverters._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{ BeforeAndAfterAll, Suite, Tag }
@@ -32,7 +33,6 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest
 //#init-client
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.concurrent.duration._
 import scala.util.Random
 

@@ -19,10 +19,10 @@ import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
 import pekko.stream.javadsl.Source
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
+import pekko.util.ccompat.JavaConverters._
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 
 import java.util.concurrent.CompletionStage
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.compat.java8.FutureConverters.FutureOps
 
 /**
