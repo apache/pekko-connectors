@@ -344,7 +344,7 @@ class TableReaderSettingsBuilder[K, V](
       maximumInflightMessages,
       maxEntriesAtOnce)
 
-  @deprecated("Use withKeyExtractor instead", "4.0.0")
+  @deprecated("Use withKeyExtractor instead", "Alpakka 4.0.0")
   def withTableKey(extractor: K => TableKey): TableReaderSettingsBuilder[K, V] = withKeyExtractor(extractor)
 
   def withKeyExtractor(
