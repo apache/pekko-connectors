@@ -35,7 +35,6 @@ import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 
-import scala.annotation.nowarn
 import scala.collection.immutable
 import scala.concurrent.{ Future, Promise }
 import scala.util.{ Failure, Success, Try }
@@ -1025,14 +1024,13 @@ import scala.util.{ Failure, Success, Try }
   /**
    * Initiates a multipart upload. Returns a source of the initiated upload with upload part indicess
    */
-  @nowarn("msg=deprecated")
   private def initiateUpload(s3Location: S3Location,
       contentType: ContentType,
       s3Headers: immutable.Seq[HttpHeader]): Source[(MultipartUpload, Int), NotUsed] =
     Source
       .single(s3Location)
       .flatMapConcat(initiateMultipartUpload(_, contentType, s3Headers))
-      .mapConcat(r => Stream.continually(r))
+      .flatMapConcat(r => Source.repeat(r))
       .zip(Source.fromIterator(() => Iterator.from(1)))
 
   private def poolSettings(implicit settings: S3Settings, system: ActorSystem) =
@@ -1273,7 +1271,6 @@ import scala.util.{ Failure, Success, Try }
       .mapMaterializedValue(_ => NotUsed)
   }
 
-  @nowarn("msg=deprecated")
   private def requestInfoOrUploadState(s3Location: S3Location,
       contentType: ContentType,
       s3Headers: S3Headers,
@@ -1285,7 +1282,7 @@ import scala.util.{ Failure, Success, Try }
         Source
           .single(s3Location)
           .flatMapConcat(_ => Source.single(MultipartUpload(s3Location.bucket, s3Location.key, uploadId)))
-          .mapConcat(r => Stream.continually(r))
+          .flatMapConcat(r => Source.repeat(r))
           .zip(Source.fromIterator(() => Iterator.from(initialIndex)))
       case None =>
         // First step of the multi part upload process is made.
