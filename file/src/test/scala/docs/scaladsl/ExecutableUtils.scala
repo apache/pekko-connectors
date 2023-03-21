@@ -18,7 +18,6 @@ import java.nio.file.{ Files, Path, Paths }
 
 import org.apache.pekko.util.ByteString
 
-import scala.annotation.nowarn
 import scala.concurrent.Future
 import scala.sys.process.{ BasicIO, Process }
 
@@ -58,10 +57,9 @@ object ExecutableUtils {
     finally stream.close()
   }
 
-  @nowarn("msg=deprecated")
   private def readStream(stream: InputStream): ByteString = {
     val reader = new BufferedInputStream(stream)
-    try ByteString(Stream.continually(reader.read).takeWhile(_ != -1).map(_.toByte).toArray)
+    try ByteString(Iterator.continually(reader.read).takeWhile(_ != -1).map(_.toByte).toArray)
     finally reader.close()
   }
 
