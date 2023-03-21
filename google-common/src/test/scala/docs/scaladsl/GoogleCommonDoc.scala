@@ -21,8 +21,7 @@ import pekko.stream.scaladsl.Source
 
 import scala.annotation.nowarn
 
-@nowarn("msg=never used")
-@nowarn("msg=dead code")
+@nowarn("msg=never used|dead code")
 class GoogleCommonDoc {
 
   implicit val system: ActorSystem = ???

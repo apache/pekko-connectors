@@ -33,6 +33,8 @@ import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.model._
 
+import scala.annotation.nowarn
+
 class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with LogCapturing {
 
   "KinesisFlow" must {
@@ -101,9 +103,10 @@ class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with Lo
         .run()
   }
 
+  @nowarn("msg=deprecated")
   trait KinesisFlowWithContextProbe { self: Settings =>
     val streamName = "stream-name"
-    val recordStream = LazyList
+    val recordStream = Stream
       .from(1)
       .map(i =>
         (PutRecordsRequestEntry
@@ -112,7 +115,7 @@ class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with Lo
             .data(SdkBytes.fromByteBuffer(ByteString(i).asByteBuffer))
             .build(),
           i))
-    val resultStream = LazyList
+    val resultStream = Stream
       .from(1)
       .map(i => (PutRecordsResultEntry.builder().build(), i))
 

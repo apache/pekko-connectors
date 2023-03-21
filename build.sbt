@@ -153,8 +153,15 @@ lazy val geode =
     "geode",
     Dependencies.Geode,
     Test / fork := true,
-    // https://github.com/scala/bug/issues/12072
-    Test / scalacOptions += "-Xlint:-byname-implicit")
+    Test / scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, n)) if n == 13 =>
+          // https://github.com/scala/bug/issues/12072
+          List("-Xlint:-byname-implicit")
+        case Some((2, n)) if n == 12 =>
+          List.empty
+      }
+    })
 
 lazy val googleCommon = pekkoConnectorProject(
   "google-common",
