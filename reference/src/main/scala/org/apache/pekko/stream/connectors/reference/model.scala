@@ -17,6 +17,7 @@ import java.util.{ Optional, OptionalInt }
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
+import pekko.util.ccompat._
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 
