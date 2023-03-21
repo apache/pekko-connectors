@@ -1024,13 +1024,14 @@ import scala.util.{ Failure, Success, Try }
   /**
    * Initiates a multipart upload. Returns a source of the initiated upload with upload part indicess
    */
-  private def initiateUpload(s3Location: S3Location,
+  private def initiateUpload(
+      s3Location: S3Location,
       contentType: ContentType,
       s3Headers: immutable.Seq[HttpHeader]): Source[(MultipartUpload, Int), NotUsed] =
     Source
       .single(s3Location)
       .flatMapConcat(initiateMultipartUpload(_, contentType, s3Headers))
-      .flatMapConcat(r => Source.repeat(r))
+      .mapConcat(r => Iterator.continually(r))
       .zip(Source.fromIterator(() => Iterator.from(1)))
 
   private def poolSettings(implicit settings: S3Settings, system: ActorSystem) =
@@ -1274,15 +1275,12 @@ import scala.util.{ Failure, Success, Try }
   private def requestInfoOrUploadState(s3Location: S3Location,
       contentType: ContentType,
       s3Headers: S3Headers,
-      initialUploadState: Option[(String, Int)]) = {
+      initialUploadState: Option[(String, Int)]): Source[(MultipartUpload, Int), NotUsed] = {
     initialUploadState match {
       case Some((uploadId, initialIndex)) =>
         // We are resuming from a previously aborted Multipart upload so rather than creating a new MultipartUpload
         // resource we just need to set up the initial state
-        Source
-          .single(s3Location)
-          .flatMapConcat(_ => Source.single(MultipartUpload(s3Location.bucket, s3Location.key, uploadId)))
-          .flatMapConcat(r => Source.repeat(r))
+        Source.fromIterator(() => Iterator.continually(MultipartUpload(s3Location.bucket, s3Location.key, uploadId)))
           .zip(Source.fromIterator(() => Iterator.from(initialIndex)))
       case None =>
         // First step of the multi part upload process is made.
