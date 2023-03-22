@@ -59,7 +59,7 @@ object ExecutableUtils {
 
   private def readStream(stream: InputStream): ByteString = {
     val reader = new BufferedInputStream(stream)
-    try ByteString(Iterator.continually(reader.read).takeWhile(_ != -1).map(_.toByte).toArray)
+    try ByteString(Iterator.continually(reader.read).takeWhile(_ != -1).map(_.toByte))
     finally reader.close()
   }
 
