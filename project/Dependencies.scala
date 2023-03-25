@@ -27,7 +27,7 @@ object Dependencies {
   val AwsSpiPekkoHttpVersion = "0.1.0-SNAPSHOT"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "2.1"
-  val PekkoHttpVersion = "0.0.0+4311-07201517-SNAPSHOT"
+  val PekkoHttpVersion = "0.0.0+4334-7826b8b0-SNAPSHOT"
   val AkkaHttpBinaryVersion = "10.2"
   val ScalaTestVersion = "3.2.11"
   val TestContainersScalaTestVersion = "0.40.3"
