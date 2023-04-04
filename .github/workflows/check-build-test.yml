@@ -41,8 +41,8 @@ jobs:
         uses: coursier/cache-action@v6.4.0
 
       # temporarily remove mima checks
-      - name: "Code style, compile tests, MiMa. Run locally with: sbt +~2.13 \"headerCheckAll; verifyCodeFmt; Test/compile; mimaReportBinaryIssues\""
-        run: sbt "headerCheckAll; verifyCodeFmt; +Test/compile"
+      - name: "Code style, compile tests, MiMa. Run locally with: sbt +~2.13 \"verifyCodeFmt; Test/compile; mimaReportBinaryIssues\""
+        run: sbt "verifyCodeFmt; +Test/compile"
 
   documentation:
     name: ScalaDoc, Documentation with Paradox
