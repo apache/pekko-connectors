@@ -18,7 +18,7 @@ object Dependencies {
   val Scala212 = "2.12.17"
   val ScalaVersions = Seq(Scala213, Scala212)
 
-  val PekkoVersion = "0.0.0+26623-85c2a469-SNAPSHOT"
+  val PekkoVersion = "0.0.0+26629-321c5721-SNAPSHOT"
   val AkkaBinaryVersion = "2.6"
 
   val InfluxDBJavaVersion = "2.15"
@@ -27,7 +27,7 @@ object Dependencies {
   val AwsSpiPekkoHttpVersion = "0.1.0-SNAPSHOT"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "2.1"
-  val PekkoHttpVersion = "0.0.0+4334-7826b8b0-SNAPSHOT"
+  val PekkoHttpVersion = "0.0.0+4338-c98db6bd-SNAPSHOT"
   val AkkaHttpBinaryVersion = "10.2"
   val ScalaTestVersion = "3.2.11"
   val TestContainersScalaTestVersion = "0.40.3"
@@ -70,7 +70,7 @@ object Dependencies {
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
   // This should align with the Jackson minor version used in Pekko 1.0.x
   // https://github.com/apache/incubator-pekko/blob/main/project/Dependencies.scala
-  val JacksonDatabindVersion = "2.11.4"
+  val JacksonDatabindVersion = "2.14.2"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonDatabindVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion)
