@@ -33,6 +33,19 @@ object Dependencies {
   val TestContainersScalaTestVersion = "0.40.3"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val hoverflyVersion = "0.14.1"
+  val scalaCheckVersion = "1.15.4"
+
+  /**
+   * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
+   *
+   * @see
+   * https://www.scalatest.org/user_guide/property_based_testing
+   */
+  private def scalaTestPlusScalaCheckVersion(version: String) =
+    version.split('.').take(2).mkString("-")
+
+  val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
+  val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
 
   val CouchbaseVersion = "2.7.16"
   val CouchbaseVersionForDocs = "2.7"
@@ -155,7 +168,7 @@ object Dependencies {
       ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       "com.sksamuel.avro4s" %% "avro4s-core" % "3.0.9" % Test,
-      "org.scalacheck" %% "scalacheck" % "1.15.4" % Test,
+      "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.specs2" %% "specs2-core" % "4.8.3" % Test, // MIT like: https://github.com/etorreborre/specs2/blob/master/LICENSE.txt
       "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
     ))
@@ -375,8 +388,10 @@ object Dependencies {
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.2" % Test, // ApacheV2
-      "com.github.tomakehurst" % "wiremock-jre8" % "2.32.0" % Test // ApacheV2
-    ))
+      "com.github.tomakehurst" % "wiremock-jre8" % "2.32.0" % Test, // ApacheV2
+      "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
+      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test,
+      "com.markatta" %% "futiles" % "2.0.2" % Test))
 
   val SpringWeb = {
     val SpringVersion = "5.1.17.RELEASE"
