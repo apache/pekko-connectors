@@ -1014,7 +1014,7 @@ import scala.util.{ Failure, Success, Try }
     import mat.executionContext
     implicit val conf: S3Settings = resolveSettings(attr, mat.system)
 
-    val headers = s3Headers.headersFor(UploadPart)
+    val headers = s3Headers.serverSideEncryption.map(_.headersFor(UploadPart)).getOrElse(Nil)
 
     Source
       .future(
@@ -1098,7 +1098,7 @@ import scala.util.{ Failure, Success, Try }
 
     val chunkBufferSize = chunkSize * 2
 
-    val headers = s3Headers.headersFor(UploadPart)
+    val headers = s3Headers.serverSideEncryption.map(_.headersFor(UploadPart)).getOrElse(Nil)
 
     Flow
       .fromMaterializer { (mat, attr) =>
@@ -1189,7 +1189,7 @@ import scala.util.{ Failure, Success, Try }
 
     val chunkBufferSize = chunkSize * 2
 
-    val headers = s3Headers.headersFor(UploadPart)
+    val headers = s3Headers.serverSideEncryption.map(_.headersFor(UploadPart)).getOrElse(Nil)
 
     Flow
       .fromMaterializer { (mat, attr) =>
