@@ -809,9 +809,23 @@ trait S3IntegrationSpec
     }
   }
 
-  it should "throw an exception while creating a bucket with the same name" in {
+  it should "throw an exception while creating a bucket with the same name in Minio" in {
+    // S3 will only throw a BucketAlreadyExists exception if the owner of the account creating the bucket with an
+    // already existing name different from the owner of the already existing bucket. On the other hand Minio will
+    // always throw this exception. Since its hard to test the S3 case of different owners we only run this test
+    // against Minio.
+    assume(this.isInstanceOf[MinioS3IntegrationSpec])
     implicit val attr: Attributes = attributes
     S3.makeBucket(defaultBucket).failed.futureValue shouldBe an[S3Exception]
+  }
+
+  it should "Do nothing while creating a bucket with the same name and owner in AWS S3" in {
+    // Due to this being a PUT request, S3 doesn't actually throw an exception unless
+    // you are NOT the owner of the already existing bucket.
+    // See https://github.com/aws/aws-sdk-go/issues/1362#issuecomment-722554726
+    assume(this.isInstanceOf[AWSS3IntegrationSpec])
+    implicit val attr: Attributes = attributes
+    S3.makeBucket(defaultBucket).futureValue shouldBe Done
   }
 
   it should "create and delete bucket with a given name" in {
