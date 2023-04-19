@@ -100,8 +100,8 @@ trait S3IntegrationSpec
       _.withCredentialsProvider(
         StaticCredentialsProvider.create(AwsBasicCredentials.create("invalid", "invalid"))))
 
-  def defaultRegionContentCount = 4
-  def otherRegionContentCount = 5
+  def defaultRegionContentCount = 0
+  def otherRegionContentCount = 0
 
   it should "list buckets in current aws account" in {
     val result = for {
@@ -1043,9 +1043,6 @@ class MinioS3IntegrationSpec
     extends TestKit(ActorSystem("MinioS3IntegrationSpec"))
     with S3IntegrationSpec
     with MinioS3Test {
-
-  override val defaultRegionContentCount = 0
-  override val otherRegionContentCount = 0
 
   override lazy val defaultS3Settings: S3Settings = s3Settings
     .withS3RegionProvider(
