@@ -1633,4 +1633,124 @@ object S3 {
   private def func[T, R](f: T => R) = new pekko.japi.function.Function[T, R] {
     override def apply(param: T): R = f(param)
   }
+
+  /**
+   * Sets the versioning state of an existing bucket.
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html
+   * @param bucketName       Bucket name
+   * @param bucketVersioning The state that you want to update
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[Done]] as API doesn't return any additional information
+   */
+  def putBucketVersioning(bucketName: String, bucketVersioning: BucketVersioning)(
+      implicit system: ClassicActorSystemProvider,
+      attributes: Attributes = Attributes()): CompletionStage[Done] =
+    putBucketVersioning(bucketName, bucketVersioning, S3Headers.empty)
+
+  /**
+   * Sets the versioning state of an existing bucket.
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html
+   * @param bucketName       Bucket name
+   * @param bucketVersioning The state that you want to update
+   * @param s3Headers  any headers you want to add
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[Done]] as API doesn't return any additional information
+   */
+  def putBucketVersioning(
+      bucketName: String,
+      bucketVersioning: BucketVersioning,
+      s3Headers: S3Headers)(
+      implicit system: ClassicActorSystemProvider, attributes: Attributes): CompletionStage[Done] =
+    S3Stream
+      .putBucketVersioning(bucketName, bucketVersioning, s3Headers)(SystemMaterializer(system).materializer, attributes)
+      .toJava
+
+  /**
+   * Sets the versioning state of an existing bucket.
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html
+   * @param bucketName       Bucket name
+   * @param bucketVersioning The state that you want to update
+   * @return [[pekko.stream.javadsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   */
+  def putBucketVersioningSource(bucketName: String, bucketVersioning: BucketVersioning): Source[Done, NotUsed] =
+    putBucketVersioningSource(bucketName, bucketVersioning, S3Headers.empty)
+
+  /**
+   * Sets the versioning state of an existing bucket.
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html
+   * @param bucketName       Bucket name
+   * @param bucketVersioning The state that you want to update
+   * @param s3Headers  any headers you want to add
+   * @return [[pekko.stream.javadsl.Source Source]] of type [[Done]] as API doesn't return any additional information
+   */
+  def putBucketVersioningSource(bucketName: String,
+      bucketVersioning: BucketVersioning,
+      s3Headers: S3Headers): Source[Done, NotUsed] =
+    S3Stream.putBucketVersioningSource(bucketName, bucketVersioning, s3Headers).asJava
+
+  /**
+   * Gets the versioning of an existing bucket
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html
+   * @param bucketName Bucket name
+   * @param system     the actor system which provides the materializer to run with
+   * @param attributes attributes to run request with
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[BucketVersioningResult]]
+   */
+  def getBucketVersioning(bucketName: String,
+      system: ClassicActorSystemProvider,
+      attributes: Attributes): CompletionStage[BucketVersioningResult] =
+    getBucketVersioning(bucketName, system, attributes, S3Headers.empty)
+
+  /**
+   * Gets the versioning of an existing bucket
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html
+   * @param bucketName Bucket name
+   * @param system     the actor system which provides the materializer to run with
+   * @param attributes attributes to run request with
+   * @param s3Headers  any headers you want to add
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[BucketVersioningResult]]
+   */
+  def getBucketVersioning(bucketName: String,
+      system: ClassicActorSystemProvider,
+      attributes: Attributes,
+      s3Headers: S3Headers): CompletionStage[BucketVersioningResult] =
+    S3Stream.getBucketVersioning(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).toJava
+
+  /**
+   * Gets the versioning of an existing bucket
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html
+   * @param bucketName Bucket name
+   * @param system     the actor system which provides the materializer to run with
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[BucketVersioningResult]]
+   */
+  def getBucketVersioning(
+      bucketName: String, system: ClassicActorSystemProvider): CompletionStage[BucketVersioningResult] =
+    getBucketVersioning(bucketName, system, Attributes(), S3Headers.empty)
+
+  /**
+   * Gets the versioning of an existing bucket
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html
+   * @param bucketName Bucket name
+   * @return [[pekko.stream.javadsl.Source Source]] of type [[BucketVersioningResult]]
+   */
+  def getBucketVersioningSource(bucketName: String): Source[BucketVersioningResult, NotUsed] =
+    getBucketVersioningSource(bucketName, S3Headers.empty)
+
+  /**
+   * Gets the versioning of an existing bucket
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html
+   * @param bucketName Bucket name
+   * @param s3Headers  any headers you want to add
+   * @return [[pekko.stream.javadsl.Source Source]] of type [[BucketVersioningResult]]
+   */
+  def getBucketVersioningSource(bucketName: String, s3Headers: S3Headers): Source[BucketVersioningResult, NotUsed] =
+    S3Stream.getBucketVersioningSource(bucketName, s3Headers).asJava
+
 }

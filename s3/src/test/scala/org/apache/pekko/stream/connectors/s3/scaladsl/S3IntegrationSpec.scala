@@ -828,6 +828,51 @@ trait S3IntegrationSpec
     S3.makeBucket(defaultBucket).futureValue shouldBe Done
   }
 
+  it should "enable and disable versioning for a bucket" in {
+    // TODO: Figure out a way to properly test this with Minio, see https://github.com/akka/alpakka/issues/2750
+    assume(this.isInstanceOf[AWSS3IntegrationSpec])
+    implicit val attr: Attributes = attributes
+    val bucketName = "samplebucketversioning"
+
+    val request = for {
+      _ <- S3.makeBucket(bucketName)
+      firstResult <- S3.getBucketVersioning(bucketName)
+      _ <- S3.putBucketVersioning(bucketName, BucketVersioning().withStatus(BucketVersioningStatus.Enabled))
+      secondResult <- S3.getBucketVersioning(bucketName)
+    } yield (firstResult, secondResult)
+
+    whenReady(request) { case (firstValue, secondValue) =>
+      firstValue shouldEqual BucketVersioningResult()
+      secondValue shouldEqual BucketVersioningResult().withStatus(BucketVersioningStatus.Enabled)
+      S3.putBucketVersioning(bucketName,
+        BucketVersioning().withStatus(BucketVersioningStatus.Suspended)).futureValue shouldBe Done
+      S3.deleteBucket(bucketName).futureValue
+    }
+  }
+
+  it should "enable and disable versioning for a bucket with MFA delete configured to false" in {
+    // TODO: Figure out a way to properly test this with Minio, see https://github.com/akka/alpakka/issues/2750
+    assume(this.isInstanceOf[AWSS3IntegrationSpec])
+    implicit val attr: Attributes = attributes
+    val bucketName = "samplebucketversioningmfadeletefalse"
+
+    val request = for {
+      _ <- S3.makeBucket(bucketName)
+      _ <- S3.putBucketVersioning(bucketName,
+        BucketVersioning()
+          .withStatus(BucketVersioningStatus.Enabled)
+          .withMfaDelete(MFAStatus.Disabled))
+      result <- S3.getBucketVersioning(bucketName)
+    } yield result
+
+    whenReady(request) { value =>
+      value shouldEqual BucketVersioningResult().withStatus(BucketVersioningStatus.Enabled).withMfaDelete(false)
+      S3.putBucketVersioning(bucketName,
+        BucketVersioning().withStatus(BucketVersioningStatus.Suspended)).futureValue shouldBe Done
+      S3.deleteBucket(bucketName).futureValue
+    }
+  }
+
   it should "create and delete bucket with a given name" in {
     val bucketName = "samplebucket3"
 

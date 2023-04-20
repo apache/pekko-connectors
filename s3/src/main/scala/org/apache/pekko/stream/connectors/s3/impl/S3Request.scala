@@ -74,3 +74,13 @@ import org.apache.pekko.annotation.InternalApi
  * Internal Api
  */
 @InternalApi private[s3] case object CheckBucket extends S3Request
+
+/**
+ * Internal Api
+ */
+@InternalApi private[s3] case object PutBucketVersioning extends S3Request
+
+/**
+ * Internal Api
+ */
+@InternalApi private[s3] case object GetBucketVersioning extends S3Request

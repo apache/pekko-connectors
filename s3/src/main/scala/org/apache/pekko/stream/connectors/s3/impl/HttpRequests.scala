@@ -24,13 +24,21 @@ import pekko.http.scaladsl.model.Uri.{ Authority, Query }
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
 import pekko.http.scaladsl.model.{ RequestEntity, _ }
 import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
-import pekko.stream.connectors.s3.{ ApiVersion, MultipartUpload, S3Settings }
+import pekko.stream.connectors.s3.{
+  ApiVersion,
+  BucketVersioning,
+  BucketVersioningStatus,
+  MFAStatus,
+  MultipartUpload,
+  S3Settings
+}
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
 import software.amazon.awssdk.regions.Region
 
 import scala.collection.immutable.Seq
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.xml.NodeSeq
 
 /**
  * Internal Api
@@ -177,6 +185,47 @@ import scala.concurrent.{ ExecutionContext, Future }
       headers: Seq[HttpHeader] = Seq.empty[HttpHeader])(implicit conf: S3Settings): HttpRequest =
     s3Request(s3Location = s3Location, method = method)
       .withDefaultHeaders(headers)
+
+  def bucketVersioningRequest(bucket: String, mfaStatus: Option[MFAStatus], method: HttpMethod,
+      headers: Seq[HttpHeader] = Nil)(
+      implicit conf: S3Settings): HttpRequest = {
+
+    val confWithVirtualHost = conf.withAccessStyle(VirtualHostAccessStyle)
+    val authority = requestAuthority(bucket, conf.s3RegionProvider.getRegion)(confWithVirtualHost)
+
+    val finalHeaders = (mfaStatus, method) match {
+      case (Some(mfaEnabled: MFAStatus.Enabled), HttpMethods.PUT) =>
+        RawHeader("x-amz-mfa", s"${mfaEnabled.mfa.serialNumber} ${mfaEnabled.mfa.tokenCode}") +: headers
+      case _ => headers
+    }
+
+    HttpRequest(method)
+      .withHeaders(Host(authority) +: finalHeaders)
+      .withUri(requestUri(bucket, None)(confWithVirtualHost).withAuthority(authority).withQuery(Query("versioning")))
+  }
+
+  def putBucketVersioningPayload(bucketVersioning: BucketVersioning)(
+      implicit ec: ExecutionContext): Future[RequestEntity] = {
+
+    val status = bucketVersioning.status.map {
+      case BucketVersioningStatus.Enabled   => <Status>Enabled</Status>
+      case BucketVersioningStatus.Suspended => <Status>Suspended</Status>
+    }.getOrElse(NodeSeq.Empty)
+
+    val mfaDelete = bucketVersioning.mfaDelete.map {
+      case _: MFAStatus.Enabled => <MfaDelete>Enabled</MfaDelete>
+      case MFAStatus.Disabled   => <MfaDelete>Disabled</MfaDelete>
+    }.getOrElse(NodeSeq.Empty)
+
+    // @formatter:off
+    val payload = <VersioningConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+      {status}
+      {mfaDelete}
+    </VersioningConfiguration>
+    // @formatter:on
+
+    Marshal(payload).to[RequestEntity]
+  }
 
   def uploadManagementRequest(
       s3Location: S3Location,

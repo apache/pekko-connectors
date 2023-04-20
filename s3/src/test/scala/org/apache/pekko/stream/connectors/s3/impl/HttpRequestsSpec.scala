@@ -500,4 +500,19 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
     request.uri.queryString() should equal(None)
     request.method should equal(HttpMethods.HEAD)
   }
+
+  it should "add x-amz-mfa headers for a putBucketVersioning request" in {
+    implicit val settings: S3Settings = getSettings()
+
+    val serialNumber = "serial-number"
+    val tokenCode = "token-code"
+
+    val request: HttpRequest = HttpRequests.bucketVersioningRequest("target-bucket",
+      Some(MFAStatus.Enabled(MFA(serialNumber, tokenCode))),
+      HttpMethods.PUT)
+
+    request.headers.collectFirst {
+      case httpHeader if httpHeader.is("x-amz-mfa") => httpHeader.value()
+    } should equal(Some(s"$serialNumber $tokenCode"))
+  }
 }
