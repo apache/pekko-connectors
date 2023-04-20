@@ -26,6 +26,219 @@ import scala.collection.immutable.Seq
 import scala.collection.immutable
 import scala.compat.java8.OptionConverters._
 
+final class MFA private (val serialNumber: String, val tokenCode: String) {
+
+  /** Java API */
+  def getSerialNumber: String = serialNumber
+
+  /** Java API */
+  def getTokenCode: String = tokenCode
+
+  def withSerialNumber(value: String): MFA = copy(serialNumber = value)
+
+  def withTokenCode(value: String): MFA = copy(tokenCode = value)
+
+  private def copy(serialNumber: String = serialNumber, tokenCode: String = tokenCode): MFA =
+    new MFA(
+      serialNumber,
+      tokenCode)
+
+  override def toString: String =
+    "MFA(" +
+    s"serialNumber=$serialNumber," +
+    s"tokenCode=$tokenCode" +
+    ")"
+
+  override def equals(other: Any): Boolean = other match {
+    case that: MFA =>
+      Objects.equals(this.serialNumber, that.serialNumber) &&
+      Objects.equals(this.tokenCode, that.tokenCode)
+    case _ => false
+  }
+
+  override def hashCode(): Int =
+    Objects.hash(this.serialNumber, this.tokenCode)
+}
+
+object MFA {
+
+  /** Scala API */
+  def apply(serialNumber: String, tokenCode: String): MFA =
+    new MFA(serialNumber, tokenCode)
+
+  /** Java API */
+  def create(serialNumber: String, tokenCode: String): MFA =
+    apply(serialNumber, tokenCode)
+}
+
+sealed trait MFAStatus
+
+object MFAStatus {
+  final class Enabled private (val mfa: MFA) extends MFAStatus {
+
+    /** Java API */
+    def getMfa: MFA = mfa
+
+    // Warning is only being generated here because there is a single argument in the parameter list. If more fields
+    // get added to CommonPrefixes then the `@nowarn` is no longer needed
+    @nowarn
+    def withMfa(value: MFA): Enabled = copy(mfa = value)
+
+    private def copy(mfa: MFA): Enabled = new Enabled(mfa)
+
+    override def toString: String =
+      "Enabled(" +
+      s"mfa=$mfa" +
+      ")"
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Enabled =>
+        Objects.equals(this.mfa, that.mfa)
+      case _ => false
+    }
+
+    override def hashCode(): Int = Objects.hash(this.mfa)
+
+  }
+
+  object Enabled {
+
+    /** Scala API */
+    def apply(mfa: MFA): Enabled = new Enabled(mfa)
+
+    /** Java API */
+    def create(mfa: MFA): Enabled = apply(mfa)
+  }
+
+  case object Disabled extends MFAStatus
+
+  /** Java API */
+  val disabled = Disabled
+
+}
+
+sealed trait BucketVersioningStatus
+
+object BucketVersioningStatus {
+  case object Enabled extends BucketVersioningStatus
+
+  case object Suspended extends BucketVersioningStatus
+
+  /** Java API */
+  val enabled = Enabled
+
+  /** Java API */
+  val suspended = Suspended
+}
+
+final class BucketVersioningResult private (val status: Option[BucketVersioningStatus],
+    val mfaDelete: Option[Boolean]) {
+
+  /** Java API */
+  def getStatus: Option[BucketVersioningStatus] = status
+
+  /** Java API */
+  def getMfaDelete: java.util.Optional[Boolean] = mfaDelete.asJava
+
+  def withStatus(value: BucketVersioningStatus): BucketVersioningResult =
+    copy(status = Some(value))
+
+  def withMfaDelete(value: Boolean): BucketVersioningResult =
+    copy(mfaDelete = Some(value))
+
+  private def copy(
+      status: Option[BucketVersioningStatus] = status, mfaDelete: Option[Boolean] = mfaDelete): BucketVersioningResult =
+    new BucketVersioningResult(
+      status,
+      mfaDelete)
+
+  override def toString: String =
+    "BucketVersioningResult(" +
+    s"status=$status," +
+    s"mfaDelete=$mfaDelete" +
+    ")"
+
+  override def equals(other: Any): Boolean = other match {
+    case that: BucketVersioningResult =>
+      Objects.equals(this.status, that.status) &&
+      Objects.equals(this.mfaDelete, that.mfaDelete)
+    case _ => false
+  }
+
+  override def hashCode(): Int =
+    Objects.hash(this.status, this.mfaDelete)
+}
+
+object BucketVersioningResult {
+
+  def apply(): BucketVersioningResult = apply(None, None)
+
+  /** Scala API */
+  def apply(status: Option[BucketVersioningStatus], mfaDelete: Option[Boolean]): BucketVersioningResult =
+    new BucketVersioningResult(status, mfaDelete)
+
+  /** Java API */
+  def create(): BucketVersioningResult = apply()
+
+  def create(status: java.util.Optional[BucketVersioningStatus], mfaDelete: java.util.Optional[Boolean])
+      : BucketVersioningResult =
+    apply(status.asScala, mfaDelete.asScala)
+
+}
+
+final class BucketVersioning private (val status: Option[BucketVersioningStatus], val mfaDelete: Option[MFAStatus]) {
+
+  /** Java API */
+  def getStatus: java.util.Optional[BucketVersioningStatus] = status.asJava
+
+  /** Java API */
+  def getMfaDelete: java.util.Optional[MFAStatus] = mfaDelete.asJava
+
+  def withStatus(value: BucketVersioningStatus): BucketVersioning = copy(status = Some(value))
+
+  def withMfaDelete(value: MFAStatus): BucketVersioning = copy(mfaDelete = Some(value))
+
+  private def copy(
+      status: Option[BucketVersioningStatus] = status, mfaDelete: Option[MFAStatus] = mfaDelete): BucketVersioning =
+    new BucketVersioning(
+      status,
+      mfaDelete)
+
+  override def toString: String =
+    "BucketVersioning(" +
+    s"status=$status," +
+    s"mfaDelete=$mfaDelete" +
+    ")"
+
+  override def equals(other: Any): Boolean = other match {
+    case that: BucketVersioning =>
+      Objects.equals(this.status, that.status) &&
+      Objects.equals(this.mfaDelete, that.mfaDelete)
+    case _ => false
+  }
+
+  override def hashCode(): Int =
+    Objects.hash(this.status, this.mfaDelete)
+}
+
+object BucketVersioning {
+
+  /** Scala API */
+  def apply(): BucketVersioning = apply(None, None)
+
+  /** Scala API */
+  def apply(status: Option[BucketVersioningStatus], mfaDelete: Option[MFAStatus]): BucketVersioning =
+    new BucketVersioning(status, mfaDelete)
+
+  /** Java API */
+  def create(): BucketVersioning = apply()
+
+  def create(
+      status: java.util.Optional[BucketVersioningStatus], mfaDelete: java.util.Optional[MFAStatus]): BucketVersioning =
+    apply(status.asScala, mfaDelete.asScala)
+
+}
+
 final class MultipartUpload private (val bucket: String, val key: String, val uploadId: String) {
 
   /** Java API */

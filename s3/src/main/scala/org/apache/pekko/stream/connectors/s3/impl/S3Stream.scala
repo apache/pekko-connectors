@@ -779,6 +779,47 @@ import scala.util.{ Failure, Success, Try }
       attr: Attributes): Future[Done] =
     deleteUploadSource(bucket, key, uploadId, headers).withAttributes(attr).runWith(Sink.ignore)
 
+  private def bucketVersioningRequest(bucket: String, mfaStatus: Option[MFAStatus], headers: S3Headers)(
+      method: HttpMethod,
+      conf: S3Settings): HttpRequest =
+    HttpRequests.bucketVersioningRequest(bucket, mfaStatus, method, headers.headers)(conf)
+
+  def putBucketVersioningSource(
+      bucket: String, bucketVersioning: BucketVersioning, headers: S3Headers): Source[Done, NotUsed] =
+    s3ManagementRequest[Done](
+      bucket = bucket,
+      method = HttpMethods.PUT,
+      httpRequest = bucketVersioningRequest(bucket, bucketVersioning.mfaDelete, headers),
+      headers.headersFor(PutBucketVersioning),
+      process = processS3LifecycleResponse,
+      httpEntity = Some(putBucketVersioningPayload(bucketVersioning)(ExecutionContexts.parasitic)))
+
+  def putBucketVersioning(bucket: String, bucketVersioning: BucketVersioning, headers: S3Headers)(
+      implicit mat: Materializer,
+      attr: Attributes): Future[Done] =
+    putBucketVersioningSource(bucket, bucketVersioning, headers).withAttributes(attr).runWith(Sink.ignore)
+
+  def getBucketVersioningSource(
+      bucket: String, headers: S3Headers): Source[BucketVersioningResult, NotUsed] =
+    s3ManagementRequest[BucketVersioningResult](
+      bucket = bucket,
+      method = HttpMethods.GET,
+      httpRequest = bucketVersioningRequest(bucket, None, headers),
+      headers.headersFor(GetBucketVersioning),
+      process = { (response: HttpResponse, mat: Materializer) =>
+        response match {
+          case HttpResponse(status, _, entity, _) if status.isSuccess() =>
+            Unmarshal(entity).to[BucketVersioningResult](implicitly, ExecutionContexts.parasitic, mat)
+          case response: HttpResponse =>
+            unmarshalError(response.status, response.entity)(mat)
+        }
+      })
+
+  def getBucketVersioning(bucket: String, headers: S3Headers)(
+      implicit mat: Materializer,
+      attr: Attributes): Future[BucketVersioningResult] =
+    getBucketVersioningSource(bucket, headers).withAttributes(attr).runWith(Sink.head)
+
   private def s3ManagementRequest[T](
       bucket: String,
       method: HttpMethod,

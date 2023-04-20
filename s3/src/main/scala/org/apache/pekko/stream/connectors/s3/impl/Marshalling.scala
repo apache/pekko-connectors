@@ -32,6 +32,19 @@ import scala.xml.NodeSeq
 @InternalApi private[impl] object Marshalling {
   import ScalaXmlSupport._
 
+  implicit val bucketVersioningUnmarshaller: FromEntityUnmarshaller[BucketVersioningResult] = {
+    nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
+      case NodeSeq.Empty => throw Unmarshaller.NoContentException
+      case x =>
+        val status = (x \ "Status").headOption.map(_.text match {
+          case "Enabled"   => BucketVersioningStatus.Enabled
+          case "Suspended" => BucketVersioningStatus.Suspended
+        })
+        val MFADelete = (x \ "MfaDelete").headOption.map(_.exists(_.text == "Enabled"))
+        BucketVersioningResult(status, MFADelete)
+    }
+  }
+
   implicit val multipartUploadUnmarshaller: FromEntityUnmarshaller[MultipartUpload] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
