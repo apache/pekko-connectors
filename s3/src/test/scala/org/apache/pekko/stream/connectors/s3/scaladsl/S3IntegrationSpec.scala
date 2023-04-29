@@ -575,11 +575,11 @@ trait S3IntegrationSpec
         case uploadPart if uploadPart.key == sourceKey => uploadPart.uploadId
       }
       parts <- Future.sequence(uploadIds.map { uploadId =>
-        S3.listParts(defaultBucket, sourceKey, uploadId).runWith(Sink.seq)
+        S3.listParts(defaultBucket, sourceKey, uploadId).withAttributes(attributes).runWith(Sink.seq)
       })
       // Cleanup the uploads after
       _ <- Future.sequence(uploadIds.map { uploadId =>
-        S3.deleteUpload(defaultBucket, sourceKey, uploadId)
+        S3.deleteUpload(defaultBucket, sourceKey, uploadId)(implicitly, attributes)
       })
     } yield (uploadIds, incomplete, parts.flatten)
 
@@ -628,7 +628,7 @@ trait S3IntegrationSpec
         case uploadPart if uploadPart.key == sourceKey => uploadPart.uploadId
       }.get
 
-      parts <- S3.listParts(defaultBucket, sourceKey, uploadId).runWith(Sink.seq)
+      parts <- S3.listParts(defaultBucket, sourceKey, uploadId).withAttributes(attributes).runWith(Sink.seq)
 
       remainingData = inputData.slice(3, 6)
       _ <- Source(remainingData)
@@ -682,9 +682,9 @@ trait S3IntegrationSpec
         case uploadPart if uploadPart.key == sourceKey => uploadPart.uploadId
       }.get
 
-      parts <- S3.listParts(defaultBucket, sourceKey, uploadId).runWith(Sink.seq)
+      parts <- S3.listParts(defaultBucket, sourceKey, uploadId).withAttributes(attributes).runWith(Sink.seq)
 
-      _ <- S3.completeMultipartUpload(defaultBucket, sourceKey, uploadId, parts.map(_.toPart))
+      _ <- S3.completeMultipartUpload(defaultBucket, sourceKey, uploadId, parts.map(_.toPart))(implicitly, attributes)
       // This delay is here because sometimes there is a delay when you complete a large file and its
       // actually downloadable
       downloaded <- pekko.pattern.after(5.seconds)(
