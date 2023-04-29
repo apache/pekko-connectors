@@ -843,7 +843,9 @@ trait S3IntegrationSpec
 
     whenReady(request) { case (firstValue, secondValue) =>
       firstValue shouldEqual BucketVersioningResult()
+      firstValue.bucketVersioningEnabled shouldEqual false
       secondValue shouldEqual BucketVersioningResult().withStatus(BucketVersioningStatus.Enabled)
+      secondValue.bucketVersioningEnabled shouldEqual true
       S3.putBucketVersioning(bucketName,
         BucketVersioning().withStatus(BucketVersioningStatus.Suspended)).futureValue shouldBe Done
       S3.deleteBucket(bucketName).futureValue
