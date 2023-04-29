@@ -146,6 +146,12 @@ final class BucketVersioningResult private (val status: Option[BucketVersioningS
   def withMfaDelete(value: Boolean): BucketVersioningResult =
     copy(mfaDelete = Some(value))
 
+  /** Java API */
+  def getBucketVersioningEnabled: Boolean = bucketVersioningEnabled
+
+  /** Scala API */
+  def bucketVersioningEnabled: Boolean = status.contains(BucketVersioningStatus.Enabled)
+
   private def copy(
       status: Option[BucketVersioningStatus] = status, mfaDelete: Option[Boolean] = mfaDelete): BucketVersioningResult =
     new BucketVersioningResult(
@@ -193,6 +199,12 @@ final class BucketVersioning private (val status: Option[BucketVersioningStatus]
 
   /** Java API */
   def getMfaDelete: java.util.Optional[MFAStatus] = mfaDelete.asJava
+
+  /** Java API */
+  def getBucketVersioningEnabled: Boolean = bucketVersioningEnabled
+
+  /** Scala API */
+  def bucketVersioningEnabled: Boolean = status.contains(BucketVersioningStatus.Enabled)
 
   def withStatus(value: BucketVersioningStatus): BucketVersioning = copy(status = Some(value))
 
