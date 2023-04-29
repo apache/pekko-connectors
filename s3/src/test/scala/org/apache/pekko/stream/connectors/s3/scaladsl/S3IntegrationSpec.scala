@@ -480,6 +480,7 @@ trait S3IntegrationSpec
   final def createStringCollectionWithMinChunkSizeRec(numberOfChunks: Int,
       stringAcc: BigInt = BigInt(0),
       currentChunk: Int = 0,
+      currentChunkSize: Int = 0,
       result: Vector[ByteString] = Vector.empty): Vector[ByteString] = {
 
     if (currentChunk == numberOfChunks)
@@ -490,29 +491,30 @@ trait S3IntegrationSpec
       result.lift(currentChunk) match {
         case Some(currentString) =>
           val newString = ByteString(s"\n${newAcc.toString()}")
-          // TODO: Performance here can be improved by using the same technique as in
-          // createStringCollectionContextWithMinChunkSizeRec to keep track of the current string size in bytes
-          if (currentString.toArray.length < S3.MinChunkSize) {
+          if (currentChunkSize < S3.MinChunkSize) {
             val appendedString = currentString ++ newString
+            val newChunkSize = currentChunkSize + newString.length
             createStringCollectionWithMinChunkSizeRec(numberOfChunks,
               newAcc,
               currentChunk,
+              newChunkSize,
               result.updated(currentChunk, appendedString))
           } else {
             val newChunk = currentChunk + 1
-            val newResult = {
+            val (newResult, newChunkSize) = {
               // // We are at the last index at this point so don't append a new entry at the end of the Vector
               if (currentChunk == numberOfChunks - 1)
-                result
+                (result, currentChunkSize)
               else
-                result :+ newString
+                (result :+ newString, newString.length)
             }
-            createStringCollectionWithMinChunkSizeRec(numberOfChunks, newAcc, newChunk, newResult)
+            createStringCollectionWithMinChunkSizeRec(numberOfChunks, newAcc, newChunk, newChunkSize, newResult)
           }
         case None =>
           // This case happens right at the start
-          val firstResult = Vector(ByteString("1"))
-          createStringCollectionWithMinChunkSizeRec(numberOfChunks, newAcc, currentChunk, firstResult)
+          val initial = ByteString("1")
+          val firstResult = Vector(initial)
+          createStringCollectionWithMinChunkSizeRec(numberOfChunks, newAcc, currentChunk, initial.length, firstResult)
       }
     }
   }
@@ -714,7 +716,7 @@ trait S3IntegrationSpec
         case Some(currentStrings) =>
           val newString = ByteString(s"\n${newAcc.toString()}")
           if (currentChunkSize < S3.MinChunkSize) {
-            val newChunkSize = currentChunkSize + newString.toArray.length
+            val newChunkSize = currentChunkSize + newString.length
             val newEntry = currentStrings :+ ((newString, newAcc))
             createStringCollectionContextWithMinChunkSizeRec(numberOfChunks,
               newAcc,
@@ -728,7 +730,7 @@ trait S3IntegrationSpec
               if (currentChunk == numberOfChunks - 1)
                 (result, currentChunkSize)
               else
-                (result :+ Vector((newString, newAcc)), newString.toArray.length)
+                (result :+ Vector((newString, newAcc)), newString.length)
             }
             createStringCollectionContextWithMinChunkSizeRec(numberOfChunks, newAcc, newChunk, newChunkSize, newResult)
           }
@@ -739,7 +741,7 @@ trait S3IntegrationSpec
           createStringCollectionContextWithMinChunkSizeRec(numberOfChunks,
             newAcc,
             currentChunk,
-            initial.toArray.length,
+            initial.length,
             firstResult)
       }
     }
