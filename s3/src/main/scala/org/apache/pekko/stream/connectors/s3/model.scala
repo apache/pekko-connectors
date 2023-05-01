@@ -147,7 +147,7 @@ final class BucketVersioningResult private (val status: Option[BucketVersioningS
     copy(mfaDelete = Some(value))
 
   /** Java API */
-  def getBucketVersioningEnabled: Boolean = bucketVersioningEnabled
+  def isBucketVersioningEnabled: Boolean = bucketVersioningEnabled
 
   /** Scala API */
   def bucketVersioningEnabled: Boolean = status.contains(BucketVersioningStatus.Enabled)
