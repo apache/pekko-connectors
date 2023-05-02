@@ -206,6 +206,7 @@ object Dependencies {
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-parsing" % PekkoHttpVersion,
       "org.apache.arrow" % "arrow-memory-netty" % "4.0.1" % Test,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion) ++ Mockito)
