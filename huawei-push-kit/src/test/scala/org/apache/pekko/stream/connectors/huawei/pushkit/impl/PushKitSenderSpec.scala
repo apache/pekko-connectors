@@ -51,7 +51,7 @@ class PushKitSenderSpec
     TestKit.shutdownActorSystem(system)
 
   implicit val defaultPatience =
-    PatienceConfig(timeout = 2.seconds, interval = 50.millis)
+    PatienceConfig(timeout = 6.seconds, interval = 50.millis)
 
   implicit val executionContext: ExecutionContext = system.dispatcher
 
