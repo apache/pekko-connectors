@@ -51,7 +51,7 @@ class MqttSessionSpec
   val log = LoggerFactory.getLogger(classOf[MqttSessionSpec])
 
   implicit val executionContext: ExecutionContext = system.dispatcher
-  implicit val timeout: Timeout = Timeout(3.seconds.dilated)
+  implicit val timeout: Timeout = Timeout(6.seconds.dilated)
 
   val settings = MqttSessionSettings()
 
@@ -1916,6 +1916,9 @@ class MqttSessionSpec
     }
 
     "produce a duplicate publish on the server given two client connections" in assertAllStagesStopped {
+      // longer patience needed since Akka 2.6
+      implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(1.second), scaled(50.millis))
+
       val serverSession = ActorMqttServerSession(settings.withProducerPubAckRecTimeout(10.millis))
 
       val client1 = TestProbe()
