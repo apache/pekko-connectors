@@ -56,6 +56,7 @@ lazy val `pekko-connectors` = project
     xml)
   .aggregate(`doc-examples`)
   .settings(
+    name := "pekko-connectors-root",
     onLoadMessage :=
       """
         |** Welcome to the sbt build definition for Pekko Connectors! **
