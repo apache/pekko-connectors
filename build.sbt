@@ -1,4 +1,4 @@
-ThisBuild / resolvers += "Apache Nexus Snapshots".at("https://repository.apache.org/content/repositories/snapshots/")
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "incubating-pekko-connectors"
