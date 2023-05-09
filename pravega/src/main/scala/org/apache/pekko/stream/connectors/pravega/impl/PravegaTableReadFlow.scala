@@ -22,9 +22,9 @@ import pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandle
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 
 import scala.util.control.NonFatal
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import pekko.stream.connectors.pravega.TableSettings
+import pekko.util.FutureConverters._
 
 import scala.util.{ Failure, Try }
 import io.pravega.client.tables.KeyValueTable
@@ -92,7 +92,7 @@ import scala.util.Success
     }
 
   def handleSentEvent(completableFuture: CompletableFuture[TableEntry]): Unit =
-    completableFuture.toScala.onComplete { t =>
+    completableFuture.asScala.onComplete { t =>
       asyncMessageSendCallback.invokeWithFeedback(t)
     }
 

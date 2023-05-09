@@ -18,6 +18,7 @@ import pekko.stream.connectors.google.scaladsl.Paginated
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.{ BigQueryRootJsonReader, BigQueryRootJsonWriter }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.OptionConverters._
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation._
 import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter }
@@ -27,7 +28,6 @@ import java.{ lang, util }
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable.Seq
-import scala.compat.java8.OptionConverters._
 
 /**
  * TableDataListResponse model
@@ -49,8 +49,8 @@ final case class TableDataListResponse[+T] private (totalRows: Long, pageToken: 
     this(totalRows.toLong, Option(pageToken), Option(rows).map(_.asScala.toList))
 
   def getTotalRows = totalRows
-  def getPageToken = pageToken.asJava
-  def getRows: util.Optional[util.List[T] @uncheckedVariance] = rows.map(_.asJava).asJava
+  def getPageToken = pageToken.toJava
+  def getRows: util.Optional[util.List[T] @uncheckedVariance] = rows.map(_.asJava).toJava
 
   def withTotalRows(totalRows: Long) =
     copy(totalRows = totalRows)
@@ -58,12 +58,12 @@ final case class TableDataListResponse[+T] private (totalRows: Long, pageToken: 
   def withPageToken(pageToken: Option[String]) =
     copy(pageToken = pageToken)
   def withPageToken(pageToken: util.Optional[String]) =
-    copy(pageToken = pageToken.asScala)
+    copy(pageToken = pageToken.toScala)
 
   def withRows[S >: T](rows: Option[Seq[S]]) =
     copy(rows = rows)
   def withRows(rows: util.Optional[util.List[T] @uncheckedVariance]) =
-    copy(rows = rows.asScala.map(_.asScala.toList))
+    copy(rows = rows.toScala.map(_.asScala.toList))
 }
 
 object TableDataListResponse {
@@ -79,7 +79,7 @@ object TableDataListResponse {
    * @return a [[TableDataListResponse]]
    */
   def create[T](totalRows: Long, pageToken: util.Optional[String], rows: util.Optional[util.List[T]]) =
-    TableDataListResponse(totalRows, pageToken.asScala, rows.asScala.map(_.asScala.toList))
+    TableDataListResponse(totalRows, pageToken.toScala, rows.toScala.map(_.asScala.toList))
 
   implicit def reader[T <: AnyRef](
       implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[TableDataListResponse[T]] = {
@@ -105,9 +105,9 @@ final case class TableDataInsertAllRequest[+T] private (skipInvalidRows: Option[
     templateSuffix: Option[String],
     rows: Seq[Row[T]]) {
 
-  @JsonIgnore def getSkipInvalidRows = skipInvalidRows.map(lang.Boolean.valueOf).asJava
-  @JsonIgnore def getIgnoreUnknownValues = ignoreUnknownValues.map(lang.Boolean.valueOf).asJava
-  @JsonIgnore def getTemplateSuffix = templateSuffix.asJava
+  @JsonIgnore def getSkipInvalidRows = skipInvalidRows.map(lang.Boolean.valueOf).toJava
+  @JsonIgnore def getIgnoreUnknownValues = ignoreUnknownValues.map(lang.Boolean.valueOf).toJava
+  @JsonIgnore def getTemplateSuffix = templateSuffix.toJava
   def getRows: util.List[Row[T] @uncheckedVariance] = rows.asJava
 
   @nowarn("msg=never used")
@@ -123,17 +123,17 @@ final case class TableDataInsertAllRequest[+T] private (skipInvalidRows: Option[
   def withSkipInvalidRows(skipInvalidRows: Option[Boolean]) =
     copy(skipInvalidRows = skipInvalidRows)
   def withSkipInvalidRows(skipInvalidRows: util.Optional[lang.Boolean]) =
-    copy(skipInvalidRows = skipInvalidRows.asScala.map(_.booleanValue))
+    copy(skipInvalidRows = skipInvalidRows.toScala.map(_.booleanValue))
 
   def withIgnoreUnknownValues(ignoreUnknownValues: Option[Boolean]) =
     copy(ignoreUnknownValues = ignoreUnknownValues)
   def withIgnoreUnknownValues(ignoreUnknownValues: util.Optional[lang.Boolean]) =
-    copy(ignoreUnknownValues = ignoreUnknownValues.asScala.map(_.booleanValue))
+    copy(ignoreUnknownValues = ignoreUnknownValues.toScala.map(_.booleanValue))
 
   def withTemplateSuffix(templateSuffix: Option[String]) =
     copy(templateSuffix = templateSuffix)
   def withTemplateSuffix(templateSuffix: util.Optional[String]) =
-    copy(templateSuffix = templateSuffix.asScala)
+    copy(templateSuffix = templateSuffix.toScala)
 
   def withRows[S >: T](rows: Seq[Row[S]]) =
     copy(rows = rows)
@@ -159,9 +159,9 @@ object TableDataInsertAllRequest {
       templateSuffix: util.Optional[String],
       rows: util.List[Row[T]]) =
     TableDataInsertAllRequest(
-      skipInvalidRows.asScala.map(_.booleanValue),
-      ignoreUnknownValues.asScala.map(_.booleanValue),
-      templateSuffix.asScala,
+      skipInvalidRows.toScala.map(_.booleanValue),
+      ignoreUnknownValues.toScala.map(_.booleanValue),
+      templateSuffix.toScala,
       rows.asScala.toList)
 
   implicit def writer[T](
@@ -182,13 +182,13 @@ object TableDataInsertAllRequest {
  */
 final case class Row[+T] private (insertId: Option[String], json: T) {
 
-  def getInsertId = insertId.asJava
+  def getInsertId = insertId.toJava
   def getJson = json
 
   def withInsertId(insertId: Option[String]) =
     copy(insertId = insertId)
   def withInsertId(insertId: util.Optional[String]) =
-    copy(insertId = insertId.asScala)
+    copy(insertId = insertId.toScala)
 
   def withJson[U >: T](json: U): Row[U] =
     copy(json = json)
@@ -206,7 +206,7 @@ object Row {
    * @return a [[Row]]
    */
   def create[T](insertId: util.Optional[String], json: T) =
-    Row(insertId.asScala, json)
+    Row(insertId.toScala, json)
 }
 
 /**
@@ -214,13 +214,13 @@ object Row {
  * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll#response-body BigQuery reference]]
  */
 final case class TableDataInsertAllResponse private (insertErrors: Option[Seq[InsertError]]) {
-  def getInsertErrors = insertErrors.map(_.asJava).asJava
+  def getInsertErrors = insertErrors.map(_.asJava).toJava
 
   def withInsertErrors(insertErrors: Option[Seq[InsertError]]) =
     copy(insertErrors = insertErrors)
 
   def withInsertErrors(insertErrors: util.Optional[util.List[InsertError]]) =
-    copy(insertErrors = insertErrors.asScala.map(_.asScala.toList))
+    copy(insertErrors = insertErrors.toScala.map(_.asScala.toList))
 }
 
 object TableDataInsertAllResponse {
@@ -230,7 +230,7 @@ object TableDataInsertAllResponse {
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll#response-body BigQuery reference]]
    */
   def create(insertErrors: util.Optional[util.List[InsertError]]) =
-    TableDataInsertAllResponse(insertErrors.asScala.map(_.asScala.toList))
+    TableDataInsertAllResponse(insertErrors.toScala.map(_.asScala.toList))
 
   implicit val format: RootJsonFormat[TableDataInsertAllResponse] =
     jsonFormat1(apply)
@@ -242,7 +242,7 @@ object TableDataInsertAllResponse {
  */
 final case class InsertError private (index: Int, errors: Option[Seq[ErrorProto]]) {
   def getIndex = index
-  def getErrors = errors.map(_.asJava).asJava
+  def getErrors = errors.map(_.asJava).toJava
 
   def withIndex(index: Int) =
     copy(index = index)
@@ -250,7 +250,7 @@ final case class InsertError private (index: Int, errors: Option[Seq[ErrorProto]
   def withErrors(errors: Option[Seq[ErrorProto]]) =
     copy(errors = errors)
   def withErrors(errors: util.Optional[util.List[ErrorProto]]) =
-    copy(errors = errors.asScala.map(_.asScala.toList))
+    copy(errors = errors.toScala.map(_.asScala.toList))
 }
 
 object InsertError {
@@ -260,7 +260,7 @@ object InsertError {
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll#response-body BigQuery reference]]
    */
   def create(index: Int, errors: util.Optional[util.List[ErrorProto]]) =
-    InsertError(index, errors.asScala.map(_.asScala.toList))
+    InsertError(index, errors.toScala.map(_.asScala.toList))
 
   implicit val format: JsonFormat[InsertError] = jsonFormat2(apply)
 }

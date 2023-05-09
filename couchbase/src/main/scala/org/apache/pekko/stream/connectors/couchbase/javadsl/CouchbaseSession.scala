@@ -24,13 +24,13 @@ import pekko.stream.connectors.couchbase.impl.CouchbaseSessionJavaAdapter
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
 import pekko.stream.javadsl.Source
 import pekko.{ Done, NotUsed }
+import pekko.util.FutureConverters._
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
 import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, Bucket }
 
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext
 
 /**
@@ -51,7 +51,7 @@ object CouchbaseSession {
       .apply(settings, bucketName)(executionContext(executor))
       .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
         ExecutionContexts.parasitic)
-      .toJava
+      .asJava
 
   /**
    * Create a given bucket using a pre-existing cluster client, allowing for it to be shared among
@@ -61,7 +61,7 @@ object CouchbaseSession {
     ScalaDslCouchbaseSession(client, bucketName)(executionContext(executor))
       .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
         ExecutionContexts.parasitic)
-      .toJava
+      .asJava
 
   /**
    * Connects to a Couchbase cluster by creating an `AsyncCluster`.
@@ -70,7 +70,7 @@ object CouchbaseSession {
   def createClient(settings: CouchbaseSessionSettings, executor: Executor): CompletionStage[AsyncCluster] =
     ScalaDslCouchbaseSession
       .createClusterClient(settings)(executionContext(executor))
-      .toJava
+      .asJava
 
   private def executionContext(executor: Executor): ExecutionContext =
     executor match {

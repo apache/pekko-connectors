@@ -20,8 +20,7 @@ import pekko.Done
 import pekko.japi.Pair
 import pekko.stream.connectors.amqp._
 import pekko.stream.scaladsl.Keep
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 object AmqpFlow {
 
@@ -38,7 +37,7 @@ object AmqpFlow {
    */
   def create(
       settings: AmqpWriteSettings): pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
-    pekko.stream.connectors.amqp.scaladsl.AmqpFlow(settings).mapMaterializedValue(f => f.toJava).asJava
+    pekko.stream.connectors.amqp.scaladsl.AmqpFlow(settings).mapMaterializedValue(f => f.asJava).asJava
 
   /**
    * Creates an `AmqpFlow` that accepts `WriteMessage` elements and emits `WriteResult`.
@@ -62,7 +61,7 @@ object AmqpFlow {
       settings: AmqpWriteSettings): pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpFlow
       .withConfirm(settings = settings)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -87,7 +86,7 @@ object AmqpFlow {
       settings: AmqpWriteSettings): pekko.stream.javadsl.Flow[WriteMessage, WriteResult, CompletionStage[Done]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpFlow
       .withConfirmUnordered(settings)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -109,6 +108,6 @@ object AmqpFlow {
         pekko.stream.connectors.amqp.scaladsl.AmqpFlow
           .withConfirmAndPassThroughUnordered[T](settings = settings))(Keep.right)
       .map { case (writeResult, passThrough) => Pair(writeResult, passThrough) }
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 }

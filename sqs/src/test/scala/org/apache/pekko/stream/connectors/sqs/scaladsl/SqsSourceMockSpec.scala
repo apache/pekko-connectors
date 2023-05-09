@@ -19,6 +19,7 @@ import org.apache.pekko
 import pekko.stream.connectors.sqs.SqsSourceSettings
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.testkit.scaladsl.TestSink
+import pekko.util.FutureConverters._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.{ atMost => atMostTimes, _ }
 import org.mockito.invocation.InvocationOnMock
@@ -29,7 +30,6 @@ import org.scalatestplus.mockito.MockitoSugar.mock
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.{ Message, ReceiveMessageRequest, ReceiveMessageResponse }
 
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
@@ -83,7 +83,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
                   .messages(defaultMessages: _*)
                   .build())
             }(system.dispatcher)
-            .toJava
+            .asJava
             .toCompletableFuture
       })
 
@@ -124,7 +124,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
                     .messages(List.empty[Message]: _*)
                     .build())
               }(system.dispatcher)
-              .toJava
+              .asJava
               .toCompletableFuture
           } else {
             CompletableFuture.completedFuture(

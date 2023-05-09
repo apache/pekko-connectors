@@ -19,8 +19,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.mqtt._
 import pekko.stream.javadsl.Source
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 /**
  * Java API
@@ -41,7 +40,7 @@ object MqttSource {
       bufferSize: Int): Source[MqttMessage, CompletionStage[Done]] =
     scaladsl.MqttSource
       .atMostOnce(settings, subscriptions, bufferSize)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -57,6 +56,6 @@ object MqttSource {
     scaladsl.MqttSource
       .atLeastOnce(settings, subscriptions, bufferSize)
       .map(MqttMessageWithAck.toJava)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 }

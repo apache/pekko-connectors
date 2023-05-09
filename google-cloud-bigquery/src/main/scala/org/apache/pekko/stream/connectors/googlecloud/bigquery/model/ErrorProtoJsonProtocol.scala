@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.model
 
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
+import org.apache.pekko
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
+import pekko.util.OptionConverters._
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonProperty }
 import spray.json.JsonFormat
 
 import java.util
 
 import scala.annotation.nowarn
-import scala.compat.java8.OptionConverters._
 
 /**
  * ErrorProto model
@@ -39,24 +40,24 @@ final case class ErrorProto private (reason: Option[String], location: Option[St
       @JsonProperty(value = "message") message: String) =
     this(Option(reason), Option(location), Option(message))
 
-  def getReason = reason.asJava
-  def getLocation = location.asJava
-  def getMessage = message.asJava
+  def getReason = reason.toJava
+  def getLocation = location.toJava
+  def getMessage = message.toJava
 
   def withReason(reason: Option[String]) =
     copy(reason = reason)
   def withReason(reason: util.Optional[String]) =
-    copy(reason = reason.asScala)
+    copy(reason = reason.toScala)
 
   def withLocation(location: Option[String]) =
     copy(location = location)
   def withLocation(location: util.Optional[String]) =
-    copy(location = location.asScala)
+    copy(location = location.toScala)
 
   def withMessage(message: Option[String]) =
     copy(message = message)
   def withMessage(message: util.Optional[String]) =
-    copy(message = message.asScala)
+    copy(message = message.toScala)
 }
 
 object ErrorProto {
@@ -71,7 +72,7 @@ object ErrorProto {
    * @return an [[ErrorProto]]
    */
   def create(reason: util.Optional[String], location: util.Optional[String], message: util.Optional[String]) =
-    ErrorProto(reason.asScala, location.asScala, message.asScala)
+    ErrorProto(reason.toScala, location.toScala, message.toScala)
 
   implicit val format: JsonFormat[ErrorProto] = jsonFormat3(apply)
 }

@@ -19,8 +19,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.mqtt._
 import pekko.stream.javadsl.Flow
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 /**
  * Java API
@@ -43,7 +42,7 @@ object MqttFlow {
       defaultQos: MqttQoS): Flow[MqttMessage, MqttMessage, CompletionStage[Done]] =
     scaladsl.MqttFlow
       .atMostOnce(settings, subscriptions, bufferSize, defaultQos)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -62,7 +61,7 @@ object MqttFlow {
     scaladsl.MqttFlow
       .atLeastOnce(settings, subscriptions, bufferSize, defaultQos)
       .map(MqttMessageWithAck.toJava)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -81,6 +80,6 @@ object MqttFlow {
     scaladsl.MqttFlow
       .atLeastOnceWithAckForJava(settings, subscriptions, bufferSize, defaultQos)
       .map(MqttMessageWithAck.toJava)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 }

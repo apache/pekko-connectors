@@ -20,9 +20,9 @@ import pekko.stream.connectors.googlecloud.pubsub.{ AcknowledgeRequest, PubSubCo
 import pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
 import pekko.{ Done, NotUsed }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 
 import java.util.concurrent.CompletionStage
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 
 /**
@@ -114,6 +114,6 @@ object GooglePubSub {
   def acknowledge(subscription: String, config: PubSubConfig): Sink[AcknowledgeRequest, CompletionStage[Done]] =
     GPubSub
       .acknowledge(subscription, config)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 }

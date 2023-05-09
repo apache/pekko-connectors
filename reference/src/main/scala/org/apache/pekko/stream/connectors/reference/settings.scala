@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.reference
 
+import org.apache.pekko.util.FunctionConverters._
+import org.apache.pekko.util.OptionConverters._
+
 // rename Java imports if the name clashes with the Scala name
 import java.time.{ Duration => JavaDuration }
 import java.util.Optional
 import java.util.function.Predicate
 
-import scala.compat.java8.FunctionConverters._
-import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration._
 
 /**
@@ -68,7 +69,7 @@ final class SourceSettings private (
    * A separate getter for Java API that converts Scala Option to Java Optional.
    */
   def getTraceId(): Optional[String] =
-    traceId.asJava
+    traceId.toJava
 
   /**
    * Java API

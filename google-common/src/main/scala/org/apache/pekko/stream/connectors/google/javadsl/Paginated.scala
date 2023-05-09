@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.google.javadsl
 
-import org.apache.pekko.stream.connectors.google.scaladsl
+import org.apache.pekko
+import pekko.stream.connectors.google.scaladsl
+import pekko.util.OptionConverters._
 
 import java.util
-import scala.compat.java8.OptionConverters._
 
 /**
  * Models a paginated resource
@@ -31,6 +32,6 @@ trait Paginated {
 
 private[connectors] object Paginated {
   implicit object paginatedIsPaginated extends scaladsl.Paginated[Paginated] {
-    override def pageToken(paginated: Paginated): Option[String] = paginated.getPageToken.asScala
+    override def pageToken(paginated: Paginated): Option[String] = paginated.getPageToken.toScala
   }
 }

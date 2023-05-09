@@ -21,9 +21,8 @@ import pekko.stream.javadsl.Source
 import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
+import pekko.util.FutureConverters._
 import pekko.{ Done, NotUsed }
-
-import scala.compat.java8.FutureConverters
 
 /**
  * Factory methods to create JMS producers.
@@ -59,7 +58,7 @@ object JmsProducer {
       settings: JmsProducerSettings): pekko.stream.javadsl.Sink[R, CompletionStage[Done]] =
     pekko.stream.connectors.jms.scaladsl.JmsProducer
       .sink(settings)
-      .mapMaterializedValue(FutureConverters.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -68,7 +67,7 @@ object JmsProducer {
   def textSink(settings: JmsProducerSettings): pekko.stream.javadsl.Sink[String, CompletionStage[Done]] =
     pekko.stream.connectors.jms.scaladsl.JmsProducer
       .textSink(settings)
-      .mapMaterializedValue(FutureConverters.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -78,7 +77,7 @@ object JmsProducer {
       settings: JmsProducerSettings): pekko.stream.javadsl.Sink[Array[Byte], CompletionStage[Done]] =
     pekko.stream.connectors.jms.scaladsl.JmsProducer
       .bytesSink(settings)
-      .mapMaterializedValue(FutureConverters.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -88,7 +87,7 @@ object JmsProducer {
       settings: JmsProducerSettings): pekko.stream.javadsl.Sink[ByteString, CompletionStage[Done]] =
     pekko.stream.connectors.jms.scaladsl.JmsProducer
       .byteStringSink(settings)
-      .mapMaterializedValue(FutureConverters.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -100,7 +99,7 @@ object JmsProducer {
     val scalaSink =
       pekko.stream.connectors.jms.scaladsl.JmsProducer
         .mapSink(settings)
-        .mapMaterializedValue(FutureConverters.toJava)
+        .mapMaterializedValue(_.asJava)
     val javaToScalaConversion =
       Flow.fromFunction((javaMap: java.util.Map[String, Any]) => javaMap.asScala.toMap)
     javaToScalaConversion.toMat(scalaSink)(Keep.right).asJava
@@ -113,7 +112,7 @@ object JmsProducer {
       settings: JmsProducerSettings): pekko.stream.javadsl.Sink[java.io.Serializable, CompletionStage[Done]] =
     pekko.stream.connectors.jms.scaladsl.JmsProducer
       .objectSink(settings)
-      .mapMaterializedValue(FutureConverters.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   private def toProducerStatus(scalaStatus: scaladsl.JmsProducerStatus) = new JmsProducerStatus {

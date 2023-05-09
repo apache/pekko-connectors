@@ -26,9 +26,8 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.FutureConverters;
 import org.apache.geode.cache.client.ClientCacheFactory;
-
-import scala.compat.java8.FutureConverters;
 
 import java.util.concurrent.CompletionStage;
 
@@ -51,7 +50,7 @@ public class Geode extends GeodeCache {
 
     registerPDXSerializer(serializer, serializer.clazz());
     return Source.fromGraph(new GeodeFiniteSourceStage<V>(cache(), query))
-        .mapMaterializedValue(FutureConverters::<Done>toJava);
+        .mapMaterializedValue(FutureConverters::<Done>asJava);
   }
 
   public <K, V> Flow<V, V, NotUsed> flow(

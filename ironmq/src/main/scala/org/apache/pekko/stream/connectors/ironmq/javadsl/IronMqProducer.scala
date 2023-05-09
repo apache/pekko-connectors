@@ -22,8 +22,7 @@ import pekko.stream.connectors.ironmq._
 import pekko.stream.javadsl.{ Flow, Sink }
 import pekko.stream.scaladsl.{ Flow => ScalaFlow, Keep }
 import pekko.stream.connectors.ironmq.scaladsl.{ IronMqProducer => ScalaIronMqProducer }
-
-import scala.compat.java8.FutureConverters
+import pekko.util.FutureConverters
 
 object IronMqProducer {
 
@@ -37,7 +36,7 @@ object IronMqProducer {
       .asInstanceOf[Flow[PushMessage, String, NotUsed]]
 
   def sink(queueName: String, settings: IronMqSettings): Sink[PushMessage, CompletionStage[Done]] =
-    ScalaIronMqProducer.sink(queueName, settings).mapMaterializedValue(_.toJava).asJava
+    ScalaIronMqProducer.sink(queueName, settings).mapMaterializedValue(_.asJava).asJava
 
   def atLeastOnceFlow[C1 <: Committable](
       queueName: String,

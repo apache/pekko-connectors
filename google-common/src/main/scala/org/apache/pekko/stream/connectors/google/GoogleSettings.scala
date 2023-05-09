@@ -26,11 +26,11 @@ import pekko.stream.connectors.google.auth.Credentials
 import pekko.stream.connectors.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
 import pekko.stream.connectors.google.implicits._
 import pekko.util.JavaDurationConverters._
+import pekko.util.OptionConverters._
 import com.typesafe.config.Config
 
 import java.time
 import java.util.Optional
-import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration._
 
 object GoogleSettings {
@@ -131,7 +131,7 @@ object RequestSettings {
       chunkSize: Int,
       retrySettings: RetrySettings,
       forwardProxy: Optional[ForwardProxy]) =
-    apply(userIp.asScala, quotaUser.asScala, prettyPrint, chunkSize, retrySettings, forwardProxy.asScala)
+    apply(userIp.toScala, quotaUser.toScala, prettyPrint, chunkSize, retrySettings, forwardProxy.toScala)
 }
 
 final case class RequestSettings @InternalApi private (
@@ -146,8 +146,8 @@ final case class RequestSettings @InternalApi private (
     (uploadChunkSize >= (256 * 1024)) & (uploadChunkSize % (256 * 1024) == 0),
     "Chunk size must be a multiple of 256 KiB")
 
-  def getUserIp = userIp.asJava
-  def getQuotaUser = quotaUser.asJava
+  def getUserIp = userIp.toJava
+  def getQuotaUser = quotaUser.toJava
   def getPrettyPrint = prettyPrint
   def getUploadChunkSize = uploadChunkSize
   def getRetrySettings = retrySettings
@@ -156,11 +156,11 @@ final case class RequestSettings @InternalApi private (
   def withUserIp(userIp: Option[String]) =
     copy(userIp = userIp)
   def withUserIp(userIp: Optional[String]) =
-    copy(userIp = userIp.asScala)
+    copy(userIp = userIp.toScala)
   def withQuotaUser(quotaUser: Option[String]) =
     copy(quotaUser = quotaUser)
   def withQuotaUser(quotaUser: Optional[String]) =
-    copy(quotaUser = quotaUser.asScala)
+    copy(quotaUser = quotaUser.toScala)
   def withPrettyPrint(prettyPrint: Boolean) =
     copy(prettyPrint = prettyPrint)
   def withUploadChunkSize(uploadChunkSize: Int) =
@@ -170,7 +170,7 @@ final case class RequestSettings @InternalApi private (
   def withForwardProxy(forwardProxy: Option[ForwardProxy]) =
     copy(forwardProxy = forwardProxy)
   def withForwardProxy(forwardProxy: Optional[ForwardProxy]) =
-    copy(forwardProxy = forwardProxy.asScala)
+    copy(forwardProxy = forwardProxy.toScala)
 
   // Cache query string
   private[google] def query =
@@ -262,7 +262,7 @@ object ForwardProxy {
       credentials: Optional[jm.headers.BasicHttpCredentials],
       trustPem: Optional[String],
       system: ClassicActorSystemProvider) =
-    apply(scheme, host, port, credentials.asScala.map(_.asInstanceOf[BasicHttpCredentials]), trustPem.asScala)(system)
+    apply(scheme, host, port, credentials.toScala.map(_.asInstanceOf[BasicHttpCredentials]), trustPem.toScala)(system)
 
   def create(connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings) =
     apply(connectionContext.asInstanceOf[HttpsConnectionContext], poolSettings.asInstanceOf[ConnectionPoolSettings])

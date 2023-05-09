@@ -19,9 +19,8 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.sqs.{ MessageAction, SqsAckGroupedSettings, SqsAckSettings }
 import pekko.stream.javadsl.Sink
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
-
-import scala.compat.java8.FutureConverters.FutureOps
 
 /**
  * Java API to create acknowledging sinks.
@@ -36,7 +35,7 @@ object SqsAckSink {
       sqsClient: SqsAsyncClient): Sink[MessageAction, CompletionStage[Done]] =
     pekko.stream.connectors.sqs.scaladsl.SqsAckSink
       .apply(queueUrl, settings)(sqsClient)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -47,6 +46,6 @@ object SqsAckSink {
       sqsClient: SqsAsyncClient): Sink[MessageAction, CompletionStage[Done]] =
     pekko.stream.connectors.sqs.scaladsl.SqsAckSink
       .grouped(queueUrl, settings)(sqsClient)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 }

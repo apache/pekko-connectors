@@ -22,13 +22,12 @@ import pekko.stream.stage.GraphStageLogic.StageActor
 import pekko.stream.stage._
 import pekko.stream.{ Attributes, Outlet, SourceShape }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model._
 
 import scala.collection.mutable
 import scala.util.{ Failure, Success, Try }
-
-import scala.compat.java8.FutureConverters._
 
 /**
  * Internal API
@@ -154,7 +153,7 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
         amazonKinesisAsync
           .getRecords(
             GetRecordsRequest.builder().limit(limit).shardIterator(currentShardIterator).build())
-          .toScala
+          .asScala
           .onComplete(handleGetRecords)(parasitic)
 
       private[this] def requestShardIterator(): Unit = {
@@ -177,7 +176,7 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
 
         amazonKinesisAsync
           .getShardIterator(request)
-          .toScala
+          .asScala
           .onComplete(handleGetShardIterator)(parasitic)
       }
 

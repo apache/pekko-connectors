@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.cassandra
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
+import org.apache.pekko
+import pekko.Done
+import pekko.util.FunctionConverters._
+import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
-import scala.compat.java8.FunctionConverters._
-import scala.compat.java8.FutureConverters._
 
 import scala.concurrent.Future
 
@@ -39,7 +40,7 @@ class CassandraSessionSettings private (val configPath: String,
    * only execute the first.
    */
   def withInit(value: java.util.function.Function[CqlSession, CompletionStage[Done]]): CassandraSessionSettings =
-    copy(init = Some(value.asScala.andThen(_.toScala)))
+    copy(init = Some(value.asScala.andThen(_.asScala)))
 
   /**
    * The `init` function will be performed once when the session is created, i.e.

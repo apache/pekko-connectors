@@ -15,8 +15,7 @@ package org.apache.pekko.stream.connectors.elasticsearch
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-
-import scala.compat.java8.OptionConverters._
+import pekko.util.OptionConverters._
 
 /**
  * Stream element type emitted by Elasticsearch sources.
@@ -29,7 +28,7 @@ final class ReadResult[T] @InternalApi private[elasticsearch] (val id: String,
     val version: Option[Long]) {
 
   /** Java API */
-  def getVersion: java.util.Optional[Long] = version.asJava
+  def getVersion: java.util.Optional[Long] = version.toJava
 
   override def toString =
     s"""ReadResult(id=$id,source=$source,version=${version.getOrElse("")})"""

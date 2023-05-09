@@ -20,7 +20,7 @@ import pekko.NotUsed
 import pekko.stream.connectors.jms.impl.JmsMessageReader._
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
-import scala.compat.java8.OptionConverters._
+import pekko.util.OptionConverters._
 
 /**
  * Base interface for messages handled by JmsProducers. Sub-classes support pass-through or use [[pekko.NotUsed]] as type for pass-through.
@@ -47,7 +47,7 @@ sealed trait JmsEnvelope[+PassThrough] {
   /**
    * Java API.
    */
-  def getDestination: java.util.Optional[Destination] = destination.asJava
+  def getDestination: java.util.Optional[Destination] = destination.toJava
 
   def passThrough: PassThrough
 

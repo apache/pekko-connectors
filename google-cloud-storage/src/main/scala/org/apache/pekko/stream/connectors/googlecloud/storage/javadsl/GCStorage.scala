@@ -26,10 +26,9 @@ import pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
 import pekko.stream.{ Attributes, Materializer }
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
+import pekko.util.FutureConverters._
+import pekko.util.OptionConverters._
 import pekko.{ Done, NotUsed }
-
-import scala.compat.java8.FutureConverters._
-import scala.compat.java8.OptionConverters._
 
 /**
  * Java API
@@ -55,8 +54,8 @@ object GCStorage {
       attributes: Attributes): CompletionStage[Optional[Bucket]] =
     GCStorageStream
       .getBucket(bucketName)(materializer, attributes)
-      .map(_.asJava)(materializer.executionContext)
-      .toJava
+      .map(_.toJava)(materializer.executionContext)
+      .asJava
 
   /**
    * Gets information on a bucket
@@ -71,8 +70,8 @@ object GCStorage {
   def getBucket(bucketName: String, system: ActorSystem, attributes: Attributes): CompletionStage[Optional[Bucket]] =
     GCStorageStream
       .getBucket(bucketName)(Materializer.matFromSystem(system), attributes)
-      .map(_.asJava)(system.dispatcher)
-      .toJava
+      .map(_.toJava)(system.dispatcher)
+      .asJava
 
   /**
    * Gets information on a bucket
@@ -83,7 +82,7 @@ object GCStorage {
    * @return a `Source` containing `Bucket` if it exists
    */
   def getBucketSource(bucketName: String): Source[Optional[Bucket], NotUsed] =
-    GCStorageStream.getBucketSource(bucketName).map(_.asJava).asJava
+    GCStorageStream.getBucketSource(bucketName).map(_.toJava).asJava
 
   /**
    * Creates a new bucket
@@ -100,7 +99,7 @@ object GCStorage {
       location: String,
       materializer: Materializer,
       attributes: Attributes): CompletionStage[Bucket] =
-    GCStorageStream.createBucket(bucketName, location)(materializer, attributes).toJava
+    GCStorageStream.createBucket(bucketName, location)(materializer, attributes).asJava
 
   /**
    * Creates a new bucket
@@ -115,7 +114,7 @@ object GCStorage {
       location: String,
       system: ActorSystem,
       attributes: Attributes): CompletionStage[Bucket] =
-    GCStorageStream.createBucket(bucketName, location)(Materializer.matFromSystem(system), attributes).toJava
+    GCStorageStream.createBucket(bucketName, location)(Materializer.matFromSystem(system), attributes).asJava
 
   /**
    * Creates a new bucket
@@ -140,7 +139,7 @@ object GCStorage {
    */
   @deprecated("pass in the actor system instead of the materializer", "3.0.0")
   def deleteBucket(bucketName: String, materializer: Materializer, attributes: Attributes): CompletionStage[Done] =
-    GCStorageStream.deleteBucket(bucketName)(materializer, attributes).toJava
+    GCStorageStream.deleteBucket(bucketName)(materializer, attributes).asJava
 
   /**
    * Deletes bucket
@@ -151,7 +150,7 @@ object GCStorage {
    * @return a `CompletionStage` of `Done` on successful deletion
    */
   def deleteBucket(bucketName: String, system: ActorSystem, attributes: Attributes): CompletionStage[Done] =
-    GCStorageStream.deleteBucket(bucketName)(Materializer.matFromSystem(system), attributes).toJava
+    GCStorageStream.deleteBucket(bucketName)(Materializer.matFromSystem(system), attributes).asJava
 
   /**
    * Deletes bucket
@@ -174,7 +173,7 @@ object GCStorage {
    * @return a `Source` containing `StorageObject` if it exists
    */
   def getObject(bucket: String, objectName: String): Source[Optional[StorageObject], NotUsed] =
-    GCStorageStream.getObject(bucket, objectName).map(_.asJava).asJava
+    GCStorageStream.getObject(bucket, objectName).map(_.toJava).asJava
 
   /**
    * Get storage object
@@ -187,7 +186,7 @@ object GCStorage {
    * @return a `Source` containing `StorageObject` if it exists
    */
   def getObject(bucket: String, objectName: String, generation: Long): Source[Optional[StorageObject], NotUsed] =
-    GCStorageStream.getObject(bucket, objectName, Option(generation)).map(_.asJava).asJava
+    GCStorageStream.getObject(bucket, objectName, Option(generation)).map(_.toJava).asJava
 
   /**
    * Deletes object in bucket
@@ -261,7 +260,7 @@ object GCStorage {
    *         Otherwise [[scala.Option Option]] will contain a source of object's data.
    */
   def download(bucket: String, objectName: String): Source[Optional[Source[ByteString, NotUsed]], NotUsed] =
-    GCStorageStream.download(bucket, objectName).map(_.map(_.asJava).asJava).asJava
+    GCStorageStream.download(bucket, objectName).map(_.map(_.asJava).toJava).asJava
 
   /**
    * Downloads object from bucket.
@@ -277,7 +276,7 @@ object GCStorage {
   def download(bucket: String,
       objectName: String,
       generation: Long): Source[Optional[Source[ByteString, NotUsed]], NotUsed] =
-    GCStorageStream.download(bucket, objectName, Option(generation)).map(_.map(_.asJava).asJava).asJava
+    GCStorageStream.download(bucket, objectName, Option(generation)).map(_.map(_.asJava).toJava).asJava
 
   /**
    * Uploads object, use this for small files and `resumableUpload` for big ones
@@ -349,7 +348,7 @@ object GCStorage {
         chunkSize,
         metadata.map(_.asScala.toMap))
       .asJava
-      .mapMaterializedValue(func(_.toJava))
+      .mapMaterializedValue(func(_.asJava))
   }
 
   /**
@@ -368,7 +367,7 @@ object GCStorage {
     GCStorageStream
       .resumableUpload(bucket, objectName, contentType.asInstanceOf[ScalaContentType])
       .asJava
-      .mapMaterializedValue(func(_.toJava))
+      .mapMaterializedValue(func(_.asJava))
 
   /**
    * Rewrites object to wanted destination by making multiple requests.
@@ -388,7 +387,7 @@ object GCStorage {
     RunnableGraph
       .fromGraph(
         GCStorageStream.rewrite(sourceBucket, sourceObjectName, destinationBucket, destinationObjectName))
-      .mapMaterializedValue(func(_.toJava))
+      .mapMaterializedValue(func(_.asJava))
 
   /**
    * Deletes folder and its content.

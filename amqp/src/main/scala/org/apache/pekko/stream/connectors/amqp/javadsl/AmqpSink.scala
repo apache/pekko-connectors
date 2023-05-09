@@ -19,8 +19,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.amqp._
 import pekko.util.ByteString
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 object AmqpSink {
 
@@ -31,7 +30,7 @@ object AmqpSink {
    * either normally or because of an amqp failure.
    */
   def create(settings: AmqpWriteSettings): pekko.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
-    pekko.stream.connectors.amqp.scaladsl.AmqpSink(settings).mapMaterializedValue(f => f.toJava).asJava
+    pekko.stream.connectors.amqp.scaladsl.AmqpSink(settings).mapMaterializedValue(f => f.asJava).asJava
 
   /**
    * Creates an `AmqpSink` that accepts `ByteString` elements.
@@ -42,7 +41,7 @@ object AmqpSink {
   def createSimple(
       settings: AmqpWriteSettings): pekko.stream.javadsl.Sink[ByteString, CompletionStage[Done]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpSink.simple(settings).mapMaterializedValue(f =>
-      f.toJava).asJava
+      f.asJava).asJava
 
   /**
    * Connects to an AMQP server upon materialization and sends incoming messages to the server.
@@ -55,6 +54,6 @@ object AmqpSink {
   def createReplyTo(
       settings: AmqpReplyToSinkSettings): pekko.stream.javadsl.Sink[WriteMessage, CompletionStage[Done]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpSink.replyTo(settings).mapMaterializedValue(f =>
-      f.toJava).asJava
+      f.asJava).asJava
 
 }

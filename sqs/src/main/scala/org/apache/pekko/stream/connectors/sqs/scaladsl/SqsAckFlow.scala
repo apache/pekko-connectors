@@ -26,11 +26,11 @@ import pekko.stream.connectors.sqs.SqsAckResultEntry._
 import pekko.stream.connectors.sqs._
 import pekko.stream.scaladsl.{ Flow, GraphDSL, Merge, Partition }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
 import scala.collection.immutable
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 
 /**
@@ -57,7 +57,7 @@ object SqsAckFlow {
 
           sqsClient
             .deleteMessage(request)
-            .toScala
+            .asScala
             .map(resp => new SqsDeleteResult(messageAction, resp))(parasitic)
 
         case messageAction: MessageAction.ChangeMessageVisibility =>
@@ -71,7 +71,7 @@ object SqsAckFlow {
 
           sqsClient
             .changeMessageVisibility(request)
-            .toScala
+            .asScala
             .map(resp => new SqsChangeMessageVisibilityResult(messageAction, resp))(parasitic)
 
         case messageAction: MessageAction.Ignore =>
@@ -135,7 +135,7 @@ object SqsAckFlow {
         case (actions: immutable.Seq[Delete], request) =>
           sqsClient
             .deleteMessageBatch(request)
-            .toScala
+            .asScala
             .map {
               case response if response.failed().isEmpty =>
                 val responseMetadata = response.responseMetadata()
@@ -188,7 +188,7 @@ object SqsAckFlow {
         case (actions, request) =>
           sqsClient
             .changeMessageVisibilityBatch(request)
-            .toScala
+            .asScala
             .map {
               case response if response.failed().isEmpty =>
                 val responseMetadata = response.responseMetadata()

@@ -18,12 +18,11 @@ import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.pekko.stream.connectors.geode.GeodeSettings;
 import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeContinuousSourceStage;
 import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.FutureConverters;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqQuery;
 import org.apache.geode.cache.query.QueryService;
-
-import scala.compat.java8.FutureConverters;
 
 import java.util.concurrent.CompletionStage;
 
@@ -47,7 +46,7 @@ public class GeodeWithPoolSubscription extends Geode {
           String queryName, String query, PekkoPdxSerializer<V> serializer) {
     registerPDXSerializer(serializer, serializer.clazz());
     return Source.fromGraph(new GeodeContinuousSourceStage<V>(cache(), queryName, query))
-        .mapMaterializedValue(FutureConverters::<Done>toJava);
+        .mapMaterializedValue(FutureConverters::<Done>asJava);
   }
 
   public boolean closeContinuousQuery(String name) throws CqException {

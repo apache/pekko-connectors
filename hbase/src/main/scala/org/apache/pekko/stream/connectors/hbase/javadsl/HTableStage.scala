@@ -20,9 +20,8 @@ import pekko.stream.connectors.hbase.HTableSettings
 import pekko.stream.connectors.hbase.impl.{ HBaseFlowStage, HBaseSourceStage }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
+import pekko.util.FutureConverters._
 import org.apache.hadoop.hbase.client.{ Result, Scan }
-
-import scala.compat.java8.FutureConverters._
 
 object HTableStage {
 
@@ -31,7 +30,7 @@ object HTableStage {
    * HBase mutations for every incoming element are derived from the converter functions defined in the config.
    */
   def sink[A](config: HTableSettings[A]): pekko.stream.javadsl.Sink[A, CompletionStage[Done]] =
-    Flow[A].via(flow(config)).toMat(Sink.ignore)(Keep.right).mapMaterializedValue(toJava).asJava
+    Flow[A].via(flow(config)).toMat(Sink.ignore)(Keep.right).mapMaterializedValue(asJava).asJava
 
   /**
    * Writes incoming element to HBase.

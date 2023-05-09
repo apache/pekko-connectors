@@ -20,10 +20,9 @@ import pekko.stream.connectors.sqs.SqsSourceSettings
 import pekko.stream.connectors.sqs.impl.BalancingMapAsync
 import pekko.stream.scaladsl.{ Flow, Source }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
-
-import scala.compat.java8.FutureConverters._
 
 /**
  * Scala API to create SQS sources.
@@ -63,11 +62,11 @@ object SqsSource {
 
   private def resolveHandler(parallelism: Int)(implicit sqsClient: SqsAsyncClient) =
     if (parallelism == 1) {
-      Flow[ReceiveMessageRequest].mapAsyncUnordered(parallelism)(sqsClient.receiveMessage(_).toScala)
+      Flow[ReceiveMessageRequest].mapAsyncUnordered(parallelism)(sqsClient.receiveMessage(_).asScala)
     } else {
       BalancingMapAsync[ReceiveMessageRequest, ReceiveMessageResponse](
         parallelism,
-        sqsClient.receiveMessage(_).toScala,
+        sqsClient.receiveMessage(_).asScala,
         (response, _) => if (response.messages().isEmpty) 1 else parallelism)
     }
 }

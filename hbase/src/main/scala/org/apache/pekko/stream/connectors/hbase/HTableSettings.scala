@@ -18,8 +18,9 @@ import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Mutation
 
 import scala.collection.immutable
-import org.apache.pekko.util.ccompat.JavaConverters._
-import scala.compat.java8.FunctionConverters._
+import org.apache.pekko
+import pekko.util.ccompat.JavaConverters._
+import pekko.util.FunctionConverters._
 
 final class HTableSettings[T] private (val conf: Configuration,
     val tableName: TableName,

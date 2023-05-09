@@ -17,12 +17,11 @@ import org.apache.pekko
 import pekko.stream.connectors.sns.SnsPublishSettings
 import pekko.stream.scaladsl.{ Flow, Keep, Sink }
 import pekko.{ Done, NotUsed }
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.{ PublishRequest, PublishResponse }
 
 import scala.concurrent.Future
-
-import scala.compat.java8.FutureConverters._
 
 /**
  * Scala API
@@ -56,7 +55,7 @@ object SnsPublisher {
       implicit snsClient: SnsAsyncClient): Flow[PublishRequest, PublishResponse, NotUsed] = {
     require(snsClient != null, "The `SnsAsyncClient` passed in may not be null.")
     Flow[PublishRequest]
-      .mapAsyncUnordered(settings.concurrency)(snsClient.publish(_).toScala)
+      .mapAsyncUnordered(settings.concurrency)(snsClient.publish(_).asScala)
   }
 
   /**

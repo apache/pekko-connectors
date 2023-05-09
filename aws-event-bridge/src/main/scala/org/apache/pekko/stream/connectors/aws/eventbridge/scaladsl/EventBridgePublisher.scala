@@ -17,11 +17,11 @@ import org.apache.pekko
 import pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings
 import pekko.stream.scaladsl.{ Flow, Keep, Sink }
 import pekko.{ Done, NotUsed }
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient
 import software.amazon.awssdk.services.eventbridge.model._
 
 import scala.concurrent.Future
-import scala.compat.java8.FutureConverters._
 
 /**
  * Scala API
@@ -64,7 +64,7 @@ object EventBridgePublisher {
       settings: EventBridgePublishSettings)(
       implicit eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequest, PutEventsResponse, NotUsed] =
     Flow[PutEventsRequest]
-      .mapAsync(settings.concurrency)(eventBridgeClient.putEvents(_).toScala)
+      .mapAsync(settings.concurrency)(eventBridgeClient.putEvents(_).asScala)
 
   /**
    * Creates a [[pekko.stream.scaladsl.Flow Flow]] to publish messages to an EventBridge.

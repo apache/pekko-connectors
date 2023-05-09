@@ -20,11 +20,11 @@ import pekko.annotation.InternalApi
 import pekko.discovery.Discovery
 import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
 import pekko.util.JavaDurationConverters._
+import pekko.util.FunctionConverters._
+import pekko.util.FutureConverters._
 import com.typesafe.config.Config
 
 import scala.collection.immutable
-import scala.compat.java8.FunctionConverters._
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
 
@@ -83,7 +83,7 @@ sealed class DiscoverySupport private {
       config: Config,
       system: ClassicActorSystemProvider)
       : java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]] =
-    nodes(config)(system).andThen(_.toJava).asJava
+    nodes(config)(system).andThen(_.asJava).asJava
 
   /**
    * Expects a `service` section in `pekko.connectors.couchbase.session` and reads the given service name's address

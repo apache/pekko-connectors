@@ -15,9 +15,9 @@ package org.apache.pekko.stream.connectors.xml
 
 import java.util.Optional
 
-import org.apache.pekko.util.ccompat.JavaConverters._
-
-import scala.compat.java8.OptionConverters._
+import org.apache.pekko
+import pekko.util.ccompat.JavaConverters._
+import pekko.util.OptionConverters._
 
 /**
  * XML parsing events emitted by the parser flow. These roughly correspond to Java XMLEvent types.
@@ -54,7 +54,7 @@ case object EndDocument extends ParseEvent {
 final case class Namespace(uri: String, prefix: Option[String] = None) {
 
   /** Java API */
-  def getPrefix(): java.util.Optional[String] = prefix.asJava
+  def getPrefix(): java.util.Optional[String] = prefix.toJava
 }
 
 object Namespace {
@@ -63,7 +63,7 @@ object Namespace {
    * Java API
    */
   def create(uri: String, prefix: Optional[String]) =
-    Namespace(uri, prefix.asScala)
+    Namespace(uri, prefix.toScala)
 
 }
 
@@ -73,10 +73,10 @@ final case class Attribute(name: String,
     namespace: Option[String] = None) {
 
   /** Java API */
-  def getPrefix(): java.util.Optional[String] = prefix.asJava
+  def getPrefix(): java.util.Optional[String] = prefix.toJava
 
   /** Java API */
-  def getNamespace(): java.util.Optional[String] = namespace.asJava
+  def getNamespace(): java.util.Optional[String] = namespace.toJava
 }
 
 object Attribute {
@@ -85,7 +85,7 @@ object Attribute {
    * Java API
    */
   def create(name: String, value: String, prefix: Optional[String], namespace: Optional[String]) =
-    Attribute(name, value, prefix.asScala, namespace.asScala)
+    Attribute(name, value, prefix.toScala, namespace.toScala)
 
   /**
    * Java API
@@ -109,10 +109,10 @@ final case class StartElement(localName: String,
   def getAttributes(): java.util.Map[String, String] = attributes.asJava
 
   /** Java API */
-  def getPrefix(): java.util.Optional[String] = prefix.asJava
+  def getPrefix(): java.util.Optional[String] = prefix.toJava
 
   /** Java API */
-  def getNamespace(): java.util.Optional[String] = namespace.asJava
+  def getNamespace(): java.util.Optional[String] = namespace.toJava
 
   /** Java API */
   def getNamespaceCtx(): java.util.List[Namespace] = namespaceCtx.asJava
@@ -144,8 +144,8 @@ object StartElement {
       namespaceCtx: java.util.List[Namespace]): StartElement =
     new StartElement(localName,
       attributesList.asScala.toList,
-      prefix.asScala,
-      namespace.asScala,
+      prefix.toScala,
+      namespace.toScala,
       namespaceCtx.asScala.toList)
 
   /**
@@ -155,7 +155,7 @@ object StartElement {
       attributesList: java.util.List[Attribute],
       prefix: Optional[String],
       namespace: Optional[String]): StartElement =
-    new StartElement(localName, attributesList.asScala.toList, prefix.asScala, namespace.asScala, List.empty[Namespace])
+    new StartElement(localName, attributesList.asScala.toList, prefix.toScala, namespace.toScala, List.empty[Namespace])
 
   /**
    * Java API
@@ -205,10 +205,10 @@ final case class ProcessingInstruction(target: Option[String], data: Option[Stri
   val marker = ParseEventMarker.XMLProcessingInstruction
 
   /** Java API */
-  def getTarget(): java.util.Optional[String] = target.asJava
+  def getTarget(): java.util.Optional[String] = target.toJava
 
   /** Java API */
-  def getData(): java.util.Optional[String] = data.asJava
+  def getData(): java.util.Optional[String] = data.toJava
 }
 
 object ProcessingInstruction {
@@ -217,7 +217,7 @@ object ProcessingInstruction {
    * Java API
    */
   def create(target: Optional[String], data: Optional[String]) =
-    ProcessingInstruction(target.asScala, data.asScala)
+    ProcessingInstruction(target.toScala, data.toScala)
 }
 
 final case class Comment(text: String) extends ParseEvent {

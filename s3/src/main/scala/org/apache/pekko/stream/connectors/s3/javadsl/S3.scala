@@ -31,9 +31,8 @@ import pekko.stream.connectors.s3.impl._
 import pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
-
-import scala.compat.java8.OptionConverters._
-import scala.compat.java8.FutureConverters._
+import pekko.util.OptionConverters._
+import pekko.util.FutureConverters._
 
 /**
  * Java API
@@ -338,7 +337,7 @@ object S3 {
           (pekko.stream.scaladsl.Source[ByteString, M], ObjectMetadata)], NotUsed])
       : Source[Optional[JPair[Source[ByteString, M], ObjectMetadata]], NotUsed] =
     download.map {
-      _.map { case (stream, meta) => JPair(stream.asJava, meta) }.asJava
+      _.map { case (stream, meta) => JPair(stream.asJava, meta) }.toJava
     }.asJava
 
   /**
@@ -663,7 +662,7 @@ object S3 {
       prefix: Optional[String],
       s3Headers: S3Headers): Source[ListBucketResultContents, NotUsed] =
     S3Stream
-      .listBucket(bucket, prefix.asScala, s3Headers)
+      .listBucket(bucket, prefix.toScala, s3Headers)
       .asJava
 
   /**
@@ -683,7 +682,7 @@ object S3 {
       delimiter: String,
       prefix: Optional[String]): Source[ListBucketResultContents, NotUsed] =
     scaladsl.S3
-      .listBucket(bucket, delimiter, prefix.asScala)
+      .listBucket(bucket, delimiter, prefix.toScala)
       .asJava
 
   /**
@@ -705,7 +704,7 @@ object S3 {
       prefix: Optional[String],
       s3Headers: S3Headers): Source[ListBucketResultContents, NotUsed] =
     scaladsl.S3
-      .listBucket(bucket, delimiter, prefix.asScala, s3Headers)
+      .listBucket(bucket, delimiter, prefix.toScala, s3Headers)
       .asJava
 
   /**
@@ -730,7 +729,7 @@ object S3 {
       s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListBucketResultContents], java.util.List[
       ListBucketResultCommonPrefixes]], NotUsed] =
     S3Stream
-      .listBucketAndCommonPrefixes(bucket, delimiter, prefix.asScala, s3Headers)
+      .listBucketAndCommonPrefixes(bucket, delimiter, prefix.toScala, s3Headers)
       .map {
         case (contents, commonPrefixes) => pekko.japi.Pair(contents.asJava, commonPrefixes.asJava)
       }
@@ -757,7 +756,7 @@ object S3 {
   def listMultipartUpload(bucket: String,
       prefix: Optional[String],
       s3Headers: S3Headers): Source[ListMultipartUploadResultUploads, NotUsed] =
-    scaladsl.S3.listMultipartUpload(bucket, prefix.asScala, s3Headers).asJava
+    scaladsl.S3.listMultipartUpload(bucket, prefix.toScala, s3Headers).asJava
 
   /**
    * Will return in progress or aborted multipart uploads with optional prefix and delimiter. This will automatically page through all keys with the given parameters.
@@ -775,7 +774,7 @@ object S3 {
       s3Headers: S3Headers = S3Headers.empty): Source[pekko.japi.Pair[java.util.List[ListMultipartUploadResultUploads],
     java.util.List[CommonPrefixes]], NotUsed] =
     S3Stream
-      .listMultipartUploadAndCommonPrefixes(bucket, delimiter, prefix.asScala, s3Headers)
+      .listMultipartUploadAndCommonPrefixes(bucket, delimiter, prefix.toScala, s3Headers)
       .map {
         case (uploads, commonPrefixes) => pekko.japi.Pair(uploads.asJava, commonPrefixes.asJava)
       }
@@ -821,7 +820,7 @@ object S3 {
       : Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions], java.util.List[
           DeleteMarkers]], NotUsed] =
     S3Stream
-      .listObjectVersions(bucket, prefix.asScala, S3Headers.empty)
+      .listObjectVersions(bucket, prefix.toScala, S3Headers.empty)
       .map {
         case (versions, markers) => pekko.japi.Pair(versions.asJava, markers.asJava)
       }
@@ -842,7 +841,7 @@ object S3 {
       s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions], java.util.List[
       DeleteMarkers]], NotUsed] =
     S3Stream
-      .listObjectVersions(bucket, prefix.asScala, s3Headers)
+      .listObjectVersions(bucket, prefix.toScala, s3Headers)
       .map {
         case (versions, markers) => pekko.japi.Pair(versions.asJava, markers.asJava)
       }
@@ -865,7 +864,7 @@ object S3 {
       s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions], java.util.List[
       DeleteMarkers]], NotUsed] =
     S3Stream
-      .listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix.asScala, s3Headers)
+      .listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix.toScala, s3Headers)
       .map {
         case (versions, markers, _) =>
           pekko.japi.Pair(versions.asJava, markers.asJava)
@@ -910,7 +909,7 @@ object S3 {
       s3Headers: S3Headers): Sink[ByteString, CompletionStage[MultipartUploadResult]] =
     S3Stream
       .multipartUpload(S3Location(bucket, key), contentType.asInstanceOf[ScalaContentType], s3Headers)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -976,7 +975,7 @@ object S3 {
         contentType.asInstanceOf[ScalaContentType],
         s3Headers)
       .contramap[JPair[ByteString, C]](_.toScala)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -1061,7 +1060,7 @@ object S3 {
         previousParts.asScala.toList,
         contentType.asInstanceOf[ScalaContentType],
         s3Headers)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
   }
 
@@ -1150,7 +1149,7 @@ object S3 {
         contentType.asInstanceOf[ScalaContentType],
         s3Headers)
       .contramap[JPair[ByteString, C]](_.toScala)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
   }
 
@@ -1267,7 +1266,7 @@ object S3 {
       .completeMultipartUpload(S3Location(bucket, key), uploadId, parts.asScala.toList, s3Headers)(
         SystemMaterializer(system).materializer,
         attributes)
-      .toJava
+      .asJava
 
   /**
    * Copy a S3 Object by making multiple requests.
@@ -1298,7 +1297,7 @@ object S3 {
             contentType.asInstanceOf[ScalaContentType],
             s3Headers)
       }
-      .mapMaterializedValue(func(_.toJava))
+      .mapMaterializedValue(func(_.asJava))
 
   /**
    * Copy a S3 Object by making multiple requests.
@@ -1420,7 +1419,7 @@ object S3 {
       system: ClassicActorSystemProvider,
       attributes: Attributes,
       s3Headers: S3Headers): CompletionStage[Done] =
-    S3Stream.makeBucket(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).toJava
+    S3Stream.makeBucket(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).asJava
 
   /**
    * Create new bucket with a given name
@@ -1471,7 +1470,7 @@ object S3 {
       system: ClassicActorSystemProvider,
       attributes: Attributes,
       s3Headers: S3Headers): CompletionStage[Done] =
-    S3Stream.deleteBucket(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).toJava
+    S3Stream.deleteBucket(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).asJava
 
   /**
    * Delete bucket with a given name
@@ -1533,7 +1532,7 @@ object S3 {
       system: ClassicActorSystemProvider,
       attributes: Attributes,
       s3Headers: S3Headers): CompletionStage[BucketAccess] =
-    S3Stream.checkIfBucketExists(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).toJava
+    S3Stream.checkIfBucketExists(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).asJava
 
   /**
    * Checks whether the bucket exits and user has rights to perform ListBucket operation
@@ -1599,7 +1598,7 @@ object S3 {
       implicit system: ClassicActorSystemProvider, attributes: Attributes): CompletionStage[Done] =
     S3Stream
       .deleteUpload(bucketName, key, uploadId, s3Headers)(SystemMaterializer(system).materializer, attributes)
-      .toJava
+      .asJava
 
   /**
    * Delete all existing parts for a specific upload
@@ -1663,7 +1662,7 @@ object S3 {
       implicit system: ClassicActorSystemProvider, attributes: Attributes): CompletionStage[Done] =
     S3Stream
       .putBucketVersioning(bucketName, bucketVersioning, s3Headers)(SystemMaterializer(system).materializer, attributes)
-      .toJava
+      .asJava
 
   /**
    * Sets the versioning state of an existing bucket.
@@ -1718,7 +1717,7 @@ object S3 {
       system: ClassicActorSystemProvider,
       attributes: Attributes,
       s3Headers: S3Headers): CompletionStage[BucketVersioningResult] =
-    S3Stream.getBucketVersioning(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).toJava
+    S3Stream.getBucketVersioning(bucketName, s3Headers)(SystemMaterializer(system).materializer, attributes).asJava
 
   /**
    * Gets the versioning of an existing bucket

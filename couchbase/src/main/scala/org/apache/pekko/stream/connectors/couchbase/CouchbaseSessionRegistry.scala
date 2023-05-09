@@ -21,9 +21,9 @@ import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.couchbase.impl.CouchbaseClusterRegistry
 import pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JCouchbaseSession }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import pekko.util.FutureConverters._
 
 import scala.annotation.tailrec
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.{ Future, Promise }
 
 /**
@@ -88,7 +88,7 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
   def getSessionFor(settings: CouchbaseSessionSettings, bucketName: String): CompletionStage[JCouchbaseSession] =
     sessionFor(settings, bucketName)
       .map(_.asJava)(ExecutionContexts.parasitic)
-      .toJava
+      .asJava
 
   @tailrec
   private def startSession(key: SessionKey): Future[CouchbaseSession] = {

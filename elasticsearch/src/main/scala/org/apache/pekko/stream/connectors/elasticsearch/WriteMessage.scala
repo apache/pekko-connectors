@@ -17,8 +17,7 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.util.ccompat.JavaConverters._
-
-import scala.compat.java8.OptionConverters._
+import pekko.util.OptionConverters._
 
 /**
  * INTERNAL API
@@ -153,7 +152,7 @@ final class WriteResult[T2, C2] @InternalApi private[elasticsearch] (val message
   val success: Boolean = error.isEmpty
 
   /** Java API: JSON structure of the Elasticsearch error. */
-  def getError: java.util.Optional[String] = error.asJava
+  def getError: java.util.Optional[String] = error.toJava
 
   /** `reason` field value of the Elasticsearch error. */
   def errorReason: Option[String] = {
@@ -162,7 +161,7 @@ final class WriteResult[T2, C2] @InternalApi private[elasticsearch] (val message
   }
 
   /** Java API: `reason` field value from the Elasticsearch error */
-  def getErrorReason: java.util.Optional[String] = errorReason.asJava
+  def getErrorReason: java.util.Optional[String] = errorReason.toJava
 
   override def toString =
     s"""WriteResult(message=$message,error=$error)"""

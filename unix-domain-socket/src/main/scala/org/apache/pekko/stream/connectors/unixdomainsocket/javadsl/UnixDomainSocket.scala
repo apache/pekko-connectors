@@ -18,14 +18,14 @@ import java.nio.file.Path
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 
-import scala.compat.java8.OptionConverters._
-import scala.compat.java8.FutureConverters._
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import pekko.stream.javadsl.{ Flow, Source }
 import pekko.stream.Materializer
 import pekko.util.ByteString
+import pekko.util.OptionConverters._
+import pekko.util.FutureConverters._
 
 import scala.concurrent.duration.Duration
 
@@ -47,7 +47,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
      *
      * The produced [[java.util.concurrent.CompletionStage]] is fulfilled when the unbinding has been completed.
      */
-    def unbind(): CompletionStage[Unit] = delegate.unbind().toJava
+    def unbind(): CompletionStage[Unit] = delegate.unbind().asJava
   }
 
   /**
@@ -146,7 +146,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Ex
       delegate
         .bind(path, backlog, halfClose)
         .map(new IncomingConnection(_))
-        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).toJava))
+        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).asJava))
 
   /**
    * Creates a [[UnixDomainSocket.ServerBinding]] without specifying options.
@@ -161,7 +161,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Ex
       delegate
         .bind(path)
         .map(new IncomingConnection(_))
-        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).toJava))
+        .mapMaterializedValue(_.map(new ServerBinding(_))(parasitic).asJava))
 
   /**
    * Creates an [[UnixDomainSocket.OutgoingConnection]] instance representing a prospective UnixDomainSocket client connection to the given endpoint.
@@ -190,8 +190,8 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Ex
       connectTimeout: Duration): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
     Flow.fromGraph(
       delegate
-        .outgoingConnection(remoteAddress, localAddress.asScala, halfClose, connectTimeout)
-        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).toJava))
+        .outgoingConnection(remoteAddress, localAddress.toScala, halfClose, connectTimeout)
+        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).asJava))
 
   /**
    * Creates an [[UnixDomainSocket.OutgoingConnection]] without specifying options.
@@ -207,6 +207,6 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Ex
     Flow.fromGraph(
       delegate
         .outgoingConnection(new UnixSocketAddress(path))
-        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).toJava))
+        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).asJava))
 
 }

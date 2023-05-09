@@ -11,7 +11,7 @@
  * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
  */
 
-package docs.javadsl
+package org.apache.pekko.stream.connectors.cassandra.javadsl
 
 import java.util
 import java.util.concurrent.CompletionStage
@@ -28,11 +28,11 @@ import pekko.stream.javadsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
+import pekko.util.OptionConverters._
 import com.datastax.oss.driver.api.core.cql.Row
 
 import scala.collection.immutable
-import scala.compat.java8.FutureConverters._
-import scala.compat.java8.OptionConverters._
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
@@ -80,7 +80,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
   // testing javadsl to prove delegation works
   lazy val session: javadsl.CassandraSession = javadslSessionRegistry.sessionFor(sessionSettings)
 
-  def await[T](cs: CompletionStage[T]): T = cs.toScala.futureValue
+  def await[T](cs: CompletionStage[T]): T = cs.asScala.futureValue
 
   "session" must {
 
@@ -99,7 +99,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
         } yield Done
       }.futureValue mustBe Done
       val sink: Sink[Row, CompletionStage[util.List[Row]]] = Sink.seq
-      val rows = session.select(s"SELECT * FROM $table").runWith(sink, materializer).toScala.futureValue
+      val rows = session.select(s"SELECT * FROM $table").runWith(sink, materializer).asScala.futureValue
       rows.asScala.map(_.getInt("id")) must contain theSameElementsAs data
     }
 
@@ -141,7 +141,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
 
     "selectOne empty" in {
       val row = await(session.selectOne(s"SELECT count FROM $dataTable WHERE partition = ? and key = ?", "A", "x"))
-      row.asScala mustBe empty
+      row.toScala mustBe empty
     }
 
     "create indexes" in {
@@ -151,7 +151,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
       val row =
         await(
           session.selectOne("SELECT * FROM system_schema.indexes WHERE table_name = ? ALLOW FILTERING", dataTableName))
-      row.asScala.map(index => index.getString("table_name") -> index.getString("index_name")) mustBe Some(
+      row.toScala.map(index => index.getString("table_name") -> index.getString("index_name")) mustBe Some(
         dataTableName -> "count_idx")
     }
 
