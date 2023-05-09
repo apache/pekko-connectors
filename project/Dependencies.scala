@@ -110,8 +110,8 @@ object Dependencies {
     ))
 
   val CassandraVersionInDocs = "4.0"
-  val CassandraDriverVersion = "4.13.0"
-  val CassandraDriverVersionInDocs = "4.13"
+  val CassandraDriverVersion = "4.15.0"
+  val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
     libraryDependencies ++= Seq(
