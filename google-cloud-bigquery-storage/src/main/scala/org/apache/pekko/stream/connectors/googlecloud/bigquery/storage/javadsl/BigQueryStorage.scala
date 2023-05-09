@@ -22,13 +22,13 @@ import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstor
 import pekko.stream.javadsl.Source
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
+import pekko.util.FutureConverters._
 import com.google.cloud.bigquery.storage.v1.DataFormat
 import com.google.cloud.bigquery.storage.v1.ReadSession.TableReadOptions
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 
 import java.util.concurrent.CompletionStage
-import scala.compat.java8.FutureConverters.FutureOps
 
 /**
  * Google BigQuery Storage Api Akka Stream operator factory.
@@ -126,7 +126,7 @@ object BigQueryStorage {
         (stream._1, stream._2.map(_.asJava).asJava)
       })
       .asJava
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
 
   /**
    * Create a source that contains a number of sources, one for each stream, or section of the table data.
@@ -216,6 +216,6 @@ object BigQueryStorage {
     scstorage.BigQueryStorage
       .createMergedStreams(projectId, datasetId, tableId, dataFormat, readOptions.map(_.asScala()), maxNumStreams)(um)
       .asJava
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
 
 }

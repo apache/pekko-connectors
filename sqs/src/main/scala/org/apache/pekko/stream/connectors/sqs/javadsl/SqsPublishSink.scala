@@ -21,10 +21,9 @@ import pekko.stream.connectors.sqs._
 import pekko.stream.javadsl.Sink
 import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
-
-import scala.compat.java8.FutureConverters.FutureOps
 
 /**
  * Java API to create SQS Sinks.
@@ -37,7 +36,7 @@ object SqsPublishSink {
   def create(queueUrl: String,
       settings: SqsPublishSettings,
       sqsClient: SqsAsyncClient): Sink[String, CompletionStage[Done]] =
-    scaladsl.SqsPublishSink.apply(queueUrl, settings)(sqsClient).mapMaterializedValue(_.toJava).asJava
+    scaladsl.SqsPublishSink.apply(queueUrl, settings)(sqsClient).mapMaterializedValue(_.asJava).asJava
 
   /**
    * creates a [[pekko.stream.javadsl.Sink Sink]] to publish messages to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
@@ -47,7 +46,7 @@ object SqsPublishSink {
       sqsClient: SqsAsyncClient): Sink[SendMessageRequest, CompletionStage[Done]] =
     scaladsl.SqsPublishSink
       .messageSink(queueUrl, settings)(sqsClient)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -57,7 +56,7 @@ object SqsPublishSink {
       sqsClient: SqsAsyncClient): Sink[SendMessageRequest, CompletionStage[Done]] =
     scaladsl.SqsPublishSink
       .messageSink(settings)(sqsClient)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -67,7 +66,7 @@ object SqsPublishSink {
   def grouped(queueUrl: String,
       settings: SqsPublishGroupedSettings,
       sqsClient: SqsAsyncClient): Sink[String, CompletionStage[Done]] =
-    scaladsl.SqsPublishSink.grouped(queueUrl, settings)(sqsClient).mapMaterializedValue(_.toJava).asJava
+    scaladsl.SqsPublishSink.grouped(queueUrl, settings)(sqsClient).mapMaterializedValue(_.asJava).asJava
 
   /**
    * creates a [[pekko.stream.javadsl.Sink Sink]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
@@ -78,7 +77,7 @@ object SqsPublishSink {
       sqsClient: SqsAsyncClient): Sink[SendMessageRequest, CompletionStage[Done]] =
     scaladsl.SqsPublishSink
       .groupedMessageSink(queueUrl, settings)(sqsClient)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -91,7 +90,7 @@ object SqsPublishSink {
     Flow[java.lang.Iterable[String]]
       .map(_.asScala)
       .toMat(scaladsl.SqsPublishSink.batch(queueUrl, settings)(sqsClient))(Keep.right)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -104,6 +103,6 @@ object SqsPublishSink {
     Flow[java.lang.Iterable[SendMessageRequest]]
       .map(_.asScala)
       .toMat(scaladsl.SqsPublishSink.batchedMessageSink(queueUrl, settings)(sqsClient))(Keep.right)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 }

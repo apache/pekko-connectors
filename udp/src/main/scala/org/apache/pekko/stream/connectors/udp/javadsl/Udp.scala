@@ -24,8 +24,7 @@ import pekko.stream.connectors.udp.Datagram
 import pekko.stream.javadsl.{ Flow, Sink }
 import pekko.stream.connectors.udp.scaladsl
 import pekko.util.ccompat.JavaConverters._
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 object Udp {
   import java.lang.{ Iterable => JIterable }
@@ -121,7 +120,7 @@ object Udp {
    */
   def bindFlow(localAddress: InetSocketAddress,
       system: ActorSystem): Flow[Datagram, Datagram, CompletionStage[InetSocketAddress]] =
-    scaladsl.Udp.bindFlow(localAddress)(system).mapMaterializedValue(_.toJava).asJava
+    scaladsl.Udp.bindFlow(localAddress)(system).mapMaterializedValue(_.asJava).asJava
 
   /**
    * Creates a flow that upon materialization binds to the given `localAddress`. All incoming
@@ -133,7 +132,7 @@ object Udp {
    */
   def bindFlow(localAddress: InetSocketAddress,
       system: ClassicActorSystemProvider): Flow[Datagram, Datagram, CompletionStage[InetSocketAddress]] =
-    scaladsl.Udp.bindFlow(localAddress)(system).mapMaterializedValue(_.toJava).asJava
+    scaladsl.Udp.bindFlow(localAddress)(system).mapMaterializedValue(_.asJava).asJava
 
   /**
    * Creates a flow that upon materialization binds to the given `localAddress`. All incoming
@@ -147,7 +146,7 @@ object Udp {
   def bindFlow(localAddress: InetSocketAddress,
       options: JIterable[SocketOption],
       system: ActorSystem): Flow[Datagram, Datagram, CompletionStage[InetSocketAddress]] =
-    scaladsl.Udp.bindFlow(localAddress, options.asScala.toIndexedSeq)(system).mapMaterializedValue(_.toJava).asJava
+    scaladsl.Udp.bindFlow(localAddress, options.asScala.toIndexedSeq)(system).mapMaterializedValue(_.asJava).asJava
 
   /**
    * Creates a flow that upon materialization binds to the given `localAddress`. All incoming
@@ -161,5 +160,5 @@ object Udp {
   def bindFlow(localAddress: InetSocketAddress,
       options: JIterable[SocketOption],
       system: ClassicActorSystemProvider): Flow[Datagram, Datagram, CompletionStage[InetSocketAddress]] =
-    scaladsl.Udp.bindFlow(localAddress, options.asScala.toIndexedSeq)(system).mapMaterializedValue(_.toJava).asJava
+    scaladsl.Udp.bindFlow(localAddress, options.asScala.toIndexedSeq)(system).mapMaterializedValue(_.asJava).asJava
 }

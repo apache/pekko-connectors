@@ -24,6 +24,7 @@ import pekko.stream.connectors.kinesis.KinesisErrors.FailurePublishingRecords
 import pekko.stream.scaladsl.{ Flow, FlowWithContext }
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.{
@@ -35,7 +36,6 @@ import software.amazon.awssdk.services.kinesis.model.{
 
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
-import scala.compat.java8.FutureConverters._
 import scala.util.{ Failure, Success, Try }
 
 object KinesisFlow {
@@ -95,7 +95,7 @@ object KinesisFlow {
         kinesisClient
           .putRecords(
             PutRecordsRequest.builder().streamName(streamName).records(entries.map(_._1).asJavaCollection).build)
-          .toScala
+          .asScala
           .transform(handleBatch(entries))(parasitic))
       .mapConcat(identity)
   }

@@ -20,10 +20,10 @@ import pekko.stream.javadsl.Source
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 
 import java.util.concurrent.CompletionStage
-import scala.compat.java8.FutureConverters.FutureOps
 
 /**
  * Google BigQuery Storage Api Akka Stream operator factory using Arrow Format.
@@ -67,7 +67,7 @@ object BigQueryArrowStorage {
         stream.asJava
       })
       .asJava
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
 
   def readRecords(projectId: String,
       datasetId: String,
@@ -109,7 +109,7 @@ object BigQueryArrowStorage {
         stream.map(_.asJava).asJava
       })
       .asJava
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
 
   def readMerged(projectId: String,
       datasetId: String,
@@ -151,7 +151,7 @@ object BigQueryArrowStorage {
         (stream._1, stream._2.asJava)
       })
       .asJava
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
 
   def read(
       projectId: String,
@@ -198,6 +198,6 @@ object BigQueryArrowStorage {
         (stream._1, stream._2.map(_.asJava).asJava)
       })
       .asJava
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
 
 }

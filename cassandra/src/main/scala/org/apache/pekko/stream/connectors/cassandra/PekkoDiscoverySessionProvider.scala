@@ -18,11 +18,11 @@ import pekko.ConfigurationException
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.discovery.Discovery
 import pekko.util.JavaDurationConverters._
+import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
 import scala.collection.immutable
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -72,7 +72,7 @@ private[cassandra] object PekkoDiscoverySessionProvider {
         basic.contact-points = [${contactPoints.mkString("\"", "\", \"", "\"")}]
         """).withFallback(CqlSessionProvider.driverConfig(system, config))
       val driverConfigLoader = DriverConfigLoaderFromConfig.fromConfig(driverConfigWithContactPoints)
-      CqlSession.builder().withConfigLoader(driverConfigLoader).buildAsync().toScala
+      CqlSession.builder().withConfigLoader(driverConfigLoader).buildAsync().asScala
     }
   }
 

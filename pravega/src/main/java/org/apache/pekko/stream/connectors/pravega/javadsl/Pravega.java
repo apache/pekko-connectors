@@ -25,10 +25,10 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.FutureConverters;
 
 import io.pravega.client.ClientConfig;
 import io.pravega.client.stream.ReaderGroup;
-import scala.compat.java8.FutureConverters;
 import java.util.concurrent.CompletionStage;
 
 import org.apache.pekko.stream.connectors.pravega.impl.PravegaFlow;
@@ -49,7 +49,7 @@ public class Pravega {
   public static <V> Source<PravegaEvent<V>, CompletionStage<Done>> source(
       ReaderGroup readerGroup, ReaderSettings<V> readerSettings) {
     return Source.fromGraph(new PravegaSource<>(readerGroup, readerSettings))
-        .mapMaterializedValue(FutureConverters::<Done>toJava);
+        .mapMaterializedValue(FutureConverters::<Done>asJava);
   }
 
   /** Incoming messages are written to Pravega stream and emitted unchanged. */

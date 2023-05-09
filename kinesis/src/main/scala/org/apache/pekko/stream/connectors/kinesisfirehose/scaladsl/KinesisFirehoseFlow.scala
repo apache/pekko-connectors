@@ -20,14 +20,13 @@ import pekko.stream.ThrottleMode
 import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
 import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
 import pekko.stream.scaladsl.Flow
+import pekko.util.FutureConverters._
 import pekko.util.ccompat.JavaConverters._
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchRequest, PutRecordBatchResponseEntry, Record }
 
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
-
-import scala.compat.java8.FutureConverters._
 
 object KinesisFirehoseFlow {
   def apply(streamName: String, settings: KinesisFirehoseFlowSettings = KinesisFirehoseFlowSettings.Defaults)(
@@ -44,7 +43,7 @@ object KinesisFirehoseFlow {
               .deliveryStreamName(streamName)
               .records(records.asJavaCollection)
               .build())
-          .toScala
+          .asScala
           .transform(identity, FailurePublishingRecords(_))(parasitic))
       .mapConcat(_.requestResponses.asScala.toIndexedSeq)
 

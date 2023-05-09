@@ -14,14 +14,14 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
 import java.util.Optional
-import scala.compat.java8.OptionConverters._
+import org.apache.pekko.util.OptionConverters._
 
 final class Owner private (entity: String, entityId: Option[String]) {
   def withEntity(entity: String): Owner = copy(entity = entity)
   def withEntityId(entityId: String): Owner = copy(entityId = Option(entityId))
 
   /** Java API */
-  def getEntityId: Optional[String] = entityId.asJava
+  def getEntityId: Optional[String] = entityId.toJava
 
   private def copy(entity: String = entity, entityId: Option[String] = entityId): Owner =
     new Owner(entity, entityId)
@@ -38,5 +38,5 @@ object Owner {
 
   /** Java API */
   def create(entity: String, entityId: Optional[String]): Owner =
-    new Owner(entity, entityId.asScala)
+    new Owner(entity, entityId.toScala)
 }

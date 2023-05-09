@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.dynamodb
 
 import java.util.concurrent.CompletableFuture
 
+import org.apache.pekko.util.FutureConverters._
 import org.reactivestreams.Publisher
 import software.amazon.awssdk.core.async.SdkPublisher
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
@@ -26,7 +27,6 @@ import software.amazon.awssdk.services.dynamodb.paginators.{
   ScanPublisher
 }
 
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.Future
 
 /**
@@ -39,7 +39,7 @@ import scala.concurrent.Future
  */
 sealed class DynamoDbOp[In <: DynamoDbRequest, Out <: DynamoDbResponse](
     sdkExecute: DynamoDbAsyncClient => In => CompletableFuture[Out]) {
-  def execute(request: In)(implicit client: DynamoDbAsyncClient): Future[Out] = sdkExecute(client)(request).toScala
+  def execute(request: In)(implicit client: DynamoDbAsyncClient): Future[Out] = sdkExecute(client)(request).asScala
 }
 
 /**

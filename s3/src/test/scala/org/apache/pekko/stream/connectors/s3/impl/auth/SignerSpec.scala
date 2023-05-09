@@ -22,6 +22,7 @@ import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
+import pekko.util.OptionConverters._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
 import org.scalatest.concurrent.ScalaFutures
@@ -30,8 +31,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{ Millis, Seconds, Span }
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
-
-import scala.compat.java8.OptionConverters._
 
 class SignerSpec(_system: ActorSystem)
     extends TestKit(_system)
@@ -139,7 +138,7 @@ class SignerSpec(_system: ActorSystem)
     val srFuture = Signer.signedRequest(req, signingKey(date), signAnonymousRequests = true).runWith(Sink.head)
 
     whenReady(srFuture) { signedRequest =>
-      signedRequest.getHeader("Authorization").asScala.value shouldEqual RawHeader(
+      signedRequest.getHeader("Authorization").toScala.value shouldEqual RawHeader(
         "Authorization",
         "AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/20150830/us-east-1/iam/aws4_request, SignedHeaders=content-type;host;x-amz-content-sha256;x-amz-date, Signature=dd479fa8a80364edf2119ec24bebde66712ee9c9cb2b0d92eb3ab9ccdc0c3947")
     }

@@ -19,16 +19,15 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.amqp.ReadResult
 import pekko.stream.connectors.amqp.scaladsl
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 final class CommittableReadResult(cm: scaladsl.CommittableReadResult) {
   val message: ReadResult = cm.message
 
   def ack(): CompletionStage[Done] = ack(false)
-  def ack(multiple: Boolean): CompletionStage[Done] = cm.ack(multiple).toJava
+  def ack(multiple: Boolean): CompletionStage[Done] = cm.ack(multiple).asJava
 
   def nack(): CompletionStage[Done] = nack(false, true)
   def nack(multiple: Boolean, requeue: Boolean): CompletionStage[Done] =
-    cm.nack(multiple, requeue).toJava
+    cm.nack(multiple, requeue).asJava
 }

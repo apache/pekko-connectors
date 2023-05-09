@@ -29,8 +29,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.apache.pekko.util.FutureConverters.*;
 import static scala.collection.JavaConverters.*;
-import static scala.compat.java8.FutureConverters.*;
 
 public abstract class UnitTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -87,7 +87,7 @@ public abstract class UnitTest {
 
   protected String givenQueue(String name) {
     try {
-      return toJava(ironMqClient.createQueue(name, system.dispatcher()))
+      return asJava(ironMqClient.createQueue(name, system.dispatcher()))
           .toCompletableFuture()
           .get();
     } catch (Exception e) {
@@ -103,7 +103,7 @@ public abstract class UnitTest {
             .collect(Collectors.toList());
 
     try {
-      return toJava(
+      return asJava(
               ironMqClient.pushMessages(
                   queueName,
                   asScalaBufferConverter(messages).asScala().toSeq(),

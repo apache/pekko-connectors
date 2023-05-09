@@ -19,9 +19,10 @@ import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import pekko.japi.Util
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.OptionConverters
+import pekko.util.OptionConverters._
 
 import javax.net.ssl.SSLContext
-import scala.compat.java8.OptionConverters
 
 final class ElasticsearchConnectionSettings private (
     val baseUrl: String,
@@ -73,8 +74,8 @@ final class ElasticsearchConnectionSettings private (
       None,
       OptionConverters.toScala(connectionContext.getEnabledCipherSuites).map(Util.immutableSeq(_)),
       OptionConverters.toScala(connectionContext.getEnabledProtocols).map(Util.immutableSeq(_)),
-      OptionConverters.toScala(connectionContext.getClientAuth),
-      OptionConverters.toScala(connectionContext.getSslParameters))
+      connectionContext.getClientAuth.toScala,
+      connectionContext.getSslParameters.toScala)
 
     copy(connectionContext = Option(scalaContext))
   }

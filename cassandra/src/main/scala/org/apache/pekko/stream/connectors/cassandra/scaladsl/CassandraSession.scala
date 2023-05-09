@@ -20,6 +20,7 @@ import pekko.event.LoggingAdapter
 import pekko.stream.connectors.cassandra.{ CassandraMetricsRegistry, CassandraServerMetaData, CqlSessionProvider }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.util.FutureConverters._
 import pekko.util.OptionVal
 import pekko.{ Done, NotUsed }
 import com.datastax.oss.driver.api.core.CqlSession
@@ -27,7 +28,6 @@ import com.datastax.oss.driver.api.core.cql._
 import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException
 
 import scala.collection.immutable
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.NonFatal
 
@@ -88,7 +88,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
   def close(executionContext: ExecutionContext): Future[Done] = {
     implicit val ec: ExecutionContext = executionContext
     onClose()
-    _underlyingSession.map(_.closeAsync().toScala).map(_ => Done)
+    _underlyingSession.map(_.closeAsync().asScala).map(_ => Done)
   }
 
   /**
@@ -132,7 +132,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    */
   def executeDDL(stmt: String): Future[Done] =
     underlying().flatMap { cqlSession =>
-      cqlSession.executeAsync(stmt).toScala.map(_ => Done)
+      cqlSession.executeAsync(stmt).asScala.map(_ => Done)
     }
 
   /**
@@ -141,7 +141,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    */
   def prepare(stmt: String): Future[PreparedStatement] =
     underlying().flatMap { cqlSession =>
-      cqlSession.prepareAsync(stmt).toScala
+      cqlSession.prepareAsync(stmt).asScala
     }
 
   /**
@@ -173,7 +173,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    */
   def executeWrite(stmt: Statement[_]): Future[Done] = {
     underlying().flatMap { cqlSession =>
-      cqlSession.executeAsync(stmt).toScala.map(_ => Done)
+      cqlSession.executeAsync(stmt).asScala.map(_ => Done)
     }
   }
 
@@ -196,7 +196,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    */
   @InternalApi private[pekko] def selectResultSet(stmt: Statement[_]): Future[AsyncResultSet] = {
     underlying().flatMap { s =>
-      s.executeAsync(stmt).toScala
+      s.executeAsync(stmt).asScala
     }
   }
 

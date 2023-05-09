@@ -20,11 +20,11 @@ import pekko.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Ur
 import pekko.http.scaladsl.model.headers._
 import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.OptionConverters._
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 import scala.collection.immutable
-import scala.compat.java8.OptionConverters._
 
 final class MFA private (val serialNumber: String, val tokenCode: String) {
 
@@ -138,7 +138,7 @@ final class BucketVersioningResult private (val status: Option[BucketVersioningS
   def getStatus: Option[BucketVersioningStatus] = status
 
   /** Java API */
-  def getMfaDelete: java.util.Optional[Boolean] = mfaDelete.asJava
+  def getMfaDelete: java.util.Optional[Boolean] = mfaDelete.toJava
 
   def withStatus(value: BucketVersioningStatus): BucketVersioningResult =
     copy(status = Some(value))
@@ -188,17 +188,17 @@ object BucketVersioningResult {
 
   def create(status: java.util.Optional[BucketVersioningStatus], mfaDelete: java.util.Optional[Boolean])
       : BucketVersioningResult =
-    apply(status.asScala, mfaDelete.asScala)
+    apply(status.toScala, mfaDelete.toScala)
 
 }
 
 final class BucketVersioning private (val status: Option[BucketVersioningStatus], val mfaDelete: Option[MFAStatus]) {
 
   /** Java API */
-  def getStatus: java.util.Optional[BucketVersioningStatus] = status.asJava
+  def getStatus: java.util.Optional[BucketVersioningStatus] = status.toJava
 
   /** Java API */
-  def getMfaDelete: java.util.Optional[MFAStatus] = mfaDelete.asJava
+  def getMfaDelete: java.util.Optional[MFAStatus] = mfaDelete.toJava
 
   /** Java API */
   def getBucketVersioningEnabled: Boolean = bucketVersioningEnabled
@@ -247,7 +247,7 @@ object BucketVersioning {
 
   def create(
       status: java.util.Optional[BucketVersioningStatus], mfaDelete: java.util.Optional[MFAStatus]): BucketVersioning =
-    apply(status.asScala, mfaDelete.asScala)
+    apply(status.toScala, mfaDelete.toScala)
 
 }
 
@@ -440,7 +440,7 @@ final class MultipartUploadResult private (
   def getETag: String = eTag
 
   /** Java API */
-  def getVersionId: Optional[String] = versionId.asJava
+  def getVersionId: Optional[String] = versionId.toJava
 
   def withLocation(value: Uri): MultipartUploadResult = copy(location = value)
   def withBucket(value: String): MultipartUploadResult = copy(bucket = value)
@@ -524,7 +524,7 @@ object MultipartUploadResult {
     bucket,
     key,
     eTag,
-    versionId.asScala)
+    versionId.toScala)
 }
 
 final class AWSIdentity private (val id: String, val displayName: String) {
@@ -585,10 +585,10 @@ final class ListMultipartUploadResultUploads private (val key: String,
   def getUploadId: String = uploadId
 
   /** Java API */
-  def getInitiator: Optional[AWSIdentity] = initiator.asJava
+  def getInitiator: Optional[AWSIdentity] = initiator.toJava
 
   /** Java API */
-  def getOwner: Optional[AWSIdentity] = owner.asJava
+  def getOwner: Optional[AWSIdentity] = owner.toJava
 
   /** Java API */
   def getStorageClass: String = storageClass
@@ -661,7 +661,7 @@ object ListMultipartUploadResultUploads {
       owner: Optional[AWSIdentity],
       storageClass: String,
       initiated: Instant): ListMultipartUploadResultUploads =
-    apply(key, uploadId, initiator.asScala, owner.asScala, storageClass, initiated)
+    apply(key, uploadId, initiator.toScala, owner.toScala, storageClass, initiated)
 }
 
 final class ListObjectVersionsResultVersions private (val eTag: String,
@@ -686,7 +686,7 @@ final class ListObjectVersionsResultVersions private (val eTag: String,
   def getLastModified: Instant = lastModified
 
   /** Java API */
-  def getOwner: Optional[AWSIdentity] = owner.asJava
+  def getOwner: Optional[AWSIdentity] = owner.toJava
 
   /** Java API */
   def getSize: Long = size
@@ -695,7 +695,7 @@ final class ListObjectVersionsResultVersions private (val eTag: String,
   def getStorageClass: String = storageClass
 
   /** Java API */
-  def getVersionId: Optional[String] = versionId.asJava
+  def getVersionId: Optional[String] = versionId.toJava
 
   def withETag(value: String): ListObjectVersionsResultVersions = copy(eTag = value)
 
@@ -797,7 +797,7 @@ object ListObjectVersionsResultVersions {
       size: Long,
       storageClass: String,
       versionId: Optional[String]): ListObjectVersionsResultVersions =
-    apply(eTag, isLatest, key, lastModified, owner.asScala, size, storageClass, versionId.asScala)
+    apply(eTag, isLatest, key, lastModified, owner.toScala, size, storageClass, versionId.toScala)
 }
 
 final class DeleteMarkers private (val isLatest: Boolean,
@@ -816,10 +816,10 @@ final class DeleteMarkers private (val isLatest: Boolean,
   def getLastModified: Instant = lastModified
 
   /** Java API */
-  def getOwner: Optional[AWSIdentity] = owner.asJava
+  def getOwner: Optional[AWSIdentity] = owner.toJava
 
   /** Java API */
-  def getVersionId: Optional[String] = versionId.asJava
+  def getVersionId: Optional[String] = versionId.toJava
 
   def withIsLatest(value: Boolean): DeleteMarkers = copy(isLatest = value)
 
@@ -892,7 +892,7 @@ object DeleteMarkers {
       lastModified: Instant,
       owner: Optional[AWSIdentity],
       versionId: Optional[String]): DeleteMarkers =
-    apply(isLatest, key, lastModified, owner.asScala, versionId.asScala)
+    apply(isLatest, key, lastModified, owner.toScala, versionId.toScala)
 }
 
 final class CommonPrefixes private (val prefix: String) {
@@ -1329,7 +1329,7 @@ final class ObjectMetadata private (
    *         as calculated by Amazon S3.
    */
   lazy val getETag: Optional[String] =
-    eTag.asJava
+    eTag.toJava
 
   /**
    * <p>
@@ -1439,7 +1439,7 @@ final class ObjectMetadata private (
    * @see ObjectMetadata#setContentType(String)
    */
   def getContentType: Optional[String] =
-    contentType.asJava
+    contentType.toJava
 
   /**
    * Gets the value of the Last-Modified header, indicating the date
@@ -1479,7 +1479,7 @@ final class ObjectMetadata private (
    * Gets the optional Cache-Control header
    */
   def getCacheControl: Optional[String] =
-    cacheControl.asJava
+    cacheControl.toJava
 
   /**
    * Gets the value of the version id header. The version id will only be available
@@ -1499,7 +1499,7 @@ final class ObjectMetadata private (
    *
    * @return optional version id of the object
    */
-  def getVersionId: Optional[String] = versionId.asJava
+  def getVersionId: Optional[String] = versionId.toJava
 
 }
 object ObjectMetadata {

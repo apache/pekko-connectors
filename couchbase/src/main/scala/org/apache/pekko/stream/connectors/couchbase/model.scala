@@ -19,6 +19,7 @@ import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.annotation.InternalApi
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import com.couchbase.client.java.document.Document
 import com.couchbase.client.java.env.CouchbaseEnvironment
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }
@@ -26,7 +27,6 @@ import com.typesafe.config.Config
 
 import scala.collection.immutable
 import scala.concurrent.Future
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.duration._
 
 /**
@@ -216,7 +216,7 @@ final class CouchbaseSessionSettings private (
   def withEnrichAsyncCs(
       value: java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]])
       : CouchbaseSessionSettings =
-    copy(enrichAsync = (s: CouchbaseSessionSettings) => value.apply(s).toScala)
+    copy(enrichAsync = (s: CouchbaseSessionSettings) => value.apply(s).asScala)
 
   def withEnvironment(environment: CouchbaseEnvironment): CouchbaseSessionSettings =
     copy(environment = Some(environment))

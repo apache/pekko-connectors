@@ -21,14 +21,13 @@ import pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
 import pekko.stream.Materializer
 import pekko.stream.javadsl.Source
 import pekko.http.javadsl.model.sse.ServerSentEvent
+import pekko.util.FutureConverters
+import pekko.util.OptionConverters
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 import java.util.function.{ Function => JFunction }
 
 import pekko.actor.ClassicActorSystemProvider
-
-import scala.compat.java8.FutureConverters
-import scala.compat.java8.OptionConverters
 
 /**
  * This stream processing stage establishes a continuous source of server-sent events from the given URI.
@@ -92,8 +91,8 @@ object EventSource {
       scaladsl
         .EventSource(
           uri.asScala,
-          send(_).toScala.map(_.asInstanceOf[SHttpResponse])(system.classicSystem.dispatcher),
-          lastEventId.asScala)(system)
+          send(_).asScala.map(_.asInstanceOf[SHttpResponse])(system.classicSystem.dispatcher),
+          lastEventId.toScala)(system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
   }
@@ -115,8 +114,8 @@ object EventSource {
       scaladsl
         .EventSource(
           uri.asScala,
-          send(_).toScala.map(_.asInstanceOf[SHttpResponse])(mat.executionContext),
-          lastEventId.asScala)(mat.system)
+          send(_).asScala.map(_.asInstanceOf[SHttpResponse])(mat.executionContext),
+          lastEventId.toScala)(mat.system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
   }

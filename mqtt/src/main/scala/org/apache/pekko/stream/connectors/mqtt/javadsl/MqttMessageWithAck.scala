@@ -20,8 +20,7 @@ import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.mqtt.MqttMessage
 import pekko.stream.connectors.mqtt.scaladsl
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 /**
  * Java API
@@ -50,7 +49,7 @@ sealed trait MqttMessageWithAck {
 private[javadsl] object MqttMessageWithAck {
   def toJava(cm: scaladsl.MqttMessageWithAck): MqttMessageWithAck = new MqttMessageWithAck {
     override val message: MqttMessage = cm.message
-    override def ack(): CompletionStage[Done] = cm.ack().toJava
+    override def ack(): CompletionStage[Done] = cm.ack().asJava
   }
 }
 

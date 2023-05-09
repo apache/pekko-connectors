@@ -25,11 +25,10 @@ import pekko.stream.javadsl.Sink
 import pekko.util.ByteString
 import pekko.japi.function
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
+import pekko.util.OptionConverters._
 
 import scala.concurrent.Future
-
-import scala.compat.java8.FutureConverters._
-import scala.compat.java8.OptionConverters._
 
 /**
  * Java API.
@@ -76,7 +75,7 @@ object LogRotatorSink {
       sinkFactory: function.Function[C, Sink[ByteString, CompletionStage[R]]])
       : javadsl.Sink[ByteString, CompletionStage[Done]] = {
     val t: C => scaladsl.Sink[ByteString, Future[R]] = path =>
-      sinkFactory.apply(path).asScala.mapMaterializedValue(_.toScala)
+      sinkFactory.apply(path).asScala.mapMaterializedValue(_.asScala)
     new Sink(
       pekko.stream.connectors.file.scaladsl.LogRotatorSink
         .withSinkFactory(asScala[C](triggerGeneratorCreator), t)
@@ -86,7 +85,7 @@ object LogRotatorSink {
   private def asScala[C](
       f: function.Creator[function.Function[ByteString, Optional[C]]]): () => ByteString => Option[C] = () => {
     val fun = f.create()
-    elem => fun(elem).asScala
+    elem => fun(elem).toScala
   }
 
 }

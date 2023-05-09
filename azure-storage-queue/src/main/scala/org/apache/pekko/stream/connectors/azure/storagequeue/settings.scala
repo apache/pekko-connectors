@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.azure.storagequeue
 
+import org.apache.pekko.util.OptionConverters._
+
 import java.time.{ Duration => JavaDuration }
 import java.util.Optional
 
-import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 
 /**
@@ -51,7 +52,7 @@ final class AzureQueueSourceSettings private (
    * Java API
    */
   def getRetrieveRetryTimeout(): Optional[JavaDuration] =
-    retrieveRetryTimeout.map(d => JavaDuration.ofNanos(d.toNanos)).asJava
+    retrieveRetryTimeout.map(d => JavaDuration.ofNanos(d.toNanos)).toJava
 
   private def copy(batchSize: Int = batchSize, retrieveRetryTimeout: Option[FiniteDuration] = retrieveRetryTimeout) =
     new AzureQueueSourceSettings(initialVisibilityTimeout, batchSize, retrieveRetryTimeout)

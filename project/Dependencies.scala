@@ -18,7 +18,7 @@ object Dependencies {
   val Scala212 = "2.12.17"
   val ScalaVersions = Seq(Scala213, Scala212)
 
-  val PekkoVersion = "0.0.0+26629-321c5721-SNAPSHOT"
+  val PekkoVersion = "0.0.0+26656-898c6970-SNAPSHOT"
   val AkkaBinaryVersion = "2.6"
 
   val InfluxDBJavaVersion = "2.15"
@@ -27,7 +27,7 @@ object Dependencies {
   val AwsSpiPekkoHttpVersion = "0.1.0-SNAPSHOT"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "2.1"
-  val PekkoHttpVersion = "0.0.0+4338-c98db6bd-SNAPSHOT"
+  val PekkoHttpVersion = "0.0.0+4345-fa1cb9cb-SNAPSHOT"
   val AkkaHttpBinaryVersion = "10.2"
   val ScalaTestVersion = "3.2.11"
   val TestContainersScalaTestVersion = "0.40.3"
@@ -134,7 +134,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1715-d36a8e1a-SNAPSHOT" % Test,
+      "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1728-e2c660ef-SNAPSHOT" % Test,
       "junit" % "junit" % "4.13.2" % Test, // Eclipse Public License 1.0
       "org.scalatest" %% "scalatest" % "3.2.11" % Test // ApacheV2
     ))

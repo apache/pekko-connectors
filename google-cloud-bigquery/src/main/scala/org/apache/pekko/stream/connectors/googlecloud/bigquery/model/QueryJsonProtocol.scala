@@ -19,6 +19,7 @@ import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJ
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonReader
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.JavaDurationConverters._
+import pekko.util.OptionConverters._
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonIgnoreProperties, JsonProperty }
 import spray.json.{ RootJsonFormat, RootJsonReader }
 
@@ -28,7 +29,6 @@ import java.{ lang, util }
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable.Seq
-import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -58,15 +58,15 @@ final case class QueryRequest private (query: String,
     requestId: Option[String]) {
 
   def getQuery = query
-  def getMaxResults = maxResults.asPrimitive
-  def getDefaultDataset = defaultDataset.asJava
-  def getTimeout = timeout.map(_.asJava).asJava
-  def getDryRun = dryRun.map(lang.Boolean.valueOf).asJava
-  def getUseLegacySql = useLegacySql.map(lang.Boolean.valueOf).asJava
-  def getRequestId = requestId.asJava
-  def getLocation = location.asJava
-  def getMaximumBytesBilled = maximumBytesBilled.asJava
-  def getLabels = labels.asJava
+  def getMaxResults = maxResults.toJavaPrimitive
+  def getDefaultDataset = defaultDataset.toJava
+  def getTimeout = timeout.map(_.asJava).toJava
+  def getDryRun = dryRun.map(lang.Boolean.valueOf).toJava
+  def getUseLegacySql = useLegacySql.map(lang.Boolean.valueOf).toJava
+  def getRequestId = requestId.toJava
+  def getLocation = location.toJava
+  def getMaximumBytesBilled = maximumBytesBilled.toJava
+  def getLabels = labels.toJava
 
   def withQuery(query: String) =
     copy(query = query)
@@ -74,47 +74,47 @@ final case class QueryRequest private (query: String,
   def withMaxResults(maxResults: Option[Int]) =
     copy(maxResults = maxResults)
   def withMaxResults(maxResults: util.OptionalInt) =
-    copy(maxResults = maxResults.asScala)
+    copy(maxResults = maxResults.toScala)
 
   def withDefaultDataset(defaultDataset: Option[DatasetReference]) =
     copy(defaultDataset = defaultDataset)
   def withDefaultDataset(defaultDataset: util.Optional[DatasetReference]) =
-    copy(defaultDataset = defaultDataset.asScala)
+    copy(defaultDataset = defaultDataset.toScala)
 
   def withTimeout(timeout: Option[FiniteDuration]) =
     copy(timeout = timeout)
   def withTimeout(timeout: util.Optional[Duration]) =
-    copy(timeout = timeout.asScala.map(_.asScala))
+    copy(timeout = timeout.toScala.map(_.asScala))
 
   def withDryRun(dryRun: Option[Boolean]) =
     copy(dryRun = dryRun)
   def withDryRun(dryRun: util.Optional[lang.Boolean]) =
-    copy(dryRun = dryRun.asScala.map(_.booleanValue))
+    copy(dryRun = dryRun.toScala.map(_.booleanValue))
 
   def withUseLegacySql(useLegacySql: Option[Boolean]) =
     copy(useLegacySql = useLegacySql)
   def withUseLegacySql(useLegacySql: util.Optional[lang.Boolean]) =
-    copy(useLegacySql = useLegacySql.asScala.map(_.booleanValue))
+    copy(useLegacySql = useLegacySql.toScala.map(_.booleanValue))
 
   def withRequestId(requestId: Option[String]) =
     copy(requestId = requestId)
   def withRequestId(requestId: util.Optional[String]) =
-    copy(requestId = requestId.asScala)
+    copy(requestId = requestId.toScala)
 
   def withLocation(location: Option[String]) =
     copy(location = location)
   def withLocation(location: util.Optional[String]) =
-    copy(location = location.asScala)
+    copy(location = location.toScala)
 
   def withMaximumBytesBilled(maximumBytesBilled: Option[Long]) =
     copy(maximumBytesBilled = maximumBytesBilled)
   def withMaximumBytesBilled(maximumBytesBilled: util.OptionalLong) =
-    copy(maximumBytesBilled = maximumBytesBilled.asScala)
+    copy(maximumBytesBilled = maximumBytesBilled.toScala)
 
   def withLabels(labels: Option[Map[String, String]]) =
     copy(labels = labels)
   def withLabels(labels: util.Optional[util.Map[String, String]]) =
-    copy(labels = labels.asScala.map(_.asScala.toMap))
+    copy(labels = labels.toScala.map(_.asScala.toMap))
 }
 
 object QueryRequest {
@@ -150,15 +150,15 @@ object QueryRequest {
       requestId: util.Optional[String]) =
     QueryRequest(
       query,
-      maxResults.asScala,
-      defaultDataset.asScala,
-      timeout.asScala.map(_.asScala),
-      dryRun.asScala.map(_.booleanValue),
-      useLegacySql.asScala.map(_.booleanValue),
+      maxResults.toScala,
+      defaultDataset.toScala,
+      timeout.toScala.map(_.asScala),
+      dryRun.toScala.map(_.booleanValue),
+      useLegacySql.toScala.map(_.booleanValue),
       None,
       None,
       None,
-      requestId.asScala)
+      requestId.toScala)
 
   implicit val format: RootJsonFormat[QueryRequest] = jsonFormat(
     apply,
@@ -227,21 +227,21 @@ final case class QueryResponse[+T] private (schema: Option[TableSchema],
       Option(cacheHit).map(_.booleanValue),
       Option(numDmlAffectedRows).map(_.toLong))
 
-  def getSchema = schema.asJava
+  def getSchema = schema.toJava
   def getJobReference = jobReference
-  def getTotalRows = totalRows.asPrimitive
-  def getPageToken = pageToken.asJava
-  def getRows: util.Optional[util.List[T] @uncheckedVariance] = rows.map(_.asJava).asJava
-  def getTotalBytesProcessed = totalBytesProcessed.asPrimitive
+  def getTotalRows = totalRows.toJavaPrimitive
+  def getPageToken = pageToken.toJava
+  def getRows: util.Optional[util.List[T] @uncheckedVariance] = rows.map(_.asJava).toJava
+  def getTotalBytesProcessed = totalBytesProcessed.toJavaPrimitive
   def getJobComplete = jobComplete
-  def getErrors = errors.map(_.asJava).asJava
-  def getCacheHit = cacheHit.map(lang.Boolean.valueOf).asJava
-  def getNumDmlAffectedRows = numDmlAffectedRows.asPrimitive
+  def getErrors = errors.map(_.asJava).toJava
+  def getCacheHit = cacheHit.map(lang.Boolean.valueOf).toJava
+  def getNumDmlAffectedRows = numDmlAffectedRows.toJavaPrimitive
 
   def withSchema(schema: Option[TableSchema]) =
     copy(schema = schema)
   def withSchema(schema: util.Optional[TableSchema]) =
-    copy(schema = schema.asScala)
+    copy(schema = schema.toScala)
 
   def withJobReference(jobReference: JobReference) =
     copy(jobReference = jobReference)
@@ -249,22 +249,22 @@ final case class QueryResponse[+T] private (schema: Option[TableSchema],
   def withTotalRows(totalRows: Option[Long]) =
     copy(totalRows = totalRows)
   def withTotalRows(totalRows: util.OptionalLong) =
-    copy(totalRows = totalRows.asScala)
+    copy(totalRows = totalRows.toScala)
 
   def withPageToken(pageToken: Option[String]) =
     copy(pageToken = pageToken)
   def withPageToken(pageToken: util.Optional[String]) =
-    copy(pageToken = pageToken.asScala)
+    copy(pageToken = pageToken.toScala)
 
   def withRows[S >: T](rows: Option[Seq[S]]) =
     copy(rows = rows)
   def withRows(rows: util.Optional[util.List[T] @uncheckedVariance]) =
-    copy(rows = rows.asScala.map(_.asScala.toList))
+    copy(rows = rows.toScala.map(_.asScala.toList))
 
   def withTotalBytesProcessed(totalBytesProcessed: Option[Long]) =
     copy(totalBytesProcessed = totalBytesProcessed)
   def withTotalBytesProcessed(totalBytesProcessed: util.OptionalLong) =
-    copy(totalBytesProcessed = totalBytesProcessed.asScala)
+    copy(totalBytesProcessed = totalBytesProcessed.toScala)
 
   def withJobComplete(jobComplete: Boolean) =
     copy(jobComplete = jobComplete)
@@ -272,17 +272,17 @@ final case class QueryResponse[+T] private (schema: Option[TableSchema],
   def withErrors(errors: Option[Seq[ErrorProto]]) =
     copy(errors = errors)
   def withErrors(errors: util.Optional[util.List[ErrorProto]]) =
-    copy(errors = errors.asScala.map(_.asScala.toList))
+    copy(errors = errors.toScala.map(_.asScala.toList))
 
   def withCacheHit(cacheHit: Option[Boolean]) =
     copy(cacheHit = cacheHit)
   def withCacheHit(cacheHit: util.Optional[lang.Boolean]) =
-    copy(cacheHit = cacheHit.asScala.map(_.booleanValue))
+    copy(cacheHit = cacheHit.toScala.map(_.booleanValue))
 
   def withNumDmlAffectedRows(numDmlAffectedRows: Option[Long]) =
     copy(numDmlAffectedRows = numDmlAffectedRows)
   def withNumDmlAffectedRows(numDmlAffectedRows: util.OptionalLong) =
-    copy(numDmlAffectedRows = numDmlAffectedRows.asScala)
+    copy(numDmlAffectedRows = numDmlAffectedRows.toScala)
 }
 
 object QueryResponse {
@@ -316,16 +316,16 @@ object QueryResponse {
       cacheHit: util.Optional[lang.Boolean],
       numDmlAffectedRows: util.OptionalLong) =
     QueryResponse[T](
-      schema.asScala,
+      schema.toScala,
       jobReference,
-      totalRows.asScala,
-      pageToken.asScala,
-      rows.asScala.map(_.asScala.toList),
-      totalBytesProcessed.asScala,
+      totalRows.toScala,
+      pageToken.toScala,
+      rows.toScala.map(_.asScala.toList),
+      totalBytesProcessed.toScala,
       jobComplete,
-      errors.asScala.map(_.asScala.toList),
-      cacheHit.asScala.map(_.booleanValue),
-      numDmlAffectedRows.asScala)
+      errors.toScala.map(_.asScala.toList),
+      cacheHit.toScala.map(_.booleanValue),
+      numDmlAffectedRows.toScala)
 
   implicit def reader[T <: AnyRef](
       implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[QueryResponse[T]] = {

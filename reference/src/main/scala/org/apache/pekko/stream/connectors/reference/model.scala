@@ -20,9 +20,9 @@ import pekko.annotation.InternalApi
 import pekko.util.ccompat._
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
+import pekko.util.OptionConverters._
 
 import scala.collection.immutable
-import scala.compat.java8.OptionConverters._
 import scala.util.{ Success, Try }
 
 /**
@@ -54,7 +54,7 @@ final class ReferenceReadResult @InternalApi private[reference] (
    * otherwise return empty Optional.
    */
   def getBytesRead(): OptionalInt =
-    bytesRead.toOption.asPrimitive
+    bytesRead.toOption.toJavaPrimitive
 
   /**
    * Java API
@@ -63,7 +63,7 @@ final class ReferenceReadResult @InternalApi private[reference] (
    * otherwise return empty Optional.
    */
   def getBytesReadFailure(): Optional[Throwable] =
-    bytesRead.failed.toOption.asJava
+    bytesRead.failed.toOption.toJava
 
   override def toString: String =
     s"ReferenceReadMessage(data=$data, bytesRead=$bytesRead)"

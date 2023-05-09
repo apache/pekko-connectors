@@ -25,14 +25,14 @@ import pekko.NotUsed
 import pekko.japi.function.Function2
 import pekko.stream.connectors.slick.scaladsl.{ Slick => ScalaSlick }
 import pekko.stream.javadsl._
+import pekko.util.FunctionConverters._
+import pekko.util.FutureConverters._
 import slick.dbio.DBIO
 import slick.jdbc.GetResult
 import slick.jdbc.SQLActionBuilder
 import slick.jdbc.SetParameter
 import slick.jdbc.SimpleJdbcAction
 
-import scala.compat.java8.FunctionConverters._
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext
 
 object Slick {
@@ -307,7 +307,7 @@ object Slick {
       toStatement: JFunction[T, String]): Sink[T, CompletionStage[Done]] =
     ScalaSlick
       .sink[T](parallelism, toDBIO(toStatement))(session)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**
@@ -330,7 +330,7 @@ object Slick {
       toStatement: Function2[T, Connection, PreparedStatement]): Sink[T, CompletionStage[Done]] =
     ScalaSlick
       .sink[T](parallelism, toDBIO(toStatement))(session)
-      .mapMaterializedValue(_.toJava)
+      .mapMaterializedValue(_.asJava)
       .asJava
 
   /**

@@ -19,8 +19,7 @@ import org.apache.pekko
 import pekko.stream.connectors.amqp._
 import pekko.stream.javadsl.Flow
 import pekko.util.ByteString
-
-import scala.compat.java8.FutureConverters._
+import pekko.util.FutureConverters._
 
 object AmqpRpcFlow {
 
@@ -37,7 +36,7 @@ object AmqpRpcFlow {
       repliesPerMessage: Int): Flow[ByteString, ByteString, CompletionStage[String]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .simple(settings, repliesPerMessage)
-      .mapMaterializedValue(f => f.toJava)
+      .mapMaterializedValue(f => f.asJava)
       .asJava
 
   /**
@@ -49,7 +48,7 @@ object AmqpRpcFlow {
       bufferSize: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .atMostOnceFlow(settings, bufferSize)
-      .mapMaterializedValue(f => f.toJava)
+      .mapMaterializedValue(f => f.asJava)
       .asJava
 
   /**
@@ -62,7 +61,7 @@ object AmqpRpcFlow {
       repliesPerMessage: Int): Flow[WriteMessage, ReadResult, CompletionStage[String]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .atMostOnceFlow(settings, bufferSize, repliesPerMessage)
-      .mapMaterializedValue(f => f.toJava)
+      .mapMaterializedValue(f => f.asJava)
       .asJava
 
   /**
@@ -82,7 +81,7 @@ object AmqpRpcFlow {
       repliesPerMessage: Int = 1): Flow[WriteMessage, CommittableReadResult, CompletionStage[String]] =
     pekko.stream.connectors.amqp.scaladsl.AmqpRpcFlow
       .committableFlow(settings, bufferSize, repliesPerMessage)
-      .mapMaterializedValue(f => f.toJava)
+      .mapMaterializedValue(f => f.asJava)
       .map(cm => new CommittableReadResult(cm))
       .asJava
 

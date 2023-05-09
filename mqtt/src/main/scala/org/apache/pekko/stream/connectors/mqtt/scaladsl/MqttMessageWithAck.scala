@@ -17,8 +17,8 @@ import org.apache.pekko
 import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.mqtt.MqttMessage
+import pekko.util.FutureConverters._
 
-import scala.compat.java8.FutureConverters
 import scala.concurrent.Future
 
 /**
@@ -54,6 +54,6 @@ private[scaladsl] object MqttMessageWithAck {
        *
        * @return a future indicating, if the acknowledge reached MQTT
        */
-      override def ack(): Future[Done] = FutureConverters.toScala(e.ack())
+      override def ack(): Future[Done] = e.ack().asScala
     }
 }

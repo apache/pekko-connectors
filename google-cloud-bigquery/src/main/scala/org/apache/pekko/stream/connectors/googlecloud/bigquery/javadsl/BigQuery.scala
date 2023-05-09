@@ -39,14 +39,14 @@ import pekko.stream.{ scaladsl => ss }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
+import pekko.util.OptionConverters._
 
 import java.time.Duration
 import java.util.concurrent.CompletionStage
 import java.{ lang, util }
 
 import scala.annotation.nowarn
-import scala.compat.java8.FutureConverters._
-import scala.compat.java8.OptionConverters._
 import scala.concurrent.duration.{ FiniteDuration, MILLISECONDS }
 
 /**
@@ -67,7 +67,7 @@ object BigQuery extends Google {
   def listDatasets(maxResults: util.OptionalInt,
       all: util.Optional[lang.Boolean],
       filter: util.Map[String, String]): Source[Dataset, NotUsed] =
-    ScalaBigQuery.datasets(maxResults.asScala, all.asScala.map(_.booleanValue), filter.asScala.toMap).asJava
+    ScalaBigQuery.datasets(maxResults.toScala, all.toScala.map(_.booleanValue), filter.asScala.toMap).asJava
 
   /**
    * Returns the specified dataset.
@@ -81,7 +81,7 @@ object BigQuery extends Google {
   def getDataset(datasetId: String,
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Dataset] =
-    ScalaBigQuery.dataset(datasetId)(system, settings).toJava
+    ScalaBigQuery.dataset(datasetId)(system, settings).asJava
 
   /**
    * Creates a new empty dataset.
@@ -95,7 +95,7 @@ object BigQuery extends Google {
   def createDataset(datasetId: String,
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Dataset] =
-    ScalaBigQuery.createDataset(datasetId)(system, settings).toJava
+    ScalaBigQuery.createDataset(datasetId)(system, settings).asJava
 
   /**
    * Creates a new empty dataset.
@@ -109,7 +109,7 @@ object BigQuery extends Google {
   def createDataset(dataset: Dataset,
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Dataset] =
-    ScalaBigQuery.createDataset(dataset)(system, settings).toJava
+    ScalaBigQuery.createDataset(dataset)(system, settings).asJava
 
   /**
    * Deletes the dataset specified by the datasetId value.
@@ -124,7 +124,7 @@ object BigQuery extends Google {
       deleteContents: Boolean,
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Done] =
-    ScalaBigQuery.deleteDataset(datasetId, deleteContents)(system, settings).toJava
+    ScalaBigQuery.deleteDataset(datasetId, deleteContents)(system, settings).asJava
 
   /**
    * Lists all tables in the specified dataset.
@@ -135,7 +135,7 @@ object BigQuery extends Google {
    * @return a [[pekko.stream.javadsl.Source]] that emits each [[pekko.stream.connectors.googlecloud.bigquery.model.Table]] in the dataset and materializes a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.TableListResponse]]
    */
   def listTables(datasetId: String, maxResults: util.OptionalInt): Source[Table, CompletionStage[TableListResponse]] =
-    ScalaBigQuery.tables(datasetId, maxResults.asScala).mapMaterializedValue(_.toJava).asJava
+    ScalaBigQuery.tables(datasetId, maxResults.toScala).mapMaterializedValue(_.asJava).asJava
 
   /**
    * Gets the specified table resource. This method does not return the data in the table, it only returns the table resource, which describes the structure of this table.
@@ -151,7 +151,7 @@ object BigQuery extends Google {
       tableId: String,
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Table] =
-    ScalaBigQuery.table(datasetId, tableId)(system, settings).toJava
+    ScalaBigQuery.table(datasetId, tableId)(system, settings).asJava
 
   /**
    * Creates a new, empty table in the dataset.
@@ -181,7 +181,7 @@ object BigQuery extends Google {
    * @return a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.Table]]
    */
   def createTable(table: Table, settings: GoogleSettings, system: ClassicActorSystemProvider): CompletionStage[Table] =
-    ScalaBigQuery.createTable(table)(system, settings).toJava
+    ScalaBigQuery.createTable(table)(system, settings).asJava
 
   /**
    * Deletes the specified table from the dataset. If the table contains data, all the data will be deleted.
@@ -197,7 +197,7 @@ object BigQuery extends Google {
       tableId: String,
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Done] =
-    ScalaBigQuery.deleteTable(datasetId, tableId)(system, settings).toJava
+    ScalaBigQuery.deleteTable(datasetId, tableId)(system, settings).asJava
 
   /**
    * Lists the content of a table in rows.
@@ -222,8 +222,8 @@ object BigQuery extends Google {
       : Source[Out, CompletionStage[TableDataListResponse[Out]]] = {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
-      .tableData(datasetId, tableId, startIndex.asScala, maxResults.asScala, selectedFields.asScala.toList)
-      .mapMaterializedValue(_.toJava)
+      .tableData(datasetId, tableId, startIndex.toScala, maxResults.toScala, selectedFields.asScala.toList)
+      .mapMaterializedValue(_.asJava)
       .asJava
   }
 
@@ -248,7 +248,7 @@ object BigQuery extends Google {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     ss.Flow[util.List[In]]
       .map(_.asScala.toList)
-      .to(ScalaBigQuery.insertAll[In](datasetId, tableId, retryPolicy, templateSuffix.asScala))
+      .to(ScalaBigQuery.insertAll[In](datasetId, tableId, retryPolicy, templateSuffix.toScala))
       .asJava[util.List[In]]
   }
 
@@ -291,7 +291,7 @@ object BigQuery extends Google {
       useLegacySql: Boolean,
       unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]): Source[Out, CompletionStage[QueryResponse[Out]]] = {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
-    ScalaBigQuery.query(query, dryRun, useLegacySql).mapMaterializedValue(_.toJava).asJava
+    ScalaBigQuery.query(query, dryRun, useLegacySql).mapMaterializedValue(_.asJava).asJava
   }
 
   /**
@@ -314,7 +314,7 @@ object BigQuery extends Google {
       .query(query)
       .mapMaterializedValue {
         case (jobReference, queryResponse) =>
-          Pair(jobReference.toJava, queryResponse.toJava)
+          Pair(jobReference.asJava, queryResponse.asJava)
       }
       .asJava
   }
@@ -342,11 +342,11 @@ object BigQuery extends Google {
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .queryResults(jobId,
-        startIndex.asScala,
-        maxResults.asScala,
-        timeout.asScala.map(d => FiniteDuration(d.toMillis, MILLISECONDS)),
-        location.asScala)
-      .mapMaterializedValue(_.toJava)
+        startIndex.toScala,
+        maxResults.toScala,
+        timeout.toScala.map(d => FiniteDuration(d.toMillis, MILLISECONDS)),
+        location.toScala)
+      .mapMaterializedValue(_.asJava)
       .asJava
   }
 
@@ -364,7 +364,7 @@ object BigQuery extends Google {
       location: util.Optional[String],
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[Job] =
-    ScalaBigQuery.job(jobId, location.asScala)(system, settings).toJava
+    ScalaBigQuery.job(jobId, location.toScala)(system, settings).asJava
 
   /**
    * Requests that a job be cancelled.
@@ -380,7 +380,7 @@ object BigQuery extends Google {
       location: util.Optional[String],
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[JobCancelResponse] =
-    ScalaBigQuery.cancelJob(jobId, location.asScala)(system, settings).toJava
+    ScalaBigQuery.cancelJob(jobId, location.toScala)(system, settings).asJava
 
   /**
    * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
@@ -416,7 +416,7 @@ object BigQuery extends Google {
       labels: util.Optional[util.Map[String, String]],
       marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
-    ScalaBigQuery.insertAllAsync[In](datasetId, tableId, labels.asScala.map(_.asScala.toMap)).asJava[In]
+    ScalaBigQuery.insertAllAsync[In](datasetId, tableId, labels.toScala.map(_.asScala.toMap)).asJava[In]
   }
 
   /**
@@ -438,7 +438,7 @@ object BigQuery extends Google {
       unmarshaller: Unmarshaller[HttpEntity, Job]): Sink[ByteString, CompletionStage[Job]] = {
     implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
     implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
-    ScalaBigQuery.createLoadJob(job).mapMaterializedValue(_.toJava).asJava[ByteString]
+    ScalaBigQuery.createLoadJob(job).mapMaterializedValue(_.asJava).asJava[ByteString]
   }
 
 }

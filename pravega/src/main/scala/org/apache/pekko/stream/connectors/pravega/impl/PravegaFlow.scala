@@ -19,10 +19,10 @@ import pekko.annotation.InternalApi
 import pekko.event.Logging
 import pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.util.FutureConverters._
 import io.pravega.client.stream.EventStreamWriter
 
 import scala.util.control.NonFatal
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import pekko.stream.connectors.pravega.WriterSettings
 
@@ -65,7 +65,7 @@ import scala.util.{ Failure, Success, Try }
     }
 
   def handleSentEvent(completableFuture: CompletableFuture[Void], msg: A): Unit =
-    completableFuture.toScala.onComplete { t =>
+    completableFuture.asScala.onComplete { t =>
       semaphore.acquire()
       asyncPushback.invoke((t, msg))
     }

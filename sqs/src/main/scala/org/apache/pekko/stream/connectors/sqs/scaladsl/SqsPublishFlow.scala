@@ -22,10 +22,9 @@ import pekko.dispatch.ExecutionContexts.parasitic
 import pekko.stream.connectors.sqs._
 import pekko.stream.scaladsl.{ Flow, Source }
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
-
-import scala.compat.java8.FutureConverters._
 
 /**
  * Scala API to create publishing SQS flows.
@@ -59,7 +58,7 @@ object SqsPublishFlow {
       .mapAsync(settings.maxInFlight) { req =>
         sqsClient
           .sendMessage(req)
-          .toScala
+          .asScala
           .map(req -> _)(parasitic)
       }
       .map { case (request, response) => new SqsPublishResult(request, response) }
@@ -107,7 +106,7 @@ object SqsPublishFlow {
         case (requests, batchRequest) =>
           sqsClient
             .sendMessageBatch(batchRequest)
-            .toScala
+            .asScala
             .map {
               case response if response.failed().isEmpty =>
                 val responseMetadata = response.responseMetadata()

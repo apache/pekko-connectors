@@ -16,9 +16,9 @@ package org.apache.pekko.stream.connectors.awslambda.scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.scaladsl.Flow
+import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.lambda.model.{ InvokeRequest, InvokeResponse }
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
-import scala.compat.java8.FutureConverters._
 
 object AwsLambdaFlow {
 
@@ -27,6 +27,6 @@ object AwsLambdaFlow {
    */
   def apply(
       parallelism: Int)(implicit awsLambdaClient: LambdaAsyncClient): Flow[InvokeRequest, InvokeResponse, NotUsed] =
-    Flow[InvokeRequest].mapAsyncUnordered(parallelism)(awsLambdaClient.invoke(_).toScala)
+    Flow[InvokeRequest].mapAsyncUnordered(parallelism)(awsLambdaClient.invoke(_).asScala)
 
 }

@@ -16,8 +16,7 @@ package org.apache.pekko.stream.connectors.elasticsearch.testkit
 import org.apache.pekko
 import pekko.annotation.ApiMayChange
 import pekko.stream.connectors.elasticsearch.{ ReadResult, WriteMessage, WriteResult }
-
-import scala.compat.java8.OptionConverters._
+import pekko.util.OptionConverters._
 
 object MessageFactory {
 
@@ -45,7 +44,7 @@ object MessageFactory {
       version: java.util.Optional[Long]): ReadResult[T] = new ReadResult(
     id,
     source,
-    version.asScala)
+    version.toScala)
   @ApiMayChange
   def createWriteResult[T, PT](
       message: WriteMessage[T, PT],
@@ -61,6 +60,6 @@ object MessageFactory {
       message: WriteMessage[T, PT],
       error: java.util.Optional[String]): WriteResult[T, PT] = new WriteResult(
     message,
-    error.asScala)
+    error.toScala)
 
 }

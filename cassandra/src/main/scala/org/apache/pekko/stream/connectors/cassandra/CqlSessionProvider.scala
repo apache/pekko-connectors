@@ -13,12 +13,13 @@
 
 package org.apache.pekko.stream.connectors.cassandra
 
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider, ExtendedActorSystem }
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider, ExtendedActorSystem }
+import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
 import scala.collection.immutable
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Failure
 
@@ -59,7 +60,7 @@ class DefaultSessionProvider(system: ActorSystem, config: Config) extends CqlSes
     } else {
       val driverConfig = CqlSessionProvider.driverConfig(system, config)
       val driverConfigLoader = DriverConfigLoaderFromConfig.fromConfig(driverConfig)
-      CqlSession.builder().withConfigLoader(driverConfigLoader).buildAsync().toScala
+      CqlSession.builder().withConfigLoader(driverConfigLoader).buildAsync().asScala
     }
   }
 }

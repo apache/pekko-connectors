@@ -19,9 +19,9 @@ import pekko.annotation.InternalApi
 import pekko.event.Logging
 import pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
+import pekko.util.FutureConverters._
 
 import scala.util.control.NonFatal
-import scala.compat.java8.FutureConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import pekko.stream.connectors.pravega.TableWriterSettings
 
@@ -92,7 +92,7 @@ import io.pravega.client.tables.TableKey
     }
 
   def handleSentEvent(completableFuture: CompletableFuture[Version], msg: KVPair): Unit =
-    completableFuture.toScala.onComplete { t =>
+    completableFuture.asScala.onComplete { t =>
       asyncPushback.invokeWithFeedback((t, msg))
     }
 
