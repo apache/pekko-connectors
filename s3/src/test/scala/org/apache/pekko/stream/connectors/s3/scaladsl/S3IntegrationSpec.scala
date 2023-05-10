@@ -256,6 +256,11 @@ trait S3IntegrationSpec
   def otherRegionContentCount = 0
 
   it should "list buckets in current aws account" in withDefaultBucket { defaultBucket =>
+    assume((this.isInstanceOf[AWSS3IntegrationSpec], S3IntegrationSpec.AWSS3EnableListAllMyBucketsTests) match {
+      case (true, true)  => true
+      case (true, false) => false
+      case (false, _)    => true
+    })
     val result = for {
       buckets <- S3.listBuckets().withAttributes(attributes).runWith(Sink.seq)
     } yield buckets
@@ -266,6 +271,11 @@ trait S3IntegrationSpec
   }
 
   it should "list buckets in current AWS account using non US_EAST_1 region" in withDefaultBucket { defaultBucket =>
+    assume((this.isInstanceOf[AWSS3IntegrationSpec], S3IntegrationSpec.AWSS3EnableListAllMyBucketsTests) match {
+      case (true, true)  => true
+      case (true, false) => false
+      case (false, _)    => true
+    })
     // Its only AWS that complains if listBuckets is called from a non US_EAST_1 region
     val result = for {
       buckets <- S3.listBuckets().withAttributes(
@@ -1031,6 +1041,11 @@ trait S3IntegrationSpec
   }
 
   it should "enable and disable versioning for a bucket with MFA delete configured to false" in {
+    assume((this.isInstanceOf[AWSS3IntegrationSpec], S3IntegrationSpec.AWSS3EnableMFATests) match {
+      case (true, true)  => true
+      case (true, false) => false
+      case (false, _)    => true
+    })
     // TODO: Figure out a way to properly test this with Minio, see https://github.com/akka/alpakka/issues/2750
     assume(this.isInstanceOf[AWSS3IntegrationSpec])
     forAll(genBucketName("samplebucketversioningmfadeletefalse")) { bucketName =>
@@ -1321,4 +1336,12 @@ object S3IntegrationSpec {
   val DefaultBucket = "my-test-us-east-1"
   val BucketWithVersioning = "my-bucket-with-versioning"
   val NonExistingBucket = "nowhere"
+
+  val AWSS3EnableListAllMyBucketsTests =
+    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableListAllMyBucketsTests")
+      .map(_.toBoolean).getOrElse(true)
+
+  val AWSS3EnableMFATests =
+    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableMFATests")
+      .map(_.toBoolean).getOrElse(true)
 }
