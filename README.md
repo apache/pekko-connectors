@@ -1,4 +1,4 @@
-Apache Pekko Connectors [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)
+Apache Pekko Connectors [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)[![Nightly Builds](https://github.com/apache/incubator-pekko-connectors/actions/workflows/nightly-builds.yaml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/nightly-builds.yaml)
 =======
 
 [scaladex]:              https://index.scala-lang.org/apache/incubator-pekko-connectors
