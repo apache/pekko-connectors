@@ -42,7 +42,8 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
 
   def createTopic(): String =
     snsClient
-      .createTopic(CreateTopicRequest.builder().name(s"pekko-connectors-topic-${topicNumber.incrementAndGet()}").build())
+      .createTopic(
+        CreateTopicRequest.builder().name(s"pekko-connectors-topic-${topicNumber.incrementAndGet()}").build())
       .get()
       .topicArn()
 
