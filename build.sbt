@@ -326,14 +326,14 @@ lazy val docs = project
     pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-connectors"),
     makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
-    Preprocess / siteSubdirName := s"api/alpakka/${projectInfoVersion.value}",
+    Preprocess / siteSubdirName := s"api/pekko-connectors/${projectInfoVersion.value}",
     Preprocess / sourceDirectory := (LocalRootProject / ScalaUnidoc / unidoc / target).value,
     Preprocess / preprocessRules := Seq(
       ("http://www\\.eclipse\\.org/".r, _ => "https://www\\.eclipse\\.org/"),
       ("http://pravega\\.io/".r, _ => "https://pravega\\.io/"),
       ("http://www\\.scala-lang\\.org/".r, _ => "https://www\\.scala-lang\\.org/"),
       ("https://javadoc\\.io/page/".r, _ => "https://javadoc\\.io/static/")),
-    Paradox / siteSubdirName := s"docs/alpakka/${projectInfoVersion.value}",
+    Paradox / siteSubdirName := s"docs/pekko-connectors/${projectInfoVersion.value}",
     paradoxProperties ++= Map(
       "pekko.version" -> Dependencies.PekkoVersion,
       "pekko-http.version" -> Dependencies.PekkoHttpVersion,
@@ -345,11 +345,11 @@ lazy val docs = project
       "javadoc.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
       "javadoc.pekko.link_style" -> "direct",
       "extref.pekko-http.base_url" -> s"https://pekko.apache.org/docs/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/%s",
-      "scaladoc.pekko.http.base_url" -> s"https://doc.akka.io/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
-      "javadoc.pekko.http.base_url" -> s"https://doc.akka.io/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "scaladoc.pekko.http.base_url" -> s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "javadoc.pekko.http.base_url" -> s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
       // Pekko gRPC
       "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
-      "extref.pekko-grpc.base_url" -> s"https://doc.akka.io/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
+      "extref.pekko-grpc.base_url" -> s"https://pekko.apache.org/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
       // Couchbase
       "couchbase.version" -> Dependencies.CouchbaseVersion,
       "extref.couchbase.base_url" -> s"https://docs.couchbase.com/java-sdk/${Dependencies.CouchbaseVersionForDocs}/%s",

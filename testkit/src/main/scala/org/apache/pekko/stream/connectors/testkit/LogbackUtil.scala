@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 import scala.annotation.tailrec
 
 /**
- * See https://doc.akka.io/docs/akka/current/typed/testing-async.html#silence-logging-output-from-tests
+ * See https://pekko.apache.org/docs/pekko/current/typed/testing-async.html#silence-logging-output-from-tests
  *
  * INTERNAL API
  */

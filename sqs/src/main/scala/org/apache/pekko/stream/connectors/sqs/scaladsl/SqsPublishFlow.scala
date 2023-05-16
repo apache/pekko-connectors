@@ -67,7 +67,7 @@ object SqsPublishFlow {
   /**
    * creates a [[pekko.stream.scaladsl.Flow Flow]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
    *
-   * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
+   * @see https://pekko.apache.org/docs/pekko/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def grouped(queueUrl: String, settings: SqsPublishGroupedSettings = SqsPublishGroupedSettings.Defaults)(
       implicit sqsClient: SqsAsyncClient): Flow[SendMessageRequest, SqsPublishResultEntry, NotUsed] =

@@ -78,7 +78,7 @@ object Common extends AutoPlugin {
           s"https://github.com/apache/incubator-pekko-connectors/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
         },
         "-doc-canonical-base-url",
-        "https://doc.akka.io/api/alpakka/current/"),
+        "https://pekko.apache.org/api/pekko-connectorscurrent/"),
     Compile / doc / scalacOptions -= "-Werror",
     compile / javacOptions ++= Seq(
       "-Xlint:cast",
@@ -101,7 +101,8 @@ object Common extends AutoPlugin {
       case _ => Seq.empty[String]
     }),
     autoAPIMappings := true,
-    apiURL := Some(url(s"https://doc.akka.io/api/alpakka/${version.value}/akka/stream/alpakka/index.html")),
+    apiURL := Some(url(
+      s"https://pekko.apache.org/api/pekko-connectors/${version.value}/org/apache/pekko/stream/connectors/index.html")),
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
     // -a Show stack traces and exception class name for AssertionErrors.

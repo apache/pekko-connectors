@@ -60,7 +60,7 @@ final class HdfsWritingSettings private (
 object HdfsWritingSettings {
 
   private val DefaultFilePathGenerator: FilePathGenerator =
-    FilePathGenerator((rc: Long, _: Long) => s"/tmp/alpakka/$rc")
+    FilePathGenerator((rc: Long, _: Long) => s"/tmp/pekko-connectors$rc")
 
   val default = new HdfsWritingSettings(
     overwrite = true,

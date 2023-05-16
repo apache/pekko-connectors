@@ -77,7 +77,7 @@ public abstract class BaseSqsTest {
   private SqsAsyncClient createAsyncClient(String sqsEndpoint) {
     // #init-client
     // Don't encode credentials in your source code!
-    // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
+    // see https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
     StaticCredentialsProvider credentialsProvider =
         StaticCredentialsProvider.create(AwsBasicCredentials.create("x", "x"));
     SqsAsyncClient sqsClient =
@@ -89,7 +89,7 @@ public abstract class BaseSqsTest {
             .region(Region.EU_CENTRAL_1)
             .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
-            // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
+            // see https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
             // .overrideConfiguration(...)
             .build();
 

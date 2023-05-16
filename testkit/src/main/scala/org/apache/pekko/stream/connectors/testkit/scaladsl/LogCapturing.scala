@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 
 /**
- * See https://doc.akka.io/docs/akka/current/typed/testing-async.html#silence-logging-output-from-tests
+ * See https://pekko.apache.org/docs/pekko/current/typed/testing-async.html#silence-logging-output-from-tests
  *
  * Mixin this trait to a ScalaTest test to make log lines appear only when the test failed.
  *

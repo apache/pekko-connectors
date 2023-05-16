@@ -40,7 +40,7 @@ class HdfsReaderSpec
     with LogCapturing {
 
   private var hdfsCluster: MiniDFSCluster = _
-  private val destination = "/tmp/alpakka/"
+  private val destination = "/tmp/pekko-connectors"
 
   implicit val system: ActorSystem = ActorSystem()
 

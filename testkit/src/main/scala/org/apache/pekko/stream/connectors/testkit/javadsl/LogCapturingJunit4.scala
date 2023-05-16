@@ -22,7 +22,7 @@ import org.junit.runners.model.Statement
 import org.slf4j.LoggerFactory
 
 /**
- * See https://doc.akka.io/docs/akka/current/typed/testing-async.html#silence-logging-output-from-tests
+ * See https://pekko.apache.org/docs/pekko/current/typed/testing-async.html#silence-logging-output-from-tests
  *
  * JUnit `TestRule` to make log lines appear only when the test failed.
  *
