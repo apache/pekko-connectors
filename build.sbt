@@ -341,13 +341,13 @@ lazy val docs = project
       "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
-      "scaladoc.akka.base_url" -> s"https://doc.akka.io/api/akka/${Dependencies.AkkaBinaryVersion}",
-      "javadoc.akka.base_url" -> s"https://doc.akka.io/japi/akka/${Dependencies.AkkaBinaryVersion}/",
-      "javadoc.akka.link_style" -> "direct",
-      "extref.pekko-http.base_url" -> s"https://doc.akka.io/docs/akka-http/${Dependencies.AkkaHttpBinaryVersion}/%s",
-      "scaladoc.akka.http.base_url" -> s"https://doc.akka.io/api/akka-http/${Dependencies.AkkaHttpBinaryVersion}/",
-      "javadoc.akka.http.base_url" -> s"https://doc.akka.io/japi/akka-http/${Dependencies.AkkaHttpBinaryVersion}/",
-      // Akka gRPC
+      "scaladoc.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
+      "javadoc.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
+      "javadoc.pekko.link_style" -> "direct",
+      "extref.pekko-http.base_url" -> s"https://pekko.apache.org/docs/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/%s",
+      "scaladoc.pekko.http.base_url" -> s"https://doc.akka.io/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "javadoc.pekko.http.base_url" -> s"https://doc.akka.io/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      // Pekko gRPC
       "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
       "extref.pekko-grpc.base_url" -> s"https://doc.akka.io/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
       // Couchbase

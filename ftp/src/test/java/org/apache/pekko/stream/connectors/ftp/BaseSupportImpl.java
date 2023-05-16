@@ -24,7 +24,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public abstract class BaseSupportImpl implements BaseSupport, PekkoSupport {
 
-  private ActorSystem system = ActorSystem.create("alpakka-ftp");
+  private ActorSystem system = ActorSystem.create("pekko-connectors-ftp");
   private Materializer materializer = Materializer.matFromSystem(system);
   public final FtpCredentials CREDENTIALS = FtpCredentials.create("username", "userpass");
   public final FtpCredentials WRONG_CREDENTIALS = FtpCredentials.create("username", "qwerty");

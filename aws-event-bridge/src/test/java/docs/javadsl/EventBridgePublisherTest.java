@@ -70,7 +70,7 @@ public class EventBridgePublisherTest {
         eventBridgeClient
             .createEventBus(
                 CreateEventBusRequest.builder()
-                    .name("alpakka-java-eventbus-" + UUID.randomUUID().toString())
+                    .name("pekko-connectors-java-eventbus-" + UUID.randomUUID().toString())
                     .build())
             .get()
             .eventBusArn();

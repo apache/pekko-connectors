@@ -60,7 +60,7 @@ public class SnsPublisherTest {
     snsClient = createSnsClient();
     topicArn =
         snsClient
-            .createTopic(CreateTopicRequest.builder().name("alpakka-java-topic-1").build())
+            .createTopic(CreateTopicRequest.builder().name("pekko-connectors-java-topic-1").build())
             .get()
             .topicArn();
   }

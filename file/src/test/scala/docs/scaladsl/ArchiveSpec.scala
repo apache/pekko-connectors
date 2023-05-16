@@ -148,7 +148,7 @@ class ArchiveSpec
         // #zip-reader
         val target: Path = // ???
           // #zip-reader
-          Files.createTempDirectory("alpakka-zip-")
+          Files.createTempDirectory("pekko-connectors-zip-")
         // #zip-reader
         Archive
           .zipReader(zipFile)

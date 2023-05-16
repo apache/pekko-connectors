@@ -114,7 +114,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
   "AckSink" should "pull and delete message" taggedAs Integration in {
     new IntegrationFixture {
-      sendMessage("alpakka-2")
+      sendMessage("pekko-connectors-2")
 
       val future =
         // #ack
@@ -132,7 +132,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
   it should "pull and delay a message" taggedAs Integration in {
     new IntegrationFixture {
-      sendMessage("alpakka-3")
+      sendMessage("pekko-connectors-3")
 
       val future =
         // #requeue
@@ -150,7 +150,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
   it should "pull and ignore a message" taggedAs Integration in {
     new IntegrationFixture {
-      sendMessage("alpakka-flow-ack")
+      sendMessage("pekko-connectors-flow-ack")
 
       val future =
         // #ignore
@@ -166,7 +166,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
   "AckFlow" should "pull and delete message via flow" taggedAs Integration in {
     new IntegrationFixture {
-      sendMessage("alpakka-flow-ack")
+      sendMessage("pekko-connectors-flow-ack")
 
       val future =
         // #flow-ack
@@ -179,14 +179,14 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
       val result = future.futureValue
       result shouldBe a[SqsDeleteResult]
-      result.messageAction.message.body() shouldBe "alpakka-flow-ack"
+      result.messageAction.message.body() shouldBe "pekko-connectors-flow-ack"
       verify(awsSqsClient).deleteMessage(any[DeleteMessageRequest])
     }
   }
 
   it should "pull and ignore a message" taggedAs Integration in {
     new IntegrationFixture {
-      sendMessage("alpakka-flow-ack")
+      sendMessage("pekko-connectors-flow-ack")
 
       val future =
         SqsSource(queueUrl, sqsSourceSettings)
@@ -197,7 +197,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
       val result = future.futureValue
       result shouldBe a[SqsIgnoreResult]
-      result.messageAction.message.body() shouldBe "alpakka-flow-ack"
+      result.messageAction.message.body() shouldBe "pekko-connectors-flow-ack"
     }
   }
 

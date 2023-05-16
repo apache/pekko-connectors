@@ -50,7 +50,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 /**
- * This unit test is run using a local H2 database using `/tmp/alpakka-slick-h2-test` for temporary
+ * This unit test is run using a local H2 database using `/tmp/pekko-connectors-slick-h2-test` for temporary
  * storage.
  */
 public class SlickTest {

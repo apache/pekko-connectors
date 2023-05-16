@@ -139,7 +139,7 @@ sealed abstract class FilePathGenerator extends ((Long, Long) => Path) {
 }
 
 object FilePathGenerator {
-  private val DefaultTempDirectory = "/tmp/alpakka-hdfs"
+  private val DefaultTempDirectory = "/tmp/pekko-connectors-hdfs"
 
   /**
    * Scala API: creates [[FilePathGenerator]] to rotate output

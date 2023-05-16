@@ -145,13 +145,13 @@ public class SqsPublishTest extends BaseSqsTest {
     CompletionStage<SqsPublishResult> done =
         // #flow
         // for fix SQS queue
-        Source.single(SendMessageRequest.builder().messageBody("alpakka-flow").build())
+        Source.single(SendMessageRequest.builder().messageBody("pekko-connectors-flow").build())
             .via(SqsPublishFlow.create(queueUrl, SqsPublishSettings.create(), sqsClient))
             .runWith(Sink.head(), system);
 
     // #flow
     SqsPublishResult result = done.toCompletableFuture().get(10, TimeUnit.SECONDS);
-    assertEquals(toMd5("alpakka-flow"), result.result().md5OfMessageBody());
+    assertEquals(toMd5("pekko-connectors-flow"), result.result().md5OfMessageBody());
 
     List<Message> messages =
         sqsClient
@@ -159,7 +159,7 @@ public class SqsPublishTest extends BaseSqsTest {
             .get(2, TimeUnit.SECONDS)
             .messages();
     assertEquals(1, messages.size());
-    assertEquals("alpakka-flow", messages.get(0).body());
+    assertEquals("pekko-connectors-flow", messages.get(0).body());
   }
 
   @Test
@@ -170,12 +170,12 @@ public class SqsPublishTest extends BaseSqsTest {
         // #flow
         // for dynamic SQS queues
         Source.single(
-                SendMessageRequest.builder().messageBody("alpakka-flow").queueUrl(queueUrl).build())
+                SendMessageRequest.builder().messageBody("pekko-connectors-flow").queueUrl(queueUrl).build())
             .via(SqsPublishFlow.create(SqsPublishSettings.create(), sqsClient))
             .runWith(Sink.head(), system);
     // #flow
     SqsPublishResult result = done.toCompletableFuture().get(10, TimeUnit.SECONDS);
-    assertEquals(toMd5("alpakka-flow"), result.result().md5OfMessageBody());
+    assertEquals(toMd5("pekko-connectors-flow"), result.result().md5OfMessageBody());
 
     List<Message> messages =
         sqsClient
@@ -183,7 +183,7 @@ public class SqsPublishTest extends BaseSqsTest {
             .get(2, TimeUnit.SECONDS)
             .messages();
     assertEquals(1, messages.size());
-    assertEquals("alpakka-flow", messages.get(0).body());
+    assertEquals("pekko-connectors-flow", messages.get(0).body());
   }
 
   @Test
@@ -354,12 +354,12 @@ public class SqsPublishTest extends BaseSqsTest {
     final String queueUrl = randomQueueUrl();
 
     CompletionStage<SqsPublishResult> stage =
-        Source.single(SendMessageRequest.builder().messageBody("alpakka-flow").build())
+        Source.single(SendMessageRequest.builder().messageBody("pekko-connectors-flow").build())
             .via(SqsPublishFlow.create(queueUrl, SqsPublishSettings.create(), sqsClient))
             .runWith(Sink.head(), system);
 
     SqsPublishResult result = stage.toCompletableFuture().get(10, TimeUnit.SECONDS);
-    assertEquals(toMd5("alpakka-flow"), result.result().md5OfMessageBody());
+    assertEquals(toMd5("pekko-connectors-flow"), result.result().md5OfMessageBody());
 
     List<Message> messages =
         sqsClient
@@ -369,7 +369,7 @@ public class SqsPublishTest extends BaseSqsTest {
             .messages();
 
     assertEquals(1, messages.size());
-    assertEquals("alpakka-flow", messages.get(0).body());
+    assertEquals("pekko-connectors-flow", messages.get(0).body());
   }
 
   private String toMd5(String s) throws Exception {

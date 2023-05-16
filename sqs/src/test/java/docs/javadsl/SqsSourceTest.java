@@ -57,7 +57,7 @@ public class SqsSourceTest extends BaseSqsTest {
                 i ->
                     SendMessageRequest.builder()
                         .queueUrl(queueUrl)
-                        .messageBody("alpakka-" + i)
+                        .messageBody("pekko-connectors-" + i)
                         .build())
             .grouped(10)
             .runWith(SqsPublishSink.batchedMessageSink(queueUrl, batchSettings, sqsClient), system);

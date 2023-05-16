@@ -70,7 +70,7 @@ public class IronMqDocsTest extends IronMqClientForJava {
 
   @Test
   public void atMostOnce() throws Exception {
-    String queueName = "alpakka-java";
+    String queueName = "pekko-connectors-java";
     Await.result(givenQueue(queueName), awaiting);
 
     CompletionStage<Done> produced =
@@ -92,7 +92,7 @@ public class IronMqDocsTest extends IronMqClientForJava {
 
   @Test
   public void atLeastOnce() throws Exception {
-    String queueName = "alpakka-java-committing";
+    String queueName = "pekko-connectors-java-committing";
     Await.result(givenQueue(queueName), awaiting);
 
     CompletionStage<Done> produced =
