@@ -42,7 +42,7 @@ class HdfsWriterSpec
     with LogCapturing {
 
   private var hdfsCluster: MiniDFSCluster = _
-  private val destination = "/tmp/alpakka/"
+  private val destination = "/tmp/pekko-connectors/"
 
   implicit val system: ActorSystem = ActorSystem()
   // #init-client
@@ -512,7 +512,7 @@ class HdfsWriterSpec
   private def documentation(): HdfsWritingSettings = {
     // #define-generator
     val pathGenerator =
-      FilePathGenerator((rotationCount: Long, timestamp: Long) => s"/tmp/alpakka/$rotationCount-$timestamp")
+      FilePathGenerator((rotationCount: Long, timestamp: Long) => s"$destination$rotationCount-$timestamp")
     // #define-generator
     // #define-settings
     val settings =
