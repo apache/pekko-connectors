@@ -512,7 +512,7 @@ public class HdfsWriterTest {
   private static void documentation() {
     // #define-generator
     BiFunction<Long, Long, String> func =
-        (rotationCount, timestamp) -> "/tmp/pekko-connectors" + rotationCount + "-" + timestamp;
+        (rotationCount, timestamp) -> "/tmp/pekko-connectors/" + rotationCount + "-" + timestamp;
     FilePathGenerator pathGenerator = FilePathGenerator.create(func);
     // #define-generator
     // #define-settings
