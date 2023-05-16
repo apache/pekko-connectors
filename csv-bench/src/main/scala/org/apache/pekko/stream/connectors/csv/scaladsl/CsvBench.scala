@@ -110,7 +110,7 @@ class CsvBench {
       /**
        * Compact is important here.
        *
-       * alpakka-csv perf suffers a bit over non-compact [[pekko.util.ByteString.ByteStrings]].
+       * pekko-connectors-csv perf suffers a bit over non-compact [[pekko.util.ByteString.ByteStrings]].
        * Its design relies on getting bytes by index from the [[ByteString]].
        * The indirections add up.
        *

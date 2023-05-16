@@ -63,7 +63,7 @@ public class NestedTarReaderTest {
 
   @Test
   public void flowShouldCreateZIPArchive() throws Exception {
-    Path tempDir = Files.createTempDirectory("alpakka-ftp");
+    Path tempDir = Files.createTempDirectory("pekko-connectors-ftp");
     tempDir.toFile().deleteOnExit();
     Path file = Paths.get("./file/src/test/resources/nested-sample.tar");
     logger.info(

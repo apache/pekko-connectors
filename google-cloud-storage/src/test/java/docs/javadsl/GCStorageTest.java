@@ -806,7 +806,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
 
   @Test
   public void rewriteFile() throws Exception {
-    final String rewriteBucketName = "alpakka-rewrite";
+    final String rewriteBucketName = "pekko-connectors-rewrite";
 
     mock().simulate(mockTokenApi(), mockRewrite(rewriteBucketName));
 
@@ -825,7 +825,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
 
   @Test
   public void failWhenRewriteFileFails() throws Exception {
-    final String rewriteBucketName = "alpakka-rewrite";
+    final String rewriteBucketName = "pekko-connectors-rewrite";
 
     mock().simulate(mockTokenApi(), mockRewriteFailure(rewriteBucketName));
 

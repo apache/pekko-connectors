@@ -60,7 +60,7 @@ final class HdfsWritingSettings private (
 object HdfsWritingSettings {
 
   private val DefaultFilePathGenerator: FilePathGenerator =
-    FilePathGenerator((rc: Long, _: Long) => s"/tmp/alpakka/$rc")
+    FilePathGenerator((rc: Long, _: Long) => s"/tmp/pekko-connectors/$rc")
 
   val default = new HdfsWritingSettings(
     overwrite = true,
@@ -139,7 +139,7 @@ sealed abstract class FilePathGenerator extends ((Long, Long) => Path) {
 }
 
 object FilePathGenerator {
-  private val DefaultTempDirectory = "/tmp/alpakka-hdfs"
+  private val DefaultTempDirectory = "/tmp/pekko-connectors-hdfs"
 
   /**
    * Scala API: creates [[FilePathGenerator]] to rotate output

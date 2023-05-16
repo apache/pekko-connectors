@@ -43,7 +43,7 @@ import scala.concurrent.Future
  *    storage admin (to run the create/delete bucket test)
  * - modify test/resources/application.conf
  * - create a `alpakka` bucket for testing
- * - create a rewrite `alpakka-rewrite` bucket for testing
+ * - create a rewrite `pekko-connectors-rewrite` bucket for testing
  */
 class GCStorageStreamIntegrationSpec
     extends AnyWordSpec
@@ -64,7 +64,7 @@ class GCStorageStreamIntegrationSpec
   def settings: GCStorageSettings = GCStorageSettings()
 
   def bucket = "alpakka"
-  def rewriteBucket = "alpakka-rewrite"
+  def rewriteBucket = "pekko-connectors-rewrite"
   def projectId = settings.projectId
   def clientEmail = settings.clientEmail
   def privateKey = settings.privateKey

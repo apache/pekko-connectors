@@ -40,7 +40,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
   def createEventBus(): String =
     eventBridgeClient
       .createEventBus(
-        CreateEventBusRequest.builder().name(s"alpakka-topic-${UUID.randomUUID().toString}").build())
+        CreateEventBusRequest.builder().name(s"pekko-connectors-topic-${UUID.randomUUID().toString}").build())
       .get()
       .eventBusArn()
 

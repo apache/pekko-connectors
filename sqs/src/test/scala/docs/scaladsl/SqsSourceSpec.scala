@@ -291,7 +291,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
           yield SendMessageRequest
             .builder()
             .queueUrl(queueUrl)
-            .messageBody(s"alpakka-$i")
+            .messageBody(s"pekko-connectors-$i")
             .build()
 
       input.foreach(m => sqsClient.sendMessage(m).get(2, TimeUnit.SECONDS))

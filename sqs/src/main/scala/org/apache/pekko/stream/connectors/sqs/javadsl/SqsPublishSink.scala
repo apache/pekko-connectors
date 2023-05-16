@@ -61,7 +61,7 @@ object SqsPublishSink {
 
   /**
    * creates a [[pekko.stream.javadsl.Sink Sink]] that groups strings and publishes them as messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
-   * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
+   * @see https://pekko.apache.org/docs/pekko/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def grouped(queueUrl: String,
       settings: SqsPublishGroupedSettings,
@@ -70,7 +70,7 @@ object SqsPublishSink {
 
   /**
    * creates a [[pekko.stream.javadsl.Sink Sink]] that groups messages and publishes them in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
-   * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
+   * @see https://pekko.apache.org/docs/pekko/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def groupedMessageSink(queueUrl: String,
       settings: SqsPublishGroupedSettings,
@@ -82,7 +82,7 @@ object SqsPublishSink {
 
   /**
    * creates a [[pekko.stream.javadsl.Sink Sink]] that accepts an iterable of strings and publish them as messages in batches to a SQS queue using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient SqsAsyncClient]]
-   * @see https://doc.akka.io/docs/akka/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
+   * @see https://pekko.apache.org/docs/pekko/current/stream/operators/Source-or-Flow/groupedWithin.html#groupedwithin
    */
   def batch[B <: java.lang.Iterable[String]](queueUrl: String,
       settings: SqsPublishBatchSettings,

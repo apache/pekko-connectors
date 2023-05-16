@@ -27,7 +27,7 @@ import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
- * [[https://doc.akka.io/docs/akka/current/discovery/index.html Pekko Discovery]]
+ * [[https://pekko.apache.org/docs/pekko/current/discovery/index.html Pekko Discovery]]
  * is enabled by setting the `service-discovery.name` in the given `CassandraSession` config.
  *
  * Pekko Discovery overwrites the basic.contact-points` from the configuration with addresses

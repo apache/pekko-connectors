@@ -34,7 +34,7 @@ object KinesisFirehoseSnippets {
       .builder()
       .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
       // Possibility to configure the retry policy
-      // see https://doc.akka.io/docs/alpakka/current/aws-shared-configuration.html
+      // see https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
       // .overrideConfiguration(...)
       .build()
 

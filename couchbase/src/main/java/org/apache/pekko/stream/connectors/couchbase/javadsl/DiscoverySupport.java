@@ -22,7 +22,7 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * Utility to delegate Couchbase node address lookup to
- * [[https://doc.akka.io/docs/akka/current/discovery/index.html Pekko Discovery]].
+ * [[https://pekko.apache.org/docs/pekko/current/discovery/index.html Pekko Discovery]].
  */
 public final class DiscoverySupport {
 

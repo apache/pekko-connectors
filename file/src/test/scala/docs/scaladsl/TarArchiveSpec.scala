@@ -176,7 +176,7 @@ class TarArchiveSpec
       val bytesSource: Source[ByteString, NotUsed] = // ???
         // #tar-reader
         Source.future(oneFileArchive)
-      val target = Files.createTempDirectory("alpakka-tar-")
+      val target = Files.createTempDirectory("pekko-connectors-tar-")
 
       // #tar-reader
       val tar =

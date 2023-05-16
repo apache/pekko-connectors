@@ -32,7 +32,7 @@ abstract class BigQueryStorageSpecBase(_port: Int) extends BigQueryMockData with
   private[bigquery] val bqHost = "localhost"
   private[bigquery] val bqPort = _port
 
-  implicit val system: ActorSystem = ActorSystem("alpakka-bigquery-storage")
+  implicit val system: ActorSystem = ActorSystem("pekko-connectors-bigquery-storage")
 
   implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 15.seconds, interval = 50.millis)
 

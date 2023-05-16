@@ -116,7 +116,7 @@ public class ArchiveTest {
     Map<String, ByteString> unzip = archiveHelper.unzip(resultFileContent);
 
     assertThat(inputFiles, is(unzip));
-    Path target = Files.createTempDirectory("alpakka-zip-");
+    Path target = Files.createTempDirectory("pekko-connectors-zip-");
 
     // #sample-zip-read
     Archive.zipReader(Paths.get("logo.zip").toFile())
@@ -215,7 +215,7 @@ public class ArchiveTest {
     Source<ByteString, NotUsed> bytesSource = // ???
         // #tar-reader
         Source.completionStage(oneFileArchive);
-    Path target = Files.createTempDirectory("alpakka-tar-");
+    Path target = Files.createTempDirectory("pekko-connectors-tar-");
 
     // #tar-reader
     CompletionStage<Done> tar =
@@ -263,7 +263,7 @@ public class ArchiveTest {
             .runWith(Sink.fold(ByteString.emptyByteString(), ByteString::concat), system);
 
     Source<ByteString, NotUsed> bytesSource = Source.completionStage(oneFileArchive);
-    Path target = Files.createTempDirectory("alpakka-tar-");
+    Path target = Files.createTempDirectory("pekko-connectors-tar-");
 
     CompletionStage<Done> tar =
         bytesSource

@@ -98,7 +98,7 @@ Refrain from using `org.apache.pekko.stream.connectors` as Config prefix, prefer
 
 ### Evolving APIs with binary compatibility
 
-All Pekko APIs aim to evolve in a binary compatible way within minor versions.
+All Apache Pekko APIs aim to evolve in a binary compatible way within minor versions.
 
 1. Do not use any default arguments
 
@@ -106,7 +106,7 @@ All Pekko APIs aim to evolve in a binary compatible way within minor versions.
 
 1. To generate a case class replacement, consider using [Kaze Class](https://github.com/ktoso/kaze-class)
 
-See [Binary Compatibilty Rules](https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html) in the Akka documentation.
+See [Binary Compatibilty Rules](https://pekko.apache.org/docs/pekko/current/common/binary-compatibility-rules.html) in the Apache Pekko documentation.
 
 See [Binary Compatibility for library authors](https://docs.scala-lang.org/overviews/core/binary-compatibility-for-library-authors.html)
 

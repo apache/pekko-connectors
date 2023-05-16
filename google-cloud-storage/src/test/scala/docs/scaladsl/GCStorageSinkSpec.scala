@@ -94,7 +94,7 @@ class GCStorageSinkSpec
   }
 
   "rewrite file" in {
-    val rewriteBucketName = "alpakka-rewrite"
+    val rewriteBucketName = "pekko-connectors-rewrite"
 
     mock.simulate(
       mockTokenApi,
@@ -113,7 +113,7 @@ class GCStorageSinkSpec
   }
 
   "fail when rewrite file fails" in {
-    val rewriteBucketName = "alpakka-rewrite"
+    val rewriteBucketName = "pekko-connectors-rewrite"
 
     mock.simulate(
       mockTokenApi,

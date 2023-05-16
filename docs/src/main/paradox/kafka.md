@@ -4,4 +4,4 @@ The **Apache Pekko Connectors Kafka connector** (originally known as **Reactive 
 
 ## Separate repository
 
-Please read more about it in the [Apache Pekko Connectors Kafka documentation](https://doc.akka.io/docs/alpakka-kafka/current/).
+Please read more about it in the [Apache Pekko Connectors Kafka documentation](https://pekko.apache.org/docs/pekko-connectors-kafka/current/).
