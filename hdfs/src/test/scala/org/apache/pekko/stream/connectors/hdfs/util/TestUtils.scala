@@ -61,7 +61,7 @@ sealed trait TestUtils {
     hdfsCluster
   }
 
-  def destination = "/tmp/pekko-connectors"
+  def destination = "/tmp/pekko-connectors/"
 
   def books: Sequence[ByteString]
 
