@@ -15,7 +15,7 @@ import de.heikoseeberger.sbtheader._
 import com.lightbend.paradox.projectinfo.ParadoxProjectInfoPluginKeys._
 import com.lightbend.sbt.JavaFormatterPlugin.autoImport.javafmtOnCompile
 import com.typesafe.tools.mima.plugin.MimaKeys._
-import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
+import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
 import sbtdynver.DynVerPlugin
 import sbtdynver.DynVerPlugin.autoImport.dynverSonatypeSnapshots
 
@@ -28,7 +28,7 @@ object Common extends AutoPlugin {
 
   override def trigger = allRequirements
 
-  override def requires = JvmPlugin && HeaderPlugin && SonatypeApachePlugin && DynVerPlugin
+  override def requires = JvmPlugin && HeaderPlugin && ApacheSonatypePlugin && DynVerPlugin
 
   override def globalSettings = Seq(
     scmInfo := Some(ScmInfo(url("https://github.com/apache/incubator-pekko-connectors"),

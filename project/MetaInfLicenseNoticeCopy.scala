@@ -9,8 +9,8 @@
 
 import sbt.Keys._
 import sbt._
-import org.mdedetrich.apache.sonatype.SonatypeApachePlugin
-import org.mdedetrich.apache.sonatype.SonatypeApachePlugin.autoImport._
+import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
+import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin.autoImport._
 
 /**
  * Copies LICENSE and NOTICE files into jar META-INF dir
@@ -24,5 +24,5 @@ object MetaInfLicenseNoticeCopy extends AutoPlugin {
 
   override def trigger = allRequirements
 
-  override def requires = SonatypeApachePlugin
+  override def requires = ApacheSonatypePlugin
 }
