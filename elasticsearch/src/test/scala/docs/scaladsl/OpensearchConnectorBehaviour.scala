@@ -134,8 +134,8 @@ trait OpensearchConnectorBehaviour {
     "ElasticsearchFlow" should {
       "pass through data in `withContext`" in {
         val books = immutable.Seq(
-          "Akka in Action",
-          "Alpakka Patterns")
+          "Pekko in Action",
+          "Pekko Connectors Patterns")
 
         val indexName = "sink3-1"
         val createBooks = Source(books).zipWithIndex
@@ -158,7 +158,7 @@ trait OpensearchConnectorBehaviour {
 
       "not post invalid encoded JSON" in {
         val books = immutable.Seq(
-          "Akka in Action",
+          "Pekko in Action",
           "Akka \u00DF Concurrency")
 
         val indexName = "sink4"
@@ -177,7 +177,7 @@ trait OpensearchConnectorBehaviour {
         createBooks.futureValue.filter(!_.success) shouldBe empty
         flushAndRefresh(connectionSettings, indexName)
         readTitlesFrom(apiVersion, baseSourceSettings, indexName).futureValue should contain allElementsOf Seq(
-          "Akka in Action",
+          "Pekko in Action",
           "Akka \u00DF Concurrency")
       }
 
@@ -190,8 +190,8 @@ trait OpensearchConnectorBehaviour {
         val createBooks = Source(
           immutable
             .Seq(
-              Book("Akka in Action").toJson,
-              JsObject("subject" -> "Akka Concurrency".toJson))
+              Book("Pekko in Action").toJson,
+              JsObject("subject" -> "Pekko Concurrency".toJson))
             .zipWithIndex).map {
           case (book: JsObject, index: Int) =>
             WriteMessage.createIndexMessage(index.toString, book)
@@ -211,7 +211,7 @@ trait OpensearchConnectorBehaviour {
 
         // Assert retired documents
         val failed = writeResults.filter(!_.success).head
-        failed.message shouldBe WriteMessage.createIndexMessage("1", JsObject("subject" -> "Akka Concurrency".toJson))
+        failed.message shouldBe WriteMessage.createIndexMessage("1", JsObject("subject" -> "Pekko Concurrency".toJson))
         failed.errorReason shouldBe Some(
           "mapping set to strict, dynamic introduction of [subject] within [_doc] is not allowed")
 
@@ -220,7 +220,7 @@ trait OpensearchConnectorBehaviour {
 
         flushAndRefresh(connectionSettings, indexName)
         readTitlesFrom(apiVersion, baseSourceSettings, indexName).futureValue shouldEqual Seq(
-          "Akka in Action")
+          "Pekko in Action")
       }
 
       "retry ALL failed document and pass retried documents to downstream (createWithPassThrough)" in {
@@ -275,8 +275,8 @@ trait OpensearchConnectorBehaviour {
         val createBooks = Source(
           immutable
             .Seq(
-              Book("Akka in Action").toJson,
-              JsObject("subject" -> "Akka Concurrency".toJson),
+              Book("Pekko in Action").toJson,
+              JsObject("subject" -> "Pekko Concurrency".toJson),
               Book("Learning Scala").toJson)
             .zipWithIndex).map {
           case (book: JsObject, index: Int) =>
@@ -300,7 +300,7 @@ trait OpensearchConnectorBehaviour {
 
         val (failed, _) = writeResults.filter(!_._1.success).head
         failed.message shouldBe WriteMessage
-          .createIndexMessage("1", JsObject("subject" -> "Akka Concurrency".toJson))
+          .createIndexMessage("1", JsObject("subject" -> "Pekko Concurrency".toJson))
           .withPassThrough(1)
         failed.errorReason shouldBe Some(
           "mapping set to strict, dynamic introduction of [subject] within [_doc] is not allowed")
@@ -310,7 +310,7 @@ trait OpensearchConnectorBehaviour {
 
         flushAndRefresh(connectionSettings, indexName)
         readTitlesFrom(apiVersion, baseSourceSettings, indexName).futureValue should contain theSameElementsAs Seq(
-          "Akka in Action",
+          "Pekko in Action",
           "Learning Scala")
       }
 
@@ -592,9 +592,9 @@ trait OpensearchConnectorBehaviour {
 
         val result = readWithoutTypeName.futureValue.toList
         result.sorted shouldEqual Seq(
-          "Akka Concurrency",
-          "Akka in Action",
-          "Effective Akka",
+          "Pekko Concurrency",
+          "Pekko in Action",
+          "Effective Pekko",
           "Learning Scala",
           "Programming in Scala",
           "Scala Puzzlers",
@@ -627,13 +627,13 @@ trait OpensearchConnectorBehaviour {
 
         // sort: _doc is by design an undefined order and is non-deterministic
         // we cannot check a specific order of values
-        result should contain theSameElementsAs (List("Akka in Action",
+        result should contain theSameElementsAs (List("Pekko in Action",
           "Programming in Scala",
           "Learning Scala",
           "Scala for Spark in Production",
           "Scala Puzzlers",
-          "Effective Akka",
-          "Akka Concurrency"))
+          "Effective Pekko",
+          "Pekko Concurrency"))
       }
 
       "sort by user defined field" in {

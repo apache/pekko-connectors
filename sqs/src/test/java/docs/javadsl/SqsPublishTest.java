@@ -75,7 +75,7 @@ public class SqsPublishTest extends BaseSqsTest {
 
     CompletionStage<Done> done =
         // #run-string
-        Source.single("alpakka")
+        Source.single("connectors")
             .runWith(
                 SqsPublishSink.create(queueUrl, SqsPublishSettings.create(), sqsClient), system);
     // #run-string
@@ -87,7 +87,7 @@ public class SqsPublishTest extends BaseSqsTest {
             .get(2, TimeUnit.SECONDS)
             .messages();
     assertEquals(1, messages.size());
-    assertEquals("alpakka", messages.get(0).body());
+    assertEquals("connectors", messages.get(0).body());
   }
 
   @Test
@@ -98,7 +98,7 @@ public class SqsPublishTest extends BaseSqsTest {
     CompletionStage<Done> done =
         // #run-send-request
         // for fix SQS queue
-        Source.single(SendMessageRequest.builder().messageBody("alpakka").build())
+        Source.single(SendMessageRequest.builder().messageBody("connectors").build())
             .runWith(
                 SqsPublishSink.messageSink(queueUrl, SqsPublishSettings.create(), sqsClient),
                 system);
@@ -112,7 +112,7 @@ public class SqsPublishTest extends BaseSqsTest {
             .get(2, TimeUnit.SECONDS)
             .messages();
     assertEquals(1, messages.size());
-    assertEquals("alpakka", messages.get(0).body());
+    assertEquals("connectors", messages.get(0).body());
   }
 
   @Test
@@ -124,7 +124,7 @@ public class SqsPublishTest extends BaseSqsTest {
         // #run-send-request
         // for dynamic SQS queues
         Source.single(
-                SendMessageRequest.builder().messageBody("alpakka").queueUrl(queueUrl).build())
+                SendMessageRequest.builder().messageBody("connectors").queueUrl(queueUrl).build())
             .runWith(SqsPublishSink.messageSink(SqsPublishSettings.create(), sqsClient), system);
     // #run-send-request
     done.toCompletableFuture().get(10, TimeUnit.SECONDS);
@@ -135,7 +135,7 @@ public class SqsPublishTest extends BaseSqsTest {
             .get(2, TimeUnit.SECONDS)
             .messages();
     assertEquals(1, messages.size());
-    assertEquals("alpakka", messages.get(0).body());
+    assertEquals("connectors", messages.get(0).body());
   }
 
   @Test

@@ -63,7 +63,7 @@ class GCStorageStreamIntegrationSpec
   @nowarn("msg=deprecated")
   def settings: GCStorageSettings = GCStorageSettings()
 
-  def bucket = "alpakka"
+  def bucket = "connectors"
   def rewriteBucket = "pekko-connectors-rewrite"
   def projectId = settings.projectId
   def clientEmail = settings.clientEmail

@@ -64,7 +64,7 @@ class KuduTableSpec
   val rangeKeys = List("key")
   val createTableOptions = new CreateTableOptions().setNumReplicas(1).setRangePartitionColumns(rangeKeys.asJava)
 
-  // Alpakka settings
+  // Pekko Connectors Settings
   val kuduTableSettings = KuduTableSettings("test", schema, createTableOptions, kuduConverter)
   // #configure
 

@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.geode
 import org.apache.geode.pdx.PdxSerializer
 
 /**
- * Base interface for Geode `PdxSerializer`s in Alpakka Geode.
+ * Base interface for Geode `PdxSerializer`s in Pekko Connectors Geode.
  */
 trait PekkoPdxSerializer[V] extends PdxSerializer {
   def clazz: Class[V]

@@ -19,7 +19,7 @@ import pekko.stream.Attributes
 import pekko.stream.Attributes.Attribute
 
 /**
- * Akka Stream attributes that are used when materializing BigQuery Storage stream blueprints.
+ * Pekko Stream attributes that are used when materializing BigQuery Storage stream blueprints.
  */
 object BigQueryStorageAttributes {
 

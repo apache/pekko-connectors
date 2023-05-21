@@ -25,7 +25,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ Future, Promise }
 
 /**
- * Google Pub/Sub Akka Stream operator factory.
+ * Google Pub/Sub Pekko Stream operator factory.
  */
 object GooglePubSub {
 

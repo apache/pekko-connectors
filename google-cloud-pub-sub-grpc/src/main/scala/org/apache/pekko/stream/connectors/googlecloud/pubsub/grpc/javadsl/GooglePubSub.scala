@@ -23,7 +23,7 @@ import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1._
 
 /**
- * Google Pub/Sub Akka Stream operator factory.
+ * Google Pub/Sub Pekko Stream operator factory.
  */
 object GooglePubSub {
 

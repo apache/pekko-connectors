@@ -19,7 +19,7 @@ import pekko.stream.Attributes
 import pekko.stream.Attributes.Attribute
 
 /**
- * Akka Stream attributes that are used when materializing PubSub stream blueprints.
+ * Pekko Stream attributes that are used when materializing PubSub stream blueprints.
  */
 object PubSubAttributes {
 

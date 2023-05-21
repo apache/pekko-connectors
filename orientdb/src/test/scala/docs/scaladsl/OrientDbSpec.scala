@@ -92,13 +92,13 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
     register(sourceClass)
 
-    flush(sourceClass, "book_title", "Akka in Action")
+    flush(sourceClass, "book_title", "Pekko in Action")
     flush(sourceClass, "book_title", "Programming in Scala")
     flush(sourceClass, "book_title", "Learning Scala")
     flush(sourceClass, "book_title", "Scala for Spark in Production")
     flush(sourceClass, "book_title", "Scala Puzzlers")
-    flush(sourceClass, "book_title", "Effective Akka")
-    flush(sourceClass, "book_title", "Akka Concurrency")
+    flush(sourceClass, "book_title", "Effective Pekko")
+    flush(sourceClass, "book_title", "Pekko Concurrency")
   }
 
   override def afterAll() = {
@@ -180,9 +180,9 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       // #run-odocument
 
       result.futureValue.sorted shouldEqual Seq(
-        "Akka Concurrency",
-        "Akka in Action",
-        "Effective Akka",
+        "Pekko Concurrency",
+        "Pekko in Action",
+        "Effective Pekko",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -218,9 +218,9 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
         .runWith(Sink.seq)
 
       f2.futureValue.sorted shouldEqual Seq(
-        "Akka Concurrency",
-        "Akka in Action",
-        "Effective Akka",
+        "Pekko Concurrency",
+        "Pekko in Action",
+        "Effective Pekko",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",

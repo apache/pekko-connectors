@@ -25,7 +25,7 @@ import scala.language.postfixOps
 
 class GeodeFlowSpec extends GeodeBaseSpec {
 
-  "Alpakka geode" should {
+  "Pekko Connectors geode" should {
     "create settings" in {
       {
         val hostname = "localhost"

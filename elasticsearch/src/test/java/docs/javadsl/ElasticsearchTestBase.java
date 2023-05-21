@@ -68,13 +68,13 @@ public class ElasticsearchTestBase {
     connectionSettings =
         ElasticsearchConnectionSettings.create(String.format("http://localhost:%d", port));
 
-    register("source", "Akka in Action");
+    register("source", "Pekko in Action");
     register("source", "Programming in Scala");
     register("source", "Learning Scala");
     register("source", "Scala for Spark in Production");
     register("source", "Scala Puzzlers");
-    register("source", "Effective Akka");
-    register("source", "Akka Concurrency");
+    register("source", "Effective Pekko");
+    register("source", "Pekko Concurrency");
     flushAndRefresh("source");
   }
 

@@ -230,9 +230,9 @@ public class HdfsWriterTest {
     // to commit the offset to Kafka
     List<KafkaMessage> messagesFromKafka =
         Arrays.asList(
-            new KafkaMessage(new Book("Akka Concurrency"), new KafkaOffset(0)),
-            new KafkaMessage(new Book("Akka in Action"), new KafkaOffset(1)),
-            new KafkaMessage(new Book("Effective Akka"), new KafkaOffset(2)),
+            new KafkaMessage(new Book("Pekko Concurrency"), new KafkaOffset(0)),
+            new KafkaMessage(new Book("Pekko in Action"), new KafkaOffset(1)),
+            new KafkaMessage(new Book("Effective Pekko"), new KafkaOffset(2)),
             new KafkaMessage(new Book("Learning Scala"), new KafkaOffset(3)),
             new KafkaMessage(new Book("Scala Puzzlers"), new KafkaOffset(4)),
             new KafkaMessage(new Book("Scala for Spark in Production"), new KafkaOffset(5)));

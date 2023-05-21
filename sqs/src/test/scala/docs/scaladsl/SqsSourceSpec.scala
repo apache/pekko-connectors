@@ -60,7 +60,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       SendMessageRequest
         .builder()
         .queueUrl(queueUrl)
-        .messageBody("alpakka")
+        .messageBody("connectors")
         .build()
 
     sqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)
@@ -68,7 +68,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
     val future = SqsSource(queueUrl, sqsSourceSettings)
       .runWith(Sink.head)
 
-    future.futureValue.body() shouldBe "alpakka"
+    future.futureValue.body() shouldBe "connectors"
   }
 
   it should "continue streaming if receives an empty response" taggedAs Integration in {
@@ -112,7 +112,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
         SendMessageRequest
           .builder()
           .queueUrl(queueUrl)
-          .messageBody("alpakka")
+          .messageBody("connectors")
           .build()
 
       sqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)
@@ -134,7 +134,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
           SendMessageRequest
             .builder()
             .queueUrl(queueUrl)
-            .messageBody("alpakka")
+            .messageBody("connectors")
             .build()
 
         sqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)
@@ -156,7 +156,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
         SendMessageRequest
           .builder()
           .queueUrl(queueUrl)
-          .messageBody("alpakka")
+          .messageBody("connectors")
           .build()
 
       sqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)
@@ -182,7 +182,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
         SendMessageRequest
           .builder()
           .queueUrl(queueUrl)
-          .messageBody("alpakka")
+          .messageBody("connectors")
           .messageAttributes(messageAttributes.asJava)
           .build()
 
@@ -272,7 +272,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
         SendMessageRequest
           .builder()
           .queueUrl(queueUrl)
-          .messageBody("alpakka")
+          .messageBody("connectors")
           .build()
 
       customSqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)
@@ -280,7 +280,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       val future = SqsSource(queueUrl, sqsSourceSettings)(customSqsClient)
         .runWith(Sink.head)
 
-      future.futureValue.body() shouldBe "alpakka"
+      future.futureValue.body() shouldBe "connectors"
     }
   }
 
@@ -313,7 +313,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
         SendMessageRequest
           .builder()
           .queueUrl(queueUrl)
-          .messageBody("alpakka")
+          .messageBody("connectors")
           .build()
 
       sqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)
@@ -332,7 +332,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
         SendMessageRequest
           .builder()
           .queueUrl(queueUrl)
-          .messageBody("alpakka")
+          .messageBody("connectors")
           .build()
 
       sqsClient.sendMessage(sendMessageRequest).get(2, TimeUnit.SECONDS)

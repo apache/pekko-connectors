@@ -18,7 +18,7 @@ import pekko.stream.Attributes
 import pekko.stream.Attributes.Attribute
 
 /**
- * Akka Stream attributes that are used when materializing S3 stream blueprints.
+ * Pekko Stream attributes that are used when materializing S3 stream blueprints.
  */
 object S3Attributes {
 

@@ -78,8 +78,8 @@ import java.util.concurrent.Executor
   }
 
   def requestSettings()(implicit system: ClassicActorSystemProvider, config: Config): RequestSettings = {
-    val alpakkaConfig = config.getConfig("pekko.connectors.google")
-    RequestSettings(alpakkaConfig)
+    val connectorsConfig = config.getConfig("pekko.connectors.google")
+    RequestSettings(connectorsConfig)
   }
 
 }

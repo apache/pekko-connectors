@@ -91,7 +91,7 @@ Add `withXxxx` methods to specify certain fields in the settings instance.
 
 In case you see the need to support reading the settings from `Config`, offer a method taking the `Config` instance so
 that the user can apply a proper namespace.
-Refrain from using `org.apache.pekko.stream.connectors` as Config prefix, prefer `alpakka` as root namespace.
+Refrain from using `pekko.stream.connectors` as Config prefix, prefer `pekko` as root namespace.
 
 
 ## Implementation details

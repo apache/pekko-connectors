@@ -69,9 +69,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       flushAndRefresh(connectionSettings, indexName)
 
       readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue should contain allElementsOf Seq(
-        "Akka Concurrency",
-        "Akka in Action",
-        "Effective Akka",
+        "Pekko Concurrency",
+        "Pekko in Action",
+        "Effective Pekko",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -100,9 +100,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       flushAndRefresh(connectionSettings, indexName)
 
       readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue should contain allElementsOf Seq(
-        "Akka Concurrency",
-        "Akka in Action",
-        "Effective Akka",
+        "Pekko Concurrency",
+        "Pekko in Action",
+        "Effective Pekko",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -133,9 +133,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       flushAndRefresh(connectionSettings, indexName)
 
       readTitlesFrom(ApiVersion.V7, baseSourceSettings, indexName).futureValue.sorted shouldEqual Seq(
-        "Akka Concurrency",
-        "Akka in Action",
-        "Effective Akka",
+        "Pekko Concurrency",
+        "Pekko in Action",
+        "Effective Pekko",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -441,9 +441,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       writeCustomIndex.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, customIndexName)
       readTitlesFrom(ApiVersion.V7, baseSourceSettings, customIndexName).futureValue.sorted shouldEqual Seq(
-        "Akka Concurrency",
-        "Akka in Action",
-        "Effective Akka",
+        "Pekko Concurrency",
+        "Pekko in Action",
+        "Effective Pekko",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",

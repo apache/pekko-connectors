@@ -82,13 +82,13 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
       .runWith(Sink.seq)
 
   def insertTestData(connectionSettings: ElasticsearchConnectionSettings): Unit = {
-    register(connectionSettings, "source", "Akka in Action", 10)
+    register(connectionSettings, "source", "Pekko in Action", 10)
     register(connectionSettings, "source", "Programming in Scala", 20)
     register(connectionSettings, "source", "Learning Scala", 10)
     register(connectionSettings, "source", "Scala for Spark in Production", 5)
     register(connectionSettings, "source", "Scala Puzzlers", 10)
-    register(connectionSettings, "source", "Effective Akka", 10)
-    register(connectionSettings, "source", "Akka Concurrency", 10)
+    register(connectionSettings, "source", "Effective Pekko", 10)
+    register(connectionSettings, "source", "Pekko Concurrency", 10)
     flushAndRefresh(connectionSettings, "source")
   }
 

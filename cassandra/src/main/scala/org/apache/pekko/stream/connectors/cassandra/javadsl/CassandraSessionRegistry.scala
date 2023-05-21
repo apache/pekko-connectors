@@ -24,7 +24,7 @@ import com.datastax.oss.driver.api.core.CqlSession
 
 /**
  * This Cassandra session registry makes it possible to share Cassandra sessions between multiple use sites
- * in the same `ActorSystem` (important for the Cassandra Akka Persistence plugin where it is shared between journal,
+ * in the same `ActorSystem` (important for the Cassandra Pekko Persistence plugin where it is shared between journal,
  * query plugin and snapshot plugin)
  */
 object CassandraSessionRegistry {

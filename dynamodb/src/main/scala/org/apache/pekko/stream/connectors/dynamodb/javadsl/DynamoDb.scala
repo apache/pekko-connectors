@@ -29,7 +29,7 @@ import software.amazon.awssdk.services.dynamodb.model.{ DynamoDbRequest, DynamoD
 import scala.util.Try
 
 /**
- * Factory of DynamoDb Akka Stream operators.
+ * Factory of DynamoDb Pekko Stream operators.
  */
 object DynamoDb {
 
