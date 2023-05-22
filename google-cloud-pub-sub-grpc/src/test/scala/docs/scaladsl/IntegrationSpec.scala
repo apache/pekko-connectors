@@ -58,7 +58,7 @@ class IntegrationSpec
 
     "publish a message" in {
       // #publish-single
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val topic = "simpleTopic"
 
       val publishMessage: PubsubMessage =
@@ -84,7 +84,7 @@ class IntegrationSpec
 
     "publish batch" in {
       // #publish-fast
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val topic = "simpleTopic"
 
       val publishMessage: PubsubMessage =
@@ -108,7 +108,7 @@ class IntegrationSpec
 
     "subscribe streaming" in {
       // #subscribe-stream
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val subscription = "simpleSubscription"
 
       val request = StreamingPullRequest()
@@ -139,7 +139,7 @@ class IntegrationSpec
 
     "subscribe sync" in {
       // #subscribe-sync
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val subscription = "simpleSubscription"
 
       val request = PullRequest()
@@ -169,7 +169,7 @@ class IntegrationSpec
     }
 
     "acknowledge" in {
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val subscription = "simpleSubscription"
 
       val request = StreamingPullRequest()
@@ -199,7 +199,7 @@ class IntegrationSpec
     }
 
     "acknowledge flow" in {
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val subscription = "simpleSubscription"
 
       val request = StreamingPullRequest()
@@ -223,7 +223,7 @@ class IntegrationSpec
     "republish" in {
       val msg = "Labas!"
 
-      val projectId = "connectors"
+      val projectId = "alpakka"
       val topic = "testTopic"
       val subscription = "testSubscription"
 

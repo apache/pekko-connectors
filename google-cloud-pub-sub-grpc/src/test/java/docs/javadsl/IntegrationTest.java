@@ -55,7 +55,7 @@ public class IntegrationTest {
   public void shouldPublishAMessage()
       throws InterruptedException, ExecutionException, TimeoutException {
     // #publish-single
-    final String projectId = "connectors";
+    final String projectId = "alpakka";
     final String topic = "simpleTopic";
 
     final PubsubMessage publishMessage =
@@ -84,7 +84,7 @@ public class IntegrationTest {
   public void shouldPublishBatch()
       throws InterruptedException, ExecutionException, TimeoutException {
     // #publish-fast
-    final String projectId = "connectors";
+    final String projectId = "alpakka";
     final String topic = "simpleTopic";
 
     final PubsubMessage publishMessage =
@@ -113,7 +113,7 @@ public class IntegrationTest {
   public void shouldSubscribeStream()
       throws InterruptedException, ExecutionException, TimeoutException {
     // #subscribe-stream
-    final String projectId = "connectors";
+    final String projectId = "alpakka";
     final String subscription = "simpleSubscription";
 
     final StreamingPullRequest request =
@@ -152,7 +152,7 @@ public class IntegrationTest {
   public void shouldSubscribeSync()
       throws InterruptedException, ExecutionException, TimeoutException {
     // #subscribe-sync
-    final String projectId = "connectors";
+    final String projectId = "alpakka";
     final String subscription = "simpleSubscription";
 
     final PullRequest request =
@@ -189,7 +189,7 @@ public class IntegrationTest {
 
   @Test
   public void shouldAcknowledge() {
-    final String projectId = "connectors";
+    final String projectId = "alpakka";
     final String subscription = "simpleSubscription";
 
     final StreamingPullRequest request =

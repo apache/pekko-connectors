@@ -80,9 +80,9 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
 
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
         indexName).futureValue should contain allElementsOf Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -114,9 +114,9 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
 
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
         indexName).futureValue should contain allElementsOf Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -148,9 +148,9 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       flushAndRefresh(connectionSettings, indexName)
 
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, indexName).futureValue.sorted shouldEqual Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -463,9 +463,9 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       writeCustomIndex.futureValue shouldBe Done
       flushAndRefresh(connectionSettings, customIndexName)
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings, customIndexName).futureValue.sorted shouldEqual Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",

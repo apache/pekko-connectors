@@ -94,9 +94,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
 
     List<String> expect =
         Arrays.asList(
-            "Pekko Concurrency",
-            "Pekko in Action",
-            "Effective Pekko",
+            "Akka Concurrency",
+            "Akka in Action",
+            "Effective Akka",
             "Learning Scala",
             "Programming in Scala",
             "Scala Puzzlers",
@@ -150,9 +150,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
 
     List<String> expect =
         Arrays.asList(
-            "Pekko Concurrency",
-            "Pekko in Action",
-            "Effective Pekko",
+            "Akka Concurrency",
+            "Akka in Action",
+            "Effective Akka",
             "Learning Scala",
             "Programming in Scala",
             "Scala Puzzlers",
@@ -209,9 +209,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
 
     List<String> expect =
         Arrays.asList(
-            "Pekko Concurrency",
-            "Pekko in Action",
-            "Effective Pekko",
+            "Akka Concurrency",
+            "Akka in Action",
+            "Effective Akka",
             "Learning Scala",
             "Programming in Scala",
             "Scala Puzzlers",
