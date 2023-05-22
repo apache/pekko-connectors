@@ -77,7 +77,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     val request = SendMessageRequest
       .builder()
       .queueUrl(queue1)
-      .messageBody("alpakka")
+      .messageBody("connectors")
       .build()
 
     sqsClient.sendMessage(request)
@@ -92,7 +92,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     val result =
       sqsClient.receiveMessage(ReceiveMessageRequest.builder().queueUrl(queue2).build()).get(2, TimeUnit.SECONDS)
     result.messages().size() shouldBe 1
-    result.messages().get(0).body() shouldBe "alpakka"
+    result.messages().get(0).body() shouldBe "connectors"
   }
 
   it should "failure the promise on upstream failure" in {

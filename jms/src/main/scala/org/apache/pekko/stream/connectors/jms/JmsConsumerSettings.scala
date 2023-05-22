@@ -98,7 +98,7 @@ final class JmsConsumerSettings private (
   def withMaxPendingAcks(value: Int): JmsConsumerSettings = copy(maxPendingAcks = value)
 
   /**
-   * For use with transactions, if true the stream fails if Alpakka rolls back the transaction when `ackTimeout` is hit.
+   * For use with transactions, if true the stream fails if Pekko Connectors rolls back the transaction when `ackTimeout` is hit.
    */
   def withFailStreamOnAckTimeout(value: Boolean): JmsConsumerSettings =
     if (failStreamOnAckTimeout == value) this else copy(failStreamOnAckTimeout = value)

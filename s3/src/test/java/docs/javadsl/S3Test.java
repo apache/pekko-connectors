@@ -137,7 +137,7 @@ public class S3Test extends S3WireMockBase {
 
     // #download
 
-    // #downloadToAkkaHttp
+    // #downloadToPekkoHttp
     metadataCompletionStage.thenApply(
         metadata ->
             HttpResponse.create()
@@ -149,7 +149,7 @@ public class S3Test extends S3WireMockBase {
                             .orElse(ContentTypes.APPLICATION_OCTET_STREAM),
                         metadata.getContentLength(),
                         s3Source)));
-    // #downloadToAkkaHttp
+    // #downloadToPekkoHttp
 
     String result = dataCompletionStage.toCompletableFuture().get(5, TimeUnit.SECONDS);
     ObjectMetadata metadata =

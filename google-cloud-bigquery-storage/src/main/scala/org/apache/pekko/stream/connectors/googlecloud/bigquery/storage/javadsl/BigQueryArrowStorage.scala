@@ -26,7 +26,7 @@ import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchem
 import java.util.concurrent.CompletionStage
 
 /**
- * Google BigQuery Storage Api Akka Stream operator factory using Arrow Format.
+ * Google BigQuery Storage Api Pekko Stream operator factory using Arrow Format.
  */
 object BigQueryArrowStorage {
 

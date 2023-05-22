@@ -31,7 +31,7 @@ import com.google.cloud.bigquery.storage.v1.stream.{ DataFormat => StreamDataFor
 import scala.concurrent.{ ExecutionContextExecutor, Future }
 
 /**
- * Google BigQuery Storage Api Akka Stream operator factory.
+ * Google BigQuery Storage Api Pekko Stream operator factory.
  */
 object BigQueryStorage {
 

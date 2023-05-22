@@ -53,7 +53,7 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
 
     data.utf8String shouldBe body
 
-    // #downloadToAkkaHttp
+    // #downloadToPekkoHttp
     HttpResponse(
       entity = HttpEntity(
         metadata.contentType
@@ -61,7 +61,7 @@ class S3SourceSpec extends S3WireMockBase with S3ClientIntegrationSpec {
           .getOrElse(ContentTypes.`application/octet-stream`),
         metadata.contentLength,
         s3Source))
-    // #downloadToAkkaHttp
+    // #downloadToPekkoHttp
   }
 
   "S3Source" should "use custom settings when downloading a file" in {

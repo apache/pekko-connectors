@@ -28,7 +28,7 @@ import scala.concurrent.{ Future, Promise }
 
 /**
  * This Couchbase session registry makes it possible to share Couchbase sessions between multiple use sites
- * in the same `ActorSystem` (important for the Couchbase Akka Persistence plugin where it is shared between journal,
+ * in the same `ActorSystem` (important for the Couchbase Pekko Persistence plugin where it is shared between journal,
  * query plugin and snapshot plugin)
  */
 object CouchbaseSessionRegistry extends ExtensionId[CouchbaseSessionRegistry] with ExtensionIdProvider {

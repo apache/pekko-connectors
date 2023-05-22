@@ -53,7 +53,7 @@ object TestChanged extends AutoPlugin {
   }
 
   private def shouldBuild(projectName: String, changedDirectories: Set[String]) = projectName match {
-    case "alpakka" => false
+    case "connectors" => false
     case re"pekko-connectors-(.+)$subproject" =>
       changedDirectories.contains(subproject) || changedDirectories.contains("") || changedDirectories.contains(
         "project")

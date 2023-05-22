@@ -32,15 +32,15 @@ import com.typesafe.config.Config
  *
  * For example dynamodb connector needs a DynamoClient to create Sources and Flows.
  * Another example is Google Pub Sub gRPC connector that uses Grpc Publishers and
- * Subscribers to create Sources and Sinks. Another connector, Alpakka Kafka, uses
+ * Subscribers to create Sources and Sinks. Another connector, Pekko Connectors Kafka, uses
  * an actor that can be shared across different streams.
  *
  * If your connector uses such a resource and it is possible to reuse that resource
- * across different Akka Stream operator factories, put that resource to a separate
+ * across different Pekko Stream operator factories, put that resource to a separate
  * class like below.
  */
 final class Resource private (val settings: ResourceSettings) {
-  // a resource that is to be used when creating Akka Stream operators.
+  // a resource that is to be used when creating Pekko Stream operators.
   val connection = Flow[ByteString].map(_.reverse)
 
   /**

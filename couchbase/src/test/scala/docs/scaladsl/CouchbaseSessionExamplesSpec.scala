@@ -45,7 +45,7 @@ class CouchbaseSessionExamplesSpec
       // #registry
       import com.couchbase.client.java.env.{ CouchbaseEnvironment, DefaultCouchbaseEnvironment }
 
-      // Akka extension (singleton per actor system)
+      // Pekko extension (singleton per actor system)
       val registry = CouchbaseSessionRegistry(actorSystem)
 
       // If connecting to more than one Couchbase cluster, the environment should be shared

@@ -20,7 +20,7 @@ import pekko.stream.Attributes.Attribute
 import org.apache.kudu.client.KuduClient
 
 /**
- * Akka Stream attributes that are used when materializing Kudu stream blueprints.
+ * Pekko Stream attributes that are used when materializing Kudu stream blueprints.
  */
 object KuduAttributes {
 

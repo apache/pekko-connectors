@@ -81,7 +81,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
   }
   // #define-class
 
-  "Alpakka Solr" should {
+  "Pekko Connectors Solr" should {
     "consume and publish SolrInputDocument" in {
       // Copy collection1 to collectionName through document stream
       val collectionName = createCollection()
@@ -292,7 +292,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         CommittableMessage(Book("Book 3"), CommittableOffset(2)))
       val kafkaConsumerSource = Source(messagesFromKafka)
       // #kafka-example
-      // Note: This code mimics Alpakka Kafka APIs
+      // Note: This code mimics Pekko Connectors Kafka APIs
       val copyCollection = kafkaConsumerSource
         .map { kafkaMessage: CommittableMessage =>
           val book = kafkaMessage.book
@@ -655,7 +655,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         CommittableOffset(2))
       val kafkaConsumerSource = Source(messagesFromKafka)
       // #kafka-example-PT
-      // Note: This code mimics Alpakka Kafka APIs
+      // Note: This code mimics Pekko Connectors Kafka APIs
       val copyCollection = kafkaConsumerSource
         .map { offset: CommittableOffset =>
           // Transform message so that we can write to solr

@@ -240,9 +240,9 @@ class HdfsWriterSpec
       // After we've written them to HDFS, we want
       // to commit the offset to Kafka
       val messagesFromKafka = List(
-        KafkaMessage(Book("Akka Concurrency"), KafkaOffset(0)),
-        KafkaMessage(Book("Akka in Action"), KafkaOffset(1)),
-        KafkaMessage(Book("Effective Akka"), KafkaOffset(2)),
+        KafkaMessage(Book("Pekko Concurrency"), KafkaOffset(0)),
+        KafkaMessage(Book("Pekko in Action"), KafkaOffset(1)),
+        KafkaMessage(Book("Effective Pekko"), KafkaOffset(2)),
         KafkaMessage(Book("Learning Scala"), KafkaOffset(3)),
         KafkaMessage(Book("Scala Puzzlers"), KafkaOffset(4)),
         KafkaMessage(Book("Scala for Spark in Production"), KafkaOffset(5)))

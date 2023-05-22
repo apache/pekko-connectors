@@ -348,7 +348,7 @@ public class SolrTest {
 
     Source<CommittableMessage, NotUsed> kafkaConsumerSource = Source.from(messagesFromKafka);
     // #kafka-example
-    // Note: This code mimics Alpakka Kafka APIs
+    // Note: This code mimics Pekko Connectors Kafka APIs
     CompletionStage<Done> completion =
         kafkaConsumerSource // Assume we get this from Kafka
             .map(
@@ -720,7 +720,7 @@ public class SolrTest {
 
     Source<CommittableOffset, NotUsed> kafkaConsumerSource = Source.from(messagesFromKafka);
     // #kafka-example-PT
-    // Note: This code mimics Alpakka Kafka APIs
+    // Note: This code mimics Pekko Connectors Kafka APIs
     CompletionStage<Done> completion =
         kafkaConsumerSource // Assume we get this from Kafka
             .map(

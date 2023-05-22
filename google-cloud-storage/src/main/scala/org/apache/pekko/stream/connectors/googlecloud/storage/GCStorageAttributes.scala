@@ -18,7 +18,7 @@ import pekko.stream.Attributes
 import pekko.stream.Attributes.Attribute
 
 /**
- * Akka Stream attributes that are used when materializing GCStorage stream blueprints.
+ * Pekko Stream attributes that are used when materializing GCStorage stream blueprints.
  * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")

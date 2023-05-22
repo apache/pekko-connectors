@@ -28,7 +28,7 @@ import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
 
 /**
- * Factory of DynamoDb Akka Stream operators.
+ * Factory of DynamoDb Pekko Stream operators.
  */
 object DynamoDb {
 

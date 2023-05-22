@@ -135,7 +135,7 @@ trait ElasticsearchConnectorBehaviour {
       "pass through data in `withContext`" in {
         val books = immutable.Seq(
           "Akka in Action",
-          "Alpakka Patterns")
+          "Pekko Connectors Patterns")
 
         val indexName = "sink3-1"
         val createBooks = Source(books).zipWithIndex

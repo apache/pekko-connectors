@@ -79,7 +79,7 @@ public class KuduTableTest {
     CreateTableOptions createTableOptions =
         new CreateTableOptions().setNumReplicas(1).setRangePartitionColumns(rangeKeys);
 
-    // Alpakka settings
+    // Pekko Connectors Settings
     KuduTableSettings<Person> tableSettings =
         KuduTableSettings.create("tablenameSink", schema, createTableOptions, kuduConverter);
     // #configure

@@ -102,12 +102,12 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
       val future =
         // #run-string
         Source
-          .single("alpakka")
+          .single("connectors")
           .runWith(SqsPublishSink(queueUrl))
       // #run-string
       future.futureValue shouldBe Done
 
-      receiveMessage().body() shouldBe "alpakka"
+      receiveMessage().body() shouldBe "connectors"
     }
   }
 
@@ -117,14 +117,14 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         // #run-send-request
         // for fix SQS queue
         Source
-          .single(SendMessageRequest.builder().messageBody("alpakka").build())
+          .single(SendMessageRequest.builder().messageBody("connectors").build())
           .runWith(SqsPublishSink.messageSink(queueUrl))
 
       // #run-send-request
 
       future.futureValue shouldBe Done
 
-      receiveMessage().body() shouldBe "alpakka"
+      receiveMessage().body() shouldBe "connectors"
     }
   }
 
@@ -134,13 +134,13 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         // #run-send-request
         // for dynamic SQS queues
         Source
-          .single(SendMessageRequest.builder().messageBody("alpakka").queueUrl(queueUrl).build())
+          .single(SendMessageRequest.builder().messageBody("connectors").queueUrl(queueUrl).build())
           .runWith(SqsPublishSink.messageSink())
       // #run-send-request
 
       future.futureValue shouldBe Done
 
-      receiveMessage().body() shouldBe "alpakka"
+      receiveMessage().body() shouldBe "connectors"
     }
   }
 
@@ -197,7 +197,7 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         // #flow
         // for fix SQS queue
         Source
-          .single(SendMessageRequest.builder().messageBody("alpakka").build())
+          .single(SendMessageRequest.builder().messageBody("connectors").build())
           .via(SqsPublishFlow(queueUrl))
           .runWith(Sink.head)
 
@@ -205,9 +205,9 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
 
       val result = future.futureValue
       result.result
-      result.result.md5OfMessageBody() shouldBe md5HashString("alpakka")
+      result.result.md5OfMessageBody() shouldBe md5HashString("connectors")
 
-      receiveMessage().body() shouldBe "alpakka"
+      receiveMessage().body() shouldBe "connectors"
     }
   }
 
@@ -217,15 +217,15 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         // #flow
         // for dynamic SQS queues
         Source
-          .single(SendMessageRequest.builder().messageBody("alpakka").queueUrl(queueUrl).build())
+          .single(SendMessageRequest.builder().messageBody("connectors").queueUrl(queueUrl).build())
           .via(SqsPublishFlow())
           .runWith(Sink.head)
       // #flow
 
       val result = future.futureValue
-      result.result.md5OfMessageBody() shouldBe md5HashString("alpakka")
+      result.result.md5OfMessageBody() shouldBe md5HashString("connectors")
 
-      receiveMessage().body() shouldBe "alpakka"
+      receiveMessage().body() shouldBe "connectors"
     }
   }
 
@@ -241,7 +241,7 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         .single(
           SendMessageRequest
             .builder()
-            .messageBody("alpakka")
+            .messageBody("connectors")
             .messageGroupId("group-id")
             .messageDeduplicationId("deduplication-id")
             .build())
@@ -249,10 +249,10 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         .runWith(Sink.head)
 
     val result = future.futureValue
-    result.result.md5OfMessageBody() shouldBe md5HashString("alpakka")
+    result.result.md5OfMessageBody() shouldBe md5HashString("connectors")
     result.result.sequenceNumber() should not be empty
 
-    receiveMessage().body() shouldBe "alpakka"
+    receiveMessage().body() shouldBe "connectors"
   }
 
   ignore should "put message in a flow, batch, then pass the result further with fifo queues" taggedAs Integration in new IntegrationFixture(

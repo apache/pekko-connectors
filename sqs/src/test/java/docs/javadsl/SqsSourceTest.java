@@ -122,7 +122,7 @@ public class SqsSourceTest extends BaseSqsTest {
     // #init-custom-client
 
     customSqsClient
-        .sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody("alpakka").build())
+        .sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody("connectors").build())
         .get(2, TimeUnit.SECONDS);
 
     final CompletionStage<String> cs =
@@ -131,6 +131,6 @@ public class SqsSourceTest extends BaseSqsTest {
             .map(Message::body)
             .runWith(Sink.head(), system);
 
-    assertEquals("alpakka", cs.toCompletableFuture().get(20, TimeUnit.SECONDS));
+    assertEquals("connectors", cs.toCompletableFuture().get(20, TimeUnit.SECONDS));
   }
 }

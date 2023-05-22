@@ -44,7 +44,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
 
   def stopWireMockServer(): Unit = _wireMockServer.close()
 
-  val bucketName = "alpakka"
+  val bucketName = "connectors"
   val fileName = "file1.txt"
   val generation = 1543055053992769L
 
@@ -67,7 +67,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
        |  "contentType":"text/plain; charset=UTF-8",
        |  "updated":"2018-11-24T10:24:13.992Z",
        |  "mediaLink":"https://www.googleapis.com/download/storage/v1/b/alpakka/o/$fileName?generation=1543055053992768&alt=media",
-       |  "bucket":"alpakka",
+       |  "bucket":"connectors",
        |  "kind":"storage#object",
        |  "metageneration":"1",
        |  "timeDeleted": "2018-11-24T10:24:13.992Z",
@@ -373,7 +373,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
          |  "contentType":"text/plain; charset=UTF-8",
          |  "updated":"2018-11-24T10:24:13.992Z",
          |  "mediaLink":"https://www.googleapis.com/download/storage/v1/b/alpakka/o/$firstFileName?generation=1543055053992768&alt=media",
-         |  "bucket":"alpakka",
+         |  "bucket":"connectors",
          |  "kind":"storage#object",
          |   "metageneration":"1",
          |  "timeDeleted": "2018-11-24T10:24:13.992Z",
@@ -402,7 +402,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
          |  "contentType":"text/plain; charset=UTF-8",
          |  "updated":"2018-11-24T10:24:13.992Z",
          |  "mediaLink":"https://www.googleapis.com/download/storage/v1/b/alpakka/o/$firstFileName?generation=1543055053992768&alt=media",
-         |  "bucket":"alpakka",
+         |  "bucket":"connectors",
          |  "kind":"storage#object",
          |  "metageneration":"1",
          |  "timeDeleted": "2018-11-24T10:24:13.992Z",
@@ -443,7 +443,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
          |      "contentType":"text/plain; charset=UTF-8",
          |      "updated":"2018-11-24T10:24:13.992Z",
          |      "mediaLink":"https://www.googleapis.com/download/storage/v1/b/alpakka/o/$secondFileName?generation=1543055053992768&alt=media",
-         |      "bucket":"alpakka",
+         |      "bucket":"connectors",
          |      "kind":"storage#object",
          |      "metageneration":"1",
          |      "timeDeleted": "2018-11-24T10:24:13.992Z",

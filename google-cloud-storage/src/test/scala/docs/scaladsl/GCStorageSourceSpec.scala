@@ -367,7 +367,7 @@ class GCStorageSourceSpec
     }
 
     "download results in None when file doesn't exist" in {
-      val bucketName = "alpakka"
+      val bucketName = "connectors"
       val fileName = "file1.txt"
 
       mock.simulate(
@@ -380,7 +380,7 @@ class GCStorageSourceSpec
     }
 
     "fail with error when file download fails" in {
-      val bucketName = "alpakka"
+      val bucketName = "connectors"
       val fileName = "file1.txt"
 
       mock.simulate(
@@ -396,7 +396,7 @@ class GCStorageSourceSpec
     }
 
     "automatically retry when file downloads fail" in {
-      val bucketName = "alpakka"
+      val bucketName = "connectors"
       val fileName = "file1.txt"
       val fileContent = "This is the file content"
 
@@ -419,7 +419,7 @@ class GCStorageSourceSpec
 
     // retry for all akka-http standard server errors (5XX) https://github.com/akka/alpakka/issues/2057
     "automatically retry when file downloads fail with a non-500 server error" in {
-      val bucketName = "alpakka"
+      val bucketName = "connectors"
       val fileName = "file1.txt"
       val fileContent = "This is the file content"
 

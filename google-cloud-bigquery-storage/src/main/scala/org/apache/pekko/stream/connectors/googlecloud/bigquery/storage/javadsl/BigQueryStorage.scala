@@ -31,7 +31,7 @@ import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 import java.util.concurrent.CompletionStage
 
 /**
- * Google BigQuery Storage Api Akka Stream operator factory.
+ * Google BigQuery Storage Api Pekko Stream operator factory.
  */
 object BigQueryStorage {
 

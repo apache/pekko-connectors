@@ -101,9 +101,9 @@ object ScalaTestUtils extends TestUtils with Matchers {
   type Assertion = org.scalatest.Assertion
 
   val books: Sequence[ByteString] = List(
-    "Akka Concurrency",
-    "Akka in Action",
-    "Effective Akka",
+    "Pekko Concurrency",
+    "Pekko in Action",
+    "Effective Pekko",
     "Learning Scala",
     "Programming in Scala Programming").map(ByteString(_))
 
