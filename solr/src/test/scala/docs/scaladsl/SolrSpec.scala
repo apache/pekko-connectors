@@ -115,9 +115,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         .runWith(Sink.seq)
 
       res2.futureValue shouldEqual Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -162,9 +162,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         .runWith(Sink.seq)
 
       res2.futureValue shouldEqual Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -207,9 +207,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         .runWith(Sink.seq)
 
       res2.futureValue shouldEqual Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -256,9 +256,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         .runWith(Sink.seq)
 
       res2.futureValue shouldEqual Seq(
-        "Pekko Concurrency",
-        "Pekko in Action",
-        "Effective Pekko",
+        "Akka Concurrency",
+        "Akka in Action",
+        "Effective Akka",
         "Learning Scala",
         "Programming in Scala",
         "Scala Puzzlers",
@@ -446,9 +446,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         .runWith(Sink.seq)
 
       res2.futureValue shouldEqual Seq(
-        "Pekko Concurrency. Written by good authors. It is a good book!!!",
-        "Pekko in Action. Written by good authors. It is a good book!!!",
-        "Effective Pekko. Written by good authors. It is a good book!!!",
+        "Akka Concurrency. Written by good authors. It is a good book!!!",
+        "Akka in Action. Written by good authors. It is a good book!!!",
+        "Effective Akka. Written by good authors. It is a good book!!!",
         "Learning Scala. Written by good authors. It is a good book!!!",
         "Programming in Scala. Written by good authors. It is a good book!!!",
         "Scala Puzzlers. Written by good authors. It is a good book!!!",
@@ -566,9 +566,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         .runWith(Sink.seq)
 
       res2.futureValue shouldEqual Seq(
-        "Pekko Concurrency. Written by good authors. It is a good book!!!",
-        "Pekko in Action. Written by good authors. It is a good book!!!",
-        "Effective Pekko. Written by good authors. It is a good book!!!",
+        "Akka Concurrency. Written by good authors. It is a good book!!!",
+        "Akka in Action. Written by good authors. It is a good book!!!",
+        "Effective Akka. Written by good authors. It is a good book!!!",
         "Learning Scala. Written by good authors. It is a good book!!!",
         "Programming in Scala. Written by good authors. It is a good book!!!",
         "Scala Puzzlers. Written by good authors. It is a good book!!!",
@@ -703,13 +703,13 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       .process(solrClient)
 
     new UpdateRequest()
-      .add("title", "Pekko in Action")
+      .add("title", "Akka in Action")
       .add("title", "Programming in Scala")
       .add("title", "Learning Scala")
       .add("title", "Scala for Spark in Production")
       .add("title", "Scala Puzzlers")
-      .add("title", "Effective Pekko")
-      .add("title", "Pekko Concurrency")
+      .add("title", "Effective Akka")
+      .add("title", "Akka Concurrency")
       .commit(solrClient, predefinedCollection)
   }
 

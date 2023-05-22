@@ -168,13 +168,13 @@ public class OrientDbTest {
 
     register(sourceClass);
 
-    flush(sourceClass, "book_title", "Pekko in Action");
+    flush(sourceClass, "book_title", "Akka in Action");
     flush(sourceClass, "book_title", "Programming in Scala");
     flush(sourceClass, "book_title", "Learning Scala");
     flush(sourceClass, "book_title", "Scala for Spark in Production");
     flush(sourceClass, "book_title", "Scala Puzzlers");
-    flush(sourceClass, "book_title", "Effective Pekko");
-    flush(sourceClass, "book_title", "Pekko Concurrency");
+    flush(sourceClass, "book_title", "Effective Akka");
+    flush(sourceClass, "book_title", "Akka Concurrency");
   }
 
   @AfterClass
@@ -253,9 +253,9 @@ public class OrientDbTest {
 
     List<String> expect =
         Arrays.asList(
-            "Pekko Concurrency",
-            "Pekko in Action",
-            "Effective Pekko",
+            "Akka Concurrency",
+            "Akka in Action",
+            "Effective Akka",
             "Learning Scala",
             "Programming in Scala",
             "Scala Puzzlers",
@@ -306,9 +306,9 @@ public class OrientDbTest {
 
     List<String> expect =
         Arrays.asList(
-            "Pekko Concurrency",
-            "Pekko in Action",
-            "Effective Pekko",
+            "Akka Concurrency",
+            "Akka in Action",
+            "Effective Akka",
             "Learning Scala",
             "Programming in Scala",
             "Scala Puzzlers",
@@ -328,9 +328,9 @@ public class OrientDbTest {
     List<Integer> committedOffsets = new ArrayList<>();
     List<messagesFromKafka> messagesFromKafkas =
         Arrays.asList(
-            new messagesFromKafka("Pekko Concurrency", new KafkaOffset(0)),
-            new messagesFromKafka("Pekko in Action", new KafkaOffset(1)),
-            new messagesFromKafka("Effective Pekko", new KafkaOffset(2)));
+            new messagesFromKafka("Akka Concurrency", new KafkaOffset(0)),
+            new messagesFromKafka("Akka in Action", new KafkaOffset(1)),
+            new messagesFromKafka("Effective Akka", new KafkaOffset(2)));
 
     Consumer<KafkaOffset> commitToKafka =
         new Consumer<KafkaOffset>() {
@@ -403,9 +403,9 @@ public class OrientDbTest {
 
     List<String> expect =
         Arrays.asList(
-            "Pekko Concurrency",
-            "Pekko in Action",
-            "Effective Pekko",
+            "Akka Concurrency",
+            "Akka in Action",
+            "Effective Akka",
             "Learning Scala",
             "Programming in Scala",
             "Scala Puzzlers",
