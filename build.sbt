@@ -318,7 +318,7 @@ lazy val unixdomainsocket =
 lazy val xml = pekkoConnectorProject("xml", "xml", Dependencies.Xml)
 
 lazy val docs = project
-  .enablePlugins(PekkoParadoxPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin, PublishRsyncPlugin)
+  .enablePlugins(PekkoParadoxPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin)
   .disablePlugins(MimaPlugin)
   .settings(
     Compile / paradox / name := "Apache Pekko Connectors",
@@ -393,9 +393,6 @@ lazy val docs = project
       "examples/jms-samples.html",
       "examples/mqtt-samples.html",
       "index.html"),
-    resolvers += Resolver.jcenterRepo,
-    publishRsyncArtifacts += makeSite.value -> "www/",
-    publishRsyncHost := "akkarepo@gustav.akka.io",
     apidocRootPackage := "org.apache.pekko")
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
