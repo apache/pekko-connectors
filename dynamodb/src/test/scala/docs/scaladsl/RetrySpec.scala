@@ -64,7 +64,7 @@ class RetrySpec
 
   override def afterAll(): Unit = {
     client.close()
-    shutdown();
+    shutdown()
   }
 
 }
