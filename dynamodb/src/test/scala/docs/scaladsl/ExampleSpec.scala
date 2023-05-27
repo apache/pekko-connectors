@@ -80,7 +80,7 @@ class ExampleSpec
   // #init-client
 
   override def afterAll(): Unit = {
-    client.close();
+    client.close()
     shutdown()
     super.afterAll()
   }

@@ -57,7 +57,7 @@ class InfluxDbSourceSpec
 
   "support source" in assertAllStagesStopped {
     // #run-typed
-    val query = new Query("SELECT * FROM cpu", DatabaseName);
+    val query = new Query("SELECT * FROM cpu", DatabaseName)
 
     val influxDBResult = InfluxDbSource(influxDB, query).runWith(Sink.seq)
     val resultToAssert = influxDBResult.futureValue.head
@@ -68,7 +68,7 @@ class InfluxDbSourceSpec
   }
 
   "exception on source" in assertAllStagesStopped {
-    val query = new Query("SELECT man() FROM invalid", DatabaseName);
+    val query = new Query("SELECT man() FROM invalid", DatabaseName)
 
     val result = InfluxDbSource(influxDB, query) // .runWith(Sink.seq)
       .recover {
@@ -81,7 +81,7 @@ class InfluxDbSourceSpec
   }
 
   "partial error in query" in assertAllStagesStopped {
-    val query = new Query("SELECT*FROM cpu; SELECT man() FROM invalid", DatabaseName);
+    val query = new Query("SELECT*FROM cpu; SELECT man() FROM invalid", DatabaseName)
 
     val influxDBResult = InfluxDbSource(influxDB, query).runWith(Sink.seq)
     val resultToAssert = influxDBResult.futureValue.head
@@ -94,7 +94,7 @@ class InfluxDbSourceSpec
   }
 
   "exception on typed source" in assertAllStagesStopped {
-    val query = new Query("SELECT man() FROM invalid", DatabaseName);
+    val query = new Query("SELECT man() FROM invalid", DatabaseName)
 
     val result = InfluxDbSource
       .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) // .runWith(Sink.seq)
@@ -108,7 +108,7 @@ class InfluxDbSourceSpec
   }
 
   "mixed exception on typed source" in assertAllStagesStopped {
-    val query = new Query("SELECT*FROM cpu;SELECT man() FROM invalid; SELECT*FROM cpu;", DatabaseName);
+    val query = new Query("SELECT*FROM cpu;SELECT man() FROM invalid; SELECT*FROM cpu;", DatabaseName)
 
     val result = InfluxDbSource
       .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) // .runWith(Sink.seq)
