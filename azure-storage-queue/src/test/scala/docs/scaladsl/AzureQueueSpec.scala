@@ -66,7 +66,7 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
 
   private var testMsgCount = 0
   def queueTestMsg: CloudQueueMessage = {
-    val message = new CloudQueueMessage(s"Test message no. ${testMsgCount}")
+    val message = new CloudQueueMessage(s"Test message no. $testMsgCount")
     testMsgCount += 1
     message
   }

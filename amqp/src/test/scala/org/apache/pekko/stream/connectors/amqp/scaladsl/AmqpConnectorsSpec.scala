@@ -347,7 +347,7 @@ class AmqpConnectorsSpec extends AmqpSpec {
     }
 
     "set routing key per message and consume them in the same JVM" in assertAllStagesStopped {
-      def getRoutingKey(s: String) = s"key.${s}"
+      def getRoutingKey(s: String) = s"key.$s"
 
       val exchangeName = "amqp.topic." + System.currentTimeMillis()
       val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
