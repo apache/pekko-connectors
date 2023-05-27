@@ -366,7 +366,7 @@ object Dependencies {
     ))
 
   val PravegaVersion = "0.10.2"
-  val PravegaVersionForDocs = s"v${PravegaVersion}"
+  val PravegaVersionForDocs = s"v$PravegaVersion"
 
   val Pravega = {
     Seq(
