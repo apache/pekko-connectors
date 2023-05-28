@@ -1,6 +1,7 @@
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
+ThisBuild / versionScheme := Some("semver-spec")
 sourceDistName := "incubating-pekko-connectors"
 
 lazy val `pekko-connectors` = project
