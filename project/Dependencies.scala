@@ -24,7 +24,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.15"
 
   val AwsSdk2Version = "2.17.113"
-  val AwsSpiPekkoHttpVersion = "0.0.11+77-7dcf3809-SNAPSHOT"
+  val AwsSpiPekkoHttpVersion = "0.0.11+79-233bc020-SNAPSHOT"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "current"
   val PekkoHttpVersion = "0.0.0+4411-6fe04045-SNAPSHOT"
