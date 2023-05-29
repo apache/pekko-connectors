@@ -66,11 +66,10 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.2.3", // Eclipse Public License 1.0
+      "ch.qos.logback" % "logback-classic" % "1.2.11", // Eclipse Public License 1.0
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11", // BSD-style
-      "ch.qos.logback" % "logback-classic" % "1.2.3", // Eclipse Public License 1.0
       "junit" % "junit" % "4.13" // Eclipse Public License 1.0
     ))
 
