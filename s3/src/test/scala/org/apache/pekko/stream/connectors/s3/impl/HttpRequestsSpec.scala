@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.s3.impl
 
 import java.util.UUID
-
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.Http
@@ -32,6 +31,8 @@ import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers._
+
+import scala.concurrent.ExecutionContext
 
 class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with IntegrationPatience with LogCapturing {
 
@@ -55,7 +56,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   val multipartUpload = MultipartUpload("test-bucket", "testKey", "uploadId")
 
   it should "initiate multipart upload when the region is us-east-1" in {
-    implicit val settings = getSettings()
+    implicit val settings: S3Settings = getSettings()
 
     val req =
       HttpRequests.initiateMultipartUploadRequest(
@@ -74,7 +75,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with other regions" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.US_EAST_2)
 
     val req =
       HttpRequests.initiateMultipartUploadRequest(
@@ -93,21 +94,22 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "throw an error if path-style access is false and the bucket name contains non-LDH characters" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.EU_WEST_1)
 
     assertThrows[IllegalUriException](
       HttpRequests.getDownloadRequest(S3Location("invalid_bucket_name", "image-1024@2x")))
   }
 
   it should "throw an error if the key uses `..`" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.EU_WEST_1)
 
     assertThrows[IllegalUriException](
       HttpRequests.getDownloadRequest(S3Location("validbucket", "../other-bucket/image-1024@2x")))
   }
 
   it should "throw an error when using `..` with path-style access" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
 
     assertThrows[IllegalUriException](
       HttpRequests.getDownloadRequest(S3Location("invalid/../bucket_name", "image-1024@2x")))
@@ -120,7 +122,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with path-style access in region us-east-1" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_1).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.US_EAST_1).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req =
       HttpRequests.initiateMultipartUploadRequest(
@@ -133,7 +136,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support download requests with path-style access in region us-east-1" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_1).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.US_EAST_1).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req = HttpRequests.getDownloadRequest(location)
 
@@ -143,7 +147,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with path-style access in other regions" in {
-    implicit val settings = getSettings(s3Region = Region.US_WEST_2).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.US_WEST_2).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req =
       HttpRequests.initiateMultipartUploadRequest(
@@ -156,7 +161,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support download requests with path-style access in other regions" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req = HttpRequests.getDownloadRequest(location)
 
@@ -166,7 +172,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support download requests via configured `endpointUrl`" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
 
     val req = HttpRequests.getDownloadRequest(location)
 
@@ -180,7 +187,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
     // into an object at path /[empty string]/...
     // added this test because of a tricky uri building issue
     // in case of pathStyleAccess = false
-    implicit val settings = getSettings()
+    implicit val settings: S3Settings = getSettings()
 
     val location = S3Location("bucket", "/test/foo.txt")
 
@@ -193,7 +200,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
 
   it should "support download requests with keys ending with /" in {
     // object with a slash at the end of the filename should be accessible
-    implicit val settings = getSettings()
+    implicit val settings: S3Settings = getSettings()
 
     val location = S3Location("bucket", "/test//")
 
@@ -205,7 +212,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support download requests with keys containing spaces" in {
-    implicit val settings = getSettings()
+    implicit val settings: S3Settings = getSettings()
 
     val location = S3Location("bucket", "test folder/test file.txt")
 
@@ -217,7 +224,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support download requests with keys containing plus" in {
-    implicit val settings = getSettings()
+    implicit val settings: S3Settings = getSettings()
 
     val location = S3Location("bucket", "test folder/1 + 2 = 3")
     val req = HttpRequests.getDownloadRequest(location)
@@ -227,7 +234,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support download requests with keys containing spaces with path-style access in other regions" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val location = S3Location("bucket", "test folder/test file.txt")
 
@@ -239,7 +247,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "add versionId query parameter when provided" in {
-    implicit val settings = getSettings().withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings = getSettings().withAccessStyle(AccessStyle.PathAccessStyle)
 
     val location = S3Location("bucket", "test/foo.txt")
     val versionId = "123456"
@@ -253,7 +261,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support multipart init upload requests via configured `endpointUrl`" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
 
     val req =
       HttpRequests.initiateMultipartUploadRequest(
@@ -267,7 +276,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support multipart upload part requests via configured `endpointUrl`" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
 
     val req =
       HttpRequests.uploadPartRequest(multipartUpload, 1, MemoryChunk(ByteString.empty))
@@ -278,7 +288,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "properly multipart upload part request with customer keys server side encryption" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withAccessStyle(AccessStyle.PathAccessStyle)
     val myKey = "my-key"
     val md5Key = "md5-key"
     val s3Headers = ServerSideEncryption.customerKeys(myKey).withMd5(md5Key).headersFor(UploadPart)
@@ -290,8 +301,9 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "support multipart upload complete requests via configured `endpointUrl`" in {
-    implicit val settings = getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
-    implicit val executionContext = scala.concurrent.ExecutionContext.global
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
+    implicit val executionContext: ExecutionContext = ExecutionContext.global
 
     val req =
       HttpRequests.completeMultipartUploadRequest(multipartUpload, (1, "part") :: Nil, Nil).futureValue
@@ -302,7 +314,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with AES-256 server side encryption" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.US_EAST_2)
     val s3Headers = ServerSideEncryption.aes256().headersFor(InitiateMultipartUpload)
     val req = HttpRequests.initiateMultipartUploadRequest(location, contentType, s3Headers)
 
@@ -310,7 +322,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with aws:kms server side encryption" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.US_EAST_2)
     val testArn = "arn:aws:kms:my-region:my-account-id:key/my-key-id"
     val s3Headers = ServerSideEncryption.kms(testArn).headersFor(InitiateMultipartUpload)
     val req = HttpRequests.initiateMultipartUploadRequest(location, contentType, s3Headers)
@@ -320,7 +332,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with customer keys encryption" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.US_EAST_2)
     val myKey = "my-key"
     val md5Key = "md5-key"
     val s3Headers = ServerSideEncryption.customerKeys(myKey).withMd5(md5Key).headersFor(InitiateMultipartUpload)
@@ -332,7 +344,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with custom s3 storage class" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.US_EAST_2)
     val s3Headers = S3Headers().withStorageClass(StorageClass.ReducedRedundancy).headers
     val req = HttpRequests.initiateMultipartUploadRequest(location, contentType, s3Headers)
 
@@ -340,7 +352,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "initiate multipart upload with custom s3 headers" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2)
+    implicit val settings: S3Settings = getSettings(s3Region = Region.US_EAST_2)
     val s3Headers = S3Headers().withCustomHeaders(Map("Cache-Control" -> "no-cache")).headers
     val req = HttpRequests.initiateMultipartUploadRequest(location, contentType, s3Headers)
 
@@ -348,7 +360,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "properly construct the list bucket request with no prefix, continuation token or delimiter passed" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.US_EAST_2).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req =
       HttpRequests.listBucket(location.bucket)
@@ -357,7 +370,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "properly construct the list bucket request with a prefix and token passed" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.US_EAST_2).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req =
       HttpRequests.listBucket(location.bucket, Some("random/prefix"), Some("randomToken"))
@@ -368,7 +382,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "properly construct the list bucket request with a delimiter and token passed" in {
-    implicit val settings = getSettings(s3Region = Region.US_EAST_2).withAccessStyle(AccessStyle.PathAccessStyle)
+    implicit val settings: S3Settings =
+      getSettings(s3Region = Region.US_EAST_2).withAccessStyle(AccessStyle.PathAccessStyle)
 
     val req =
       HttpRequests.listBucket(location.bucket, delimiter = Some("/"), continuationToken = Some("randomToken"))
@@ -377,7 +392,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "properly construct the list bucket request when using api version 1" in {
-    implicit val settings =
+    implicit val settings: S3Settings =
       getSettings(s3Region = Region.US_EAST_2, listBucketApiVersion = ApiVersion.ListBucketVersion1)
         .withAccessStyle(AccessStyle.PathAccessStyle)
 
@@ -388,7 +403,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   }
 
   it should "properly construct the list bucket request when using api version set to 1 and a continuation token" in {
-    implicit val settings =
+    implicit val settings: S3Settings =
       getSettings(s3Region = Region.US_EAST_2, listBucketApiVersion = ApiVersion.ListBucketVersion1)
         .withAccessStyle(AccessStyle.PathAccessStyle)
 

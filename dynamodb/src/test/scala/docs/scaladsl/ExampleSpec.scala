@@ -17,15 +17,14 @@ import java.net.URI
 
 import org.apache.pekko
 import pekko.NotUsed
+import pekko.actor.ActorSystem
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ FlowWithContext, SourceWithContext }
 
 import scala.util.{ Failure, Success, Try }
 //#init-client
-import org.apache.pekko.actor.ActorSystem
 
 //#init-client
-import org.apache.pekko
 import pekko.stream.connectors.dynamodb.DynamoDbOp._
 import pekko.stream.connectors.dynamodb.scaladsl._
 import pekko.stream.scaladsl.{ Sink, Source }

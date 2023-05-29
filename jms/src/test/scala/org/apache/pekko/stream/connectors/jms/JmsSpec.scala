@@ -37,7 +37,7 @@ abstract class JmsSpec
     with MockitoSugar
     with LogCapturing {
 
-  implicit val system = ActorSystem(this.getClass.getSimpleName)
+  implicit val system: ActorSystem = ActorSystem(this.getClass.getSimpleName)
 
   val consumerConfig = system.settings.config.getConfig(JmsConsumerSettings.configPath)
   val producerConfig = system.settings.config.getConfig(JmsProducerSettings.configPath)

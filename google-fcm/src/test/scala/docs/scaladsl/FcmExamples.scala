@@ -13,9 +13,9 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
 //#imports
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.stream.connectors.google.firebase.fcm.FcmSettings
 import pekko.stream.connectors.google.firebase.fcm.v1.models._
 import pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm
@@ -28,7 +28,7 @@ import scala.concurrent.Future
 
 class FcmExamples {
 
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
 
   // #simple-send
   val fcmConfig = FcmSettings()

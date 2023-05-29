@@ -125,12 +125,12 @@ private[ironmq] final class IronMqPullStage(queueName: String, settings: IronMqS
           buffer = buffer.tail
         }
 
-      private val updateBuffer = getAsyncCallback { xs: List[ReservedMessage] =>
+      private val updateBuffer = getAsyncCallback { (xs: List[ReservedMessage]) =>
         buffer = buffer ::: xs
         deliveryMessages()
       }
 
-      private val updateFetching = getAsyncCallback { x: Boolean =>
+      private val updateFetching = getAsyncCallback { (x: Boolean) =>
         fetching = x
       }
     }
