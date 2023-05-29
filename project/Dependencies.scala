@@ -299,7 +299,7 @@ object Dependencies {
   val IronMq = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "com.github.pjfanning" %% "pekko-http-circe" % "1.40.0-RC3_17-0a23ccd2-SNAPSHOT" // ApacheV2
+      "com.github.pjfanning" %% "pekko-http-circe" % "1.40.0-RC3_23-bb29e2a9-SNAPSHOT" // ApacheV2
     ))
 
   val Jms = Seq(
