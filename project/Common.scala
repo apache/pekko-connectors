@@ -78,7 +78,7 @@ object Common extends AutoPlugin {
           s"https://github.com/apache/incubator-pekko-connectors/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
         },
         "-doc-canonical-base-url",
-        "https://pekko.apache.org/api/pekko-connectorscurrent/"),
+        "https://pekko.apache.org/api/pekko-connectors/current/"),
     Compile / doc / scalacOptions -= "-Werror",
     compile / javacOptions ++= Seq(
       "-Xlint:cast",
