@@ -33,7 +33,7 @@ import scala.collection.immutable
  */
 class AmqpDocsSpec extends AmqpSpec {
 
-  override implicit val patienceConfig = PatienceConfig(10.seconds)
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
 
   val businessLogic: CommittableReadResult => Future[CommittableReadResult] = Future.successful(_)
 

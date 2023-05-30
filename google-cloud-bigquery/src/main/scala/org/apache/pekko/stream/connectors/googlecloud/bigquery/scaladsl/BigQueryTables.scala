@@ -29,7 +29,7 @@ import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaW
 import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException }
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 private[scaladsl] trait BigQueryTables { this: BigQueryRest =>
 
@@ -94,7 +94,7 @@ private[scaladsl] trait BigQueryTables { this: BigQueryRest =>
       settings: GoogleSettings): Future[Table] = {
     import BigQueryException._
     import SprayJsonSupport._
-    implicit val ec = ExecutionContexts.parasitic
+    implicit val ec: ExecutionContext = ExecutionContexts.parasitic
     val projectId = table.tableReference.projectId.getOrElse(settings.projectId)
     val datasetId = table.tableReference.datasetId
     val uri = BigQueryEndpoints.tables(projectId, datasetId)

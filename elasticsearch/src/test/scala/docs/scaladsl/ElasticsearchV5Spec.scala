@@ -64,7 +64,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V5),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[spray.json.JsObject] =>
+        .map { (message: ReadResult[spray.json.JsObject]) =>
           val book: Book = jsonReader[Book].read(message.source)
           WriteMessage.createIndexMessage(message.id, book)
         }
@@ -97,7 +97,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V5),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[Book] =>
+        .map { (message: ReadResult[Book]) =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .runWith(
@@ -129,7 +129,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V5),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[Book] =>
+        .map { (message: ReadResult[Book]) =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .via(
@@ -200,7 +200,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val indexName = "sink6"
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -251,7 +251,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val indexName = "sink6-bulk"
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -306,7 +306,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val indexName = "sink6-nop"
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -363,7 +363,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       register(connectionSettings, indexName, "dummy", 10) // need to create index else exception in reading below
 
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -447,7 +447,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V5),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[Book] =>
+        .map { (message: ReadResult[Book]) =>
           WriteMessage
             .createIndexMessage(message.id, message.source)
             .withIndexName(customIndexName) // Setting the index-name to use for this document
@@ -480,7 +480,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       case class TestDoc(id: String, a: String, b: Option[String], c: String)
       // #custom-search-params
 
-      implicit val formatVersionTestDoc: JsonFormat[TestDoc] = jsonFormat4(TestDoc)
+      implicit val formatVersionTestDoc: JsonFormat[TestDoc] = jsonFormat4(TestDoc.apply)
 
       val indexName = "custom-search-params-test-scala"
       val typeName = "_doc"

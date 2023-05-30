@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.google
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.HttpMethods.{ POST, PUT }
@@ -56,7 +57,7 @@ private[connectors] object ResumableUpload {
       .fromMaterializer { (mat, attr) =>
         import mat.executionContext
         implicit val materializer = mat
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
         val uploadChunkSize = settings.requestSettings.uploadChunkSize
 
         val in = Flow[ByteString]
@@ -95,7 +96,7 @@ private[connectors] object ResumableUpload {
 
   private def initiateSession(request: HttpRequest)(implicit mat: Materializer,
       settings: GoogleSettings): Future[Uri] = {
-    implicit val system = mat.system
+    implicit val system: ActorSystem = mat.system
     import implicits._
 
     implicit val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
@@ -111,7 +112,7 @@ private[connectors] object ResumableUpload {
 
   private def uploadChunk[T: FromResponseUnmarshaller](
       request: HttpRequest)(implicit mat: Materializer): Flow[Either[T, MaybeLast[Chunk]], Try[Option[T]], NotUsed] = {
-    implicit val system = mat.system
+    implicit val system: ActorSystem = mat.system
 
     val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
       response.status match {
@@ -146,7 +147,7 @@ private[connectors] object ResumableUpload {
       request: HttpRequest,
       chunk: Future[MaybeLast[Chunk]])(
       implicit mat: Materializer, settings: GoogleSettings): Future[Either[T, MaybeLast[Chunk]]] = {
-    implicit val system = mat.system
+    implicit val system: ActorSystem = mat.system
     import implicits._
 
     implicit val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>

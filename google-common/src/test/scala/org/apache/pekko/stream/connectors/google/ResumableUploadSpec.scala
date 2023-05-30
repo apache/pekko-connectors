@@ -40,7 +40,7 @@ class ResumableUploadSpec
     with ScalaFutures
     with HoverflySupport {
 
-  implicit val patience = PatienceConfig(remainingOrDefault)
+  implicit val patience: PatienceConfig = PatienceConfig(remainingOrDefault)
 
   override def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)

@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.atomic.AtomicInteger
-
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.dispatch.ExecutionContexts
@@ -33,7 +32,7 @@ import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, Shu
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
 import org.scalatest.matchers.should.Matchers
@@ -50,8 +49,8 @@ class AmqpGraphStageLogicConnectionShutdownSpec
     with BeforeAndAfterEach
     with LogCapturing {
 
-  override implicit val patienceConfig = PatienceConfig(10.seconds)
-  private implicit val executionContext = ExecutionContexts.parasitic
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
+  private implicit val executionContext: ExecutionContext = ExecutionContexts.parasitic
 
   val shutdownsAdded = new AtomicInteger()
   val shutdownsRemoved = new AtomicInteger()
@@ -76,7 +75,7 @@ class AmqpGraphStageLogicConnectionShutdownSpec
   "registers and unregisters a single connection shutdown hook per graph" in {
     // actor system is within this test as it has to be shut down in order
     // to verify graph stage termination
-    implicit val system = ActorSystem(this.getClass.getSimpleName + System.currentTimeMillis())
+    implicit val system: ActorSystem = ActorSystem(this.getClass.getSimpleName + System.currentTimeMillis())
 
     val connectionFactory = new ConnectionFactory() {
       override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection =

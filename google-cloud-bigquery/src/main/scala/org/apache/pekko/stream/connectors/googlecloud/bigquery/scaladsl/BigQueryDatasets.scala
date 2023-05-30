@@ -28,7 +28,7 @@ import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQuer
 import pekko.stream.scaladsl.Source
 import pekko.{ Done, NotUsed }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
 
@@ -102,7 +102,7 @@ private[scaladsl] trait BigQueryDatasets { this: BigQueryRest =>
       settings: GoogleSettings): Future[Dataset] = {
     import BigQueryException._
     import SprayJsonSupport._
-    implicit val ec = ExecutionContexts.parasitic
+    implicit val ec: ExecutionContext = ExecutionContexts.parasitic
     val uri = BigQueryEndpoints.datasets(settings.projectId)
     Marshal(dataset).to[RequestEntity].flatMap { entity =>
       val request = HttpRequest(POST, uri, entity = entity)

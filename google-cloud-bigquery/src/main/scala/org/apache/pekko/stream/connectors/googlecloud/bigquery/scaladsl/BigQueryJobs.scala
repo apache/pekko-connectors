@@ -43,7 +43,7 @@ import pekko.stream.scaladsl.{ Flow, GraphDSL, Keep, Sink }
 import pekko.util.ByteString
 
 import scala.annotation.nowarn
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
 
@@ -114,7 +114,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
       .fromMaterializer { (mat, attr) =>
         import SprayJsonSupport._
         import mat.executionContext
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
         val BigQuerySettings(loadJobPerTableQuota) = BigQueryAttributes.resolveSettings(mat, attr)
 
         val job = Job(
@@ -168,8 +168,8 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
     Sink
       .fromMaterializer { (mat, attr) =>
         import BigQueryException._
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
-        implicit val ec = ExecutionContexts.parasitic
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val ec: ExecutionContext = ExecutionContexts.parasitic
         val uri = BigQueryMediaEndpoints.jobs(settings.projectId).withQuery(Query("uploadType" -> "resumable"))
         Sink
           .lazyFutureSink { () =>

@@ -42,10 +42,10 @@ class GooglePubSubSpec
     with LogCapturing
     with BeforeAndAfterAll {
 
-  implicit val defaultPatience =
+  implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
 
   override protected def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)

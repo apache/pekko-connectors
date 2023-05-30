@@ -62,7 +62,7 @@ class S3StreamSpec(_system: ActorSystem)
     }
     val location = S3Location("test-bucket", "test-key")
 
-    implicit val settings =
+    implicit val settings: S3Settings =
       S3Settings(MemoryBufferType, credentialsProvider, regionProvider, ApiVersion.ListBucketVersion2)
 
     val result: HttpRequest = S3Stream.invokePrivate(requestHeaders(getDownloadRequest(location), None))
@@ -86,7 +86,7 @@ class S3StreamSpec(_system: ActorSystem)
     val location = S3Location("test-bucket", "test-key")
     val range = ByteRange(1, 4)
 
-    implicit val settings =
+    implicit val settings: S3Settings =
       S3Settings(MemoryBufferType, credentialsProvider, regionProvider, ApiVersion.ListBucketVersion2)
 
     val result: HttpRequest = S3Stream.invokePrivate(requestHeaders(getDownloadRequest(location), Some(range)))

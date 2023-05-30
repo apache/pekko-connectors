@@ -16,12 +16,10 @@ package org.apache.pekko.stream.connectors.file.javadsl
 import java.nio.file.{ Path, StandardOpenOption }
 import java.util.Optional
 import java.util.concurrent.CompletionStage
-
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.javadsl
 import pekko.stream.scaladsl
-import pekko.stream.javadsl.Sink
 import pekko.util.ByteString
 import pekko.japi.function
 import pekko.util.ccompat.JavaConverters._
@@ -42,11 +40,11 @@ object LogRotatorSink {
    */
   def createFromFunction(
       triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[Path]]])
-      : javadsl.Sink[ByteString, CompletionStage[Done]] =
-    new Sink(
-      pekko.stream.connectors.file.scaladsl
-        .LogRotatorSink(asScala(triggerGeneratorCreator))
-        .toCompletionStage())
+      : javadsl.Sink[ByteString, CompletionStage[Done]] = {
+    val logRotatorSink = new scaladsl.SinkToCompletionStage[ByteString, Done](pekko.stream.connectors.file.scaladsl
+      .LogRotatorSink(asScala(triggerGeneratorCreator)))
+    new javadsl.Sink(logRotatorSink.toCompletionStage())
+  }
 
   /**
    * Sink directing the incoming `ByteString`s to new files whenever `triggerGenerator` returns a value.
@@ -56,11 +54,12 @@ object LogRotatorSink {
    */
   def createFromFunctionAndOptions(
       triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[Path]]],
-      fileOpenOptions: java.util.Set[StandardOpenOption]): javadsl.Sink[ByteString, CompletionStage[Done]] =
-    new Sink(
-      pekko.stream.connectors.file.scaladsl
-        .LogRotatorSink(asScala(triggerGeneratorCreator), fileOpenOptions.asScala.toSet)
-        .toCompletionStage())
+      fileOpenOptions: java.util.Set[StandardOpenOption]): javadsl.Sink[ByteString, CompletionStage[Done]] = {
+
+    val logRotatorSink = new scaladsl.SinkToCompletionStage[ByteString, Done](pekko.stream.connectors.file.scaladsl
+      .LogRotatorSink(asScala(triggerGeneratorCreator), fileOpenOptions.asScala.toSet))
+    new javadsl.Sink(logRotatorSink.toCompletionStage())
+  }
 
   /**
    * Sink directing the incoming `ByteString`s to a new `Sink` created by `sinkFactory` whenever `triggerGenerator` returns a value.
@@ -72,14 +71,14 @@ object LogRotatorSink {
    */
   def withSinkFactory[C, R](
       triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[C]]],
-      sinkFactory: function.Function[C, Sink[ByteString, CompletionStage[R]]])
+      sinkFactory: function.Function[C, javadsl.Sink[ByteString, CompletionStage[R]]])
       : javadsl.Sink[ByteString, CompletionStage[Done]] = {
     val t: C => scaladsl.Sink[ByteString, Future[R]] = path =>
       sinkFactory.apply(path).asScala.mapMaterializedValue(_.asScala)
-    new Sink(
-      pekko.stream.connectors.file.scaladsl.LogRotatorSink
-        .withSinkFactory(asScala[C](triggerGeneratorCreator), t)
-        .toCompletionStage())
+    val logRotatorSink =
+      new scaladsl.SinkToCompletionStage[ByteString, Done](pekko.stream.connectors.file.scaladsl.LogRotatorSink
+        .withSinkFactory(asScala[C](triggerGeneratorCreator), t))
+    new javadsl.Sink(logRotatorSink.toCompletionStage())
   }
 
   private def asScala[C](
