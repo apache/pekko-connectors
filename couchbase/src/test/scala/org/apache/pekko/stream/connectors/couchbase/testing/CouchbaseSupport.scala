@@ -53,8 +53,8 @@ trait CouchbaseSupport {
 
   val sessionSettings = CouchbaseSessionSettings(actorSystem)
   val writeSettings: CouchbaseWriteSettings = CouchbaseWriteSettings().withReplicateTo(ReplicateTo.NONE)
-  val bucketName = "akka"
-  val queryBucketName = "akkaquery"
+  val bucketName = "pekko"
+  val queryBucketName = "pekkoquery"
 
   var session: CouchbaseSession = _
 

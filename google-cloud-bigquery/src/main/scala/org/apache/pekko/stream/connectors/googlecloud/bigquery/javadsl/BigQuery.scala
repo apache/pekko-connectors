@@ -385,7 +385,7 @@ object BigQuery extends Google {
   /**
    * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
    * @note WARNING: Pending the resolution of [[https://issuetracker.google.com/176002651 BigQuery issue 176002651]] this method may not work as expected.
-   *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Akka HTTP v10.2.4 or later.
+   *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Pekko HTTP.
    *
    * @param datasetId dataset ID of the table to insert into
    * @param tableId table ID of the table to insert into
@@ -403,7 +403,7 @@ object BigQuery extends Google {
   /**
    * Loads data into BigQuery via a series of asynchronous load jobs created at the rate [[pekko.stream.connectors.googlecloud.bigquery.BigQuerySettings.loadJobPerTableQuota]].
    * @note WARNING: Pending the resolution of [[https://issuetracker.google.com/176002651 BigQuery issue 176002651]] this method may not work as expected.
-   *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Akka HTTP v10.2.4 or later.
+   *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Pekko HTTP.
    *
    * @param datasetId dataset ID of the table to insert into
    * @param tableId table ID of the table to insert into
@@ -422,7 +422,7 @@ object BigQuery extends Google {
   /**
    * Starts a new asynchronous upload job.
    * @note WARNING: Pending the resolution of [[https://issuetracker.google.com/176002651 BigQuery issue 176002651]] this method may not work as expected.
-   *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Akka HTTP v10.2.4 or later.
+   *       As a workaround, you can use the config setting `pekko.http.parsing.conflicting-content-type-header-processing-mode = first` with Pekko HTTP.
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/insert BigQuery reference]]
    * @see [[https://cloud.google.com/bigquery/docs/reference/api-uploads BigQuery reference]]
    *

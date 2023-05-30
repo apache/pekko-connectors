@@ -32,7 +32,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
 }
 
 @InternalApi private[impl] object CanonicalRequest {
-  private val akkaSyntheticHeaderNames = List(
+  private val pekkoSyntheticHeaderNames = List(
     `Raw-Request-URI`.lowercaseName,
     `X-Forwarded-For`.lowercaseName,
     `Timeout-Access`.lowercaseName,
@@ -44,7 +44,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
         .collectFirst { case header if header.is("x-amz-content-sha256") => header.value }
         .getOrElse("")
 
-    val signedHeaders = request.headers.filterNot(header => akkaSyntheticHeaderNames.contains(header.lowercaseName()))
+    val signedHeaders = request.headers.filterNot(header => pekkoSyntheticHeaderNames.contains(header.lowercaseName()))
 
     CanonicalRequest(
       request.method.value,

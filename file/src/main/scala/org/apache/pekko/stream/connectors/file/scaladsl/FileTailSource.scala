@@ -33,7 +33,7 @@ object FileTailSource {
    * Scala API: Read the entire contents of a file, and then when the end is reached, keep reading
    * newly appended data. Like the unix command `tail -f`.
    *
-   * Aborting the stage can be done by combining with a [[akka.stream.KillSwitch]]
+   * Aborting the stage can be done by combining with a [[pekko.stream.KillSwitch]]
    *
    * @param path             a file path to tail
    * @param maxChunkSize     The max emitted size of the `ByteString`s
@@ -53,7 +53,7 @@ object FileTailSource {
    *
    * If a line is longer than `maxChunkSize` the stream will fail.
    *
-   * Aborting the stage can be done by combining with a [[akka.stream.KillSwitch]]
+   * Aborting the stage can be done by combining with a [[pekko.stream.KillSwitch]]
    *
    * @param path            a file path to tail
    * @param maxLineSize     The max emitted size of the `ByteString`s

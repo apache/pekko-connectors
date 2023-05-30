@@ -55,10 +55,10 @@ private[influxdb] final class InfluxDbSourceLogic[T](clazz: Class[T],
     shape: SourceShape[T])
     extends InfluxDbBaseSourceLogic[T](influxDB, query, outlet, shape) {
 
-  var resultMapperHelper: AlpakkaResultMapperHelper = _
+  var resultMapperHelper: PekkoConnectorsResultMapperHelper = _
 
   override def preStart(): Unit = {
-    resultMapperHelper = new AlpakkaResultMapperHelper
+    resultMapperHelper = new PekkoConnectorsResultMapperHelper
     resultMapperHelper.cacheClassFields(clazz)
     super.preStart()
   }

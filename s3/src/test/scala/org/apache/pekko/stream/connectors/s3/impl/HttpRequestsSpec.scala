@@ -470,7 +470,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
 
     val request = HttpRequests.bucketManagementRequest(location, method = HttpMethods.PUT)
 
-    // Date is added by akka by default
+    // Date is added by pekko by default
     request.uri.authority.host.toString should equal("bucket.s3.us-east-1.amazonaws.com")
     request.entity.contentLengthOption should equal(Some(0))
     request.uri.queryString() should equal(None)
@@ -482,7 +482,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
 
     val request = HttpRequests.bucketManagementRequest(location, method = HttpMethods.DELETE)
 
-    // Date is added by akka by default
+    // Date is added by pekko by default
     request.uri.authority.host.toString should equal("bucket.s3.us-east-1.amazonaws.com")
     request.entity.contentLengthOption should equal(Some(0))
     request.uri.queryString() should equal(None)
@@ -494,7 +494,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
 
     val request: HttpRequest = HttpRequests.bucketManagementRequest(location, method = HttpMethods.HEAD)
 
-    // Date is added by akka by default
+    // Date is added by pekko by default
     request.uri.authority.host.toString should equal("bucket.s3.us-east-1.amazonaws.com")
     request.entity.contentLengthOption should equal(Some(0))
     request.uri.queryString() should equal(None)

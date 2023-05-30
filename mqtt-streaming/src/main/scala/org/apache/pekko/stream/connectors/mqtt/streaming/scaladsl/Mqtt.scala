@@ -66,7 +66,7 @@ object Mqtt {
           new CoupledTerminationBidi))
 }
 
-/** INTERNAL API - taken from Akka streams - perhaps it should be made public */
+/** INTERNAL API - taken from Pekko streams - perhaps it should be made public */
 private[scaladsl] class CoupledTerminationBidi[I, O] extends GraphStage[BidiShape[I, I, O, O]] {
   val in1: Inlet[I] = Inlet("CoupledCompletion.in1")
   val out1: Outlet[I] = Outlet("CoupledCompletion.out1")

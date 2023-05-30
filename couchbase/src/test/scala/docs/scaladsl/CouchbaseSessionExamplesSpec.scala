@@ -91,7 +91,7 @@ class CouchbaseSessionExamplesSpec
 
       val cluster: CouchbaseCluster = CouchbaseCluster.create("localhost")
       cluster.authenticate(new PasswordAuthenticator("Administrator", "password"))
-      val bucket: Bucket = cluster.openBucket("akka")
+      val bucket: Bucket = cluster.openBucket("pekko")
       val session: CouchbaseSession = CouchbaseSession(bucket)
       actorSystem.registerOnTermination {
         session.close()

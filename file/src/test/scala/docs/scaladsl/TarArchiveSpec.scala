@@ -55,12 +55,12 @@ class TarArchiveSpec
       val sources = Source.empty
       val tarFlow = Archive.tar()
 
-      val akkaTarred: Future[ByteString] =
+      val pekkoTarred: Future[ByteString] =
         sources
           .via(tarFlow)
           .runWith(collectByteString)
 
-      akkaTarred.futureValue shouldBe ByteString.empty
+      pekkoTarred.futureValue shouldBe ByteString.empty
     }
 
     "archive file" in {

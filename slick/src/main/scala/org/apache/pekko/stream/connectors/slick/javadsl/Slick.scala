@@ -74,7 +74,7 @@ object Slick {
    */
   def flow[T](
       session: SlickSession,
-      toStatement: JFunction[T, String] // TODO: or use the akka japi Function2 interface?
+      toStatement: JFunction[T, String] // TODO: or use the pekko japi Function2 interface?
   ): Flow[T, java.lang.Integer, NotUsed] =
     flow(session, 1, toStatement)
 
@@ -267,7 +267,7 @@ object Slick {
    */
   def sink[T](
       session: SlickSession,
-      toStatement: JFunction[T, String] // TODO: or use the akka japi Function2 interface?
+      toStatement: JFunction[T, String] // TODO: or use the pekko japi Function2 interface?
   ): Sink[T, CompletionStage[Done]] =
     sink(session, 1, toStatement)
 

@@ -36,7 +36,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
   override implicit def patienceConfig: PatienceConfig = PatienceConfig(10.seconds, 250.millis)
 
-  val bucketName = "akka"
+  val bucketName = "pekko"
 
   override def afterAll(): Unit =
     actorSystem.terminate()
