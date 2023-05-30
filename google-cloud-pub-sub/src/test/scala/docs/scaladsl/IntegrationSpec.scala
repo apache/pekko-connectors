@@ -45,7 +45,7 @@ class IntegrationSpec
     with OptionValues
     with LogCapturing {
 
-  private implicit val system = ActorSystem("IntegrationSpec")
+  private implicit val system: ActorSystem = ActorSystem("IntegrationSpec")
 
   override def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 

@@ -31,7 +31,7 @@ class GCSExtSpec extends AnyFlatSpec with Matchers with LogCapturing {
         "pekko.connectors.google.cloud-storage.endpoint-url" -> endpointUrl,
         "pekko.connectors.google.cloud-storage.base-path" -> basePath).asJava)
 
-    implicit val system = ActorSystem.create("gcs", config)
+    implicit val system: ActorSystem = ActorSystem.create("gcs", config)
     val ext = GCSExt(system)
 
     ext.settings.endpointUrl shouldBe endpointUrl
