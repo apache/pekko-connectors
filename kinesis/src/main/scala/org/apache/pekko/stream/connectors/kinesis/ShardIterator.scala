@@ -40,7 +40,7 @@ object ShardIterator {
     override final val shardIteratorType: ShardIteratorType = ShardIteratorType.TRIM_HORIZON
   }
 
-  case class AtTimestamp private (value: Instant) extends ShardIterator {
+  case class AtTimestamp private[kinesis] (value: Instant) extends ShardIterator {
     override final val timestamp: Option[Instant] = Some(value)
 
     override final val startingSequenceNumber: Option[String] = None

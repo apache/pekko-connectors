@@ -77,5 +77,5 @@ object BigQueryException {
   }
 
   private final case class ErrorResponse(error: Option[ErrorProto])
-  private implicit val errorResponseFormat: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse)
+  private implicit val errorResponseFormat: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse.apply)
 }

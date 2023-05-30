@@ -76,7 +76,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
   def singleAuthenticatedRequest[T](request: HttpRequest)(
       implicit settings: GoogleSettings,
       um: FromResponseUnmarshaller[T]): Future[T] = Retry(settings.requestSettings.retrySettings) {
-    implicit val requestSettings = settings.requestSettings
+    implicit val requestSettings: RequestSettings = settings.requestSettings
     addAuth(request).flatMap(singleRequest(_))(ExecutionContexts.parasitic)
   }
 
@@ -110,7 +110,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
       parallelism: Int = 1): FlowWithContext[HttpRequest, Ctx, Try[T], Ctx, Future[HostConnectionPool]] =
     FlowWithContext.fromTuples {
       Flow.fromMaterializer { (mat, attr) =>
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
         val p = if (port == -1) if (https) 443 else 80 else port
 
         val uriFlow = FlowWithContext[HttpRequest, Ctx].map(addStandardQuery)
@@ -163,7 +163,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
             .fold(settings.requestSettings.queryString)(_.concat(settings.requestSettings.`&queryString`)))))
 
   private def addAuth(request: HttpRequest)(implicit settings: GoogleSettings): Future[HttpRequest] = {
-    implicit val requestSettings = settings.requestSettings
+    implicit val requestSettings: RequestSettings = settings.requestSettings
     settings.credentials
       .get()
       .map { token =>
