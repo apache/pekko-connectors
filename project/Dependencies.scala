@@ -116,7 +116,6 @@ object Dependencies {
   val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
         .exclude("com.github.spotbugs", "spotbugs-annotations")
