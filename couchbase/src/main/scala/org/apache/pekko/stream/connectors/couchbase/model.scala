@@ -270,7 +270,8 @@ sealed trait CouchbaseWriteResult[T <: Document[_]] {
 /**
  * Emitted for a successful Couchbase write operation.
  */
-final case class CouchbaseWriteSuccess[T <: Document[_]] private[couchbase] (override val doc: T) extends CouchbaseWriteResult[T] {
+final case class CouchbaseWriteSuccess[T <: Document[_]] private[couchbase] (
+    override val doc: T) extends CouchbaseWriteResult[T] {
   val isSuccess: Boolean = true
   val isFailure: Boolean = false
 }
