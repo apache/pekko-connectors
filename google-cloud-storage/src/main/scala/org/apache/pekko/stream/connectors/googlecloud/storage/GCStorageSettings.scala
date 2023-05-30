@@ -20,7 +20,7 @@ import com.typesafe.config.Config
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 final class GCStorageSettings private (
     val projectId: String,
@@ -106,7 +106,7 @@ final class GCStorageSettings private (
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageSettings {
   val ConfigPath = "pekko.connectors.google.cloud.storage"

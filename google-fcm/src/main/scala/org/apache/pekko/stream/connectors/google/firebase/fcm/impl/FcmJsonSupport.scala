@@ -25,7 +25,7 @@ import spray.json._
  * INTERNAL API
  */
 @InternalApi
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmSend", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmSend", "Alpakka 3.0.2")
 @Deprecated
 private[fcm] case class FcmSend(validate_only: Boolean, message: FcmNotification)
 
@@ -33,7 +33,7 @@ private[fcm] case class FcmSend(validate_only: Boolean, message: FcmNotification
  * INTERNAL API
  */
 @InternalApi
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmJsonSupport", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmJsonSupport", "Alpakka 3.0.2")
 @Deprecated
 private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
 

@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage
 object GoogleFcm {
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm" */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "Alpakka 3.0.2")
   @Deprecated
   def sendWithPassThrough[T](conf: FcmSettings): javadsl.Flow[Pair[FcmNotification, T], Pair[FcmResponse, T], NotUsed] =
     scaladsl
@@ -36,13 +36,13 @@ object GoogleFcm {
       .asJava
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm" */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "Alpakka 3.0.2")
   @Deprecated
   def send(conf: FcmSettings): javadsl.Flow[FcmNotification, FcmResponse, NotUsed] =
     FcmFlows.fcm(conf).asJava
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm" */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.javadsl.GoogleFcm", "Alpakka 3.0.2")
   @Deprecated
   def fireAndForget(conf: FcmSettings): javadsl.Sink[FcmNotification, CompletionStage[Done]] =
     send(conf)

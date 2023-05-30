@@ -33,10 +33,10 @@ class PubSubConfig private (
     /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "3.0.0") @Deprecated val projectId: String,
+      "Alpakka 3.0.0") @Deprecated val projectId: String,
     val pullReturnImmediately: Boolean,
     val pullMaxMessagesPerInternalBatch: Int,
-    @deprecated("Added only to help with migration", "3.0.0") @InternalApi private[pubsub] val settings: Option[
+    @deprecated("Added only to help with migration", "Alpakka 3.0.0") @InternalApi private[pubsub] val settings: Option[
       GoogleSettings]) {
 
   override def toString: String =
@@ -58,7 +58,7 @@ object PubSubConfig {
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
   @Deprecated
   def apply(projectId: String, clientEmail: String, privateKey: String)(
       implicit actorSystem: ActorSystem): PubSubConfig =
@@ -76,7 +76,7 @@ object PubSubConfig {
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
   @Deprecated
   def apply(projectId: String,
       clientEmail: String,
@@ -99,7 +99,7 @@ object PubSubConfig {
    * Java API
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
   @Deprecated
   def create(projectId: String, clientEmail: String, privateKey: String, actorSystem: ActorSystem): PubSubConfig =
     apply(projectId, clientEmail, privateKey)(actorSystem)
@@ -108,7 +108,7 @@ object PubSubConfig {
    * Java API
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
   @Deprecated
   def create(projectId: String,
       clientEmail: String,

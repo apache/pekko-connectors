@@ -20,7 +20,7 @@ import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension,
  * Manages one [[GCStorageSettings]] per `ActorSystem`.
  * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]].
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 final class GCStorageExt private (sys: ExtendedActorSystem) extends Extension {
   val settings: GCStorageSettings = settings(GCStorageSettings.ConfigPath)
@@ -31,7 +31,7 @@ final class GCStorageExt private (sys: ExtendedActorSystem) extends Extension {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageExt extends ExtensionId[GCStorageExt] with ExtensionIdProvider {
   override def lookup = GCStorageExt

@@ -213,7 +213,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[Ft
    * @param connectionSettings connection settings
    * @param materializer materializer
    * @return [[java.util.concurrent.CompletionStage CompletionStage]] of [[pekko.Done]] indicating a materialized, asynchronous request
-   * @deprecated pass in the actor system instead of the materializer, since 3.0.0
+   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
    */
   @Deprecated
   def mkdirAsync(basePath: String, name: String, connectionSettings: S, mat: Materializer): CompletionStage[Done]

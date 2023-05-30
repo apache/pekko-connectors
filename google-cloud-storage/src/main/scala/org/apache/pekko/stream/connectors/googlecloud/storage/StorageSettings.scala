@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.storage
 /**
  * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 final class StorageSettings private (val projectId: String, val clientEmail: String, val privateKey: String) {
   def withProjectId(projectId: String): StorageSettings = copy(projectId = projectId)
@@ -37,7 +37,7 @@ final class StorageSettings private (val projectId: String, val clientEmail: Str
 /**
  * @deprecated Use [[org.apache.pekko.stream.connectors.google.GoogleSettings]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 object StorageSettings {
   def apply(projectId: String, clientEmail: String, privateKey: String): StorageSettings =

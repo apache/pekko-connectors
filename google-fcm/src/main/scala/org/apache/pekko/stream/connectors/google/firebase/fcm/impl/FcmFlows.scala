@@ -32,7 +32,7 @@ import scala.concurrent.Future
 private[fcm] object FcmFlows {
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows", "Alpakka 3.0.2")
   @Deprecated
   private[fcm] def fcmWithData[T](conf: FcmSettings): Flow[(FcmNotification, T), (FcmResponse, T), NotUsed] =
     Flow
@@ -49,7 +49,7 @@ private[fcm] object FcmFlows {
       .mapMaterializedValue(_ => NotUsed)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows", "Alpakka 3.0.2")
   @Deprecated
   private[fcm] def fcm(conf: FcmSettings): Flow[FcmNotification, FcmResponse, NotUsed] =
     Flow
@@ -62,7 +62,7 @@ private[fcm] object FcmFlows {
       }
       .mapMaterializedValue(_ => NotUsed)
 
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmFlows", "Alpakka 3.0.2")
   @Deprecated
   private def resolveSettings(conf: FcmSettings)(mat: Materializer, attr: Attributes): GoogleSettings = {
     val settings = GoogleAttributes.resolveSettings(mat, attr)

@@ -24,19 +24,19 @@ import scala.concurrent.Future
 object GoogleFcm {
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm", "Alpakka 3.0.2")
   @Deprecated
   def sendWithPassThrough[T](conf: FcmSettings): Flow[(FcmNotification, T), (FcmResponse, T), NotUsed] =
     FcmFlows.fcmWithData[T](conf)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm", "Alpakka 3.0.2")
   @Deprecated
   def send(conf: FcmSettings): Flow[FcmNotification, FcmResponse, NotUsed] =
     FcmFlows.fcm(conf)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm */
-  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm", "3.0.2")
+  @deprecated("org.apache.pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm", "Alpakka 3.0.2")
   @Deprecated
   def fireAndForget(conf: FcmSettings): Sink[FcmNotification, Future[Done]] =
     FcmFlows.fcm(conf).toMat(Sink.ignore)(Keep.right)
