@@ -16,17 +16,18 @@ package org.apache.pekko.stream.connectors.google.firebase.fcm
 import org.apache.pekko.stream.connectors.google.firebase.fcm.FcmNotificationModels._
 
 /** Use class from package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models */
-@deprecated("Use class from package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models", "3.0.2")
+@deprecated("Use class from package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models", "Alpakka 3.0.2")
 @Deprecated
 object FcmNotificationModels {
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.BasicNotification */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.BasicNotification", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.BasicNotification", "Alpakka 3.0.2")
   @Deprecated
   case class BasicNotification(title: String, body: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification",
+    "Alpakka 3.0.2")
   @Deprecated
   case class AndroidNotification(
       title: String,
@@ -42,7 +43,7 @@ object FcmNotificationModels {
       title_loc_args: Seq[String])
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidConfig */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidConfig", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidConfig", "Alpakka 3.0.2")
   @Deprecated
   case class AndroidConfig(
       collapse_key: String,
@@ -53,57 +54,59 @@ object FcmNotificationModels {
       notification: AndroidNotification)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidMessagePriority */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidMessagePriority", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidMessagePriority",
+    "Alpakka 3.0.2")
   @Deprecated
   sealed trait AndroidMessagePriority
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Normal */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Normal", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Normal", "Alpakka 3.0.2")
   @Deprecated
   case object Normal extends AndroidMessagePriority
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.High */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.High", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.High", "Alpakka 3.0.2")
   @Deprecated
   case object High extends AndroidMessagePriority
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig", "Alpakka 3.0.2")
   @Deprecated
   case class WebPushNotification(title: String, body: String, icon: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig", "Alpakka 3.0.2")
   @Deprecated
   case class WebPushConfig(headers: Map[String, String], data: Map[String, String], notification: WebPushNotification)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.ApnsConfig */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.ApnsConfig", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.ApnsConfig", "Alpakka 3.0.2")
   @Deprecated
   case class ApnsConfig(headers: Map[String, String], rawPayload: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget",
+    "Alpakka 3.0.2")
   @Deprecated
   sealed trait NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Token */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Token", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Token", "Alpakka 3.0.2")
   @Deprecated
   case class Token(token: String) extends NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Topic */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Topic", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Topic", "Alpakka 3.0.2")
   @Deprecated
   case class Topic(topic: String) extends NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition", "Alpakka 3.0.2")
   @Deprecated
   case class Condition(conditionText: String) extends NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition", "Alpakka 3.0.2")
   @Deprecated
   object Condition {
     sealed trait ConditionBuilder {
@@ -131,7 +134,7 @@ object FcmNotificationModels {
 }
 
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification */
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification", "Alpakka 3.0.2")
 @Deprecated
 case class FcmNotification(
     data: Option[Map[String, String]] = None,
@@ -160,7 +163,7 @@ case class FcmNotification(
 }
 
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification */
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification", "Alpakka 3.0.2")
 @Deprecated
 object FcmNotification {
   val empty: FcmNotification = FcmNotification()
@@ -173,7 +176,7 @@ object FcmNotification {
 }
 
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmResponse */
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmResponse", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmResponse", "Alpakka 3.0.2")
 @Deprecated
 sealed trait FcmResponse {
   def isFailure: Boolean
@@ -181,7 +184,7 @@ sealed trait FcmResponse {
 }
 
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmSuccessResponse */
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmSuccessResponse", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmSuccessResponse", "Alpakka 3.0.2")
 @Deprecated
 final case class FcmSuccessResponse(name: String) extends FcmResponse {
   val isFailure = false
@@ -190,7 +193,7 @@ final case class FcmSuccessResponse(name: String) extends FcmResponse {
 }
 
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmErrorResponse */
-@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmErrorResponse", "3.0.2")
+@deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmErrorResponse", "Alpakka 3.0.2")
 @Deprecated
 final case class FcmErrorResponse(rawError: String) extends FcmResponse {
   val isFailure = true

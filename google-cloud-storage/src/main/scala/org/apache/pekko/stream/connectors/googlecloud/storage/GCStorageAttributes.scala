@@ -21,7 +21,7 @@ import pekko.stream.Attributes.Attribute
  * Pekko Stream attributes that are used when materializing GCStorage stream blueprints.
  * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageAttributes {
 
@@ -39,14 +39,14 @@ object GCStorageAttributes {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 final class GCStorageSettingsPath private (val path: String) extends Attribute
 
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageSettingsPath {
   val Default = GCStorageSettingsPath(GCStorageSettings.ConfigPath)
@@ -57,14 +57,14 @@ object GCStorageSettingsPath {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 final class GCStorageSettingsValue private (val settings: GCStorageSettings) extends Attribute
 
 /**
  * @deprecated Use [[pekko.stream.connectors.google.GoogleAttributes]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageSettingsValue {
   def apply(settings: GCStorageSettings) = new GCStorageSettingsValue(settings)

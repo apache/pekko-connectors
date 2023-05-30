@@ -27,40 +27,40 @@ final class FcmSettings private (
     /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "3.0.0") @Deprecated val clientEmail: String,
+      "Alpakka 3.0.0") @Deprecated val clientEmail: String,
     /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "3.0.0") @Deprecated val privateKey: String,
+      "Alpakka 3.0.0") @Deprecated val privateKey: String,
     /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "3.0.0") @Deprecated val projectId: String,
+      "Alpakka 3.0.0") @Deprecated val projectId: String,
     val isTest: Boolean,
     val maxConcurrentConnections: Int,
     /** Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "3.0.0") @Deprecated val forwardProxy: Option[ForwardProxy] = Option.empty) {
+      "Alpakka 3.0.0") @Deprecated val forwardProxy: Option[ForwardProxy] = Option.empty) {
 
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def withClientEmail(value: String): FcmSettings = copy(clientEmail = value)
 
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def withPrivateKey(value: String): FcmSettings = copy(privateKey = value)
 
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def withProjectId(value: String): FcmSettings = copy(projectId = value)
 
@@ -71,7 +71,7 @@ final class FcmSettings private (
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def withForwardProxy(value: ForwardProxy): FcmSettings = copy(forwardProxy = Option(value))
 
@@ -97,7 +97,7 @@ final class FcmSettings private (
 /**
  * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "Alpakka 3.0.0")
 @Deprecated
 object ForwardProxyTrustPem {
 
@@ -114,7 +114,7 @@ object ForwardProxyTrustPem {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "Alpakka 3.0.0")
 @Deprecated
 final class ForwardProxyTrustPem private (val pemPath: String) {
 
@@ -139,7 +139,7 @@ final class ForwardProxyTrustPem private (val pemPath: String) {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "Alpakka 3.0.0")
 @Deprecated
 object ForwardProxyCredentials {
 
@@ -156,7 +156,7 @@ object ForwardProxyCredentials {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "Alpakka 3.0.0")
 @Deprecated
 final class ForwardProxyCredentials private (val username: String, val password: String) {
 
@@ -193,7 +193,7 @@ final class ForwardProxyCredentials private (val username: String, val password:
 /**
  * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "Alpakka 3.0.0")
 @Deprecated
 object ForwardProxy {
 
@@ -228,7 +228,7 @@ object ForwardProxy {
 /**
  * @deprecated Use [[pekko.stream.connectors.google.ForwardProxy]]
  */
-@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "3.0.0")
+@deprecated("Use org.apache.pekko.stream.connectors.google.ForwardProxy", "Alpakka 3.0.0")
 @Deprecated
 final class ForwardProxy private (val host: String,
     val port: Int,
@@ -298,7 +298,7 @@ object FcmSettings {
    * Scala API
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def apply(
       clientEmail: String,
@@ -313,7 +313,7 @@ object FcmSettings {
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def apply(
       clientEmail: String,
@@ -331,7 +331,7 @@ object FcmSettings {
    * Java API
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def create(clientEmail: String, privateKey: String, projectId: String): FcmSettings = {
     apply(clientEmail, privateKey, projectId)
@@ -340,7 +340,7 @@ object FcmSettings {
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def create(clientEmail: String, privateKey: String, projectId: String, forwardProxy: ForwardProxy): FcmSettings = {
     apply(clientEmail, privateKey, projectId, forwardProxy)

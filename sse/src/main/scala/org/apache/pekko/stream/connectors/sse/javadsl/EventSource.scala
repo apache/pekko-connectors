@@ -103,9 +103,9 @@ object EventSource {
    * @param lastEventId initial value for Last-Evend-ID header, optional
    * @param mat `Materializer`
    * @return continuous source of server-sent events
-   * @deprecated pass in the actor system instead of the materializer, since 3.0.0
+   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
    */
-  @deprecated("pass in the actor system instead of the materializer", "3.0.0")
+  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
   def create(uri: Uri,
       send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
       lastEventId: Optional[String],

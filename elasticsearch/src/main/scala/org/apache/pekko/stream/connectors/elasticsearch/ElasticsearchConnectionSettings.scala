@@ -59,13 +59,13 @@ final class ElasticsearchConnectionSettings private (
   }
 
   /** Scala API */
-  @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "3.1.0")
+  @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "Alpakka 3.1.0")
   @Deprecated
   def withConnectionContext(connectionContext: HttpsConnectionContext): ElasticsearchConnectionSettings =
     copy(connectionContext = Option(connectionContext))
 
   /** Java API */
-  @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "3.1.0")
+  @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "Alpakka 3.1.0")
   @Deprecated
   def withConnectionContext(
       connectionContext: pekko.http.javadsl.HttpsConnectionContext): ElasticsearchConnectionSettings = {

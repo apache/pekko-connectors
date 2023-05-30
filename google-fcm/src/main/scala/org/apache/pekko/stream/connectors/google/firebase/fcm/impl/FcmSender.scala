@@ -37,7 +37,7 @@ private[fcm] class FcmSender {
   import FcmJsonSupport._
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmSender */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmSender", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmSender", "Alpakka 3.0.2")
   @Deprecated
   def send(http: HttpExt, fcmSend: FcmSend)(
       implicit mat: Materializer,
@@ -64,7 +64,7 @@ private[fcm] class FcmSender {
   }.withDefaultRetry
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmErrorException */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmErrorException", "3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmErrorException", "Alpakka 3.0.2")
   @Deprecated
   private case class FcmErrorException(error: FcmErrorResponse) extends Exception
 }

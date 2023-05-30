@@ -36,7 +36,7 @@ final class PubSubSettings private (
     /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "3.0.0") @Deprecated val callCredentials: Option[
+      "Alpakka 3.0.0") @Deprecated val callCredentials: Option[
       CallCredentials]) {
 
   /**
@@ -60,7 +60,7 @@ final class PubSubSettings private (
    * Credentials that are going to be used for gRPC call authorization.
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "3.0.0")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
   def withCallCredentials(callCredentials: CallCredentials): PubSubSettings =
     copy(callCredentials = Some(callCredentials))

@@ -81,9 +81,9 @@ object DynamoDb {
 
   /**
    * Create a CompletionStage that will be completed with a response to a given request.
-   * @deprecated pass in the actor system instead of the materializer, since 3.0.0
+   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
    */
-  @deprecated("pass in the actor system instead of the materializer", "3.0.0")
+  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
   def single[In <: DynamoDbRequest, Out <: DynamoDbResponse](client: DynamoDbAsyncClient,
       operation: DynamoDbOp[In, Out],
       request: In,
