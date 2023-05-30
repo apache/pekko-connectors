@@ -37,7 +37,7 @@ import pekko.{ Done, NotUsed }
 import spray.json._
 
 import scala.annotation.nowarn
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 @InternalApi private[storage] object GCStorageStream {
 
@@ -55,7 +55,7 @@ import scala.concurrent.Future
       val uri = Uri(gcsSettings.endpointUrl)
         .withPath(Path(gcsSettings.basePath) / "b")
         .withQuery(Query("project" -> settings.projectId))
-      implicit val ec = parasitic
+      implicit val ec: ExecutionContext = parasitic
       val request = Marshal(BucketInfo(bucketName, location)).to[RequestEntity].map { entity =>
         HttpRequest(POST, uri, entity = entity)
       }
@@ -142,7 +142,7 @@ import scala.concurrent.Future
       metadata: Option[Map[String, String]] = None): Sink[ByteString, Future[StorageObject]] =
     Sink
       .fromMaterializer { (mat, attr) =>
-        implicit val settings = {
+        implicit val settings: GoogleSettings = {
           val s = resolveSettings(mat, attr)
           s.copy(requestSettings = s.requestSettings.copy(uploadChunkSize = chunkSize))
         }
@@ -226,7 +226,7 @@ import scala.concurrent.Future
   private def makeRequestSource[T: FromResponseUnmarshaller](request: Future[HttpRequest]): Source[T, NotUsed] =
     Source
       .fromMaterializer { (mat, attr) =>
-        implicit val settings = resolveSettings(mat, attr)
+        implicit val settings: GoogleSettings = resolveSettings(mat, attr)
         Source.lazyFuture { () =>
           request.flatMap { request =>
             GoogleHttp()(mat.system).singleAuthenticatedRequest[T](request)

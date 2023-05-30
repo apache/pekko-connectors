@@ -40,7 +40,7 @@ abstract class IronMqSpec
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 15.seconds, interval = 1.second)
   val DefaultActorSystemTerminateTimeout: Duration = 10.seconds
 
-  private implicit val ec = ExecutionContext.global
+  private implicit val ec: ExecutionContext = ExecutionContext.global
   private var mutableIronMqClient = Option.empty[IronMqClient]
 
   private var mutableConfig = Option.empty[Config]

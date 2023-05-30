@@ -43,7 +43,7 @@ class MongoSourceSpec
     with LogCapturing {
 
   // #init-system
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
   // #init-system
 
   override protected def beforeAll(): Unit =
@@ -74,7 +74,7 @@ class MongoSourceSpec
 
   private val numbersDocumentColl = db.getCollection("numbers")
 
-  implicit val defaultPatience =
+  implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 5.seconds, interval = 50.millis)
 
   override def afterEach(): Unit =

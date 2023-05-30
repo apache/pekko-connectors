@@ -16,6 +16,8 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
+
+import scala.concurrent.ExecutionContext
 //#important-imports
 import org.apache.pekko
 import pekko.stream.connectors.slick.scaladsl._
@@ -26,8 +28,8 @@ import slick.jdbc.GetResult
 import scala.concurrent.Future
 
 object SlickSourceWithPlainSQLQueryExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #source-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -62,8 +64,8 @@ object SlickSourceWithPlainSQLQueryExample extends App {
 }
 
 object SlickSourceWithTypedQueryExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #source-with-typed-query
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -94,8 +96,8 @@ object SlickSourceWithTypedQueryExample extends App {
 }
 
 object SlickSinkExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #sink-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -125,8 +127,8 @@ object SlickSinkExample extends App {
 }
 
 object SlickFlowExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #flow-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -168,8 +170,8 @@ object SlickFlowWithPassThroughExample extends App {
     def map[B](f: A => B): KafkaMessage[B] = KafkaMessage(f(msg), offset)
   }
 
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #flowWithPassThrough-example
   implicit val session = SlickSession.forConfig("slick-h2")
