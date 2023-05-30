@@ -37,7 +37,7 @@ private[fcm] object FcmFlows {
   private[fcm] def fcmWithData[T](conf: FcmSettings): Flow[(FcmNotification, T), (FcmResponse, T), NotUsed] =
     Flow
       .fromMaterializer { (mat, attr) =>
-        implicit val settings = resolveSettings(conf)(mat, attr)
+        implicit val settings: GoogleSettings = resolveSettings(conf)(mat, attr)
         val sender = new FcmSender()
         Flow[(FcmNotification, T)].mapAsync(conf.maxConcurrentConnections) {
           case (notification, data) =>
@@ -54,7 +54,7 @@ private[fcm] object FcmFlows {
   private[fcm] def fcm(conf: FcmSettings): Flow[FcmNotification, FcmResponse, NotUsed] =
     Flow
       .fromMaterializer { (mat, attr) =>
-        implicit val settings = resolveSettings(conf)(mat, attr)
+        implicit val settings: GoogleSettings = resolveSettings(conf)(mat, attr)
         val sender = new FcmSender()
         Flow[FcmNotification].mapAsync(conf.maxConcurrentConnections) { notification =>
           sender.send(Http(mat.system), FcmSend(conf.isTest, notification))(mat, settings)

@@ -50,7 +50,7 @@ class BigQueryQueriesSpec
     jsonFormat10(QueryResponse[T])
   }
 
-  implicit val settings = GoogleSettings().copy(credentials = NoCredentials("", ""))
+  implicit val settings: GoogleSettings = GoogleSettings().copy(credentials = NoCredentials("", ""))
 
   val jobId = "jobId"
   val pageToken = "pageToken"
