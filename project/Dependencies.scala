@@ -168,7 +168,6 @@ object Dependencies {
     ))
 
   val AvroParquet = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.10.1", // Apache2
       ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
