@@ -50,7 +50,7 @@ class PushKitSenderSpec
   override def afterAll() =
     TestKit.shutdownActorSystem(system)
 
-  implicit val defaultPatience =
+  implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 6.seconds, interval = 50.millis)
 
   implicit val executionContext: ExecutionContext = system.dispatcher

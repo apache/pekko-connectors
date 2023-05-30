@@ -227,5 +227,5 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
   implicit val webNotificationJsonFormat: RootJsonFormat[WebNotification] = jsonFormat14(WebNotification.apply)
   implicit val pushKitNotificationJsonFormat: RootJsonFormat[PushKitNotification] = jsonFormat8(
     PushKitNotification.apply)
-  implicit val pushKitSendJsonFormat: RootJsonFormat[PushKitSend] = jsonFormat2(PushKitSend)
+  implicit val pushKitSendJsonFormat: RootJsonFormat[PushKitSend] = jsonFormat2(PushKitSend.apply)
 }

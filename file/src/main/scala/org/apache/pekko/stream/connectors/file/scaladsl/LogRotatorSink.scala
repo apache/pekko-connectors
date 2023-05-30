@@ -167,7 +167,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
 
     override def postStop(): Unit =
       promise.completeWith {
-        implicit val ec = materializer.executionContext
+        implicit val ec: ExecutionContext = materializer.executionContext
         Future
           .sequence(sinkCompletions)
           .map(_ => Done)(pekko.dispatch.ExecutionContexts.parasitic)
