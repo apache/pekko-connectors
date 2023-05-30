@@ -270,7 +270,8 @@ sealed trait CouchbaseWriteResult[T <: Document[_]] {
 /**
  * Emitted for a successful Couchbase write operation.
  */
-final case class CouchbaseWriteSuccess[T <: Document[_]] private (override val doc: T) extends CouchbaseWriteResult[T] {
+final case class CouchbaseWriteSuccess[T <: Document[_]] private[couchbase] (
+    override val doc: T) extends CouchbaseWriteResult[T] {
   val isSuccess: Boolean = true
   val isFailure: Boolean = false
 }
@@ -278,7 +279,7 @@ final case class CouchbaseWriteSuccess[T <: Document[_]] private (override val d
 /**
  * Emitted for a failed Couchbase write operation.
  */
-final case class CouchbaseWriteFailure[T <: Document[_]] private (override val doc: T, failure: Throwable)
+final case class CouchbaseWriteFailure[T <: Document[_]] private[couchbase] (override val doc: T, failure: Throwable)
     extends CouchbaseWriteResult[T] {
   val isSuccess: Boolean = false
   val isFailure: Boolean = true
@@ -296,7 +297,7 @@ sealed trait CouchbaseDeleteResult {
 /**
  * Emitted for a successful Couchbase write operation.
  */
-final case class CouchbaseDeleteSuccess private (override val id: String) extends CouchbaseDeleteResult {
+final case class CouchbaseDeleteSuccess private[couchbase] (override val id: String) extends CouchbaseDeleteResult {
   val isSuccess: Boolean = true
   val isFailure: Boolean = false
 }
@@ -304,7 +305,7 @@ final case class CouchbaseDeleteSuccess private (override val id: String) extend
 /**
  * Emitted for a failed Couchbase write operation.
  */
-final case class CouchbaseDeleteFailure private (override val id: String, failure: Throwable)
+final case class CouchbaseDeleteFailure private[couchbase] (override val id: String, failure: Throwable)
     extends CouchbaseDeleteResult {
   val isSuccess: Boolean = false
   val isFailure: Boolean = true
