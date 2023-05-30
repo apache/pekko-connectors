@@ -125,12 +125,11 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
   val Couchbase = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion, // ApacheV2
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1", // ApacheV2
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided, // Apache V2
-      "com.typesafe.play" %% "play-json" % "2.9.2" % Test, // Apache V2
+      "com.typesafe.play" %% "play-json" % "2.10.0-RC8" % Test, // Apache V2
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test // Apache V2
     ))
 
