@@ -29,7 +29,7 @@ import pekko.stream.connectors.couchbase.{
 import pekko.stream.scaladsl.Flow
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Scala API: Factory methods for Couchbase flows.
@@ -100,8 +100,8 @@ object CouchbaseFlow {
    */
   def upsertDocWithResult[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
-      bucketName: String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
-    Flow
+      bucketName: String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
+    val flow: Flow[T, CouchbaseWriteResult[T], Future[NotUsed]] = Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
@@ -115,7 +115,8 @@ object CouchbaseFlow {
               }
           })
       }
-      .mapMaterializedValue(_ => NotUsed)
+    flow.mapMaterializedValue(_ => NotUsed)
+  }
 
   /**
    * Create a flow to replace a Couchbase [[com.couchbase.client.java.document.JsonDocument JsonDocument]].
@@ -153,8 +154,8 @@ object CouchbaseFlow {
    */
   def replaceDocWithResult[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
-      bucketName: String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
-    Flow
+      bucketName: String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
+    val flow: Flow[T, CouchbaseWriteResult[T], Future[NotUsed]] = Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
@@ -168,7 +169,8 @@ object CouchbaseFlow {
               }
           })
       }
-      .mapMaterializedValue(_ => NotUsed)
+    flow.mapMaterializedValue(_ => NotUsed)
+  }
 
   /**
    * Create a flow to delete documents from Couchbase by `id`. Emits the same `id`.
