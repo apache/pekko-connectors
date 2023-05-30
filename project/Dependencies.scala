@@ -106,7 +106,6 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
 
   val AzureStorageQueue = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.microsoft.azure" % "azure-storage" % "8.0.0" // ApacheV2
     ))
