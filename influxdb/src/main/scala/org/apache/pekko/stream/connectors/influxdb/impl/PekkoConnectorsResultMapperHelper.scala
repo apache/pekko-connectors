@@ -32,7 +32,7 @@ import org.influxdb.dto.Point
  * Internal API.
  */
 @InternalApi
-private[impl] class AlpakkaResultMapperHelper {
+private[impl] class PekkoConnectorsResultMapperHelper {
 
   val CLASS_FIELD_CACHE: ConcurrentHashMap[String, ConcurrentMap[String, Field]] = new ConcurrentHashMap();
 

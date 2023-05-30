@@ -112,7 +112,7 @@ object ResourceSettings {
 
 /**
  * In order to minimise the user facing API, the resource lifetime can be managed by an
- * Akka Extension. In that case Akka Extension will make sure that
+ * Pekko Extension. In that case Pekko Extension will make sure that
  * there is only one instance of the resource instantiated per Actor System.
  */
 final class ResourceExt private (sys: ExtendedActorSystem) extends Extension {

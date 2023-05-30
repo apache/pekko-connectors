@@ -145,7 +145,7 @@ private[influxdb] final class InfluxDbMapperRecordLogic[T, C](
     shape: FlowShape[immutable.Seq[InfluxDbWriteMessage[T, C]], immutable.Seq[InfluxDbWriteResult[T, C]]])
     extends InfluxDbLogic(influxDB, in, out, shape) {
 
-  private val mapperHelper: AlpakkaResultMapperHelper = new AlpakkaResultMapperHelper
+  private val mapperHelper: PekkoConnectorsResultMapperHelper = new PekkoConnectorsResultMapperHelper
 
   override protected def write(messages: immutable.Seq[InfluxDbWriteMessage[T, C]]): Unit =
     messages

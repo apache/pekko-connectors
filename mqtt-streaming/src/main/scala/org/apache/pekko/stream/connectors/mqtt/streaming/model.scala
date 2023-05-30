@@ -21,7 +21,7 @@ import java.util.concurrent.{ CompletionStage, ForkJoinPool, TimeUnit }
 import org.apache.pekko
 import pekko.Done
 import pekko.annotation.InternalApi
-import pekko.japi.{ Pair => AkkaPair }
+import pekko.japi.{ Pair => PekkoPair }
 import pekko.stream.connectors.mqtt.streaming.Connect.ProtocolLevel
 import pekko.util.ccompat.JavaConverters._
 import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
@@ -374,7 +374,7 @@ final case class Subscribe @InternalApi private[streaming] (packetId: PacketId,
    * 3.8 SUBSCRIBE - Subscribe to topics
    * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
    */
-  def this(topicFilters: java.util.List[AkkaPair[String, Integer]]) =
+  def this(topicFilters: java.util.List[PekkoPair[String, Integer]]) =
     this(PacketId(0), topicFilters.asScala.toIndexedSeq.map(v => v.first -> ControlPacketFlags(v.second)))
 
   /**

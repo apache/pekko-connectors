@@ -263,7 +263,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   protected def closeConnection(connection: jms.Connection): Unit = {
     try {
-      // deregister exception listener to clear reference from JMS client to the Akka stage
+      // deregister exception listener to clear reference from JMS client to the Pekko stage
       connection.setExceptionListener(null)
     } catch {
       case _: jms.JMSException => // ignore

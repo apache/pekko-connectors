@@ -52,12 +52,12 @@ class ArchiveSpec
         val sources = Source.empty
         val zipFlow = Archive.zip()
 
-        val akkaZipped: Future[ByteString] =
+        val pekkoZipped: Future[ByteString] =
           sources
             .via(zipFlow)
             .runWith(Sink.fold(ByteString.empty)(_ ++ _))
 
-        akkaZipped.futureValue shouldBe ByteString.empty
+        pekkoZipped.futureValue shouldBe ByteString.empty
       }
 
       "archive file" in {
@@ -113,12 +113,12 @@ class ArchiveSpec
         val inputStream = filesToStream(inputFiles)
         val zipFlow = Archive.zip()
 
-        val akkaZipped: Future[ByteString] =
+        val pekkoZipped: Future[ByteString] =
           inputStream
             .via(zipFlow)
             .runWith(Sink.fold(ByteString.empty)(_ ++ _))
 
-        archiveHelper.unzip(akkaZipped.futureValue).asScala shouldBe inputFiles
+        archiveHelper.unzip(pekkoZipped.futureValue).asScala shouldBe inputFiles
       }
 
       "unarchive files" in {
@@ -126,7 +126,7 @@ class ArchiveSpec
         val inputStream = filesToStream(inputFiles)
         val zipFlow = Archive.zip()
 
-        val akkaZipped: Future[ByteString] =
+        val pekkoZipped: Future[ByteString] =
           inputStream
             .via(zipFlow)
             .runWith(Sink.fold(ByteString.empty)(_ ++ _))
@@ -136,7 +136,7 @@ class ArchiveSpec
           File.createTempFile("pre", "post")
         zipFile.deleteOnExit()
 
-        Source.future(akkaZipped).runWith(FileIO.toPath(zipFile.toPath)).futureValue
+        Source.future(pekkoZipped).runWith(FileIO.toPath(zipFile.toPath)).futureValue
 
         Archive
           .zipReader(zipFile)
