@@ -30,7 +30,7 @@ abstract class CsvSpec
     with ScalaFutures
     with LogCapturing {
 
-  implicit val system = ActorSystem(this.getClass.getSimpleName)
+  implicit val system: ActorSystem = ActorSystem(this.getClass.getSimpleName)
 
   override protected def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)

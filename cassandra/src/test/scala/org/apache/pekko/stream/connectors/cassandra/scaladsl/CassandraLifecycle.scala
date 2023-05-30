@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
 import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicInteger
-
 import org.apache.pekko
 import pekko.Done
 import pekko.testkit.TestKitBase
@@ -27,7 +26,7 @@ import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }
 
 import scala.collection.immutable
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.util.control.NonFatal
 
 trait CassandraLifecycleBase {
@@ -71,7 +70,7 @@ trait CassandraLifecycleBase {
     executeCql(lifecycleSession, statements.asScala.toList).asJava
 
   def withSchemaMetadataDisabled(block: => Future[Done]): Future[Done] = {
-    implicit val ec = lifecycleSession.ec
+    implicit val ec: ExecutionContext = lifecycleSession.ec
     lifecycleSession.underlying().flatMap { cqlSession =>
       cqlSession.setSchemaMetadataEnabled(false)
       val blockResult =

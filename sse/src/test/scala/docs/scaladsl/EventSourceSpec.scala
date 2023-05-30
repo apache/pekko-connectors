@@ -32,7 +32,7 @@ import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable
 import scala.concurrent.duration.DurationInt
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 //#event-source
 import org.apache.pekko
 import pekko.http.scaladsl.Http
@@ -91,7 +91,7 @@ object EventSourceSpec {
     import Server._
     import context.dispatcher
 
-    private implicit val sys = context.system
+    private implicit val sys: ActorSystem = context.system
 
     context.system.scheduler.scheduleOnce(1.second, self, Bind)
 
@@ -147,8 +147,8 @@ object EventSourceSpec {
 final class EventSourceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
   import EventSourceSpec._
 
-  private implicit val system = ActorSystem()
-  private implicit val ec = system.dispatcher
+  private implicit val system: ActorSystem = ActorSystem()
+  private implicit val ec: ExecutionContext = system.dispatcher
 
   "EventSource" should {
     "communicate correctly with an instable HTTP server" in {

@@ -159,7 +159,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       // Copy source to sink1 through ODocument stream
       val f1 = OrientDbSource(
         sourceClass,
-        OrientDbSourceSettings(oDatabase)).map { message: OrientDbReadResult[ODocument] =>
+        OrientDbSourceSettings(oDatabase)).map { (message: OrientDbReadResult[ODocument]) =>
         OrientDbWriteMessage(message.oDocument)
       }
         .groupedWithin(10, 50.millis)
@@ -173,7 +173,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       // #run-odocument
       val result: Future[immutable.Seq[String]] = OrientDbSource(
         sink4,
-        OrientDbSourceSettings(oDatabase)).map { message: OrientDbReadResult[ODocument] =>
+        OrientDbSourceSettings(oDatabase)).map { (message: OrientDbReadResult[ODocument]) =>
         message.oDocument.field[String]("book_title")
       }
         .runWith(Sink.seq)
@@ -197,7 +197,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
       val f1 = OrientDbSource(
         sourceClass,
-        OrientDbSourceSettings(oDatabase)).map { message: OrientDbReadResult[ODocument] =>
+        OrientDbSourceSettings(oDatabase)).map { (message: OrientDbReadResult[ODocument]) =>
         OrientDbWriteMessage(message.oDocument)
       }
         .groupedWithin(10, 50.millis)
@@ -231,7 +231,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       // #run-typed
       val streamCompletion: Future[Done] = OrientDbSource
         .typed(sourceClass, OrientDbSourceSettings(oDatabase), classOf[OrientDbTest.source1])
-        .map { m: OrientDbReadResult[OrientDbTest.source1] =>
+        .map { (m: OrientDbReadResult[OrientDbTest.source1]) =>
           val db: ODatabaseDocumentTx = oDatabase.acquire
           db.setDatabaseOwner(new OObjectDatabaseTx(db))
           ODatabaseRecordThreadLocal.instance.set(db)
@@ -267,7 +267,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
         committedOffsets = committedOffsets :+ offset
 
       val f1 = Source(messagesFromKafka)
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
           println("title: " + book.title)
@@ -279,7 +279,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
           OrientDbFlow.createWithPassThrough(
             sink7,
             OrientDbWriteSettings(oDatabase)))
-        .map { messages: Seq[OrientDbWriteMessage[ODocument, KafkaOffset]] =>
+        .map { (messages: Seq[OrientDbWriteMessage[ODocument, KafkaOffset]]) =>
           messages.foreach { message =>
             commitToKafka(message.passThrough)
           }

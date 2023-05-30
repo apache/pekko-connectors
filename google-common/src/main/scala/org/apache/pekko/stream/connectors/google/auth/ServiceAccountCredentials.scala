@@ -57,7 +57,7 @@ private[connectors] object ServiceAccountCredentials {
 
   final case class ServiceAccountCredentialsFile(project_id: String, client_email: String, private_key: String)
   implicit val serviceAccountCredentialsFormat: RootJsonFormat[ServiceAccountCredentialsFile] = jsonFormat3(
-    ServiceAccountCredentialsFile)
+    ServiceAccountCredentialsFile.apply)
 }
 
 @InternalApi
