@@ -5,7 +5,6 @@
 package org.apache.pekko.stream.connectors.csv.scaladsl
 
 import java.util.concurrent.TimeUnit
-
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
@@ -15,7 +14,7 @@ import pekko.util.ByteString
 import org.openjdk.jmh.annotations._
 import org.openjdk.jmh.infra.Blackhole
 
-import scala.concurrent.Await
+import scala.concurrent.{ Await, ExecutionContext }
 import scala.concurrent.duration.Duration
 
 /**
@@ -50,9 +49,9 @@ import scala.concurrent.duration.Duration
 @State(Scope.Benchmark)
 class CsvBench {
 
-  implicit val system = ActorSystem()
-  implicit val executionContext = system.dispatcher
-  implicit val mat = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val executionContext: ExecutionContext = system.dispatcher
+  implicit val mat: ActorMaterializer = ActorMaterializer()
 
   /**
    * Size of [[ByteString]] chunks in bytes.

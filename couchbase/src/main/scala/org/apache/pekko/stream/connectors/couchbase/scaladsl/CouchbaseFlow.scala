@@ -29,6 +29,8 @@ import pekko.stream.connectors.couchbase.{
 import pekko.stream.scaladsl.Flow
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 
+import scala.concurrent.ExecutionContext
+
 /**
  * Scala API: Factory methods for Couchbase flows.
  */
@@ -104,7 +106,7 @@ object CouchbaseFlow {
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc => {
-            implicit val executor = materializer.system.dispatcher
+            implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.upsertDoc(doc, writeSettings))
               .map(_ => CouchbaseWriteSuccess(doc))
@@ -157,7 +159,7 @@ object CouchbaseFlow {
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc => {
-            implicit val executor = materializer.system.dispatcher
+            implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.replaceDoc(doc, writeSettings))
               .map(_ => CouchbaseWriteSuccess(doc))
@@ -179,7 +181,7 @@ object CouchbaseFlow {
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[String]
           .mapAsync(writeSettings.parallelism)(id => {
-            implicit val executor = materializer.system.dispatcher
+            implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.remove(id, writeSettings))
               .map(_ => id)
@@ -198,7 +200,7 @@ object CouchbaseFlow {
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[String]
           .mapAsync(writeSettings.parallelism)(id => {
-            implicit val executor = materializer.system.dispatcher
+            implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.remove(id, writeSettings))
               .map(_ => CouchbaseDeleteSuccess(id))

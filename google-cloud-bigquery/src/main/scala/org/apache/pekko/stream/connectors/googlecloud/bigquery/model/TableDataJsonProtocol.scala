@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation._
 import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter }
 
 import java.{ lang, util }
-
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable.Seq
@@ -166,8 +165,8 @@ object TableDataInsertAllRequest {
 
   implicit def writer[T](
       implicit writer: BigQueryRootJsonWriter[T]): RootJsonWriter[TableDataInsertAllRequest[T]] = {
-    implicit val format = lift(writer)
-    implicit val rowFormat = jsonFormat2(Row[T])
+    implicit val format: RootJsonFormat[T] = lift(writer)
+    implicit val rowFormat: RootJsonFormat[Row[T]] = jsonFormat2(Row[T])
     jsonFormat4(TableDataInsertAllRequest[T])
   }
 }

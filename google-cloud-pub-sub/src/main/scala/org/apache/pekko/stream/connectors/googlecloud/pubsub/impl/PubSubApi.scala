@@ -23,7 +23,7 @@ import pekko.http.scaladsl.marshalling.Marshal
 import pekko.http.scaladsl.model.HttpMethods.POST
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, Unmarshaller }
-import pekko.stream.connectors.google.GoogleAttributes
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, RequestSettings }
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.implicits._
 import pekko.stream.connectors.googlecloud.pubsub._
@@ -142,7 +142,7 @@ private[pubsub] trait PubSubApi {
       AcknowledgeRequest(json.asJsObject.fields("ackIds").convertTo[immutable.Seq[String]]: _*)
     def write(ar: AcknowledgeRequest): JsValue = JsObject("ackIds" -> ar.ackIds.toJson)
   }
-  private implicit val pullRequestFormat = DefaultJsonProtocol.jsonFormat2(PullRequest)
+  private implicit val pullRequestFormat = DefaultJsonProtocol.jsonFormat2(PullRequest.apply)
 
   private def scheme: String = if (isEmulated) "http" else "https"
 
@@ -150,8 +150,8 @@ private[pubsub] trait PubSubApi {
     Flow
       .fromMaterializer { (mat, attr) =>
         import mat.executionContext
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
-        implicit val requestSettings = settings.requestSettings
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val requestSettings: RequestSettings = settings.requestSettings
 
         val url: Uri = Uri.from(
           scheme = scheme,
@@ -188,8 +188,8 @@ private[pubsub] trait PubSubApi {
     Flow
       .fromMaterializer { (mat, attr) =>
         import mat.executionContext
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
-        implicit val requestSettings = settings.requestSettings
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val requestSettings: RequestSettings = settings.requestSettings
 
         val url: Uri = Uri.from(
           scheme = scheme,
@@ -239,8 +239,8 @@ private[pubsub] trait PubSubApi {
       Flow
         .fromMaterializer { (mat, attr) =>
           import mat.executionContext
-          implicit val system = mat.system
-          implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+          implicit val system: ActorSystem = mat.system
+          implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
           val url: Uri = s"/v1/projects/${settings.projectId}/topics/$topic:publish"
           FlowWithContext[PublishRequest, T]
             .mapAsync(parallelism) { request =>

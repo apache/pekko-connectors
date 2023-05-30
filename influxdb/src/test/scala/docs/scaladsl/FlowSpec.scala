@@ -43,7 +43,7 @@ class FlowSpec
     with ScalaFutures
     with LogCapturing {
 
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
 
   final val DatabaseName = this.getClass.getSimpleName
 
@@ -102,7 +102,7 @@ class FlowSpec
       committedOffsets = committedOffsets :+ offset
 
     val f1 = Source(messagesFromKafka)
-      .map { kafkaMessage: KafkaMessage =>
+      .map { (kafkaMessage: KafkaMessage) =>
         val cpu = kafkaMessage.cpu
         println("hostname: " + cpu.getHostname)
 
@@ -111,7 +111,7 @@ class FlowSpec
       .groupedWithin(10, 50.millis)
       .via(
         InfluxDbFlow.typedWithPassThrough(classOf[InfluxDbFlowCpu]))
-      .map { messages: Seq[InfluxDbWriteResult[InfluxDbFlowCpu, KafkaOffset]] =>
+      .map { (messages: Seq[InfluxDbWriteResult[InfluxDbFlowCpu, KafkaOffset]]) =>
         messages.foreach { message =>
           commitToKafka(message.writeMessage.passThrough)
         }

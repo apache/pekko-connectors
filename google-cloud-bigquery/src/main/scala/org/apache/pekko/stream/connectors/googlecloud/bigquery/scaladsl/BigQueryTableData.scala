@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.NotUsed
 import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
@@ -22,7 +23,7 @@ import pekko.http.scaladsl.model.HttpMethods.POST
 import pekko.http.scaladsl.model.Uri.Query
 import pekko.http.scaladsl.model.{ HttpRequest, RequestEntity }
 import pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller }
-import pekko.stream.connectors.google.GoogleAttributes
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.implicits._
 import pekko.stream.connectors.googlecloud.bigquery.model.{
@@ -131,9 +132,9 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
       .fromMaterializer { (mat, attr) =>
         import BigQueryException._
         import SprayJsonSupport._
-        implicit val system = mat.system
+        implicit val system: ActorSystem = mat.system
         implicit val ec = ExecutionContexts.parasitic
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
 
         val uri = BigQueryEndpoints.tableDataInsertAll(settings.projectId, datasetId, tableId)
         val request = HttpRequest(POST, uri)
