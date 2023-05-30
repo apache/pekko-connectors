@@ -56,13 +56,13 @@ services:
           --wait
         couchbase-cli bucket-create -c couchbase \
           -u Administrator -p password \
-          --bucket pekkoquery \
+          --bucket akkaquery \
           --bucket-type couchbase \
           --bucket-ramsize 100 \
           --bucket-replica 1 \
           --wait
         sleep 2 # just wait a tiny bit more after creating the bucket
-        echo 'CREATE PRIMARY INDEX ON pekkoquery USING GSI;' | \
+        echo 'CREATE PRIMARY INDEX ON akkaquery USING GSI;' | \
           cbq -c Administrator:password -e http://couchbase:8093
       "
   elasticmq:
