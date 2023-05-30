@@ -26,7 +26,8 @@ object FcmNotificationModels {
   case class BasicNotification(title: String, body: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification", "Alpakka 3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification",
+    "Alpakka 3.0.2")
   @Deprecated
   case class AndroidNotification(
       title: String,
@@ -53,7 +54,8 @@ object FcmNotificationModels {
       notification: AndroidNotification)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidMessagePriority */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidMessagePriority", "Alpakka 3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidMessagePriority",
+    "Alpakka 3.0.2")
   @Deprecated
   sealed trait AndroidMessagePriority
 
@@ -83,7 +85,8 @@ object FcmNotificationModels {
   case class ApnsConfig(headers: Map[String, String], rawPayload: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget", "Alpakka 3.0.2")
+  @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget",
+    "Alpakka 3.0.2")
   @Deprecated
   sealed trait NotificationTarget
 
