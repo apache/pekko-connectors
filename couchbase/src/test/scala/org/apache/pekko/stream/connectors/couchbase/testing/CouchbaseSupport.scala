@@ -25,8 +25,9 @@ import com.couchbase.client.deps.io.netty.util.CharsetUtil
 import com.couchbase.client.java.ReplicateTo
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ BinaryDocument, JsonDocument, RawJsonDocument, StringDocument }
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.slf4j.LoggerFactory
-import play.api.libs.json.Json
 
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,6 +35,12 @@ import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }
 
 case class TestObject(id: String, value: String)
+
+private[couchbase] object CouchbaseSupport {
+  val jacksonMapper = JsonMapper.builder()
+    .addModule(DefaultScalaModule)
+    .build()
+}
 
 trait CouchbaseSupport {
 
@@ -64,7 +71,7 @@ trait CouchbaseSupport {
   }
 
   def toRawJsonDocument(testObject: TestObject): RawJsonDocument = {
-    val json = Json.toJson(testObject)(Json.writes[TestObject]).toString()
+    val json = CouchbaseSupport.jacksonMapper.writeValueAsString(testObject)
     RawJsonDocument.create(testObject.id, json)
   }
 
@@ -72,12 +79,12 @@ trait CouchbaseSupport {
     JsonDocument.create(testObject.id, JsonObject.create().put("id", testObject.id).put("value", testObject.value))
 
   def toStringDocument(testObject: TestObject): StringDocument = {
-    val json = Json.toJson(testObject)(Json.writes[TestObject]).toString()
+    val json = CouchbaseSupport.jacksonMapper.writeValueAsString(testObject)
     StringDocument.create(testObject.id, json)
   }
 
   def toBinaryDocument(testObject: TestObject): BinaryDocument = {
-    val json = Json.toJson(testObject)(Json.writes[TestObject]).toString()
+    val json = CouchbaseSupport.jacksonMapper.writeValueAsString(testObject)
     val toWrite = Unpooled.copiedBuffer(json, CharsetUtil.UTF_8)
     BinaryDocument.create(testObject.id, toWrite)
   }
