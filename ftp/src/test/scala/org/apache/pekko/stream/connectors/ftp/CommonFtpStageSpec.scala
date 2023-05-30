@@ -20,8 +20,9 @@ import java.nio.file.{ Files, Paths }
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import org.apache.pekko
-import pekko.stream.{ IOOperationIncompleteException, IOResult }
+import pekko.stream.{ IOOperationIncompleteException, IOResult, Materializer }
 import BaseSftpSupport.{ CLIENT_PRIVATE_KEY_PASSPHRASE => ClientPrivateKeyPassphrase }
+import pekko.actor.ActorSystem
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.TestSink
@@ -30,7 +31,7 @@ import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{ Millis, Seconds, Span }
 
 import scala.collection.immutable
-import scala.concurrent.{ Await, ExecutionContextExecutor }
+import scala.concurrent.{ Await, ExecutionContext, ExecutionContextExecutor }
 import scala.concurrent.duration._
 import scala.util.Random
 
@@ -85,14 +86,14 @@ final class UnconfirmedReadsSftpSourceSpec extends BaseSftpSpec with CommonFtpSt
 
 trait CommonFtpStageSpec extends BaseSpec with Eventually {
 
-  implicit val system = getSystem
-  implicit val mat = getMaterializer
-  implicit val defaultPatience =
+  implicit val system: ActorSystem = getSystem
+  implicit val mat: Materializer = getMaterializer
+  implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = Span(30, Seconds), interval = Span(600, Millis))
 
   "FtpBrowserSource" should {
     "complete with a failed Future, when the credentials supplied were wrong" in assertAllStagesStopped {
-      implicit val ec = system.getDispatcher
+      implicit val ec: ExecutionContext = system.getDispatcher
       listFilesWithWrongCredentials("")
         .toMat(Sink.seq)(Keep.right)
         .run()

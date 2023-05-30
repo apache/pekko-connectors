@@ -86,11 +86,13 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
   }
 
   // app -> google
-  implicit val webPushNotificationJsonFormat: RootJsonFormat[WebPushNotification] = jsonFormat3(WebPushNotification)
+  implicit val webPushNotificationJsonFormat: RootJsonFormat[WebPushNotification] =
+    jsonFormat3(WebPushNotification.apply)
   implicit val webPushConfigJsonFormat: RootJsonFormat[WebPushConfig] = jsonFormat3(WebPushConfig.apply)
-  implicit val androidNotificationJsonFormat: RootJsonFormat[AndroidNotification] = jsonFormat11(AndroidNotification)
+  implicit val androidNotificationJsonFormat: RootJsonFormat[AndroidNotification] =
+    jsonFormat11(AndroidNotification.apply)
   implicit val androidConfigJsonFormat: RootJsonFormat[AndroidConfig] = jsonFormat6(AndroidConfig.apply)
-  implicit val basicNotificationJsonFormat: RootJsonFormat[BasicNotification] = jsonFormat2(BasicNotification)
+  implicit val basicNotificationJsonFormat: RootJsonFormat[BasicNotification] = jsonFormat2(BasicNotification.apply)
   implicit val sendableFcmNotificationJsonFormat: RootJsonFormat[FcmNotification] = jsonFormat8(FcmNotification.apply)
-  implicit val fcmSendJsonFormat: RootJsonFormat[FcmSend] = jsonFormat2(FcmSend)
+  implicit val fcmSendJsonFormat: RootJsonFormat[FcmSend] = jsonFormat2(FcmSend.apply)
 }

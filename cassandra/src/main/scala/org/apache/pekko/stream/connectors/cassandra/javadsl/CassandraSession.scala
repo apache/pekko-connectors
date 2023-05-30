@@ -83,7 +83,7 @@ final class CassandraSession(@InternalApi private[pekko] val delegate: scaladsl.
       onClose: java.lang.Runnable) =
     this(system.classicSystem, sessionProvider, executionContext, log, metricsCategory, init, onClose)
 
-  implicit private val ec = delegate.ec
+  implicit private val ec: ExecutionContext = delegate.ec
 
   /**
    * Closes the underlying Cassandra session.

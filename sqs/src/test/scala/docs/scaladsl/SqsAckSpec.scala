@@ -248,7 +248,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
   it should "fail if any of the messages in the batch request failed" in {
     val messages = for (i <- 0 until 10) yield Message.builder().body(s"Message - $i").build()
 
-    implicit val mockAwsSqsClient = mock[SqsAsyncClient]
+    implicit val mockAwsSqsClient: SqsAsyncClient = mock[SqsAsyncClient]
 
     when(mockAwsSqsClient.deleteMessageBatch(any[DeleteMessageBatchRequest]))
       .thenReturn(CompletableFuture.completedFuture {
@@ -269,7 +269,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
   it should "fail if the batch request failed" in {
     val messages = for (i <- 0 until 10) yield Message.builder().body(s"Message - $i").build()
 
-    implicit val mockAwsSqsClient = mock[SqsAsyncClient]
+    implicit val mockAwsSqsClient: SqsAsyncClient = mock[SqsAsyncClient]
 
     when(mockAwsSqsClient.deleteMessageBatch(any[DeleteMessageBatchRequest]))
       .thenReturn(
@@ -289,7 +289,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
   it should "fail if the client invocation failed" in {
     val messages = for (i <- 0 until 10) yield Message.builder().body(s"Message - $i").build()
 
-    implicit val mockAwsSqsClient = mock[SqsAsyncClient]
+    implicit val mockAwsSqsClient: SqsAsyncClient = mock[SqsAsyncClient]
 
     when(
       mockAwsSqsClient.deleteMessageBatch(any[DeleteMessageBatchRequest])).thenThrow(new RuntimeException("error"))
@@ -357,7 +357,7 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
   it should "ignore batch of messages" in {
     val messages = for (i <- 0 until 10) yield Message.builder().body(s"Message - $i").build()
 
-    implicit val mockAwsSqsClient = mock[SqsAsyncClient]
+    implicit val mockAwsSqsClient: SqsAsyncClient = mock[SqsAsyncClient]
 
     val future =
       // #batch-ignore

@@ -14,7 +14,6 @@
 package docs.scaladsl
 
 import java.util.concurrent.CompletableFuture
-
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow
@@ -36,7 +35,7 @@ import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 import software.amazon.awssdk.services.lambda.model.{ InvokeRequest, InvokeResponse }
 
-import scala.concurrent.Await
+import scala.concurrent.{ Await, ExecutionContext }
 import scala.concurrent.duration._
 
 class AwsLambdaFlowSpec
@@ -49,9 +48,9 @@ class AwsLambdaFlowSpec
     with MockitoSugar
     with LogCapturing {
 
-  implicit val ec = system.dispatcher
+  implicit val ec: ExecutionContext = system.dispatcher
 
-  implicit val awsLambdaClient = mock[LambdaAsyncClient]
+  implicit val awsLambdaClient: LambdaAsyncClient = mock[LambdaAsyncClient]
 
   override protected def afterEach(): Unit = {
     reset(awsLambdaClient)
