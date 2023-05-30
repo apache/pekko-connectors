@@ -16,7 +16,8 @@ object Dependencies {
 
   val Scala213 = "2.13.10" // update even in link-validator.conf
   val Scala212 = "2.12.17"
-  val ScalaVersions = Seq(Scala213, Scala212)
+  val Scala3 = "3.3.0"
+  val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
   val PekkoVersion = "0.0.0+26669-ec5b6764-SNAPSHOT"
   val PekkoBinaryVersion = "current"
@@ -62,7 +63,7 @@ object Dependencies {
 
   val testkit = Seq(
     libraryDependencies := Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0",
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
@@ -88,6 +89,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion)
 
   val Amqp = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.rabbitmq" % "amqp-client" % "5.14.2" // APLv2
     ) ++ Mockito)
@@ -104,6 +106,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
 
   val AzureStorageQueue = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.microsoft.azure" % "azure-storage" % "8.0.0" // ApacheV2
     ))
@@ -113,6 +116,7 @@ object Dependencies {
   val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
         .exclude("com.github.spotbugs", "spotbugs-annotations")
@@ -121,6 +125,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
   val Couchbase = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion, // ApacheV2
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1", // ApacheV2
@@ -151,6 +156,7 @@ object Dependencies {
     ))
 
   val Elasticsearch = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -162,17 +168,19 @@ object Dependencies {
     ))
 
   val AvroParquet = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.10.1", // Apache2
       ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       "com.sksamuel.avro4s" %% "avro4s-core" % "4.1.1" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.8.3" % Test, // MIT like: https://github.com/etorreborre/specs2/blob/master/LICENSE.txt
+      "org.specs2" %% "specs2-core" % "4.20.0" % Test, // MIT like: https://github.com/etorreborre/specs2/blob/master/LICENSE.txt
       "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
     ))
 
   val Ftp = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "commons-net" % "commons-net" % "3.8.0", // ApacheV2
       "com.hierynomus" % "sshj" % "0.33.0" // ApacheV2
@@ -182,6 +190,7 @@ object Dependencies {
   val GeodeVersionForDocs = "115"
 
   val Geode = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++=
       Seq("geode-core", "geode-cq")
         .map("org.apache.geode" % _ % GeodeVersion) ++
@@ -190,6 +199,7 @@ object Dependencies {
         "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies)
 
   val GoogleCommon = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -199,6 +209,7 @@ object Dependencies {
     ) ++ Mockito)
 
   val GoogleBigQuery = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-jackson" % PekkoHttpVersion % Provided,
@@ -209,6 +220,7 @@ object Dependencies {
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
     ) ++ Mockito)
   val GoogleBigQueryStorage = Seq(
+    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
@@ -224,6 +236,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion) ++ Mockito)
 
   val GooglePubSub = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -231,6 +244,7 @@ object Dependencies {
     ) ++ Mockito)
 
   val GooglePubSubGrpc = Seq(
+    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
@@ -241,11 +255,13 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
 
   val GoogleFcm = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion) ++ Mockito)
 
   val GoogleStorage = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -271,6 +287,7 @@ object Dependencies {
 
   val HadoopVersion = "3.2.1"
   val Hdfs = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"), // ApacheV2
@@ -285,6 +302,7 @@ object Dependencies {
     ))
 
   val HuaweiPushKit = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -297,12 +315,14 @@ object Dependencies {
     ))
 
   val IronMq = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "com.github.pjfanning" %% "pekko-http-circe" % "1.40.0-RC3_23-bb29e2a9-SNAPSHOT" // ApacheV2
     ))
 
   val Jms = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "javax.jms" % "jms" % "1.1" % Provided, // CDDL + GPLv2
       "com.ibm.mq" % "com.ibm.mq.allclient" % "9.2.5.0" % Test, // IBM International Program License Agreement https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/maven/licenses/L-APIG-AZYF2E/LI_en.html
@@ -315,6 +335,7 @@ object Dependencies {
       "https://repository.jboss.org/nexus/content/groups/public")) +: externalResolvers.value)
 
   val JsonStreaming = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0" // MIT
     ) ++ JacksonDatabindDependencies)
@@ -340,6 +361,7 @@ object Dependencies {
     ))
 
   val MongoDb = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0" // ApacheV2
     ))
@@ -350,6 +372,7 @@ object Dependencies {
     ))
 
   val MqttStreaming = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion, // ApacheV2
       "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test, // ApacheV2
@@ -381,6 +404,7 @@ object Dependencies {
     ))
 
   val S3 = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-xml" % PekkoHttpVersion,
@@ -407,6 +431,7 @@ object Dependencies {
 
   val SlickVersion = "3.3.3"
   val Slick = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion, // BSD 2-clause "Simplified" License
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion, // BSD 2-clause "Simplified" License
@@ -467,6 +492,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-testkit" % PekkoHttpVersion % Test))
 
   val UnixDomainSocket = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.3.1", // classifier "complete", // Is the classifier needed anymore?
       "com.github.jnr" % "jnr-unixsocket" % "0.38.5" // BSD/ApacheV2/CPL/MIT as per https://github.com/akka/alpakka/issues/620#issuecomment-348727265

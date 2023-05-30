@@ -50,7 +50,7 @@ class IntegrationSpec
     with OptionValues
     with LogCapturing {
 
-  implicit val system = ActorSystem("IntegrationSpec")
+  implicit val system: ActorSystem = ActorSystem("IntegrationSpec")
 
   implicit val defaultPatience = PatienceConfig(timeout = 15.seconds, interval = 50.millis)
 

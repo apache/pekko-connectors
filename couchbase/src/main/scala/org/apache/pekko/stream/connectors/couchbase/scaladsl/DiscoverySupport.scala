@@ -25,7 +25,7 @@ import pekko.util.FutureConverters._
 import com.typesafe.config.Config
 
 import scala.collection.immutable
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -39,7 +39,7 @@ sealed class DiscoverySupport private {
   private def readNodes(
       serviceName: String,
       lookupTimeout: FiniteDuration)(implicit system: ClassicActorSystemProvider): Future[immutable.Seq[String]] = {
-    implicit val ec = system.classicSystem.dispatcher
+    implicit val ec: ExecutionContext = system.classicSystem.dispatcher
     val discovery = Discovery(system).discovery
     discovery.lookup(serviceName, lookupTimeout).map { resolved =>
       resolved.addresses.map(_.host)
@@ -63,7 +63,7 @@ sealed class DiscoverySupport private {
   def nodes(
       config: Config)(
       implicit system: ClassicActorSystemProvider): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = {
-    implicit val ec = system.classicSystem.dispatcher
+    implicit val ec: ExecutionContext = system.classicSystem.dispatcher
     settings =>
       readNodes(config)
         .map { nodes =>
