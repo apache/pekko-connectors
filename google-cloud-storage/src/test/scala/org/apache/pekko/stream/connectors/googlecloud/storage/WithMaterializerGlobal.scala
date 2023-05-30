@@ -29,7 +29,7 @@ trait WithMaterializerGlobal
     with ScalaFutures
     with IntegrationPatience
     with Matchers {
-  implicit val actorSystem: ActorSystem = ActorSystem("test")
+  implicit val actorSystem = ActorSystem("test")
   implicit val ec: ExecutionContext = actorSystem.dispatcher
 
   override protected def afterAll(): Unit = {
