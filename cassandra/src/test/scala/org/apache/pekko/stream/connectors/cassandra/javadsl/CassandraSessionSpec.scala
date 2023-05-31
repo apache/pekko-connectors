@@ -38,7 +38,7 @@ import scala.concurrent.duration._
 
 final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("CassandraSessionSpec")) {
 
-  val log = Logging(system, this.getClass)
+  val log = Logging(system, classOf[CassandraSessionSpec])
   val javadslSessionRegistry = javadsl.CassandraSessionRegistry.get(system)
 
   val data = 1 until 103
