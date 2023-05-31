@@ -102,7 +102,6 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
 
   val AzureStorageQueue = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.microsoft.azure" % "azure-storage" % "8.0.0"))
 
@@ -111,7 +110,6 @@ object Dependencies {
   val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
         .exclude("com.github.spotbugs", "spotbugs-annotations")
