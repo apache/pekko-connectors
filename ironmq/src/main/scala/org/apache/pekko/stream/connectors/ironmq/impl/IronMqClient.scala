@@ -28,9 +28,9 @@ import pekko.stream.connectors.ironmq._
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.{ Done, NotUsed }
 import com.typesafe.config.Config
-import com.github.pjfanning.pekkohttpcirce.ErrorAccumulatingCirceSupport._
 import io.circe.Json
 import io.circe.syntax._
+import org.mdedetrich.pekko.http.support.CirceHttpSupport._
 
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 import scala.concurrent.{ ExecutionContext, Future }
