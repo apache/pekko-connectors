@@ -11,7 +11,10 @@ github:
     - reactive
     - reactive-streams
     - messaging
-  
+
+  protected_tags:
+    - "v*.*.*"
+
   features:
     # Enable wiki for documentation
     wiki: false
