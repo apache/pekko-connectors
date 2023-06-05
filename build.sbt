@@ -1,5 +1,8 @@
+// TODO: Remove when Pekko has a proper release
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
+
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "incubating-pekko-connectors"
