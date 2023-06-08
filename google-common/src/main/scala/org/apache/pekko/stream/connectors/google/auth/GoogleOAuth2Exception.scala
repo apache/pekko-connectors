@@ -22,7 +22,8 @@ import pekko.stream.connectors.google.util.Retry
 import spray.json.DefaultJsonProtocol._
 import spray.json.RootJsonFormat
 
-final case class GoogleOAuth2Exception private (override val info: ErrorInfo) extends ExceptionWithErrorInfo(info)
+final case class GoogleOAuth2Exception private[google] (override val info: ErrorInfo)
+    extends ExceptionWithErrorInfo(info)
 
 private[google] object GoogleOAuth2Exception {
 

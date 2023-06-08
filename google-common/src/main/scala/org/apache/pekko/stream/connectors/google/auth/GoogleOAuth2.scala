@@ -21,9 +21,10 @@ import pekko.http.scaladsl.model.HttpMethods.POST
 import pekko.http.scaladsl.model.{ FormData, HttpRequest }
 import pekko.stream.Materializer
 import pekko.stream.connectors.google.http.GoogleHttp
+import pekko.stream.connectors.google.jwt.JwtSprayJson
 import pekko.stream.connectors.google.{ implicits, RequestSettings }
 import pdi.jwt.JwtAlgorithm.RS256
-import pdi.jwt.{ JwtClaim, JwtSprayJson }
+import pdi.jwt.JwtClaim
 import spray.json.DefaultJsonProtocol._
 import spray.json.JsonFormat
 

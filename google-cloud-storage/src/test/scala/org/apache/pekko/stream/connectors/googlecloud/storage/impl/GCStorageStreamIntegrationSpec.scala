@@ -53,7 +53,7 @@ class GCStorageStreamIntegrationSpec
     with ScalaFutures
     with LogCapturing {
 
-  private implicit val defaultPatience =
+  private implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 60.seconds, interval = 60.millis)
 
   var folderName: String = _
