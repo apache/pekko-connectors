@@ -15,7 +15,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class HmsSettingsSpec extends AnyWordSpec with Matchers {
   "HmsSettings" must {
     "have an apply that does not recurse indefinitely" in {
-      val hmsSettings = HmsSettings(appId = "id1", appSecret = "secret1", forwardProxy = None)
+      val hmsSettings = HmsSettings("id1", "secret1", None)
       hmsSettings should equal(HmsSettings(hmsSettings.appId, hmsSettings.appSecret, false, 50, None))
     }
   }
