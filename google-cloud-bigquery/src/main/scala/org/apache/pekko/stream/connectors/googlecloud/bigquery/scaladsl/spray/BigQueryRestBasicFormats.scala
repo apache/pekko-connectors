@@ -13,7 +13,6 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray
 
-import spray.json
 import spray.json.{ deserializationError, DefaultJsonProtocol, JsNumber, JsValue, JsonFormat }
 
 import scala.concurrent.duration.{ DurationLong, FiniteDuration }
