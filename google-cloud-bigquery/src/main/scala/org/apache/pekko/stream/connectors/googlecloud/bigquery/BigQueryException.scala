@@ -39,7 +39,7 @@ object BigQueryException {
 
   implicit val fromResponseUnmarshaller: FromResponseUnmarshaller[Throwable] =
     Unmarshaller
-      .withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
+      .withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
         import SprayJsonSupport._
         val HttpResponse(status, _, entity, _) = response: @nowarn("msg=match may not be exhaustive")
         Unmarshaller
