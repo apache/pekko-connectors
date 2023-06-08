@@ -37,7 +37,7 @@ import scala.util.{ Failure, Success, Try }
  */
 @InternalApi
 private[jms] trait JmsConnector[S <: JmsSession] {
-  this: TimerGraphStageLogic with StageLogging =>
+  this: TimerGraphStageLogic with GraphStageCompanion with StageLogging =>
 
   import JmsConnector._
 
@@ -71,12 +71,12 @@ private[jms] trait JmsConnector[S <: JmsSession] {
       Source
         .queue[InternalConnectionState](2, OverflowStrategy.dropHead)
         .toMat(BroadcastHub.sink(1))(Keep.both)
-        .run()(this.materializer)
+        .run()(graphStageMaterializer)
     connectionStateQueue = queue
     connectionStateSourcePromise.complete(Success(source))
 
     // add subscription to purge queued connection status events after the configured timeout.
-    scheduleOnce(ConnectionStatusTimeout, jmsSettings.connectionStatusSubscriptionTimeout)
+    scheduleOnceOnGraphStage(ConnectionStatusTimeout, jmsSettings.connectionStatusSubscriptionTimeout)
   }
 
   protected def finishStop(): Unit = {
@@ -91,7 +91,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     closeSessions()
     val previous = updateStateWith(update)
     closeConnectionAsync(connection(previous))
-    if (isTimerActive("connection-status-timeout")) drainConnectionState()
+    if (isTimerActiveOnGraphStage("connection-status-timeout")) drainConnectionState()
     connectionStateQueue.complete()
   }
 
@@ -219,7 +219,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
       closeConnectionAsync(connection(status))
       val delay = if (backoffMaxed) maxBackoff else waitTime(nextAttempt)
       val backoffNowMaxed = backoffMaxed || delay == maxBackoff
-      scheduleOnce(AttemptConnect(nextAttempt, backoffNowMaxed), delay)
+      scheduleOnceOnGraphStage(AttemptConnect(nextAttempt, backoffNowMaxed), delay)
     }
   }
 
@@ -234,7 +234,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
   }
 
   private def drainConnectionState(): Unit =
-    Source.future(connectionStateSource).flatMapConcat(identity).runWith(Sink.ignore)(this.materializer)
+    Source.future(connectionStateSource).flatMapConcat(identity).runWith(Sink.ignore)(graphStageMaterializer)
 
   protected def executionContext(attributes: Attributes): ExecutionContext = {
     val dispatcherId = (attributes.get[ActorAttributes.Dispatcher](ActorAttributes.IODispatcher) match {
@@ -244,11 +244,11 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     }) match {
       case d @ ActorAttributes.IODispatcher =>
         // this one is not a dispatcher id, but is a config path pointing to the dispatcher id
-        materializer.system.settings.config.getString(d.dispatcher)
+        graphStageMaterializer.system.settings.config.getString(d.dispatcher)
       case d => d.dispatcher
     }
 
-    materializer.system.dispatchers.lookup(dispatcherId)
+    graphStageMaterializer.system.dispatchers.lookup(dispatcherId)
   }
 
   protected def createSession(connection: jms.Connection, createDestination: jms.Session => jms.Destination): S
@@ -324,7 +324,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   private def cancelAckTimers(s: JmsSession): Unit = s match {
     case session: JmsAckSession =>
-      cancelTimer(FlushAcknowledgementsTimerKey(session))
+      cancelTimerOnGraphStage(FlushAcknowledgementsTimerKey(session))
     case _ => ()
   }
 
@@ -341,7 +341,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
   }
 
   private def openConnection(attempt: Int, backoffMaxed: Boolean): Future[jms.Connection] = {
-    implicit val system: ActorSystem = materializer.system
+    implicit val system: ActorSystem = graphStageMaterializer.system
     val jmsConnection = openConnectionAttempt(startConnection)
     updateState(JmsConnectorInitializing(jmsConnection, attempt, backoffMaxed, 0))
     jmsConnection.map { connection =>

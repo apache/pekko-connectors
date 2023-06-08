@@ -46,7 +46,7 @@ private[jms] final class JmsTxSourceStage(settings: JmsConsumerSettings, destina
     protected def createSession(connection: jms.Connection, createDestination: jms.Session => javax.jms.Destination) = {
       val session =
         connection.createSession(true, settings.acknowledgeMode.getOrElse(AcknowledgeMode.SessionTransacted).mode)
-      new JmsConsumerSession(connection, session, createDestination(session), this.asInstanceOf[JmsTxSourceStage].destination)
+      new JmsConsumerSession(connection, session, createDestination(session), graphStageDestination)
     }
 
     protected def pushMessage(msg: TxEnvelope): Unit = push(out, msg)
