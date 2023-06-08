@@ -15,7 +15,7 @@ Pekko Connectors is a fork of [Alpakka](https://github.com/akka/alpakka) 4.0.0, 
 Documentation
 -------------
 
-**TODO add documentation links**
+Pekko Connectors are documented at https://pekko.apache.org/docs/pekko-connectors/current/.
 
 To keep up with the latest releases check out [Pekko Connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko Connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
 
