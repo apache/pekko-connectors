@@ -21,11 +21,10 @@ import pekko.util.ccompat.JavaConverters._
 import pekko.util.JavaDurationConverters._
 import pekko.util.OptionConverters._
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonIgnoreProperties, JsonProperty }
-import spray.json.{ RootJsonFormat, RootJsonReader }
+import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader }
 
 import java.time.Duration
 import java.{ lang, util }
-
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable.Seq
@@ -329,7 +328,7 @@ object QueryResponse {
 
   implicit def reader[T <: AnyRef](
       implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[QueryResponse[T]] = {
-    implicit val format = lift(reader)
+    implicit val format: AnyRef with JsonFormat[T] = lift(reader)
     jsonFormat10(QueryResponse[T])
   }
   implicit val paginated: Paginated[QueryResponse[Any]] = _.pageToken
