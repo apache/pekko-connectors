@@ -33,7 +33,7 @@ import scala.collection.immutable.Seq
  * @param jobReference reference describing the unique-per-user name of the job
  * @param status the status of this job
  */
-final case class Job private (configuration: Option[JobConfiguration],
+final case class Job private[bigquery] (configuration: Option[JobConfiguration],
     jobReference: Option[JobReference],
     status: Option[JobStatus]) {
 

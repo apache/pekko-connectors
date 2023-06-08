@@ -32,7 +32,7 @@ import scala.collection.immutable.Seq
  * @param labels the labels associated with this dataset
  * @param location the geographic location where the dataset should reside
  */
-final case class Dataset private (datasetReference: DatasetReference,
+final case class Dataset private[bigquery] (datasetReference: DatasetReference,
     friendlyName: Option[String],
     labels: Option[Map[String, String]],
     location: Option[String]) {
@@ -87,7 +87,7 @@ object Dataset {
  * @param datasetId A unique ID for this dataset, without the project name
  * @param projectId The ID of the project containing this dataset
  */
-final case class DatasetReference private (datasetId: Option[String], projectId: Option[String]) {
+final case class DatasetReference private[bigquery] (datasetId: Option[String], projectId: Option[String]) {
 
   def getDatasetId = datasetId.toJava
   def getProjectId = projectId.toJava
