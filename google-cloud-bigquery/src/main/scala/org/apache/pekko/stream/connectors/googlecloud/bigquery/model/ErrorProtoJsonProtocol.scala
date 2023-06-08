@@ -31,7 +31,8 @@ import scala.annotation.nowarn
  * @param location specifies where the error occurred, if present
  * @param message A human-readable description of the error
  */
-final case class ErrorProto private (reason: Option[String], location: Option[String], message: Option[String]) {
+final case class ErrorProto private[bigquery] (reason: Option[String], location: Option[String],
+    message: Option[String]) {
 
   @nowarn("msg=never used")
   @JsonCreator

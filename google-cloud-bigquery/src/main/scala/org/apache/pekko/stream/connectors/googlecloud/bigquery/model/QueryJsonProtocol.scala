@@ -21,11 +21,10 @@ import pekko.util.ccompat.JavaConverters._
 import pekko.util.JavaDurationConverters._
 import pekko.util.OptionConverters._
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonIgnoreProperties, JsonProperty }
-import spray.json.{ RootJsonFormat, RootJsonReader }
+import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader }
 
 import java.time.Duration
 import java.{ lang, util }
-
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable.Seq
@@ -46,7 +45,7 @@ import scala.concurrent.duration.FiniteDuration
  * @param maximumBytesBilled limits the number of bytes billed for this query
  * @param requestId a unique user provided identifier to ensure idempotent behavior for queries
  */
-final case class QueryRequest private (query: String,
+final case class QueryRequest private[bigquery] (query: String,
     maxResults: Option[Int],
     defaultDataset: Option[DatasetReference],
     timeout: Option[FiniteDuration],
@@ -192,7 +191,7 @@ object QueryRequest {
  * @tparam T the data model for each row
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-final case class QueryResponse[+T] private (schema: Option[TableSchema],
+final case class QueryResponse[+T] private[bigquery] (schema: Option[TableSchema],
     jobReference: JobReference,
     totalRows: Option[Long],
     pageToken: Option[String],
@@ -329,7 +328,7 @@ object QueryResponse {
 
   implicit def reader[T <: AnyRef](
       implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[QueryResponse[T]] = {
-    implicit val format = lift(reader)
+    implicit val format: JsonFormat[T] = lift(reader)
     jsonFormat10(QueryResponse[T])
   }
   implicit val paginated: Paginated[QueryResponse[Any]] = _.pageToken
