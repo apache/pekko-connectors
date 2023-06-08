@@ -9,8 +9,10 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.jms.Destination
+import org.apache.pekko
+import pekko.annotation.InternalApi
+import pekko.stream.Materializer
+import pekko.stream.connectors.jms.Destination
 
 import scala.concurrent.duration.FiniteDuration
 
@@ -18,7 +20,8 @@ import scala.concurrent.duration.FiniteDuration
  * Exposes some protected methods from [[org.apache.pekko.stream.stage.GraphStage]]
  * that are not accessible when using Scala3 compiler.
  */
-private trait GraphStageCompanion {
+@InternalApi
+private[impl] trait GraphStageCompanion {
   def graphStageMaterializer: Materializer
 
   def graphStageDestination: Destination
