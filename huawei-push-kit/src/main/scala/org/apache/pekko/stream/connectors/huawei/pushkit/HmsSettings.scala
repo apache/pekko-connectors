@@ -123,7 +123,8 @@ object HmsSettings {
   def apply(
       appId: String,
       appSecret: String,
-      forwardProxy: Option[ForwardProxy]): HmsSettings = apply(appId, appSecret, forwardProxy)
+      forwardProxy: Option[ForwardProxy]): HmsSettings =
+    apply(appId, appSecret, IsTest, MaxConcurrentConnections, forwardProxy)
 
   /**
    * Java API.
