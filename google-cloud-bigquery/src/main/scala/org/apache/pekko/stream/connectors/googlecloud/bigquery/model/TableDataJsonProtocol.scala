@@ -83,7 +83,7 @@ object TableDataListResponse {
 
   implicit def reader[T <: AnyRef](
       implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[TableDataListResponse[T]] = {
-    implicit val format: AnyRef with JsonFormat[T] = lift(reader)
+    implicit val format: JsonFormat[T] = lift(reader)
     jsonFormat3(TableDataListResponse[T])
   }
   implicit val paginated: Paginated[TableDataListResponse[Any]] = _.pageToken
