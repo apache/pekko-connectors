@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.google
 
 import org.apache.pekko
-import pekko.actor.ActorSystem
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.HttpMethods.{ POST, PUT }
