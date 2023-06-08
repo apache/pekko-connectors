@@ -13,7 +13,6 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import java.util.concurrent.atomic.AtomicBoolean
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.jms.impl.InternalConnectionState.JmsConnectorStopping
@@ -23,9 +22,10 @@ import pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
 import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
 import pekko.{ Done, NotUsed }
 
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.jms
 import scala.collection.mutable
 import scala.util.{ Failure, Success }
-import javax.jms
 import scala.concurrent.duration.FiniteDuration
 
 /**

@@ -200,7 +200,7 @@ trait ElasticsearchConnectorBehaviour {
           .via(
             ElasticsearchFlow.create(
               constructElasticsearchParams(indexName, "_doc", apiVersion),
-              baseWriteSettings.withRetryLogic(RetryAtFixedRate(5, 100.millis))))
+              baseWriteSettings.withRetryLogic(RetryAtFixedRate(5, 100.millis)))(RootJsObjectFormat))
           .runWith(Sink.seq)
 
         val start = System.currentTimeMillis()
@@ -286,7 +286,7 @@ trait ElasticsearchConnectorBehaviour {
           .via(
             ElasticsearchFlow.createWithContext(
               constructElasticsearchParams(indexName, "_doc", apiVersion),
-              baseWriteSettings.withRetryLogic(RetryAtFixedRate(5, 100.millis))))
+              baseWriteSettings.withRetryLogic(RetryAtFixedRate(5, 100.millis)))(RootJsObjectFormat))
           .runWith(Sink.seq)
 
         val start = System.currentTimeMillis()

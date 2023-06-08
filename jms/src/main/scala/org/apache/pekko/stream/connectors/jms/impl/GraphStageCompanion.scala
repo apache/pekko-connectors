@@ -17,7 +17,7 @@ import pekko.stream.connectors.jms.Destination
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * Exposes some protected methods from [[org.apache.pekko.stream.stage.GraphStage]]
+ * Exposes some protected methods from [[pekko.stream.stage.GraphStage]]
  * that are not accessible when using Scala3 compiler.
  */
 @InternalApi
