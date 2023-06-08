@@ -252,7 +252,7 @@ object ForwardProxy {
       credentials: Option[BasicHttpCredentials],
       trustPem: Option[String])(implicit system: ClassicActorSystemProvider): ForwardProxy = {
     ForwardProxy(
-      trustPem.fold(Http(system).defaultClientHttpsContext)(ForwardProxyHttpsContext(_)),
+      trustPem.fold(Http(system.classicSystem).defaultClientHttpsContext)(ForwardProxyHttpsContext(_)),
       ForwardProxyPoolSettings(scheme, host, port, credentials)(system.classicSystem))
   }
 
