@@ -197,11 +197,10 @@ object Dependencies {
         "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies)
 
   val GoogleCommon = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4", // ApacheV2
+      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5", // ApacheV2
       "com.google.auth" % "google-auth-library-credentials" % "0.24.1", // BSD 3-clause
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
     ) ++ Mockito)
@@ -253,7 +252,6 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
 
   val GoogleFcm = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion) ++ Mockito)
@@ -300,11 +298,10 @@ object Dependencies {
     ))
 
   val HuaweiPushKit = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4" // ApacheV2
+      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5" // ApacheV2
     ) ++ Mockito)
 
   val InfluxDB = Seq(

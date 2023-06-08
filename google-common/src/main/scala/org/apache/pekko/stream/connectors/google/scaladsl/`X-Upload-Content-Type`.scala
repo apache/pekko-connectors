@@ -34,7 +34,7 @@ object `X-Upload-Content-Type` extends ModeledCustomHeaderCompanion[`X-Upload-Co
         contentType => Success(`X-Upload-Content-Type`(contentType)))
 }
 
-final case class `X-Upload-Content-Type` private (contentType: ContentType)
+final case class `X-Upload-Content-Type` private[connectors] (contentType: ContentType)
     extends ModeledCustomHeader[`X-Upload-Content-Type`]
     with XUploadContentType {
   override def value(): String = contentType.toString()
