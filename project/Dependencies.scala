@@ -206,7 +206,6 @@ object Dependencies {
     ) ++ Mockito)
 
   val GoogleBigQuery = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-jackson" % PekkoHttpVersion % Provided,
@@ -233,7 +232,6 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion) ++ Mockito)
 
   val GooglePubSub = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,

@@ -147,9 +147,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val write: Future[immutable.Seq[WriteResult[String, NotUsed]]] = Source(
         immutable.Seq(
-          WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.toString()),
-          WriteMessage.createIndexMessage("2", Book("Faust").toJson.toString()),
-          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.toString()))).via(
+          WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.compactPrint),
+          WriteMessage.createIndexMessage("2", Book("Faust").toJson.compactPrint),
+          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.compactPrint))).via(
         ElasticsearchFlow.create(
           constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
           settings = baseWriteSettings,
