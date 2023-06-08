@@ -164,7 +164,7 @@ private[connectors] object ResumableUpload {
         case _ => throw InvalidResponseException(ErrorInfo(response.status.value, response.status.defaultMessage))
       }
     }.withDefaultRetry
-    
+
     chunk.flatMap {
       case maybeLast @ MaybeLast(Chunk(bytes, position)) =>
         GoogleHttp(mat.system)
