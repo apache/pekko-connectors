@@ -37,7 +37,7 @@ import scala.collection.immutable.Seq
  * @param numRows the number of rows of data in this table
  * @param location the geographic location where the table resides
  */
-final case class Table private (tableReference: TableReference,
+final case class Table private[bigquery] (tableReference: TableReference,
     labels: Option[Map[String, String]],
     schema: Option[TableSchema],
     numRows: Option[Long],
@@ -109,7 +109,8 @@ object Table {
  * @param datasetId the ID of the dataset containing this table
  * @param tableId the ID of the table
  */
-final case class TableReference private (projectId: Option[String], datasetId: String, tableId: Option[String]) {
+final case class TableReference private[bigquery] (projectId: Option[String], datasetId: String,
+    tableId: Option[String]) {
 
   def getProjectId = projectId.toJava
   def getDatasetId = datasetId
@@ -152,7 +153,7 @@ object TableReference {
  *
  * @param fields describes the fields in a table
  */
-final case class TableSchema private (fields: Seq[TableFieldSchema]) {
+final case class TableSchema private[bigquery] (fields: Seq[TableFieldSchema]) {
 
   @nowarn("msg=never used")
   @JsonCreator
@@ -200,7 +201,7 @@ object TableSchema {
  * @param mode the field mode
  * @param fields describes the nested schema fields if the type property is set to `RECORD`
  */
-final case class TableFieldSchema private (name: String,
+final case class TableFieldSchema private[bigquery] (name: String,
     `type`: TableFieldSchemaType,
     mode: Option[TableFieldSchemaMode],
     fields: Option[Seq[TableFieldSchema]]) {
@@ -278,7 +279,7 @@ object TableFieldSchema {
     jsonFormat(apply, "name", "type", "mode", "fields"))
 }
 
-final case class TableFieldSchemaType private (value: String) extends StringEnum
+final case class TableFieldSchemaType private[bigquery] (value: String) extends StringEnum
 object TableFieldSchemaType {
 
   /**
@@ -328,7 +329,7 @@ object TableFieldSchemaType {
   implicit val format: JsonFormat[TableFieldSchemaType] = StringEnum.jsonFormat(apply)
 }
 
-final case class TableFieldSchemaMode private (value: String) extends StringEnum
+final case class TableFieldSchemaMode private[bigquery] (value: String) extends StringEnum
 object TableFieldSchemaMode {
 
   /**
@@ -356,7 +357,7 @@ object TableFieldSchemaMode {
  * @param tables tables in the requested dataset
  * @param totalItems the total number of tables in the dataset
  */
-final case class TableListResponse private (nextPageToken: Option[String],
+final case class TableListResponse private[bigquery] (nextPageToken: Option[String],
     tables: Option[Seq[Table]],
     totalItems: Option[Int]) {
 

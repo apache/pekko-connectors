@@ -50,20 +50,20 @@ class BigQuerySchemasSpec extends AnyWordSpecLike with Matchers {
   "BigQuerySchemas" should {
 
     "correctly generate schema" in {
-      implicit val cSchemaWriter = bigQuerySchema1(C)
-      implicit val bSchemaWriter = bigQuerySchema2(B)
-      val generatedSchema = bigQuerySchema7(A).write
+      implicit val cSchemaWriter: TableSchemaWriter[C] = bigQuerySchema1(C.apply)
+      implicit val bSchemaWriter: TableSchemaWriter[B] = bigQuerySchema2(B.apply)
+      val generatedSchema = bigQuerySchema7(A.apply).write
       generatedSchema shouldEqual schema
     }
 
     "throw exception when nesting options" in {
       case class Invalid(invalid: Option[Option[String]])
-      assertThrows[IllegalArgumentException](bigQuerySchema1(Invalid).write)
+      assertThrows[IllegalArgumentException](bigQuerySchema1(Invalid.apply).write)
     }
 
     "throw exception when nesting options inside seqs" in {
       case class Invalid(invalid: Seq[Option[String]])
-      assertThrows[IllegalArgumentException](bigQuerySchema1(Invalid).write)
+      assertThrows[IllegalArgumentException](bigQuerySchema1(Invalid.apply).write)
     }
   }
 }

@@ -39,7 +39,7 @@ case class A(integer: Int, long: Long, float: Float, double: Double, string: Str
       new B(f.get(6).get("v")))
 
   def getInteger = integer
-  @JsonSerialize(using = classOf[ToStringSerializer])
+  @JsonSerialize(`using` = classOf[ToStringSerializer])
   def getLong = long
   def getFloat = float
   def getDouble = double
@@ -74,7 +74,7 @@ case class C(numeric: BigDecimal, date: LocalDate, time: LocalTime, dateTime: Lo
       LocalDateTime.parse(node.get("f").get(3).get("v").textValue()),
       Instant.ofEpochMilli((BigDecimal(node.get("f").get(4).get("v").textValue()) * 1000).toLong))
 
-  @JsonSerialize(using = classOf[ToStringSerializer])
+  @JsonSerialize(`using` = classOf[ToStringSerializer])
   def getNumeric = numeric
   def getDate = date
   def getTime = time
