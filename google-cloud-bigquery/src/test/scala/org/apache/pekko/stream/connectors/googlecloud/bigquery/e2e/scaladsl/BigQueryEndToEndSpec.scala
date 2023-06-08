@@ -14,12 +14,14 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.scaladsl
 
 import org.apache.pekko
-import pekko.actor.ActorSystem
+import pekko.actor.{ ActorSystem, Scheduler }
 import pekko.{ pattern, Done }
 import pekko.stream.connectors.googlecloud.bigquery.HoverflySupport
 import pekko.stream.connectors.googlecloud.bigquery.e2e.{ A, B, C }
 import pekko.stream.connectors.googlecloud.bigquery.model.JobState
 import pekko.stream.connectors.googlecloud.bigquery.model.TableReference
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat
 import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.{ HoverflyMode, SimulationSource }
 import org.scalatest.BeforeAndAfterAll
@@ -56,7 +58,7 @@ class BigQueryEndToEndSpec
     super.afterAll()
   }
 
-  implicit def scheduler = system.scheduler
+  implicit def scheduler: Scheduler = system.scheduler
 
   "BigQuery Scala DSL" should {
 
@@ -66,12 +68,12 @@ class BigQueryEndToEndSpec
     import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
     import pekko.stream.scaladsl.{ Sink, Source }
 
-    implicit val cFormat = bigQueryJsonFormat5(C)
-    implicit val bFormat = bigQueryJsonFormat3(B)
-    implicit val aFormat = bigQueryJsonFormat7(A)
-    implicit val cSchema = bigQuerySchema5(C)
-    implicit val bSchema = bigQuerySchema3(B)
-    implicit val aSchema = bigQuerySchema7(A)
+    implicit val cFormat: BigQueryRootJsonFormat[C] = bigQueryJsonFormat5(C.apply)
+    implicit val bFormat: BigQueryRootJsonFormat[B] = bigQueryJsonFormat3(B.apply)
+    implicit val aFormat: BigQueryRootJsonFormat[A] = bigQueryJsonFormat7(A.apply)
+    implicit val cSchema: TableSchemaWriter[C] = bigQuerySchema5(C.apply)
+    implicit val bSchema: TableSchemaWriter[B] = bigQuerySchema3(B.apply)
+    implicit val aSchema: TableSchemaWriter[A] = bigQuerySchema7(A.apply)
 
     "create dataset" in {
       BigQuery.createDataset(datasetId).map { dataset =>
