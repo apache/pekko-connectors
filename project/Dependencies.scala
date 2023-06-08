@@ -216,6 +216,7 @@ object Dependencies {
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
     ) ++ Mockito)
   val GoogleBigQueryStorage = Seq(
+    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
@@ -238,6 +239,7 @@ object Dependencies {
     ) ++ Mockito)
 
   val GooglePubSubGrpc = Seq(
+    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/

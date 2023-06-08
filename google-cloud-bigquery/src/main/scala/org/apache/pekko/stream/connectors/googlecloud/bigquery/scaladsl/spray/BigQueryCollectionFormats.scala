@@ -46,9 +46,9 @@ trait BigQueryCollectionFormats {
 
   implicit def immIterableFormat[T: BigQueryJsonFormat]: BigQueryJsonFormat[imm.Iterable[T]] =
     viaSeq[imm.Iterable[T], T](seq => imm.Iterable(seq: _*))
-  implicit def immSeqFormat[T: BigQueryJsonFormat]: BigQueryJsonFormat[Seq[T]] =
+  implicit def immSeqFormat[T: BigQueryJsonFormat]: BigQueryJsonFormat[imm.Seq[T]] =
     viaSeq[imm.Seq[T], T](seq => imm.Seq(seq: _*))
-  implicit def immIndexedSeqFormat[T: BigQueryJsonFormat]: BigQueryJsonFormat[IndexedSeq[T]] =
+  implicit def immIndexedSeqFormat[T: BigQueryJsonFormat]: BigQueryJsonFormat[imm.IndexedSeq[T]] =
     viaSeq[imm.IndexedSeq[T], T](seq => imm.IndexedSeq(seq: _*))
   implicit def immLinearSeqFormat[T: BigQueryJsonFormat]: BigQueryJsonFormat[imm.LinearSeq[T]] =
     viaSeq[imm.LinearSeq[T], T](seq => imm.LinearSeq(seq: _*))

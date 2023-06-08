@@ -117,7 +117,7 @@ private[pubsub] trait PubSubApi {
       PublishRequest(json.asJsObject.fields("messages").convertTo[immutable.Seq[PublishMessage]])
     def write(pr: PublishRequest): JsValue = JsObject("messages" -> pr.messages.toJson)
   }
-  private implicit val gcePubSubResponseFormat = new RootJsonFormat[PublishResponse] {
+  private implicit val gcePubSubResponseFormat: RootJsonFormat[PublishResponse] = new RootJsonFormat[PublishResponse] {
     def read(json: JsValue): PublishResponse =
       PublishResponse(json.asJsObject.fields("messageIds").convertTo[immutable.Seq[String]])
     def write(pr: PublishResponse): JsValue = JsObject("messageIds" -> pr.messageIds.toJson)
