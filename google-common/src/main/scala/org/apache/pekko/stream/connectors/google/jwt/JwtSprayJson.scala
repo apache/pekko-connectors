@@ -10,6 +10,8 @@
 package org.apache.pekko.stream.connectors.google.jwt
 
 import java.time.Clock
+import org.apache.pekko
+import pekko.annotation.InternalApi
 import pdi.jwt._
 import pdi.jwt.exceptions.JwtNonStringException
 import spray.json._
@@ -17,6 +19,7 @@ import spray.json._
 /**
  * Implementation of `JwtCore` using `JsObject` from spray-json.
  */
+@InternalApi
 private[google] trait JwtSprayJsonParser[H, C] extends JwtJsonCommon[JsObject, H, C] {
   protected def parse(value: String): JsObject = value.parseJson.asJsObject
 
@@ -32,6 +35,7 @@ private[google] trait JwtSprayJsonParser[H, C] extends JwtJsonCommon[JsObject, H
 
 }
 
+@InternalApi
 private[google] object JwtSprayJson extends JwtSprayJsonParser[JwtHeader, JwtClaim] {
   import DefaultJsonProtocol._
 
@@ -69,6 +73,7 @@ private[google] object JwtSprayJson extends JwtSprayJsonParser[JwtHeader, JwtCla
     js.fields.get(name).flatMap(safeRead[A])
 }
 
+@InternalApi
 private[google] class JwtSprayJson private (override val clock: Clock)
     extends JwtSprayJsonParser[JwtHeader, JwtClaim] {
   override def parseHeader(header: String): JwtHeader = JwtSprayJson.parseHeader(header)
