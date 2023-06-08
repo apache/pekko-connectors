@@ -55,7 +55,7 @@ class PushKitSenderSpec
 
   implicit val executionContext: ExecutionContext = system.dispatcher
 
-  implicit val config = HmsSettings()
+  implicit val config: HmsSettings = HmsSettings()
 
   "HmsSender" should {
 
