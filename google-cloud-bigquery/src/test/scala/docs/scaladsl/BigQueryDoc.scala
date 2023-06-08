@@ -15,8 +15,6 @@ package docs.scaladsl
 
 //#imports
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
 import pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
@@ -30,9 +28,11 @@ import pekko.stream.connectors.googlecloud.bigquery.model.{
   TableDataListResponse,
   TableListResponse
 }
-import pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.BigQuerySchemas._
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryJsonProtocol._
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.{ Done, NotUsed }
 

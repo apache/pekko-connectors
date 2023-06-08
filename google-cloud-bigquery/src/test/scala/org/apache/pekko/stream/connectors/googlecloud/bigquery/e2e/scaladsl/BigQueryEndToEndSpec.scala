@@ -20,10 +20,10 @@ import pekko.stream.connectors.googlecloud.bigquery.HoverflySupport
 import pekko.stream.connectors.googlecloud.bigquery.e2e.{ A, B, C }
 import pekko.stream.connectors.googlecloud.bigquery.model.JobState
 import pekko.stream.connectors.googlecloud.bigquery.model.TableReference
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter
+import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat
 import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.{ HoverflyMode, SimulationSource }
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter
-import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
 import org.scalatest.matchers.should.Matchers
