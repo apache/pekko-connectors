@@ -67,10 +67,11 @@ class GoogleHttpSpec
         anyInt,
         any[HttpsConnectionContext],
         any[ConnectionPoolSettings],
-        any[LoggingAdapter])).thenReturn(Flow[Any]
+        any[LoggingAdapter])).thenReturn(
+      Flow[Any]
         .zipWith(response)(Keep.right)
         .map(Try(_))
-        .map((_, mock[Nothing]))
+        .map((_, mock[Nothing](scala.reflect.ClassTag.Nothing)))
         .mapMaterializedValue(_ => mock[HostConnectionPool]),
       Nil: _*): @nowarn("msg=dead code")
     http

@@ -19,7 +19,7 @@ import pekko.annotation.ApiMayChange
 import pekko.http.javadsl.marshalling.Marshaller
 import pekko.http.javadsl.model.{ HttpEntity, RequestEntity }
 import pekko.http.javadsl.unmarshalling.Unmarshaller
-import pekko.http.scaladsl.{ model => sm }
+import pekko.http.scaladsl.{ marshalling, model, model => sm, unmarshalling }
 import pekko.japi.Pair
 import pekko.stream.connectors.google.GoogleSettings
 import pekko.stream.connectors.google.javadsl.Google
@@ -45,7 +45,6 @@ import pekko.util.OptionConverters._
 import java.time.Duration
 import java.util.concurrent.CompletionStage
 import java.{ lang, util }
-
 import scala.annotation.nowarn
 import scala.concurrent.duration.{ FiniteDuration, MILLISECONDS }
 
@@ -220,7 +219,8 @@ object BigQuery extends Google {
       selectedFields: util.List[String],
       unmarshaller: Unmarshaller[HttpEntity, TableDataListResponse[Out]])
       : Source[Out, CompletionStage[TableDataListResponse[Out]]] = {
-    implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
+    implicit val um: unmarshalling.Unmarshaller[model.HttpEntity, TableDataListResponse[Out]] =
+      unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .tableData(datasetId, tableId, startIndex.toScala, maxResults.toScala, selectedFields.asScala.toList)
       .mapMaterializedValue(_.asJava)
@@ -245,7 +245,8 @@ object BigQuery extends Google {
       retryPolicy: InsertAllRetryPolicy,
       templateSuffix: util.Optional[String],
       marshaller: Marshaller[TableDataInsertAllRequest[In], RequestEntity]): Sink[util.List[In], NotUsed] = {
-    implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
+    implicit val m: marshalling.Marshaller[TableDataInsertAllRequest[In], model.RequestEntity] =
+      marshaller.asScalaCastOutput[sm.RequestEntity]
     ss.Flow[util.List[In]]
       .map(_.asScala.toList)
       .to(ScalaBigQuery.insertAll[In](datasetId, tableId, retryPolicy, templateSuffix.toScala))
@@ -269,7 +270,8 @@ object BigQuery extends Google {
       retryFailedRequests: Boolean,
       marshaller: Marshaller[TableDataInsertAllRequest[In], RequestEntity])
       : Flow[TableDataInsertAllRequest[In], TableDataInsertAllResponse, NotUsed] = {
-    implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
+    implicit val m: marshalling.Marshaller[TableDataInsertAllRequest[In], model.RequestEntity] =
+      marshaller.asScalaCastOutput[sm.RequestEntity]
     ScalaBigQuery.insertAll[In](datasetId, tableId, retryFailedRequests).asJava
   }
 
@@ -290,7 +292,8 @@ object BigQuery extends Google {
       dryRun: Boolean,
       useLegacySql: Boolean,
       unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]): Source[Out, CompletionStage[QueryResponse[Out]]] = {
-    implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
+    implicit val um: unmarshalling.Unmarshaller[model.HttpEntity, QueryResponse[Out]] =
+      unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery.query(query, dryRun, useLegacySql).mapMaterializedValue(_.asJava).asJava
   }
 
@@ -309,7 +312,8 @@ object BigQuery extends Google {
       query: QueryRequest,
       unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]])
       : Source[Out, Pair[CompletionStage[JobReference], CompletionStage[QueryResponse[Out]]]] = {
-    implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
+    implicit val um: unmarshalling.Unmarshaller[model.HttpEntity, QueryResponse[Out]] =
+      unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .query(query)
       .mapMaterializedValue {
@@ -339,7 +343,8 @@ object BigQuery extends Google {
       timeout: util.Optional[Duration],
       location: util.Optional[String],
       unmarshaller: Unmarshaller[HttpEntity, QueryResponse[Out]]): Source[Out, CompletionStage[QueryResponse[Out]]] = {
-    implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
+    implicit val um: unmarshalling.Unmarshaller[model.HttpEntity, QueryResponse[Out]] =
+      unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery
       .queryResults(jobId,
         startIndex.toScala,
@@ -396,7 +401,7 @@ object BigQuery extends Google {
   def insertAllAsync[In](datasetId: String,
       tableId: String,
       marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
-    implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
+    implicit val m: marshalling.Marshaller[In, model.RequestEntity] = marshaller.asScalaCastOutput[sm.RequestEntity]
     ScalaBigQuery.insertAllAsync[In](datasetId, tableId).asJava[In]
   }
 
@@ -415,7 +420,7 @@ object BigQuery extends Google {
       tableId: String,
       labels: util.Optional[util.Map[String, String]],
       marshaller: Marshaller[In, RequestEntity]): Flow[In, Job, NotUsed] = {
-    implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
+    implicit val m: marshalling.Marshaller[In, model.RequestEntity] = marshaller.asScalaCastOutput[sm.RequestEntity]
     ScalaBigQuery.insertAllAsync[In](datasetId, tableId, labels.toScala.map(_.asScala.toMap)).asJava[In]
   }
 
@@ -436,8 +441,8 @@ object BigQuery extends Google {
       job: Job,
       marshaller: Marshaller[Job, RequestEntity],
       unmarshaller: Unmarshaller[HttpEntity, Job]): Sink[ByteString, CompletionStage[Job]] = {
-    implicit val m = marshaller.asScalaCastOutput[sm.RequestEntity]
-    implicit val um = unmarshaller.asScalaCastInput[sm.HttpEntity]
+    implicit val m: marshalling.Marshaller[Job, model.RequestEntity] = marshaller.asScalaCastOutput[sm.RequestEntity]
+    implicit val um: unmarshalling.Unmarshaller[model.HttpEntity, Job] = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery.createLoadJob(job).mapMaterializedValue(_.asJava).asJava[ByteString]
   }
 

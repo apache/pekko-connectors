@@ -90,7 +90,7 @@ object GoogleSettings {
 
 }
 
-final case class GoogleSettings @InternalApi private (projectId: String,
+final case class GoogleSettings @InternalApi private[connectors] (projectId: String,
     credentials: Credentials,
     requestSettings: RequestSettings) {
   def getProjectId = projectId
@@ -134,7 +134,7 @@ object RequestSettings {
     apply(userIp.toScala, quotaUser.toScala, prettyPrint, chunkSize, retrySettings, forwardProxy.toScala)
 }
 
-final case class RequestSettings @InternalApi private (
+final case class RequestSettings @InternalApi private[connectors] (
     userIp: Option[String],
     quotaUser: Option[String],
     prettyPrint: Boolean,
