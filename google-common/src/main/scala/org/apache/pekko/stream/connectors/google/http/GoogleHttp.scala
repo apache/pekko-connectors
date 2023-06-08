@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.google.http
 
 import org.apache.pekko
-import pekko.actor.ClassicActorSystemProvider
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Scheduler }
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.Http.HostConnectionPool
@@ -26,7 +26,7 @@ import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, Reques
 import pekko.stream.connectors.google.util.Retry
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContextExecutor, Future }
 import scala.util.{ Failure, Success, Try }
 
 @InternalApi
@@ -45,9 +45,9 @@ private[connectors] object GoogleHttp {
 @InternalApi
 private[connectors] final class GoogleHttp private (val http: HttpExt) extends AnyVal {
 
-  private implicit def system = http.system
-  private implicit def ec = system.dispatcher
-  private implicit def scheduler = system.scheduler
+  private implicit def system: ExtendedActorSystem = http.system
+  private implicit def ec: ExecutionContextExecutor = system.dispatcher
+  private implicit def scheduler: Scheduler = system.scheduler
 
   /**
    * Sends a single [[HttpRequest]] and returns the raw [[HttpResponse]].

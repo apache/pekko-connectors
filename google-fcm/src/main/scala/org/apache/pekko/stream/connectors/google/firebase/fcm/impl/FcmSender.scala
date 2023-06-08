@@ -55,7 +55,7 @@ private[fcm] class FcmSender {
   }
 
   implicit private val unmarshaller: FromResponseUnmarshaller[FcmSuccessResponse] = Unmarshaller.withMaterializer {
-    implicit ec => implicit mat => response: HttpResponse =>
+    implicit ec => implicit mat => (response: HttpResponse) =>
       if (response.status.isSuccess) {
         Unmarshal(response.entity).to[FcmSuccessResponse]
       } else {
