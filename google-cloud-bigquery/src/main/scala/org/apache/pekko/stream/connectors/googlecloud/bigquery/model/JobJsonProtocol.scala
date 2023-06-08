@@ -211,7 +211,7 @@ object JobConfigurationLoad {
   implicit val configurationLoadFormat: JsonFormat[JobConfigurationLoad] = jsonFormat5(apply)
 }
 
-final case class CreateDisposition private (value: String) extends StringEnum
+final case class CreateDisposition private[bigquery] (value: String) extends StringEnum
 object CreateDisposition {
 
   /**
@@ -228,7 +228,7 @@ object CreateDisposition {
   implicit val format: JsonFormat[CreateDisposition] = StringEnum.jsonFormat(apply)
 }
 
-final case class WriteDisposition private (value: String) extends StringEnum
+final case class WriteDisposition private[bigquery] (value: String) extends StringEnum
 object WriteDisposition {
 
   /**
@@ -325,7 +325,8 @@ object JobReference {
  * @param errors the first errors encountered during the running of the job
  * @param state running state of the job
  */
-final case class JobStatus private (errorResult: Option[ErrorProto], errors: Option[Seq[ErrorProto]], state: JobState) {
+final case class JobStatus private[bigquery] (errorResult: Option[ErrorProto], errors: Option[Seq[ErrorProto]],
+    state: JobState) {
 
   def getErrorResult = errorResult.toJava
   def getErrors = errors.map(_.asJava).toJava
@@ -362,7 +363,7 @@ object JobStatus {
   implicit val format: JsonFormat[JobStatus] = jsonFormat3(apply)
 }
 
-final case class JobState private (value: String) extends StringEnum
+final case class JobState private[bigquery] (value: String) extends StringEnum
 object JobState {
 
   /**
@@ -382,7 +383,7 @@ object JobState {
   implicit val format: JsonFormat[JobState] = StringEnum.jsonFormat(apply)
 }
 
-final case class JobCancelResponse private (job: Job) {
+final case class JobCancelResponse private[bigquery] (job: Job) {
   def getJob = job
   def withJob(job: Job) =
     copy(job = job)

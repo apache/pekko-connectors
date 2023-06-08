@@ -45,7 +45,7 @@ import scala.concurrent.duration.FiniteDuration
  * @param maximumBytesBilled limits the number of bytes billed for this query
  * @param requestId a unique user provided identifier to ensure idempotent behavior for queries
  */
-final case class QueryRequest private (query: String,
+final case class QueryRequest private[bigquery] (query: String,
     maxResults: Option[Int],
     defaultDataset: Option[DatasetReference],
     timeout: Option[FiniteDuration],

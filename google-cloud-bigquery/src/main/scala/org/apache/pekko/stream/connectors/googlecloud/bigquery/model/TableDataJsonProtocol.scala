@@ -38,7 +38,8 @@ import scala.collection.immutable.Seq
  * @tparam T the data model of each row
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-final case class TableDataListResponse[+T] private (totalRows: Long, pageToken: Option[String], rows: Option[Seq[T]]) {
+final case class TableDataListResponse[+T] private[bigquery] (totalRows: Long, pageToken: Option[String],
+    rows: Option[Seq[T]]) {
 
   @nowarn("msg=never used")
   @JsonCreator
@@ -212,7 +213,7 @@ object Row {
  * TableDataInsertAllResponse model
  * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll#response-body BigQuery reference]]
  */
-final case class TableDataInsertAllResponse private (insertErrors: Option[Seq[InsertError]]) {
+final case class TableDataInsertAllResponse private[bigquery] (insertErrors: Option[Seq[InsertError]]) {
   def getInsertErrors = insertErrors.map(_.asJava).toJava
 
   def withInsertErrors(insertErrors: Option[Seq[InsertError]]) =
@@ -239,7 +240,7 @@ object TableDataInsertAllResponse {
  * InsertError model
  * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll#response-body BigQuery reference]]
  */
-final case class InsertError private (index: Int, errors: Option[Seq[ErrorProto]]) {
+final case class InsertError private[bigquery] (index: Int, errors: Option[Seq[ErrorProto]]) {
   def getIndex = index
   def getErrors = errors.map(_.asJava).toJava
 

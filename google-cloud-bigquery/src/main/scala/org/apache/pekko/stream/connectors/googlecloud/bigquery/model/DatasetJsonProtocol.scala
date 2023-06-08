@@ -126,7 +126,7 @@ object DatasetReference {
  * @param nextPageToken a token that can be used to request the next results page
  * @param datasets an array of the dataset resources in the project
  */
-final case class DatasetListResponse private (nextPageToken: Option[String], datasets: Option[Seq[Dataset]]) {
+final case class DatasetListResponse private[bigquery] (nextPageToken: Option[String], datasets: Option[Seq[Dataset]]) {
 
   def getNextPageToken = nextPageToken.toJava
   def getDatasets = datasets.map(_.asJava).toJava

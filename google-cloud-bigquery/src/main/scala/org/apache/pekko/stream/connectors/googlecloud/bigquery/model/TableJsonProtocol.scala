@@ -357,7 +357,7 @@ object TableFieldSchemaMode {
  * @param tables tables in the requested dataset
  * @param totalItems the total number of tables in the dataset
  */
-final case class TableListResponse private (nextPageToken: Option[String],
+final case class TableListResponse private[bigquery] (nextPageToken: Option[String],
     tables: Option[Seq[Table]],
     totalItems: Option[Int]) {
 
