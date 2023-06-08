@@ -221,7 +221,7 @@ object ElasticsearchFlow {
   }
 
   private final class SprayJsonWriter[T](implicit writer: JsonWriter[T]) extends MessageWriter[T] {
-    override def convert(message: T): String = message.toJson.toString()
+    override def convert(message: T): String = message.toJson.compactPrint
   }
 
 }
