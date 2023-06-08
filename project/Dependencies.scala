@@ -324,7 +324,6 @@ object Dependencies {
     ))
 
   val Jms = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "javax.jms" % "jms" % "1.1" % Provided, // CDDL + GPLv2
       "com.ibm.mq" % "com.ibm.mq.allclient" % "9.2.5.0" % Test, // IBM International Program License Agreement https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/maven/licenses/L-APIG-AZYF2E/LI_en.html
