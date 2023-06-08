@@ -82,7 +82,7 @@ object TableDataListResponse {
 
   implicit def reader[T <: AnyRef](
       implicit reader: BigQueryRootJsonReader[T]): RootJsonReader[TableDataListResponse[T]] = {
-    implicit val format = lift(reader)
+    implicit val format: AnyRef with JsonFormat[T] = lift(reader)
     jsonFormat3(TableDataListResponse[T])
   }
   implicit val paginated: Paginated[TableDataListResponse[Any]] = _.pageToken
@@ -99,7 +99,7 @@ object TableDataListResponse {
  * @tparam T the data model of each row
  */
 @JsonInclude(Include.NON_NULL)
-final case class TableDataInsertAllRequest[+T] private (skipInvalidRows: Option[Boolean],
+final case class TableDataInsertAllRequest[+T] private[bigquery] (skipInvalidRows: Option[Boolean],
     ignoreUnknownValues: Option[Boolean],
     templateSuffix: Option[String],
     rows: Seq[Row[T]]) {
@@ -179,7 +179,7 @@ object TableDataInsertAllRequest {
  * @param json the record this row contains
  * @tparam T the data model of the record
  */
-final case class Row[+T] private (insertId: Option[String], json: T) {
+final case class Row[+T] private[bigquery] (insertId: Option[String], json: T) {
 
   def getInsertId = insertId.toJava
   def getJson = json

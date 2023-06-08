@@ -192,7 +192,7 @@ object QueryRequest {
  * @tparam T the data model for each row
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-final case class QueryResponse[+T] private (schema: Option[TableSchema],
+final case class QueryResponse[+T] private[bigquery] (schema: Option[TableSchema],
     jobReference: JobReference,
     totalRows: Option[Long],
     pageToken: Option[String],

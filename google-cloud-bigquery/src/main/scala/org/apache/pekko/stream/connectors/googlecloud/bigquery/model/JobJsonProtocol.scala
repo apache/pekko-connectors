@@ -83,7 +83,8 @@ object Job {
  * @param load configures a load job
  * @param labels the labels associated with this job
  */
-final case class JobConfiguration private (load: Option[JobConfigurationLoad], labels: Option[Map[String, String]]) {
+final case class JobConfiguration private[bigquery] (load: Option[JobConfigurationLoad],
+    labels: Option[Map[String, String]]) {
   def getLoad = load.toJava
   def getLabels = labels.toJava
 
@@ -144,7 +145,7 @@ object JobConfiguration {
  * @param writeDisposition specifies the action that occurs if the destination table already exists
  * @param sourceFormat the format of the data files
  */
-final case class JobConfigurationLoad private (schema: Option[TableSchema],
+final case class JobConfigurationLoad private[bigquery] (schema: Option[TableSchema],
     destinationTable: Option[TableReference],
     createDisposition: Option[CreateDisposition],
     writeDisposition: Option[WriteDisposition],
@@ -269,7 +270,8 @@ object SourceFormat {
  * @param jobId the ID of the job
  * @param location the geographic location of the job
  */
-final case class JobReference private (projectId: Option[String], jobId: Option[String], location: Option[String]) {
+final case class JobReference private[bigquery] (projectId: Option[String], jobId: Option[String],
+    location: Option[String]) {
 
   @nowarn("msg=never used")
   @JsonCreator

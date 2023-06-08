@@ -15,6 +15,8 @@ package docs.scaladsl
 
 //#imports
 import org.apache.pekko
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema.TableSchemaWriter
+import org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonFormat
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
 import pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
@@ -48,8 +50,8 @@ class BigQueryDoc {
   // #setup
   case class Person(name: String, age: Int, addresses: Seq[Address], isHakker: Boolean)
   case class Address(street: String, city: String, postalCode: Option[Int])
-  implicit val addressFormat = bigQueryJsonFormat3(Address)
-  implicit val personFormat = bigQueryJsonFormat4(Person)
+  implicit val addressFormat: BigQueryRootJsonFormat[Address] = bigQueryJsonFormat3(Address.apply)
+  implicit val personFormat: BigQueryRootJsonFormat[Person] = bigQueryJsonFormat4(Person.apply)
   // #setup
 
   @nowarn("msg=dead code")
@@ -113,8 +115,8 @@ class BigQueryDoc {
   // #table-methods
 
   // #create-table
-  implicit val addressSchema = bigQuerySchema3(Address)
-  implicit val personSchema = bigQuerySchema4(Person)
+  implicit val addressSchema: TableSchemaWriter[Address] = bigQuerySchema3(Address.apply)
+  implicit val personSchema: TableSchemaWriter[Person] = bigQuerySchema4(Person.apply)
   val newTable: Future[Table] = BigQuery.createTable[Person](datasetId, "newTableId")
   // #create-table
 
