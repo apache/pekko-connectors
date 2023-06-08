@@ -32,7 +32,7 @@ private[connectors] object NoCredentials {
 }
 
 @InternalApi
-private[auth] final case class NoCredentials private (projectId: String, token: String) extends Credentials {
+private[connectors] final case class NoCredentials(projectId: String, token: String) extends Credentials {
 
   private val futureToken = Future.successful(OAuth2BearerToken(token))
 
