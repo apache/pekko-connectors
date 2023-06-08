@@ -242,7 +242,7 @@ import scala.concurrent.{ ExecutionContext, Future }
     getBucketPath(bucket) / "o" / objectName
 
   implicit def unmarshaller[T: FromEntityUnmarshaller]: Unmarshaller[HttpResponse, T] =
-    Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
+    Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
       response match {
         case HttpResponse(status, _, entity, _) if status.isSuccess() && !status.isRedirection() =>
           Unmarshal(entity).to[T]
@@ -254,7 +254,7 @@ import scala.concurrent.{ ExecutionContext, Future }
     }.withDefaultRetry
 
   implicit def optionUnmarshaller[T: FromEntityUnmarshaller]: Unmarshaller[HttpResponse, Option[T]] =
-    Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
+    Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
       response match {
         case HttpResponse(status, _, entity, _) if status.isSuccess() && !status.isRedirection() =>
           Unmarshal(entity).to[T].map(Some(_))
