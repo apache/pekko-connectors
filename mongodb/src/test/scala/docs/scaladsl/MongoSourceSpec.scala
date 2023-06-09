@@ -18,7 +18,7 @@ import pekko.NotUsed
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.mongodb.scaladsl.MongoSource
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{Sink, Source}
+import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.util.ccompat.JavaConverters._
 import com.mongodb.reactivestreams.client.MongoClients

@@ -15,17 +15,17 @@ package docs.scaladsl
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.mongodb.{DocumentReplace, DocumentUpdate}
+import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
 import pekko.stream.connectors.mongodb.scaladsl.MongoSink
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{Sink, Source}
+import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.util.ccompat.JavaConverters._
-import com.mongodb.client.model.{Filters, InsertManyOptions, Updates}
-import com.mongodb.reactivestreams.client.{MongoClients, MongoCollection}
+import com.mongodb.client.model.{ Filters, InsertManyOptions, Updates }
+import com.mongodb.reactivestreams.client.{ MongoClients, MongoCollection }
 import org.bson.Document
 import org.bson.codecs.ValueCodecProvider
-import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+import org.bson.codecs.configuration.CodecRegistries.{ fromProviders, fromRegistries }
 import org.bson.codecs.pojo.PojoCodecProvider
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
