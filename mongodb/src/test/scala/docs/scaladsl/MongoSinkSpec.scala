@@ -15,26 +15,24 @@ package docs.scaladsl
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
+import pekko.stream.connectors.mongodb.{DocumentReplace, DocumentUpdate}
 import pekko.stream.connectors.mongodb.scaladsl.MongoSink
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.scaladsl.{Sink, Source}
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.util.ccompat.JavaConverters._
-import com.mongodb.client.model.{ Filters, InsertManyOptions, Updates }
-import com.mongodb.reactivestreams.client.{ MongoClients, MongoCollection }
+import com.mongodb.client.model.{Filters, InsertManyOptions, Updates}
+import com.mongodb.reactivestreams.client.{MongoClients, MongoCollection}
 import org.bson.Document
-import org.bson.codecs.configuration.CodecRegistries.{ fromProviders, fromRegistries }
-import org.mongodb.scala.MongoClient.DEFAULT_CODEC_REGISTRY
-import org.mongodb.scala.bson.codecs.Macros._
+import org.bson.codecs.ValueCodecProvider
+import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+import org.bson.codecs.pojo.PojoCodecProvider
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
-
-import scala.concurrent.duration._
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.annotation.nowarn
+import scala.concurrent.duration._
 
 class MongoSinkSpec
     extends AnyWordSpec
@@ -48,9 +46,8 @@ class MongoSinkSpec
   case class Number(_id: Int)
   case class DomainObject(_id: Int, firstProperty: String, secondProperty: String)
 
-  val codecRegistry =
-    fromRegistries(fromProviders(classOf[Number], classOf[DomainObject]), DEFAULT_CODEC_REGISTRY): @nowarn(
-      "msg=match may not be exhaustive")
+  val codecProvider = PojoCodecProvider.builder.register(classOf[Number], classOf[DomainObject]).build
+  val codecRegistry = fromRegistries(fromProviders(codecProvider, new ValueCodecProvider))
 
   implicit val system: ActorSystem = ActorSystem()
   implicit val defaultPatience: PatienceConfig =
@@ -108,7 +105,7 @@ class MongoSinkSpec
 
     "save with insertOne and codec support" in assertAllStagesStopped {
       // #insert-one
-      val testRangeObjects = testRange.map(Number)
+      val testRangeObjects = testRange.map(Number.apply)
       val source = Source(testRangeObjects)
       source.runWith(MongoSink.insertOne(numbersColl)).futureValue
       // #insert-one
@@ -130,7 +127,7 @@ class MongoSinkSpec
 
     "save with insertMany and codec support" in assertAllStagesStopped {
       // #insert-many
-      val objects = testRange.map(Number)
+      val objects = testRange.map(Number.apply)
       val source = Source(objects)
       val completion = source.grouped(2).runWith(MongoSink.insertMany[Number](numbersColl))
       // #insert-many
@@ -156,7 +153,7 @@ class MongoSinkSpec
     }
 
     "save with insertMany with options and codec support" in assertAllStagesStopped {
-      val testRangeObjects = testRange.map(Number)
+      val testRangeObjects = testRange.map(Number.apply)
       val source = Source(testRangeObjects)
 
       source

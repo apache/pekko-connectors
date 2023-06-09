@@ -18,21 +18,22 @@ import pekko.NotUsed
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.mongodb.scaladsl.MongoSource
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.scaladsl.{Sink, Source}
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.util.ccompat.JavaConverters._
 import com.mongodb.reactivestreams.client.MongoClients
 import org.bson.Document
+import org.bson.codecs.ValueCodecProvider
+import org.bson.codecs.configuration.CodecRegistries
+import org.bson.codecs.pojo.PojoCodecProvider
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.Seq
 import scala.concurrent._
 import scala.concurrent.duration._
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-
-import scala.annotation.nowarn
 
 class MongoSourceSpec
     extends AnyWordSpec
@@ -56,12 +57,8 @@ class MongoSourceSpec
   // #pojo
 
   // #codecs
-  import org.bson.codecs.configuration.CodecRegistries.{ fromProviders, fromRegistries }
-  import org.mongodb.scala.MongoClient.DEFAULT_CODEC_REGISTRY
-  import org.mongodb.scala.bson.codecs.Macros._
-
-  val codecRegistry =
-    fromRegistries(fromProviders(classOf[Number]: @nowarn("msg=match may not be exhaustive")), DEFAULT_CODEC_REGISTRY)
+  val codecProvider = PojoCodecProvider.builder.register(classOf[Number]).build
+  val codecRegistry = CodecRegistries.fromProviders(codecProvider, new ValueCodecProvider)
   // #codecs
 
   // #init-connection
@@ -110,7 +107,7 @@ class MongoSourceSpec
     }
 
     "support codec registry to read case class objects" in assertAllStagesStopped {
-      val data: Seq[Number] = seed().map(Number)
+      val data: Seq[Number] = seed().map(Number.apply)
 
       // #create-source
       val source: Source[Number, NotUsed] =

@@ -355,8 +355,9 @@ object Dependencies {
 
   val MongoDb = Seq(
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" % "mongo-java-driver" % "4.9.0" // ApacheV2
-    ))
+      "org.mongodb" % "mongodb-driver-core" % "4.9.1", // ApacheV2
+      "org.mongodb" % "mongodb-driver-reactivestreams" % "4.9.1" // ApacheV2
+  ))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
