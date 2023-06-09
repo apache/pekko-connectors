@@ -15,29 +15,25 @@ package org.apache.pekko.stream.connectors.unixdomainsocket
 package impl
 
 import org.apache.pekko
-import pekko.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
+import pekko.actor.{Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension}
 import pekko.annotation.InternalApi
-import pekko.event.{ Logging, LoggingAdapter }
+import pekko.event.{LogSource, Logging, LoggingAdapter}
 import pekko.stream._
-import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
-  IncomingConnection,
-  OutgoingConnection,
-  ServerBinding
-}
-import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{IncomingConnection, OutgoingConnection, ServerBinding}
+import pekko.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import pekko.util.ByteString
-import pekko.{ Done, NotUsed }
+import pekko.{Done, NotUsed}
 import jnr.enxio.channels.NativeSelectorProvider
-import jnr.unixsocket.{ UnixServerSocketChannel, UnixSocketAddress => JnrUnixSocketAddress, UnixSocketChannel }
+import jnr.unixsocket.{UnixServerSocketChannel, UnixSocketChannel, UnixSocketAddress => JnrUnixSocketAddress}
 
 import java.io.IOException
 import java.nio.ByteBuffer
-import java.nio.channels.{ SelectionKey, Selector }
-import java.nio.file.{ Files, Path, Paths }
-import scala.concurrent.duration.{ Duration, FiniteDuration }
-import scala.concurrent.{ ExecutionContext, Future, Promise }
+import java.nio.channels.{SelectionKey, Selector}
+import java.nio.file.{Files, Path, Paths}
+import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
-import scala.util.{ Failure, Success, Try }
+import scala.util.{Failure, Success, Try}
 
 /**
  * INTERNAL API
@@ -371,9 +367,9 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
   private val sel = NativeSelectorProvider.getInstance.openSelector
 
   /** Override to customise reported log source */
-  protected def logSource: Class[_] = this.getClass
+  protected def logSource: Class[_] = getClass
 
-  private val ioThread = new Thread(() => nioEventLoop(sel, Logging(system, logSource)), "unix-domain-socket-io")
+  private val ioThread = new Thread(() => nioEventLoop(sel, Logging(system, logSource.getName)), "unix-domain-socket-io")
   ioThread.start()
 
   CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "stopUnixDomainSocket") { () =>
