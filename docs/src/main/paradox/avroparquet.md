@@ -29,7 +29,7 @@ Sometimes it might be useful to use a Parquet file as stream Source. For this we
 instance which will produce records as subtypes of `GenericRecord`, the Avro record's abstract representation.
  
 Scala
-: @@snip (/avroparquet/src/test/scala/docs/scaladsl/AbstractAvroParquet.scala) { #prepare-source #init-reader }
+: @@snip (/avroparquet/src/test/scala-2/docs/scaladsl/AbstractAvroParquet.scala) { #prepare-source #init-reader }
 
 Java
 : @@snip (/avroparquet/src/test/java/docs/javadsl/Examples.java) { #init-reader }
@@ -49,7 +49,7 @@ On the other hand, you can use `AvroParquetWriter` as the Apache Pekko Streams S
 In that case, its initialisation would require an instance of `org.apache.parquet.hadoop.ParquetWriter`. It will also expect any subtype of `GenericRecord` to be passed.
  
 Scala
-: @@snip (/avroparquet/src/test/scala/docs/scaladsl/AbstractAvroParquet.scala) { #prepare-sink }
+: @@snip (/avroparquet/src/test/scala-2/docs/scaladsl/AbstractAvroParquet.scala) { #prepare-sink }
 
 Java
 : @@snip (/avroparquet/src/test/java/docs/javadsl/AvroParquetSinkTest.java) { #init-writer }

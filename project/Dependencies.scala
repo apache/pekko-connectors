@@ -167,13 +167,16 @@ object Dependencies {
       "com.google.jimfs" % "jimfs" % "1.2" % Test // ApacheV2
     ))
 
+  val avro4sVersion: Def.Initialize[String] = Def.setting {
+    if (scalaVersion.value.startsWith("2")) "4.1.1" else "5.0.4"
+  }
+
   val AvroParquet = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.10.1", // Apache2
       ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
-      "com.sksamuel.avro4s" %% "avro4s-core" % "4.1.1" % Test,
+      "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.specs2" %% "specs2-core" % "4.20.0" % Test, // MIT like: https://github.com/etorreborre/specs2/blob/master/LICENSE.txt
       "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html

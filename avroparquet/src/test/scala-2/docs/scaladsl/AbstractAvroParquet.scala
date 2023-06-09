@@ -13,20 +13,19 @@
 
 package docs.scaladsl
 
-import java.io.File
-
-import org.apache.pekko.testkit.TestKit
 import com.sksamuel.avro4s.RecordFormat
 import org.apache.avro.Schema
 import org.apache.avro.generic.{ GenericRecord, GenericRecordBuilder }
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.parquet.avro.{ AvroParquetReader, AvroParquetWriter, AvroReadSupport }
-import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
 import org.apache.parquet.hadoop.util.HadoopInputFile
+import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
+import org.apache.pekko.testkit.TestKit
 import org.scalacheck.Gen
 import org.scalatest.{ BeforeAndAfterAll, Suite }
 
+import java.io.File
 import scala.reflect.io.Directory
 import scala.util.Random
 
@@ -110,8 +109,8 @@ trait AbstractAvroParquet extends BeforeAndAfterAll {
     import org.apache.avro.generic.GenericRecord
     import org.apache.hadoop.fs.Path
     import org.apache.parquet.avro.AvroParquetReader
-    import org.apache.parquet.hadoop.util.HadoopInputFile
     import org.apache.parquet.hadoop.ParquetReader
+    import org.apache.parquet.hadoop.util.HadoopInputFile
 
     val file: String = "./sample/path/test.parquet"
     val writer: ParquetWriter[GenericRecord] =

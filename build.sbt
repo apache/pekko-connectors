@@ -111,10 +111,26 @@ TaskKey[Unit]("verifyCodeFmt") := {
   }
 }
 
+val scalaReleaseSeparateSource: Def.SettingsDefinition = Compile / unmanagedSourceDirectories ++= {
+  if (scalaVersion.value.startsWith("2")) {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-2")
+  } else {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-3")
+  }
+}
+
+val scalaReleaseSeparateTestSource: Def.SettingsDefinition = Compile / unmanagedSourceDirectories ++= {
+  if (scalaVersion.value.startsWith("2")) {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "test" / "scala-2")
+  } else {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "test" / "scala-3")
+  }
+}
+
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
 lazy val avroparquet =
-  pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
+  pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet, scalaReleaseSeparateTestSource)
 
 lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
 
@@ -255,14 +271,6 @@ lazy val ironmq = pekkoConnectorProject(
   Test / fork := true)
 
 lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
-
-val scalaReleaseSeparateSource: Def.SettingsDefinition = Compile / unmanagedSourceDirectories ++= {
-  if (scalaVersion.value.startsWith("2")) {
-    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-2")
-  } else {
-    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-3")
-  }
-}
 
 lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming",
   Dependencies.JsonStreaming ++ scalaReleaseSeparateSource)
