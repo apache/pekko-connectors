@@ -310,7 +310,6 @@ object Dependencies {
       "https://repository.jboss.org/nexus/content/groups/public")) +: externalResolvers.value)
 
   val JsonStreaming = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0") ++ JacksonDatabindDependencies)
 
