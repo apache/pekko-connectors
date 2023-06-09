@@ -264,7 +264,16 @@ lazy val ironmq = pekkoConnectorProject(
 
 lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 
-lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
+val scalaReleaseSeparateSource: Def.SettingsDefinition = Compile / unmanagedSourceDirectories ++= {
+  if (scalaVersion.value.startsWith("2")) {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-2")
+  } else {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-3")
+  }
+}
+
+lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming",
+  Dependencies.JsonStreaming ++ scalaReleaseSeparateSource)
 
 lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
 
