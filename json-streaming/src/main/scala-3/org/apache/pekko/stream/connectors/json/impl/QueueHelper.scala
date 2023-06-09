@@ -16,6 +16,6 @@ import scala.collection.immutable.Queue
 private[impl] object QueueHelper {
   inline final def enqueue(queue: Queue[ByteString], byteString: ByteString): Queue[ByteString] = {
     // see https://github.com/lampepfl/dotty/issues/17946
-    queue.enqueue(Iterable.single(byteString))
+    queue.enqueueAll(Iterable.single(byteString))
   }
 }
