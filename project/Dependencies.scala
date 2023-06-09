@@ -354,9 +354,8 @@ object Dependencies {
     ))
 
   val MongoDb = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0" // ApacheV2
+      "org.mongodb.scala" % "mongo-java-driver" % "4.9.0" // ApacheV2
     ))
 
   val Mqtt = Seq(
