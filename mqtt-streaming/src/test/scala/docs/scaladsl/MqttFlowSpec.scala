@@ -36,37 +36,37 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class UntypedMqttFlowSpec
-    extends ParametrizedTestKit("untyped-flow-spec/flow",
+    extends ParameterizedTestKit("untyped-flow-spec/flow",
       "untyped-flow-spec/topic1",
       ActorSystem("UntypedMqttFlowSpec"))
     with MqttFlowSpec
 class TypedMqttFlowSpec
-    extends ParametrizedTestKit("typed-flow-spec/flow",
+    extends ParameterizedTestKit("typed-flow-spec/flow",
       "typed-flow-spec/topic1",
       org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
     with MqttFlowSpec
 
-class ParametrizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
+class ParameterizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
 
 trait MqttFlowSpec extends AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
-  self: ParametrizedTestKit =>
+  self: ParameterizedTestKit =>
 
-  override def sourceActorSytem = Some(system.name)
+  override def sourceActorSytem = Some(this.system.name)
 
   private implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
-  private implicit val dispatcherExecutionContext: ExecutionContext = system.dispatcher
+  private implicit val dispatcherExecutionContext: ExecutionContext = this.system.dispatcher
 
-  implicit val logAdapter: LoggingAdapter = Logging(system, this.getClass.getName)
+  implicit val logAdapter: LoggingAdapter = Logging(this.system, this.getClass.getName)
 
   override def afterAll(): Unit =
-    TestKit.shutdownActorSystem(system)
+    TestKit.shutdownActorSystem(this.system)
 
   "mqtt client flow" should {
     "establish a bidirectional connection and subscribe to a topic" in assertAllStagesStopped {
       // #create-streaming-flow
       val settings = MqttSessionSettings()
-      val session = ActorMqttClientSession(settings)
+      val session = ActorMqttClientSession(settings)(this.system)
 
       val connection = Tcp().outgoingConnection("localhost", 1883)
 

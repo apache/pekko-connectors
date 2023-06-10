@@ -365,7 +365,6 @@ object Dependencies {
     ))
 
   val MqttStreaming = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion, // ApacheV2
       "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test, // ApacheV2
