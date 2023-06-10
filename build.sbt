@@ -186,6 +186,8 @@ lazy val geode =
           List("-Xlint:-byname-implicit")
         case Some((2, n)) if n == 12 =>
           List.empty
+        case Some((3, _)) =>
+          List.empty
       }
     })
 

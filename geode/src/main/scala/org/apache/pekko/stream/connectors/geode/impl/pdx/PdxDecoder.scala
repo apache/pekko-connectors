@@ -18,7 +18,7 @@ import java.util.{ Date, UUID }
 import org.apache.pekko.annotation.InternalApi
 import org.apache.geode.pdx.PdxReader
 
-import scala.util.{ Failure, Success, Try }
+import scala.util.{ Success, Try }
 
 @InternalApi
 trait PdxDecoder[A] {
@@ -27,17 +27,12 @@ trait PdxDecoder[A] {
 
 }
 
-object PdxDecoder {
+object PdxDecoder extends ObjectDecoder {
 
-  import shapeless._
-  import shapeless.labelled._
-
-  private def instance[A](f: (PdxReader, Symbol) => Try[A]): PdxDecoder[A] =
+  private[pekko] def instance[A](f: (PdxReader, Symbol) => Try[A]): PdxDecoder[A] =
     new PdxDecoder[A] {
       def decode(reader: PdxReader, fieldName: Symbol) = f(reader, fieldName)
     }
-
-  implicit val hnilDecoder: PdxDecoder[HNil] = instance((_, _) => Success(HNil))
 
   implicit val booleanDecoder: PdxDecoder[Boolean] = instance {
     case (reader, fieldName) =>
@@ -147,27 +142,6 @@ object PdxDecoder {
   implicit def setDecoder[T <: AnyRef]: PdxDecoder[Set[T]] = instance {
     case (reader, fieldName) =>
       Try(reader.readObjectArray(fieldName.name).toSet.asInstanceOf[Set[T]])
-  }
-
-  implicit def hlistDecoder[K <: Symbol, H, T <: HList](
-      implicit witness: Witness.Aux[K],
-      hDecoder: Lazy[PdxDecoder[H]],
-      tDecoder: Lazy[PdxDecoder[T]]): PdxDecoder[FieldType[K, H] :: T] = instance {
-    case (reader, fieldName) => {
-      val headField = hDecoder.value.decode(reader, witness.value)
-      val tailFields = tDecoder.value.decode(reader, fieldName)
-      (headField, tailFields) match {
-        case (Success(h), Success(t)) => Success(field[K](h) :: t)
-        case _                        => Failure(null)
-      }
-    }
-    case e => Failure(null)
-  }
-
-  implicit def objectDecoder[A, Repr <: HList](
-      implicit gen: LabelledGeneric.Aux[A, Repr],
-      hlistDecoder: PdxDecoder[Repr]): PdxDecoder[A] = instance { (reader, fieldName) =>
-    hlistDecoder.decode(reader, fieldName).map(gen.from)
   }
 
   def apply[A](implicit ev: PdxDecoder[A]): PdxDecoder[A] = ev

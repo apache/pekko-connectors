@@ -8,6 +8,7 @@
  */
 
 import sbt._
+import Common.isScala3
 import Keys._
 
 object Dependencies {
@@ -178,13 +179,16 @@ object Dependencies {
   val GeodeVersionForDocs = "115"
 
   val Geode = Seq(
-    crossScalaVersions -= Scala3,
-    libraryDependencies ++=
+    libraryDependencies ++= {
       Seq("geode-core", "geode-cq")
         .map("org.apache.geode" % _ % GeodeVersion) ++
       Seq(
-        "com.chuusai" %% "shapeless" % "2.3.3",
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies)
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies ++
+      (if (isScala3.value)
+         Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
+       else Seq(
+         "com.chuusai" %% "shapeless" % "2.3.10"))
+    })
 
   val GoogleCommon = Seq(
     libraryDependencies ++= Seq(
