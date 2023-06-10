@@ -46,8 +46,8 @@ private[impl] abstract class RestBulkApi[T, C] {
 
   def messageToJson(message: WriteMessage[T, C], messageSource: String): String = message.operation match {
     case Index | Create => "\n" + messageSource
-    case Upsert         => "\n" + JsObject("doc" -> messageSource.parseJson, "doc_as_upsert" -> JsTrue).toString
-    case Update         => "\n" + JsObject("doc" -> messageSource.parseJson).toString
+    case Upsert         => "\n" + JsObject("doc" -> messageSource.parseJson, "doc_as_upsert" -> JsTrue).compactPrint
+    case Update         => "\n" + JsObject("doc" -> messageSource.parseJson).compactPrint
     case Delete         => ""
     case Nop            => ""
   }
@@ -69,7 +69,7 @@ private[impl] abstract class RestBulkApi[T, C] {
           // good message
           val command = message.operation.command
           val res = itemsIter.next().asJsObject.fields(command).asJsObject
-          val error: Option[String] = res.fields.get("error").map(_.toString())
+          val error: Option[String] = res.fields.get("error").map(_.compactPrint)
           ret += new WriteResult(message, error)
         } else {
           // error?

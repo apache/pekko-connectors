@@ -57,7 +57,7 @@ class FcmSenderSpec
 
   implicit val executionContext: ExecutionContext = system.dispatcher
 
-  implicit val conf: FcmSettings = FcmSettings()
+  implicit val conf = FcmSettings()
   implicit val settings: GoogleSettings = GoogleSettings().copy(projectId = "projectId")
 
   "FcmSender" should {
