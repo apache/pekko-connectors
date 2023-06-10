@@ -345,7 +345,6 @@ object Dependencies {
       "org.eclipse.paho" % "org.eclipse.paho.client.mqttv3" % "1.2.5"))
 
   val MqttStreaming = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion,
       "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test,
