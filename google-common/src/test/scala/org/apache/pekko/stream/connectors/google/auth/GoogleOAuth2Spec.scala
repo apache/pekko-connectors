@@ -46,7 +46,7 @@ class GoogleOAuth2Spec
 
   implicit val executionContext: ExecutionContext = system.dispatcher
   implicit val settings: GoogleSettings = GoogleSettings(system)
-  implicit val clock = Clock.systemUTC()
+  implicit val clock: Clock = Clock.systemUTC()
 
   lazy val privateKey = {
     val inputStream = getClass.getClassLoader.getResourceAsStream("private_pcks8.pem")
