@@ -33,7 +33,7 @@ object BigQueryArrowStorage {
   def readRecordsMerged(projectId: String,
       datasetId: String,
       tableId: String): Source[java.util.List[BigQueryRecord], CompletionStage[NotUsed]] =
-    readRecordsMerged(projectId, datasetId, tableId)
+    readRecordsMerged(projectId, datasetId, tableId, None, 0)
 
   def readRecordsMerged(projectId: String,
       datasetId: String,
@@ -72,7 +72,7 @@ object BigQueryArrowStorage {
   def readRecords(projectId: String,
       datasetId: String,
       tableId: String): Source[java.util.List[Source[BigQueryRecord, NotUsed]], CompletionStage[NotUsed]] =
-    readRecords(projectId, datasetId, tableId)
+    readRecords(projectId, datasetId, tableId, None, 0)
 
   def readRecords(
       projectId: String,
@@ -114,7 +114,7 @@ object BigQueryArrowStorage {
   def readMerged(projectId: String,
       datasetId: String,
       tableId: String): Source[(ArrowSchema, Source[ArrowRecordBatch, NotUsed]), CompletionStage[NotUsed]] =
-    readMerged(projectId, datasetId, tableId)
+    readMerged(projectId, datasetId, tableId, None, 0)
 
   def readMerged(
       projectId: String,
