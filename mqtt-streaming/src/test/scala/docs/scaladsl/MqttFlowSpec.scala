@@ -45,7 +45,7 @@ class TypedMqttFlowSpec
       "typed-flow-spec/topic1",
       pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
 
-abstract class MqttFlowSpecBase(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
+abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSystem) extends TestKit(system)
     with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
   override def sourceActorSytem = Some(system.name)
