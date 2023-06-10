@@ -26,6 +26,6 @@ addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
 // Pekko gRPC -- sync with version in Dependencies.scala:19
-addSbtPlugin("org.apache.pekko" % "sbt-pekko-grpc" % "0.0.0-45-fdf9da1b-SNAPSHOT")
+addSbtPlugin("org.apache.pekko" % "sbt-pekko-grpc" % "0.0.0-41-ab1c00da-SNAPSHOT")
 // templating
 addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.6.1")
