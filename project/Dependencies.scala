@@ -272,11 +272,10 @@ object Dependencies {
 
   val HadoopVersion = "3.2.1"
   val Hdfs = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"),
-      "org.typelevel" %% "cats-core" % "2.0.0",
+        "slf4j-log4j12"), // ApacheV2
+      "org.typelevel" %% "cats-core" % "2.9.0", // MIT,
       ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
