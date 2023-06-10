@@ -45,7 +45,8 @@ class TypedMqttFlowSpec
       "typed-flow-spec/topic1",
       org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
 
-abstract class MqttFlowSpecBase(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system) with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
+abstract class MqttFlowSpecBase(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
+    with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
   override def sourceActorSytem = Some(system.name)
 
@@ -56,7 +57,6 @@ abstract class MqttFlowSpecBase(val clientId: String, val topic: String, system:
   private implicit val implicitSystem: ActorSystem = system
 
   implicit val logAdapter: LoggingAdapter = Logging(system, this.getClass.getName)
-
 
   override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
