@@ -17,7 +17,7 @@ package impl
 import org.apache.pekko
 import pekko.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
 import pekko.annotation.InternalApi
-import pekko.event.{ Logging, LoggingAdapter }
+import pekko.event.{ LogSource, Logging, LoggingAdapter }
 import pekko.stream._
 import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
   IncomingConnection,
@@ -371,9 +371,10 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
   private val sel = NativeSelectorProvider.getInstance.openSelector
 
   /** Override to customise reported log source */
-  protected def logSource: Class[_] = this.getClass
+  protected def logSource: Class[_] = getClass
 
-  private val ioThread = new Thread(() => nioEventLoop(sel, Logging(system, logSource)), "unix-domain-socket-io")
+  private val ioThread =
+    new Thread(() => nioEventLoop(sel, Logging(system, logSource.getName)), "unix-domain-socket-io")
   ioThread.start()
 
   CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "stopUnixDomainSocket") { () =>
