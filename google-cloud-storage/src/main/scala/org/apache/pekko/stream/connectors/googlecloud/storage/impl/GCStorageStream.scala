@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
 import pekko.dispatch.ExecutionContexts.parasitic
