@@ -52,7 +52,7 @@ private[jms] final class JmsConsumerStage(settings: JmsConsumerSettings, destina
         createDestination: jms.Session => javax.jms.Destination): JmsConsumerSession = {
       val session =
         connection.createSession(false, settings.acknowledgeMode.getOrElse(AcknowledgeMode.AutoAcknowledge).mode)
-      new JmsConsumerSession(connection, session, createDestination(session), destination)
+      new JmsConsumerSession(connection, session, createDestination(session), graphStageDestination)
     }
 
     protected def pushMessage(msg: jms.Message): Unit = {

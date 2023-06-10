@@ -23,9 +23,10 @@ import pekko.stream.impl.Buffer
 import pekko.stream.scaladsl.Source
 import pekko.stream.stage._
 import pekko.util.OptionVal
-import javax.jms
 
+import javax.jms
 import scala.concurrent.Future
+import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NoStackTrace
 import scala.util.{ Failure, Success, Try }
 
@@ -34,7 +35,7 @@ import scala.util.{ Failure, Success, Try }
  */
 @InternalApi
 private trait JmsProducerConnector extends JmsConnector[JmsProducerSession] {
-  this: TimerGraphStageLogic with StageLogging =>
+  this: TimerGraphStageLogic with GraphStageCompanion with StageLogging =>
 
   protected final def createSession(connection: jms.Connection,
       createDestination: jms.Session => jms.Destination): JmsProducerSession = {
@@ -74,7 +75,18 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
   }
 
   private def producerLogic(inheritedAttributes: Attributes) =
-    new TimerGraphStageLogic(shape) with JmsProducerConnector with StageLogging {
+    new TimerGraphStageLogic(shape) with JmsProducerConnector with GraphStageCompanion with StageLogging {
+
+      final override def graphStageMaterializer: Materializer = materializer
+
+      final override def graphStageDestination: Destination = destination
+
+      final override def scheduleOnceOnGraphStage(timerKey: Any, delay: FiniteDuration): Unit =
+        scheduleOnce(timerKey, delay)
+
+      final override def isTimerActiveOnGraphStage(timerKey: Any): Boolean = isTimerActive(timerKey)
+
+      final override def cancelTimerOnGraphStage(timerKey: Any): Unit = cancelTimer(timerKey)
 
       /*
        * NOTE: the following code is heavily inspired by org.apache.pekko.stream.impl.fusing.MapAsync
