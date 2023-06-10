@@ -315,7 +315,6 @@ object Dependencies {
     ))
 
   val IronMq = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.mdedetrich" %% "pekko-stream-circe" % "0.0.0+94-dbf3173f-SNAPSHOT", // ApacheV2
