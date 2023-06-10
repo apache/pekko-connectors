@@ -13,28 +13,27 @@
 
 package org.apache.pekko.stream.connectors.jms.impl
 
-import java.util.concurrent.atomic.AtomicBoolean
-
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.jms.impl.InternalConnectionState.JmsConnectorStopping
 import pekko.stream.connectors.jms.{ Destination, JmsConsumerSettings }
 import pekko.stream.scaladsl.Source
 import pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
-import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
 import pekko.{ Done, NotUsed }
 
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.jms
 import scala.collection.mutable
 import scala.util.{ Failure, Success }
-
-import javax.jms
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * Internal API.
  */
 @InternalApi
 private trait JmsConsumerConnector extends JmsConnector[JmsConsumerSession] {
-  this: TimerGraphStageLogic with StageLogging =>
+  this: TimerGraphStageLogic with GraphStageCompanion with StageLogging =>
 
   override val startConnection = true
 
@@ -54,7 +53,19 @@ private abstract class SourceStageLogic[T](shape: SourceShape[T],
     inheritedAttributes: Attributes)
     extends TimerGraphStageLogic(shape)
     with JmsConsumerConnector
+    with GraphStageCompanion
     with StageLogging {
+
+  final override def graphStageMaterializer: Materializer = materializer
+
+  final override def graphStageDestination: Destination = destination
+
+  final override def scheduleOnceOnGraphStage(timerKey: Any, delay: FiniteDuration): Unit =
+    scheduleOnce(timerKey, delay)
+
+  final override def isTimerActiveOnGraphStage(timerKey: Any): Boolean = isTimerActive(timerKey)
+
+  final override def cancelTimerOnGraphStage(timerKey: Any): Unit = cancelTimer(timerKey)
 
   override protected def jmsSettings: JmsConsumerSettings = settings
   private val queue = mutable.Queue[T]()
