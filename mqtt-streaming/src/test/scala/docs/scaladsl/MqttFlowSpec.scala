@@ -36,26 +36,25 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class UntypedMqttFlowSpec
-    extends ParametrizedTestKit("untyped-flow-spec/flow",
+    extends MqttFlowSpecBase("untyped-flow-spec/flow",
       "untyped-flow-spec/topic1",
       ActorSystem("UntypedMqttFlowSpec"))
-    with MqttFlowSpec
+
 class TypedMqttFlowSpec
-    extends ParametrizedTestKit("typed-flow-spec/flow",
+    extends MqttFlowSpecBase("typed-flow-spec/flow",
       "typed-flow-spec/topic1",
-      org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
-    with MqttFlowSpec
+      pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
 
-class ParametrizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
-
-trait MqttFlowSpec extends AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
-  self: ParametrizedTestKit =>
+abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSystem) extends TestKit(system)
+    with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
   override def sourceActorSytem = Some(system.name)
 
   private implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
   private implicit val dispatcherExecutionContext: ExecutionContext = system.dispatcher
+
+  private implicit val implicitSystem: ActorSystem = system
 
   implicit val logAdapter: LoggingAdapter = Logging(system, this.getClass.getName)
 

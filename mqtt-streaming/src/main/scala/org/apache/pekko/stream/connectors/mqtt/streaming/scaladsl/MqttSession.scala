@@ -169,7 +169,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
   import MqttSession._
   import system.dispatcher
 
-  private implicit val loggingAdapter: LoggingAdapter = Logging(system, this.getClass)
+  private implicit val loggingAdapter: LoggingAdapter = Logging(system, classOf[ActorMqttClientSession])
 
   override def ![A](cp: Command[A]): Unit = cp match {
     case Command(cp: Publish, _, carry) =>
@@ -504,7 +504,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
   import MqttSession._
   import system.dispatcher
 
-  private implicit val loggingAdapter: LoggingAdapter = Logging(system, this.getClass)
+  private implicit val loggingAdapter: LoggingAdapter = Logging(system, classOf[ActorMqttClientSession])
 
   override def ![A](cp: Command[A]): Unit = cp match {
     case Command(cp: Publish, _, carry) =>
