@@ -53,7 +53,8 @@ object ControlPacketType {
   val DISCONNECT = ControlPacketType(14)
   val Reserved2 = ControlPacketType(15)
 }
-final case class ControlPacketType private (underlying: Int) extends AnyVal
+@InternalApi
+final case class ControlPacketType(underlying: Int) extends AnyVal
 
 /**
  * 2.2.2 Flags
@@ -75,7 +76,8 @@ object ControlPacketFlags {
   val RETAIN = ControlPacketFlags(1)
 }
 
-final case class ControlPacketFlags private (underlying: Int) extends AnyVal {
+@InternalApi
+final case class ControlPacketFlags(underlying: Int) extends AnyVal {
 
   /**
    * Convenience bitwise OR
@@ -110,7 +112,8 @@ case object Reserved2 extends ControlPacket(ControlPacketType.Reserved2, Control
  * 2.3.1 Packet Identifier
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-final case class PacketId private (underlying: Int) extends AnyVal
+@InternalApi
+final case class PacketId(underlying: Int) extends AnyVal
 
 object ConnectFlags {
   val None = ConnectFlags(0)
@@ -127,7 +130,7 @@ object ConnectFlags {
  * 3.1.2.3 Connect Flags
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-final case class ConnectFlags private (underlying: Int) extends AnyVal {
+final case class ConnectFlags private[streaming] (underlying: Int) extends AnyVal {
 
   /**
    * Convenience bitwise OR
@@ -223,7 +226,7 @@ object ConnAckFlags {
  * 3.2.2.1 Connect Acknowledge Flags
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-final case class ConnAckFlags private (underlying: Int) extends AnyVal
+final case class ConnAckFlags private[streaming] (underlying: Int) extends AnyVal
 
 object ConnAckReturnCode {
   val ConnectionAccepted = ConnAckReturnCode(0)
@@ -238,7 +241,7 @@ object ConnAckReturnCode {
  * 3.2.2.3 Connect Return code
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-final case class ConnAckReturnCode private (underlying: Int) extends AnyVal {
+final case class ConnAckReturnCode private[streaming] (underlying: Int) extends AnyVal {
 
   /**
    * Convenience bitwise OR
@@ -286,7 +289,8 @@ object Publish {
  * 3.3 PUBLISH – Publish message
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-final case class Publish @InternalApi private[streaming] (override val flags: ControlPacketFlags,
+@InternalApi
+final case class Publish(override val flags: ControlPacketFlags,
     topicName: String,
     packetId: Option[PacketId],
     payload: ByteString)
