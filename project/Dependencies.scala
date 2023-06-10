@@ -298,7 +298,6 @@ object Dependencies {
       "org.influxdb" % "influxdb-java" % InfluxDBJavaVersion))
 
   val IronMq = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.mdedetrich" %% "pekko-stream-circe" % "1.0.0",
