@@ -43,7 +43,7 @@ class UntypedMqttFlowSpec
 class TypedMqttFlowSpec
     extends MqttFlowSpecBase("typed-flow-spec/flow",
       "typed-flow-spec/topic1",
-      org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
+      pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
 
 abstract class MqttFlowSpecBase(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
     with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
