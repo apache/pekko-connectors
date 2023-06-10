@@ -23,7 +23,6 @@ import pekko.stream.javadsl.{ Flow, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1._
 
-
 /**
  * Google Pub/Sub Pekko Stream operator factory.
  */
