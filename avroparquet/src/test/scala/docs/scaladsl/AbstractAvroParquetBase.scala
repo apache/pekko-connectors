@@ -7,6 +7,10 @@
  * This file is part of the Apache Pekko project, derived from Akka.
  */
 
+/*
+ * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
+ */
+
 package docs.scaladsl
 
 import org.apache.avro.Schema
