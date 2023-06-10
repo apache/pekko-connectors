@@ -18,7 +18,7 @@ import java.time.OffsetDateTime
 import org.apache.pekko
 import pekko.http.scaladsl.model.{ ContentType, ContentTypes }
 import pekko.stream.connectors.googlecloud.storage._
-import spray.json.{ DefaultJsonProtocol, JsObject, JsValue, RootJsonFormat, RootJsonReader }
+import spray.json.{ enrichAny, DefaultJsonProtocol, JsObject, JsValue, RootJsonFormat, RootJsonReader }
 
 import scala.util.Try
 

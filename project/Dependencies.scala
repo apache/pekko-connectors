@@ -199,7 +199,6 @@ object Dependencies {
         "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies)
 
   val GoogleCommon = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -261,7 +260,6 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion) ++ Mockito)
 
   val GoogleStorage = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
