@@ -61,7 +61,7 @@ object GooglePubSub {
           .setStreamAckDeadlineSeconds(0)
           .build()
 
-        subscriber(mat, attr).client
+        val streamingPullResult: Source[StreamingPullResponse, NotUsed] = subscriber(mat, attr).client
           .streamingPull(
             Source
               .single(request)
@@ -69,8 +69,11 @@ object GooglePubSub {
                 Source
                   .tick(Duration.ZERO, pollInterval, subsequentRequest)
                   .mapMaterializedValue(cancellable.complete(_))))
-          .mapConcat(_.getReceivedMessagesList)
+
+        val concatResult: Source[ReceivedMessage, CompletableFuture[Cancellable]] = streamingPullResult
+          .mapConcat((response: StreamingPullResponse) => response.getReceivedMessagesList)
           .mapMaterializedValue(_ => cancellable)
+        concatResult
       }
       .mapMaterializedValue(flattenCs(_))
       .mapMaterializedValue(_.toCompletableFuture)
@@ -92,12 +95,16 @@ object GooglePubSub {
 
         val client = subscriber(mat, attr).client
 
-        Source
+        val sourceResult: Source[PullResponse, Cancellable] = Source
           .tick(Duration.ZERO, pollInterval, request)
           .mapAsync(1, client.pull(_))
-          .mapConcat(_.getReceivedMessagesList)
+
+        val concatResult: Source[ReceivedMessage, CompletableFuture[Cancellable]] = sourceResult
+          .mapConcat((response: PullResponse) => response.getReceivedMessagesList)
           .mapMaterializedValue(cancellable.complete(_))
           .mapMaterializedValue(_ => cancellable)
+
+        concatResult
       }
       .mapMaterializedValue(flattenCs(_))
       .mapMaterializedValue(_.toCompletableFuture)

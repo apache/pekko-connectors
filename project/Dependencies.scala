@@ -240,6 +240,7 @@ object Dependencies {
     ) ++ Mockito)
 
   val GooglePubSubGrpc = Seq(
+    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
