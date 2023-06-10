@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
 import pekko.dispatch.ExecutionContexts.parasitic
@@ -289,7 +290,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 
   @nowarn("msg=deprecated")
   private def resolveSettings(mat: Materializer, attr: Attributes) = {
-    implicit val sys = mat.system
+    implicit val sys: ActorSystem = mat.system
     val legacySettings = attr
       .get[GCStorageSettingsValue]
       .map(_.settings)
@@ -334,7 +335,7 @@ import scala.concurrent.{ ExecutionContext, Future }
   }
 
   private def resolveGCSSettings(mat: Materializer, attr: Attributes): GCSSettings = {
-    implicit val sys = mat.system
+    implicit val sys: ActorSystem = mat.system
     attr
       .get[GCSSettingsValue]
       .map(_.settings)
