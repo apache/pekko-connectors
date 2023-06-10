@@ -36,33 +36,30 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class UntypedMqttFlowSpec
-    extends ParameterizedTestKit("untyped-flow-spec/flow",
+    extends MqttFlowSpecBase("untyped-flow-spec/flow",
       "untyped-flow-spec/topic1",
       ActorSystem("UntypedMqttFlowSpec"))
-    with MqttFlowSpec
+
 class TypedMqttFlowSpec
-    extends ParameterizedTestKit("typed-flow-spec/flow",
+    extends MqttFlowSpecBase("typed-flow-spec/flow",
       "typed-flow-spec/topic1",
       org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
-    with MqttFlowSpec
 
-class ParameterizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system) {
-  def actorSystem: ActorSystem = system
-}
+abstract class MqttFlowSpecBase(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system) with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
-trait MqttFlowSpec extends AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
-  self: ParameterizedTestKit =>
-
-  override def sourceActorSytem = Some(actorSystem.name)
+  override def sourceActorSytem = Some(system.name)
 
   private implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
-  private implicit val dispatcherExecutionContext: ExecutionContext = actorSystem.dispatcher
+  private implicit val dispatcherExecutionContext: ExecutionContext = system.dispatcher
 
-  implicit val logAdapter: LoggingAdapter = Logging(actorSystem, this.getClass.getName)
+  private implicit val implicitSystem: ActorSystem = system
+
+  implicit val logAdapter: LoggingAdapter = Logging(system, this.getClass.getName)
+
 
   override def afterAll(): Unit =
-    TestKit.shutdownActorSystem(actorSystem)
+    TestKit.shutdownActorSystem(system)
 
   "mqtt client flow" should {
     "establish a bidirectional connection and subscribe to a topic" in assertAllStagesStopped {
