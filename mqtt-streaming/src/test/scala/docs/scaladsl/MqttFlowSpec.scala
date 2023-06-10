@@ -46,27 +46,29 @@ class TypedMqttFlowSpec
       org.apache.pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
     with MqttFlowSpec
 
-class ParameterizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system)
+class ParameterizedTestKit(val clientId: String, val topic: String, system: ActorSystem) extends TestKit(system) {
+  def actorSystem: ActorSystem = system
+}
 
 trait MqttFlowSpec extends AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
   self: ParameterizedTestKit =>
 
-  override def sourceActorSytem = Some(this.system.name)
+  override def sourceActorSytem = Some(actorSystem.name)
 
   private implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
-  private implicit val dispatcherExecutionContext: ExecutionContext = this.system.dispatcher
+  private implicit val dispatcherExecutionContext: ExecutionContext = actorSystem.dispatcher
 
-  implicit val logAdapter: LoggingAdapter = Logging(this.system, this.getClass.getName)
+  implicit val logAdapter: LoggingAdapter = Logging(actorSystem, this.getClass.getName)
 
   override def afterAll(): Unit =
-    TestKit.shutdownActorSystem(this.system)
+    TestKit.shutdownActorSystem(actorSystem)
 
   "mqtt client flow" should {
     "establish a bidirectional connection and subscribe to a topic" in assertAllStagesStopped {
       // #create-streaming-flow
       val settings = MqttSessionSettings()
-      val session = ActorMqttClientSession(settings)(this.system)
+      val session = ActorMqttClientSession(settings)
 
       val connection = Tcp().outgoingConnection("localhost", 1883)
 
