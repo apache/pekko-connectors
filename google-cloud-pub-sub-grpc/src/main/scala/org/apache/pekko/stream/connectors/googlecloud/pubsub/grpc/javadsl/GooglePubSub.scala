@@ -17,10 +17,12 @@ import java.time.Duration
 import java.util.concurrent.{ CompletableFuture, CompletionStage }
 import org.apache.pekko
 import pekko.actor.Cancellable
+import pekko.japi.function
 import pekko.stream.{ Attributes, Materializer }
 import pekko.stream.javadsl.{ Flow, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1._
+
 
 /**
  * Google Pub/Sub Pekko Stream operator factory.
@@ -70,10 +72,12 @@ object GooglePubSub {
                   .tick(Duration.ZERO, pollInterval, subsequentRequest)
                   .mapMaterializedValue(cancellable.complete(_))))
 
-        val concatResult: Source[ReceivedMessage, CompletableFuture[Cancellable]] = streamingPullResult
-          .mapConcat((response: StreamingPullResponse) => response.getReceivedMessagesList)
+        streamingPullResult
+          .mapConcat(new function.Function[StreamingPullResponse, java.util.List[ReceivedMessage]] {
+            override def apply(response: StreamingPullResponse): java.util.List[ReceivedMessage] =
+              response.getReceivedMessagesList
+          })
           .mapMaterializedValue(_ => cancellable)
-        concatResult
       }
       .mapMaterializedValue(flattenCs(_))
       .mapMaterializedValue(_.toCompletableFuture)
@@ -100,7 +104,10 @@ object GooglePubSub {
           .mapAsync(1, client.pull(_))
 
         val concatResult: Source[ReceivedMessage, CompletableFuture[Cancellable]] = sourceResult
-          .mapConcat((response: PullResponse) => response.getReceivedMessagesList)
+          .mapConcat(new function.Function[PullResponse, java.util.List[ReceivedMessage]] {
+            override def apply(response: PullResponse): java.util.List[ReceivedMessage] =
+              response.getReceivedMessagesList
+          })
           .mapMaterializedValue(cancellable.complete(_))
           .mapMaterializedValue(_ => cancellable)
 
