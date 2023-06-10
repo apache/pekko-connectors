@@ -182,5 +182,5 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    * for example using the [[pekko.stream.scaladsl.Framing]] stages.
    */
   def outgoingConnection(path: Path): Flow[ByteString, ByteString, Future[OutgoingConnection]] =
-    super.outgoingConnection(UnixSocketAddress(path))
+    super.outgoingConnection(UnixSocketAddress(path), None, true, Duration.Inf)
 }

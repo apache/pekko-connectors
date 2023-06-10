@@ -488,7 +488,6 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-testkit" % PekkoHttpVersion % Test))
 
   val UnixDomainSocket = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.3.1", // classifier "complete", // Is the classifier needed anymore?
       "com.github.jnr" % "jnr-unixsocket" % "0.38.5" // BSD/ApacheV2/CPL/MIT as per https://github.com/akka/alpakka/issues/620#issuecomment-348727265
