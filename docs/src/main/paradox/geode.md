@@ -69,7 +69,9 @@ Java
 :   @@snip [snip](/geode/src/test/java/docs/javadsl/PersonPdxSerializer.java) { #person-pdx-serializer }
 
 
-This Apache Pekko Connectors Geode provides a generic solution for Scala users based on [Shapeless](https://github.com/milessabin/shapeless) which may generate serializers for case classes at compile time.
+This Apache Pekko Connectors Geode provides a generic solution for Scala users based on [Shapeless](https://github.com/milessabin/shapeless) for Scala 2 and
+for Scala 3 using the [built-in tuple generic metaprogramming](https://www.scala-lang.org/2021/02/26/tuples-bring-generic-programming-to-scala-3.html)
+which may generate serializers for case classes at compile time.
 
 Java users need to implement custom serializers manually, or use runtime reflection as described in @extref[Using Automatic Reflection-Based PDX Serialization](geode:/developing/data_serialization/auto_serialization.html).
 
