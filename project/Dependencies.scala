@@ -110,7 +110,6 @@ object Dependencies {
   val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
         .exclude("com.github.spotbugs", "spotbugs-annotations")
@@ -119,7 +118,6 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
   val Couchbase = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion, // ApacheV2
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1", // ApacheV2
@@ -276,7 +274,6 @@ object Dependencies {
       "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val HuaweiPushKit = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
