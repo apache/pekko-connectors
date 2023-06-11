@@ -30,7 +30,7 @@ import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
 @DoNotInherit
-sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { _: FtpSourceFactory[FtpClient, S] =>
+sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory[FtpClient, S] =>
 
   /**
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
@@ -573,6 +573,6 @@ object Sftp extends SftpApi {
    */
   def create(customSshClient: SSHClient): SftpApi =
     new SftpApi {
-      override val sshClient: SSHClient = customSshClient
+      override def sshClient(): SSHClient = customSshClient
     }
 }

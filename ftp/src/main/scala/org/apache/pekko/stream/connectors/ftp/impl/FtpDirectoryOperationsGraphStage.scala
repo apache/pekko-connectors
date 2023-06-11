@@ -31,7 +31,7 @@ private[ftp] trait FtpDirectoryOperationsGraphStage[FtpClient, S <: RemoteFileSe
         out,
         new OutHandler {
           override def onPull(): Unit = {
-            push(out, ftpLike.mkdir(basePath, directoryName, handler.get))
+            push(out, graphStageFtpLike.mkdir(basePath, directoryName, handler.get))
             complete(out)
           }
         })
