@@ -17,7 +17,6 @@ import java.time.Duration
 import java.util.concurrent.{ CompletableFuture, CompletionStage }
 import org.apache.pekko
 import pekko.actor.Cancellable
-import pekko.japi.function
 import pekko.stream.{ Attributes, Materializer }
 import pekko.stream.javadsl.{ Flow, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
@@ -62,7 +61,7 @@ object GooglePubSub {
           .setStreamAckDeadlineSeconds(0)
           .build()
 
-        val streamingPullResult: Source[StreamingPullResponse, NotUsed] = subscriber(mat, attr).client
+        subscriber(mat, attr).client
           .streamingPull(
             Source
               .single(request)
@@ -70,12 +69,10 @@ object GooglePubSub {
                 Source
                   .tick(Duration.ZERO, pollInterval, subsequentRequest)
                   .mapMaterializedValue(cancellable.complete(_))))
-
-        streamingPullResult
-          .mapConcat(new function.Function[StreamingPullResponse, java.util.List[ReceivedMessage]] {
-            override def apply(response: StreamingPullResponse): java.util.List[ReceivedMessage] =
-              response.getReceivedMessagesList
-          })
+          .mapConcat(
+            ((response: StreamingPullResponse) =>
+                  response.getReceivedMessagesList): pekko.japi.function.Function[StreamingPullResponse,
+              java.util.List[ReceivedMessage]])
           .mapMaterializedValue(_ => cancellable)
       }
       .mapMaterializedValue(flattenCs(_))
@@ -103,10 +100,10 @@ object GooglePubSub {
           .mapAsync(1, client.pull(_))
 
         val concatResult: Source[ReceivedMessage, CompletableFuture[Cancellable]] = sourceResult
-          .mapConcat(new function.Function[PullResponse, java.util.List[ReceivedMessage]] {
-            override def apply(response: PullResponse): java.util.List[ReceivedMessage] =
-              response.getReceivedMessagesList
-          })
+          .mapConcat(
+            ((response: PullResponse) =>
+                  response.getReceivedMessagesList): pekko.japi.function.Function[PullResponse,
+              java.util.List[ReceivedMessage]])
           .mapMaterializedValue(cancellable.complete(_))
           .mapMaterializedValue(_ => cancellable)
 
