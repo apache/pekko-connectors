@@ -34,7 +34,7 @@ public class FtpsWithProxyStageTest extends BaseFtpSupport implements CommonFtpS
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
-  private final Integer PROXYPORT = 3128;
+  private final static int PROXYPORT = 3128;
   private final Proxy PROXY =
       new Proxy(Proxy.Type.HTTP, new InetSocketAddress(HOSTNAME, PROXYPORT));
 
