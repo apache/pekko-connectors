@@ -205,7 +205,6 @@ object Dependencies {
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion % Test,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
   val GoogleBigQueryStorage = Seq(
-    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
@@ -227,7 +226,6 @@ object Dependencies {
       "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test) ++ Mockito)
 
   val GooglePubSubGrpc = Seq(
-    crossScalaVersions -= Scala3,
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
