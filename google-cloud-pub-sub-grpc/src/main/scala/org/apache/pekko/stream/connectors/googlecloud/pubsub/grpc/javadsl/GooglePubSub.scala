@@ -69,7 +69,11 @@ object GooglePubSub {
                 Source
                   .tick(Duration.ZERO, pollInterval, subsequentRequest)
                   .mapMaterializedValue(cancellable.complete(_))))
-          .mapConcat(_.getReceivedMessagesList)
+          .mapConcat(
+            // TODO uptake any fix suggested for https://contributors.scala-lang.org/t/better-type-inference-for-scala-send-us-your-problematic-cases/2410/183
+            ((response: StreamingPullResponse) =>
+                  response.getReceivedMessagesList): pekko.japi.function.Function[StreamingPullResponse,
+              java.util.List[ReceivedMessage]])
           .mapMaterializedValue(_ => cancellable)
       }
       .mapMaterializedValue(flattenCs(_))
@@ -95,7 +99,11 @@ object GooglePubSub {
         Source
           .tick(Duration.ZERO, pollInterval, request)
           .mapAsync(1, client.pull(_))
-          .mapConcat(_.getReceivedMessagesList)
+          .mapConcat(
+            // TODO uptake any fix suggested for https://contributors.scala-lang.org/t/better-type-inference-for-scala-send-us-your-problematic-cases/2410/183
+            ((response: PullResponse) =>
+                  response.getReceivedMessagesList): pekko.japi.function.Function[PullResponse,
+              java.util.List[ReceivedMessage]])
           .mapMaterializedValue(cancellable.complete(_))
           .mapMaterializedValue(_ => cancellable)
       }
