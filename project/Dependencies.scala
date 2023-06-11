@@ -88,7 +88,6 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion)
 
   val Amqp = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.rabbitmq" % "amqp-client" % "5.14.2") ++ Mockito)
 
