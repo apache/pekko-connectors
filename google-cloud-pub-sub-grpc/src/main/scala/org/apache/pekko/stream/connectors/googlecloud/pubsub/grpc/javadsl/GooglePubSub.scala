@@ -95,19 +95,15 @@ object GooglePubSub {
 
         val client = subscriber(mat, attr).client
 
-        val sourceResult: Source[PullResponse, Cancellable] = Source
+        Source
           .tick(Duration.ZERO, pollInterval, request)
           .mapAsync(1, client.pull(_))
-
-        val concatResult: Source[ReceivedMessage, CompletableFuture[Cancellable]] = sourceResult
           .mapConcat(
             ((response: PullResponse) =>
                   response.getReceivedMessagesList): pekko.japi.function.Function[PullResponse,
               java.util.List[ReceivedMessage]])
           .mapMaterializedValue(cancellable.complete(_))
           .mapMaterializedValue(_ => cancellable)
-
-        concatResult
       }
       .mapMaterializedValue(flattenCs(_))
       .mapMaterializedValue(_.toCompletableFuture)
