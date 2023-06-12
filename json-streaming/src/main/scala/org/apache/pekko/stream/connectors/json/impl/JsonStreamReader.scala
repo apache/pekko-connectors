@@ -50,7 +50,7 @@ private[pekko] final class JsonStreamReader(path: JsonPath) extends GraphStage[F
           new JsonPathListener {
             override def onValue(value: Any, context: ParsingContext): Unit = {
               // see https://github.com/lampepfl/dotty/issues/17946
-              buffer = QueueHelper.enqueue(buffer, ByteString(value.toString))
+              buffer = buffer.enqueue[ByteString](ByteString(value.toString))
             }
           })
         .build
