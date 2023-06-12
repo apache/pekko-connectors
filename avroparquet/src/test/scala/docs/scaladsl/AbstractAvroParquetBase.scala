@@ -13,26 +13,18 @@
 
 package docs.scaladsl
 
-import java.io.File
-
-import org.apache.pekko.testkit.TestKit
-import com.sksamuel.avro4s.RecordFormat
 import org.apache.avro.Schema
 import org.apache.avro.generic.{ GenericRecord, GenericRecordBuilder }
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.apache.parquet.avro.{ AvroParquetReader, AvroParquetWriter, AvroReadSupport }
-import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
 import org.apache.parquet.hadoop.util.HadoopInputFile
+import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
 import org.scalacheck.Gen
-import org.scalatest.{ BeforeAndAfterAll, Suite }
 
-import scala.reflect.io.Directory
 import scala.util.Random
 
-trait AbstractAvroParquet extends BeforeAndAfterAll {
-  this: Suite with TestKit =>
-
+trait AbstractAvroParquetBase {
   case class Document(id: String, body: String)
 
   val schema: Schema = new Schema.Parser().parse(
@@ -42,13 +34,13 @@ trait AbstractAvroParquet extends BeforeAndAfterAll {
     Gen.oneOf(Seq(Document(id = Gen.alphaStr.sample.get, body = Gen.alphaLowerStr.sample.get)))
   val genDocuments: Int => Gen[List[Document]] = n => Gen.listOfN(n, genDocument)
 
-  val format: RecordFormat[Document] = RecordFormat[Document]
-
   val folder: String = "./" + Random.alphanumeric.take(8).mkString("")
 
   val genFinalFile: Gen[String] = for {
     fileName <- Gen.alphaLowerStr
-  } yield { folder + "/" + fileName + ".parquet" }
+  } yield {
+    folder + "/" + fileName + ".parquet"
+  }
 
   val genFile: Gen[String] = Gen.oneOf(Seq(Gen.alphaLowerStr.sample.get + ".parquet"))
 
@@ -110,8 +102,8 @@ trait AbstractAvroParquet extends BeforeAndAfterAll {
     import org.apache.avro.generic.GenericRecord
     import org.apache.hadoop.fs.Path
     import org.apache.parquet.avro.AvroParquetReader
-    import org.apache.parquet.hadoop.util.HadoopInputFile
     import org.apache.parquet.hadoop.ParquetReader
+    import org.apache.parquet.hadoop.util.HadoopInputFile
 
     val file: String = "./sample/path/test.parquet"
     val writer: ParquetWriter[GenericRecord] =
@@ -123,11 +115,5 @@ trait AbstractAvroParquet extends BeforeAndAfterAll {
     // #init-reader
     if (writer != null && reader != null) { // forces val usage
     }
-  }
-
-  override def afterAll(): Unit = {
-    TestKit.shutdownActorSystem(system)
-    val directory = new Directory(new File(folder))
-    directory.deleteRecursively()
   }
 }
