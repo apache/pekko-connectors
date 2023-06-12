@@ -112,18 +112,18 @@ TaskKey[Unit]("verifyCodeFmt") := {
 }
 
 val scalaReleaseSeparateSource: Def.SettingsDefinition = Compile / unmanagedSourceDirectories ++= {
-  if (scalaVersion.value.startsWith("2")) {
-    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-2")
-  } else {
+  if (Common.isScala3.value) {
     Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-3")
+  } else {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "main" / "scala-2")
   }
 }
 
 val scalaReleaseSeparateTestSource: Def.SettingsDefinition = Compile / unmanagedSourceDirectories ++= {
-  if (scalaVersion.value.startsWith("2")) {
-    Seq((LocalRootProject / baseDirectory).value / "src" / "test" / "scala-2")
-  } else {
+  if (Common.isScala3.value) {
     Seq((LocalRootProject / baseDirectory).value / "src" / "test" / "scala-3")
+  } else {
+    Seq((LocalRootProject / baseDirectory).value / "src" / "test" / "scala-2")
   }
 }
 

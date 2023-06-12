@@ -56,7 +56,7 @@ object Dependencies {
   val log4jOverSlf4jVersion = "1.7.36"
   val jclOverSlf4jVersion = "1.7.36"
 
-  val Common = Seq(
+  val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion))
@@ -168,7 +168,7 @@ object Dependencies {
     ))
 
   val avro4sVersion: Def.Initialize[String] = Def.setting {
-    if (scalaVersion.value.startsWith("2")) "4.1.1" else "5.0.4"
+    if (Common.isScala3.value) "4.1.1" else "5.0.4"
   }
 
   val AvroParquet = Seq(
