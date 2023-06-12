@@ -13,6 +13,9 @@
 
 package docs.scaladsl
 
+import com.sksamuel.avro4s.Record
+import org.apache.avro.generic.GenericRecord
+import org.apache.parquet.hadoop.ParquetWriter
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
@@ -20,13 +23,10 @@ import pekko.stream.connectors.avroparquet.scaladsl.AvroParquetFlow
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.testkit.TestKit
-import com.sksamuel.avro4s.Record
-import org.apache.avro.generic.GenericRecord
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
-import org.apache.parquet.hadoop.ParquetWriter
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
 class AvroParquetFlowSpec
     extends TestKit(ActorSystem("FlowSpec"))
