@@ -168,7 +168,7 @@ object Dependencies {
     ))
 
   val avro4sVersion: Def.Initialize[String] = Def.setting {
-    if (Common.isScala3.value) "4.1.1" else "5.0.4"
+    if (Common.isScala3.value) "5.0.4" else "4.1.1"
   }
 
   val AvroParquet = Seq(
