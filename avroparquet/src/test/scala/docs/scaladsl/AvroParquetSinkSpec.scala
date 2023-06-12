@@ -13,18 +13,18 @@
 
 package docs.scaladsl
 
+import com.sksamuel.avro4s.Record
+import org.apache.avro.generic.GenericRecord
+import org.apache.parquet.hadoop.ParquetWriter
 import org.apache.pekko
-import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.avroparquet.scaladsl.AvroParquetSink
 import pekko.stream.scaladsl.Source
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.testkit.TestKit
-import com.sksamuel.avro4s.{ Record, RecordFormat }
-import org.scalatest.concurrent.ScalaFutures
-import org.apache.avro.generic.GenericRecord
-import org.apache.parquet.hadoop.ParquetWriter
+import pekko.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -63,7 +63,7 @@ class AvroParquetSinkSpec
       val documents: List[Document] = genDocuments(n).sample.get
       val writer: ParquetWriter[Record] = parquetWriter[Record](file, conf, schema)
       // #init-sink
-      val records: List[Record] = documents.map(RecordFormat[Document].to(_))
+      val records: List[Record] = documents.map(format.to(_))
       val source: Source[Record, NotUsed] = Source(records)
       val result: Future[Done] = source
         .runWith(AvroParquetSink(writer))
