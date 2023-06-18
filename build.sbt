@@ -4,7 +4,6 @@ ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
-ThisBuild / versionScheme := Some(VersionScheme.SemVerSpec)
 sourceDistName := "incubating-pekko-connectors"
 
 lazy val `pekko-connectors` = project
