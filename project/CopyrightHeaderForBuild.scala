@@ -4,7 +4,7 @@
  *
  *   https://www.apache.org/licenses/LICENSE-2.0
  *
- * This file is part of the Apache Pekko project, derived from Akka.
+ * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
 /*
@@ -22,7 +22,9 @@ object CopyrightHeaderForBuild extends CopyrightHeader {
     Seq(Compile, Test).flatMap { config =>
       inConfig(config) {
         Seq(
-          config / headerSources ++= (((config / baseDirectory).value / "project") ** "*.scala").get,
+          config / headerSources ++= (((config / baseDirectory).value / "project") ** ("*.scala" || "*.sbt")).get,
+          config / headerSources ++= ((config / baseDirectory).value ** "*.sbt").get,
+          headerMappings := headerMappings.value ++ Map(HeaderFileType("sbt") -> cStyleComment),
           headerMappings := headerMappings.value ++ Map(HeaderFileType.scala -> cStyleComment))
       }
     }
