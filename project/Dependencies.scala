@@ -18,7 +18,7 @@ object Dependencies {
   val Scala212 = "2.12.17"
   val ScalaVersions = Seq(Scala213, Scala212)
 
-  val PekkoVersion = "0.0.0+26669-ec5b6764-SNAPSHOT"
+  val PekkoVersion = "1.0.0-RC2"
   val PekkoBinaryVersion = "current"
 
   val InfluxDBJavaVersion = "2.15"
