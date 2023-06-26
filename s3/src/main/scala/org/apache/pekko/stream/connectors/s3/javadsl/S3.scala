@@ -51,7 +51,7 @@ object S3 {
    * @return a raw HTTP response from S3
    */
   def request(bucket: String, key: String, method: HttpMethod, s3Headers: S3Headers): Source[HttpResponse, NotUsed] =
-    request(bucket, key, method, s3Headers)
+    request(bucket, key, Optional.empty(), method, s3Headers)
 
   /**
    * Use this for a low level access to S3.
