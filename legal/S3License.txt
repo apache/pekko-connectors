@@ -209,3 +209,10 @@ This code was released under an Apache 2.0 license.
 
 AWS SDK for Java
 Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+---------------
+
+pekko-connectors-s3 contains test code in `org.apache.pekko.stream.connectors.s3.impl.retry` package
+which is copied from futiles <https://github.com/johanandren/futiles>.
+The original code was released under the Apache 2.0 license.
+Copyright 2015 Johan Andrén.
