@@ -38,7 +38,7 @@ import scala.util.{ Failure, Success, Try }
 
 /**
  * Internal API.
- * An IronMq client based on Akka-http.
+ * An IronMq client based on pekko-http.
  *
  * This client provide a subset of the operation you can do by the IronMQ protocol. It is not intended to be used by
  * the final user but as internal API. Still it could be used to create/list/delete queues if needed.
