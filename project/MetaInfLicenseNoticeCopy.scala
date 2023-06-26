@@ -20,7 +20,14 @@ object MetaInfLicenseNoticeCopy extends AutoPlugin {
   private lazy val baseDir = LocalRootProject / baseDirectory
 
   override lazy val projectSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "StandardLicense.txt",
     apacheSonatypeDisclaimerFile := Some(baseDir.value / "DISCLAIMER"))
+
+  /**
+   * Settings specific for pekko-connectors-google-common subproject which requires a different license file.
+   */
+  lazy val googleCommonSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "LICENSE")
 
   override def trigger = allRequirements
 
