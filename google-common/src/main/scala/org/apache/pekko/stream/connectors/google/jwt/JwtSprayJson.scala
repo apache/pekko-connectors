@@ -18,6 +18,9 @@ import spray.json._
 
 /**
  * Implementation of `JwtCore` using `JsObject` from spray-json.
+ *
+ * This is a copy of Apache licensed (version 2.0) code from
+ * https://github.com/jwt-scala/jwt-scala/blob/224f16124ea49a1cc5144a647e3767de4267ee7c/json/spray-json/src/main/scala/JwtSprayJson.scala
  */
 @InternalApi
 private[google] trait JwtSprayJsonParser[H, C] extends JwtJsonCommon[JsObject, H, C] {
