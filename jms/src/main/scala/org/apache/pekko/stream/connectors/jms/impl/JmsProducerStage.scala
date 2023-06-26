@@ -77,7 +77,7 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
     new TimerGraphStageLogic(shape) with JmsProducerConnector with StageLogging {
 
       /*
-       * NOTE: the following code is heavily inspired by akka.stream.impl.fusing.MapAsync
+       * NOTE: the following code is heavily inspired by org.apache.pekko.stream.impl.fusing.MapAsync
        *
        * To get a condensed view of what the buffers and handler behavior is about, have a look there too.
        */
@@ -257,7 +257,7 @@ private[jms] object JmsProducerStage {
   val NotYetThere = Failure(new Exception with NoStackTrace)
 
   /*
-   * NOTE: the following code is heavily inspired by akka.stream.impl.fusing.MapAsync
+   * NOTE: the following code is heavily inspired by org.apache.pekko.stream.impl.fusing.MapAsync
    *
    * To get a condensed view of what the Holder is about, have a look there too.
    */

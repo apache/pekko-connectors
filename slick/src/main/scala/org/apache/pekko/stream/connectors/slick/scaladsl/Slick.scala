@@ -28,7 +28,7 @@ import slick.dbio.DBIO
 import slick.dbio.StreamingDBIO
 
 /**
- * Methods for interacting with relational databases using Slick and akka-stream.
+ * Methods for interacting with relational databases using Slick and pekko-stream.
  */
 object Slick {
 

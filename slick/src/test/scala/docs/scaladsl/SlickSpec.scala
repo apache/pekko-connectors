@@ -79,7 +79,7 @@ class SlickSpec
 
     // This uses the standard Slick API exposed by the Slick session
     // on purpose, just to double-check that inserting data through
-    // our Alpakka connectors is equivalent to inserting it the Slick way.
+    // our Pekko connectors is equivalent to inserting it the Slick way.
     session.db.run(DBIO.seq(actions.toList: _*)).futureValue
   }
 

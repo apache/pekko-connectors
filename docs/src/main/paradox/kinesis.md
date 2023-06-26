@@ -4,24 +4,6 @@ The AWS Kinesis connector provides flows for streaming data to and from Kinesis 
 
 For more information about Kinesis please visit the [Kinesis documentation](https://docs.aws.amazon.com/kinesis/index.html).
 
-@@@ note { title="Alternative connector 1" }
-
-Another Kinesis connector which is based on the Kinesis Client Library is available.
-
-This library combines the convenience of Apache Pekko Streams with KCL checkpoint management, failover, load-balancing, and re-sharding capabilities.
-
-Please read more about it at [GitHub StreetContxt/kcl-pekko-stream](https://github.com/StreetContxt/kcl-pekko-stream).
-@@@
-
-@@@ note { title="Alternative connector 2" }
-
-Another Kinesis connector which is based on the Kinesis Client Library 2.x is available.
-
-This library exposes an Apache Pekko Streams Source backed by the KCL for checkpoint management, failover, load-balancing, and re-sharding capabilities.
-
-Please read more about it at [GitHub 500px/kinesis-stream](https://github.com/500px/kinesis-stream).
-@@@
-
 @@project-info{ projectId="kinesis" }
 
 ## Artifacts
