@@ -1282,7 +1282,8 @@ import scala.util.{ Failure, Success, Try }
           Flow[(ByteString, C)].orElse(
             Source.single((ByteString.empty, null.asInstanceOf[C])))
 
-        val source1: SubFlow[(Chunk, immutable.Iterable[C]), NotUsed, Flow[(ByteString, C), (ByteString, C), NotUsed]#Repr, Sink[(ByteString, C), NotUsed]] =
+        val source1: SubFlow[(Chunk, immutable.Iterable[C]), NotUsed, Flow[(ByteString, C), (ByteString, C),
+            NotUsed]#Repr, Sink[(ByteString, C), NotUsed]] =
           SplitAfterSizeWithContext(chunkSize)(atLeastOneByteStringAndEmptyContext)
             .via(getChunk(chunkBufferSize))
 
