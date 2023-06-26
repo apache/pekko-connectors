@@ -956,7 +956,7 @@ class MqttSessionSpec
       // This reply triggers an error showing in the logs which hinders proper shutdown
       //   7   │ 2019-03-06 11:28:23,035 ERROR [mqtt-spec-org.apache.pekko.actor.default-dispatcher-3] [org.apache.pekko.actor.OneForOneStrategy]  56 (of class java.lang.Integer)
       //   8   │ scala.MatchError: 56 (of class java.lang.Integer)
-      //   9   │     at akka.stream.impl.fusing.GraphInterpreter.$anonfun$toSnapshot$4(GraphInterpreter.scala:662)
+      //   9   │     at org.apache.pekko.stream.impl.fusing.GraphInterpreter.$anonfun$toSnapshot$4(GraphInterpreter.scala:662)
       server.reply(connAckBytes) // It doesn't matter what the message is - our test machinery here just wants a reply
       server.expectMsg(publishDupBytes)
       server.reply(pubAckBytes)

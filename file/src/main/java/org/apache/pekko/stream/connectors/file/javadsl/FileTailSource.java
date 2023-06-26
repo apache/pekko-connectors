@@ -29,7 +29,7 @@ import java.nio.file.Path;
  * <p>Read the entire contents of a file, and then when the end is reached, keep reading newly
  * appended data. Like the unix command `tail -f`.
  *
- * <p>Aborting the stage can be done by combining with a [[akka.stream.KillSwitch]]
+ * <p>Aborting the stage can be done by combining with a [[org.apache.pekko.stream.KillSwitch]]
  *
  * <p>To use the stage from Scala see the factory methods in {@link
  * org.apache.pekko.stream.connectors.file.scaladsl.FileTailSource}
@@ -42,7 +42,7 @@ public final class FileTailSource {
    *
    * <p>Reading text lines can be done with the `createLines` factory methods or by composing with
    * other stages manually depending on your needs. Aborting the stage can be done by combining with
-   * a [[akka.stream.KillSwitch]]
+   * a [[org.apache.pekko.stream.KillSwitch]]
    *
    * @param path a file path to tail
    * @param maxChunkSize The max emitted size of the `ByteString`s
@@ -65,7 +65,7 @@ public final class FileTailSource {
    *
    * <p>If a line is longer than `maxChunkSize` the stream will fail.
    *
-   * <p>Aborting the stage can be done by combining with a [[akka.stream.KillSwitch]]
+   * <p>Aborting the stage can be done by combining with a [[org.apache.pekko.stream.KillSwitch]]
    *
    * @param path a file path to tail
    * @param maxLineSize The max emitted size of the `ByteString`s

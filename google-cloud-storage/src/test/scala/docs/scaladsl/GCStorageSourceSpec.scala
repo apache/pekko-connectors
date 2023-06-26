@@ -417,7 +417,7 @@ class GCStorageSourceSpec
       result.futureValue.mkString shouldBe fileContent
     }
 
-    // retry for all akka-http standard server errors (5XX) https://github.com/akka/alpakka/issues/2057
+    // retry for all pekko-http standard server errors (5XX) https://github.com/akka/alpakka/issues/2057
     "automatically retry when file downloads fail with a non-500 server error" in {
       val bucketName = "connectors"
       val fileName = "file1.txt"
