@@ -194,6 +194,7 @@ lazy val googleCommon = pekkoConnectorProject(
   "google-common",
   "google.common",
   Dependencies.GoogleCommon,
+  MetaInfLicenseNoticeCopy.googleCommonSettings,
   Test / fork := true)
 
 lazy val googleCloudBigQuery = pekkoConnectorProject(
