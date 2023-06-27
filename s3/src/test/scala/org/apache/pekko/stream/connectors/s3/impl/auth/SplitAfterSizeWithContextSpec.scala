@@ -27,7 +27,6 @@ import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration._
-import scala.runtime.RichInt
 
 class SplitAfterSizeWithContextSpec(_system: ActorSystem)
     extends TestKit(_system)
@@ -81,6 +80,6 @@ class SplitAfterSizeWithContextSpec(_system: ActorSystem)
   }
 
   // https://github.com/lampepfl/dotty/issues/18068
-  def bytes(start: Byte, end: Byte): Array[Byte] = (new RichInt(start) to end).map(_.toByte).toArray[Byte]
+  def bytes(start: Byte, end: Byte): Array[Byte] = (start.toInt to end).map(_.toByte).toArray[Byte]
 
 }
