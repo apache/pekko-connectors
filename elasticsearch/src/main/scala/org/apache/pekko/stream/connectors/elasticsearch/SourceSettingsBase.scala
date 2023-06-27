@@ -17,8 +17,6 @@ import org.apache.pekko
 import pekko.util.JavaDurationConverters._
 import java.util.concurrent.TimeUnit
 
-import pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings
-
 import scala.concurrent.duration.FiniteDuration
 
 /**
