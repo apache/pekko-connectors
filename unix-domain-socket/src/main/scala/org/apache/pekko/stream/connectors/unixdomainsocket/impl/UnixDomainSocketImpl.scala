@@ -17,7 +17,7 @@ package impl
 import org.apache.pekko
 import pekko.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
 import pekko.annotation.InternalApi
-import pekko.event.{ LogSource, Logging, LoggingAdapter }
+import pekko.event.{ Logging, LoggingAdapter }
 import pekko.stream._
 import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
   IncomingConnection,
