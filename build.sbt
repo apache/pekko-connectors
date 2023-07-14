@@ -18,7 +18,7 @@ sourceDistIncubating := true
 
 lazy val `pekko-connectors` = project
   .in(file("."))
-  .enablePlugins(ReproducibleBuildsPlugin, ScalaUnidocPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
   .aggregate(
     amqp,
@@ -423,7 +423,7 @@ def pekkoConnectorProject(projectId: String,
     additionalSettings: sbt.Def.SettingsDefinition*): Project = {
   import com.typesafe.tools.mima.core._
   Project(id = projectId, base = file(projectId))
-    .enablePlugins(AutomateHeaderPlugin)
+    .enablePlugins(AutomateHeaderPlugin, ReproducibleBuildsPlugin)
     .disablePlugins(SitePlugin)
     .settings(
       name := s"pekko-connectors-$projectId",
