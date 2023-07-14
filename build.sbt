@@ -18,7 +18,7 @@ sourceDistIncubating := true
 
 lazy val `pekko-connectors` = project
   .in(file("."))
-  .enablePlugins(ScalaUnidocPlugin)
+  .enablePlugins(ReproducibleBuildsPlugin, ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
   .aggregate(
     amqp,
