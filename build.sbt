@@ -13,7 +13,8 @@ ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
-sourceDistName := "incubating-pekko-connectors"
+sourceDistName := "apache-pekko-connectors"
+sourceDistIncubating := true
 
 lazy val `pekko-connectors` = project
   .in(file("."))
@@ -422,7 +423,7 @@ def pekkoConnectorProject(projectId: String,
     additionalSettings: sbt.Def.SettingsDefinition*): Project = {
   import com.typesafe.tools.mima.core._
   Project(id = projectId, base = file(projectId))
-    .enablePlugins(AutomateHeaderPlugin)
+    .enablePlugins(AutomateHeaderPlugin, ReproducibleBuildsPlugin)
     .disablePlugins(SitePlugin)
     .settings(
       name := s"pekko-connectors-$projectId",
