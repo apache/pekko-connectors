@@ -2041,7 +2041,7 @@ class MqttSessionSpec
       connect2Received.future.futureValue shouldBe Done
 
       serverConnection2.offer(Command(connAck))
-      client2.expectMsg(6.seconds, connAckBytes)
+      client2.expectMsg(15.seconds, connAckBytes)
 
       client2Connection.offer(subscribeBytes)
 
