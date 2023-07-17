@@ -29,11 +29,11 @@ object Dependencies {
   val PekkoGrpcBinaryVersion = "current"
   val PekkoHttpVersion = "0.0.0+4411-6fe04045-SNAPSHOT"
   val PekkoHttpBinaryVersion = "current"
-  val ScalaTestVersion = "3.2.11"
+  val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val hoverflyVersion = "0.14.1"
-  val scalaCheckVersion = "1.15.4"
+  val scalaCheckVersion = "1.16.0"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -76,7 +76,7 @@ object Dependencies {
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
-    "org.scalatestplus" %% "mockito-4-2" % (ScalaTestVersion + ".0") % Test)
+    "org.scalatestplus" %% "mockito-4-6" % (ScalaTestVersion + ".0") % Test)
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
@@ -135,7 +135,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
       "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1738-07a19b8e-SNAPSHOT" % Test,
       "junit" % "junit" % "4.13.2" % Test, // Eclipse Public License 1.0
-      "org.scalatest" %% "scalatest" % "3.2.11" % Test // ApacheV2
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % Test // ApacheV2
     ))
 
   val DynamoDB = Seq(
