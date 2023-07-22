@@ -21,7 +21,7 @@ import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.testkit.TestKit
 import pekko.util.ByteString
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
-import org.scalatest.{ Args, BeforeAndAfter, BeforeAndAfterAll, Inside, Status, TestSuite, TestSuiteMixin }
+import org.scalatest.{ BeforeAndAfter, BeforeAndAfterAll, Inside, TestSuite, TestSuiteMixin }
 
 import scala.concurrent.Future
 import org.scalatest.matchers.should.Matchers
@@ -72,16 +72,5 @@ trait BaseSpec
   override protected def afterAll() = {
     TestKit.shutdownActorSystem(getSystem, verifySystemShutdown = true)
     super.afterAll()
-  }
-
-  // Allows to run tests n times in a row with a command line argument, useful for debugging sporadic failures
-  // e.g. ftp/testOnly *.FtpsStageSpec -- -Dtimes=20
-  // https://gist.github.com/dwickern/6ba9c5c505d2325d3737ace059302922
-  override abstract protected def runTest(testName: String, args: Args): Status = {
-    def run0(times: Int): Status = {
-      val status = super.runTest(testName, args)
-      if (times <= 1) status else status.thenRun(run0(times - 1))
-    }
-    run0(args.configMap.getWithDefault("times", "1").toInt)
   }
 }
