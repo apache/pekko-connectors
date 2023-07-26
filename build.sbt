@@ -16,6 +16,12 @@ ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
 
+commands := commands.value.filterNot { command =>
+  command.nameOption.exists { name =>
+    name.contains("sonatypeRelease") || name.contains("sonatypeBundleRelease")
+  }
+}
+
 lazy val `pekko-connectors` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
