@@ -45,5 +45,6 @@ We want Apache Pekko and Apache Pekko Connectors to strive in a welcoming and op
 * [Other documentation resources](other-docs/index.md)
 * [Integration Patterns](patterns.md)
 * [Release notes](release-notes/index.md)
+* [License Report](license-report.md)
 
 @@@
