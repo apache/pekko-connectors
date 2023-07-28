@@ -417,7 +417,14 @@ lazy val docs = project
       "examples/jms-samples.html",
       "examples/mqtt-samples.html",
       "index.html"),
-    apidocRootPackage := "org.apache.pekko")
+    apidocRootPackage := "org.apache.pekko",
+    Compile / paradoxMarkdownToHtml / sourceGenerators += Def.taskDyn {
+      val targetFile = (Compile / paradox / sourceManaged).value / "license-report.md"
+
+      (LocalRootProject / dumpLicenseReportAggregate).map { dir =>
+        IO.copy(List(dir / "pekko-connectors-root-licenses.md" -> targetFile)).toList
+      }
+    }.taskValue)
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
 
