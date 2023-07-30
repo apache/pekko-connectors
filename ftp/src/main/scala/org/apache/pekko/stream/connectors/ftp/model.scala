@@ -15,6 +15,8 @@ package org.apache.pekko.stream.connectors.ftp
 
 import java.net.InetAddress
 import java.net.Proxy
+import javax.net.ssl.KeyManager
+import javax.net.ssl.TrustManager
 import java.nio.file.attribute.PosixFilePermission
 
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
@@ -173,7 +175,9 @@ final class FtpsSettings private (
     val binary: Boolean,
     val passiveMode: Boolean,
     val configureConnection: FTPSClient => Unit,
-    val proxy: Option[Proxy]) extends FtpFileSettings {
+    val proxy: Option[Proxy],
+    val keyManager: Option[KeyManager],
+    val trustManager: Option[TrustManager]) extends FtpFileSettings {
 
   def withHost(value: java.net.InetAddress): FtpsSettings = copy(host = value)
   def withPort(value: Int): FtpsSettings = copy(port = value)
@@ -182,6 +186,8 @@ final class FtpsSettings private (
   def withPassiveMode(value: Boolean): FtpsSettings =
     if (passiveMode == value) this else copy(passiveMode = value)
   def withProxy(value: Proxy): FtpsSettings = copy(proxy = Some(value))
+  def withKeyManager(value: KeyManager): FtpsSettings = copy(keyManager = Some(value))
+  def withTrustManager(value: TrustManager): FtpsSettings = copy(trustManager = Some(value))
 
   /**
    * Scala API:
@@ -205,14 +211,18 @@ final class FtpsSettings private (
       binary: Boolean = binary,
       passiveMode: Boolean = passiveMode,
       configureConnection: FTPSClient => Unit = configureConnection,
-      proxy: Option[Proxy] = proxy): FtpsSettings = new FtpsSettings(
+      proxy: Option[Proxy] = proxy,
+      keyManager: Option[KeyManager] = keyManager,
+      trustManager: Option[TrustManager] = trustManager): FtpsSettings = new FtpsSettings(
     host = host,
     port = port,
     credentials = credentials,
     binary = binary,
     passiveMode = passiveMode,
     configureConnection = configureConnection,
-    proxy = proxy)
+    proxy = proxy,
+    keyManager = keyManager,
+    trustManager = trustManager)
 
   override def toString =
     "FtpsSettings(" +
@@ -222,7 +232,9 @@ final class FtpsSettings private (
     s"binary=$binary," +
     s"passiveMode=$passiveMode," +
     s"configureConnection=$configureConnection," +
-    s"proxy=$proxy)"
+    s"proxy=$proxy" +
+    s"keyManager=$keyManager" +
+    s"trustManager=$trustManager)"
 }
 
 /**
@@ -241,7 +253,9 @@ object FtpsSettings {
     binary = false,
     passiveMode = false,
     configureConnection = _ => (),
-    proxy = None)
+    proxy = None,
+    keyManager = None,
+    trustManager = None)
 
   /** Java API */
   def create(host: java.net.InetAddress): FtpsSettings = apply(
