@@ -23,23 +23,34 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.TrustManager;
+import javax.net.ssl.*;
+import java.net.Socket;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class FtpsWithTrustAndKeyManagersStageTest extends BaseFtpSupport implements CommonFtpStageTest {
   private static final String PEM_PATH = "ftpd/pure-ftpd.pem";
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
+  private X509ExtendedKeyManager keyManager;
+  private X509ExtendedTrustManager trustManager;
+
   @Test
   public void listFiles() throws Exception {
     CommonFtpStageTest.super.listFiles();
+
+    verify(trustManager).checkServerTrusted(any(X509Certificate[].class), anyString(), any(Socket.class));
   }
 
   public Source<FtpFile, NotUsed> getBrowserSource(String basePath) throws Exception {
@@ -64,24 +75,29 @@ public class FtpsWithTrustAndKeyManagersStageTest extends BaseFtpSupport impleme
   }
 
   private FtpsSettings settings() throws Exception {
+    keyManager = keyManager();
+    trustManager = trustManager();
+
     return FtpsSettings.create(InetAddress.getByName(HOSTNAME))
         .withPort(PORT)
         .withCredentials(CREDENTIALS)
         .withBinary(false)
         .withPassiveMode(true)
-        .withTrustManager(trustManager())
-        .withKeyManager(keyManager());
+        .withTrustManager(trustManager)
+        .withKeyManager(keyManager);
   }
 
-  private KeyManager keyManager() throws IOException {
+  private X509ExtendedKeyManager keyManager() throws IOException {
     try (InputStream stream = classLoader().getResourceAsStream(PEM_PATH)) {
-      return PemUtils.loadIdentityMaterial(stream);
+      X509ExtendedKeyManager manager = PemUtils.loadIdentityMaterial(stream);
+      return Mockito.spy(manager);
     }
   }
 
-  private TrustManager trustManager() throws IOException {
+  private X509ExtendedTrustManager trustManager() throws IOException {
     try (InputStream stream = classLoader().getResourceAsStream(PEM_PATH)) {
-      return PemUtils.loadTrustMaterial(stream);
+      X509ExtendedTrustManager manager = PemUtils.loadTrustMaterial(stream);
+      return Mockito.spy(manager);
     }
   }
 
