@@ -66,12 +66,11 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.2.11", // Eclipse Public License 1.0
+      "ch.qos.logback" % "logback-classic" % "1.2.11",
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
-      "com.novocode" % "junit-interface" % "0.11", // BSD-style
-      "junit" % "junit" % "4.13" // Eclipse Public License 1.0
-    ))
+      "com.novocode" % "junit-interface" % "0.11",
+      "junit" % "junit" % "4.13"))
 
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
@@ -89,24 +88,20 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.14.2" // APLv2
-    ) ++ Mockito)
+      "com.rabbitmq" % "amqp-client" % "5.14.2") ++ Mockito)
 
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion, // ApacheV2
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll( // ApacheV2
-
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "lambda" % AwsSdk2Version).excludeAll( // ApacheV2
-
+      ("software.amazon.awssdk" % "lambda" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
 
   val AzureStorageQueue = Seq(
     libraryDependencies ++= Seq(
-      "com.microsoft.azure" % "azure-storage" % "8.0.0" // ApacheV2
-    ))
+      "com.microsoft.azure" % "azure-storage" % "8.0.0"))
 
   val CassandraVersionInDocs = "4.0"
   val CassandraDriverVersion = "4.15.0"
@@ -122,33 +117,28 @@ object Dependencies {
 
   val Couchbase = Seq(
     libraryDependencies ++= Seq(
-      "com.couchbase.client" % "java-client" % CouchbaseVersion, // ApacheV2
-      "io.reactivex" % "rxjava-reactive-streams" % "1.2.1", // ApacheV2
-      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided, // Apache V2
-      "com.typesafe.play" %% "play-json" % "2.9.2" % Test, // Apache V2
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test // Apache V2
-    ))
+      "com.couchbase.client" % "java-client" % CouchbaseVersion,
+      "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
+      "com.typesafe.play" %% "play-json" % "2.9.2" % Test,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
       "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1761-2291eac2-SNAPSHOT" % Test,
-      "junit" % "junit" % "4.13.2" % Test, // Eclipse Public License 1.0
-      "org.scalatest" %% "scalatest" % ScalaTestVersion % Test // ApacheV2
-    ))
+      "junit" % "junit" % "4.13.2" % Test,
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % Test))
 
   val DynamoDB = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll( // ApacheV2
-
+      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version).excludeAll( // ApacheV2
-
+      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion // ApacheV2
-    ))
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion))
 
   val Elasticsearch = Seq(
     libraryDependencies ++= Seq(
@@ -158,24 +148,22 @@ object Dependencies {
 
   val File = Seq(
     libraryDependencies ++= Seq(
-      "com.google.jimfs" % "jimfs" % "1.2" % Test // ApacheV2
-    ))
+      "com.google.jimfs" % "jimfs" % "1.2" % Test))
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.10.1", // Apache2
-      ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
-      ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
+      "org.apache.parquet" % "parquet-avro" % "1.10.1",
+      ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % "4.1.1" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.8.3" % Test, // MIT like: https://github.com/etorreborre/specs2/blob/master/LICENSE.txt
-      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
-    ))
+      "org.specs2" %% "specs2-core" % "4.8.3" % Test,
+      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val Ftp = Seq(
     libraryDependencies ++= Seq(
-      "commons-net" % "commons-net" % "3.8.0", // ApacheV2
-      "com.hierynomus" % "sshj" % "0.33.0", // ApacheV2
+      "commons-net" % "commons-net" % "3.8.0",
+      "com.hierynomus" % "sshj" % "0.33.0",
       "io.github.hakky54" % "sslcontext-kickstart-for-pem" % "6.8.0" % Test,
       "org.mockito" % "mockito-core" % "4.11.0" % Test,
       "org.mockito" % "mockito-inline" % "4.11.0" % Test))
@@ -195,10 +183,9 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4", // ApacheV2
-      "com.google.auth" % "google-auth-library-credentials" % "0.24.1", // BSD 3-clause
-      "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
-    ) ++ Mockito)
+      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4",
+      "com.google.auth" % "google-auth-library-credentials" % "0.24.1",
+      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val GoogleBigQuery = Seq(
     libraryDependencies ++= Seq(
@@ -208,16 +195,15 @@ object Dependencies {
       "io.spray" %% "spray-json" % "1.3.6",
       "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonDatabindVersion,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion % Test,
-      "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
-    ) ++ Mockito)
+      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
   val GoogleBigQueryStorage = Seq(
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src", // ApacheV2
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src",
       "org.apache.avro" % "avro" % "1.9.2" % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
-      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
+      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
@@ -229,16 +215,15 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test // ApacheV2
-    ) ++ Mockito)
+      "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test) ++ Mockito)
 
   val GooglePubSubGrpc = Seq(
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src", // ApacheV2
-      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion, // ApacheV2
-      "com.google.auth" % "google-auth-library-oauth2-http" % "0.22.2", // BSD 3-clause
+      "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src",
+      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
+      "com.google.auth" % "google-auth-library-oauth2-http" % "0.22.2",
       // pull in Pekko Discovery for our Pekko version
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
 
@@ -251,8 +236,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
-    ) ++ Mockito)
+      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val HBase = {
     val hbaseVersion = "1.4.13"
@@ -260,77 +244,69 @@ object Dependencies {
     Seq(
       libraryDependencies ++= Seq(
         ("org.apache.hbase" % "hbase-shaded-client" % hbaseVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-          "slf4j-log4j12"), // ApacheV2,
+          "slf4j-log4j12"),
         ("org.apache.hbase" % "hbase-common" % hbaseVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-          "slf4j-log4j12"), // ApacheV2,
+          "slf4j-log4j12"),
         ("org.apache.hadoop" % "hadoop-common" % hadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-          "slf4j-log4j12"), // ApacheV2,
+          "slf4j-log4j12"),
         ("org.apache.hadoop" % "hadoop-mapreduce-client-core" % hadoopVersion).exclude("log4j", "log4j").exclude(
-          "org.slf4j", "slf4j-log4j12"), // ApacheV2,
-        "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
-      ))
+          "org.slf4j", "slf4j-log4j12"),
+        "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
   }
 
   val HadoopVersion = "3.2.1"
   val Hdfs = Seq(
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"), // ApacheV2
-      "org.typelevel" %% "cats-core" % "2.0.0", // MIT,
+        "slf4j-log4j12"),
+      "org.typelevel" %% "cats-core" % "2.0.0",
       ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"), // ApacheV2
+        "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"), // ApacheV2
+        "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-minicluster" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"), // ApacheV2
-      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
-    ))
+        "slf4j-log4j12"),
+      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val HuaweiPushKit = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4" // ApacheV2
-    ) ++ Mockito)
+      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4") ++ Mockito)
 
   val InfluxDB = Seq(
     libraryDependencies ++= Seq(
-      "org.influxdb" % "influxdb-java" % InfluxDBJavaVersion // MIT
-    ))
+      "org.influxdb" % "influxdb-java" % InfluxDBJavaVersion))
 
   val IronMq = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.mdedetrich" %% "pekko-stream-circe" % "0.0.0+97-53ec124d-SNAPSHOT", // ApacheV2
-      "org.mdedetrich" %% "pekko-http-circe" % "0.0.0+97-53ec124d-SNAPSHOT" // ApacheV2
-    ))
+      "org.mdedetrich" %% "pekko-stream-circe" % "0.0.0+97-53ec124d-SNAPSHOT",
+      "org.mdedetrich" %% "pekko-http-circe" % "0.0.0+97-53ec124d-SNAPSHOT"))
 
   val Jms = Seq(
     libraryDependencies ++= Seq(
-      "javax.jms" % "jms" % "1.1" % Provided, // CDDL + GPLv2
-      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.2.5.0" % Test, // IBM International Program License Agreement https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/maven/licenses/L-APIG-AZYF2E/LI_en.html
-      "org.apache.activemq" % "activemq-broker" % "5.16.4" % Test, // ApacheV2
-      "org.apache.activemq" % "activemq-client" % "5.16.4" % Test, // ApacheV2
-      "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test // ApacheV2
-    ) ++ Mockito,
+      "javax.jms" % "jms" % "1.1" % Provided,
+      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.2.5.0" % Test,
+      "org.apache.activemq" % "activemq-broker" % "5.16.4" % Test,
+      "org.apache.activemq" % "activemq-client" % "5.16.4" % Test,
+      "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test) ++ Mockito,
     // Having JBoss as a first resolver is a workaround for https://github.com/coursier/coursier/issues/200
     externalResolvers := ("jboss".at(
       "https://repository.jboss.org/nexus/content/groups/public")) +: externalResolvers.value)
 
   val JsonStreaming = Seq(
     libraryDependencies ++= Seq(
-      "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0" // MIT
-    ) ++ JacksonDatabindDependencies)
+      "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0") ++ JacksonDatabindDependencies)
 
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion, // ApacheV2
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(ExclusionRule(
         organization = "org.apache.pekko"))) ++ Seq(
-      "software.amazon.awssdk" % "kinesis" % AwsSdk2Version, // ApacheV2
-      "software.amazon.awssdk" % "firehose" % AwsSdk2Version, // ApacheV2
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.0" // ApacheV2
-    ).map(
+      "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
+      "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.0").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
@@ -338,34 +314,29 @@ object Dependencies {
   val KuduVersion = "1.7.1"
   val Kudu = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.kudu" % "kudu-client-tools" % KuduVersion, // ApacheV2
-      "org.apache.kudu" % "kudu-client" % KuduVersion % Test // ApacheV2
-    ))
+      "org.apache.kudu" % "kudu-client-tools" % KuduVersion,
+      "org.apache.kudu" % "kudu-client" % KuduVersion % Test))
 
   val MongoDb = Seq(
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0" // ApacheV2
-    ))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
-      "org.eclipse.paho" % "org.eclipse.paho.client.mqttv3" % "1.2.5" // Eclipse Public License 1.0
-    ))
+      "org.eclipse.paho" % "org.eclipse.paho.client.mqttv3" % "1.2.5"))
 
   val MqttStreaming = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion, // ApacheV2
-      "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test, // ApacheV2
-      "org.apache.pekko" %% "pekko-stream-typed" % PekkoVersion, // ApacheV2
-      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test // ApacheV2
-    ))
+      "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-actor-testkit-typed" % PekkoVersion % Test,
+      "org.apache.pekko" %% "pekko-stream-typed" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test))
 
   val OrientDB = Seq(
     libraryDependencies ++= Seq(
       ("com.orientechnologies" % "orientdb-graphdb" % "3.1.9")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.1.9" // ApacheV2
-    ))
+      "com.orientechnologies" % "orientdb-object" % "3.1.9"))
 
   val PravegaVersion = "0.10.2"
   val PravegaVersionForDocs = s"v$PravegaVersion"
@@ -374,8 +345,7 @@ object Dependencies {
     Seq(
       libraryDependencies ++= Seq(
         "io.pravega" % "pravega-client" % PravegaVersion,
-        "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
-      ))
+        "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
   }
 
   val Reference = Seq(
@@ -389,8 +359,8 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-xml" % PekkoHttpVersion,
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
-      "com.google.jimfs" % "jimfs" % "1.2" % Test, // ApacheV2
-      "com.github.tomakehurst" % "wiremock-jre8" % "2.32.0" % Test, // ApacheV2
+      "com.google.jimfs" % "jimfs" % "1.2" % Test,
+      "com.github.tomakehurst" % "wiremock-jre8" % "2.32.0" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test,
       "com.markatta" %% "futiles" % "2.0.2" % Test))
@@ -411,58 +381,47 @@ object Dependencies {
   val SlickVersion = "3.3.3"
   val Slick = Seq(
     libraryDependencies ++= Seq(
-      "com.typesafe.slick" %% "slick" % SlickVersion, // BSD 2-clause "Simplified" License
-      "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion, // BSD 2-clause "Simplified" License
-      "com.h2database" % "h2" % "2.1.210" % Test // Eclipse Public License 1.0
-    ))
+      "com.typesafe.slick" %% "slick" % SlickVersion,
+      "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
+      "com.h2database" % "h2" % "2.1.210" % Test))
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll( // ApacheV2
-
+      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "eventbridge" % AwsSdk2Version).excludeAll( // ApacheV2
-
+      ("software.amazon.awssdk" % "eventbridge" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion // ApacheV2
-    ) ++ Mockito)
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion) ++ Mockito)
 
   val Sns = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll( // ApacheV2
-
+      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "sns" % AwsSdk2Version).excludeAll( // ApacheV2
-
+      ("software.amazon.awssdk" % "sns" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion // ApacheV2
-    ) ++ Mockito)
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion) ++ Mockito)
 
   val SolrjVersion = "7.7.3"
   val SolrVersionForDocs = "7_7"
 
   val Solr = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.solr" % "solr-solrj" % SolrjVersion, // ApacheV2
+      "org.apache.solr" % "solr-solrj" % SolrjVersion,
       ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
-        "log4j-slf4j-impl"), // ApacheV2
-      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
-    ),
-    resolvers += ("restlet".at("https://maven.restlet.talend.com")))
+        "log4j-slf4j-impl"),
+      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test),
+    resolvers += "restlet".at("https://maven.restlet.talend.com"))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll( // ApacheV2
-
+      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll( // ApacheV2
-
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion, // ApacheV2
-      "org.mockito" % "mockito-inline" % mockitoVersion % Test // MIT
-    ) ++ Mockito)
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "org.mockito" % "mockito-inline" % mockitoVersion % Test) ++ Mockito)
 
   val Sse = Seq(
     libraryDependencies ++= Seq(
@@ -472,12 +431,10 @@ object Dependencies {
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.3.1", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.38.5" // BSD/ApacheV2/CPL/MIT as per https://github.com/akka/alpakka/issues/620#issuecomment-348727265
-    ))
+      "com.github.jnr" % "jnr-unixsocket" % "0.38.5"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
-      "com.fasterxml" % "aalto-xml" % "1.2.2" // ApacheV2
-    ))
+      "com.fasterxml" % "aalto-xml" % "1.2.2"))
 
 }

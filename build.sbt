@@ -98,6 +98,11 @@ lazy val `pekko-connectors` = project
         |
         |  mimaReportBinaryIssues - checks whether this current API
         |    is binary compatible with the released version
+        |
+        |  checkCodeStyle - checks that the codebase follows code
+        |    style
+        |
+        |  applyCodeStyle - applies code style to the codebase
       """.stripMargin,
     // unidoc combines sources and jars from all connectors and that
     // might include some incompatible ones. Depending on the
@@ -124,12 +129,8 @@ lazy val `pekko-connectors` = project
     crossScalaVersions := List() // workaround for https://github.com/sbt/sbt/issues/3465
   )
 
-TaskKey[Unit]("verifyCodeFmt") := {
-  javafmtCheckAll.all(ScopeFilter(inAnyProject)).result.value.toEither.left.foreach { _ =>
-    throw new MessageOnlyException(
-      "Unformatted Java code found. Please run 'javafmtAll' and commit the reformatted code")
-  }
-}
+addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll")
+addCommandAlias("checkCodeStyle", ";scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
 
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
@@ -417,7 +418,14 @@ lazy val docs = project
       "examples/jms-samples.html",
       "examples/mqtt-samples.html",
       "index.html"),
-    apidocRootPackage := "org.apache.pekko")
+    apidocRootPackage := "org.apache.pekko",
+    Compile / paradoxMarkdownToHtml / sourceGenerators += Def.taskDyn {
+      val targetFile = (Compile / paradox / sourceManaged).value / "license-report.md"
+
+      (LocalRootProject / dumpLicenseReportAggregate).map { dir =>
+        IO.copy(List(dir / "pekko-connectors-root-licenses.md" -> targetFile)).toList
+      }
+    }.taskValue)
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
 
