@@ -127,7 +127,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1761-2291eac2-SNAPSHOT" % Test,
+      "org.apache.pekko" %% "pekko-connectors-kafka" % "1.0.0" % Test,
       "junit" % "junit" % "4.13.2" % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % Test))
 
