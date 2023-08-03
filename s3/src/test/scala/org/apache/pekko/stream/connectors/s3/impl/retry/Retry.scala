@@ -1,13 +1,4 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * license agreements; and to You under the Apache License, version 2.0:
- *
- *   https://www.apache.org/licenses/LICENSE-2.0
- *
- * This file is part of the Apache Pekko project, derived from Akka.
- */
-
-/*
  * Copyright 2015 Johan Andrén
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
