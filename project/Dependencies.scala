@@ -18,16 +18,16 @@ object Dependencies {
   val Scala212 = "2.12.17"
   val ScalaVersions = Seq(Scala213, Scala212)
 
-  val PekkoVersion = "1.0.0"
+  val PekkoVersion = "1.0.1"
   val PekkoBinaryVersion = "current"
 
   val InfluxDBJavaVersion = "2.15"
 
   val AwsSdk2Version = "2.17.113"
-  val AwsSpiPekkoHttpVersion = "0.0.11+95-02ec3f55-SNAPSHOT"
+  val AwsSpiPekkoHttpVersion = "0.1.0"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "current"
-  val PekkoHttpVersion = "0.0.0+4468-963bd592-SNAPSHOT"
+  val PekkoHttpVersion = "1.0.0"
   val PekkoHttpBinaryVersion = "current"
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
@@ -127,7 +127,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
-      "org.apache.pekko" %% "pekko-connectors-kafka" % "0.0.0+1761-2291eac2-SNAPSHOT" % Test,
+      "org.apache.pekko" %% "pekko-connectors-kafka" % "1.0.0" % Test,
       "junit" % "junit" % "4.13.2" % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % Test))
 
@@ -278,8 +278,8 @@ object Dependencies {
   val IronMq = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.mdedetrich" %% "pekko-stream-circe" % "0.0.0+97-53ec124d-SNAPSHOT",
-      "org.mdedetrich" %% "pekko-http-circe" % "0.0.0+97-53ec124d-SNAPSHOT"))
+      "org.mdedetrich" %% "pekko-stream-circe" % "1.0.0",
+      "org.mdedetrich" %% "pekko-http-circe" % "1.0.0"))
 
   val Jms = Seq(
     libraryDependencies ++= Seq(
