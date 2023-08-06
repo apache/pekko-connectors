@@ -288,7 +288,9 @@ lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Dependencies.Mong
 lazy val mqtt = pekkoConnectorProject("mqtt", "mqtt", Dependencies.Mqtt)
 
 lazy val mqttStreaming =
-  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming)
+  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming,
+    MetaInfLicenseNoticeCopy.mqttStreamingSettings)
+
 lazy val mqttStreamingBench = internalProject("mqtt-streaming-bench")
   .enablePlugins(JmhPlugin)
   .dependsOn(mqtt, mqttStreaming)

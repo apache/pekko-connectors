@@ -202,7 +202,7 @@
 
 ---------------
 
-pekko-connectors-s3 contains code aws-sdk-java <from https://github.com/aws/aws-sdk-java>.
+pekko-connectors-s3 contains code from aws-sdk-java <https://github.com/aws/aws-sdk-java>.
 This code was released under an Apache 2.0 license.
 
  - s3/src/main/scala/org/apache/pekko/stream/connectors/s3/Utils.scala

@@ -11,6 +11,22 @@
  * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
  */
 
+/*******************************************************************************
+ * Copyright (c) 2009, 2014 IBM Corp.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v2.0
+ * and Eclipse Distribution License v1.0 which accompany this distribution.
+ *
+ * The Eclipse Public License is available at
+ *    https://www.eclipse.org/legal/epl-2.0
+ * and the Eclipse Distribution License is available at
+ *   https://www.eclipse.org/org/documents/edl-v10.php
+ *
+ * Contributors:
+ *    Dave Locke - initial API and implementation and/or initial documentation
+ */
+
 package org.apache.pekko.stream.connectors.mqtt.streaming
 package impl
 
@@ -615,7 +631,10 @@ object Topics {
    * 4.7 Topic Names and Topic Filters
    * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
    *
-   * Inspired by https://github.com/eclipse/paho.mqtt.java/blob/master/org.eclipse.paho.client.mqttv3/src/main/java/org/eclipse/paho/client/mqttv3/MqttTopic.java#L240
+   * Inspired by https://github.com/eclipse/paho.mqtt.java/blob/master/org.eclipse.paho.client.mqttv3/src/main/java/org/eclipse/paho/client/mqttv3/MqttTopic.java
+   *
+   * The Apache Pekko project chooses to use the paho.mqtt.java inspired code under the
+   * Eclipse Distribution License <https://www.eclipse.org/org/documents/edl-v10.php>
    */
   def filter(topicFilterName: String, topicName: String): Boolean = {
     @tailrec

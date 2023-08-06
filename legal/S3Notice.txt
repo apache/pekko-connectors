@@ -12,7 +12,7 @@ Apache License, Version 2.0 License.
 
 ---------------
 
-pekko-connectors-s3 contains code aws-sdk-java <from https://github.com/aws/aws-sdk-java>.
+pekko-connectors-s3 contains code from aws-sdk-java <https://github.com/aws/aws-sdk-java>.
 This code was released under an Apache 2.0 license.
 
 AWS SDK for Java

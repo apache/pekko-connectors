@@ -222,13 +222,3 @@ and the Eclipse Distribution License is available at
 
 For an explanation of what dual-licensing means to you, see:
 https://www.eclipse.org/legal/eplfaq.php#DUALLIC
-
----------------
-
-pekko-connectors-s3 contains code from aws-sdk-java <https://github.com/aws/aws-sdk-java>.
-This code was released under an Apache 2.0 license.
-
- - s3/src/main/scala/org/apache/pekko/stream/connectors/s3/Utils.scala
-
-AWS SDK for Java
-Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
