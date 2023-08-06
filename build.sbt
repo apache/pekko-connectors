@@ -305,7 +305,8 @@ lazy val orientdb =
 lazy val reference = internalProject("reference", Dependencies.Reference)
   .dependsOn(testkit % Test)
 
-lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3)
+lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3,
+  MetaInfLicenseNoticeCopy.s3Settings)
 
 lazy val pravega = pekkoConnectorProject(
   "pravega",
