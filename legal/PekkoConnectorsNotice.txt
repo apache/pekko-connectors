@@ -9,14 +9,3 @@ Copyright (C) 2009-2022 Lightbend Inc. <https://www.lightbend.com>
 
 Apache Pekko Connectors is derived from Alpakka 4.0.x, the last version that was distributed under the
 Apache License, Version 2.0 License.
-
----------------
-
-pekko-connectors-s3 contains code aws-sdk-java <from https://github.com/aws/aws-sdk-java>.
-This code was released under an Apache 2.0 license.
-
-AWS SDK for Java
-Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
-This product includes software developed by
-Amazon Technologies, Inc (http://www.amazon.com/).
