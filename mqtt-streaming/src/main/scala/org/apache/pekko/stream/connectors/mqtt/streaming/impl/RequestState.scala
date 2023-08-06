@@ -11,7 +11,7 @@
  * Copyright (C) since 2016 Lightbend Inc. <https://www.lightbend.com>
  */
 
-/*******************************************************************************
+/**
  * Copyright (c) 2009, 2014 IBM Corp.
  *
  * All rights reserved. This program and the accompanying materials
