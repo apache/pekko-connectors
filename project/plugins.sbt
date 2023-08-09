@@ -21,6 +21,8 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-java-formatter" % "0.7.0")
 // docs
 // allow access to snapshots for pekko-sbt-paradox
 resolvers += Resolver.ApacheMavenSnapshotsRepo
+resolvers += "Apache Pekko Staging".at(
+  "https://repository.apache.org/content/groups/staging")
 updateOptions := updateOptions.value.withLatestSnapshots(false)
 
 // We have to deliberately use older versions of sbt-paradox because current Pekko sbt build
@@ -37,6 +39,6 @@ addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
 // Pekko gRPC -- sync with version in Dependencies.scala:19
-addSbtPlugin("org.apache.pekko" % "sbt-pekko-grpc" % "0.0.0-73-c03eff2b-SNAPSHOT")
+addSbtPlugin("org.apache.pekko" % "sbt-pekko-grpc" % "1.0.0-RC1")
 // templating
 addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.6.1")
