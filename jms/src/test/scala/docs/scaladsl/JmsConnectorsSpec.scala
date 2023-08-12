@@ -221,7 +221,7 @@ class JmsConnectorsSpec extends JmsSpec {
         // #jms-source
 
         control.shutdown()
-      // #jms-source
+        // #jms-source
     }
 
     "publish and consume JMS text messages" in withConnectionFactory() { connectionFactory =>
