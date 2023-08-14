@@ -164,7 +164,7 @@ class SlickSpec
     "insert 40 records into a table (no parallelism)" in {
       // #init-db-config-session
       val databaseConfig = DatabaseConfig.forConfig[JdbcProfile]("slick-h2")
-      implicit val session = SlickSession.forConfig(databaseConfig)
+      implicit val session: SlickSession = SlickSession.forConfig(databaseConfig)
       // #init-db-config-session
 
       val inserted = Source(users)

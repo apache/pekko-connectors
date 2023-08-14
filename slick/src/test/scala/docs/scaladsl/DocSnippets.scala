@@ -32,7 +32,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
   implicit val ec: ExecutionContext = system.dispatcher
 
   // #source-example
-  implicit val session = SlickSession.forConfig("slick-h2")
+  implicit val session: SlickSession = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
   // The example domain
@@ -42,7 +42,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
   // into instances of the User class.
   // Please import slick.jdbc.GetResult
   // See also: "http://slick.lightbend.com/doc/3.2.1/sql.html#result-sets"
-  implicit val getUserResult = GetResult(r => User(r.nextInt(), r.nextString()))
+  implicit val getUserResult: GetResult[User] = GetResult(r => User(r.nextInt(), r.nextString()))
 
   // This import enables the use of the Slick sql"...",
   // sqlu"...", and sqlt"..." String interpolators.
@@ -68,7 +68,7 @@ object SlickSourceWithTypedQueryExample extends App {
   implicit val ec: ExecutionContext = system.dispatcher
 
   // #source-with-typed-query
-  implicit val session = SlickSession.forConfig("slick-h2")
+  implicit val session: SlickSession = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
   // This import brings everything you need into scope
@@ -100,7 +100,7 @@ object SlickSinkExample extends App {
   implicit val ec: ExecutionContext = system.dispatcher
 
   // #sink-example
-  implicit val session = SlickSession.forConfig("slick-h2")
+  implicit val session: SlickSession = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
   // The example domain
@@ -132,7 +132,7 @@ object SlickFlowExample extends App {
   implicit val ec: ExecutionContext = system.dispatcher
 
   // #flow-example
-  implicit val session = SlickSession.forConfig("slick-h2")
+  implicit val session: SlickSession = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
   // The example domain
@@ -176,7 +176,7 @@ object SlickFlowWithPassThroughExample extends App {
   implicit val ec: ExecutionContext = system.dispatcher
 
   // #flowWithPassThrough-example
-  implicit val session = SlickSession.forConfig("slick-h2")
+  implicit val session: SlickSession = SlickSession.forConfig("slick-h2")
   system.registerOnTermination(session.close())
 
   // The example domain

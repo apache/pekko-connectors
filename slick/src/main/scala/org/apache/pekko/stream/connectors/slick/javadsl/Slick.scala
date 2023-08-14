@@ -18,7 +18,6 @@ import java.sql.PreparedStatement
 import java.util.concurrent.CompletionStage
 import java.util.function.{ Function => JFunction }
 import java.util.function.{ BiFunction => JBiFunction }
-
 import org.apache.pekko
 import pekko.Done
 import pekko.NotUsed
@@ -28,14 +27,13 @@ import pekko.stream.javadsl._
 import pekko.util.FunctionConverters._
 import pekko.util.FutureConverters._
 import slick.dbio.DBIO
-import slick.jdbc.GetResult
-import slick.jdbc.SQLActionBuilder
-import slick.jdbc.SetParameter
-import slick.jdbc.SimpleJdbcAction
+import slick.jdbc.{ GetResult, SQLActionBuilder, SetParameter, SimpleJdbcAction, TypedParameter }
 
 import scala.concurrent.ExecutionContext
 
 object Slick {
+
+  private val unitType = new TypedParameter((), SetParameter.SetUnit)
 
   /**
    * Java API: creates a Source that performs the specified query against
@@ -54,7 +52,8 @@ object Slick {
       session: SlickSession,
       query: String,
       mapper: JFunction[SlickRow, T]): Source[T, NotUsed] = {
-    val streamingAction = SQLActionBuilder(query, SetParameter.SetUnit).as[T](toSlick(mapper))
+
+    val streamingAction = SQLActionBuilder(Seq(query), Seq(unitType)).as[T](toSlick(mapper))
 
     ScalaSlick
       .source[T](streamingAction)(session)
@@ -363,7 +362,7 @@ object Slick {
     GetResult(pr => mapper(new SlickRow(pr)))
 
   private def toDBIO[T](javaDml: JFunction[T, String]): T => DBIO[Int] = { t =>
-    SQLActionBuilder(javaDml.asScala(t), SetParameter.SetUnit).asUpdate
+    SQLActionBuilder(Seq(javaDml.asScala(t)), Seq(unitType)).asUpdate
   }
 
   private def toDBIO[T](javaDml: Function2[T, Connection, PreparedStatement]): T => DBIO[Int] = { t =>
