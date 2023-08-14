@@ -54,7 +54,8 @@ object Slick {
       session: SlickSession,
       query: String,
       mapper: JFunction[SlickRow, T]): Source[T, NotUsed] = {
-    val streamingAction = SQLActionBuilder(query, SetParameter.SetUnit).as[T](toSlick(mapper))
+    val chars: Seq[Char] = query.toSeq
+    val streamingAction = SQLActionBuilder(chars, SetParameter.SetUnit).as[T](toSlick(mapper))
 
     ScalaSlick
       .source[T](streamingAction)(session)
@@ -363,7 +364,9 @@ object Slick {
     GetResult(pr => mapper(new SlickRow(pr)))
 
   private def toDBIO[T](javaDml: JFunction[T, String]): T => DBIO[Int] = { t =>
-    SQLActionBuilder(javaDml.asScala(t), SetParameter.SetUnit).asUpdate
+    val str = javaDml.asScala(t)
+    val chars: Seq[Char] = str.toSeq
+    SQLActionBuilder(chars, SetParameter.SetUnit).asUpdate
   }
 
   private def toDBIO[T](javaDml: Function2[T, Connection, PreparedStatement]): T => DBIO[Int] = { t =>
