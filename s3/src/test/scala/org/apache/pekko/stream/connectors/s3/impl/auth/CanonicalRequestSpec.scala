@@ -128,7 +128,7 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
     val reservedCharacters = ":?#[]@!$&'()*+,;="
     reservedCharacters.foreach { char =>
       withClue(s"failed for path containing reserved character [$char]:") {
-        val expectedCharEncoding = "%" + char.toHexString.toUpperCase
+        val expectedCharEncoding = "%" + Integer.toHexString(char).toUpperCase
 
         val request =
           HttpRequest(

@@ -17,11 +17,11 @@
 
 package org.apache.pekko.stream.connectors.s3
 
-import markatta.futiles.Retry
 import org.apache.commons.lang3.StringUtils
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.s3.scaladsl.S3
-import org.apache.pekko.stream.scaladsl.Sink
+import pekko.stream.connectors.s3.impl.retry.Retry
+import pekko.stream.connectors.s3.scaladsl.S3
+import pekko.stream.scaladsl.Sink
 import org.scalacheck.Gen
 import pekko.actor.ActorSystem
 import pekko.stream.Attributes

@@ -486,11 +486,8 @@ object S3 {
    * @return A [[pekko.stream.javadsl.Source]] containing the objects data as a [[pekko.util.ByteString]] along with a materialized value containing the
    *         [[pekko.stream.connectors.s3.ObjectMetadata]]
    */
-  def getObject(bucket: String, key: String): Source[ByteString, CompletionStage[ObjectMetadata]] = {
-    val objectSource: SourceToCompletionStage[ByteString, ObjectMetadata] =
-      S3Stream.getObject(S3Location(bucket, key), None, None, S3Headers.empty)
-    new Source(objectSource.toCompletionStage())
-  }
+  def getObject(bucket: String, key: String): Source[ByteString, CompletionStage[ObjectMetadata]] =
+    new Source(S3Stream.getObject(S3Location(bucket, key), None, None, S3Headers.empty).toCompletionStage())
 
   /**
    * Gets a S3 Object
@@ -518,9 +515,7 @@ object S3 {
    */
   def getObject(bucket: String, key: String, range: ByteRange): Source[ByteString, CompletionStage[ObjectMetadata]] = {
     val scalaRange = range.asInstanceOf[ScalaByteRange]
-    val objectSource: SourceToCompletionStage[ByteString, ObjectMetadata] =
-      S3Stream.getObject(S3Location(bucket, key), Some(scalaRange), None, S3Headers.empty)
-    new Source(objectSource.toCompletionStage())
+    new Source(S3Stream.getObject(S3Location(bucket, key), Some(scalaRange), None, S3Headers.empty).toCompletionStage())
   }
 
   /**
@@ -590,9 +585,7 @@ object S3 {
       range: ByteRange,
       s3Headers: S3Headers): Source[ByteString, CompletionStage[ObjectMetadata]] = {
     val scalaRange = range.asInstanceOf[ScalaByteRange]
-    val objectSource: SourceToCompletionStage[ByteString, ObjectMetadata] =
-      S3Stream.getObject(S3Location(bucket, key), Some(scalaRange), None, s3Headers)
-    new Source(objectSource.toCompletionStage())
+    new Source(S3Stream.getObject(S3Location(bucket, key), Some(scalaRange), None, s3Headers).toCompletionStage())
   }
 
   /**
@@ -613,9 +606,10 @@ object S3 {
       versionId: Optional[String],
       s3Headers: S3Headers): Source[ByteString, CompletionStage[ObjectMetadata]] = {
     val scalaRange = range.asInstanceOf[ScalaByteRange]
-    val objectSource: SourceToCompletionStage[ByteString, ObjectMetadata] =
-      S3Stream.getObject(S3Location(bucket, key), Option(scalaRange), Option(versionId.orElse(null)), s3Headers)
-    new Source(objectSource.toCompletionStage())
+    new Source(
+      S3Stream
+        .getObject(S3Location(bucket, key), Option(scalaRange), Option(versionId.orElse(null)), s3Headers)
+        .toCompletionStage())
   }
 
   /**

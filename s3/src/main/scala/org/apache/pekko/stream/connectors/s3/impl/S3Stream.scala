@@ -1390,9 +1390,9 @@ import scala.util.{ Failure, Success, Try }
         import mat.executionContext
         Sink
           .seq[UploadPartResponse]
-          .mapMaterializedValue { responseFuture: Future[immutable.Seq[UploadPartResponse]] =>
+          .mapMaterializedValue { (responseFuture: Future[immutable.Seq[UploadPartResponse]]) =>
             responseFuture
-              .flatMap { responses: immutable.Seq[UploadPartResponse] =>
+              .flatMap { (responses: immutable.Seq[UploadPartResponse]) =>
                 val successes = responses.collect { case r: SuccessfulUploadPart => r }
                 val failures = responses.collect { case r: FailedUploadPart => r }
                 if (responses.isEmpty) {
