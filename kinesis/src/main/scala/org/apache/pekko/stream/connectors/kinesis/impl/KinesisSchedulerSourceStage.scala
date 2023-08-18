@@ -26,7 +26,7 @@ import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProc
 
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.concurrent.{ ExecutionContext, Future, Promise }
+import scala.concurrent.{ Future, Promise }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -76,15 +76,19 @@ private[kinesis] class KinesisSchedulerSourceStage(
     private[this] val buffer = mutable.Queue.empty[CommittableRecord]
     private[this] var schedulerOpt: Option[Scheduler] = None
 
-    implicit def ec: ExecutionContext = materializer.executionContext
-
     override def preStart(): Unit = {
       val scheduler = schedulerBuilder(new ShardRecordProcessorFactory {
         override def shardRecordProcessor(): ShardRecordProcessor =
           new ShardProcessor(newRecordCallback)
       })
+      //Run the scheduler loop in a separate thread
+      val thread = new Thread(() => {
+        val result = Try {scheduler.run()}
+        callback.invoke(SchedulerShutdown(result))
+      }, s"KinesisSchedulerSource")
+      thread.setDaemon(true)
+      thread.start()
       schedulerOpt = Some(scheduler)
-      Future(scheduler.run()).onComplete(result => callback.invoke(SchedulerShutdown(result)))
       matValue.success(scheduler)
     }
     private val callback: AsyncCallback[Command] = getAsyncCallback(awaitingRecords)
@@ -113,6 +117,6 @@ private[kinesis] class KinesisSchedulerSourceStage(
         failStage(SchedulerUnexpectedShutdown(e))
     }
     override def postStop(): Unit =
-      schedulerOpt.foreach(scheduler => Future(if (!scheduler.shutdownComplete()) scheduler.shutdown()))
+      schedulerOpt.foreach(scheduler => Future(if (!scheduler.shutdownComplete()) scheduler.shutdown())(materializer.executionContext))
   }
 }
