@@ -49,7 +49,7 @@ private[kinesis] object KinesisSchedulerSourceStage {
 @InternalApi
 private[kinesis] class KinesisSchedulerSourceStage(
     settings: KinesisSchedulerSourceSettings,
-    schedulerBuilder: ShardRecordProcessorFactory => Scheduler)(implicit ec: ExecutionContext)
+    schedulerBuilder: ShardRecordProcessorFactory => Scheduler)
     extends GraphStageWithMaterializedValue[SourceShape[CommittableRecord], Future[Scheduler]] {
 
   private val out = Outlet[CommittableRecord]("Records")
@@ -75,6 +75,8 @@ private[kinesis] class KinesisSchedulerSourceStage(
     private[this] val backpressureSemaphore = new Semaphore(bufferSize)
     private[this] val buffer = mutable.Queue.empty[CommittableRecord]
     private[this] var schedulerOpt: Option[Scheduler] = None
+
+    implicit def ec: ExecutionContext = materializer.executionContext
 
     override def preStart(): Unit = {
       val scheduler = schedulerBuilder(new ShardRecordProcessorFactory {
