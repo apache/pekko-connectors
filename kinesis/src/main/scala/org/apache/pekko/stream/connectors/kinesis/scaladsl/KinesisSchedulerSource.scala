@@ -47,7 +47,6 @@ object KinesisSchedulerSource {
       settings: KinesisSchedulerSourceSettings): Source[CommittableRecord, Future[Scheduler]] =
     Source
       .fromMaterializer { (mat, _) =>
-        import mat.executionContext
         Source
           .fromGraph(new KinesisSchedulerSourceStage(settings, schedulerBuilder))
       }
