@@ -33,7 +33,8 @@ import software.amazon.awssdk.regions.Region
 abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMockServer) extends TestKit(_system) {
 
   private def this(mock: WireMockServer) =
-    this(ActorSystem(getCallerName(getClass), config(mock.port()).withFallback(ConfigFactory.load())), mock)
+    this(ActorSystem(getCallerName(classOf[S3WireMockBase]), config(mock.port()).withFallback(ConfigFactory.load())),
+      mock)
 
   def this() = {
     this(initServer())

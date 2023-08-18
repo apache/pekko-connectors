@@ -69,7 +69,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
   def canonicalQueryString(query: Query): String = {
     def uriEncode(s: String): String = s.flatMap {
       case c if isUnreservedCharacter(c) => c.toString
-      case c                             => "%" + c.toHexString.toUpperCase
+      case c                             => "%" + Integer.toHexString(c).toUpperCase
     }
 
     query
@@ -99,7 +99,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
     if (path.isEmpty) "/"
     else {
       path.toString.flatMap {
-        case c if isReservedCharacter(c) => "%" + c.toHexString.toUpperCase
+        case c if isReservedCharacter(c) => "%" + Integer.toHexString(c).toUpperCase
         case c                           => c.toString
       }
     }
