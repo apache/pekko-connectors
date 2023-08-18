@@ -1293,8 +1293,8 @@ class AWSS3IntegrationSpec extends TestKit(ActorSystem("AWSS3IntegrationSpec")) 
     }.orElse(Some(1.minute))
 
   // Since S3 accounts share global state, we should randomly generate bucket names so concurrent tests
-  // against an S3 account don't conflict with eachother
-  override lazy val randomlyGenerateBucketNames: Boolean =
+  // against an S3 account don't conflict with each other
+  override val randomlyGenerateBucketNames: Boolean =
     sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.randomlyGenerateBucketNames")
       .map(_.toBoolean).getOrElse(true)
 }
@@ -1313,7 +1313,7 @@ class MinioS3IntegrationSpec
 
   // Since a unique new Minio container is started with each test run there is no point in making random
   // bucket names
-  override lazy val randomlyGenerateBucketNames: Boolean = false
+  override val randomlyGenerateBucketNames: Boolean = false
 
   override lazy val defaultS3Settings: S3Settings = s3Settings
     .withS3RegionProvider(

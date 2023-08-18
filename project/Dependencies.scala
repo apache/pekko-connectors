@@ -364,7 +364,6 @@ object Dependencies {
     ))
 
   val S3 = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-xml" % PekkoHttpVersion,
@@ -373,8 +372,7 @@ object Dependencies {
       "com.google.jimfs" % "jimfs" % "1.2" % Test,
       "com.github.tomakehurst" % "wiremock-jre8" % "2.32.0" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test,
-      "com.markatta" %% "futiles" % "2.0.2" % Test))
+      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
   val SpringWeb = {
     val SpringVersion = "5.1.17.RELEASE"
