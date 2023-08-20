@@ -9,11 +9,6 @@
 
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
 
-// TODO: Remove when Pekko has a proper release
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
-ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
-ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
-
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
