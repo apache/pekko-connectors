@@ -55,8 +55,8 @@ private[connectors] object ResumableUpload {
     Sink
       .fromMaterializer { (mat, attr) =>
         import mat.executionContext
-        implicit val materializer = mat
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val materializer: Materializer = mat
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
         val uploadChunkSize = settings.requestSettings.uploadChunkSize
 
         val in = Flow[ByteString]
@@ -95,25 +95,24 @@ private[connectors] object ResumableUpload {
 
   private def initiateSession(request: HttpRequest)(implicit mat: Materializer,
       settings: GoogleSettings): Future[Uri] = {
-    implicit val system = mat.system
     import implicits._
 
-    implicit val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
-      response.discardEntityBytes().future.map { _ =>
-        response.header[Location].fold(throw InvalidResponseException(ErrorInfo("No Location header")))(_.uri)
-      }
-    }.withDefaultRetry
+    implicit val um: FromResponseUnmarshaller[Uri] =
+      Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
+        response.discardEntityBytes().future.map { _ =>
+          response.header[Location].fold(throw InvalidResponseException(ErrorInfo("No Location header")))(_.uri)
+        }
+      }.withDefaultRetry
 
-    GoogleHttp().singleAuthenticatedRequest[Uri](request)
+    GoogleHttp(mat.system).singleAuthenticatedRequest[Uri](request)
   }
 
   private final case class DoNotRetry(ex: Throwable) extends Throwable(ex) with NoStackTrace
 
   private def uploadChunk[T: FromResponseUnmarshaller](
       request: HttpRequest)(implicit mat: Materializer): Flow[Either[T, MaybeLast[Chunk]], Try[Option[T]], NotUsed] = {
-    implicit val system = mat.system
 
-    val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
+    val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
       response.status match {
         case PermanentRedirect =>
           response.discardEntityBytes().future.map(_ => None)
@@ -126,7 +125,8 @@ private[connectors] object ResumableUpload {
       val uri = request.uri
       Flow[HttpRequest]
         .map((_, ()))
-        .via(GoogleHttp().cachedHostConnectionPoolWithContext(uri.authority.host.address, uri.effectivePort)(um))
+        .via(GoogleHttp(mat.system).cachedHostConnectionPoolWithContext(uri.authority.host.address, uri.effectivePort)(
+          um))
         .map(_._1.recoverWith { case DoNotRetry(ex) => Failure(ex) })
     }
 
@@ -146,30 +146,30 @@ private[connectors] object ResumableUpload {
       request: HttpRequest,
       chunk: Future[MaybeLast[Chunk]])(
       implicit mat: Materializer, settings: GoogleSettings): Future[Either[T, MaybeLast[Chunk]]] = {
-    implicit val system = mat.system
     import implicits._
 
-    implicit val um = Unmarshaller.withMaterializer { implicit ec => implicit mat => response: HttpResponse =>
-      response.status match {
-        case OK | Created => Unmarshal(response).to[T].map(Left(_))
-        case PermanentRedirect =>
-          response.discardEntityBytes().future.map { _ =>
-            Right(
-              response
-                .header[Range]
-                .flatMap(_.ranges.headOption)
-                .collect {
-                  case Slice(_, last) => last + 1
-                }.getOrElse(0L))
-          }
-        case _ => throw InvalidResponseException(ErrorInfo(response.status.value, response.status.defaultMessage))
-      }
-    }.withDefaultRetry
+    implicit val um: FromResponseUnmarshaller[Either[T, Long]] =
+      Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
+        response.status match {
+          case OK | Created => Unmarshal(response).to[T].map(Left(_))
+          case PermanentRedirect =>
+            response.discardEntityBytes().future.map { _ =>
+              Right(
+                response
+                  .header[Range]
+                  .flatMap(_.ranges.headOption)
+                  .collect {
+                    case Slice(_, last) => last + 1
+                  }.getOrElse(0L))
+            }
+          case _ => throw InvalidResponseException(ErrorInfo(response.status.value, response.status.defaultMessage))
+        }
+      }.withDefaultRetry
 
     import mat.executionContext
     chunk.flatMap {
       case maybeLast @ MaybeLast(Chunk(bytes, position)) =>
-        GoogleHttp()
+        GoogleHttp(mat.system)
           .singleAuthenticatedRequest[Either[T, Long]](request.addHeader(statusRequestHeader))
           .map {
             case Left(result) if maybeLast.isLast => Left(result)

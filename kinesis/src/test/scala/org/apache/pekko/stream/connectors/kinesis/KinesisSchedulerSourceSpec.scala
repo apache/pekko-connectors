@@ -269,7 +269,7 @@ class KinesisSchedulerSourceSpec
 
     var recordProcessor: ShardRecordProcessor = _
     var otherRecordProcessor: ShardRecordProcessor = _
-    private val schedulerBuilder = { x: ShardRecordProcessorFactory =>
+    private val schedulerBuilder = { (x: ShardRecordProcessorFactory) =>
       recordProcessor = x.shardRecordProcessor()
       otherRecordProcessor = x.shardRecordProcessor()
       semaphore.release()
@@ -334,12 +334,12 @@ class KinesisSchedulerSourceSpec
       var latestRecord: KinesisClientRecord = _
       val allRecordsPushed: Future[Unit] = Future {
         for (i <- 1 to 3) {
-          val record = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
-          when(record.sequenceNumber).thenReturn("1")
-          when(record.subSequenceNumber).thenReturn(i.toLong)
+          val clientRecord = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
+          when(clientRecord.sequenceNumber).thenReturn("1")
+          when(clientRecord.subSequenceNumber).thenReturn(i.toLong)
           sourceProbe.sendNext(
             new CommittableRecord(
-              record,
+              clientRecord,
               new BatchData(null, null, false, 0),
               new ShardProcessorData(
                 "shard-1",
@@ -349,7 +349,7 @@ class KinesisSchedulerSourceSpec
 
               override def forceCheckpoint(): Unit = checkpointer(record)
             })
-          latestRecord = record
+          latestRecord = clientRecord
         }
       }
 
@@ -374,11 +374,11 @@ class KinesisSchedulerSourceSpec
 
       val allRecordsPushed: Future[Unit] = Future {
         for (i <- 1 to 3) {
-          val record = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
-          when(record.sequenceNumber).thenReturn(i.toString)
+          val clientRecord = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
+          when(clientRecord.sequenceNumber).thenReturn(i.toString)
           sourceProbe.sendNext(
             new CommittableRecord(
-              record,
+              clientRecord,
               new BatchData(null, null, false, 0),
               new ShardProcessorData(
                 "shard-1",
@@ -388,14 +388,14 @@ class KinesisSchedulerSourceSpec
 
               override def forceCheckpoint(): Unit = checkpointerShard1(record)
             })
-          latestRecordShard1 = record
+          latestRecordShard1 = clientRecord
         }
         for (i <- 1 to 3) {
-          val record = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
-          when(record.sequenceNumber).thenReturn(i.toString)
+          val clientRecord = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
+          when(clientRecord.sequenceNumber).thenReturn(i.toString)
           sourceProbe.sendNext(
             new CommittableRecord(
-              record,
+              clientRecord,
               new BatchData(null, null, false, 0),
               new ShardProcessorData(
                 "shard-2",
@@ -405,7 +405,7 @@ class KinesisSchedulerSourceSpec
 
               override def forceCheckpoint(): Unit = checkpointerShard2(record)
             })
-          latestRecordShard2 = record
+          latestRecordShard2 = clientRecord
         }
       }
 
@@ -422,12 +422,12 @@ class KinesisSchedulerSourceSpec
     }
 
     "fail with Exception if checkpoint action fails" in new KinesisSchedulerCheckpointContext {
-      val record: KinesisClientRecord = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
-      when(record.sequenceNumber).thenReturn("1")
+      val clientRecord: KinesisClientRecord = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
+      when(clientRecord.sequenceNumber).thenReturn("1")
       val checkpointer: KinesisClientRecord => Unit =
         org.mockito.Mockito.mock(classOf[KinesisClientRecord => Unit])
       val committableRecord: CommittableRecord = new CommittableRecord(
-        record,
+        clientRecord,
         new BatchData(null, null, false, 0),
         new ShardProcessorData(
           "shard-1",
@@ -439,7 +439,7 @@ class KinesisSchedulerSourceSpec
       sourceProbe.sendNext(committableRecord)
 
       val failure = new RuntimeException()
-      when(checkpointer.apply(record)).thenThrow(failure)
+      when(checkpointer.apply(clientRecord)).thenThrow(failure)
 
       sinkProbe.request(1)
 

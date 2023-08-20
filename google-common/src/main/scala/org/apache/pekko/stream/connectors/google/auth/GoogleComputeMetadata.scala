@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.google.auth
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.Http
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
@@ -42,7 +43,7 @@ private[auth] object GoogleComputeMetadata {
       clock: Clock): Future[AccessToken] = {
     import SprayJsonSupport._
     import mat.executionContext
-    implicit val system = mat.system
+    implicit val system: ActorSystem = mat.system
     for {
       response <- Http().singleRequest(tokenRequest)
       token <- Unmarshal(response.entity).to[AccessToken]
@@ -52,7 +53,7 @@ private[auth] object GoogleComputeMetadata {
   def getProjectId()(
       implicit mat: Materializer): Future[String] = {
     import mat.executionContext
-    implicit val system = mat.system
+    implicit val system: ActorSystem = mat.system
     for {
       response <- Http().singleRequest(projectIdRequest)
       projectId <- Unmarshal(response.entity).to[String]

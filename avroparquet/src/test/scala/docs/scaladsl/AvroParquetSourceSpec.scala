@@ -13,6 +13,9 @@
 
 package docs.scaladsl
 
+import com.sksamuel.avro4s.Record
+import org.apache.avro.generic.GenericRecord
+import org.apache.parquet.hadoop.ParquetReader
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
@@ -21,11 +24,8 @@ import pekko.stream.scaladsl.{ Keep, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.TestSink
 import pekko.testkit.TestKit
-import com.sksamuel.avro4s.Record
-import org.scalatest.concurrent.ScalaFutures
-import org.apache.avro.generic.GenericRecord
-import org.apache.parquet.hadoop.ParquetReader
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 

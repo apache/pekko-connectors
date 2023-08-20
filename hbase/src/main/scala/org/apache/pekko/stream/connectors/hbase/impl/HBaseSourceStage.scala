@@ -17,7 +17,7 @@ import org.apache.pekko
 import pekko.stream.{ Attributes, Outlet, SourceShape }
 import pekko.stream.connectors.hbase.HTableSettings
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
-import org.apache.hadoop.hbase.client.{ Result, Scan, Table }
+import org.apache.hadoop.hbase.client.{ Connection, Result, Scan, Table }
 
 import scala.util.control.NonFatal
 
@@ -40,7 +40,7 @@ private[hbase] final class HBaseSourceLogic[A](scan: Scan,
     with StageLogging
     with HBaseCapabilities {
 
-  implicit val connection = connect(settings.conf)
+  implicit val connection: Connection = connect(settings.conf)
 
   lazy val table: Table = getOrCreateTable(settings.tableName, settings.columnFamilies).get
   private var results: java.util.Iterator[Result] = null

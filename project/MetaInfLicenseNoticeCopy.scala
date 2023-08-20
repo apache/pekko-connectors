@@ -28,7 +28,19 @@ object MetaInfLicenseNoticeCopy extends AutoPlugin {
   private lazy val baseDir = LocalRootProject / baseDirectory
 
   override lazy val projectSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "StandardLicense.txt",
+    apacheSonatypeNoticeFile := baseDir.value / "legal" / "PekkoConnectorsNotice.txt",
     apacheSonatypeDisclaimerFile := Some(baseDir.value / "DISCLAIMER"))
+
+  lazy val mqttStreamingSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "MqttStreamingLicense.txt")
+
+  lazy val s3Settings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "S3License.txt",
+    apacheSonatypeNoticeFile := baseDir.value / "legal" / "S3Notice.txt")
+
+  lazy val googleCommonSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "GoogleCommonLicense.txt")
 
   override def trigger = allRequirements
 

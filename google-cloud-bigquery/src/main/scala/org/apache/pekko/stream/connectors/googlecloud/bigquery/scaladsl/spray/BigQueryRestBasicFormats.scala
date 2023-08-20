@@ -22,18 +22,18 @@ import scala.concurrent.duration.{ DurationLong, FiniteDuration }
  */
 trait BigQueryRestBasicFormats {
 
-  implicit val IntJsonFormat = DefaultJsonProtocol.IntJsonFormat
-  implicit val FloatJsonFormat = DefaultJsonProtocol.FloatJsonFormat
-  implicit val DoubleJsonFormat = DefaultJsonProtocol.DoubleJsonFormat
-  implicit val ByteJsonFormat = DefaultJsonProtocol.ByteJsonFormat
-  implicit val ShortJsonFormat = DefaultJsonProtocol.ShortJsonFormat
-  implicit val BigDecimalJsonFormat = DefaultJsonProtocol.BigDecimalJsonFormat
-  implicit val BigIntJsonFormat = DefaultJsonProtocol.BigIntJsonFormat
-  implicit val UnitJsonFormat = DefaultJsonProtocol.UnitJsonFormat
-  implicit val BooleanJsonFormat = DefaultJsonProtocol.BooleanJsonFormat
-  implicit val CharJsonFormat = DefaultJsonProtocol.CharJsonFormat
-  implicit val StringJsonFormat = DefaultJsonProtocol.StringJsonFormat
-  implicit val SymbolJsonFormat = DefaultJsonProtocol.SymbolJsonFormat
+  implicit val IntJsonFormat: JsonFormat[Int] = DefaultJsonProtocol.IntJsonFormat
+  implicit val FloatJsonFormat: JsonFormat[Float] = DefaultJsonProtocol.FloatJsonFormat
+  implicit val DoubleJsonFormat: JsonFormat[Double] = DefaultJsonProtocol.DoubleJsonFormat
+  implicit val ByteJsonFormat: JsonFormat[Byte] = DefaultJsonProtocol.ByteJsonFormat
+  implicit val ShortJsonFormat: JsonFormat[Short] = DefaultJsonProtocol.ShortJsonFormat
+  implicit val BigDecimalJsonFormat: JsonFormat[BigDecimal] = DefaultJsonProtocol.BigDecimalJsonFormat
+  implicit val BigIntJsonFormat: JsonFormat[BigInt] = DefaultJsonProtocol.BigIntJsonFormat
+  implicit val UnitJsonFormat: JsonFormat[Unit] = DefaultJsonProtocol.UnitJsonFormat
+  implicit val BooleanJsonFormat: JsonFormat[Boolean] = DefaultJsonProtocol.BooleanJsonFormat
+  implicit val CharJsonFormat: JsonFormat[Char] = DefaultJsonProtocol.CharJsonFormat
+  implicit val StringJsonFormat: JsonFormat[String] = DefaultJsonProtocol.StringJsonFormat
+  implicit val SymbolJsonFormat: JsonFormat[Symbol] = DefaultJsonProtocol.SymbolJsonFormat
 
   implicit object BigQueryLongJsonFormat extends JsonFormat[Long] {
     def write(x: Long) = JsNumber(x)

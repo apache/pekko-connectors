@@ -30,6 +30,8 @@ object Common extends AutoPlugin {
 
   override def requires = JvmPlugin && HeaderPlugin && ApacheSonatypePlugin && DynVerPlugin
 
+  val isScala3 = Def.setting(scalaBinaryVersion.value == "3")
+
   override def globalSettings = Seq(
     scmInfo := Some(ScmInfo(url("https://github.com/apache/incubator-pekko-connectors"),
       "git@github.com:apache/incubator-pekko-connectors.git")),
@@ -43,7 +45,13 @@ object Common extends AutoPlugin {
     // Ignore unused keys which affect documentation
     excludeLintKeys ++= Set(scmInfo, projectInfoVersion, autoAPIMappings))
 
-  override lazy val projectSettings = Dependencies.Common ++ Seq(
+  val packagesToSkip = "org.apache.pekko.pattern:" + // for some reason Scaladoc creates this
+    "org.mongodb.scala:" + // this one is a mystery as well
+    // excluding generated grpc classes, except the model ones (com.google.pubsub)
+    "com.google.api:com.google.cloud:com.google.iam:com.google.logging:" +
+    "com.google.longrunning:com.google.protobuf:com.google.rpc:com.google.type"
+
+  override lazy val projectSettings = Dependencies.CommonSettings ++ Seq(
     projectInfoVersion := (if (isSnapshot.value) "snapshot" else version.value),
     crossVersion := CrossVersion.binary,
     crossScalaVersions := Dependencies.ScalaVersions,
@@ -64,13 +72,8 @@ object Common extends AutoPlugin {
       "-doc-version",
       version.value,
       "-sourcepath",
-      (ThisBuild / baseDirectory).value.toString,
-      "-skip-packages",
-      "org.apache.pekko.pattern:" + // for some reason Scaladoc creates this
-      "org.mongodb.scala:" + // this one is a mystery as well
-      // excluding generated grpc classes, except the model ones (com.google.pubsub)
-      "com.google.api:com.google.cloud:com.google.iam:com.google.logging:" +
-      "com.google.longrunning:com.google.protobuf:com.google.rpc:com.google.type"),
+      (ThisBuild / baseDirectory).value.toString),
+    Compile / doc / scalacOptions := scalacOptions.value,
     Compile / doc / scalacOptions ++=
       Seq(
         "-doc-source-url", {
@@ -79,6 +82,13 @@ object Common extends AutoPlugin {
         },
         "-doc-canonical-base-url",
         "https://pekko.apache.org/api/pekko-connectors/current/"),
+    Compile / doc / scalacOptions ++= {
+      if (isScala3.value) {
+        Seq("-skip-packages:" + packagesToSkip)
+      } else {
+        Seq("-skip-packages", packagesToSkip)
+      }
+    },
     Compile / doc / scalacOptions -= "-Werror",
     compile / javacOptions ++= Seq(
       "-Xlint:cast",

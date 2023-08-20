@@ -129,8 +129,8 @@ lazy val `pekko-connectors` = project
     crossScalaVersions := List() // workaround for https://github.com/sbt/sbt/issues/3465
   )
 
-addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll")
-addCommandAlias("checkCodeStyle", ";scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
+addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll; +headerCreateAll")
+addCommandAlias("checkCodeStyle", "+headerCheckAll; ;scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
 
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
@@ -194,6 +194,7 @@ lazy val googleCommon = pekkoConnectorProject(
   "google-common",
   "google.common",
   Dependencies.GoogleCommon,
+  MetaInfLicenseNoticeCopy.googleCommonSettings,
   Test / fork := true)
 
 lazy val googleCloudBigQuery = pekkoConnectorProject(
@@ -288,7 +289,9 @@ lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Dependencies.Mong
 lazy val mqtt = pekkoConnectorProject("mqtt", "mqtt", Dependencies.Mqtt)
 
 lazy val mqttStreaming =
-  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming)
+  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming,
+    MetaInfLicenseNoticeCopy.mqttStreamingSettings)
+
 lazy val mqttStreamingBench = internalProject("mqtt-streaming-bench")
   .enablePlugins(JmhPlugin)
   .dependsOn(mqtt, mqttStreaming)
@@ -305,7 +308,8 @@ lazy val orientdb =
 lazy val reference = internalProject("reference", Dependencies.Reference)
   .dependsOn(testkit % Test)
 
-lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3)
+lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3,
+  MetaInfLicenseNoticeCopy.s3Settings)
 
 lazy val pravega = pekkoConnectorProject(
   "pravega",

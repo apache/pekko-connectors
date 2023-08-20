@@ -67,16 +67,17 @@ class GoogleHttpSpec
         anyInt,
         any[HttpsConnectionContext],
         any[ConnectionPoolSettings],
-        any[LoggingAdapter])).thenReturn(Flow[Any]
+        any[LoggingAdapter])).thenReturn(
+      Flow[Any]
         .zipWith(response)(Keep.right)
         .map(Try(_))
-        .map((_, mock[Nothing]))
+        .map((_, mock[Nothing](scala.reflect.ClassTag.Nothing)))
         .mapMaterializedValue(_ => mock[HostConnectionPool]),
       Nil: _*): @nowarn("msg=dead code")
     http
   }
 
-  implicit val settings = GoogleSettings().requestSettings
+  implicit val settings: RequestSettings = GoogleSettings().requestSettings
 
   "GoogleHttp" must {
 
@@ -163,7 +164,7 @@ class GoogleHttpSpec
       when(credentials.get()(any[ExecutionContext], any[RequestSettings])).thenReturn(
         Future.failed(GoogleOAuth2Exception(ErrorInfo())),
         Future.failed(new AnotherException))
-      implicit val settingsWithMockedCredentials = GoogleSettings().copy(credentials = credentials)
+      implicit val settingsWithMockedCredentials: GoogleSettings = GoogleSettings().copy(credentials = credentials)
 
       val http = mockHttp
       when(

@@ -199,3 +199,50 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+---------------
+
+pekko-connectors-google-common contains `org.apache.pekko.stream.connectors.google.jwt.JwtSprayJson.scala`
+which is copied from jwt-scala <https://github.com/jwt-scala/jwt-scala>.
+The original code was released under the Apache 2.0 license.
+Copyright 2021 JWT-Scala Contributors.
+
+---------------
+
+pekko-connectors-mqtt-streaming contains code from paho.mqtt.java <https://github.com/eclipse/paho.mqtt.java>.
+This code was released under a dual license:
+Eclipse Public License version 2.0 and Eclipse Distribution License.
+We choose to use the code under the Eclipse Distribution License.
+
+ - mqtt-streaming/src/main/scala/org/apache/pekko/stream/connectors/mqtt/streaming/impl/RequestState.scala
+
+Eclipse Public License - v 2.0
+
+This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v2.0
+and Eclipse Distribution License v1.0 which accompany this distribution.
+
+The Eclipse Public License is available at
+  https://www.eclipse.org/legal/epl-2.0/
+and the Eclipse Distribution License is available at
+  https://www.eclipse.org/org/documents/edl-v10.php
+
+For an explanation of what dual-licensing means to you, see:
+https://www.eclipse.org/legal/eplfaq.php#DUALLIC
+
+---------------
+
+pekko-connectors-s3 contains code from aws-sdk-java <https://github.com/aws/aws-sdk-java>.
+This code was released under an Apache 2.0 license.
+
+ - s3/src/main/scala/org/apache/pekko/stream/connectors/s3/Utils.scala
+
+AWS SDK for Java
+Copyright 2010-2014 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+---------------
+
+pekko-connectors-s3 contains test code in `org.apache.pekko.stream.connectors.s3.impl.retry` package
+which is copied from futiles <https://github.com/johanandren/futiles>.
+The original code was released under the Apache 2.0 license.
+Copyright 2015 Johan Andrén.

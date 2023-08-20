@@ -371,9 +371,10 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
   private val sel = NativeSelectorProvider.getInstance.openSelector
 
   /** Override to customise reported log source */
-  protected def logSource: Class[_] = this.getClass
+  protected def logSource: Class[_] = getClass
 
-  private val ioThread = new Thread(() => nioEventLoop(sel, Logging(system, logSource)), "unix-domain-socket-io")
+  private val ioThread =
+    new Thread(() => nioEventLoop(sel, Logging(system, logSource.getName)), "unix-domain-socket-io")
   ioThread.start()
 
   CoordinatedShutdown(system).addTask(CoordinatedShutdown.PhaseServiceStop, "stopUnixDomainSocket") { () =>

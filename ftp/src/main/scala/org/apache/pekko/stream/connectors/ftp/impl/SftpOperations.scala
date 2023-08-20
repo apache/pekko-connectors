@@ -37,7 +37,7 @@ import scala.util.{ Failure, Try }
  * INTERNAL API
  */
 @InternalApi
-private[ftp] trait SftpOperations { _: FtpLike[SSHClient, SftpSettings] =>
+private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
 
   type Handler = SFTPClient
 

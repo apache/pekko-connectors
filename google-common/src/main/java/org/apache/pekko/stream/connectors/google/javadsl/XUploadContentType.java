@@ -22,7 +22,6 @@ public interface XUploadContentType {
   ContentType getContentType();
 
   static XUploadContentType create(ContentType contentType) {
-    return X$minusUpload$minusContent$minusType$.MODULE$.apply(
-        (org.apache.pekko.http.scaladsl.model.ContentType) contentType);
+    return X$minusUpload$minusContent$minusType$.MODULE$.apply(contentType.toString());
   }
 }

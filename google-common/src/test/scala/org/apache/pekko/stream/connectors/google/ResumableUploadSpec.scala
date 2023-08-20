@@ -18,7 +18,7 @@ import pekko.actor.ActorSystem
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pekko.http.scaladsl.model.HttpMethods.POST
 import pekko.http.scaladsl.model.{ ContentTypes, HttpRequest, Uri }
-import pekko.http.scaladsl.unmarshalling.Unmarshaller
+import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshaller }
 import pekko.stream.connectors.google.scaladsl.`X-Upload-Content-Type`
 import pekko.stream.scaladsl.Source
 import pekko.testkit.TestKit
@@ -40,7 +40,7 @@ class ResumableUploadSpec
     with ScalaFutures
     with HoverflySupport {
 
-  implicit val patience = PatienceConfig(remainingOrDefault)
+  implicit val patience: PatienceConfig = PatienceConfig(remainingOrDefault)
 
   override def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
@@ -79,7 +79,7 @@ class ResumableUploadSpec
             .willReturn(created().header("Content-Type", "application/json").body("{}"))))
 
       import implicits._
-      implicit val um =
+      implicit val um: FromResponseUnmarshaller[JsValue] =
         Unmarshaller.messageUnmarshallerFromEntityUnmarshaller(sprayJsValueUnmarshaller).withDefaultRetry
 
       val result = Source

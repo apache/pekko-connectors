@@ -14,15 +14,17 @@
 package org.apache.pekko.stream.connectors.google.auth
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import pekko.http.scaladsl.model.HttpMethods.POST
 import pekko.http.scaladsl.model.{ FormData, HttpRequest }
 import pekko.stream.Materializer
 import pekko.stream.connectors.google.http.GoogleHttp
+import pekko.stream.connectors.google.jwt.JwtSprayJson
 import pekko.stream.connectors.google.{ implicits, RequestSettings }
 import pdi.jwt.JwtAlgorithm.RS256
-import pdi.jwt.{ JwtClaim, JwtSprayJson }
+import pdi.jwt.JwtClaim
 import spray.json.DefaultJsonProtocol._
 import spray.json.JsonFormat
 
@@ -42,7 +44,7 @@ private[auth] object GoogleOAuth2 {
     import GoogleOAuth2Exception._
     import SprayJsonSupport._
     import implicits._
-    implicit val system = mat.system
+    implicit val system: ActorSystem = mat.system
 
     try {
       val entity = FormData(
@@ -71,5 +73,5 @@ private[auth] object GoogleOAuth2 {
   }
 
   final case class JwtClaimContent(scope: String)
-  implicit val jwtClaimContentFormat: JsonFormat[JwtClaimContent] = jsonFormat1(JwtClaimContent)
+  implicit val jwtClaimContentFormat: JsonFormat[JwtClaimContent] = jsonFormat1(JwtClaimContent.apply)
 }

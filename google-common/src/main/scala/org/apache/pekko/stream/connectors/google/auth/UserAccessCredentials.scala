@@ -61,7 +61,7 @@ private[connectors] object UserAccessCredentials {
       refresh_token: String,
       quota_project_id: String)
   implicit val userAccessCredentialsFormat: RootJsonFormat[UserAccessCredentialsFile] = jsonFormat4(
-    UserAccessCredentialsFile)
+    UserAccessCredentialsFile.apply)
 }
 
 @InternalApi
