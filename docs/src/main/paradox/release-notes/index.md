@@ -35,7 +35,7 @@ We haven't had to fix many bugs that were in Alpakka 4.0.0.
 
 ### Additions
 * Add back Scala 2.12 support ([PR65](https://github.com/apache/incubator-pekko-connectors/pull/65))
-* Scala 3 support ([126](https://github.com/apache/incubator-pekko-connectors/issues/126))
+* Scala 3 support ([#126](https://github.com/apache/incubator-pekko-connectors/issues/126))
     * The connectors that still only support Scala 2 are Geode, MongoDB and Slick.
 * FTP Connector now supports UTF8 Autodetect mode ([PR221](https://github.com/apache/incubator-pekko-connectors/pull/221))
 * IronMQ Connector: changed the Circe JSON integration to use [mdedetrich/pekko-streams-circe](https://github.com/mdedetrich/pekko-streams-circe) ([PR134](https://github.com/apache/incubator-pekko-connectors/pull/134)) 
@@ -45,6 +45,7 @@ We haven't had to fix many bugs that were in Alpakka 4.0.0.
 We have tried to limit the changes to third party dependencies that are used in Pekko HTTP 1.0.0. These are some exceptions:
 
 * Cassandra Driver 4.15.0 ([PR100](https://github.com/apache/incubator-pekko-connectors/pull/100))
+* protobuf 3.21.12 ([#222](https://github.com/apache/incubator-pekko-connectors/issues/222))
 * jackson 2.14.3
 * scalatest 3.2.14. Pekko users who have existing tests based on Akka Testkit may need to migrate their tests due to the scalatest upgrade. The [scalatest 3.2 release notes](https://www.scalatest.org/release_notes/3.2.0) have a detailed description of the changes needed.
 
