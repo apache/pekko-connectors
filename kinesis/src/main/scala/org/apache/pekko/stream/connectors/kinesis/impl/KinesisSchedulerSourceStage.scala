@@ -81,11 +81,11 @@ private[kinesis] class KinesisSchedulerSourceStage(
         override def shardRecordProcessor(): ShardRecordProcessor =
           new ShardProcessor(newRecordCallback)
       })
-      //Run the scheduler loop in a separate thread
+      // Run the scheduler loop in a separate thread
       val thread = new Thread(() => {
-        val result = Try {scheduler.run()}
-        callback.invoke(SchedulerShutdown(result))
-      }, s"KinesisSchedulerSource")
+          val result = Try { scheduler.run() }
+          callback.invoke(SchedulerShutdown(result))
+        }, s"KinesisSchedulerSource")
       thread.setDaemon(true)
       thread.start()
       schedulerOpt = Some(scheduler)
@@ -117,6 +117,7 @@ private[kinesis] class KinesisSchedulerSourceStage(
         failStage(SchedulerUnexpectedShutdown(e))
     }
     override def postStop(): Unit =
-      schedulerOpt.foreach(scheduler => Future(if (!scheduler.shutdownComplete()) scheduler.shutdown())(materializer.executionContext))
+      schedulerOpt.foreach(scheduler =>
+        Future(if (!scheduler.shutdownComplete()) scheduler.shutdown())(materializer.executionContext))
   }
 }
