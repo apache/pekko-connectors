@@ -251,6 +251,42 @@ class KinesisSchedulerSourceSpec
         killSwitch.shutdown()
         sinkProbe.expectComplete()
       })
+
+    "not starve dispatcher threads with 15 sources" in assertAllStagesStopped {
+      val scheduler: Scheduler = org.mockito.Mockito.mock(classOf[Scheduler])
+      when(scheduler.run()).thenAnswer(new Answer[Unit] {
+        override def answer(invocation: InvocationOnMock): Unit =
+          Thread.sleep(10000)
+      })
+
+      val killSwitch = KillSwitches.shared("")
+
+      for (_ <- 1 to 15)
+        KinesisSchedulerSource(_ => scheduler, KinesisSchedulerSourceSettings.defaults)
+          .via(killSwitch.flow)
+          .run()
+
+      killSwitch.shutdown()
+
+    }
+
+    "not starve dispatcher threads with 16 sources" in assertAllStagesStopped {
+      val scheduler: Scheduler = org.mockito.Mockito.mock(classOf[Scheduler])
+      when(scheduler.run()).thenAnswer(new Answer[Unit] {
+        override def answer(invocation: InvocationOnMock): Unit =
+          Thread.sleep(10000)
+      })
+
+      val killSwitch = KillSwitches.shared("")
+
+      for (_ <- 1 to 16)
+        KinesisSchedulerSource(_ => scheduler, KinesisSchedulerSourceSettings.defaults)
+          .via(killSwitch.flow)
+          .run()
+
+      killSwitch.shutdown()
+
+    }
   }
 
   private abstract class KinesisSchedulerContext(schedulerFailure: Option[Throwable] = None,
