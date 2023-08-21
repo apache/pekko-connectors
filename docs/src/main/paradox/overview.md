@@ -29,12 +29,7 @@ Please feel free to contribute to Apache Pekko Connectors by reporting issues yo
 
 We want Apache Pekko and Apache Pekko Connectors to strive in a welcoming and open atmosphere and expect all contributors to respect our [code of conduct](https://www.apache.org/foundation/policies/conduct.html).
 
-[![pekko-connectors]][pekko-connectors-scaladex] Feel free to tag your project with *pekko-connectors* keyword in Scaladex for easier discoverability.
-
-[pekko-connectors]: https://index.scala-lang.org/count.svg?q=topics:pekko-streams&amp;subject=pekko-connectors&amp;style=flat-square
-
-[pekko-connectors-scaladex]: https://index.scala-lang.org/search?q=topics:pekko-connectors
-
+Feel free to tag your project with *pekko-connectors* keyword in [Scaladex](https://index.scala-lang.org/search?topics=pekko-connnectors) for easier discoverability.
 
 @@ toc { .main depth=2 }
 
