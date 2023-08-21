@@ -1,7 +1,4 @@
-# Snapshots 
-
-[snapshots-badge]:  https://img.shields.io/nexus/s/org.pekko/pekko-connectors-csv_2.13?server=https%3A%2F%2Foss.sonatype.org
-[snapshots]:        https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/pekko-connectors-csv_2.13/
+# Snapshots
 
 Snapshots are published to the Sonatype Snapshot repository after every successful build on 'main' branch.
 Add the following to your project build definition to resolve Apache Pekko Connectors snapshots:
@@ -15,8 +12,8 @@ Maven
       <repositories>
         <repository>
             <id>snapshots-repo</id>
-            <name>Sonatype snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <name>Apache snapshots</name>
+            <url>https://repository.apache.org/content/groups/snapshots</url>
         </repository>
       </repositories>
     ...
@@ -25,14 +22,15 @@ Maven
 
 sbt
 :   ```scala
-    resolvers += Resolver.sonatypeRepo("snapshots")
+    resolvers += "Apache Staging" at "https://repository.apache.org/content/groups/snapshots"
+    resolvers += Resolver.ApacheMavenSnapshotsRepo // use this if you are using sbt 1.9.0 or above
     ```
 
 Gradle
 :   ```gradle
     repositories {
       maven {
-        url  "https://oss.sonatype.org/content/repositories/snapshots"
+        url  "https://repository.apache.org/content/groups/snapshots"
       }
     }
     ```
@@ -44,6 +42,6 @@ The [snapshot documentation](https://pekko.apache.org/docs/pekko-connectors/snap
 
 ## Versions
 
-Latest published snapshot version is [![snapshots-badge][]][snapshots]
+To find the latest published snapshot version, have a look at https://repository.apache.org/content/groups/snapshots/org/apache/pekko/pekko-connectors-csv_2.13/
 
-The snapshot repository is cleaned from time to time with no further notice. Check [Sonatype snapshots Apache Pekko Connectors Kafka files](https://oss.sonatype.org/content/repositories/snapshots/com/lightbend/akka/) to see what versions are currently available.
+The snapshot repository is cleaned from time to time with no further notice. Check https://repository.apache.org/content/groups/snapshots/org/apache/pekko/ to see what versions are currently available.
