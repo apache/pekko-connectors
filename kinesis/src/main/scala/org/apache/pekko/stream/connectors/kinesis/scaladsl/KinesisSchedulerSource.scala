@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.kinesis.scaladsl
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.stream._
 import pekko.stream.connectors.kinesis.impl.KinesisSchedulerSourceStage
 import pekko.stream.connectors.kinesis.{
@@ -45,12 +44,7 @@ object KinesisSchedulerSource {
   def apply(
       schedulerBuilder: ShardRecordProcessorFactory => Scheduler,
       settings: KinesisSchedulerSourceSettings): Source[CommittableRecord, Future[Scheduler]] =
-    Source
-      .fromMaterializer { (mat, _) =>
-        Source
-          .fromGraph(new KinesisSchedulerSourceStage(settings, schedulerBuilder))
-      }
-      .mapMaterializedValue(_.flatMap(identity)(ExecutionContexts.parasitic))
+    Source.fromGraph(new KinesisSchedulerSourceStage(settings, schedulerBuilder))
 
   def sharded(
       schedulerBuilder: ShardRecordProcessorFactory => Scheduler,
