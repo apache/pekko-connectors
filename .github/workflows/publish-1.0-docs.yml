@@ -26,7 +26,7 @@ jobs:
 
       - name: Build Documentation
         run: |-
-          sbt "set ThisBuild / version := \"1.0.0\"; docs/paradox unidoc"
+          sbt "set ThisBuild / version := \"1.0.0\"; docs/paradox; unidoc"
 
       # Create directory structure upfront since rsync does not create intermediate directories otherwise
       - name: Create directory structure
