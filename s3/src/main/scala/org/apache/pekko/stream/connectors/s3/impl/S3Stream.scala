@@ -1177,6 +1177,7 @@ import scala.util.{ Failure, Success, Try }
 
         import conf.multipartUploadSettings.retrySettings._
 
+        // TODO: Scala 3 workaround, see https://github.com/lampepfl/dotty/issues/18438
         val source1: SubFlow[Chunk, NotUsed, Flow[ByteString, ByteString, NotUsed]#Repr, Sink[ByteString, NotUsed]] =
           SplitAfterSize(chunkSize, chunkBufferSize)(atLeastOneByteString)
             .via(getChunkBuffer(chunkSize, chunkBufferSize, maxRetries)) // creates the chunks
