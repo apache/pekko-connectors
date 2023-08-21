@@ -26,7 +26,7 @@ import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProc
 
 import scala.annotation.tailrec
 import scala.collection.mutable
-import scala.concurrent.{ ExecutionContext, Future, Promise }
+import scala.concurrent.{ Future, Promise }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -77,13 +77,18 @@ private[kinesis] class KinesisSchedulerSourceStage(
     private[this] var schedulerOpt: Option[Scheduler] = None
 
     override def preStart(): Unit = {
-      implicit val ec: ExecutionContext = executionContext(attributes)
       val scheduler = schedulerBuilder(new ShardRecordProcessorFactory {
         override def shardRecordProcessor(): ShardRecordProcessor =
           new ShardProcessor(newRecordCallback)
       })
+      // Run the scheduler loop in a separate thread
+      val thread = new Thread(() => {
+          val result = Try { scheduler.run() }
+          callback.invoke(SchedulerShutdown(result))
+        }, s"KinesisSchedulerSource")
+      thread.setDaemon(true)
+      thread.start()
       schedulerOpt = Some(scheduler)
-      Future(scheduler.run()).onComplete(result => callback.invoke(SchedulerShutdown(result)))
       matValue.success(scheduler)
     }
     private val callback: AsyncCallback[Command] = getAsyncCallback(awaitingRecords)
@@ -114,20 +119,5 @@ private[kinesis] class KinesisSchedulerSourceStage(
     override def postStop(): Unit =
       schedulerOpt.foreach(scheduler =>
         Future(if (!scheduler.shutdownComplete()) scheduler.shutdown())(materializer.executionContext))
-
-    protected def executionContext(attributes: Attributes): ExecutionContext = {
-      val dispatcherId = (attributes.get[ActorAttributes.Dispatcher](ActorAttributes.IODispatcher) match {
-        case ActorAttributes.Dispatcher("") =>
-          ActorAttributes.IODispatcher
-        case d => d
-      }) match {
-        case d @ ActorAttributes.IODispatcher =>
-          // this one is not a dispatcher id, but is a config path pointing to the dispatcher id
-          materializer.system.settings.config.getString(d.dispatcher)
-        case d => d.dispatcher
-      }
-
-      materializer.system.dispatchers.lookup(dispatcherId)
-    }
   }
 }
