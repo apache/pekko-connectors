@@ -1,5 +1,4 @@
-Apache Pekko Connectors [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)[![Nightly Builds](https://github.com/apache/incubator-pekko-connectors/actions/workflows/nightly-builds.yaml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/nightly-builds.yaml)
-=======
+# Apache Pekko Connectors [![scaladex-badge][]][scaladex] [![maven-central-badge][]][maven-central] [![CI on GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/check-build-test.yml)[![Nightly Builds](https://github.com/apache/incubator-pekko-connectors/actions/workflows/nightly-builds.yaml/badge.svg)](https://github.com/apache/incubator-pekko-connectors/actions/workflows/nightly-builds.yaml)
 
 [scaladex]:              https://index.scala-lang.org/apache/incubator-pekko-connectors
 [scaladex-badge]:        https://index.scala-lang.org/apache/incubator-pekko-connectors/latest.svg
@@ -12,42 +11,36 @@ The Apache Pekko Connectors project is an open source initiative to implement st
 
 Pekko Connectors is a fork of [Alpakka](https://github.com/akka/alpakka) 4.0.0, prior to the Akka project's adoption of the Business Source License.
 
-Documentation
--------------
+## Documentation
 
 Pekko Connectors are documented at https://pekko.apache.org/docs/pekko-connectors/current/.
 
 To keep up with the latest releases check out [Pekko Connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko Connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
 
-Community
----------
+## Community
 
 You can join these forums and chats to discuss and ask Pekko and Pekko connector related questions:
 
 - [GitHub discussions](https://github.com/apache/incubator-pekko/discussions): for questions and general discussion.
-- [Pekko user mailing list](https://lists.apache.org/list.html?user@pekko.apache.org): for Pekko Connectors usage discussions.
+- [Pekko users mailing list](https://lists.apache.org/list.html?users@pekko.apache.org): for Pekko Connectors usage discussions.
 - [Pekko dev mailing list](https://lists.apache.org/list.html?dev@pekko.apache.org): for Pekko Connectors development discussions.
 - [GitHub issues](https://github.com/apache/incubator-pekko-connectors/issues): for bug reports and feature requests. Please search the existing issues before creating new ones. If you are unsure whether you have found a bug, consider asking in GitHub discussions or the mailing list first.
 
-Contributing
-------------
+## Contributing
 
 Contributions are very welcome. If you have an idea on how to improve Pekko, don't hesitate to create an issue or submit a pull request.
 
 See [CONTRIBUTING.md](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md) for details on the development workflow and how to create your pull request.
 
-Code of Conduct
----------------
+## Code of Conduct
 
 Apache Pekko is governed by the [Apache code of conduct](https://www.apache.org/foundation/policies/conduct.html). By participating in this project you agree to abide by its terms.
 
-License
--------
+## License
 
 Apache Pekko is available under the Apache License, version 2.0. See [LICENSE](https://github.com/apache/incubator-pekko-connectors/blob/main/LICENSE) file for details.
 
-Caveat Emptor
--------------
+## Caveat Emptor
 
 Pekko Connectors components are not always binary compatible between releases. API changes that are not backward compatible might be introduced as we refine and simplify based on your feedback. A module may be dropped in any release without prior deprecation. 
 
