@@ -171,10 +171,7 @@ object Dependencies {
   val Ftp = Seq(
     libraryDependencies ++= Seq(
       "commons-net" % "commons-net" % "3.8.0",
-      "com.hierynomus" % "sshj" % "0.33.0",
-      "io.github.hakky54" % "sslcontext-kickstart-for-pem" % "6.8.0" % Test,
-      "org.mockito" % "mockito-core" % "4.11.0" % Test,
-      "org.mockito" % "mockito-inline" % "4.11.0" % Test))
+      "com.hierynomus" % "sshj" % "0.33.0") ++ Mockito)
 
   val GeodeVersion = "1.15.0"
   val GeodeVersionForDocs = "115"
