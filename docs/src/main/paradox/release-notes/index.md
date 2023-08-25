@@ -38,6 +38,7 @@ We haven't had to fix many bugs that were in Alpakka 4.0.0.
 * Scala 3 support ([#126](https://github.com/apache/incubator-pekko-connectors/issues/126))
     * The connectors that still only support Scala 2 are MongoDB and Slick.
 * FTP Connector now supports UTF8 Autodetect mode ([PR221](https://github.com/apache/incubator-pekko-connectors/pull/221))
+* FTP Connector now supports setting `TrustManager`/`KeyManager` ([PR205](https://github.com/apache/incubator-pekko-connectors/pull/205))
 * IronMQ Connector: changed the Circe JSON integration to use [mdedetrich/pekko-streams-circe](https://github.com/mdedetrich/pekko-streams-circe) ([PR134](https://github.com/apache/incubator-pekko-connectors/pull/134)) 
 * S3 Connector: Add Bucket With Versioning API support ([PR84](https://github.com/apache/incubator-pekko-connectors/pull/84))
 
