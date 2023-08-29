@@ -347,9 +347,6 @@ lazy val docs = project
   .enablePlugins(PekkoParadoxPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin)
   .disablePlugins(MimaPlugin)
   .settings(
-    // TODO Remove when pekko-paradox-sbt has its first release
-    resolvers += Resolver.ApacheMavenSnapshotsRepo,
-    updateOptions := updateOptions.value.withLatestSnapshots(false),
     Compile / paradox / name := "Apache Pekko Connectors",
     publish / skip := true,
     pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-connectors"),
