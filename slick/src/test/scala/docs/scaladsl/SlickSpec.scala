@@ -53,7 +53,7 @@ class SlickSpec
   import session.profile.api._
 
   case class User(id: Int, name: String)
-  class Users(tag: Tag) extends Table[(Int, String)](tag, "ALPAKKA_SLICK_SCALADSL_TEST_USERS") {
+  class Users(tag: Tag) extends Table[(Int, String)](tag, "PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS") {
     def id = column[Int]("ID")
     def name = column[String]("NAME")
     def * = (id, name)
@@ -65,13 +65,13 @@ class SlickSpec
 
   val users = (1 to 40).map(i => User(i, s"Name$i")).toSet
 
-  val createTable = sqlu"""CREATE TABLE ALPAKKA_SLICK_SCALADSL_TEST_USERS(ID INTEGER, NAME VARCHAR(50))"""
-  val dropTable = sqlu"""DROP TABLE ALPAKKA_SLICK_SCALADSL_TEST_USERS"""
-  val selectAllUsers = sql"SELECT ID, NAME FROM ALPAKKA_SLICK_SCALADSL_TEST_USERS".as[User]
+  val createTable = sqlu"""CREATE TABLE PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS(ID INTEGER, NAME VARCHAR(50))"""
+  val dropTable = sqlu"""DROP TABLE PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS"""
+  val selectAllUsers = sql"SELECT ID, NAME FROM PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS".as[User]
   val typedSelectAllUsers = TableQuery[Users].result
 
   def insertUser(user: User): DBIO[Int] =
-    sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
+    sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
 
   def getAllUsersFromDb: Future[Set[User]] = Slick.source(selectAllUsers).runWith(Sink.seq).map(_.toSet)
   def populate() = {

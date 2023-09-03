@@ -34,7 +34,7 @@ public class DocSnippetSource {
     final CompletionStage<Done> done =
         Slick.source(
                 session,
-                "SELECT ID, NAME FROM ALPAKKA_SLICK_JAVADSL_TEST_USERS",
+                "SELECT ID, NAME FROM PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS",
                 (SlickRow row) -> new User(row.nextInt(), row.nextString()))
             .log("user")
             .runWith(Sink.ignore(), system);
