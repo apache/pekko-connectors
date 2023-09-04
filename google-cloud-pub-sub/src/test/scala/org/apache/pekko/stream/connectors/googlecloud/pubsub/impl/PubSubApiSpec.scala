@@ -95,8 +95,7 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
   val config = PubSubConfig()
 
-  val accessToken =
-    "TESTTOKEN"
+  val accessToken = "TESTTOKEN"
 
   it should "publish" in {
 

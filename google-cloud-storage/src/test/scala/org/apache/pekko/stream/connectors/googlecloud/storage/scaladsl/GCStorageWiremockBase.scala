@@ -889,6 +889,5 @@ object GCStorageWiremockBase {
 }
 
 object TestCredentials {
-  val accessToken =
-    "TESTTOKEN"
+  val accessToken = "TESTTOKEN"
 }

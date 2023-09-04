@@ -573,6 +573,5 @@ class GCStorageSourceSpec
 }
 
 object TestCredentials {
-  val accessToken =
-    "TESTTOKEN"
+  val accessToken = "TESTTOKEN"
 }
