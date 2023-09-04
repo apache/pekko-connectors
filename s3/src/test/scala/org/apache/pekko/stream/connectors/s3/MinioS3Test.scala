@@ -21,7 +21,7 @@ import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCred
 trait MinioS3Test extends ForAllTestContainer with TestKitBase { self: Suite =>
   val S3DummyAccessKey = "TESTKEY"
   val S3DummySecretKey = "TESTSECRET"
-  val S3DummyDomain = "s3minio.alpakka"
+  val S3DummyDomain = "s3minio.pekko-connectors"
 
   override lazy val container: MinioContainer = new MinioContainer(S3DummyAccessKey, S3DummySecretKey, S3DummyDomain)
 

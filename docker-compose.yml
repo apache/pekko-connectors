@@ -133,21 +133,21 @@ services:
     image: google/cloud-sdk:311.0.0
     ports:
       - "8538:8538"
-    command: gcloud beta emulators pubsub start --project=alpakka --host-port=0.0.0.0:8538
+    command: gcloud beta emulators pubsub start --project=pekko-connectors --host-port=0.0.0.0:8538
   gcloud-pubsub-emulator_prep:
     image: martynas/gcloud-pubsub-client
     links:
       - "gcloud-pubsub-emulator"
     environment:
-      - "PUBSUB_PROJECT_ID=alpakka"
+      - "PUBSUB_PROJECT_ID=pekko-connectors"
       - "PUBSUB_EMULATOR_HOST=gcloud-pubsub-emulator:8538"
     entrypoint: ""
     command: >
       bash -c "
-        python publisher.py alpakka create simpleTopic &&
-        python subscriber.py alpakka create simpleTopic simpleSubscription
-        python publisher.py alpakka create testTopic &&
-        python subscriber.py alpakka create testTopic testSubscription
+        python publisher.py pekko-connectors create simpleTopic &&
+        python subscriber.py pekko-connectors create simpleTopic simpleSubscription
+        python publisher.py pekko-connectors create testTopic &&
+        python subscriber.py pekko-connectors create testTopic testSubscription
       "
   hbase:
     image: harisekhon/hbase:1.4
