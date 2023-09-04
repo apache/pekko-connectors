@@ -190,7 +190,7 @@ class HdfsWriterSpec
 
     "use time rotation" in {
       val (cancellable, resF) = Source
-        .tick(0.millis, 50.milliseconds, ByteString("I love Alpakka!"))
+        .tick(0.millis, 50.milliseconds, ByteString("I love Pekko Connectors!"))
         .map(HdfsWriteMessage(_))
         .via(
           HdfsFlow.data(
