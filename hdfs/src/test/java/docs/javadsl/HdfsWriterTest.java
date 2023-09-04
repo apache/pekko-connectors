@@ -181,7 +181,7 @@ public class HdfsWriterTest {
         Source.tick(
                 java.time.Duration.ofMillis(0),
                 java.time.Duration.ofMillis(50),
-                ByteString.fromString("I love Alpakka!"))
+                ByteString.fromString("I love Pekko Connectors!"))
             .map(HdfsWriteMessage::create)
             .via(
                 HdfsFlow.data(
