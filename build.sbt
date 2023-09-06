@@ -125,7 +125,7 @@ lazy val `pekko-connectors` = project
   )
 
 addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll; +headerCreateAll")
-addCommandAlias("checkCodeStyle", "+headerCheckAll; ;scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
+addCommandAlias("checkCodeStyle", ";+headerCheckAll; scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
 
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
