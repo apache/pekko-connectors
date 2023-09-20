@@ -111,8 +111,10 @@ object Common extends AutoPlugin {
       case _ => Seq.empty[String]
     }),
     autoAPIMappings := true,
-    apiURL := Some(url(
-      s"https://pekko.apache.org/api/pekko-connectors/${version.value}/org/apache/pekko/stream/connectors/index.html")),
+    apiURL := {
+      val apiVersion = if (isSnapshot.value) "current" else version.value
+      Some(url(s"https://pekko.apache.org/api/pekko-connectors/$apiVersion/"))
+    },
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
     // -a Show stack traces and exception class name for AssertionErrors.

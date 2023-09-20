@@ -2,6 +2,13 @@
 
 To understand the forces on version numbers, read about @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
 
+## 1.0.1
+
+### Bug Fixes
+
+* Fix `apiURL` so that projects depending on pekko-connectors have the correct
+url in their scaladocs via sbt's [autoAPIMappings](https://www.scala-sbt.org/1.x/docs/Howto-Scaladoc.html#Define+the+location+of+API+documentation+for+a+library) feature ([PR252](https://github.com/apache/incubator-pekko-connectors/pull/252))
+
 ## 1.0.0
 
 Apache Pekko Connectors 1.0.0 is based on Alpakka 4.0.0. Pekko came about as a result of Lightbend's decision to make future
