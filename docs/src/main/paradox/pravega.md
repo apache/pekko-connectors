@@ -53,7 +53,7 @@ Two categories of properties can/must be provided to configure the connector.
 reference.conf
 : @@snip(/pravega/src/main/resources/reference.conf)
 
-The Pravega connector can automatically configure the Pravega client by supplying Lightbend configuration in an
+The Pravega connector can automatically configure the Pravega client by supplying [configuration](https://github.com/lightbend/config) in an
 application.conf, or it can be set programmatically with @apidoc[ReaderSettingsBuilder$] or @apidoc[WriterSettingsBuilder$].
 See the following sections for examples.
 
