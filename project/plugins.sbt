@@ -35,7 +35,7 @@ addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
 // Pekko gRPC -- sync with version in Dependencies.scala:29
-resolvers += Resolver.ApacheMavenSnapshotsRepo
-addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.0-15-c95da038-SNAPSHOT")
+resolvers += Resolver.ApacheMavenStagingRepo
+addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.1-RC1")
 // templating
 addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.6.1")
