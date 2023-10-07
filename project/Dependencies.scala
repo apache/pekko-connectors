@@ -35,10 +35,10 @@ object Dependencies {
   val PekkoHttpBinaryVersion = "1.0"
   val ScalaTestVersion = "3.2.17"
   val TestContainersScalaTestVersion = "0.40.14"
-  val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
+  val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.21.12"
   val hoverflyVersion = "0.14.1"
-  val scalaCheckVersion = "1.16.0"
+  val scalaCheckVersion = "1.17.0"
 
   val LogbackForSlf4j1Version = "1.2.13"
   val LogbackForSlf4j2Version = "1.3.14"
