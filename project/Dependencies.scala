@@ -33,7 +33,7 @@ object Dependencies {
   val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoHttpBinaryVersion = "1.0"
-  val ScalaTestVersion = "3.2.14"
+  val ScalaTestVersion = "3.2.17"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.21.12"
@@ -60,7 +60,7 @@ object Dependencies {
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.20.0"
-  val JwtCoreVersion = "3.0.1"
+  val JwtScalaVersion = "9.4.4"
 
   val log4jOverSlf4jVersion = "1.7.36"
   val jclOverSlf4jVersion = "1.7.36"
@@ -204,7 +204,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5",
+      "com.github.jwt-scala" %% "jwt-json-common" % JwtScalaVersion,
       "com.google.auth" % "google-auth-library-credentials" % GoogleAuthVersion,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
@@ -295,7 +295,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5") ++ Mockito)
+      "com.github.jwt-scala" %% "jwt-json-common" % JwtScalaVersion) ++ Mockito)
 
   val InfluxDB = Seq(
     libraryDependencies ++= Seq(
