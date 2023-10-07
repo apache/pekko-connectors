@@ -53,6 +53,7 @@ object Dependencies {
   val CouchbaseVersion = "2.7.16"
   val CouchbaseVersionForDocs = "2.7"
 
+  val GoogleAuthVersion = "1.20.0"
   val JwtCoreVersion = "3.0.1"
 
   val log4jOverSlf4jVersion = "1.7.36"
@@ -195,7 +196,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5", // ApacheV2
-      "com.google.auth" % "google-auth-library-credentials" % "0.24.1", // BSD 3-clause
+      "com.google.auth" % "google-auth-library-credentials" % GoogleAuthVersion, // BSD 3-clause
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
     ) ++ Mockito)
 
@@ -236,7 +237,7 @@ object Dependencies {
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
       "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
-      "com.google.auth" % "google-auth-library-oauth2-http" % "0.22.2",
+      "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       // pull in Pekko Discovery for our Pekko version
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
