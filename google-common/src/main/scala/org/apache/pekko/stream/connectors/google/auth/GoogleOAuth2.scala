@@ -69,7 +69,7 @@ private[auth] object GoogleOAuth2 {
       .expiresIn(3600)
       .issuedNow
 
-    JwtSprayJson.encode(claim, privateKey, RS256)
+    JwtSprayJson(clock).encode(claim, privateKey, RS256)
   }
 
   final case class JwtClaimContent(scope: String)
