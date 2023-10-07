@@ -22,6 +22,7 @@ import org.apache.parquet.hadoop.util.HadoopInputFile
 import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
 import org.scalacheck.Gen
 
+import scala.annotation.nowarn
 import scala.util.Random
 
 trait AbstractAvroParquetBase {
@@ -47,7 +48,7 @@ trait AbstractAvroParquetBase {
   val conf: Configuration = new Configuration()
   conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true)
 
-  @SuppressWarnings(Array("deprecation"))
+  @nowarn("msg=deprecated")
   def parquetWriter[T <: GenericRecord](file: String, conf: Configuration, schema: Schema): ParquetWriter[T] =
     AvroParquetWriter.builder[T](new Path(file)).withConf(conf).withSchema(schema).build()
 
@@ -81,7 +82,7 @@ trait AbstractAvroParquetBase {
     // #prepare-source
   }
 
-  @SuppressWarnings(Array("deprecation"))
+  @nowarn("msg=deprecated")
   def sinkDocumentation(): Unit = {
     // #prepare-sink
     import com.sksamuel.avro4s.Record
@@ -99,7 +100,7 @@ trait AbstractAvroParquetBase {
     }
   }
 
-  @SuppressWarnings(Array("deprecation"))
+  @nowarn("msg=deprecated")
   def initWriterDocumentation(): Unit = {
     // #init-writer
     import org.apache.avro.generic.GenericRecord
