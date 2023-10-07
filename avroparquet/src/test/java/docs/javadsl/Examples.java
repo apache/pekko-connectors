@@ -58,10 +58,10 @@ public class Examples {
   Source<GenericRecord, NotUsed> source = AvroParquetSource.create(reader);
   // #init-source
 
+  @SuppressWarnings("msg=deprecated")
   public Examples() throws IOException {
 
     // #init-flow
-    @SuppressWarnings("msg=deprecated")
     ParquetWriter<GenericRecord> writer =
         AvroParquetWriter.<GenericRecord>builder(new Path("./test.parquet"))
             .withConf(conf)

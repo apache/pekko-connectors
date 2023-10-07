@@ -76,6 +76,7 @@ public class AvroParquetSinkTest {
     records.add(new GenericRecordBuilder(schema).set("id", "3").set("body", "body13").build());
   }
 
+  @SuppressWarnings("msg=deprecated")
   @Test
   public void createNewParquetFile()
       throws InterruptedException, IOException, TimeoutException, ExecutionException {
@@ -83,7 +84,6 @@ public class AvroParquetSinkTest {
 
     Configuration conf = new Configuration();
     conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true);
-    @SuppressWarnings("msg=deprecated")
     ParquetWriter<GenericRecord> writer =
         AvroParquetWriter.<GenericRecord>builder(new Path(file))
             .withConf(conf)

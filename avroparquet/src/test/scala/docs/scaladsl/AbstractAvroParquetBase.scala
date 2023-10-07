@@ -47,6 +47,7 @@ trait AbstractAvroParquetBase {
   val conf: Configuration = new Configuration()
   conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true)
 
+  @SuppressWarnings(Array("msg=deprecated"))
   def parquetWriter[T <: GenericRecord](file: String, conf: Configuration, schema: Schema): ParquetWriter[T] =
     AvroParquetWriter.builder[T](new Path(file)).withConf(conf).withSchema(schema).build()
 
@@ -80,6 +81,7 @@ trait AbstractAvroParquetBase {
     // #prepare-source
   }
 
+  @SuppressWarnings(Array("msg=deprecated"))
   def sinkDocumentation(): Unit = {
     // #prepare-sink
     import com.sksamuel.avro4s.Record
@@ -97,6 +99,7 @@ trait AbstractAvroParquetBase {
     }
   }
 
+  @SuppressWarnings(Array("msg=deprecated"))
   def initWriterDocumentation(): Unit = {
     // #init-writer
     import org.apache.avro.generic.GenericRecord
