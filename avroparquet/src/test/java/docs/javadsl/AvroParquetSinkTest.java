@@ -76,7 +76,7 @@ public class AvroParquetSinkTest {
     records.add(new GenericRecordBuilder(schema).set("id", "3").set("body", "body13").build());
   }
 
-  @SuppressWarnings("msg=deprecated")
+  @SuppressWarnings("deprecation")
   @Test
   public void createNewParquetFile()
       throws InterruptedException, IOException, TimeoutException, ExecutionException {

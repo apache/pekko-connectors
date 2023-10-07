@@ -58,7 +58,7 @@ public class Examples {
   Source<GenericRecord, NotUsed> source = AvroParquetSource.create(reader);
   // #init-source
 
-  @SuppressWarnings("msg=deprecated")
+  @SuppressWarnings("deprecation")
   public Examples() throws IOException {
 
     // #init-flow
