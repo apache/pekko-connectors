@@ -61,6 +61,7 @@ public class Examples {
   public Examples() throws IOException {
 
     // #init-flow
+    @SuppressWarnings("msg=deprecated")
     ParquetWriter<GenericRecord> writer =
         AvroParquetWriter.<GenericRecord>builder(new Path("./test.parquet"))
             .withConf(conf)

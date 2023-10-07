@@ -83,6 +83,7 @@ public class AvroParquetSinkTest {
 
     Configuration conf = new Configuration();
     conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true);
+    @SuppressWarnings("msg=deprecated")
     ParquetWriter<GenericRecord> writer =
         AvroParquetWriter.<GenericRecord>builder(new Path(file))
             .withConf(conf)
