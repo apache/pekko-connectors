@@ -22,6 +22,7 @@ import org.apache.parquet.hadoop.util.HadoopInputFile
 import org.apache.parquet.hadoop.{ ParquetReader, ParquetWriter }
 import org.scalacheck.Gen
 
+import scala.annotation.nowarn
 import scala.util.Random
 
 trait AbstractAvroParquetBase {
@@ -47,6 +48,7 @@ trait AbstractAvroParquetBase {
   val conf: Configuration = new Configuration()
   conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true)
 
+  @nowarn("msg=deprecated")
   def parquetWriter[T <: GenericRecord](file: String, conf: Configuration, schema: Schema): ParquetWriter[T] =
     AvroParquetWriter.builder[T](new Path(file)).withConf(conf).withSchema(schema).build()
 
@@ -80,6 +82,7 @@ trait AbstractAvroParquetBase {
     // #prepare-source
   }
 
+  @nowarn("msg=deprecated")
   def sinkDocumentation(): Unit = {
     // #prepare-sink
     import com.sksamuel.avro4s.Record
@@ -87,30 +90,30 @@ trait AbstractAvroParquetBase {
     import org.apache.hadoop.fs.Path
     import org.apache.parquet.avro.AvroReadSupport
 
-    val file: String = "./sample/path/test.parquet"
-    val conf: Configuration = new Configuration()
+    val file = "./sample/path/test.parquet"
+    val conf = new Configuration()
     conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true)
-    val writer: ParquetWriter[Record] =
+    val writer =
       AvroParquetWriter.builder[Record](new Path(file)).withConf(conf).withSchema(schema).build()
     // #prepare-sink
     if (writer != null) { // forces val usage
     }
   }
 
+  @nowarn("msg=deprecated")
   def initWriterDocumentation(): Unit = {
     // #init-writer
     import org.apache.avro.generic.GenericRecord
     import org.apache.hadoop.fs.Path
     import org.apache.parquet.avro.AvroParquetReader
-    import org.apache.parquet.hadoop.ParquetReader
     import org.apache.parquet.hadoop.util.HadoopInputFile
 
-    val file: String = "./sample/path/test.parquet"
-    val writer: ParquetWriter[GenericRecord] =
+    val file = "./sample/path/test.parquet"
+    val writer =
       AvroParquetWriter.builder[GenericRecord](new Path(file)).withConf(conf).withSchema(schema).build()
     // #init-writer
     // #init-reader
-    val reader: ParquetReader[GenericRecord] =
+    val reader =
       AvroParquetReader.builder[GenericRecord](HadoopInputFile.fromPath(new Path(file), conf)).withConf(conf).build()
     // #init-reader
     if (writer != null && reader != null) { // forces val usage

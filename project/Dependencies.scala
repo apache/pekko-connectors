@@ -25,6 +25,7 @@ object Dependencies {
 
   val InfluxDBJavaVersion = "2.15"
 
+  val AvroVersion = "1.11.3"
   val AwsSdk2Version = "2.17.113"
   val AwsSpiPekkoHttpVersion = "0.1.0"
   // Sync with plugins.sbt
@@ -157,12 +158,13 @@ object Dependencies {
       "com.google.jimfs" % "jimfs" % "1.2" % Test))
 
   val avro4sVersion: Def.Initialize[String] = Def.setting {
-    if (Common.isScala3.value) "5.0.4" else "4.1.1"
+    if (Common.isScala3.value) "5.0.5" else "4.1.1"
   }
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.10.1", // Apache2
+      "org.apache.parquet" % "parquet-avro" % "1.13.1", // Apache2
+      "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
@@ -214,7 +216,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src",
-      "org.apache.avro" % "avro" % "1.9.2" % "provided",
+      "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
