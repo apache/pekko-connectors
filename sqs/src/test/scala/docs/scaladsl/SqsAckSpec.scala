@@ -15,7 +15,6 @@ package docs.scaladsl
 
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
 import java.util.function.Supplier
-
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.sqs.scaladsl._
@@ -25,8 +24,10 @@ import pekko.stream.connectors.sqs.SqsAckResultEntry._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ccompat.JavaConverters._
+import org.mockito.Answers
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{ spy, times, verify, when }
+import org.mockito.Mockito.{ times, verify, when, withSettings }
+import org.mockito.internal.MockitoCore
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar.mock
@@ -39,7 +40,14 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
   trait IntegrationFixture {
     val queueUrl: String = randomQueueUrl()
-    implicit val awsSqsClient: SqsAsyncClient = spy(sqsClient)
+    implicit val awsSqsClient: SqsAsyncClient = spyInternal(sqsClient)
+
+    // spyInternal was created due to compile problems using Mockito 4.11 in Scala 2.12
+    private val mockitoCore = new MockitoCore
+    private def spyInternal[T](t: T): T =
+      mockitoCore.mock(t.getClass.asInstanceOf[Class[T]],
+        withSettings.spiedInstance(t)
+          .defaultAnswer(Answers.CALLS_REAL_METHODS))
 
     def sendMessage(message: String): Unit = {
       def request =
