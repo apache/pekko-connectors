@@ -122,13 +122,12 @@ object Dependencies {
 
   val Couchbase = Seq(
     libraryDependencies ++= Seq(
-      "com.couchbase.client" % "java-client" % CouchbaseVersion, // ApacheV2
-      "io.reactivex" % "rxjava-reactive-streams" % "1.2.1", // ApacheV2
-      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided, // Apache V2
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test, // Apache V2
-      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion % Test, // Apache V2
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonDatabindVersion % Test // Apache V2
-    ))
+      "com.couchbase.client" % "java-client" % CouchbaseVersion,
+      "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
+      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion % Test,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonDatabindVersion % Test))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
@@ -163,15 +162,14 @@ object Dependencies {
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.13.1", // Apache2
+      "org.apache.parquet" % "parquet-avro" % "1.13.1",
       "org.apache.avro" % "avro" % AvroVersion,
-      ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
-      ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"), // Apache2
+      ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.20.0" % Test, // MIT like: https://github.com/etorreborre/specs2/blob/master/LICENSE.txt
-      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test // MIT like: http://www.slf4j.org/license.html
-    ))
+      "org.specs2" %% "specs2-core" % "4.20.0" % Test,
+      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val Ftp = Seq(
     libraryDependencies ++= Seq(
@@ -197,10 +195,9 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5", // ApacheV2
-      "com.google.auth" % "google-auth-library-credentials" % GoogleAuthVersion, // BSD 3-clause
-      "io.specto" % "hoverfly-java" % hoverflyVersion % Test // ApacheV2
-    ) ++ Mockito)
+      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5",
+      "com.google.auth" % "google-auth-library-credentials" % GoogleAuthVersion,
+      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val GoogleBigQuery = Seq(
     libraryDependencies ++= Seq(
@@ -275,8 +272,8 @@ object Dependencies {
   val Hdfs = Seq(
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"), // ApacheV2
-      "org.typelevel" %% "cats-core" % "2.9.0", // MIT,
+        "slf4j-log4j12"),
+      "org.typelevel" %% "cats-core" % "2.9.0",
       ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
@@ -289,8 +286,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5" // ApacheV2
-    ) ++ Mockito)
+      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5") ++ Mockito)
 
   val InfluxDB = Seq(
     libraryDependencies ++= Seq(
