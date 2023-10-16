@@ -114,7 +114,7 @@ object Dependencies {
   val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
-    libraryDependencies ++= Seq(
+    libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
       ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
         .exclude("com.github.spotbugs", "spotbugs-annotations")
         .exclude("org.apache.tinkerpop", "*") // https://github.com/akka/alpakka/issues/2200
@@ -186,6 +186,8 @@ object Dependencies {
       Seq("geode-core", "geode-cq")
         .map("org.apache.geode" % _ % GeodeVersion) ++
       Seq(
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
         "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
@@ -350,10 +352,10 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test))
 
   val OrientDB = Seq(
-    libraryDependencies ++= Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.1.9")
+    libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.1.20")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.1.9"))
+      "com.orientechnologies" % "orientdb-object" % "3.1.20"))
 
   val PravegaVersion = "0.10.2"
   val PravegaVersionForDocs = s"v$PravegaVersion"
