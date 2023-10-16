@@ -28,6 +28,7 @@ object Dependencies {
   val AvroVersion = "1.11.3"
   val AwsSdk2Version = "2.17.113"
   val AwsSpiPekkoHttpVersion = "0.1.0"
+  val NettyVersion = "4.1.100.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "current"
   val PekkoHttpVersion = "1.0.0"
@@ -118,6 +119,7 @@ object Dependencies {
         .exclude("com.github.spotbugs", "spotbugs-annotations")
         .exclude("org.apache.tinkerpop", "*") // https://github.com/akka/alpakka/issues/2200
         .exclude("com.esri.geometry", "esri-geometry-api"), // https://github.com/akka/alpakka/issues/2225
+      "io.netty" % "netty-handler" % NettyVersion,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
   val Couchbase = Seq(
