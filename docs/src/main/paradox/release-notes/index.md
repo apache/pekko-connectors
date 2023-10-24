@@ -9,6 +9,16 @@ To understand the forces on version numbers, read about @ref:[Apache Pekko Conne
 * Fix `apiURL` so that projects depending on pekko-connectors have the correct
 url in their scaladocs via sbt's [autoAPIMappings](https://www.scala-sbt.org/1.x/docs/Howto-Scaladoc.html#Define+the+location+of+API+documentation+for+a+library) feature ([PR252](https://github.com/apache/incubator-pekko-connectors/pull/252))
 
+### Dependency Upgrades
+
+Most dependency changes in this release relate to upgrading dependencies that are affected by CVEs.
+
+* Pekko gRPC 1.0.1 (includes some useful dependency updates)
+* avro 1.11.3 ([#259](https://github.com/apache/incubator-pekko-connectors/issues/259))
+* jackson 2.14.3 - use in more places ([#263](https://github.com/apache/incubator-pekko-connectors/pull/263))
+* google-auth-library-oauth2-http 1.20.0 ([#256](https://github.com/apache/incubator-pekko-connectors/issues/256))
+* netty 4.1.100 - updated in cassandra connector ([#262](https://github.com/apache/incubator-pekko-connectors/pull/262))
+
 ## 1.0.0
 
 Apache Pekko Connectors 1.0.0 is based on Alpakka 4.0.0. Pekko came about as a result of Lightbend's decision to make future
