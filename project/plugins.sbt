@@ -7,6 +7,8 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
+dependencyOverrides += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
+
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.3")
 addSbtPlugin("com.dwijnand" % "sbt-dynver" % "4.1.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.31")
