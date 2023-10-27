@@ -37,6 +37,8 @@ object Dependencies {
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.21.12"
+  val grpcVersion = "1.54.2"
+  val guavaVersion = "32.1.2-android"
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.16.0"
 
@@ -219,7 +221,12 @@ object Dependencies {
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
-      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
+      "io.grpc" % "grpc-core" % grpcVersion,
+      "io.grpc" % "grpc-protobuf" % grpcVersion,
+      "io.grpc" % "grpc-netty-shaded" % grpcVersion,
+      "io.grpc" % "grpc-stub" % grpcVersion % "provided",
+      "io.grpc" % "grpc-auth" % grpcVersion,
+      "com.google.guava" % "guava" % guavaVersion % "runtime",
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
@@ -239,7 +246,12 @@ object Dependencies {
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
       "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src",
-      "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
+      "io.grpc" % "grpc-core" % grpcVersion,
+      "io.grpc" % "grpc-protobuf" % grpcVersion,
+      "io.grpc" % "grpc-netty-shaded" % grpcVersion,
+      "io.grpc" % "grpc-stub" % grpcVersion % "provided",
+      "io.grpc" % "grpc-auth" % grpcVersion,
+      "com.google.guava" % "guava" % guavaVersion % "runtime",
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       // pull in Pekko Discovery for our Pekko version
