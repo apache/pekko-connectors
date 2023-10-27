@@ -13,7 +13,6 @@ url in their scaladocs via sbt's [autoAPIMappings](https://www.scala-sbt.org/1.x
 
 Most dependency changes in this release relate to upgrading dependencies that are affected by CVEs.
 
-* Pekko gRPC 1.0.1 (includes some useful dependency updates)
 * avro 1.11.3 ([#259](https://github.com/apache/incubator-pekko-connectors/issues/259))
 * jackson 2.14.3 - use in more places ([#263](https://github.com/apache/incubator-pekko-connectors/pull/263))
 * google-auth-library-oauth2-http 1.20.0 ([#256](https://github.com/apache/incubator-pekko-connectors/issues/256))
