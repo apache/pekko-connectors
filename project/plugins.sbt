@@ -7,6 +7,8 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
+dependencyOverrides += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
+
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.3")
 addSbtPlugin("com.dwijnand" % "sbt-dynver" % "4.1.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.31")
@@ -34,7 +36,7 @@ addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-project-info" % "2.0.0").fo
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
-// Pekko gRPC -- sync with version in Dependencies.scala:29
-addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.0")
+// Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
+addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.1")
 // templating
 addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.6.1")
