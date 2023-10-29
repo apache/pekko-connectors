@@ -21,7 +21,7 @@ object Dependencies {
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
   val PekkoVersion = "1.0.1"
-  val PekkoBinaryVersion = "current"
+  val PekkoBinaryVersion = "1.0"
 
   val InfluxDBJavaVersion = "2.15"
 
@@ -30,9 +30,9 @@ object Dependencies {
   val AwsSpiPekkoHttpVersion = "0.1.0"
   val NettyVersion = "4.1.100.Final"
   // Sync with plugins.sbt
-  val PekkoGrpcBinaryVersion = "current"
+  val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = "1.0.0"
-  val PekkoHttpBinaryVersion = "current"
+  val PekkoHttpBinaryVersion = "1.0"
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
