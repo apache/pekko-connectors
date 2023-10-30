@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
-import pekko.stream.ActorMaterializer
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
 import org.openjdk.jmh.annotations._
@@ -51,7 +50,6 @@ class CsvBench {
 
   implicit val system: ActorSystem = ActorSystem()
   implicit val executionContext: ExecutionContext = system.dispatcher
-  implicit val mat: ActorMaterializer = ActorMaterializer()
 
   /**
    * Size of [[ByteString]] chunks in bytes.
@@ -85,7 +83,6 @@ class CsvBench {
 
   @TearDown
   def tearDown(): Unit = {
-    mat.shutdown()
     system.terminate()
   }
 
