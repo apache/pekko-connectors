@@ -36,7 +36,6 @@ object Dependencies {
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
-  val protobufJavaVersion = "3.21.12"
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.16.0"
 
@@ -220,7 +219,6 @@ object Dependencies {
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
-      "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
