@@ -36,6 +36,7 @@ object Dependencies {
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
+  val protobufJavaVersion = "3.25.0"
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.16.0"
 
@@ -219,6 +220,7 @@ object Dependencies {
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
+      "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
@@ -239,6 +241,7 @@ object Dependencies {
       "com.google.cloud" % "google-cloud-pubsub" % "1.125.2" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
+      "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
       // pull in Pekko Discovery for our Pekko version
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
 
