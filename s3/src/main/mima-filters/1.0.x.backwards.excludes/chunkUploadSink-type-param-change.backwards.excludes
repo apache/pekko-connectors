@@ -1,0 +1,12 @@
+# These filters are here because a type argument in the chunkUploadSink parameter was changed from
+# NotUsed to _ which has zero effect on runtime
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.javadsl.S3.resumeMultipartUploadWithContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.javadsl.S3.multipartUploadWithContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.javadsl.S3.resumeMultipartUploadWithContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.resumeMultipartUploadWithHeadersAndContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.resumeMultipartUploadWithContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.multipartUploadWithHeadersAndContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.multipartUploadWithContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.multipartUploadWithHeadersAndContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.resumeMultipartUploadWithContext")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.s3.scaladsl.S3.resumeMultipartUploadWithHeadersAndContext")
