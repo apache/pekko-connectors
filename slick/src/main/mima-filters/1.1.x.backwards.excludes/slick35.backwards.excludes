@@ -1,0 +1,7 @@
+# migrate to Slick 3.5
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.slick.javadsl.SlickSession.db")
+ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.stream.connectors.slick.javadsl.SlickSession.db")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.slick.javadsl.SlickSessionFactory#SlickSessionConfigBackedImpl.db")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.slick.javadsl.SlickSessionFactory#SlickSessionDbAndProfileBackedImpl.db")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.stream.connectors.slick.javadsl.SlickSessionFactory#SlickSessionDbAndProfileBackedImpl.this")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.stream.connectors.slick.scaladsl.package#SlickSession.forDbAndProfile")
