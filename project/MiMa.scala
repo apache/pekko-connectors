@@ -30,7 +30,7 @@ object MiMa extends AutoPlugin {
 
   override val projectSettings = Seq(
     mimaReportSignatureProblems := true,
-    mimaPreviousArtifacts := pekkoPreviousArtifacts(name.value, organization.value),
+    mimaPreviousArtifacts := pekkoPreviousArtifacts(name.value, organization.value, scalaVersion.value),
     checkMimaFilterDirectories := checkFilterDirectories(baseDirectory.value))
 
   def checkFilterDirectories(moduleRoot: File): Unit = {
@@ -44,10 +44,12 @@ object MiMa extends AutoPlugin {
 
   private val ignoreScala3CompatSet = Set("pekko-connectors-mongodb", "pekko-connectors-slick")
 
-  def pekkoPreviousArtifacts(
+  private def pekkoPreviousArtifacts(
       projectName: String,
-      organization: String): Set[sbt.ModuleID] = {
-    if (ignoreScala3CompatSet.contains(projectName)) {
+      organization: String,
+      scalaVersionString: String): Set[sbt.ModuleID] = {
+    if (CrossVersion.partialVersion(scalaVersionString).map(_._1).getOrElse(2) == 3 && ignoreScala3CompatSet.contains(
+        projectName)) {
       Set.empty
     } else {
       val versions: Seq[String] = {
