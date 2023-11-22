@@ -42,21 +42,27 @@ object MiMa extends AutoPlugin {
     }
   }
 
+  private val ignoreScala3CompatSet = Set("pekko-connectors-mongodb", "pekko-connectors-slick")
+
   def pekkoPreviousArtifacts(
       projectName: String,
       organization: String): Set[sbt.ModuleID] = {
-    val versions: Seq[String] = {
-      val firstPatchOf10 = 0
+    if (ignoreScala3CompatSet.contains(projectName)) {
+      Set.empty
+    } else {
+      val versions: Seq[String] = {
+        val firstPatchOf10 = 0
 
-      val pekko10Previous = expandVersions(1, 0, 0 to latestPatchOf10)
+        val pekko10Previous = expandVersions(1, 0, 0 to latestPatchOf10)
 
-      pekko10Previous
+        pekko10Previous
+      }
+
+      // check against all binary compatible artifacts
+      versions.map { v =>
+        organization %% projectName % v
+      }.toSet
     }
-
-    // check against all binary compatible artifacts
-    versions.map { v =>
-      organization %% projectName % v
-    }.toSet
   }
 
   private def expandVersions(major: Int, minor: Int, patches: immutable.Seq[Int]): immutable.Seq[String] =
