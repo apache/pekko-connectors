@@ -21,7 +21,7 @@ import pekko.stream.connectors.elasticsearch.{ impl, _ }
 import pekko.stream.javadsl.Source
 import pekko.stream.{ Attributes, Materializer }
 import pekko.util.ccompat.JavaConverters._
-import com.fasterxml.jackson.core.{ JsonFactory, StreamReadConstraints, StreamWriteConstraints }
+import com.fasterxml.jackson.core.{ JsonFactory, JsonFactoryBuilder, StreamReadConstraints, StreamWriteConstraints }
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.{ ArrayNode, NumericNode }
@@ -180,7 +180,7 @@ object ElasticsearchSource {
     val streamWriteConstraints = StreamWriteConstraints.builder
       .maxNestingDepth(config.getInt("write.max-nesting-depth"))
       .build
-    val jsonFactory = JsonFactory.builder
+    val jsonFactory = JsonFactory.builder.asInstanceOf[JsonFactoryBuilder]
       .streamReadConstraints(streamReadConstraints)
       .streamWriteConstraints(streamWriteConstraints)
       .build
