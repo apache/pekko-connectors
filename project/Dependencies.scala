@@ -211,7 +211,7 @@ object Dependencies {
       "io.spray" %% "spray-json" % "1.3.6",
       "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonDatabindVersion,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion % Test,
-      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
+      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ JacksonDatabindDependencies ++ Mockito)
   val GoogleBigQueryStorage = Seq(
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
