@@ -21,8 +21,11 @@ import pekko.stream.connectors.elasticsearch.{ impl, _ }
 import pekko.stream.javadsl.Source
 import pekko.stream.{ Attributes, Materializer }
 import pekko.util.ccompat.JavaConverters._
+import com.fasterxml.jackson.core.{ JsonFactory, StreamReadConstraints, StreamWriteConstraints }
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.{ ArrayNode, NumericNode }
+import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.ExecutionContext
 
@@ -38,7 +41,7 @@ object ElasticsearchSource {
   def create(elasticsearchParams: ElasticsearchParams,
       query: String,
       settings: SourceSettingsBase[_, _]): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
-    create(elasticsearchParams, query, settings, new ObjectMapper())
+    create(elasticsearchParams, query, settings, createObjectMapper())
 
   /**
    * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
@@ -105,7 +108,7 @@ object ElasticsearchSource {
       query: String,
       settings: SourceSettingsBase[_, _],
       clazz: Class[T]): Source[ReadResult[T], NotUsed] =
-    typed[T](elasticsearchParams, query, settings, clazz, new ObjectMapper())
+    typed[T](elasticsearchParams, query, settings, clazz, createObjectMapper())
 
   /**
    * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
@@ -164,6 +167,26 @@ object ElasticsearchSource {
         }
       }
       .mapMaterializedValue(_ => NotUsed)
+
+  private def createObjectMapper(): ObjectMapper = {
+    val config = ConfigFactory.load.getConfig("pekko.connectors.elasticsearch.jackson")
+    val streamReadConstraints = StreamReadConstraints.builder
+      .maxNestingDepth(config.getInt("read.max-nesting-depth"))
+      .maxNumberLength(config.getInt("read.max-number-length"))
+      .maxStringLength(config.getInt("read.max-string-length"))
+      .maxNameLength(config.getInt("read.max-name-length"))
+      .maxDocumentLength(config.getLong("read.max-document-length"))
+      .build
+    val streamWriteConstraints = StreamWriteConstraints.builder
+      .maxNestingDepth(config.getInt("write.max-nesting-depth"))
+      .build
+    val jsonFactory = JsonFactory.builder
+      .streamReadConstraints(streamReadConstraints)
+      .streamWriteConstraints(streamWriteConstraints)
+      .build
+    new JsonMapper(jsonFactory)
+
+  }
 
   private final class JacksonReader[T](mapper: ObjectMapper, clazz: Class[T]) extends impl.MessageReader[T] {
 
