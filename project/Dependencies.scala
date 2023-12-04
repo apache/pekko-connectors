@@ -72,7 +72,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.2.11",
+      "ch.qos.logback" % "logback-classic" % "1.2.13",
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11",
