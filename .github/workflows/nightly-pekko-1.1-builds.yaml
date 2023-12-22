@@ -1,0 +1,43 @@
+name: Nightly Pekko 1.1 Builds
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  # Only run once for latest commit per ref and cancel other (previous) runs.
+  group: pekko-1.1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-compile:
+    name: Compile
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        JDK: [ 8, 11 ]
+    env:
+      JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Setup Java ${{ matrix.JDK }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.JDK }}
+
+      - name: Cache Coursier cache
+        uses: coursier/cache-action@v6.4.0
+
+      - name: "compile, including  tests. Run locally with: sbt -Dpekko.build.pekko.version=main +Test/compile"
+        run: sbt -Dpekko.build.pekko.version=main +Test/compile

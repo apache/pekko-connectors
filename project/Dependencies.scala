@@ -10,6 +10,7 @@
 import sbt._
 import Common.isScala3
 import Keys._
+import com.github.pjfanning.pekkobuild.PekkoDependency
 
 object Dependencies {
 
@@ -20,8 +21,8 @@ object Dependencies {
   val Scala3 = "3.3.1"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
-  val PekkoVersion = "1.0.2"
-  val PekkoBinaryVersion = "1.0"
+  val PekkoVersion = PekkoDependency.pekkoVersionDerivedFromDefault("1.0.2")
+  val PekkoBinaryVersion = PekkoVersion.take(3)
 
   val InfluxDBJavaVersion = "2.15"
 
@@ -39,6 +40,8 @@ object Dependencies {
   val protobufJavaVersion = "3.21.12"
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.16.0"
+
+  val LogbackVersion = if (PekkoBinaryVersion == "1.0") "1.2.13" else "1.3.14"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -72,7 +75,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.2.13",
+      "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11",
