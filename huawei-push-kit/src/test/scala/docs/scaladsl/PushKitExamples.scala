@@ -13,9 +13,9 @@
 
 package docs.scaladsl
 
-import org.apache.pekko.actor.ActorSystem
 //#imports
 import org.apache.pekko
+import pekko.actor.ActorSystem
 import pekko.stream.connectors.huawei.pushkit._
 import pekko.stream.connectors.huawei.pushkit.scaladsl.HmsPushKit
 import pekko.stream.connectors.huawei.pushkit.models.AndroidConfig
@@ -38,7 +38,7 @@ import scala.concurrent.Future
 
 class PushKitExamples {
 
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
 
   // #simple-send
   val config = HmsSettings()

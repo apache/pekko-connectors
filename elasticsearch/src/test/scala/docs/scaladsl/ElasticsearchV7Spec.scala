@@ -56,7 +56,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[spray.json.JsObject] =>
+        .map { (message: ReadResult[spray.json.JsObject]) =>
           val book: Book = jsonReader[Book].read(message.source)
           WriteMessage.createIndexMessage(message.id, book)
         }
@@ -88,7 +88,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[Book] =>
+        .map { (message: ReadResult[Book]) =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .runWith(
@@ -119,7 +119,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[Book] =>
+        .map { (message: ReadResult[Book]) =>
           WriteMessage.createIndexMessage(message.id, message.source)
         }
         .via(
@@ -147,9 +147,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val write: Future[immutable.Seq[WriteResult[String, NotUsed]]] = Source(
         immutable.Seq(
-          WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.toString()),
-          WriteMessage.createIndexMessage("2", Book("Faust").toJson.toString()),
-          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.toString()))).via(
+          WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.compactPrint),
+          WriteMessage.createIndexMessage("2", Book("Faust").toJson.compactPrint),
+          WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.compactPrint))).via(
         ElasticsearchFlow.create(
           constructElasticsearchParams(indexName, "_doc", ApiVersion.V7),
           settings = baseWriteSettings,
@@ -187,7 +187,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val indexName = "sink6"
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -237,7 +237,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val indexName = "sink6-bulk"
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -291,7 +291,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       val indexName = "sink6-nop"
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -347,7 +347,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       register(connectionSettings, indexName, "dummy", 10) // need to create index else exception in reading below
 
       val kafkaToEs = Source(messagesFromKafka) // Assume we get this from Kafka
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           val id = book.title
 
@@ -428,7 +428,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
           constructElasticsearchParams("source", "_doc", ApiVersion.V7),
           query = """{"match_all": {}}""",
           settings = baseSourceSettings)
-        .map { message: ReadResult[Book] =>
+        .map { (message: ReadResult[Book]) =>
           WriteMessage
             .createIndexMessage(message.id, message.source)
             .withIndexName(customIndexName) // Setting the index-name to use for this document
@@ -458,7 +458,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       case class TestDoc(id: String, a: String, b: Option[String], c: String)
 
-      implicit val formatVersionTestDoc: JsonFormat[TestDoc] = jsonFormat4(TestDoc)
+      implicit val formatVersionTestDoc: JsonFormat[TestDoc] = jsonFormat4(TestDoc.apply)
 
       val indexName = "custom-search-params-test-scala"
       val typeName = "_doc"

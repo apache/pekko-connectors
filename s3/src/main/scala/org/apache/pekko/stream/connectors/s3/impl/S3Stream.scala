@@ -29,7 +29,7 @@ import pekko.http.scaladsl.{ ClientTransport, Http }
 import pekko.stream.connectors.s3.BucketAccess.{ AccessDenied, AccessGranted, NotExists }
 import pekko.stream.connectors.s3._
 import pekko.stream.connectors.s3.impl.auth.{ CredentialScope, Signer, SigningKey }
-import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, RunnableGraph, Sink, Source, Tcp }
+import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, RunnableGraph, Sink, Source, SubFlow, Tcp }
 import pekko.stream.{ Attributes, Materializer }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
@@ -906,7 +906,7 @@ import scala.util.{ Failure, Success, Try }
    */
   def multipartUploadWithContext[C](
       s3Location: S3Location,
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), NotUsed],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       s3Headers: S3Headers,
       chunkSize: Int = MinChunkSize,
@@ -943,7 +943,7 @@ import scala.util.{ Failure, Success, Try }
       s3Location: S3Location,
       uploadId: String,
       previousParts: immutable.Iterable[Part],
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), NotUsed],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       s3Headers: S3Headers,
       chunkSize: Int = MinChunkSize,
@@ -1177,11 +1177,16 @@ import scala.util.{ Failure, Success, Try }
 
         import conf.multipartUploadSettings.retrySettings._
 
-        SplitAfterSize(chunkSize, chunkBufferSize)(atLeastOneByteString)
-          .via(getChunkBuffer(chunkSize, chunkBufferSize, maxRetries)) // creates the chunks
-          .mergeSubstreamsWithParallelism(parallelism)
+        // TODO: Scala 3 workaround, see https://github.com/lampepfl/dotty/issues/18438
+        val source1: SubFlow[Chunk, NotUsed, Flow[ByteString, ByteString, NotUsed]#Repr, Sink[ByteString, NotUsed]] =
+          SplitAfterSize(chunkSize, chunkBufferSize)(atLeastOneByteString)
+            .via(getChunkBuffer(chunkSize, chunkBufferSize, maxRetries)) // creates the chunks
+
+        val source2 = source1.mergeSubstreamsWithParallelism(parallelism)
           .filter(_.size > 0)
           .via(atLeastOne)
+
+        source2
           .zip(requestInfoOrUploadState(s3Location, contentType, s3Headers, initialUploadState))
           .groupBy(parallelism, { case (_, (_, chunkIndex)) => chunkIndex % parallelism })
           // Allow requests that fail with transient errors to be retried, using the already buffered chunk.
@@ -1211,7 +1216,7 @@ import scala.util.{ Failure, Success, Try }
       contentType: ContentType,
       s3Headers: S3Headers,
       chunkSize: Int,
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), NotUsed],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
       initialUploadState: Option[(String, Int)] = None)(
       parallelism: Int): Flow[(ByteString, C), UploadPartResponse, NotUsed] = {
 
@@ -1278,11 +1283,18 @@ import scala.util.{ Failure, Success, Try }
           Flow[(ByteString, C)].orElse(
             Source.single((ByteString.empty, null.asInstanceOf[C])))
 
-        SplitAfterSizeWithContext(chunkSize)(atLeastOneByteStringAndEmptyContext)
-          .via(getChunk(chunkBufferSize))
-          .mergeSubstreamsWithParallelism(parallelism)
-          .filter { case (chunk, _) => chunk.size > 0 }
-          .via(atLeastOne)
+        val source1: SubFlow[(Chunk, immutable.Iterable[C]), NotUsed, Flow[(ByteString, C), (ByteString, C),
+            NotUsed]#Repr, Sink[(ByteString, C), NotUsed]] =
+          SplitAfterSizeWithContext(chunkSize)(atLeastOneByteStringAndEmptyContext)
+            .via(getChunk(chunkBufferSize))
+
+        val source2: Flow[(ByteString, C), (Chunk, immutable.Iterable[C]), NotUsed] =
+          source1
+            .mergeSubstreamsWithParallelism(parallelism)
+            .filter { case (chunk, _) => chunk.size > 0 }
+            .via(atLeastOne)
+
+        source2
           .zip(requestInfoOrUploadState(s3Location, contentType, s3Headers, initialUploadState))
           .groupBy(parallelism, { case (_, (_, chunkIndex)) => chunkIndex % parallelism })
           .map {
@@ -1379,9 +1391,9 @@ import scala.util.{ Failure, Success, Try }
         import mat.executionContext
         Sink
           .seq[UploadPartResponse]
-          .mapMaterializedValue { responseFuture: Future[immutable.Seq[UploadPartResponse]] =>
+          .mapMaterializedValue { (responseFuture: Future[immutable.Seq[UploadPartResponse]]) =>
             responseFuture
-              .flatMap { responses: immutable.Seq[UploadPartResponse] =>
+              .flatMap { (responses: immutable.Seq[UploadPartResponse]) =>
                 val successes = responses.collect { case r: SuccessfulUploadPart => r }
                 val failures = responses.collect { case r: FailedUploadPart => r }
                 if (responses.isEmpty) {

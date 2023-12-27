@@ -53,14 +53,14 @@ class NoopTrustManager extends X509TrustManager {
 
 class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures with Matchers with LogCapturing {
 
-  implicit val system = ActorSystem(
+  implicit val system: ActorSystem = ActorSystem(
     "PubSubApiSpec",
     ConfigFactory
       .parseString(
         s"pekko.connectors.google.credentials.none.project-id = ${TestCredentials.projectId}")
       .withFallback(ConfigFactory.load()))
 
-  implicit val defaultPatience =
+  implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
   def createInsecureSslEngine(host: String, port: Int): SSLEngine = {
@@ -95,8 +95,7 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
   val config = PubSubConfig()
 
-  val accessToken =
-    "ya29.Elz4A2XkfGKJ4CoS5x_umUBHsvjGdeWQzu6gRRCnNXI0fuIyoDP_6aYktBQEOI4YAhLNgUl2OpxWQaN8Z3hd5YfFw1y4EGAtr2o28vSID-c8ul_xxHuudE7RmhH9sg"
+  val accessToken = "TESTTOKEN"
 
   it should "publish" in {
 

@@ -52,11 +52,11 @@ class MongoSinkSpec
     fromRegistries(fromProviders(classOf[Number], classOf[DomainObject]), DEFAULT_CODEC_REGISTRY): @nowarn(
       "msg=match may not be exhaustive")
 
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val defaultPatience: PatienceConfig =
+    PatienceConfig(timeout = 5.seconds, interval = 50.millis)
 
   override protected def beforeAll(): Unit = {
-    implicit val patienceConfig =
-      PatienceConfig(timeout = 2.seconds, interval = 100.millis)
     Source.fromPublisher(db.drop()).runWith(Sink.headOption).futureValue
   }
 
@@ -68,9 +68,6 @@ class MongoSinkSpec
   private val domainObjectsColl: MongoCollection[DomainObject] =
     db.getCollection("domainObjectsSink", classOf[DomainObject]).withCodecRegistry(codecRegistry)
   private val domainObjectsDocumentColl = db.getCollection("domainObjectsSink")
-
-  implicit val defaultPatience =
-    PatienceConfig(timeout = 5.seconds, interval = 50.millis)
 
   override def afterEach(): Unit = {
     Source.fromPublisher(numbersDocumentColl.deleteMany(new Document())).runWith(Sink.head).futureValue

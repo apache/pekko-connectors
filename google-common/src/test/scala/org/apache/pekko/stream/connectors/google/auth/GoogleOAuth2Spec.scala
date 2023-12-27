@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.google.auth
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.google.{ GoogleSettings, HoverflySupport }
+import pekko.stream.connectors.google.{ GoogleSettings, HoverflySupport, RequestSettings }
 import pekko.testkit.TestKit
 import io.specto.hoverfly.junit.core.SimulationSource.dsl
 import io.specto.hoverfly.junit.core.model.RequestFieldMatcher.newRegexMatcher
@@ -42,11 +42,11 @@ class GoogleOAuth2Spec
     TestKit.shutdownActorSystem(system)
     super.afterAll()
   }
-  implicit val defaultPatience = PatienceConfig(remainingOrDefault)
+  implicit val defaultPatience: PatienceConfig = PatienceConfig(remainingOrDefault)
 
   implicit val executionContext: ExecutionContext = system.dispatcher
-  implicit val settings = GoogleSettings(system)
-  implicit val clock = Clock.systemUTC()
+  implicit val settings: GoogleSettings = GoogleSettings(system)
+  implicit val clock: Clock = Clock.systemUTC()
 
   lazy val privateKey = {
     val inputStream = getClass.getClassLoader.getResourceAsStream("private_pcks8.pem")
@@ -73,7 +73,7 @@ class GoogleOAuth2Spec
               success("""{"access_token": "token", "token_type": "String", "expires_in": 3600}""",
                 "application/json"))))
 
-      implicit val settings = GoogleSettings().requestSettings
+      implicit val settings: RequestSettings = GoogleSettings().requestSettings
       GoogleOAuth2.getAccessToken("email", privateKey, scopes).futureValue should matchPattern {
         case AccessToken("token", exp) if exp > (System.currentTimeMillis / 1000L + 3000L) =>
       }

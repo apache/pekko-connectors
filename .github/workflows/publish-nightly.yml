@@ -15,13 +15,13 @@ jobs:
       JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          # we don't know what commit the last tag was it's safer to get entire repo so previousStableVersion resolves
+          fetch-tags: true
           fetch-depth: 0
 
       - name: Setup Java 8
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
@@ -48,7 +48,7 @@ jobs:
         with:
           upload: true
           switches: --archive --compress --update --delete --progress --relative
-          local_path: target/nightly-docs/./docs/pekko-connectors/ # The intermediate dot is to show `--relative` which paths to operate on
+          local_path: target/nightly-docs/./docs/pekko-connectors/${{ github.ref_name }}-snapshot # The intermediate dot is to show `--relative` which paths to operate on
           remote_path: ${{ secrets.NIGHTLIES_RSYNC_PATH }}/pekko/
           remote_host: ${{ secrets.NIGHTLIES_RSYNC_HOST }}
           remote_port: ${{ secrets.NIGHTLIES_RSYNC_PORT }}

@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.google.http
 
 import org.apache.pekko
-import pekko.actor.ClassicActorSystemProvider
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Scheduler }
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.Http.HostConnectionPool
@@ -26,7 +26,7 @@ import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, Reques
 import pekko.stream.connectors.google.util.Retry
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContextExecutor, Future }
 import scala.util.{ Failure, Success, Try }
 
 @InternalApi
@@ -45,9 +45,9 @@ private[connectors] object GoogleHttp {
 @InternalApi
 private[connectors] final class GoogleHttp private (val http: HttpExt) extends AnyVal {
 
-  private implicit def system = http.system
-  private implicit def ec = system.dispatcher
-  private implicit def scheduler = system.scheduler
+  private implicit def system: ExtendedActorSystem = http.system
+  private implicit def ec: ExecutionContextExecutor = system.dispatcher
+  private implicit def scheduler: Scheduler = system.scheduler
 
   /**
    * Sends a single [[HttpRequest]] and returns the raw [[HttpResponse]].
@@ -76,7 +76,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
   def singleAuthenticatedRequest[T](request: HttpRequest)(
       implicit settings: GoogleSettings,
       um: FromResponseUnmarshaller[T]): Future[T] = Retry(settings.requestSettings.retrySettings) {
-    implicit val requestSettings = settings.requestSettings
+    implicit val requestSettings: RequestSettings = settings.requestSettings
     addAuth(request).flatMap(singleRequest(_))(ExecutionContexts.parasitic)
   }
 
@@ -110,7 +110,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
       parallelism: Int = 1): FlowWithContext[HttpRequest, Ctx, Try[T], Ctx, Future[HostConnectionPool]] =
     FlowWithContext.fromTuples {
       Flow.fromMaterializer { (mat, attr) =>
-        implicit val settings = GoogleAttributes.resolveSettings(mat, attr)
+        implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
         val p = if (port == -1) if (https) 443 else 80 else port
 
         val uriFlow = FlowWithContext[HttpRequest, Ctx].map(addStandardQuery)
@@ -163,7 +163,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
             .fold(settings.requestSettings.queryString)(_.concat(settings.requestSettings.`&queryString`)))))
 
   private def addAuth(request: HttpRequest)(implicit settings: GoogleSettings): Future[HttpRequest] = {
-    implicit val requestSettings = settings.requestSettings
+    implicit val requestSettings: RequestSettings = settings.requestSettings
     settings.credentials
       .get()
       .map { token =>

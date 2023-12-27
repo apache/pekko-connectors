@@ -1,7 +1,7 @@
 # Spring Web
 
-Spring 5.0 introduced compatibility with [Reactive Streams](https://www.reactive-streams.org), a library interoperability standardization effort co-lead by Lightbend (with Apache Pekko Streams) along with Kaazing, Netflix, 
-Pivotal, Red Hat, Twitter and many others.
+Spring 5.0 introduced compatibility with [Reactive Streams](https://www.reactive-streams.org), a library interoperability standardization effort co-lead by Lightbend (with Apache Pekko Streams and Akka Streams)
+along with Kaazing, Netflix, Pivotal, Red Hat, Twitter and many others.
 
 Thanks to adopting Reactive Streams, multiple libraries can now inter-op since the same interfaces are implemented by 
 all these libraries. Apache Pekko Streams by-design, hides the raw reactive-streams types from end-users, since it allows for

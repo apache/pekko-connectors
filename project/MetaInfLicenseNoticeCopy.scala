@@ -39,6 +39,9 @@ object MetaInfLicenseNoticeCopy extends AutoPlugin {
     apacheSonatypeLicenseFile := baseDir.value / "legal" / "S3License.txt",
     apacheSonatypeNoticeFile := baseDir.value / "legal" / "S3Notice.txt")
 
+  lazy val googleCommonSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "GoogleCommonLicense.txt")
+
   override def trigger = allRequirements
 
   override def requires = ApacheSonatypePlugin

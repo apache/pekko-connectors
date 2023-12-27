@@ -67,7 +67,7 @@ public class HdfsReaderTest {
     List<Character> readData = new ArrayList<>();
 
     for (RotationMessage log : logs) {
-      Path path = new Path("/tmp/alpakka", log.path());
+      Path path = new Path("/tmp/pekko-connectors", log.path());
       // #define-data-source
       Source<ByteString, CompletionStage<IOResult>> source = HdfsSource.data(fs, path);
       // #define-data-source
@@ -103,7 +103,7 @@ public class HdfsReaderTest {
     List<Character> readData = new ArrayList<>();
 
     for (RotationMessage log : logs) {
-      Path path = new Path("/tmp/alpakka", log.path());
+      Path path = new Path("/tmp/pekko-connectors", log.path());
       // #define-compressed-source
       Source<ByteString, CompletionStage<IOResult>> source = HdfsSource.compressed(fs, path, codec);
       // #define-compressed-source
@@ -141,7 +141,7 @@ public class HdfsReaderTest {
     List<Pair<Text, Text>> readData = new ArrayList<>();
 
     for (RotationMessage log : logs) {
-      Path path = new Path("/tmp/alpakka", log.path());
+      Path path = new Path("/tmp/pekko-connectors", log.path());
       // #define-sequence-source
       Source<Pair<Text, Text>, NotUsed> source =
           HdfsSource.sequence(fs, path, Text.class, Text.class);

@@ -42,7 +42,7 @@ class GCStorageExtSpec extends AnyFlatSpec with Matchers with LogCapturing {
         "pekko.connectors.google.cloud.storage.base-path" -> basePath,
         "pekko.connectors.google.cloud.storage.token-url" -> tokenUrl,
         "pekko.connectors.google.cloud.storage.token-scope" -> tokenScope).asJava)
-    implicit val system = ActorSystem.create("gcStorage", config)
+    implicit val system: ActorSystem = ActorSystem.create("gcStorage", config)
     @nowarn("msg=deprecated")
     val ext = GCStorageExt(system)
 

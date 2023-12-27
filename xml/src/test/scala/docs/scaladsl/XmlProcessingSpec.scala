@@ -29,6 +29,9 @@ import scala.concurrent.{ Await, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+import scala.annotation.nowarn
+
+@nowarn("msg=deprecated")
 class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with BeforeAndAfterAll with LogCapturing {
   implicit val system: ActorSystem = ActorSystem("Test")
   implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 2.seconds, interval = 50.millis)

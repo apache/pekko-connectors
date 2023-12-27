@@ -80,11 +80,11 @@ class IronMqProducerSpec extends IronMqSpec {
         new MockCommittable,
         new MockCommittable)
 
-      whenReady(
-        messages
-          .zip(Source(committables))
-          .via(atLeastOnceFlow(queue, settings, Flow[Committable].mapAsync(1)(_.commit())))
-          .runWith(Sink.ignore)) { _ =>
+      val future: Future[Done] = messages
+        .zip(Source(committables))
+        .via(atLeastOnceFlow(queue, settings, Flow[Committable].mapAsync(1)(_.commit())))
+        .runWith(Sink.ignore)
+      whenReady(future) { _ =>
         committables.forall(_.committed) shouldBe true
       }
     }

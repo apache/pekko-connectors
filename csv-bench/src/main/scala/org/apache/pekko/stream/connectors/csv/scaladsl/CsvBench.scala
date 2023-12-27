@@ -1,21 +1,28 @@
 /*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * license agreements; and to You under the Apache License, version 2.0:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is part of the Apache Pekko project, which was derived from Akka.
+ */
+
+/*
  * Copyright (C) 2016-2019 Lightbend Inc. <http://www.lightbend.com>
  */
 
 package org.apache.pekko.stream.connectors.csv.scaladsl
 
 import java.util.concurrent.TimeUnit
-
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ActorSystem
-import pekko.stream.ActorMaterializer
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
 import org.openjdk.jmh.annotations._
 import org.openjdk.jmh.infra.Blackhole
 
-import scala.concurrent.Await
+import scala.concurrent.{ Await, ExecutionContext }
 import scala.concurrent.duration.Duration
 
 /**
@@ -50,9 +57,8 @@ import scala.concurrent.duration.Duration
 @State(Scope.Benchmark)
 class CsvBench {
 
-  implicit val system = ActorSystem()
-  implicit val executionContext = system.dispatcher
-  implicit val mat = ActorMaterializer()
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val executionContext: ExecutionContext = system.dispatcher
 
   /**
    * Size of [[ByteString]] chunks in bytes.
@@ -86,7 +92,6 @@ class CsvBench {
 
   @TearDown
   def tearDown(): Unit = {
-    mat.shutdown()
     system.terminate()
   }
 

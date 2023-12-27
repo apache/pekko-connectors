@@ -50,15 +50,15 @@ class IntegrationSpec
     with OptionValues
     with LogCapturing {
 
-  implicit val system = ActorSystem("IntegrationSpec")
+  implicit val system: ActorSystem = ActorSystem("IntegrationSpec")
 
-  implicit val defaultPatience = PatienceConfig(timeout = 15.seconds, interval = 50.millis)
+  implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 15.seconds, interval = 50.millis)
 
   "connector" should {
 
     "publish a message" in {
       // #publish-single
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val topic = "simpleTopic"
 
       val publishMessage: PubsubMessage =
@@ -84,7 +84,7 @@ class IntegrationSpec
 
     "publish batch" in {
       // #publish-fast
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val topic = "simpleTopic"
 
       val publishMessage: PubsubMessage =
@@ -108,7 +108,7 @@ class IntegrationSpec
 
     "subscribe streaming" in {
       // #subscribe-stream
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val subscription = "simpleSubscription"
 
       val request = StreamingPullRequest()
@@ -139,7 +139,7 @@ class IntegrationSpec
 
     "subscribe sync" in {
       // #subscribe-sync
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val subscription = "simpleSubscription"
 
       val request = PullRequest()
@@ -169,7 +169,7 @@ class IntegrationSpec
     }
 
     "acknowledge" in {
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val subscription = "simpleSubscription"
 
       val request = StreamingPullRequest()
@@ -199,7 +199,7 @@ class IntegrationSpec
     }
 
     "acknowledge flow" in {
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val subscription = "simpleSubscription"
 
       val request = StreamingPullRequest()
@@ -223,7 +223,7 @@ class IntegrationSpec
     "republish" in {
       val msg = "Labas!"
 
-      val projectId = "alpakka"
+      val projectId = "pekko-connectors"
       val topic = "testTopic"
       val subscription = "testSubscription"
 

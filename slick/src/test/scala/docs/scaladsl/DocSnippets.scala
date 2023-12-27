@@ -16,6 +16,8 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
+
+import scala.concurrent.ExecutionContext
 //#important-imports
 import org.apache.pekko
 import pekko.stream.connectors.slick.scaladsl._
@@ -26,8 +28,8 @@ import slick.jdbc.GetResult
 import scala.concurrent.Future
 
 object SlickSourceWithPlainSQLQueryExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #source-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -50,7 +52,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
   // Stream the results of a query
   val done: Future[Done] =
     Slick
-      .source(sql"SELECT ID, NAME FROM ALPAKKA_SLICK_SCALADSL_TEST_USERS".as[User])
+      .source(sql"SELECT ID, NAME FROM PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS".as[User])
       .log("user")
       .runWith(Sink.ignore)
   // #source-example
@@ -62,8 +64,8 @@ object SlickSourceWithPlainSQLQueryExample extends App {
 }
 
 object SlickSourceWithTypedQueryExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #source-with-typed-query
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -73,7 +75,7 @@ object SlickSourceWithTypedQueryExample extends App {
   import session.profile.api._
 
   // The example domain
-  class Users(tag: Tag) extends Table[(Int, String)](tag, "ALPAKKA_SLICK_SCALADSL_TEST_USERS") {
+  class Users(tag: Tag) extends Table[(Int, String)](tag, "PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS") {
     def id = column[Int]("ID")
     def name = column[String]("NAME")
     def * = (id, name)
@@ -94,8 +96,8 @@ object SlickSourceWithTypedQueryExample extends App {
 }
 
 object SlickSinkExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #sink-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -115,7 +117,8 @@ object SlickSinkExample extends App {
     Source(users)
       .runWith(
         // add an optional first argument to specify the parallelism factor (Int)
-        Slick.sink(user => sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
+        Slick.sink(user =>
+          sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
   // #sink-example
 
   done.onComplete {
@@ -125,8 +128,8 @@ object SlickSinkExample extends App {
 }
 
 object SlickFlowExample extends App {
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #flow-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -146,7 +149,8 @@ object SlickFlowExample extends App {
     Source(users)
       .via(
         // add an optional first argument to specify the parallelism factor (Int)
-        Slick.flow(user => sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
+        Slick.flow(user =>
+          sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
       .log("nr-of-updated-rows")
       .runWith(Sink.ignore)
   // #flow-example
@@ -168,8 +172,8 @@ object SlickFlowWithPassThroughExample extends App {
     def map[B](f: A => B): KafkaMessage[B] = KafkaMessage(f(msg), offset)
   }
 
-  implicit val system = ActorSystem()
-  implicit val ec = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val ec: ExecutionContext = system.dispatcher
 
   // #flowWithPassThrough-example
   implicit val session = SlickSession.forConfig("slick-h2")
@@ -192,7 +196,7 @@ object SlickFlowWithPassThroughExample extends App {
         // add an optional first argument to specify the parallelism factor (Int)
         Slick.flowWithPassThrough { kafkaMessage =>
           val user = kafkaMessage.msg
-          sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
+          sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
             .map { insertCount => // map db result to something else
               // allows to keep the kafka message offset so it can be committed in a next stage
               kafkaMessage.map(user => (user, insertCount))

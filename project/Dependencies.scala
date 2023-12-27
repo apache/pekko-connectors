@@ -8,32 +8,40 @@
  */
 
 import sbt._
+import Common.isScala3
 import Keys._
+import com.github.pjfanning.pekkobuild.PekkoDependency
 
 object Dependencies {
 
   val CronBuild = sys.env.get("GITHUB_EVENT_NAME").contains("schedule")
 
-  val Scala213 = "2.13.10" // update even in link-validator.conf
-  val Scala212 = "2.12.17"
-  val ScalaVersions = Seq(Scala213, Scala212)
+  val Scala213 = "2.13.12" // update even in link-validator.conf
+  val Scala212 = "2.12.18"
+  val Scala3 = "3.3.1"
+  val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
-  val PekkoVersion = "1.0.1"
-  val PekkoBinaryVersion = "current"
+  val PekkoVersion = PekkoDependency.pekkoVersionDerivedFromDefault("1.0.2")
+  val PekkoBinaryVersion = PekkoVersion.take(3)
 
   val InfluxDBJavaVersion = "2.15"
 
+  val AvroVersion = "1.11.3"
   val AwsSdk2Version = "2.17.113"
   val AwsSpiPekkoHttpVersion = "0.1.0"
+  val NettyVersion = "4.1.100.Final"
   // Sync with plugins.sbt
-  val PekkoGrpcBinaryVersion = "current"
+  val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = "1.0.0"
-  val PekkoHttpBinaryVersion = "current"
+  val PekkoHttpBinaryVersion = "1.0"
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
+  val protobufJavaVersion = "3.21.12"
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.16.0"
+
+  val LogbackVersion = if (PekkoBinaryVersion == "1.0") "1.2.13" else "1.3.14"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -50,23 +58,24 @@ object Dependencies {
   val CouchbaseVersion = "2.7.16"
   val CouchbaseVersionForDocs = "2.7"
 
+  val GoogleAuthVersion = "1.20.0"
   val JwtCoreVersion = "3.0.1"
 
   val log4jOverSlf4jVersion = "1.7.36"
   val jclOverSlf4jVersion = "1.7.36"
 
-  val Common = Seq(
+  val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion))
 
   val testkit = Seq(
     libraryDependencies := Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0",
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "ch.qos.logback" % "logback-classic" % "1.2.11",
+      "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11",
@@ -108,11 +117,12 @@ object Dependencies {
   val CassandraDriverVersionInDocs = "4.15"
 
   val Cassandra = Seq(
-    libraryDependencies ++= Seq(
+    libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
       ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
         .exclude("com.github.spotbugs", "spotbugs-annotations")
         .exclude("org.apache.tinkerpop", "*") // https://github.com/akka/alpakka/issues/2200
         .exclude("com.esri.geometry", "esri-geometry-api"), // https://github.com/akka/alpakka/issues/2225
+      "io.netty" % "netty-handler" % NettyVersion,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
   val Couchbase = Seq(
@@ -120,8 +130,9 @@ object Dependencies {
       "com.couchbase.client" % "java-client" % CouchbaseVersion,
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
-      "com.typesafe.play" %% "play-json" % "2.9.2" % Test,
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test))
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
+      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion % Test,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonDatabindVersion % Test))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
@@ -150,38 +161,49 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.google.jimfs" % "jimfs" % "1.2" % Test))
 
+  val avro4sVersion: Def.Initialize[String] = Def.setting {
+    if (Common.isScala3.value) "5.0.5" else "4.1.1"
+  }
+
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.10.1",
+      "org.apache.parquet" % "parquet-avro" % "1.13.1",
+      "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % "3.2.1" % Test).exclude("log4j", "log4j"),
       ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"),
-      "com.sksamuel.avro4s" %% "avro4s-core" % "4.1.1" % Test,
+      "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.8.3" % Test,
+      "org.specs2" %% "specs2-core" % "4.20.0" % Test,
       "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val Ftp = Seq(
     libraryDependencies ++= Seq(
       "commons-net" % "commons-net" % "3.8.0",
-      "com.hierynomus" % "sshj" % "0.33.0"))
+      "com.hierynomus" % "sshj" % "0.33.0") ++ Mockito)
 
   val GeodeVersion = "1.15.0"
   val GeodeVersionForDocs = "115"
 
   val Geode = Seq(
-    libraryDependencies ++=
+    libraryDependencies ++= {
       Seq("geode-core", "geode-cq")
         .map("org.apache.geode" % _ % GeodeVersion) ++
       Seq(
-        "com.chuusai" %% "shapeless" % "2.3.3",
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies)
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies ++
+      (if (isScala3.value)
+         Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
+       else Seq(
+         "com.chuusai" %% "shapeless" % "2.3.10"))
+    })
 
   val GoogleCommon = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4",
-      "com.google.auth" % "google-auth-library-credentials" % "0.24.1",
+      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5",
+      "com.google.auth" % "google-auth-library-credentials" % GoogleAuthVersion,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val GoogleBigQuery = Seq(
@@ -198,9 +220,10 @@ object Dependencies {
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src",
-      "org.apache.avro" % "avro" % "1.9.2" % "provided",
+      "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
+      "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
@@ -220,7 +243,8 @@ object Dependencies {
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
       "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
-      "com.google.auth" % "google-auth-library-oauth2-http" % "0.22.2",
+      "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
+      "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       // pull in Pekko Discovery for our Pekko version
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion))
 
@@ -256,7 +280,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
-      "org.typelevel" %% "cats-core" % "2.0.0",
+      "org.typelevel" %% "cats-core" % "2.9.0",
       ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
@@ -269,7 +293,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.jwt-scala" %% "jwt-spray-json" % "7.1.4") ++ Mockito)
+      "com.github.jwt-scala" %% "jwt-json-common" % "7.1.5") ++ Mockito)
 
   val InfluxDB = Seq(
     libraryDependencies ++= Seq(
@@ -315,6 +339,7 @@ object Dependencies {
       "org.apache.kudu" % "kudu-client" % KuduVersion % Test))
 
   val MongoDb = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0"))
 
@@ -330,10 +355,10 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test))
 
   val OrientDB = Seq(
-    libraryDependencies ++= Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.1.9")
+    libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.1.20")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.1.9"))
+      "com.orientechnologies" % "orientdb-object" % "3.1.20"))
 
   val PravegaVersion = "0.10.2"
   val PravegaVersionForDocs = s"v$PravegaVersion"
@@ -359,8 +384,7 @@ object Dependencies {
       "com.google.jimfs" % "jimfs" % "1.2" % Test,
       "com.github.tomakehurst" % "wiremock-jre8" % "2.32.0" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test,
-      "com.markatta" %% "futiles" % "2.0.2" % Test))
+      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
   val SpringWeb = {
     val SpringVersion = "5.1.17.RELEASE"
@@ -377,6 +401,7 @@ object Dependencies {
 
   val SlickVersion = "3.3.3"
   val Slick = Seq(
+    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,

@@ -18,7 +18,6 @@ import java.util.concurrent.CompletionStage;
 
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.ActorMaterializer;
 // #read-all
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord;
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings;
@@ -40,7 +39,6 @@ import org.apache.pekko.http.javadsl.unmarshalling.Unmarshaller;
 public class ExampleReader {
 
   static final ActorSystem sys = ActorSystem.create("ExampleReader");
-  static final ActorMaterializer mat = ActorMaterializer.create(sys);
 
   // #read-all
   Source<

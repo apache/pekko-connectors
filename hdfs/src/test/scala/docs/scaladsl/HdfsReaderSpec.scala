@@ -72,7 +72,7 @@ class HdfsReaderSpec
         Future
           .sequence(
             logs.map { log =>
-              val path = new Path("/tmp/alpakka", log.path)
+              val path = new Path("/tmp/pekko-connectors", log.path)
               // #define-data-source
               val source = HdfsSource.data(fs, path)
               // #define-data-source
@@ -108,7 +108,7 @@ class HdfsReaderSpec
         Future
           .sequence(
             logs.map { log =>
-              val path = new Path("/tmp/alpakka", log.path)
+              val path = new Path("/tmp/pekko-connectors", log.path)
               // #define-compressed-source
               val source = HdfsSource.compressed(fs, path, codec)
               // #define-compressed-source
@@ -142,7 +142,7 @@ class HdfsReaderSpec
         Future
           .sequence(
             logs.map { log =>
-              val path = new Path("/tmp/alpakka", log.path)
+              val path = new Path("/tmp/pekko-connectors", log.path)
               // #define-sequence-source
               val source = HdfsSource.sequence(fs, path, classOf[Text], classOf[Text])
               // #define-sequence-source

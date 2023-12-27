@@ -47,6 +47,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@SuppressWarnings("deprecation")
 public class XmlParsingTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 

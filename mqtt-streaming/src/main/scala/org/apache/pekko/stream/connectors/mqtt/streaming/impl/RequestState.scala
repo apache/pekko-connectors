@@ -646,7 +646,7 @@ object Topics {
         val tnHead = tn.charAt(0)
         if (tfnHead == '/' && tnHead != '/') {
           false
-        } else if (tfnHead == '/' && tnHead == '/' && tn.length == 1) {
+        } else if (tfnHead == '/' && tn.length == 1) {
           matchStrings(tfn, tn.tail)
         } else if (tfnHead != '+' && tfnHead != '#' && tfnHead != tnHead) {
           false

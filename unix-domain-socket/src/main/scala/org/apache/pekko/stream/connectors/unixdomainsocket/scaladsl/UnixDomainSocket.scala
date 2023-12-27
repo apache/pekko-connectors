@@ -140,7 +140,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
       backlog: Int = 128,
       halfClose: Boolean = false): Future[ServerBinding] =
     bind(path, backlog, halfClose)
-      .to(Sink.foreach { conn: IncomingConnection =>
+      .to(Sink.foreach { (conn: IncomingConnection) =>
         conn.flow.join(handler).run()
       })
       .run()
@@ -182,5 +182,5 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    * for example using the [[pekko.stream.scaladsl.Framing]] stages.
    */
   def outgoingConnection(path: Path): Flow[ByteString, ByteString, Future[OutgoingConnection]] =
-    super.outgoingConnection(UnixSocketAddress(path))
+    super.outgoingConnection(UnixSocketAddress(path), None, true, Duration.Inf)
 }

@@ -22,13 +22,15 @@ import pekko.stream.connectors.google.util.Retry
 import spray.json.DefaultJsonProtocol._
 import spray.json.RootJsonFormat
 
-final case class GoogleOAuth2Exception private (override val info: ErrorInfo) extends ExceptionWithErrorInfo(info)
+final case class GoogleOAuth2Exception private[google] (override val info: ErrorInfo)
+    extends ExceptionWithErrorInfo(info)
 
 private[google] object GoogleOAuth2Exception {
 
   private val internalFailure = "internal_failure"
   private final case class OAuth2ErrorResponse(error: Option[String], error_description: Option[String])
-  private implicit val oAuth2ErrorResponseFormat: RootJsonFormat[OAuth2ErrorResponse] = jsonFormat2(OAuth2ErrorResponse)
+  private implicit val oAuth2ErrorResponseFormat: RootJsonFormat[OAuth2ErrorResponse] =
+    jsonFormat2(OAuth2ErrorResponse.apply)
 
   implicit val unmarshaller: FromResponseUnmarshaller[Throwable] =
     Unmarshaller

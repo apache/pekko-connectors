@@ -50,7 +50,7 @@ class BigQueryQueriesSpec
     jsonFormat10(QueryResponse[T])
   }
 
-  implicit val settings = GoogleSettings().copy(credentials = NoCredentials("", ""))
+  implicit val settings: GoogleSettings = GoogleSettings().copy(credentials = NoCredentials("", ""))
 
   val jobId = "jobId"
   val pageToken = "pageToken"
@@ -94,7 +94,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQuery.toJson.toString(), "application/json"))))
+              .willReturn(success(completeQuery.toJson.compactPrint, "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -111,7 +111,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQueryWith2ndPage.toJson.toString(), "application/json"))
+              .willReturn(success(completeQueryWith2ndPage.toJson.compactPrint, "application/json"))
               .get(BigQueryEndpoints.query(settings.projectId, jobId).path.toString)
               .queryParam("pageToken", pageToken)
               .queryParam("prettyPrint", "false")
@@ -132,7 +132,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(incompleteQuery.toJson.toString(), "application/json"))
+              .willReturn(success(incompleteQuery.toJson.compactPrint, "application/json"))
               .get(BigQueryEndpoints.query(settings.projectId, jobId).path.toString)
               .queryParam("prettyPrint", "false")
               .willReturn(success(completeQuery.toJson.toString, "application/json"))))
@@ -152,7 +152,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(incompleteQuery.toJson.toString(), "application/json"))
+              .willReturn(success(incompleteQuery.toJson.compactPrint, "application/json"))
               .get(BigQueryEndpoints.query(settings.projectId, jobId).path.toString)
               .queryParam("prettyPrint", "false")
               .willReturn(success(completeQueryWith2ndPage.toJson.toString, "application/json"))
@@ -176,7 +176,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQueryWithoutJobId.toJson.toString(), "application/json"))))
+              .willReturn(success(completeQueryWithoutJobId.toJson.compactPrint, "application/json"))))
 
         query[JsValue]("SQL")
           .addAttributes(GoogleAttributes.settings(settings))
@@ -204,7 +204,7 @@ class BigQueryQueriesSpec
               .post(BigQueryEndpoints.queries(settings.projectId).path.toString)
               .queryParam("prettyPrint", "false")
               .anyBody()
-              .willReturn(success(completeQuery.toJson.toString(), "application/json"))))
+              .willReturn(success(completeQuery.toJson.compactPrint, "application/json"))))
 
         recoverToSucceededIf[BrokenParserException] {
           query[JsValue]("SQL")

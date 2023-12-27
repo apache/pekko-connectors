@@ -89,7 +89,7 @@ public class DocSnippetFlowWithPassThrough {
                     (kafkaMessage, connection) -> {
                       PreparedStatement statement =
                           connection.prepareStatement(
-                              "INSERT INTO ALPAKKA_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)");
+                              "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)");
                       statement.setInt(1, kafkaMessage.msg.id);
                       statement.setString(2, kafkaMessage.msg.name);
                       return statement;

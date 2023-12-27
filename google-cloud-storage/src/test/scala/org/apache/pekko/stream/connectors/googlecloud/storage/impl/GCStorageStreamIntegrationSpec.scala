@@ -42,7 +42,7 @@ import scala.concurrent.Future
  *    storage object admin
  *    storage admin (to run the create/delete bucket test)
  * - modify test/resources/application.conf
- * - create a `alpakka` bucket for testing
+ * - create a `pekko-connectors` bucket for testing
  * - create a rewrite `pekko-connectors-rewrite` bucket for testing
  */
 class GCStorageStreamIntegrationSpec
@@ -53,7 +53,7 @@ class GCStorageStreamIntegrationSpec
     with ScalaFutures
     with LogCapturing {
 
-  private implicit val defaultPatience =
+  private implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 60.seconds, interval = 60.millis)
 
   var folderName: String = _
@@ -80,7 +80,7 @@ class GCStorageStreamIntegrationSpec
   "GCStorageStream" should {
 
     "be able to create and delete a bucket" ignore {
-      val randomBucketName = s"alpakka_${UUID.randomUUID().toString}"
+      val randomBucketName = s"pekko-connectors_${UUID.randomUUID().toString}"
 
       val res = for {
         bucket <- GCStorageStream.createBucketSource(randomBucketName, "europe-west1").runWith(Sink.head)

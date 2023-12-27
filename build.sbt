@@ -9,14 +9,10 @@
 
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
 
-// TODO: Remove when Pekko has a proper release
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
-ThisBuild / resolvers ++= Resolver.sonatypeOssRepos("snapshots")
-ThisBuild / updateOptions := updateOptions.value.withLatestSnapshots(false)
-
 ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 commands := commands.value.filterNot { command =>
   command.nameOption.exists { name =>
@@ -24,8 +20,7 @@ commands := commands.value.filterNot { command =>
   }
 }
 
-ThisBuild / reproducibleBuildsCheckResolver :=
-  "Apache Pekko Staging".at("https://repository.apache.org/content/groups/staging/")
+ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val `pekko-connectors` = project
   .in(file("."))
@@ -130,7 +125,7 @@ lazy val `pekko-connectors` = project
   )
 
 addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll; +headerCreateAll")
-addCommandAlias("checkCodeStyle", "+headerCheckAll; ;scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
+addCommandAlias("checkCodeStyle", ";+headerCheckAll; scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
 
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
@@ -187,6 +182,8 @@ lazy val geode =
           List("-Xlint:-byname-implicit")
         case Some((2, n)) if n == 12 =>
           List.empty
+        case Some((3, _)) =>
+          List.empty
       }
     })
 
@@ -194,6 +191,7 @@ lazy val googleCommon = pekkoConnectorProject(
   "google-common",
   "google.common",
   Dependencies.GoogleCommon,
+  MetaInfLicenseNoticeCopy.googleCommonSettings,
   Test / fork := true)
 
 lazy val googleCloudBigQuery = pekkoConnectorProject(
@@ -473,6 +471,8 @@ def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefin
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
   val log = sLog.value
+  log.info(
+    s"Building Pekko Connectors $v against Pekko ${Dependencies.PekkoVersion} on Scala ${(googleCommon / scalaVersion).value}")
   if (dynverGitDescribeOutput.value.hasNoTags)
     log.error(
       s"Failed to derive version from git tags. Maybe run `git fetch --unshallow` or `git fetch upstream` on a fresh git clone from a fork? Derived version: $v")

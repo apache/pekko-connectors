@@ -25,11 +25,14 @@ import scala.util.Try
  */
 @InternalApi
 private[ftp] trait FtpsOperations extends CommonFtpOperations {
-  _: FtpLike[FTPSClient, FtpsSettings] =>
+  self: FtpLike[FTPSClient, FtpsSettings] =>
 
   def connect(connectionSettings: FtpsSettings)(implicit ftpClient: FTPSClient): Try[Handler] =
     Try {
       connectionSettings.proxy.foreach(ftpClient.setProxy)
+
+      connectionSettings.keyManager.foreach(ftpClient.setKeyManager)
+      connectionSettings.trustManager.foreach(ftpClient.setTrustManager)
 
       if (ftpClient.getAutodetectUTF8() != connectionSettings.autodetectUTF8) {
         ftpClient.setAutodetectUTF8(connectionSettings.autodetectUTF8)

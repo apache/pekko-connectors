@@ -71,7 +71,7 @@ public class SlickTest {
 
   private static final Function<User, String> insertUser =
       (user) ->
-          "INSERT INTO ALPAKKA_SLICK_JAVADSL_TEST_USERS VALUES ("
+          "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES ("
               + user.id
               + ", '"
               + user.name
@@ -81,14 +81,14 @@ public class SlickTest {
       (user, connection) -> {
         PreparedStatement statement =
             connection.prepareStatement(
-                "INSERT INTO ALPAKKA_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)");
+                "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)");
         statement.setInt(1, user.id);
         statement.setString(2, user.name);
         return statement;
       };
 
   private static final String selectAllUsers =
-      "SELECT ID, NAME FROM ALPAKKA_SLICK_JAVADSL_TEST_USERS";
+      "SELECT ID, NAME FROM PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS";
 
   @BeforeClass
   public static void setup() {
@@ -97,19 +97,19 @@ public class SlickTest {
     // #init-mat
 
     executeStatement(
-        "CREATE TABLE ALPAKKA_SLICK_JAVADSL_TEST_USERS(ID INTEGER, NAME VARCHAR(50))",
+        "CREATE TABLE PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS(ID INTEGER, NAME VARCHAR(50))",
         session,
         system);
   }
 
   @After
   public void cleanUp() {
-    executeStatement("DELETE FROM ALPAKKA_SLICK_JAVADSL_TEST_USERS", session, system);
+    executeStatement("DELETE FROM PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS", session, system);
   }
 
   @AfterClass
   public static void teardown() {
-    executeStatement("DROP TABLE ALPAKKA_SLICK_JAVADSL_TEST_USERS", session, system);
+    executeStatement("DROP TABLE PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS", session, system);
 
     // #close-session
     system.registerOnTermination(session::close);
@@ -125,7 +125,7 @@ public class SlickTest {
             session,
             (__, connection) ->
                 connection.prepareStatement(
-                    "INSERT INTO ALPAKKA_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)"));
+                    "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)"));
     assertThrows(
         ExecutionException.class,
         () ->
@@ -171,7 +171,7 @@ public class SlickTest {
                 session,
                 (__, connection) ->
                     connection.prepareStatement(
-                        "INSERT INTO ALPAKKA_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)"))
+                        "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)"))
             .recoverWithRetries(1, SQLException.class, () -> Source.single(-1));
     final List<Integer> insertionResult =
         usersSource

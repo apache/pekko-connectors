@@ -27,7 +27,7 @@ import slick.dbio.DBIOAction
 import slick.jdbc.{ GetResult, JdbcProfile }
 
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, Future }
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -43,7 +43,7 @@ class SlickSpec
     with Matchers
     with LogCapturing {
   // #init-mat
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
   // #init-mat
 
   // #init-session
@@ -53,25 +53,25 @@ class SlickSpec
   import session.profile.api._
 
   case class User(id: Int, name: String)
-  class Users(tag: Tag) extends Table[(Int, String)](tag, "ALPAKKA_SLICK_SCALADSL_TEST_USERS") {
+  class Users(tag: Tag) extends Table[(Int, String)](tag, "PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS") {
     def id = column[Int]("ID")
     def name = column[String]("NAME")
     def * = (id, name)
   }
 
-  implicit val ec = system.dispatcher
-  implicit val defaultPatience = PatienceConfig(timeout = 3.seconds, interval = 50.millis)
-  implicit val getUserResult = GetResult(r => User(r.nextInt(), r.nextString()))
+  implicit val ec: ExecutionContext = system.dispatcher
+  implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 3.seconds, interval = 50.millis)
+  implicit val getUserResult: GetResult[User] = GetResult(r => User(r.nextInt(), r.nextString()))
 
   val users = (1 to 40).map(i => User(i, s"Name$i")).toSet
 
-  val createTable = sqlu"""CREATE TABLE ALPAKKA_SLICK_SCALADSL_TEST_USERS(ID INTEGER, NAME VARCHAR(50))"""
-  val dropTable = sqlu"""DROP TABLE ALPAKKA_SLICK_SCALADSL_TEST_USERS"""
-  val selectAllUsers = sql"SELECT ID, NAME FROM ALPAKKA_SLICK_SCALADSL_TEST_USERS".as[User]
+  val createTable = sqlu"""CREATE TABLE PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS(ID INTEGER, NAME VARCHAR(50))"""
+  val dropTable = sqlu"""DROP TABLE PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS"""
+  val selectAllUsers = sql"SELECT ID, NAME FROM PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS".as[User]
   val typedSelectAllUsers = TableQuery[Users].result
 
   def insertUser(user: User): DBIO[Int] =
-    sqlu"INSERT INTO ALPAKKA_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
+    sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
 
   def getAllUsersFromDb: Future[Set[User]] = Slick.source(selectAllUsers).runWith(Sink.seq).map(_.toSet)
   def populate() = {

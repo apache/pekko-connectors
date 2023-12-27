@@ -18,7 +18,7 @@ import pekko.NotUsed
 import pekko.actor.ClassicActorSystemProvider
 import pekko.http.javadsl.model.{ HttpRequest, HttpResponse }
 import pekko.http.javadsl.unmarshalling.Unmarshaller
-import pekko.http.scaladsl.{ model => sm }
+import pekko.http.scaladsl.{ model => sm, unmarshalling }
 import pekko.stream.connectors.google.GoogleSettings
 import pekko.stream.connectors.google.scaladsl.{ Google => ScalaGoogle }
 import pekko.stream.javadsl.{ Sink, Source }
@@ -59,7 +59,7 @@ private[connectors] trait Google {
    */
   final def paginatedRequest[Out <: Paginated](request: HttpRequest,
       unmarshaller: Unmarshaller[HttpResponse, Out]): Source[Out, NotUsed] = {
-    implicit val um = unmarshaller.asScala
+    implicit val um: unmarshalling.Unmarshaller[HttpResponse, Out] = unmarshaller.asScala
     ScalaGoogle.paginatedRequest[Out](request).asJava
   }
 

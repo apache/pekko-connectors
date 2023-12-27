@@ -121,6 +121,7 @@ class SplitAfterSizeSpec(_system: ActorSystem)
         Seq(ByteString(16), ByteString(17, 18))))
   }
 
-  def bytes(start: Byte, end: Byte): Array[Byte] = (start to end).map(_.toByte).toArray[Byte]
+  // https://github.com/lampepfl/dotty/issues/18068
+  def bytes(start: Byte, end: Byte): Array[Byte] = (start.toInt to end).map(_.toByte).toArray[Byte]
 
 }

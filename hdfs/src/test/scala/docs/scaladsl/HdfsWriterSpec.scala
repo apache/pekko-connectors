@@ -190,7 +190,7 @@ class HdfsWriterSpec
 
     "use time rotation" in {
       val (cancellable, resF) = Source
-        .tick(0.millis, 50.milliseconds, ByteString("I love Alpakka!"))
+        .tick(0.millis, 50.milliseconds, ByteString("I love Pekko Connectors!"))
         .map(HdfsWriteMessage(_))
         .via(
           HdfsFlow.data(
@@ -253,7 +253,7 @@ class HdfsWriterSpec
         committedOffsets = committedOffsets :+ offset
 
       val resF = Source(messagesFromKafka)
-        .map { kafkaMessage: KafkaMessage =>
+        .map { (kafkaMessage: KafkaMessage) =>
           val book = kafkaMessage.book
           // Transform message so that we can write to hdfs
           HdfsWriteMessage(ByteString(book.title), kafkaMessage.offset)
