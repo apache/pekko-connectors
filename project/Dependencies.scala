@@ -95,6 +95,11 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonDatabindVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion)
 
+  val JacksonDatabindVersion216 = "2.16.0"
+  val JacksonDatabindDependencies216 = Seq(
+    "com.fasterxml.jackson.core" % "jackson-core" % JacksonDatabindVersion216,
+    "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion216)
+
   val Amqp = Seq(
     libraryDependencies ++= Seq(
       "com.rabbitmq" % "amqp-client" % "5.14.2") ++ Mockito)
@@ -155,7 +160,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "org.slf4j" % "jcl-over-slf4j" % jclOverSlf4jVersion % Test) ++ JacksonDatabindDependencies)
+      "org.slf4j" % "jcl-over-slf4j" % jclOverSlf4jVersion % Test) ++ JacksonDatabindDependencies216)
 
   val File = Seq(
     libraryDependencies ++= Seq(
