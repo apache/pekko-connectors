@@ -13,6 +13,7 @@ ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
+ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 
 commands := commands.value.filterNot { command =>
   command.nameOption.exists { name =>
