@@ -24,11 +24,11 @@ import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 
 public class DocSnippetSource {
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     final ActorSystem system = ActorSystem.create();
 
     // #source-example
-    final SlickSession session = SlickSession.forConfig("slick-h2");
+    final SlickSession session = SlickSession$.MODULE$.forConfig("slick-h2");
     system.registerOnTermination(session::close);
 
     final CompletionStage<Done> done =

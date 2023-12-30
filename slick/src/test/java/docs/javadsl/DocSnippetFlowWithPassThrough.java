@@ -18,6 +18,7 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.slick.javadsl.Slick;
 import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession;
+import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession$;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 
@@ -61,10 +62,10 @@ public class DocSnippetFlowWithPassThrough {
     }
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     final ActorSystem system = ActorSystem.create();
 
-    final SlickSession session = SlickSession.forConfig("slick-h2");
+    final SlickSession session = SlickSession$.MODULE$.forConfig("slick-h2");
     system.registerOnTermination(session::close);
 
     final List<User> users =

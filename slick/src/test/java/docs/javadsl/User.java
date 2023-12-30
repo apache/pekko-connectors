@@ -13,6 +13,8 @@
 
 package docs.javadsl;
 
+import java.util.Objects;
+
 public class User {
   public final Integer id;
   public final String name;
@@ -39,10 +41,10 @@ public class User {
       return false;
     }
     final User other = (User) obj;
-    if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+    if (!Objects.equals(this.name, other.name)) {
       return false;
     }
-    if (this.id != other.id) {
+    if (!Objects.equals(this.id, other.id)) {
       return false;
     }
     return true;

@@ -20,6 +20,7 @@ import org.apache.pekko.japi.function.Function2;
 import org.apache.pekko.stream.connectors.slick.javadsl.Slick;
 import org.apache.pekko.stream.connectors.slick.javadsl.SlickRow;
 import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession;
+import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession$;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -59,7 +60,7 @@ public class SlickTest {
   private static ActorSystem system;
 
   // #init-session
-  private static final SlickSession session = SlickSession.forConfig("slick-h2");
+  private static final SlickSession session = SlickSession$.MODULE$.forConfig("slick-h2");
   // #init-session
 
   private static final Set<User> users =

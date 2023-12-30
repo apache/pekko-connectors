@@ -19,7 +19,6 @@ import pekko.actor.ActorSystem
 
 import scala.concurrent.ExecutionContext
 //#important-imports
-import org.apache.pekko
 import pekko.stream.connectors.slick.scaladsl._
 import pekko.stream.scaladsl._
 import slick.jdbc.GetResult
