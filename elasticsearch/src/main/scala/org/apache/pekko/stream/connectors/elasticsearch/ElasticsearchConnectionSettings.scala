@@ -19,7 +19,6 @@ import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import pekko.japi.Util
 import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters
 import pekko.util.OptionConverters._
 
 import javax.net.ssl.SSLContext
@@ -72,8 +71,8 @@ final class ElasticsearchConnectionSettings private (
     val scalaContext = new HttpsConnectionContext(
       connectionContext.getSslContext,
       None,
-      OptionConverters.toScala(connectionContext.getEnabledCipherSuites).map(Util.immutableSeq(_)),
-      OptionConverters.toScala(connectionContext.getEnabledProtocols).map(Util.immutableSeq(_)),
+      connectionContext.getEnabledCipherSuites.toScala.map(Util.immutableSeq(_)),
+      connectionContext.getEnabledProtocols.toScala.map(Util.immutableSeq(_)),
       connectionContext.getClientAuth.toScala,
       connectionContext.getSslParameters.toScala)
 
