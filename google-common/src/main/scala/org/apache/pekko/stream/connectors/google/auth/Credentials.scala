@@ -75,8 +75,10 @@ object Credentials {
     ServiceAccountCredentials(c.getConfig("service-account"), scopes)
   }
 
-  private def parseComputeEngine(c: Config)(implicit system: ClassicActorSystemProvider) =
-    Await.result(ComputeEngineCredentials(), c.getDuration("compute-engine.timeout").asScala)
+  private def parseComputeEngine(c: Config)(implicit system: ClassicActorSystemProvider) = {
+    val scopes = c.getStringList("scopes").asScala.toSet
+    Await.result(ComputeEngineCredentials(scopes), c.getDuration("compute-engine.timeout").asScala)
+  }
 
   private def parseUserAccess(c: Config)(implicit system: ClassicActorSystemProvider) =
     UserAccessCredentials(c.getConfig("user-access"))

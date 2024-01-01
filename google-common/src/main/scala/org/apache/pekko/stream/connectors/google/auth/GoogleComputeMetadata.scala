@@ -19,7 +19,7 @@ import pekko.annotation.InternalApi
 import pekko.http.scaladsl.Http
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import pekko.http.scaladsl.model.HttpMethods.GET
-import pekko.http.scaladsl.model.HttpRequest
+import pekko.http.scaladsl.model.{ HttpRequest, Uri }
 import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.http.scaladsl.unmarshalling.Unmarshal
 import pekko.stream.Materializer
@@ -35,17 +35,26 @@ private[auth] object GoogleComputeMetadata {
   private val projectIdUrl = s"$metadataUrl/project/project-id"
   private val `Metadata-Flavor` = RawHeader("Metadata-Flavor", "Google")
 
-  private val tokenRequest = HttpRequest(GET, tokenUrl).addHeader(`Metadata-Flavor`)
+  private def tokenRequest(scopes: Set[String]) = {
+    val finalUri =
+      if (scopes.nonEmpty)
+        Uri(tokenUrl).withQuery(Uri.Query(Map(
+          "scopes" -> scopes.mkString(","))))
+      else
+        Uri(tokenUrl)
+
+    HttpRequest(GET, finalUri).addHeader(`Metadata-Flavor`)
+  }
   private val projectIdRequest = HttpRequest(GET, projectIdUrl).addHeader(`Metadata-Flavor`)
 
-  def getAccessToken()(
+  def getAccessToken(scopes: Set[String])(
       implicit mat: Materializer,
       clock: Clock): Future[AccessToken] = {
     import SprayJsonSupport._
     import mat.executionContext
     implicit val system: ActorSystem = mat.system
     for {
-      response <- Http().singleRequest(tokenRequest)
+      response <- Http().singleRequest(tokenRequest(scopes))
       token <- Unmarshal(response.entity).to[AccessToken]
     } yield token
   }
