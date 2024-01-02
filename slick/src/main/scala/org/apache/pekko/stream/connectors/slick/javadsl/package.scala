@@ -59,7 +59,12 @@ private[slick] abstract class SlickSessionFactory {
  * closed after creation to avoid leaking database resources like active
  * connection pools, etc.
  */
-object SlickSession extends SlickSessionFactory
+object SlickSession extends SlickSessionFactory {
+  override def forConfig(path: String) = super.forConfig(path)
+  override def forConfig(config: Config) = super.forConfig(config)
+  override def forConfig(path: String, config: Config) = super.forConfig(path, config)
+  override def forConfig(databaseConfig: DatabaseConfig[JdbcProfile]) = super.forConfig(databaseConfig)
+}
 
 /**
  * Java API: A class representing a slick resultset row, which is used
