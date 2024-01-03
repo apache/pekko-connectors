@@ -41,8 +41,9 @@ object Dependencies {
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.16.0"
 
+  val LogbackForSlf4j1Version = "1.2.13"
   val LogbackForSlf4j2Version = "1.3.14"
-  val LogbackVersion = if (PekkoBinaryVersion == "1.0") "1.2.13" else LogbackForSlf4j2Version
+  val LogbackVersion = if (PekkoBinaryVersion == "1.0") LogbackForSlf4j1Version else LogbackForSlf4j2Version
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
