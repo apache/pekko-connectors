@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.ftp.impl
 
 import java.net.InetAddress
 
+import com.typesafe.config.ConfigFactory
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.FtpCredentials
@@ -164,11 +165,16 @@ private[ftp] trait FtpsSource extends FtpSourceFactory[FTPSClient, FtpsSettings]
   protected final val FtpsDirectorySource = "FtpsDirectorySource"
   protected final val FtpsIOSinkName = "FtpsIOSink"
 
-  protected val ftpClient: () => FTPSClient = () => new FTPSClient
+  protected val ftpClient: () => FTPSClient = () => new FTPSClient(useFtpsImplicit())
   protected val ftpBrowserSourceName: String = FtpsBrowserSourceName
   protected val ftpIOSourceName: String = FtpsIOSourceName
   protected val ftpIOSinkName: String = FtpsIOSinkName
   override protected val ftpDirectorySourceName: String = FtpsDirectorySource
+
+  private def useFtpsImplicit(): Boolean = {
+    val cfg = ConfigFactory.load()
+    cfg.getBoolean("pekko.connectors.ftp.ftps-implicit")
+  }
 }
 
 /**
