@@ -27,6 +27,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Base64;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
@@ -38,7 +39,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import org.apache.commons.net.ftp.*;
-import org.apache.commons.net.util.Base64;
 import org.apache.commons.net.util.SSLContextUtils;
 import org.apache.commons.net.util.SSLSocketUtils;
 import org.apache.commons.net.util.TrustManagerUtils;
@@ -47,6 +47,8 @@ import org.apache.commons.net.util.TrustManagerUtils;
  * This class is a workaround for code introduced in commons-net 3.9.0 that breaks
  * FTPS support when HTTP proxies are used.
  * See https://issues.apache.org/jira/browse/NET-718
+ * 
+ * Derived from https://github.com/apache/commons-net/blob/master/src/main/java/org/apache/commons/net/ftp/FTPSClient.java
  */
 final class LegacyFtpsClient extends FTPClient {
 
@@ -260,22 +262,6 @@ final class LegacyFtpsClient extends FTPClient {
     }
 
     /**
-     * Close open sockets.
-     *
-     * @param socket    main socket for proxy if enabled
-     * @param sslSocket ssl socket
-     * @throws IOException closing sockets is not successful
-     */
-    private void closeSockets(final Socket socket, final Socket sslSocket) throws IOException {
-        if (socket != null) {
-            socket.close();
-        }
-        if (sslSocket != null) {
-            sslSocket.close();
-        }
-    }
-
-    /**
      * Create SSL socket from plain socket.
      *
      * @param socket
@@ -319,7 +305,7 @@ final class LegacyFtpsClient extends FTPClient {
      */
     public int execADAT(final byte[] data) throws IOException {
         if (data != null) {
-            return sendCommand(CMD_ADAT, Base64.encodeBase64StringUnChunked(data));
+            return sendCommand(CMD_ADAT, Base64.getEncoder().encodeToString(data));
         }
         return sendCommand(CMD_ADAT);
     }
@@ -386,7 +372,7 @@ final class LegacyFtpsClient extends FTPClient {
      */
     public int execCONF(final byte[] data) throws IOException {
         if (data != null) {
-            return sendCommand(CMD_CONF, Base64.encodeBase64StringUnChunked(data));
+            return sendCommand(CMD_CONF, Base64.getEncoder().encodeToString(data));
         }
         return sendCommand(CMD_CONF, ""); // perhaps "=" or just sendCommand(String)?
     }
@@ -401,7 +387,7 @@ final class LegacyFtpsClient extends FTPClient {
      */
     public int execENC(final byte[] data) throws IOException {
         if (data != null) {
-            return sendCommand(CMD_ENC, Base64.encodeBase64StringUnChunked(data));
+            return sendCommand(CMD_ENC, Base64.getEncoder().encodeToString(data));
         }
         return sendCommand(CMD_ENC, ""); // perhaps "=" or just sendCommand(String)?
     }
@@ -416,7 +402,7 @@ final class LegacyFtpsClient extends FTPClient {
      */
     public int execMIC(final byte[] data) throws IOException {
         if (data != null) {
-            return sendCommand(CMD_MIC, Base64.encodeBase64StringUnChunked(data));
+            return sendCommand(CMD_MIC, Base64.getEncoder().encodeToString(data));
         }
         return sendCommand(CMD_MIC, ""); // perhaps "=" or just sendCommand(String)?
     }
