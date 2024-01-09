@@ -185,6 +185,7 @@ final class FtpsSettings private (
     val credentials: FtpCredentials,
     val binary: Boolean,
     val passiveMode: Boolean,
+    val useFtpsImplicit: Boolean,
     val autodetectUTF8: Boolean,
     val configureConnection: FTPSClient => Unit,
     val proxy: Option[Proxy],
@@ -197,6 +198,8 @@ final class FtpsSettings private (
   def withBinary(value: Boolean): FtpsSettings = if (binary == value) this else copy(binary = value)
   def withPassiveMode(value: Boolean): FtpsSettings =
     if (passiveMode == value) this else copy(passiveMode = value)
+  def withFtpsImplicit(value: Boolean): FtpsSettings =
+    if (useFtpsImplicit == value) this else copy(useFtpsImplicit = value)
   def withAutodetectUTF8(value: Boolean): FtpsSettings =
     if (autodetectUTF8 == value) this else copy(autodetectUTF8 = value)
   def withProxy(value: Proxy): FtpsSettings = copy(proxy = Some(value))
@@ -224,6 +227,7 @@ final class FtpsSettings private (
       credentials: FtpCredentials = credentials,
       binary: Boolean = binary,
       passiveMode: Boolean = passiveMode,
+      useFtpsImplicit: Boolean = useFtpsImplicit,
       autodetectUTF8: Boolean = autodetectUTF8,
       configureConnection: FTPSClient => Unit = configureConnection,
       proxy: Option[Proxy] = proxy,
@@ -234,6 +238,7 @@ final class FtpsSettings private (
     credentials = credentials,
     binary = binary,
     passiveMode = passiveMode,
+    useFtpsImplicit = useFtpsImplicit,
     autodetectUTF8 = autodetectUTF8,
     configureConnection = configureConnection,
     proxy = proxy,
@@ -247,6 +252,7 @@ final class FtpsSettings private (
     s"credentials=$credentials," +
     s"binary=$binary," +
     s"passiveMode=$passiveMode," +
+    s"useFtpsImplicit=$useFtpsImplicit," +
     s"autodetectUTF8=$autodetectUTF8" +
     s"configureConnection=$configureConnection," +
     s"proxy=$proxy" +
@@ -269,6 +275,7 @@ object FtpsSettings {
     FtpCredentials.AnonFtpCredentials,
     binary = false,
     passiveMode = false,
+    useFtpsImplicit = false,
     autodetectUTF8 = false,
     configureConnection = _ => (),
     proxy = None,
