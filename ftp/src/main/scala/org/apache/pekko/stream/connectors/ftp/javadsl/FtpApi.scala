@@ -27,7 +27,7 @@ import pekko.util.ByteString
 import pekko.util.FunctionConverters._
 import pekko.{ Done, NotUsed }
 import net.schmizz.sshj.SSHClient
-import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
+import org.apache.commons.net.ftp.FTPClient
 
 @DoNotInherit
 sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory[FtpClient, S] =>
@@ -374,7 +374,7 @@ object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
   }
 
 }
-object Ftps extends FtpApi[FTPSClient, FtpsSettings] with FtpsSourceParams {
+object Ftps extends FtpApi[FTPClient, FtpsSettings] with FtpsSourceParams {
   def ls(host: String): Source[FtpFile, NotUsed] = ls(host, basePath = "")
   def ls(host: String, basePath: String): Source[FtpFile, NotUsed] = ls(basePath, defaultSettings(host))
 

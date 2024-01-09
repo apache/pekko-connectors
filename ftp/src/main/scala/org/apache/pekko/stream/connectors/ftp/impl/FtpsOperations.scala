@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.ftp.impl
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.{ FtpAuthenticationException, FtpsSettings }
-import org.apache.commons.net.ftp.{ FTP, FTPSClient }
+import org.apache.commons.net.ftp.{ FTP, FTPClient } 
 
 import scala.util.Try
 
@@ -25,14 +25,18 @@ import scala.util.Try
  */
 @InternalApi
 private[ftp] trait FtpsOperations extends CommonFtpOperations {
-  self: FtpLike[FTPSClient, FtpsSettings] =>
+  self: FtpLike[FTPClient, FtpsSettings] =>
 
-  def connect(connectionSettings: FtpsSettings)(implicit ftpClient: FTPSClient): Try[Handler] =
+  def connect(connectionSettings: FtpsSettings)(implicit ftpClient: FTPClient): Try[Handler] =
     Try {
       connectionSettings.proxy.foreach(ftpClient.setProxy)
 
-      connectionSettings.keyManager.foreach(ftpClient.setKeyManager)
-      connectionSettings.trustManager.foreach(ftpClient.setTrustManager)
+      ftpClient match {
+        case legacyClient: LegacyFtpsClient =>
+          connectionSettings.keyManager.foreach(legacyClient.setKeyManager)
+          connectionSettings.trustManager.foreach(legacyClient.setTrustManager)
+        case _ =>
+      }
 
       if (ftpClient.getAutodetectUTF8() != connectionSettings.autodetectUTF8) {
         ftpClient.setAutodetectUTF8(connectionSettings.autodetectUTF8)
@@ -62,7 +66,7 @@ private[ftp] trait FtpsOperations extends CommonFtpOperations {
       ftpClient
     }
 
-  def disconnect(handler: Handler)(implicit ftpClient: FTPSClient): Unit =
+  def disconnect(handler: Handler)(implicit ftpClient: FTPClient): Unit =
     if (ftpClient.isConnected) {
       ftpClient.logout()
       ftpClient.disconnect()

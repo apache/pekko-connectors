@@ -12,6 +12,11 @@ Apache License, Version 2.0 License.
 
 ---------------
 
+pekko-connectors-s3 contains code from commons-net <https://commons.apache.org/proper/commons-net/>.
+This code was released under an Apache 2.0 license.
+
+---------------
+
 pekko-connectors-s3 contains code from aws-sdk-java <https://github.com/aws/aws-sdk-java>.
 This code was released under an Apache 2.0 license.
 

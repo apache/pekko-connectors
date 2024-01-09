@@ -20,7 +20,7 @@ import javax.net.ssl.TrustManager
 import java.nio.file.attribute.PosixFilePermission
 
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
+import org.apache.commons.net.ftp.FTPClient
 
 /**
  * FTP remote file descriptor.
@@ -187,7 +187,7 @@ final class FtpsSettings private (
     val passiveMode: Boolean,
     val useFtpsImplicit: Boolean,
     val autodetectUTF8: Boolean,
-    val configureConnection: FTPSClient => Unit,
+    val configureConnection: FTPClient => Unit,
     val proxy: Option[Proxy],
     val keyManager: Option[KeyManager],
     val trustManager: Option[TrustManager]) extends FtpFileSettings {
@@ -210,7 +210,7 @@ final class FtpsSettings private (
    * Scala API:
    * Sets the configure connection callback.
    */
-  def withConfigureConnection(value: FTPSClient => Unit): FtpsSettings =
+  def withConfigureConnection(value: FTPClient => Unit): FtpsSettings =
     copy(configureConnection = value)
 
   /**
@@ -218,7 +218,7 @@ final class FtpsSettings private (
    * Sets the configure connection callback.
    */
   def withConfigureConnectionConsumer(
-      configureConnection: java.util.function.Consumer[FTPSClient]): FtpsSettings =
+      configureConnection: java.util.function.Consumer[FTPClient]): FtpsSettings =
     copy(configureConnection = configureConnection.accept)
 
   private def copy(
@@ -229,7 +229,7 @@ final class FtpsSettings private (
       passiveMode: Boolean = passiveMode,
       useFtpsImplicit: Boolean = useFtpsImplicit,
       autodetectUTF8: Boolean = autodetectUTF8,
-      configureConnection: FTPSClient => Unit = configureConnection,
+      configureConnection: FTPClient => Unit = configureConnection,
       proxy: Option[Proxy] = proxy,
       keyManager: Option[KeyManager] = keyManager,
       trustManager: Option[TrustManager] = trustManager): FtpsSettings = new FtpsSettings(
