@@ -622,7 +622,7 @@ final class LegacyFtpsClient extends FTPClient {
         if (reply == null) {
             return null;
         }
-        return Base64.decodeBase64(extractPrefixedData("ADAT=", reply));
+        return Base64.getDecoder().decode(extractPrefixedData("ADAT=", reply));
     }
 
     /**
