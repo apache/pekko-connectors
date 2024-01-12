@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.ftp.impl
 
 import java.net.InetAddress
 
-import com.typesafe.config.ConfigFactory
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.FtpCredentials
@@ -31,7 +30,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
 
   protected[this] final val DefaultChunkSize = 8192
 
-  protected[this] def ftpClient: () => FtpClient
+  protected[this] def ftpClient: S => FtpClient
 
   protected[this] def ftpBrowserSourceName: String
 
@@ -58,7 +57,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
       lazy val name: String = ftpBrowserSourceName
       val basePath: String = _basePath
       val connectionSettings: S = _connectionSettings
-      val ftpClient: () => FtpClient = self.ftpClient
+      val ftpClient: S => FtpClient = self.ftpClient
       val ftpLike: FtpLike[FtpClient, S] = _ftpLike
       override val branchSelector: (FtpFile) => Boolean = _branchSelector
       override val emitTraversedDirectories: Boolean = _emitTraversedDirectories
@@ -75,7 +74,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
 
       override def connectionSettings: S = currentConnectionSettings
 
-      override def ftpClient: () => FtpClient = self.ftpClient
+      override def ftpClient: S => FtpClient = self.ftpClient
 
       override val directoryName: String = dirName
     }
@@ -95,7 +94,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
       lazy val name: String = ftpIOSourceName
       val path: String = _path
       val connectionSettings: S = _connectionSettings
-      val ftpClient: () => FtpClient = self.ftpClient
+      val ftpClient: S => FtpClient = self.ftpClient
       val ftpLike: FtpLike[FtpClient, S] = _ftpLike
       val chunkSize: Int = _chunkSize
       override val offset: Long = _offset
@@ -109,7 +108,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
       lazy val name: String = ftpIOSinkName
       val path: String = _path
       val connectionSettings: S = _connectionSettings
-      val ftpClient: () => FtpClient = self.ftpClient
+      val ftpClient: S => FtpClient = self.ftpClient
       val ftpLike: FtpLike[FtpClient, S] = _ftpLike
       val append: Boolean = _append
     }
@@ -119,7 +118,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
       _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]) =
     new FtpMoveSink[FtpClient, S] {
       val connectionSettings: S = _connectionSettings
-      val ftpClient: () => FtpClient = self.ftpClient
+      val ftpClient: S => FtpClient = self.ftpClient
       val ftpLike: FtpLike[FtpClient, S] = _ftpLike
       val destinationPath: FtpFile => String = _destinationPath
     }
@@ -128,7 +127,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
       _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]) =
     new FtpRemoveSink[FtpClient, S] {
       val connectionSettings: S = _connectionSettings
-      val ftpClient: () => FtpClient = self.ftpClient
+      val ftpClient: S => FtpClient = self.ftpClient
       val ftpLike: FtpLike[FtpClient, S] = _ftpLike
     }
 
@@ -148,7 +147,7 @@ private[ftp] trait FtpSource extends FtpSourceFactory[FTPClient, FtpSettings] {
   protected final val FtpDirectorySource = "FtpDirectorySource"
   protected final val FtpIOSinkName = "FtpIOSink"
 
-  protected val ftpClient: () => FTPClient = () => new FTPClient
+  protected val ftpClient: FtpSettings => FTPClient = _ => new FTPClient
   protected val ftpBrowserSourceName: String = FtpBrowserSourceName
   protected val ftpIOSourceName: String = FtpIOSourceName
   protected val ftpIOSinkName: String = FtpIOSinkName
@@ -165,16 +164,11 @@ private[ftp] trait FtpsSource extends FtpSourceFactory[FTPSClient, FtpsSettings]
   protected final val FtpsDirectorySource = "FtpsDirectorySource"
   protected final val FtpsIOSinkName = "FtpsIOSink"
 
-  protected val ftpClient: () => FTPSClient = () => new FTPSClient(useFtpsImplicit())
+  protected val ftpClient: FtpsSettings => FTPSClient = settings => new FTPSClient(settings.useFtpsImplicit)
   protected val ftpBrowserSourceName: String = FtpsBrowserSourceName
   protected val ftpIOSourceName: String = FtpsIOSourceName
   protected val ftpIOSinkName: String = FtpsIOSinkName
   override protected val ftpDirectorySourceName: String = FtpsDirectorySource
-
-  private def useFtpsImplicit(): Boolean = {
-    val cfg = ConfigFactory.load()
-    cfg.getBoolean("pekko.connectors.ftp.ftps-implicit")
-  }
 }
 
 /**
@@ -188,7 +182,7 @@ private[ftp] trait SftpSource extends FtpSourceFactory[SSHClient, SftpSettings] 
   protected final val sFtpIOSinkName = "sFtpIOSink"
 
   def sshClient(): SSHClient = new SSHClient()
-  protected val ftpClient: () => SSHClient = () => sshClient()
+  protected val ftpClient: SftpSettings => SSHClient = _ => sshClient()
   protected val ftpBrowserSourceName: String = sFtpBrowserSourceName
   protected val ftpIOSourceName: String = sFtpIOSourceName
   protected val ftpIOSinkName: String = sFtpIOSinkName
