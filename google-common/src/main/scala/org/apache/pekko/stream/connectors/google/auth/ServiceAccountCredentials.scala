@@ -18,7 +18,6 @@ import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.InternalApi
 import pekko.stream.Materializer
 import pekko.stream.connectors.google.RequestSettings
-import pekko.util.ccompat.JavaConverters._
 import com.typesafe.config.Config
 import spray.json.DefaultJsonProtocol._
 import spray.json.{ JsonParser, RootJsonFormat }
@@ -30,11 +29,11 @@ import scala.io.Source
 @InternalApi
 private[connectors] object ServiceAccountCredentials {
 
-  def apply(projectId: String, clientEmail: String, privateKey: String, scopes: Seq[String])(
+  def apply(projectId: String, clientEmail: String, privateKey: String, scopes: Set[String])(
       implicit system: ClassicActorSystemProvider): Credentials =
     new ServiceAccountCredentials(projectId, clientEmail, privateKey, scopes)
 
-  def apply(c: Config)(implicit system: ClassicActorSystemProvider): Credentials = {
+  def apply(c: Config, scopes: Set[String])(implicit system: ClassicActorSystemProvider): Credentials = {
     val (projectId, clientEmail, privateKey) = {
       if (c.getString("private-key").nonEmpty) {
         (
@@ -48,7 +47,6 @@ private[connectors] object ServiceAccountCredentials {
         (credentials.project_id, credentials.client_email, credentials.private_key)
       }
     }
-    val scopes = c.getStringList("scopes").asScala.toSeq
     require(
       projectId.nonEmpty && clientEmail.nonEmpty && privateKey.nonEmpty && scopes.nonEmpty && scopes.forall(_.nonEmpty),
       "Service account requires that project-id, client-email, private-key, and at least one scope are specified.")
@@ -64,7 +62,7 @@ private[connectors] object ServiceAccountCredentials {
 private final class ServiceAccountCredentials(projectId: String,
     clientEmail: String,
     privateKey: String,
-    scopes: Seq[String])(implicit mat: Materializer)
+    scopes: Set[String])(implicit mat: Materializer)
     extends OAuth2Credentials(projectId) {
 
   override protected def getAccessToken()(implicit mat: Materializer,

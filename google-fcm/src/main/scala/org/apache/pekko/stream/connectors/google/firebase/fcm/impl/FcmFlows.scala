@@ -66,7 +66,7 @@ private[fcm] object FcmFlows {
   @Deprecated
   private def resolveSettings(conf: FcmSettings)(mat: Materializer, attr: Attributes): GoogleSettings = {
     val settings = GoogleAttributes.resolveSettings(mat, attr)
-    val scopes = List("https://www.googleapis.com/auth/firebase.messaging")
+    val scopes = Set("https://www.googleapis.com/auth/firebase.messaging")
     val credentials =
       if (conf.privateKey == "deprecated")
         settings.credentials
