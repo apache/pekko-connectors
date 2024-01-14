@@ -20,6 +20,7 @@ import pekko.event.Logging
 import pekko.http.scaladsl.model.headers.HttpCredentials
 import pekko.stream.connectors.google.RequestSettings
 import pekko.util.JavaDurationConverters._
+import pekko.util.ccompat.JavaConverters._
 import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 
@@ -69,8 +70,10 @@ object Credentials {
     case "none"            => parseNone(c)
   }
 
-  private def parseServiceAccount(c: Config)(implicit system: ClassicActorSystemProvider) =
-    ServiceAccountCredentials(c.getConfig("service-account"))
+  private def parseServiceAccount(c: Config)(implicit system: ClassicActorSystemProvider) = {
+    val scopes = c.getStringList("scopes").asScala.toSet
+    ServiceAccountCredentials(c.getConfig("service-account"), scopes)
+  }
 
   private def parseComputeEngine(c: Config)(implicit system: ClassicActorSystemProvider) =
     Await.result(ComputeEngineCredentials(), c.getDuration("compute-engine.timeout").asScala)
