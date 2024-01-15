@@ -10,7 +10,6 @@
 import sbt._
 import Common.isScala3
 import Keys._
-import com.github.pjfanning.pekkobuild.PekkoDependency
 
 object Dependencies {
 
@@ -21,7 +20,7 @@ object Dependencies {
   val Scala3 = "3.3.1"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
-  val PekkoVersion = PekkoDependency.pekkoVersionDerivedFromDefault("1.0.2")
+  val PekkoVersion = PekkoCoreDependency.version
   val PekkoBinaryVersion = PekkoVersion.take(3)
 
   val InfluxDBJavaVersion = "2.15"
