@@ -31,7 +31,7 @@ object Dependencies {
   val NettyVersion = "4.1.104.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.0"
-  val PekkoHttpVersion = "1.0.0"
+  val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoHttpBinaryVersion = "1.0"
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
