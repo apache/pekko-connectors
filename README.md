@@ -19,9 +19,11 @@ To keep up with the latest releases check out [Pekko Connectors releases](https:
 
 ## Building From Source
 
-The build commands in the [incubator-pekko](https://github.com/apache/incubator-pekko?tab=readme-ov-file#building-from-source) repo are also useful here. Java 8 should work well for this building the source in this repo. Building the Paradox docs is significatntly harder if you use Java 17 or above. You will need to specify a large number of `--add-opens` settings.
+The build commands in the [incubator-pekko](https://github.com/apache/incubator-pekko?tab=readme-ov-file#building-from-source) repo are also useful here. Java 8 should work well for building from source with this repo. Building the Paradox docs is significatntly harder if you use Java 17 or above. You will need to specify a large number of `--add-opens` settings.
 
-This repo contains shell scripts. These scripts are designed to help with the testing of pekko Please avoid running the scripts without checking if you need to and try to understand what the script does first. There is also a `nested-sample.tar` file that is used in tests. This tar file does not contain compiled artifacts.
+This repo contains shell scripts. These scripts are designed to help with the testing of Apache Pekko Connectors. Please avoid running the scripts without checking if you need to and try to understand what the script does first.
+
+There is also a `nested-sample.tar` file that is used in tests. This tar file does not contain compiled artifacts.
 
 ## Running Tests
 
