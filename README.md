@@ -17,6 +17,14 @@ Pekko Connectors are documented at https://pekko.apache.org/docs/pekko-connector
 
 To keep up with the latest releases check out [Pekko Connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko Connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
 
+## Building From Source
+
+The build commands in the [incubator-pekko](https://github.com/apache/incubator-pekko?tab=readme-ov-file#building-from-source) repo are also useful here. Java 8 should work well for this building the source in this repo. Building the Paradox docs is significatntly harder if you use Java 17 or above. You will need to specify a large number of `--add-opens` settings.
+
+## Running Tests
+
+There are details in the [Contributing page](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md). That page also has guidelines about how to prepare Pull Requests.
+
 ## Community
 
 You can join these forums and chats to discuss and ask Pekko and Pekko connector related questions:
