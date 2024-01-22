@@ -6,7 +6,7 @@ You're always welcome to submit your PR straight away and start the discussion (
 
 # The Pekko Community
 
-If you have questions about the contribution process or discuss specific issues, we will be happy to try to help via the usual [communication channels](https://github.com/apache/incubator-pekko-connectors?tab=readme-ov-file#community). 
+If you have questions about the contribution process or to discuss specific issues, we will be happy to try to help via the usual [communication channels](https://github.com/apache/incubator-pekko-connectors?tab=readme-ov-file#community). 
 
 # Contributing to Pekko Connectors
 
