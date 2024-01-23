@@ -6,11 +6,7 @@ You're always welcome to submit your PR straight away and start the discussion (
 
 # The Pekko Community
 
-If you have questions about the contribution process or discuss specific issues, please interact with the community using the following resources.
-
-- [GitHub discussions](https://github.com/apache/incubator-pekko/discussions): for questions and general discussion.
-- [Pekko dev mailing list](https://lists.apache.org/list.html?dev@pekko.apache.org): for Pekko development discussions.
-- [GitHub issues](https://github.com/apache/incubator-pekko/issues): for bug reports and feature requests. Please search the existing issues before creating new ones. If you are unsure whether you have found a bug, consider asking in GitHub discussions or the mailing list first.
+If you have questions about the contribution process or to discuss specific issues, we will be happy to try to help via the usual [communication channels](https://github.com/apache/incubator-pekko-connectors?tab=readme-ov-file#community). 
 
 # Contributing to Pekko Connectors
 
@@ -30,6 +26,27 @@ This is the process for committing code into main.
 1. After the review you should fix the issues (review comments, CI failures, compiler warnings) by pushing a new commit for new review, iterating until the reviewers give their thumbs up and CI tests pass.
 
 1. If the branch merge conflicts with its target, rebase your branch onto the target branch.
+
+## Running tests
+
+| :exclamation:  Take care when running the shell scripts in this repo. |
+|-----------------------------------------------------------------------|
+
+You can run tests using [sbt](https://www.scala-sbt.org/). With this repo, you will typically be working on one connector at a time. For instance, the FTP connector is in the `ftp` folder and you can run its tests with `sbt ftp/test`. You should read the rest of this section before running these tests.
+
+This repo is for connectors that integrate with 3rd party services (e.g. AWS S3, FTP, Hive). For many connectors, you will need to use [Docker Compose](https://docs.docker.com/compose/) to start servers that the Pekko Connector tests will need to interact with. The tests don't expect to interact with live resources but instead expect to work with local services that provide the right functionality.
+
+You can get an idea of what Docker commands that you need to run tests for specific connectors by looking at the GitHub Actions workflow [check-build-test.yml](https://github.com/apache/incubator-pekko-connectors/blob/75e9a4867eec3e1c2b971eb7e13a0f0b9dbddab3/.github/workflows/check-build-test.yml#L78-L125).
+
+The Docker setup in many cases requires the use of shell scripts that are designed to run inside Docker containers and are not designed for users to be running on their own machines. Please take care when running any shell scripts in this repo.
+
+To continue with the FTP connector as an example, you will need to run this [script](https://github.com/apache/incubator-pekko-connectors/blob/main/scripts/ftp-servers.sh) (that runs Docker Compose commands) before running the tests.
+
+```
+./scripts/ftp-servers.sh
+```
+
+This FTP setup does not work well on Apple Macs. There is a workaround described by Sebastien Alfers in this [write up](https://github.com/sebastian-alfers/commons-net/blob/1cd10e1da577d5f900c5e33af2a041de1361eb25/README_REPRODUCE.md#squid--ftp-on-mac).
 
 ## Pekko Connectors specific advice
 
