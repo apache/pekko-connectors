@@ -12,7 +12,6 @@ import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCh
 // pekkoInlineEnabled should be set to true when we start building 1.1.x builds
 ThisBuild / pekkoInlineEnabled := false
 
-ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
