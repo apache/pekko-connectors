@@ -23,7 +23,11 @@ The build commands in the [incubator-pekko](https://github.com/apache/incubator-
 
 This repo contains shell scripts. These scripts are designed to help with the testing of Apache Pekko Connectors. Please avoid running the scripts without checking if you need to and try to understand what the script does first.
 
-There is also a `nested-sample.tar` file that is used in tests. This tar file does not contain compiled artifacts.
+There are some binary files in this repo that are used in testing. These files do not contain compiled artifacts.
+
+* file/src/test/resources/nested-sample.tar
+* google-cloud-pub-sub-grpc/src/main/resources/GSR2.crt
+* s3/src/test/resources/keystore.jks
 
 ## Running Tests
 
