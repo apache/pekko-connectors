@@ -1,6 +1,6 @@
 # Release Notes
 
-To understand the forces on version numbers, read about @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
+The versioning strategy is described in @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
 
 ## 1.0.2
 
