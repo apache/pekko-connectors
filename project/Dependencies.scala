@@ -311,8 +311,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "javax.jms" % "jms" % "1.1" % Provided,
       "com.ibm.mq" % "com.ibm.mq.allclient" % "9.2.5.0" % Test,
-      "org.apache.activemq" % "activemq-broker" % "5.16.4" % Test,
-      "org.apache.activemq" % "activemq-client" % "5.16.4" % Test,
+      "org.apache.activemq" % "activemq-broker" % "5.16.7" % Test,
+      "org.apache.activemq" % "activemq-client" % "5.16.7" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test) ++ Mockito,
     // Having JBoss as a first resolver is a workaround for https://github.com/coursier/coursier/issues/200
     externalResolvers := ("jboss".at(
