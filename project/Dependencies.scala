@@ -26,7 +26,8 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.15"
 
   val AvroVersion = "1.11.3"
-  val AwsSdk2Version = "2.23.11"
+  val AwsSdk2Version = "2.23.12"
+  val AwsSdk2SqsVersion = "2.20.162" // latest AwsSdk2Version causes us test issues with SQS
   val AwsSpiPekkoHttpVersion = "0.1.0"
   val NettyVersion = "4.1.106.Final"
   // Sync with plugins.sbt
@@ -115,7 +116,7 @@ object Dependencies {
 
   val CassandraVersionInDocs = "4.0"
   val CassandraDriverVersion = "4.17.0"
-  val CassandraDriverVersionInDocs = "4.15"
+  val CassandraDriverVersionInDocs = "4.17"
 
   val Cassandra = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
@@ -441,7 +442,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll(
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2SqsVersion).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
