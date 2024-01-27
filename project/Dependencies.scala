@@ -56,7 +56,7 @@ object Dependencies {
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
 
-  val CouchbaseVersion = "2.7.16"
+  val CouchbaseVersion = "2.7.23"
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.20.0"
