@@ -34,7 +34,7 @@ object Dependencies {
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoHttpBinaryVersion = "1.0"
   val ScalaTestVersion = "3.2.17"
-  val TestContainersScalaTestVersion = "0.40.14"
+  val TestContainersScalaTestVersion = "0.41.0"
   val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.21.12"
   val hoverflyVersion = "0.14.1"
@@ -98,7 +98,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.14.2") ++ Mockito)
+      "com.rabbitmq" % "amqp-client" % "5.20.0") ++ Mockito)
 
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
