@@ -25,7 +25,7 @@ import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, 
 import pekko.stream.Materializer
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.util.{ AnnotateLast, EitherFlow, MaybeLast, Retry }
-import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, Sink, Source }
+import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, Sink }
 import pekko.util.ByteString
 
 import scala.concurrent.Future
@@ -61,14 +61,9 @@ private[connectors] object ResumableUpload {
 
         val in = Flow[ByteString]
           .via(chunker(uploadChunkSize))
-          .statefulMapConcat { () =>
-            var cumulativeLength = 0L
-            bytes => {
-              val chunk = Chunk(bytes, cumulativeLength)
-              cumulativeLength += bytes.length
-              chunk :: Nil
-            }
-          }
+          .statefulMap(() => 0L)((cumulativeLength, bytes) =>
+              (cumulativeLength + bytes.length, Chunk(bytes, cumulativeLength)),
+            _ => None)
           .via(AnnotateLast[Chunk])
           .map(chunk => Future.successful(Right(chunk)))
 
@@ -182,26 +177,24 @@ private[connectors] object ResumableUpload {
     }
   }
 
-  private def chunker(chunkSize: Int) = Flow[ByteString].map(Some(_)).concat(Source.single(None)).statefulMapConcat {
-    () =>
-      val chunkBuilder = ByteString.newBuilder
-      bytes =>
-        bytes.fold(Some(chunkBuilder.result()).filter(_.nonEmpty).toList) { bytes =>
+  private def chunker(chunkSize: Int): Flow[ByteString, ByteString, NotUsed] =
+    Flow[ByteString]
+      .statefulMap(() => ByteString.newBuilder)((chunkBuilder, bytes) => {
           chunkBuilder ++= bytes
           if (chunkBuilder.length < chunkSize) {
-            Nil
+            (chunkBuilder, ByteString.empty)
           } else if (chunkBuilder.length == chunkSize) {
-            val chunk = chunkBuilder.result()
             chunkBuilder.clear()
-            chunk :: Nil
-          } else { // chunkBuilder.length > chunkSize
+            (chunkBuilder, chunkBuilder.result())
+          } else {
+            // chunkBuilder.length > chunkSize
             val result = chunkBuilder.result()
             chunkBuilder.clear()
             val (chunk, init) = result.splitAt(chunkSize)
             chunkBuilder ++= init
-            chunk :: Nil
+            (chunkBuilder, chunk)
           }
-        }
-  }
+        }, chunkBuilder => Some(chunkBuilder.result()))
+      .filter(_.nonEmpty)
 
 }
