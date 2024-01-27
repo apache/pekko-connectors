@@ -223,7 +223,7 @@ object Dependencies {
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
-      "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
+      "org.apache.arrow" % "arrow-vector" % "4.0.1" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
