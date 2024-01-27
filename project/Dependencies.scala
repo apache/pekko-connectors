@@ -389,7 +389,7 @@ object Dependencies {
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
   val SpringWeb = {
-    val SpringVersion = "5.1.17.RELEASE"
+    val SpringVersion = "5.1.20.RELEASE"
     val SpringBootVersion = "2.1.16.RELEASE"
     Seq(
       libraryDependencies ++= Seq(
