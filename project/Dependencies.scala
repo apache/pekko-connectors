@@ -91,7 +91,7 @@ object Dependencies {
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
   // This should align with the Jackson minor version used in Pekko 1.0.x
   // https://github.com/apache/incubator-pekko/blob/main/project/Dependencies.scala
-  val JacksonDatabindVersion = "2.14.3"
+  val JacksonDatabindVersion = "2.16.1"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonDatabindVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion)
