@@ -71,7 +71,7 @@ object PubSubConfig {
           projectId = projectId,
           credentials =
             ServiceAccountCredentials(projectId, clientEmail, privateKey,
-              Seq("https://www.googleapis.com/auth/pubsub")))))
+              Set("https://www.googleapis.com/auth/pubsub")))))
 
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
@@ -93,7 +93,7 @@ object PubSubConfig {
           projectId = projectId,
           credentials =
             ServiceAccountCredentials(projectId, clientEmail, privateKey,
-              Seq("https://www.googleapis.com/auth/pubsub")))))
+              Set("https://www.googleapis.com/auth/pubsub")))))
 
   /**
    * Java API
