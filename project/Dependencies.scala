@@ -407,7 +407,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
-      "com.h2database" % "h2" % "2.1.210" % Test))
+      "com.h2database" % "h2" % "2.1.214" % Test))
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
       ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
