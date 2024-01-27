@@ -320,7 +320,7 @@ object Dependencies {
 
   val JsonStreaming = Seq(
     libraryDependencies ++= Seq(
-      "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0") ++ JacksonDatabindDependencies)
+      "com.github.jsurfer" % "jsurfer-jackson" % "1.6.5") ++ JacksonDatabindDependencies)
 
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
