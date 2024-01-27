@@ -25,7 +25,7 @@ import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, 
 import pekko.stream.Materializer
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.util.{ AnnotateLast, EitherFlow, MaybeLast, Retry }
-import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, Sink, Source }
+import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, Sink }
 import pekko.util.ByteString
 
 import scala.concurrent.Future
@@ -179,27 +179,22 @@ private[connectors] object ResumableUpload {
 
   private def chunker(chunkSize: Int): Flow[ByteString, ByteString, NotUsed] =
     Flow[ByteString]
-      .map(Some(_))
-      .concat(Source.single(None))
       .statefulMap(() => ByteString.newBuilder)((chunkBuilder, bytes) => {
-          val result = bytes.fold(Some(chunkBuilder.result()).filter(_.nonEmpty).toList) { bytes =>
-            chunkBuilder ++= bytes
-            if (chunkBuilder.length < chunkSize) {
-              Nil
-            } else if (chunkBuilder.length == chunkSize) {
-              val chunk = chunkBuilder.result()
-              chunkBuilder.clear()
-              chunk :: Nil
-            } else {
-              // chunkBuilder.length > chunkSize
-              val result = chunkBuilder.result()
-              chunkBuilder.clear()
-              val (chunk, init) = result.splitAt(chunkSize)
-              chunkBuilder ++= init
-              chunk :: Nil
-            }
+          chunkBuilder ++= bytes
+          if (chunkBuilder.length < chunkSize) {
+            (chunkBuilder, ByteString.empty)
+          } else if (chunkBuilder.length == chunkSize) {
+            val chunk = chunkBuilder.result()
+            chunkBuilder.clear()
+            (chunkBuilder, chunk)
+          } else {
+            // chunkBuilder.length > chunkSize
+            val result = chunkBuilder.result()
+            chunkBuilder.clear()
+            val (chunk, init) = result.splitAt(chunkSize)
+            chunkBuilder ++= init
+            (chunkBuilder, chunk)
           }
-          (chunkBuilder, result)
-        }, _ => None)
-      .mapConcat(identity)
+        }, chunkBuilder => Some(chunkBuilder.result()))
+      .filter(_.nonEmpty)
 }
