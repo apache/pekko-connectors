@@ -49,16 +49,12 @@ private[google] object AnnotateLast {
     Flow[T]
       .map(Some(_))
       .concat(Source.single(None))
-      .statefulMapConcat { () =>
-        var previousElement: Option[T] = None
-        e => {
+      .statefulMap(() => Option.empty[T])((previousElement, e) => {
           if (e.isDefined) {
-            val emit = previousElement
-            previousElement = e
-            emit.map(NotLast(_)).toList
+            (e, previousElement.map(NotLast(_)).toList)
           } else {
-            previousElement.map(Last(_)).toList
+            (previousElement, previousElement.map(Last(_)).toList)
           }
-        }
-      }
+        }, _ => None)
+      .mapConcat(identity)
 }
