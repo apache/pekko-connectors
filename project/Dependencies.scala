@@ -111,7 +111,7 @@ object Dependencies {
 
   val AzureStorageQueue = Seq(
     libraryDependencies ++= Seq(
-      "com.microsoft.azure" % "azure-storage" % "8.0.0"))
+      "com.microsoft.azure" % "azure-storage" % "8.6.6"))
 
   val CassandraVersionInDocs = "4.0"
   val CassandraDriverVersion = "4.17.0"
