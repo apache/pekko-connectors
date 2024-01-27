@@ -441,6 +441,8 @@ lazy val `doc-examples` = project
     publish / skip := true,
     Dependencies.`Doc-examples`)
 
+val mimaCompareVersion = "1.0.2"
+
 def pekkoConnectorProject(projectId: String,
     moduleName: String,
     additionalSettings: sbt.Def.SettingsDefinition*): Project = {
@@ -453,8 +455,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := Set(
-        organization.value %% name.value % previousStableVersion.value
-          .getOrElse("0.0.0")),
+        organization.value %% name.value % mimaCompareVersion),
       mimaBinaryIssueFilters ++= Seq(
         ProblemFilters.exclude[Problem]("*.impl.*"),
         // generated code
