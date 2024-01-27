@@ -39,4 +39,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
 addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.2")
 // templating
-addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.6.1")
+addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.7.0")
