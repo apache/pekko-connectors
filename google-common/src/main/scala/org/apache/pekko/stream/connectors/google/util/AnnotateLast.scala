@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.google.util
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
-import pekko.stream.scaladsl.{ Flow, Source }
+import pekko.stream.scaladsl.Flow
 
 @InternalApi
 private[google] object MaybeLast {
@@ -47,14 +47,13 @@ private[google] object AnnotateLast {
 
   def apply[T]: Flow[T, MaybeLast[T], NotUsed] =
     Flow[T]
-      .map(Some(_))
-      .concat(Source.single(None))
-      .statefulMap(() => Option.empty[T])((previousElement, e) => {
-          if (e.isDefined) {
-            (e, previousElement.map(NotLast(_)).toList)
-          } else {
-            (previousElement, previousElement.map(Last(_)).toList)
+      .statefulMap(() => Option.empty[T])((maybePreviousElement, elem) => {
+          maybePreviousElement match {
+            case Some(previousElem) => (Some(elem), Some(NotLast(previousElem)))
+            case None               => (Some(elem), None)
           }
-        }, _ => None)
-      .mapConcat(identity)
+        }, _.map(elem => Some(Last(elem))))
+      .collect {
+        case Some(elem) => elem
+      }
 }
