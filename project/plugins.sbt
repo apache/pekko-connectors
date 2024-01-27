@@ -10,7 +10,7 @@
 dependencyOverrides += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
 
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.3")
-addSbtPlugin("com.dwijnand" % "sbt-dynver" % "4.1.1")
+addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.0.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.31")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.1.11")
 addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.3.1")
@@ -39,4 +39,4 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
 addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.2")
 // templating
-addSbtPlugin("io.spray" % "sbt-boilerplate" % "0.6.1")
+addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.7.0")
