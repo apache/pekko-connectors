@@ -333,7 +333,8 @@ object Dependencies {
       "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.8").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
-        ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
+      "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ Mockito)
 
   val KuduVersion = "1.7.1"
   val Kudu = Seq(
