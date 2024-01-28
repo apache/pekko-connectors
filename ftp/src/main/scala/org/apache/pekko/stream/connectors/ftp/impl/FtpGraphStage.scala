@@ -26,7 +26,7 @@ trait FtpGraphStage[FtpClient, S <: RemoteFileSettings, T] extends GraphStage[So
 
   def connectionSettings: S
 
-  def ftpClient: () => FtpClient
+  def ftpClient: S => FtpClient
 
   val shape: SourceShape[T] = SourceShape(Outlet[T](s"$name.out"))
 

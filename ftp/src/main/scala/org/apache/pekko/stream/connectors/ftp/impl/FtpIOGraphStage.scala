@@ -49,7 +49,7 @@ private[ftp] trait FtpIOGraphStage[FtpClient, S <: RemoteFileSettings, Sh <: Sha
 
   def connectionSettings: S
 
-  implicit def ftpClient: () => FtpClient
+  implicit def ftpClient: S => FtpClient
 
   val ftpLike: FtpLike[FtpClient, S]
 
@@ -282,7 +282,7 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
 private[ftp] trait FtpMoveSink[FtpClient, S <: RemoteFileSettings]
     extends GraphStageWithMaterializedValue[SinkShape[FtpFile], Future[IOResult]] {
   val connectionSettings: S
-  val ftpClient: () => FtpClient
+  val ftpClient: S => FtpClient
   val ftpLike: FtpLike[FtpClient, S]
   val destinationPath: FtpFile => String
   val in: Inlet[FtpFile] = Inlet("FtpMvSink")
@@ -340,7 +340,7 @@ private[ftp] trait FtpMoveSink[FtpClient, S <: RemoteFileSettings]
 private[ftp] trait FtpRemoveSink[FtpClient, S <: RemoteFileSettings]
     extends GraphStageWithMaterializedValue[SinkShape[FtpFile], Future[IOResult]] {
   val connectionSettings: S
-  val ftpClient: () => FtpClient
+  val ftpClient: S => FtpClient
   val ftpLike: FtpLike[FtpClient, S]
   val in: Inlet[FtpFile] = Inlet("FtpRmSink")
 
