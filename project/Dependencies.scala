@@ -239,7 +239,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test) ++ Mockito)
+      "com.github.tomakehurst" % "wiremock" % "3.0.1" % Test) ++ Mockito)
 
   val GooglePubSubGrpc = Seq(
     // see Pekko gRPC version in plugins.sbt
