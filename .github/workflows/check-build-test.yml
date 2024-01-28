@@ -150,7 +150,7 @@ jobs:
           PRE_CMD: ${{ matrix.pre_cmd }}
         run: |-
           $PRE_CMD
-          sbt "+${CONNECTOR}/test"
+          sbt -Dpekko.build.pekko.version=main -Dpekko.build.pekko.http.version=main "+${CONNECTOR}/test"
 
       - name: Print logs on failure
         if: failure()
