@@ -331,7 +331,7 @@ object Dependencies {
         organization = "org.apache.pekko"))) ++ Seq(
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.8").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.4").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
