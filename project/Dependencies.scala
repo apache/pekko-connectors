@@ -194,7 +194,8 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.22.1" % Test) ++ JacksonDatabindDependencies ++
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.22.1" % Test,
+        "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
        else Seq(
