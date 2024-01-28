@@ -173,7 +173,7 @@ object FtpSettings {
  * @param credentials credentials (username and password)
  * @param binary specifies the file transfer mode, BINARY or ASCII. Default is ASCII (false)
  * @param passiveMode specifies whether to use passive mode connections. Default is active mode (false)
- * @param tectUTF8 enables or disables automatic server encoding detection (only UTF-8 supported).
+ * @param autodetectUTF8 enables or disables automatic server encoding detection (only UTF-8 supported).
  *                       Disabled by default (false).
  * @param configureConnection A function which will be called after connecting to the server. Use this for
  *                            any custom configuration required by the server you are connecting to.
