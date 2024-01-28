@@ -60,7 +60,7 @@ object Dependencies {
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.22.0"
-  val JwtScalaVersion = "9.4.6"
+  val JwtScalaVersion = "10.0.0"
 
   val log4jOverSlf4jVersion = "1.7.36"
   val jclOverSlf4jVersion = "1.7.36"
@@ -193,7 +193,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.2" % Test) ++ JacksonDatabindDependencies ++
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.22.1" % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
        else Seq(
@@ -390,7 +390,7 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "5.3.31"
-    val SpringBootVersion = "2.1.18.RELEASE"
+    val SpringBootVersion = "2.7.18"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
@@ -407,7 +407,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
-      "com.h2database" % "h2" % "2.1.214" % Test))
+      "com.h2database" % "h2" % "2.2.224" % Test))
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
       ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(

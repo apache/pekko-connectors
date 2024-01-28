@@ -87,10 +87,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
       retryPolicy: InsertAllRetryPolicy,
       templateSuffix: Option[String] = None)(
       implicit m: ToEntityMarshaller[TableDataInsertAllRequest[In]]): Sink[Seq[In], NotUsed] = {
-    val requests = Flow[Seq[In]].statefulMapConcat { () =>
-      val randomGen = new SplittableRandom
-
-      xs => {
+    val requests = Flow[Seq[In]].statefulMap(() => new SplittableRandom)((randomGen, xs) => {
         val rows = xs.map { x =>
           val insertId =
             if (retryPolicy.deduplicate)
@@ -100,9 +97,8 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
           Row(insertId, x)
         }
 
-        TableDataInsertAllRequest(None, None, templateSuffix, rows) :: Nil
-      }
-    }
+        (randomGen, TableDataInsertAllRequest(None, None, templateSuffix, rows))
+      }, _ => None)
 
     val errorSink = Sink.foreach[TableDataInsertAllResponse] { response =>
       response.insertErrors
