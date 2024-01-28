@@ -136,7 +136,7 @@ final class FtpSettings private (
     s"credentials=$credentials," +
     s"binary=$binary," +
     s"passiveMode=$passiveMode," +
-    s"autodetectUTF8=$autodetectUTF8" +
+    s"autodetectUTF8=$autodetectUTF8," +
     s"configureConnection=$configureConnection," +
     s"proxy=$proxy)"
 }
@@ -173,7 +173,7 @@ object FtpSettings {
  * @param credentials credentials (username and password)
  * @param binary specifies the file transfer mode, BINARY or ASCII. Default is ASCII (false)
  * @param passiveMode specifies whether to use passive mode connections. Default is active mode (false)
- * @param autodetectUTF8 enables or disables automatic server encoding detection (only UTF-8 supported).
+ * @param tectUTF8 enables or disables automatic server encoding detection (only UTF-8 supported).
  *                       Disabled by default (false).
  * @param configureConnection A function which will be called after connecting to the server. Use this for
  *                            any custom configuration required by the server you are connecting to.
@@ -253,10 +253,10 @@ final class FtpsSettings private (
     s"binary=$binary," +
     s"passiveMode=$passiveMode," +
     s"useFtpsImplicit=$useFtpsImplicit," +
-    s"autodetectUTF8=$autodetectUTF8" +
+    s"autodetectUTF8=$autodetectUTF8," +
     s"configureConnection=$configureConnection," +
-    s"proxy=$proxy" +
-    s"keyManager=$keyManager" +
+    s"proxy=$proxy," +
+    s"keyManager=$keyManager," +
     s"trustManager=$trustManager)"
 }
 
