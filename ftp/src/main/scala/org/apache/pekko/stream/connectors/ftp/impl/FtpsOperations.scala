@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.ftp.impl
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.{ FtpAuthenticationException, FtpsSettings }
-import org.apache.commons.net.ftp.{ FTP, FTPClient }
+import org.apache.commons.net.ftp.{ FTP, FTPClient, FTPSClient }
 
 import scala.util.Try
 
@@ -35,6 +35,9 @@ private[ftp] trait FtpsOperations extends CommonFtpOperations {
         case legacyClient: LegacyFtpsClient =>
           connectionSettings.keyManager.foreach(legacyClient.setKeyManager)
           connectionSettings.trustManager.foreach(legacyClient.setTrustManager)
+        case ftpsClient: FTPSClient =>
+          connectionSettings.keyManager.foreach(ftpsClient.setKeyManager)
+          connectionSettings.trustManager.foreach(ftpsClient.setTrustManager)
         case _ =>
       }
 

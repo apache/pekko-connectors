@@ -165,7 +165,13 @@ private[ftp] trait FtpsSource extends FtpSourceFactory[FTPClient, FtpsSettings] 
   protected final val FtpsDirectorySource = "FtpsDirectorySource"
   protected final val FtpsIOSinkName = "FtpsIOSink"
 
-  protected val ftpClient: FtpsSettings => FTPSClient = settings => new FTPSClient(settings.useFtpsImplicit)
+  protected val ftpClient: FtpsSettings => FTPClient = settings => {
+    if (settings.useUpdatedFtpsClient) {
+      new FTPSClient(settings.useFtpsImplicit)
+    } else {
+      new LegacyFtpsClient(settings.useFtpsImplicit)
+    }
+  }
   protected val ftpBrowserSourceName: String = FtpsBrowserSourceName
   protected val ftpIOSourceName: String = FtpsIOSourceName
   protected val ftpIOSinkName: String = FtpsIOSinkName

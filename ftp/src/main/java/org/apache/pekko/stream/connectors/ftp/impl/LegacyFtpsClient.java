@@ -140,12 +140,22 @@ final class LegacyFtpsClient extends FTPClient {
     private boolean tlsEndpointChecking;
 
     /**
-     * Constructor for LegacyFtpsClient, calls.
+     * Constructor for LegacyFtpsClient calls.
      *
      * Sets protocol to {@link #DEFAULT_PROTOCOL} - i.e. TLS - and security mode to explicit (isImplicit = false)
      */
     LegacyFtpsClient() {
-        this(DEFAULT_PROTOCOL, false);
+        this(false);
+    }
+
+    /**
+     * Constructor for LegacyFtpsClient calls.
+     *
+     * Sets protocol to {@link #DEFAULT_PROTOCOL} - i.e. TLS
+     * @param isImplicit True - Implicit Mode / False - Explicit Mode
+     */
+    LegacyFtpsClient(final boolean isImplicit) {
+        this(DEFAULT_PROTOCOL, isImplicit);
     }
 
     private LegacyFtpsClient(final String protocol, final boolean isImplicit) {

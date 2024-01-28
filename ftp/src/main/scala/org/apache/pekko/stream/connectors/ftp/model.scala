@@ -187,6 +187,7 @@ final class FtpsSettings private (
     val passiveMode: Boolean,
     val useFtpsImplicit: Boolean,
     val autodetectUTF8: Boolean,
+    val useUpdatedFtpsClient: Boolean,
     val configureConnection: FTPClient => Unit,
     val proxy: Option[Proxy],
     val keyManager: Option[KeyManager],
@@ -202,6 +203,8 @@ final class FtpsSettings private (
     if (useFtpsImplicit == value) this else copy(useFtpsImplicit = value)
   def withAutodetectUTF8(value: Boolean): FtpsSettings =
     if (autodetectUTF8 == value) this else copy(autodetectUTF8 = value)
+  def withUpdatedFtpsClient(value: Boolean): FtpsSettings =
+    if (useUpdatedFtpsClient == value) this else copy(useUpdatedFtpsClient = value)
   def withProxy(value: Proxy): FtpsSettings = copy(proxy = Some(value))
   def withKeyManager(value: KeyManager): FtpsSettings = copy(keyManager = Some(value))
   def withTrustManager(value: TrustManager): FtpsSettings = copy(trustManager = Some(value))
@@ -229,6 +232,7 @@ final class FtpsSettings private (
       passiveMode: Boolean = passiveMode,
       useFtpsImplicit: Boolean = useFtpsImplicit,
       autodetectUTF8: Boolean = autodetectUTF8,
+      useUpdatedFtpsClient: Boolean = useUpdatedFtpsClient,
       configureConnection: FTPClient => Unit = configureConnection,
       proxy: Option[Proxy] = proxy,
       keyManager: Option[KeyManager] = keyManager,
@@ -240,6 +244,7 @@ final class FtpsSettings private (
     passiveMode = passiveMode,
     useFtpsImplicit = useFtpsImplicit,
     autodetectUTF8 = autodetectUTF8,
+    useUpdatedFtpsClient = useUpdatedFtpsClient,
     configureConnection = configureConnection,
     proxy = proxy,
     keyManager = keyManager,
@@ -254,6 +259,7 @@ final class FtpsSettings private (
     s"passiveMode=$passiveMode," +
     s"useFtpsImplicit=$useFtpsImplicit," +
     s"autodetectUTF8=$autodetectUTF8," +
+    s"useUpdatedFtpsClient=$useUpdatedFtpsClient," +
     s"configureConnection=$configureConnection," +
     s"proxy=$proxy," +
     s"keyManager=$keyManager," +
@@ -277,6 +283,7 @@ object FtpsSettings {
     passiveMode = false,
     useFtpsImplicit = false,
     autodetectUTF8 = false,
+    useUpdatedFtpsClient = false,
     configureConnection = _ => (),
     proxy = None,
     keyManager = None,
