@@ -475,7 +475,7 @@ Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
   val log = sLog.value
   log.info(
-    s"Building Pekko Connectors $v against Pekko ${Dependencies.PekkoVersion} on Scala ${(googleCommon / scalaVersion).value}")
+    s"Building Pekko Connectors $v against Pekko ${Dependencies.PekkoVersion} and Pekko HTTP ${Dependencies.PekkoHttpVersion} on Scala ${(googleCommon / scalaVersion).value}")
   if (dynverGitDescribeOutput.value.hasNoTags)
     log.error(
       s"Failed to derive version from git tags. Maybe run `git fetch --unshallow` or `git fetch upstream` on a fresh git clone from a fork? Derived version: $v")
