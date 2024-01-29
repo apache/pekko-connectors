@@ -291,7 +291,7 @@ object Dependencies {
         "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-minicluster" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
-      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
+      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test) ++ Mockito)
 
   val HuaweiPushKit = Seq(
     libraryDependencies ++= Seq(
