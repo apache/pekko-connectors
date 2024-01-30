@@ -171,8 +171,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.13.1",
       "org.apache.avro" % "avro" % AvroVersion,
-      ("org.apache.hadoop" % "hadoop-client" % "3.3.6" % Test).exclude("log4j", "log4j"),
-      ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-client" % "3.4.0" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-common" % "3.4.0" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.specs2" %% "specs2-core" % "4.20.5" % Test,
