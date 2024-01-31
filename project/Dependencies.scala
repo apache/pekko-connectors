@@ -279,7 +279,7 @@ object Dependencies {
         "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
   }
 
-  val HadoopVersion = "3.2.4"
+  val HadoopVersion = "3.3.6"
   val Hdfs = Seq(
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
