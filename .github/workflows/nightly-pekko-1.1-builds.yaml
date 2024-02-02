@@ -37,7 +37,7 @@ jobs:
           java-version: ${{ matrix.JDK }}
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: "compile, including  tests. Run locally with: sbt -Dpekko.build.pekko.version=main +Test/compile"
         run: sbt -Dpekko.build.pekko.version=main -Dpekko.build.pekko.http.version=main +Test/compile
