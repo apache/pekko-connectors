@@ -35,7 +35,7 @@ jobs:
           java-version: 8
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: "Code style, compile tests, MiMa. Run locally with: sbt \"javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues\""
         run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
@@ -60,7 +60,7 @@ jobs:
           java-version: 11
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: "Create all API docs and create site with Paradox"
         run: sbt docs/makeSite
@@ -142,7 +142,7 @@ jobs:
           java-version: 8
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: ${{ matrix.connector }}
         env:
