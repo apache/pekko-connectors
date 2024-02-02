@@ -13,13 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
+import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
-import pekko.stream.connectors.couchbase.scaladsl
+import pekko.stream.connectors.couchbase.{ scaladsl, CouchbaseSessionSettings }
 import pekko.stream.javadsl.Source
-import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 
 /**
  * Java API: Factory methods for Couchbase sources.
@@ -30,16 +28,16 @@ object CouchbaseSource {
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.document.JsonDocument JsonDocument]]s.
    */
   def fromStatement(sessionSettings: CouchbaseSessionSettings,
-      statement: Statement,
-      bucketName: String): Source[JsonObject, NotUsed] =
+      statement: String,
+      bucketName: String): Source[QueryResult, NotUsed] =
     scaladsl.CouchbaseSource.fromStatement(sessionSettings, statement, bucketName).asJava
 
   /**
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.document.JsonDocument JsonDocument]]s.
    */
   def fromN1qlQuery(sessionSettings: CouchbaseSessionSettings,
-      query: N1qlQuery,
-      bucketName: String): Source[JsonObject, NotUsed] =
+      query: String,
+      bucketName: String): Source[QueryResult, NotUsed] =
     scaladsl.CouchbaseSource.fromN1qlQuery(sessionSettings, query, bucketName).asJava
 
 }

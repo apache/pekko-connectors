@@ -13,8 +13,8 @@
 
 package org.apache.pekko.stream.connectors.couchbase
 
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko.annotation.InternalApi
-import com.couchbase.client.java.document.json.JsonObject
 
 /**
  * Describes a Couchbase related failure with an error code.

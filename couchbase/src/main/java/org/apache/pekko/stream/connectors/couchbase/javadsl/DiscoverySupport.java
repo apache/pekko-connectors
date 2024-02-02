@@ -33,7 +33,7 @@ public final class DiscoverySupport {
    * Expects a `service` section in the given Config and reads the given service name's address to
    * be used as Couchbase `nodes`.
    */
-  public static final java.util.function.Function<
+  public static java.util.function.Function<
           CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
       getNodes(Config config, ActorSystem system) {
     return SUPPORT.getNodes(config, system);
@@ -43,7 +43,7 @@ public final class DiscoverySupport {
    * Expects a `service` section in the given Config and reads the given service name's address to
    * be used as Couchbase `nodes`.
    */
-  public static final java.util.function.Function<
+  public static java.util.function.Function<
           CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
       getNodes(Config config, ClassicActorSystemProvider system) {
     return getNodes(config, system.classicSystem());
@@ -53,7 +53,7 @@ public final class DiscoverySupport {
    * Expects a `service` section in the given Config and reads the given service name's address to
    * be used as Couchbase `nodes`.
    */
-  public static final java.util.function.Function<
+  public static java.util.function.Function<
           CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
       getNodes(ActorSystem system) {
     return SUPPORT.getNodes(
@@ -64,7 +64,7 @@ public final class DiscoverySupport {
    * Expects a `service` section in the given Config and reads the given service name's address to
    * be used as Couchbase `nodes`.
    */
-  public static final java.util.function.Function<
+  public static java.util.function.Function<
           CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
       getNodes(ClassicActorSystemProvider system) {
     return getNodes(system.classicSystem());

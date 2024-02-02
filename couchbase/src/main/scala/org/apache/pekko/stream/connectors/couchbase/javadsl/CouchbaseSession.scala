@@ -13,24 +13,21 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import java.time.Duration
-import java.util.Optional
-import java.util.concurrent.{ CompletionStage, Executor }
+import com.couchbase.client.java.AsyncCluster
+import com.couchbase.client.java.kv._
+import com.couchbase.client.java.manager.query.QueryIndex
+import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
+import pekko.{ Done, NotUsed }
 import pekko.annotation.DoNotInherit
 import pekko.dispatch.ExecutionContexts
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
-import pekko.stream.connectors.couchbase.impl.CouchbaseSessionJavaAdapter
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionImpl, CouchbaseSessionScalaAdapter }
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
 import pekko.stream.javadsl.Source
-import pekko.{ Done, NotUsed }
 import pekko.util.FutureConverters._
-import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.document.{ Document, JsonDocument }
-import com.couchbase.client.java.query.util.IndexInfo
-import com.couchbase.client.java.query.{ N1qlQuery, Statement }
-import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, Bucket }
 
+import java.util.concurrent.{ CompletionStage, Executor }
 import scala.concurrent.ExecutionContext
 
 /**
@@ -49,18 +46,7 @@ object CouchbaseSession {
       executor: Executor): CompletionStage[CouchbaseSession] =
     ScalaDslCouchbaseSession
       .apply(settings, bucketName)(executionContext(executor))
-      .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
-        ExecutionContexts.parasitic)
-      .asJava
-
-  /**
-   * Create a given bucket using a pre-existing cluster client, allowing for it to be shared among
-   * multiple `CouchbaseSession`s. The cluster client's life-cycle is the user's responsibility.
-   */
-  def create(client: AsyncCluster, bucketName: String, executor: Executor): CompletionStage[CouchbaseSession] =
-    ScalaDslCouchbaseSession(client, bucketName)(executionContext(executor))
-      .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
-        ExecutionContexts.parasitic)
+      .map(_.asJava)(executionContext(executor))
       .asJava
 
   /**
@@ -78,11 +64,6 @@ object CouchbaseSession {
       case _                    => ExecutionContext.fromExecutor(executor)
     }
 
-  /**
-   * Create a session against the given bucket. You are responsible for managing the lifecycle of the couchbase client
-   * that the bucket was created with.
-   */
-  def create(bucket: Bucket): CouchbaseSession = new CouchbaseSessionJavaAdapter(ScalaDslCouchbaseSession.apply(bucket))
 }
 
 /**
@@ -94,78 +75,26 @@ object CouchbaseSession {
 @DoNotInherit
 abstract class CouchbaseSession {
 
-  def underlying: AsyncBucket
+  def underlying: AsyncCluster
 
   def asScala: ScalaDslCouchbaseSession
-
-  /**
-   * Insert a JSON document using the default write settings.
-   *
-   * For inserting other types of documents see `insertDoc`.
-   *
-   * @return A CompletionStage that completes with the written document when the write completes
-   */
-  def insert(document: JsonDocument): CompletionStage[JsonDocument]
-
-  /**
-   * Insert a document using the default write settings. Separate from `insert` to make the most common
-   * case smoother with the type inference
-   *
-   * @return A CompletionStage that completes with the written document when the write completes
-   */
-  def insertDoc[T <: Document[_]](document: T): CompletionStage[T]
 
   /**
    * Insert a JSON document using the given write settings.
    *
    * For inserting other types of documents see `insertDoc`.
    */
-  def insert(document: JsonDocument, writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument]
-
-  /**
-   * Insert a document using the given write settings.
-   * Separate from `insert` to make the most common case smoother with the type inference
-   */
-  def insertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
+  def insert(id: String, document: Object, insertOptions: InsertOptions): CompletionStage[MutationResult]
 
   /**
    * @return A document if found or none if there is no document for the id
    */
-  def get(id: String): CompletionStage[Optional[JsonDocument]]
+  def get(id: String, getOptions: GetOptions): CompletionStage[GetResult]
 
   /**
    * @return A document if found or none if there is no document for the id
    */
-  def get[T <: Document[_]](id: String, documentClass: Class[T]): CompletionStage[Optional[T]]
-
-  /**
-   * @param timeout fail the returned CompletionStage with a TimeoutException if it takes longer than this
-   * @return A document if found or none if there is no document for the id
-   */
-  def get(id: String, timeout: Duration): CompletionStage[Optional[JsonDocument]]
-
-  /**
-   * @param timeout fail the returned CompletionStage with a TimeoutException if it takes longer than this
-   * @return A document if found or none if there is no document for the id
-   */
-  def get[T <: Document[_]](id: String, timeout: Duration, documentClass: Class[T]): CompletionStage[Optional[T]]
-
-  /**
-   * Upsert using the default write settings
-   *
-   * For inserting other types of documents see `upsertDoc`.
-   *
-   * @return a CompletionStage that completes when the upsert is done
-   */
-  def upsert(document: JsonDocument): CompletionStage[JsonDocument]
-
-  /**
-   * Upsert using the default write settings.
-   * Separate from `upsert` to make the most common case smoother with the type inference
-   *
-   * @return a CompletionStage that completes when the upsert is done
-   */
-  def upsertDoc[T <: Document[_]](document: T): CompletionStage[T]
+  def get[T](id: String, documentClass: Class[T], getOptions: GetOptions): CompletionStage[T]
 
   /**
    * Upsert using the given write settings.
@@ -174,16 +103,7 @@ abstract class CouchbaseSession {
    *
    * @return a CompletionStage that completes when the upsert is done
    */
-  def upsert(document: JsonDocument, writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument]
-
-  /**
-   * Upsert using the given write settings.
-   *
-   * Separate from `upsert` to make the most common case smoother with the type inference
-   *
-   * @return a CompletionStage that completes when the upsert is done
-   */
-  def upsertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
+  def upsert[T](id: String, document: T, upsertOptions: UpsertOptions): CompletionStage[MutationResult]
 
   /**
    * Replace using the default write settings
@@ -192,33 +112,7 @@ abstract class CouchbaseSession {
    *
    * @return a CompletionStage that completes when the replace is done
    */
-  def replace(document: JsonDocument): CompletionStage[JsonDocument]
-
-  /**
-   * Replace using the default write settings.
-   * Separate from `replace` to make the most common case smoother with the type inference
-   *
-   * @return a CompletionStage that completes when the replace is done
-   */
-  def replaceDoc[T <: Document[_]](document: T): CompletionStage[T]
-
-  /**
-   * Replace using the given write settings.
-   *
-   * For replacing other types of documents see `replaceDoc`.
-   *
-   * @return a CompletionStage that completes when the replace done
-   */
-  def replace(document: JsonDocument, writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument]
-
-  /**
-   * Replace using the given write settings.
-   *
-   * Separate from `replace` to make the most common case smoother with the type inference
-   *
-   * @return a CompletionStage that completes when the replace is done
-   */
-  def replaceDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
+  def replace[T](id: String, document: T, replaceOptions: ReplaceOptions): CompletionStage[MutationResult]
 
   /**
    * Remove a document by id using the default write settings.
@@ -226,40 +120,17 @@ abstract class CouchbaseSession {
    * @return CompletionStage that completes when the document has been removed, if there is no such document
    *         the CompletionStage is failed with a `DocumentDoesNotExistException`
    */
-  def remove(id: String): CompletionStage[Done]
+  def remove(id: String, removeOptions: RemoveOptions): CompletionStage[MutationResult]
 
-  /**
-   * Remove a document by id using the default write settings.
-   *
-   * @return CompletionStage that completes when the document has been removed, if there is no such document
-   *         the CompletionStage is failed with a `DocumentDoesNotExistException`
-   */
-  def remove(id: String, writeSettings: CouchbaseWriteSettings): CompletionStage[Done]
-
-  def streamedQuery(query: N1qlQuery): Source[JsonObject, NotUsed]
-  def streamedQuery(query: Statement): Source[JsonObject, NotUsed]
-  def singleResponseQuery(query: Statement): CompletionStage[Optional[JsonObject]]
-  def singleResponseQuery(query: N1qlQuery): CompletionStage[Optional[JsonObject]]
+  def streamedQuery(query: String): Source[QueryResult, NotUsed]
 
   /**
    * Create or increment a counter
    *
    * @param id What counter document id
-   * @param delta Value to increase the counter with if it does exist
-   * @param initial Value to start from if the counter does not exist
    * @return The value of the counter after applying the delta
    */
-  def counter(id: String, delta: Long, initial: Long): CompletionStage[Long]
-
-  /**
-   * Create or increment a counter
-   *
-   * @param id What counter document id
-   * @param delta Value to increase the counter with if it does exist
-   * @param initial Value to start from if the counter does not exist
-   * @return The value of the counter after applying the delta
-   */
-  def counter(id: String, delta: Long, initial: Long, writeSettings: CouchbaseWriteSettings): CompletionStage[Long]
+  def counter(id: String, incrementOptions: IncrementOptions): CompletionStage[CounterResult]
 
   /**
    * Close the session and release all resources it holds. Subsequent calls to other methods will likely fail.
@@ -269,18 +140,18 @@ abstract class CouchbaseSession {
   /**
    * Create a secondary index for the current bucket.
    *
-   * @param indexName the name of the index.
+   * @param indexName     the name of the index.
    * @param ignoreIfExist if a secondary index already exists with that name, an exception will be thrown unless this
    *                      is set to true.
-   * @param fields the JSON fields to index - each can be either `String` or [[com.couchbase.client.java.query.dsl.Expression]]
+   * @param fields        the JSON fields to index - each can be either `String` or [[com.couchbase.client.java.query.dsl.Expression]]
    * @return a [[java.util.concurrent.CompletionStage]] of `true` if the index was/will be effectively created, `false`
-   *      if the index existed and ignoreIfExist` is true. Completion of the `CompletionStage` does not guarantee the index
-   *      is online and ready to be used.
+   *         if the index existed and ignoreIfExist` is true. Completion of the `CompletionStage` does not guarantee the index
+   *         is online and ready to be used.
    */
-  def createIndex(indexName: String, ignoreIfExist: Boolean, fields: AnyRef*): CompletionStage[Boolean]
+  def createIndex(indexName: String, ignoreIfExist: Boolean, fields: String*): CompletionStage[Boolean]
 
   /**
    * List the existing secondary indexes for the bucket
    */
-  def listIndexes(): Source[IndexInfo, NotUsed]
+  def listIndexes(): Source[List[QueryIndex], NotUsed]
 }

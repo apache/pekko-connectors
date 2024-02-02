@@ -13,18 +13,27 @@
 
 package org.apache.pekko.stream.connectors.couchbase
 
-import java.util.concurrent.{ CompletionStage, TimeUnit }
-
-import org.apache.pekko
-import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
-import pekko.util.FutureConverters._
-import com.couchbase.client.java.document.Document
-import com.couchbase.client.java.env.CouchbaseEnvironment
-import com.couchbase.client.java.{ PersistTo, ReplicateTo }
+import com.couchbase.client.java.env.ClusterEnvironment
+import com.couchbase.client.java.kv.{
+  CommonDurabilityOptions,
+  InsertOptions,
+  MutationResult,
+  PersistTo,
+  RemoveOptions,
+  ReplaceOptions,
+  ReplicateTo,
+  UpsertOptions
+}
+import com.couchbase.client.java.query.QueryResult
 import com.typesafe.config.Config
+import org.apache.pekko
+import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko.util.FutureConverters._
+import org.apache.pekko.util.ccompat.JavaConverters._
+import org.apache.pekko.util.JavaDurationConverters.ScalaDurationOps
 
+import java.util.concurrent.{ CompletionStage, TimeUnit }
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -84,6 +93,18 @@ final class CouchbaseWriteSettings private (val parallelism: Int,
    * Scala API:
    */
   def withTimeout(timeout: FiniteDuration): CouchbaseWriteSettings = copy(timeout = timeout)
+
+  private[this] def toOption[T <: CommonDurabilityOptions[T]](mutationOption: T) =
+    mutationOption.durability(persistTo, replicateTo)
+      .timeout(timeout.asJava)
+
+  private[couchbase] def toInsertOption = toOption(InsertOptions.insertOptions())
+
+  private[couchbase] def toUpsertOption = toOption(UpsertOptions.upsertOptions())
+
+  private[couchbase] def toReplaceOption = toOption(ReplaceOptions.replaceOptions())
+
+  private[couchbase] def toRemoveOption = toOption(RemoveOptions.removeOptions())
 
   private[this] def copy(parallelism: Int = parallelism,
       replicateTo: ReplicateTo = replicateTo,
@@ -183,7 +204,7 @@ final class CouchbaseSessionSettings private (
     val username: String,
     val password: String,
     val nodes: immutable.Seq[String],
-    val environment: Option[CouchbaseEnvironment],
+    val environment: Option[ClusterEnvironment],
     val enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]) {
 
   def withUsername(username: String): CouchbaseSessionSettings =
@@ -218,7 +239,7 @@ final class CouchbaseSessionSettings private (
       : CouchbaseSessionSettings =
     copy(enrichAsync = (s: CouchbaseSessionSettings) => value.apply(s).asScala)
 
-  def withEnvironment(environment: CouchbaseEnvironment): CouchbaseSessionSettings =
+  def withEnvironment(environment: ClusterEnvironment): CouchbaseSessionSettings =
     copy(environment = Some(environment))
 
   /**
@@ -232,7 +253,7 @@ final class CouchbaseSessionSettings private (
       username: String = username,
       password: String = password,
       nodes: immutable.Seq[String] = nodes,
-      environment: Option[CouchbaseEnvironment] = environment,
+      environment: Option[ClusterEnvironment] = environment,
       enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync)
       : CouchbaseSessionSettings =
     new CouchbaseSessionSettings(username, password, nodes, environment, enrichAsync)
@@ -261,17 +282,22 @@ final class CouchbaseSessionSettings private (
 /**
  * Wrapper to for handling Couchbase write failures in-stream instead of failing the stream.
  */
-sealed trait CouchbaseWriteResult[T <: Document[_]] {
+sealed trait CouchbaseMutationResult[T] {
   def isSuccess: Boolean
+
   def isFailure: Boolean
+
+  def id: String
+
   def doc: T
 }
 
 /**
  * Emitted for a successful Couchbase write operation.
  */
-final case class CouchbaseWriteSuccess[T <: Document[_]] private[couchbase] (
-    override val doc: T) extends CouchbaseWriteResult[T] {
+final case class CouchbaseMutationSuccess[T] private[couchbase] (override val id: String, override val doc: T,
+    result: MutationResult)
+    extends CouchbaseMutationResult[T] {
   val isSuccess: Boolean = true
   val isFailure: Boolean = false
 }
@@ -279,8 +305,9 @@ final case class CouchbaseWriteSuccess[T <: Document[_]] private[couchbase] (
 /**
  * Emitted for a failed Couchbase write operation.
  */
-final case class CouchbaseWriteFailure[T <: Document[_]] private[couchbase] (override val doc: T, failure: Throwable)
-    extends CouchbaseWriteResult[T] {
+final case class CouchbaseMutationFailure[T] private[couchbase] (override val id: String, override val doc: T,
+    failure: Throwable)
+    extends CouchbaseMutationResult[T] {
   val isSuccess: Boolean = false
   val isFailure: Boolean = true
 }
@@ -290,14 +317,17 @@ final case class CouchbaseWriteFailure[T <: Document[_]] private[couchbase] (ove
  */
 sealed trait CouchbaseDeleteResult {
   def isSuccess: Boolean
+
   def isFailure: Boolean
+
   def id: String
 }
 
 /**
  * Emitted for a successful Couchbase write operation.
  */
-final case class CouchbaseDeleteSuccess private[couchbase] (override val id: String) extends CouchbaseDeleteResult {
+final case class CouchbaseDeleteSuccess private[couchbase] (
+    override val id: String, result: MutationResult) extends CouchbaseDeleteResult {
   val isSuccess: Boolean = true
   val isFailure: Boolean = false
 }

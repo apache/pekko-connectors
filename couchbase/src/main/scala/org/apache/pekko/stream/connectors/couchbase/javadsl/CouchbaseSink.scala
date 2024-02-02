@@ -13,13 +13,13 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
+import com.couchbase.client.java.json.JsonValue
 import org.apache.pekko
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 
 import java.util.concurrent.CompletionStage
 import pekko.stream.javadsl.{ Keep, Sink }
 import pekko.{ Done, NotUsed }
-import com.couchbase.client.java.document.{ Document, JsonDocument }
 
 /**
  * Java API: Factory methods for Couchbase sinks.
@@ -29,41 +29,44 @@ object CouchbaseSink {
   /**
    * Create a sink to update or insert a Couchbase [[com.couchbase.client.java.document.JsonDocument JsonDocument]].
    */
-  def upsert(sessionSettings: CouchbaseSessionSettings,
+  def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
-      bucketName: String): Sink[JsonDocument, CompletionStage[Done]] =
+      bucketName: String,
+      getId: JsonValue => String): Sink[JsonValue, CompletionStage[Done]] =
     CouchbaseFlow
-      .upsert(sessionSettings, writeSettings, bucketName)
+      .upsertJson(sessionSettings, writeSettings, bucketName, getId)
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
    * Create a sink to update or insert a Couchbase document of the given class.
    */
-  def upsertDoc[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def upsert[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
-      bucketName: String): Sink[T, CompletionStage[Done]] =
+      bucketName: String,
+      getId: T => String): Sink[T, CompletionStage[Done]] =
     CouchbaseFlow
-      .upsertDoc[T](sessionSettings, writeSettings, bucketName)
+      .upsert[T](sessionSettings, writeSettings, bucketName, getId)
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
    * Create a sink to replace a Couchbase [[com.couchbase.client.java.document.JsonDocument JsonDocument]].
    */
-  def replace(sessionSettings: CouchbaseSessionSettings,
+  def replaceJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
-      bucketName: String): Sink[JsonDocument, CompletionStage[Done]] =
+      bucketName: String,
+      getId: JsonValue => String): Sink[JsonValue, CompletionStage[Done]] =
     CouchbaseFlow
-      .replace(sessionSettings, writeSettings, bucketName)
+      .replaceJson(sessionSettings, writeSettings, bucketName, getId)
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**
    * Create a sink to replace a Couchbase document of the given class.
    */
-  def replaceDoc[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def replace[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
-      bucketName: String): Sink[T, CompletionStage[Done]] =
+      bucketName: String, getId: T => String): Sink[T, CompletionStage[Done]] =
     CouchbaseFlow
-      .replaceDoc[T](sessionSettings, writeSettings, bucketName)
+      .replace[T](sessionSettings, writeSettings, bucketName, getId)
       .toMat(Sink.ignore(), Keep.right[NotUsed, CompletionStage[Done]])
 
   /**

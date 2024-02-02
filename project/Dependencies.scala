@@ -58,7 +58,7 @@ object Dependencies {
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
   val scalaTestMockitoVersion = "3.2.17.0" // https://github.com/scalatest/scalatest/issues/2311
 
-  val CouchbaseVersion = "2.7.23"
+  val CouchbaseVersion = "3.5.2"
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.23.0"
@@ -128,7 +128,6 @@ object Dependencies {
   val Couchbase = Seq(
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion,
-      "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
       "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion % Test,

@@ -13,12 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
+import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.scaladsl.Source
-import com.couchbase.client.java.document.json.JsonObject
-import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 
 /**
  * Scala API: Factory methods for Couchbase sources.
@@ -26,11 +25,11 @@ import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 object CouchbaseSource {
 
   /**
-   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.document.JsonDocument JsonDocument]]s.
+   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
    */
   def fromStatement(sessionSettings: CouchbaseSessionSettings,
-      statement: Statement,
-      bucketName: String): Source[JsonObject, NotUsed] =
+      statement: String,
+      bucketName: String): Source[QueryResult, NotUsed] =
     Source
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
@@ -41,11 +40,11 @@ object CouchbaseSource {
       .mapMaterializedValue(_ => NotUsed)
 
   /**
-   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.document.JsonDocument JsonDocument]]s.
+   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
    */
   def fromN1qlQuery(sessionSettings: CouchbaseSessionSettings,
-      query: N1qlQuery,
-      bucketName: String): Source[JsonObject, NotUsed] =
+      query: String,
+      bucketName: String): Source[QueryResult, NotUsed] =
     Source
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
