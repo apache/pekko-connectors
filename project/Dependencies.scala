@@ -245,7 +245,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.112.5" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.126.2" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
