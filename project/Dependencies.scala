@@ -63,8 +63,8 @@ object Dependencies {
   val GoogleAuthVersion = "1.22.0"
   val JwtScalaVersion = "10.0.0"
 
-  val log4jOverSlf4jVersion = "1.7.36"
-  val jclOverSlf4jVersion = "1.7.36"
+  val log4jOverSlf4jVersion = "2.0.11"
+  val jclOverSlf4jVersion = "2.0.11"
 
   val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
