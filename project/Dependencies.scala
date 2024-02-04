@@ -225,14 +225,14 @@ object Dependencies {
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.23.2" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
-      "org.apache.arrow" % "arrow-vector" % "4.0.1" % "provided",
+      "org.apache.arrow" % "arrow-vector" % "15.0.0" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-parsing" % PekkoHttpVersion,
-      "org.apache.arrow" % "arrow-memory-netty" % "4.0.1" % Test,
+      "org.apache.arrow" % "arrow-memory-netty" % "15.0.0" % Test,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion) ++ Mockito)
 
   val GooglePubSub = Seq(
