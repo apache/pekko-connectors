@@ -180,7 +180,7 @@ object Dependencies {
 
   val Ftp = Seq(
     libraryDependencies ++= Seq(
-      "commons-net" % "commons-net" % "3.8.0",
+      "commons-net" % "commons-net" % "3.10.0",
       "com.hierynomus" % "sshj" % "0.38.0",
       "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ Mockito)
 
