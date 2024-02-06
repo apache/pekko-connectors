@@ -429,16 +429,15 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion) ++ Mockito)
 
-  val SolrjVersion = "7.7.3"
-  val SolrVersionForDocs = "7_7"
+  val SolrjVersion = "8.11.2"
+  val SolrVersionForDocs = "8_11"
 
   val Solr = Seq(
     libraryDependencies ++= Seq(
       "org.apache.solr" % "solr-solrj" % SolrjVersion,
       ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
         "log4j-slf4j-impl"),
-      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test),
-    resolvers += "restlet".at("https://maven.restlet.talend.com"))
+      "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(

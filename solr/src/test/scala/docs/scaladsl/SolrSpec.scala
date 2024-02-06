@@ -729,7 +729,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
     val confDir = new File("solr/src/test/resources/conf")
 
-    val zkDir = testWorkingDir.toPath.resolve("zookeeper/server/data").toString
+    val zkDir = testWorkingDir.toPath.resolve("zookeeper/server/data")
     zkTestServer = new ZkTestServer(zkDir, zookeeperPort)
     zkTestServer.run()
 
