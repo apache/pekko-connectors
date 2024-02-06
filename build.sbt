@@ -322,7 +322,9 @@ lazy val eventbridge =
 
 lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
 
-lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr)
+// Solrj has some deprecated methods
+lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr,
+  fatalWarnings := false)
 
 lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
 
