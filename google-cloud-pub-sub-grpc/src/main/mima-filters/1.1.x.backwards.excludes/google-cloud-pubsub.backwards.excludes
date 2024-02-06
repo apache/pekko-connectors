@@ -54,3 +54,6 @@ ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balanc
 ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$3")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.unapply")
 ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse#InitialLoadBalanceResponseLens.loadBalancerDelegate")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse._1")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse._2")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse._3")
