@@ -322,7 +322,9 @@ lazy val eventbridge =
 
 lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
 
-lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr)
+// Solrj has some deprecated methods
+lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr,
+  fatalWarnings := false)
 
 lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
 
@@ -385,8 +387,8 @@ lazy val docs = project
       "extref.cassandra-driver.base_url" -> s"https://docs.datastax.com/en/developer/java-driver/${Dependencies.CassandraDriverVersionInDocs}/%s",
       "javadoc.com.datastax.oss.base_url" -> s"https://docs.datastax.com/en/drivers/java/${Dependencies.CassandraDriverVersionInDocs}/",
       // Solr
-      "extref.solr.base_url" -> s"https://lucene.apache.org/solr/guide/${Dependencies.SolrVersionForDocs}/%s",
-      "javadoc.org.apache.solr.base_url" -> s"https://lucene.apache.org/solr/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
+      "extref.solr.base_url" -> s"https://solr.apache.org/guide/${Dependencies.SolrVersionForDocs}/%s",
+      "javadoc.org.apache.solr.base_url" -> s"https://solr.apache.org/docs/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",
       "javadoc.javax.jms.base_url" -> "https://docs.oracle.com/javaee/7/api/",
