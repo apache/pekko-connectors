@@ -361,7 +361,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val deleteDocuments = SolrSource
         .fromTupleStream(stream2)
         .map { (tuple: Tuple) =>
-          val id = tuple.fields.get("title").toString
+          val id = tuple.getFields.get("title").toString
           WriteMessage.createDeleteMessage[SolrInputDocument](id)
         }
         .groupedWithin(5, 10.millis)
@@ -415,8 +415,8 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val updateCollection = SolrSource
         .fromTupleStream(stream2)
         .map { (tuple: Tuple) =>
-          val id = tuple.fields.get("title").toString
-          val comment = tuple.fields.get("comment").toString
+          val id = tuple.getFields.get("title").toString
+          val comment = tuple.getFields.get("comment").toString
           WriteMessage.createUpdateMessage[SolrInputDocument](
             idField = "title",
             idValue = id,
@@ -483,7 +483,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val deleteElements = SolrSource
         .fromTupleStream(stream2)
         .map { (tuple: Tuple) =>
-          val title = tuple.fields.get("title").toString
+          val title = tuple.getFields.get("title").toString
           WriteMessage.createDeleteMessage[Book](title)
         }
         .groupedWithin(5, 10.millis)
@@ -538,8 +538,8 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
           WriteMessage
             .createUpdateMessage[Book](
               idField = "title",
-              tuple.fields.get("title").toString,
-              updates = Map("comment" -> Map("set" -> s"${tuple.fields.get("comment")} It is a good book!!!")))
+              tuple.getFields.get("title").toString,
+              updates = Map("comment" -> Map("set" -> s"${tuple.getFields.get("comment")} It is a good book!!!")))
             .withRoutingFieldValue("router-value")
         }
         .groupedWithin(5, 10.millis)
@@ -602,7 +602,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       val deleteByQuery = SolrSource
         .fromTupleStream(stream2)
         .map { (tuple: Tuple) =>
-          val title = tuple.fields.get("title").toString
+          val title = tuple.getFields.get("title").toString
           WriteMessage.createDeleteByQueryMessage[SolrInputDocument](
             s"""title:"$title" """)
         }
