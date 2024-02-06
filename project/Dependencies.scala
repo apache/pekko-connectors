@@ -337,7 +337,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
       "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ Mockito)
 
-  val KuduVersion = "1.7.1"
+  val KuduVersion = "1.14.0"
   val Kudu = Seq(
     libraryDependencies ++= Seq(
       "org.apache.kudu" % "kudu-client-tools" % KuduVersion,
