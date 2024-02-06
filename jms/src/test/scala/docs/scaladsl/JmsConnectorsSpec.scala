@@ -13,7 +13,7 @@
 
 package docs.scaladsl
 
-import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ CountDownLatch, LinkedBlockingQueue, ThreadLocalRandom, TimeUnit }
@@ -117,7 +117,7 @@ class JmsConnectorsSpec extends JmsSpec {
       // #bytearray-sink
       val jmsSink: Sink[Array[Byte], Future[Done]] = JmsProducer.bytesSink(
         JmsProducerSettings(system, connectionFactory).withQueue("test"))
-      val in: Array[Byte] = "ThisIsATest".getBytes(Charset.forName("UTF-8"))
+      val in: Array[Byte] = "ThisIsATest".getBytes(StandardCharsets.UTF_8)
       val streamCompletion: Future[Done] =
         Source
           .single(in)
@@ -151,7 +151,7 @@ class JmsConnectorsSpec extends JmsSpec {
           "short value" -> 7.toShort,
           "boolean value" -> true,
           "long value" -> 7.toLong,
-          "bytearray" -> "AStringAsByteArray".getBytes(Charset.forName("UTF-8")),
+          "bytearray" -> "AStringAsByteArray".getBytes(StandardCharsets.UTF_8),
           "byte" -> 1.toByte))
 
       val streamCompletion: Future[Done] =
@@ -181,7 +181,7 @@ class JmsConnectorsSpec extends JmsSpec {
           out("byte") shouldEqual in("byte")
 
           val outBytes = out("bytearray").asInstanceOf[Array[Byte]]
-          new String(outBytes, Charset.forName("UTF-8")) shouldBe "AStringAsByteArray"
+          new String(outBytes, StandardCharsets.UTF_8) shouldBe "AStringAsByteArray"
       }
     }
 

@@ -25,18 +25,19 @@ import scala.concurrent.Future
 @InternalApi
 private[auth] object ComputeEngineCredentials {
 
-  def apply()(implicit system: ClassicActorSystemProvider): Future[Credentials] =
+  def apply(scopes: Set[String])(implicit system: ClassicActorSystemProvider): Future[Credentials] = {
     GoogleComputeMetadata
       .getProjectId()
-      .map(new ComputeEngineCredentials(_))(system.classicSystem.dispatcher)
+      .map(projectId => new ComputeEngineCredentials(projectId, scopes))(system.classicSystem.dispatcher)
+  }
 
 }
 
 @InternalApi
-private final class ComputeEngineCredentials(projectId: String)(implicit mat: Materializer)
+private final class ComputeEngineCredentials(projectId: String, scopes: Set[String])(implicit mat: Materializer)
     extends OAuth2Credentials(projectId) {
   override protected def getAccessToken()(implicit mat: Materializer,
       settings: RequestSettings,
       clock: Clock): Future[AccessToken] =
-    GoogleComputeMetadata.getAccessToken()
+    GoogleComputeMetadata.getAccessToken(scopes)
 }

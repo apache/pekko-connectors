@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.ftp;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,7 +28,7 @@ public class BaseSftpSupport extends BaseSupportImpl {
   final String ROOT_PATH = "upload/";
 
   public static final byte[] CLIENT_PRIVATE_KEY_PASSPHRASE =
-      "secret".getBytes(Charset.forName("UTF-8"));
+      "secret".getBytes(StandardCharsets.UTF_8);
 
   private File clientPrivateKeyFile;
   private File knownHostsFile;

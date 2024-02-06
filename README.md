@@ -13,9 +13,25 @@ Pekko Connectors is a fork of [Alpakka](https://github.com/akka/alpakka) 4.0.0, 
 
 ## Documentation
 
-Pekko Connectors are documented at https://pekko.apache.org/docs/pekko-connectors/current/.
+Apache Pekko Connectors are documented at https://pekko.apache.org/docs/pekko-connectors/current/.
 
 To keep up with the latest releases check out [Pekko Connectors releases](https://github.com/apache/incubator-pekko-connectors/releases) and [Pekko Connectors Kafka releases](https://github.com/apache/incubator-pekko-connectors-kafka/releases).
+
+## Building From Source
+
+The build commands in the [incubator-pekko](https://github.com/apache/incubator-pekko?tab=readme-ov-file#building-from-source) repo are also useful here. Java 8 should work well for building from source with this repo. Building the Paradox docs is significatntly harder if you use Java 17 or above. You will need to specify a large number of `--add-opens` settings.
+
+This repo contains shell scripts. These scripts are designed to help with the testing of Apache Pekko Connectors. Please avoid running the scripts without checking if you need to and try to understand what the script does first.
+
+There are some binary files in this repo that are used in testing. These files do not contain compiled artifacts.
+
+* file/src/test/resources/nested-sample.tar
+* google-cloud-pub-sub-grpc/src/main/resources/GSR2.crt
+* s3/src/test/resources/keystore.jks
+
+## Running Tests
+
+There are details in the [Contributing page](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md). That page also has guidelines about how to prepare Pull Requests.
 
 ## Community
 

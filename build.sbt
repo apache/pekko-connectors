@@ -9,15 +9,10 @@
 
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
 
-ThisBuild / apacheSonatypeProjectProfile := "pekko"
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
-
-commands := commands.value.filterNot { command =>
-  command.nameOption.exists { name =>
-    name.contains("sonatypeRelease") || name.contains("sonatypeBundleRelease")
-  }
-}
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
+ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
@@ -327,7 +322,9 @@ lazy val eventbridge =
 
 lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
 
-lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr)
+// Solrj has some deprecated methods
+lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr,
+  fatalWarnings := false)
 
 lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
 
@@ -390,8 +387,8 @@ lazy val docs = project
       "extref.cassandra-driver.base_url" -> s"https://docs.datastax.com/en/developer/java-driver/${Dependencies.CassandraDriverVersionInDocs}/%s",
       "javadoc.com.datastax.oss.base_url" -> s"https://docs.datastax.com/en/drivers/java/${Dependencies.CassandraDriverVersionInDocs}/",
       // Solr
-      "extref.solr.base_url" -> s"https://lucene.apache.org/solr/guide/${Dependencies.SolrVersionForDocs}/%s",
-      "javadoc.org.apache.solr.base_url" -> s"https://lucene.apache.org/solr/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
+      "extref.solr.base_url" -> s"https://solr.apache.org/guide/${Dependencies.SolrVersionForDocs}/%s",
+      "javadoc.org.apache.solr.base_url" -> s"https://solr.apache.org/docs/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",
       "javadoc.javax.jms.base_url" -> "https://docs.oracle.com/javaee/7/api/",
@@ -437,6 +434,8 @@ lazy val `doc-examples` = project
     publish / skip := true,
     Dependencies.`Doc-examples`)
 
+val mimaCompareVersion = "1.0.2"
+
 def pekkoConnectorProject(projectId: String,
     moduleName: String,
     additionalSettings: sbt.Def.SettingsDefinition*): Project = {
@@ -449,8 +448,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := Set(
-        organization.value %% name.value % previousStableVersion.value
-          .getOrElse("0.0.0")),
+        organization.value %% name.value % mimaCompareVersion),
       mimaBinaryIssueFilters ++= Seq(
         ProblemFilters.exclude[Problem]("*.impl.*"),
         // generated code
@@ -470,6 +468,8 @@ def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefin
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
   val log = sLog.value
+  log.info(
+    s"Building Pekko Connectors $v against Pekko ${Dependencies.PekkoVersion} and Pekko HTTP ${Dependencies.PekkoHttpVersion} on Scala ${(googleCommon / scalaVersion).value}")
   if (dynverGitDescribeOutput.value.hasNoTags)
     log.error(
       s"Failed to derive version from git tags. Maybe run `git fetch --unshallow` or `git fetch upstream` on a fresh git clone from a fork? Derived version: $v")

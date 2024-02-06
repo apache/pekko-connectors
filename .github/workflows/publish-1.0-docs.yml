@@ -10,33 +10,34 @@ jobs:
     name: Publish
     runs-on: ubuntu-20.04
     env:
-      JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-tags: true
           fetch-depth: 0
+          ref: 1.0.x
 
       - name: Setup Java 8
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
 
       - name: Build Documentation
         run: |-
-          sbt "set ThisBuild / version := \"1.0.1\"; docs/paradox; unidoc"
+          sbt "set ThisBuild / version := \"1.0.2\"; docs/paradox; unidoc"
 
       # Create directory structure upfront since rsync does not create intermediate directories otherwise
       - name: Create directory structure
         run: |-
-          mkdir -p target/nightly-docs/docs/pekko-connectors/1.0.1/
+          mkdir -p target/nightly-docs/docs/pekko-connectors/1.0.2/
           mkdir -p target/nightly-docs/docs/pekko-connectors/1.0/
-          cp -r docs/target/paradox/site/main/ target/nightly-docs/docs/pekko-connectors/1.0.1/docs
+          cp -r docs/target/paradox/site/main/ target/nightly-docs/docs/pekko-connectors/1.0.2/docs
           cp -r docs/target/paradox/site/main/ target/nightly-docs/docs/pekko-connectors/1.0/docs
           rm -r docs/target/paradox/site/main/
-          cp -r target/scala-2.13/unidoc target/nightly-docs/docs/pekko-connectors/1.0.1/api
+          cp -r target/scala-2.13/unidoc target/nightly-docs/docs/pekko-connectors/1.0.2/api
           cp -r target/scala-2.13/unidoc target/nightly-docs/docs/pekko-connectors/1.0/api
           rm -r target/scala-2.13/unidoc
 
@@ -45,7 +46,7 @@ jobs:
         with:
           upload: true
           switches: --archive --compress --update --delete --progress --relative
-          local_path: target/nightly-docs/./docs/pekko-connectors/1.0.1 # The intermediate dot is to show `--relative` which paths to operate on
+          local_path: target/nightly-docs/./docs/pekko-connectors/1.0.2 # The intermediate dot is to show `--relative` which paths to operate on
           remote_path: ${{ secrets.NIGHTLIES_RSYNC_PATH }}/pekko/
           remote_host: ${{ secrets.NIGHTLIES_RSYNC_HOST }}
           remote_port: ${{ secrets.NIGHTLIES_RSYNC_PORT }}
