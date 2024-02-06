@@ -219,21 +219,24 @@ object Dependencies {
       "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonDatabindVersion,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion % Test,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
+  
+  val ArrowVersion = "15.0.0"
   val GoogleBigQueryStorage = Seq(
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.23.2" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
-      "org.apache.arrow" % "arrow-vector" % "15.0.0" % "provided",
+      "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-core" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-parsing" % PekkoHttpVersion,
-      "org.apache.arrow" % "arrow-memory-netty" % "15.0.0" % Test,
-      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion) ++ Mockito)
+      "org.apache.arrow" % "arrow-memory-netty" % ArrowVersion % Test,
+      "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ Mockito)
 
   val GooglePubSub = Seq(
     libraryDependencies ++= Seq(
