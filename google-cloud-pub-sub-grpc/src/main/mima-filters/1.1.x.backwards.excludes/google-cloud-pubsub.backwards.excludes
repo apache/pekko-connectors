@@ -1,0 +1,56 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+# Upgrading to google-cloud-pubsub 1.22 caused these issues
+ProblemFilters.exclude[MissingFieldProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse.LOAD_BALANCER_DELEGATE_FIELD_NUMBER")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse.getLoadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse.getLoadBalancerDelegateBytes")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse#Builder.getLoadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse#Builder.getLoadBalancerDelegateBytes")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse#Builder.setLoadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse#Builder.clearLoadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponse#Builder.setLoadBalancerDelegateBytes")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponseOrBuilder.getLoadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.InitialLoadBalanceResponseOrBuilder.getLoadBalancerDelegateBytes")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.<init>$default$3")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.<init>$default$2")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.<init>$default$1")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.unapply")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$3")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$2")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$1")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.of")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.LOAD_BALANCER_DELEGATE_FIELD_NUMBER")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.loadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.withLoadBalancerDelegate")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.copy")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.copy$default$1")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.copy$default$2")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.copy$default$3")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.this")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.<init>$default$1")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.<init>$default$2")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.<init>$default$3")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.LOAD_BALANCER_DELEGATE_FIELD_NUMBER")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.of")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$1")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$2")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.apply$default$3")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse.unapply")
+ProblemFilters.exclude[DirectMissingMethodProblem]("io.grpc.lb.v1.load_balancer.InitialLoadBalanceResponse#InitialLoadBalanceResponseLens.loadBalancerDelegate")
