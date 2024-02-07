@@ -113,7 +113,8 @@ private[kinesis] class KinesisSchedulerSourceStage(
     }
     override def postStop(): Unit =
       schedulerOpt.foreach(scheduler =>
-        Future(if (!scheduler.shutdownComplete()) scheduler.shutdown())(materializer.executionContext))
+        if (!scheduler.shutdownComplete()) scheduler.shutdown()
+      )
 
     protected def executionContext(attributes: Attributes): ExecutionContext = {
       val dispatcherId = (attributes.get[ActorAttributes.Dispatcher](ActorAttributes.IODispatcher) match {
