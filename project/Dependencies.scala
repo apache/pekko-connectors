@@ -115,15 +115,12 @@ object Dependencies {
       "com.microsoft.azure" % "azure-storage" % "8.6.6"))
 
   val CassandraVersionInDocs = "4.0"
-  val CassandraDriverVersion = "4.17.0"
+  val CassandraDriverVersion = "4.18.0"
   val CassandraDriverVersionInDocs = "4.17"
 
   val Cassandra = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.datastax.oss" % "java-driver-core" % CassandraDriverVersion)
-        .exclude("com.github.spotbugs", "spotbugs-annotations")
-        .exclude("org.apache.tinkerpop", "*") // https://github.com/akka/alpakka/issues/2200
-        .exclude("com.esri.geometry", "esri-geometry-api"), // https://github.com/akka/alpakka/issues/2225
+      "org.apache.cassandra" % "java-driver-core" % CassandraDriverVersion,
       "io.netty" % "netty-handler" % NettyVersion,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
 
