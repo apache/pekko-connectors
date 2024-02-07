@@ -21,3 +21,4 @@ ext-lib-src/
 .metals/
 metals.sbt
 .bsp/
+.vscode/

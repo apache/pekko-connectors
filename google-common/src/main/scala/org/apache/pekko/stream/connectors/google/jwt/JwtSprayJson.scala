@@ -39,10 +39,15 @@ private[google] trait JwtSprayJsonParser[H, C] extends JwtJsonCommon[JsObject, H
 }
 
 @InternalApi
-private[google] object JwtSprayJson extends JwtSprayJsonParser[JwtHeader, JwtClaim] {
-  import DefaultJsonProtocol._
-
+private[google] object JwtSprayJson {
   def apply(clock: Clock): JwtSprayJson = new JwtSprayJson(clock)
+}
+
+@InternalApi
+private[google] class JwtSprayJson private (defaultClock: Clock)
+    extends JwtSprayJsonParser[JwtHeader, JwtClaim] {
+  import DefaultJsonProtocol._
+  implicit val clock: Clock = defaultClock
 
   override def parseHeader(header: String): JwtHeader = {
     val jsObj = parse(header)
@@ -74,11 +79,4 @@ private[google] object JwtSprayJson extends JwtSprayJsonParser[JwtHeader, JwtCla
 
   private[this] def safeGetField[A: JsonReader](js: JsObject, name: String) =
     js.fields.get(name).flatMap(safeRead[A])
-}
-
-@InternalApi
-private[google] class JwtSprayJson private (override val clock: Clock)
-    extends JwtSprayJsonParser[JwtHeader, JwtClaim] {
-  override def parseHeader(header: String): JwtHeader = JwtSprayJson.parseHeader(header)
-  override def parseClaim(header: String): JwtClaim = JwtSprayJson.parseClaim(header)
 }

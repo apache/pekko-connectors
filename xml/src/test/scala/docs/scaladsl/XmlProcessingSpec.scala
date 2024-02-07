@@ -75,25 +75,24 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
       val result: Future[immutable.Seq[String]] = Source
         .single(doc)
         .via(XmlParsing.parser)
-        .statefulMapConcat(() => {
-          // state
-          val textBuffer = new StringBuilder()
-          // aggregation function
-          parseEvent =>
+        .statefulMap(() => new StringBuilder())((textBuffer, parseEvent) => {
             parseEvent match {
-              case s: StartElement =>
+              case _: StartElement =>
                 textBuffer.clear()
-                immutable.Seq.empty
+                (textBuffer, None)
               case s: EndElement if s.localName == "elem" =>
                 val text = textBuffer.toString
-                immutable.Seq(text)
+                (textBuffer, Some(text))
               case t: TextEvent =>
                 textBuffer.append(t.text)
-                immutable.Seq.empty
+                (textBuffer, None)
               case _ =>
-                immutable.Seq.empty
+                (textBuffer, None)
             }
-        })
+          }, textBuffer => Some(Some(textBuffer.toString)))
+        .collect {
+          case Some(txt) => txt
+        }
         .runWith(Sink.seq)
 
       result.futureValue should contain.inOrderOnly("elem1", "elem2")

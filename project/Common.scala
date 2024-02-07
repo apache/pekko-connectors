@@ -10,10 +10,8 @@
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import org.scalafmt.sbt.ScalafmtPlugin.autoImport._
 import de.heikoseeberger.sbtheader._
 import com.lightbend.paradox.projectinfo.ParadoxProjectInfoPluginKeys._
-import com.lightbend.sbt.JavaFormatterPlugin.autoImport.javafmtOnCompile
 import com.typesafe.tools.mima.plugin.MimaKeys._
 import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
 import sbtdynver.DynVerPlugin
@@ -124,9 +122,7 @@ object Common extends AutoPlugin {
     // By default scalatest futures time out in 150 ms, dilate that to 600ms.
     // This should not impact the total test time as we don't expect to hit this
     // timeout.
-    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-F", "4"),
-    scalafmtOnCompile := false,
-    javafmtOnCompile := false)
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-F", "4"))
 
   override lazy val buildSettings = Seq(
     dynverSonatypeSnapshots := true)

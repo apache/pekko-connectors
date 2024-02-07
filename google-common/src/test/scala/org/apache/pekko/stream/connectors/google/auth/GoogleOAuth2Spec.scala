@@ -58,7 +58,7 @@ class GoogleOAuth2Spec
     Source.fromInputStream(inputStream).getLines().mkString("\n").stripMargin
   }
 
-  val scopes = Seq("https://www.googleapis.com/auth/service")
+  val scopes = Set("https://www.googleapis.com/auth/service")
 
   "GoogleTokenApi" should {
 

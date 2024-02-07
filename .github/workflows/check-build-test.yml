@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - 1.0.x
     tags-ignore:
       - v*
 
@@ -18,7 +19,7 @@ jobs:
     name: Compile, Code Style, Binary Compatibility
     runs-on: ubuntu-20.04
     env:
-      JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
     steps:
       - name: Checkout
@@ -34,7 +35,7 @@ jobs:
           java-version: 8
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: "Code style, compile tests, MiMa. Run locally with: sbt \"javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues\""
         run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
@@ -43,7 +44,7 @@ jobs:
     name: ScalaDoc, Documentation with Paradox
     runs-on: ubuntu-20.04
     env:
-      JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
     steps:
       - name: Checkout
@@ -59,7 +60,7 @@ jobs:
           java-version: 11
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: "Create all API docs and create site with Paradox"
         run: sbt docs/makeSite
@@ -125,7 +126,7 @@ jobs:
           - { connector: xml }
 
     env:
-      JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
     steps:
       - name: Checkout
@@ -141,7 +142,7 @@ jobs:
           java-version: 8
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: ${{ matrix.connector }}
         env:

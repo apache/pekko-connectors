@@ -44,7 +44,7 @@ import scala.util.Success;
 import scala.util.Try;
 
 import javax.jms.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -218,7 +218,7 @@ public class JmsConnectorsTest {
               JmsProducer.bytesSink(
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
-          byte[] in = "ThisIsATest".getBytes(Charset.forName("UTF-8"));
+          byte[] in = "ThisIsATest".getBytes(StandardCharsets.UTF_8);
           CompletionStage<Done> finished = Source.single(in).runWith(jmsSink, system);
           // #bytearray-sink
 
@@ -232,7 +232,7 @@ public class JmsConnectorsTest {
 
           assertEquals(Done.getInstance(), finished.toCompletableFuture().get(3, TimeUnit.SECONDS));
           byte[] resultArray = result.toCompletableFuture().get(3, TimeUnit.SECONDS);
-          assertEquals("ThisIsATest", new String(resultArray, Charset.forName("UTF-8")));
+          assertEquals("ThisIsATest", new String(resultArray, StandardCharsets.UTF_8));
         });
   }
 
@@ -258,7 +258,7 @@ public class JmsConnectorsTest {
           in.put("short value", (short) 7);
           in.put("boolean value", true);
           in.put("long value", 7L);
-          in.put("bytearray", "AStringAsByteArray".getBytes(Charset.forName("UTF-8")));
+          in.put("bytearray", "AStringAsByteArray".getBytes(StandardCharsets.UTF_8));
           in.put("byte", (byte) 1);
 
           CompletionStage<Done> finished = Source.single(in).runWith(jmsSink, system);
@@ -286,7 +286,7 @@ public class JmsConnectorsTest {
 
           assertEquals(Done.getInstance(), finished.toCompletableFuture().get(3, TimeUnit.SECONDS));
           byte[] resultByteArray = (byte[]) resultMap.get("bytearray");
-          assertEquals(new String(resultByteArray, Charset.forName("UTF-8")), "AStringAsByteArray");
+          assertEquals(new String(resultByteArray, StandardCharsets.UTF_8), "AStringAsByteArray");
         });
   }
 

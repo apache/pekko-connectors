@@ -1,6 +1,19 @@
 # Release Notes
 
-To understand the forces on version numbers, read about @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
+The versioning strategy is described in @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
+
+## 1.0.2
+
+### Bug Fixes
+
+* Accept any materializer type param for S3's chunkUploadSink ([#279](https://github.com/apache/incubator-pekko-connectors/pull/279))
+* Change materializer type for chunkUploadSink in S3 DSLs ([#280](https://github.com/apache/incubator-pekko-connectors/pull/280))
+* Kinesis: fix maxBytesPerSecond throttling ([#298](https://github.com/apache/incubator-pekko-connectors/pull/298)) 
+
+### Dependency Upgrades
+
+* sshj 0.38.0 - updated in FTP connector due to a CVE in sshj ([#305](https://github.com/apache/incubator-pekko-connectors/pull/305))
+* netty 4.1.104 - updated in cassandra connector ([#309](https://github.com/apache/incubator-pekko-connectors/pull/309))
 
 ## 1.0.1
 

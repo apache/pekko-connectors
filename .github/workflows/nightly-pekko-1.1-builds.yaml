@@ -2,7 +2,7 @@ name: Nightly Pekko 1.1 Builds
 
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 permissions: {}
@@ -21,7 +21,7 @@ jobs:
       matrix:
         JDK: [ 8, 11, 17 ]
     env:
-      JAVA_OPTS: -Xms2G -Xmx2G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
     steps:
       - name: Checkout
@@ -37,7 +37,7 @@ jobs:
           java-version: ${{ matrix.JDK }}
 
       - name: Cache Coursier cache
-        uses: coursier/cache-action@v6.4.0
+        uses: coursier/cache-action@v6
 
       - name: "compile, including  tests. Run locally with: sbt -Dpekko.build.pekko.version=main +Test/compile"
-        run: sbt -Dpekko.build.pekko.version=main +Test/compile
+        run: sbt -Dpekko.build.pekko.version=main -Dpekko.build.pekko.http.version=main +Test/compile

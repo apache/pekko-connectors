@@ -312,7 +312,7 @@ import scala.concurrent.{ ExecutionContext, Future }
         && (legacySettings.tokenUrl.contains("googleapis.com") || legacySettings.tokenUrl == "unsupported"),
         "Non-default base-url/base-path/token-url no longer supported, use config path pekko.connectors.google.forward-proxy")
 
-      val legacyScopes = legacySettings.tokenScope.split(" ").toList
+      val legacyScopes = legacySettings.tokenScope.split(" ").toSet
       val credentials = Credentials.cache(
         (
           legacySettings.projectId,
