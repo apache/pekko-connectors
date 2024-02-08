@@ -219,7 +219,7 @@ services:
     volumes:
       - ./mqtt/src/test/travis:/mqtt/config/conf.d
   orientdb:
-    image: orientdb:3.1.9
+    image: orientdb:3.2.27
     ports:
       - "2424:2424"
     environment:
