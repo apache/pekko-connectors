@@ -51,14 +51,15 @@ class MqttSessionSpec
     with Eventually
     with LogCapturing {
 
-  val log = LoggerFactory.getLogger(classOf[MqttSessionSpec])
+  // log to the system log to the LogCapturing successfully associates it to the system:
+  val log = system.log
+  override def sourceActorSytem: Option[String] = Some(system.name)
 
   implicit val executionContext: ExecutionContext = system.dispatcher
   implicit val timeout: Timeout = Timeout(6.seconds.dilated)
 
   val settings = MqttSessionSettings()
 
-  override def sourceActorSytem: Option[String] = Some(system.name)
 
   import MqttCodec._
 
