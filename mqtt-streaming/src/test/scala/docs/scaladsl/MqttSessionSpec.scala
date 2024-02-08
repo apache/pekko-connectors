@@ -1962,7 +1962,7 @@ class MqttSessionSpec
           .queue[Command[Nothing]](1, OverflowStrategy.fail)
           .via(
             Mqtt
-              .serverSessionFlow(serverSession, ByteString.fromInts(1))
+              .serverSessionFlow(serverSession, ByteString.fromInts(4))
               .join(pipeToClient1))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
