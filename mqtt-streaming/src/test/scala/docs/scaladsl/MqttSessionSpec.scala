@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory
 import scala.util.Right
 
 class MqttSessionSpec
-    extends TestKit(ActorSystem("mqtt-spec"))
+    extends TestKit(ActorSystem("mqtt-session-spec"))
     with AnyWordSpecLike
     with BeforeAndAfterAll
     with ScalaFutures
@@ -57,6 +57,8 @@ class MqttSessionSpec
   implicit val timeout: Timeout = Timeout(6.seconds.dilated)
 
   val settings = MqttSessionSettings()
+
+  override def sourceActorSytem: Option[String] = Some(system.name)
 
   import MqttCodec._
 
@@ -1192,7 +1194,9 @@ class MqttSessionSpec
             }
           }
           .takeWhile {
-            case Right(Event(PingResp, None)) => false
+            case Right(Event(PingResp, None)) =>
+              log.warn("Saw PingResp event, closing event consumption")
+              false
             case _                            => true
           }
           .toMat(Sink.seq)(Keep.both)
