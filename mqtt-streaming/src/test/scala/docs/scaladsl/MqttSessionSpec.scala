@@ -1196,7 +1196,7 @@ class MqttSessionSpec
           }
           .takeWhile {
             case Right(Event(PingResp, None)) =>
-              log.warn("Saw PingResp event, closing event consumption")
+              log.warning("Saw PingResp event, closing event consumption")
               false
             case _                            => true
           }
