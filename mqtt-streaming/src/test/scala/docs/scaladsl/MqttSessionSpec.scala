@@ -1169,7 +1169,7 @@ class MqttSessionSpec
 
     "unsubscribe a client session" in assertAllStagesStopped {
       // longer patience appears to be needed on GitHub Actions
-      implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(1.second), scaled(50.millis))
+//      implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(1.second), scaled(50.millis))
 
       val session = ActorMqttClientSession(settings)
 
@@ -1182,7 +1182,7 @@ class MqttSessionSpec
       val (client, result) =
         Source
           .queue[Command[ByteString]](2, OverflowStrategy.fail)
-          .log("after-queue")
+//          .log("after-queue")
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
