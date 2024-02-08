@@ -1181,7 +1181,7 @@ class MqttSessionSpec
 
       val (client, result) =
         Source
-          .queue(2, OverflowStrategy.fail)
+          .queue(8, OverflowStrategy.fail)
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
@@ -1198,7 +1198,9 @@ class MqttSessionSpec
             case Right(Event(PingResp, None)) =>
               log.warning("Saw PingResp event, closing event consumption")
               false
-            case _                            => true
+            case _                            =>
+              log.warning("Saw other event, continuing event consumption")
+              true
           }
           .toMat(Sink.seq)(Keep.both)
           .run()
