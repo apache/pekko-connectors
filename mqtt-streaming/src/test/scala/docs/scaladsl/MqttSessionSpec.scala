@@ -1869,7 +1869,7 @@ class MqttSessionSpec
           .queue[Command[Nothing]](1, OverflowStrategy.fail)
           .via(
             Mqtt
-              .serverSessionFlow(session, ByteString.empty)
+              .serverSessionFlow(session, ByteString.fromInts(3))
               .join(pipeToClient))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
@@ -1962,12 +1962,13 @@ class MqttSessionSpec
           .queue[Command[Nothing]](1, OverflowStrategy.fail)
           .via(
             Mqtt
-              .serverSessionFlow(serverSession, ByteString.empty)
+              .serverSessionFlow(serverSession, ByteString.fromInts(1))
               .join(pipeToClient1))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connect1Received.success(Done)
             case Right(Event(cp: Subscribe, _)) if cp.topicFilters == subscribe.topicFilters =>
+              log.warn("Got a subscribe on server 1")
               subscribe1Received.success(Done)
             case Right(Event(`disconnect`, _)) =>
               disconnectReceived.success(Done)
@@ -2002,6 +2003,7 @@ class MqttSessionSpec
       serverConnection1.offer(Command(connAck))
       client1.expectMsg(connAckBytes)
 
+      log.warn("Sending subscribe 1")
       client1Connection.offer(subscribeBytes)
 
       subscribe1Received.future.futureValue shouldBe Done
@@ -2025,12 +2027,13 @@ class MqttSessionSpec
           .queue[Command[Nothing]](1, OverflowStrategy.fail)
           .via(
             Mqtt
-              .serverSessionFlow(serverSession, ByteString.empty)
+              .serverSessionFlow(serverSession, ByteString.fromInts(2))
               .join(pipeToClient2))
           .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
             case Right(Event(`connect`, _)) =>
               connect2Received.success(Done)
             case Right(Event(cp: Subscribe, _)) if cp.topicFilters == subscribe.topicFilters =>
+              log.warn("Got a subscribe on server 2")
               subscribe2Received.success(Done)
             case Right(Event(_: PubAck, _)) =>
               pubAckReceived.success(Done)
@@ -2046,6 +2049,7 @@ class MqttSessionSpec
       serverConnection2.offer(Command(connAck))
       client2.expectMsg(6.seconds, connAckBytes)
 
+      log.warn("Sending subscribe 2")
       client2Connection.offer(subscribeBytes)
 
       subscribe2Received.future.futureValue shouldBe Done

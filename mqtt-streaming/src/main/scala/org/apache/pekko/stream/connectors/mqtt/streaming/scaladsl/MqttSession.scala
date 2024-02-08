@@ -648,7 +648,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
               case _: WatchedActorTerminatedException => ByteString.empty
             }
             .filter(_.nonEmpty)
-            .log("server-commandFlow", _.iterator.decodeControlPacket(settings.maxPacketSize)) // we decode here so we can see the generated packet id
+            .log(s"server-commandFlow-${connectionId}", _.iterator.decodeControlPacket(settings.maxPacketSize)) // we decode here so we can see the generated packet id
             .withAttributes(ActorAttributes.logLevels(onFailure = Logging.DebugLevel)))
       }
       .mapMaterializedValue(_ => NotUsed)
@@ -667,7 +667,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
       }
       .via(new MqttFrameStage(settings.maxPacketSize))
       .map(_.iterator.decodeControlPacket(settings.maxPacketSize))
-      .log("server-events")
+      .log(s"server-events-${connectionId}")
       .mapAsync[Either[MqttCodec.DecodeError, Event[A]]](settings.eventParallelism) {
         case Right(cp: Connect) =>
           val reply = Promise[ClientConnection.ForwardConnect.type]()
