@@ -1179,10 +1179,9 @@ class MqttSessionSpec
       val unsubAck = UnsubAck(PacketId(1))
       val unsubAckReceived = Promise[Done]()
 
-      val (client, result) =
+      val (client, out) =
         Source
           .queue[Command[ByteString]](2, OverflowStrategy.fail)
-//          .log("after-queue")
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
@@ -1195,15 +1194,7 @@ class MqttSessionSpec
               case _ =>
             }
           }
-          .takeWhile {
-            case Right(Event(PingResp, None)) =>
-              log.warning("Saw PingResp event, closing event consumption")
-              false
-            case _                            =>
-              log.warning("Saw other event, continuing event consumption")
-              true
-          }
-          .toMat(Sink.seq)(Keep.both)
+          .toMat(Sink.queue(10))(Keep.both)
           .run()
 
       val connect = Connect("some-client-id", ConnectFlags.None)
@@ -1247,14 +1238,13 @@ class MqttSessionSpec
 
       unsubAckReceived.future.futureValue shouldBe Done
 
+      out.queue.pull().futureValue shouldBe Some(Right(Event(unsubAck)))
+      out.queue.pull().futureValue shouldBe  Some(Right(Event(publishDup)))
       client.offer(Command(pubAck))
 
       server.expectMsg(pubAckBytes)
-      server.reply(pingRespBytes)
 
-      // Quite possible to receive a pub from an unsubscribed topic given that it may be in transit
-      result.futureValue shouldBe Vector(Right(Event(unsubAck)), Right(Event(publishDup)))
-
+      out.cancel()
       client.complete()
       client.watchCompletion().foreach(_ => session.shutdown())
     }
