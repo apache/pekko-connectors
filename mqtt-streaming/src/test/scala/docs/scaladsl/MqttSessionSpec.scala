@@ -1165,6 +1165,9 @@ class MqttSessionSpec
     }
 
     "unsubscribe a client session" in assertAllStagesStopped {
+      // longer patience appears to be needed on GitHub Actions
+      implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(1.second), scaled(50.millis))
+
       val session = ActorMqttClientSession(settings)
 
       val server = TestProbe()
