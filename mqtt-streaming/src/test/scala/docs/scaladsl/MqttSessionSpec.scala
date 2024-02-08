@@ -1181,7 +1181,7 @@ class MqttSessionSpec
 
       val (client, result) =
         Source
-          .queue(2, OverflowStrategy.fail)
+          .queue[Command[ByteString]](2, OverflowStrategy.fail)
           .log("after-queue")
           .via(
             Mqtt
