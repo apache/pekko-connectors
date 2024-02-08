@@ -1181,7 +1181,8 @@ class MqttSessionSpec
 
       val (client, result) =
         Source
-          .queue(8, OverflowStrategy.fail)
+          .queue(2, OverflowStrategy.fail)
+          .log("after-queue")
           .via(
             Mqtt
               .clientSessionFlow(session, ByteString("1"))
