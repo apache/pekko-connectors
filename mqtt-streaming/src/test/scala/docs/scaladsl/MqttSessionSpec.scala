@@ -1173,7 +1173,7 @@ class MqttSessionSpec
       val unsubAck = UnsubAck(PacketId(1))
       val unsubAckReceived = Promise[Done]()
 
-      val (client, result) =
+      val (client, results) =
         Source
           .queue(2, OverflowStrategy.fail)
           .via(
@@ -1188,11 +1188,7 @@ class MqttSessionSpec
               case _ =>
             }
           }
-          .takeWhile {
-            case Right(Event(PingResp, None)) => false
-            case _                            => true
-          }
-          .toMat(Sink.seq)(Keep.both)
+          .toMat(Sink.queue(10))(Keep.both)
           .run()
 
       val connect = Connect("some-client-id", ConnectFlags.None)
@@ -1232,18 +1228,19 @@ class MqttSessionSpec
       client.offer(Command(unsubscribe))
 
       server.expectMsg(unsubscribeBytes)
+      // Possible to receive a pub from an unsubscribed topic given that it may be in transit
       server.reply(unsubAckBytes ++ publishDupBytes)
 
       unsubAckReceived.future.futureValue shouldBe Done
 
+      results.queue.pull().futureValue shouldBe Some(Right(Event(unsubAck)))
+      results.queue.pull().futureValue shouldBe Some(Right(Event(publishDup)))
       client.offer(Command(pubAck))
 
       server.expectMsg(pubAckBytes)
       server.reply(pingRespBytes)
 
-      // Quite possible to receive a pub from an unsubscribed topic given that it may be in transit
-      result.futureValue shouldBe Vector(Right(Event(unsubAck)), Right(Event(publishDup)))
-
+      results.cancel()
       client.complete()
       client.watchCompletion().foreach(_ => session.shutdown())
     }
