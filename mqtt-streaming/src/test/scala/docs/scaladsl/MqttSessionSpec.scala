@@ -1178,7 +1178,7 @@ class MqttSessionSpec
           .queue(2, OverflowStrategy.fail)
           .via(
             Mqtt
-              .clientSessionFlow(session, ByteString("1"))
+              .clientSessionFlow(session, ByteString("42"))
               .join(pipeToServer))
           .drop(3)
           .wireTap { e =>
