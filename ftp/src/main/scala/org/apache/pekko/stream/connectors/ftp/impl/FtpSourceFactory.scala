@@ -19,6 +19,7 @@ import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.FtpCredentials
 import pekko.stream.connectors.ftp._
+
 import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
@@ -158,13 +159,19 @@ private[ftp] trait FtpSource extends FtpSourceFactory[FTPClient, FtpSettings] {
  * INTERNAL API
  */
 @InternalApi
-private[ftp] trait FtpsSource extends FtpSourceFactory[FTPSClient, FtpsSettings] {
+private[ftp] trait FtpsSource extends FtpSourceFactory[FTPClient, FtpsSettings] {
   protected final val FtpsBrowserSourceName = "FtpsBrowserSource"
   protected final val FtpsIOSourceName = "FtpsIOSource"
   protected final val FtpsDirectorySource = "FtpsDirectorySource"
   protected final val FtpsIOSinkName = "FtpsIOSink"
 
-  protected val ftpClient: FtpsSettings => FTPSClient = settings => new FTPSClient(settings.useFtpsImplicit)
+  protected val ftpClient: FtpsSettings => FTPClient = settings => {
+    if (settings.useUpdatedFtpsClient) {
+      new FTPSClient(settings.useFtpsImplicit)
+    } else {
+      new LegacyFtpsClient(settings.useFtpsImplicit)
+    }
+  }
   protected val ftpBrowserSourceName: String = FtpsBrowserSourceName
   protected val ftpIOSourceName: String = FtpsIOSourceName
   protected val ftpIOSinkName: String = FtpsIOSinkName
@@ -255,7 +262,7 @@ private[ftp] trait FtpSourceParams extends FtpSource with FtpDefaultSettings {
 @InternalApi
 private[ftp] trait FtpsSourceParams extends FtpsSource with FtpsDefaultSettings {
   type S = FtpsSettings
-  protected[this] val ftpLike: FtpLike[FTPSClient, S] = FtpLike.ftpsLikeInstance
+  protected[this] val ftpLike: FtpLike[FTPClient, S] = FtpLike.ftpsLikeInstance
 }
 
 /**

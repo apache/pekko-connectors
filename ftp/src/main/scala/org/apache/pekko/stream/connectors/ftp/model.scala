@@ -20,7 +20,7 @@ import javax.net.ssl.TrustManager
 import java.nio.file.attribute.PosixFilePermission
 
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
+import org.apache.commons.net.ftp.FTPClient
 
 /**
  * FTP remote file descriptor.
@@ -187,7 +187,8 @@ final class FtpsSettings private (
     val passiveMode: Boolean,
     val useFtpsImplicit: Boolean,
     val autodetectUTF8: Boolean,
-    val configureConnection: FTPSClient => Unit,
+    val useUpdatedFtpsClient: Boolean,
+    val configureConnection: FTPClient => Unit,
     val proxy: Option[Proxy],
     val keyManager: Option[KeyManager],
     val trustManager: Option[TrustManager]) extends FtpFileSettings {
@@ -202,6 +203,8 @@ final class FtpsSettings private (
     if (useFtpsImplicit == value) this else copy(useFtpsImplicit = value)
   def withAutodetectUTF8(value: Boolean): FtpsSettings =
     if (autodetectUTF8 == value) this else copy(autodetectUTF8 = value)
+  def withUpdatedFtpsClient(value: Boolean): FtpsSettings =
+    if (useUpdatedFtpsClient == value) this else copy(useUpdatedFtpsClient = value)
   def withProxy(value: Proxy): FtpsSettings = copy(proxy = Some(value))
   def withKeyManager(value: KeyManager): FtpsSettings = copy(keyManager = Some(value))
   def withTrustManager(value: TrustManager): FtpsSettings = copy(trustManager = Some(value))
@@ -210,7 +213,7 @@ final class FtpsSettings private (
    * Scala API:
    * Sets the configure connection callback.
    */
-  def withConfigureConnection(value: FTPSClient => Unit): FtpsSettings =
+  def withConfigureConnection(value: FTPClient => Unit): FtpsSettings =
     copy(configureConnection = value)
 
   /**
@@ -218,7 +221,7 @@ final class FtpsSettings private (
    * Sets the configure connection callback.
    */
   def withConfigureConnectionConsumer(
-      configureConnection: java.util.function.Consumer[FTPSClient]): FtpsSettings =
+      configureConnection: java.util.function.Consumer[FTPClient]): FtpsSettings =
     copy(configureConnection = configureConnection.accept)
 
   private def copy(
@@ -229,7 +232,8 @@ final class FtpsSettings private (
       passiveMode: Boolean = passiveMode,
       useFtpsImplicit: Boolean = useFtpsImplicit,
       autodetectUTF8: Boolean = autodetectUTF8,
-      configureConnection: FTPSClient => Unit = configureConnection,
+      useUpdatedFtpsClient: Boolean = useUpdatedFtpsClient,
+      configureConnection: FTPClient => Unit = configureConnection,
       proxy: Option[Proxy] = proxy,
       keyManager: Option[KeyManager] = keyManager,
       trustManager: Option[TrustManager] = trustManager): FtpsSettings = new FtpsSettings(
@@ -240,6 +244,7 @@ final class FtpsSettings private (
     passiveMode = passiveMode,
     useFtpsImplicit = useFtpsImplicit,
     autodetectUTF8 = autodetectUTF8,
+    useUpdatedFtpsClient = useUpdatedFtpsClient,
     configureConnection = configureConnection,
     proxy = proxy,
     keyManager = keyManager,
@@ -254,6 +259,7 @@ final class FtpsSettings private (
     s"passiveMode=$passiveMode," +
     s"useFtpsImplicit=$useFtpsImplicit," +
     s"autodetectUTF8=$autodetectUTF8," +
+    s"useUpdatedFtpsClient=$useUpdatedFtpsClient," +
     s"configureConnection=$configureConnection," +
     s"proxy=$proxy," +
     s"keyManager=$keyManager," +
@@ -277,6 +283,7 @@ object FtpsSettings {
     passiveMode = false,
     useFtpsImplicit = false,
     autodetectUTF8 = false,
+    useUpdatedFtpsClient = false,
     configureConnection = _ => (),
     proxy = None,
     keyManager = None,
