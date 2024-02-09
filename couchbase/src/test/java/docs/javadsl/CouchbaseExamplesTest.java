@@ -167,7 +167,7 @@ public class CouchbaseExamplesTest {
 
     CouchbaseCluster cluster = CouchbaseCluster.create("localhost");
     cluster.authenticate(new PasswordAuthenticator("Administrator", "password"));
-    Bucket bucket = cluster.openBucket("akka");
+    Bucket bucket = cluster.openBucket("pekko");
     CouchbaseSession session = CouchbaseSession.create(bucket);
     actorSystem.registerOnTermination(
         () -> {
