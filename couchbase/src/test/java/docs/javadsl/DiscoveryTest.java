@@ -41,7 +41,7 @@ public class DiscoveryTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem actorSystem;
-  private static final String bucketName = "akka";
+  private static final String bucketName = "pekko";
 
   @BeforeClass
   public static void beforeAll() {
