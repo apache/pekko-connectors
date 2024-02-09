@@ -1177,16 +1177,11 @@ import scala.util.{ Failure, Success, Try }
 
         import conf.multipartUploadSettings.retrySettings._
 
-        // TODO: Scala 3 workaround, see https://github.com/lampepfl/dotty/issues/18438
-        val source1: SubFlow[Chunk, NotUsed, Flow[ByteString, ByteString, NotUsed]#Repr, Sink[ByteString, NotUsed]] =
-          SplitAfterSize(chunkSize, chunkBufferSize)(atLeastOneByteString)
-            .via(getChunkBuffer(chunkSize, chunkBufferSize, maxRetries)) // creates the chunks
-
-        val source2 = source1.mergeSubstreamsWithParallelism(parallelism)
+        SplitAfterSize(chunkSize, chunkBufferSize)(atLeastOneByteString)
+          .via(getChunkBuffer(chunkSize, chunkBufferSize, maxRetries)) // creates the chunks
+          .mergeSubstreamsWithParallelism(parallelism)
           .filter(_.size > 0)
           .via(atLeastOne)
-
-        source2
           .zip(requestInfoOrUploadState(s3Location, contentType, s3Headers, initialUploadState))
           .groupBy(parallelism, { case (_, (_, chunkIndex)) => chunkIndex % parallelism })
           // Allow requests that fail with transient errors to be retried, using the already buffered chunk.
@@ -1195,9 +1190,8 @@ import scala.util.{ Failure, Success, Try }
               if (isTransientError(r.status)) {
                 r.entity.discardBytes()
                 Some(chunkAndUploadInfo)
-              } else {
+              } else
                 None
-              }
             case (chunkAndUploadInfo, (Failure(_), _)) =>
               // Treat any exception as transient.
               Some(chunkAndUploadInfo)
