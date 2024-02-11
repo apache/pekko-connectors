@@ -27,7 +27,7 @@ object Dependencies {
 
   val AvroVersion = "1.11.3"
   val AwsSdk2Version = "2.23.17"
-  val AwsSdk2SqsVersion = "2.20.162" // latest AwsSdk2Version causes us test issues with SQS
+  val AwsSdk2SqsVersion = "2.24.0" // latest AwsSdk2Version causes us test issues with SQS
   val AwsSpiPekkoHttpVersion = "0.1.0"
   val NettyVersion = "4.1.106.Final"
   // Sync with plugins.sbt
