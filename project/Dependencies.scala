@@ -56,6 +56,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
+  val scalaTestMockitoVersion = "3.2.17.0" // https://github.com/scalatest/scalatest/issues/2311
 
   val CouchbaseVersion = "2.7.23"
   val CouchbaseVersionForDocs = "2.7"
@@ -86,7 +87,7 @@ object Dependencies {
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
-    "org.scalatestplus" %% "mockito-4-11" % (ScalaTestVersion + ".0") % Test)
+    "org.scalatestplus" %% "mockito-4-11" % scalaTestMockitoVersion % Test)
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
