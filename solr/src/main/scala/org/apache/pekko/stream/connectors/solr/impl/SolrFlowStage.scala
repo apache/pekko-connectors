@@ -27,9 +27,8 @@ import org.apache.solr.client.solrj.response.UpdateResponse
 import org.apache.solr.common.SolrInputDocument
 
 import scala.annotation.tailrec
-import scala.util.control.NonFatal
-
 import scala.collection.immutable
+import scala.util.control.NonFatal
 
 /**
  * Internal API
@@ -114,7 +113,12 @@ private final class SolrFlowLogic[T, C](
 
       message.routingFieldValue.foreach { routingFieldValue =>
         val routingField = client match {
-          case csc: CloudSolrClient => Some("id")
+          case csc: CloudSolrClient => {
+            val docCollection = Option(csc.getZkStateReader.getClusterState.getCollectionOrNull(collection))
+            docCollection.map { dc =>
+              dc.getRouter.getRouteField(dc)
+            }
+          }
           case _ => None
         }
         routingField.foreach { routingField =>
