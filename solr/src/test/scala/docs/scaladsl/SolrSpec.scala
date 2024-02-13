@@ -738,11 +738,12 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       testWorkingDir.toPath,
       MiniSolrCloudCluster.DEFAULT_CLOUD_SOLR_XML,
       JettyConfig.builder.setContext("/solr").build,
-      zkTestServer)
-    solrClient.getClusterStateProvider
-      .asInstanceOf[ZkClientClusterStateProvider]
-      .uploadConfig(confDir.toPath, "conf")
-    solrClient.setIdField("router")
+      zkTestServer,
+      false)
+    // solrClient.getClusterStateProvider
+    //  .asInstanceOf[ZkClientClusterStateProvider]
+     // .uploadConfig(confDir.toPath, "conf")
+    // solrClient.setIdField("router")
 
     assertTrue(!solrClient.getClusterState.getLiveNodes.isEmpty)
   }

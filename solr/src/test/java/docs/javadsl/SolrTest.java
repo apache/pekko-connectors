@@ -850,7 +850,8 @@ public class SolrTest {
             testWorkingDir.toPath(),
             MiniSolrCloudCluster.DEFAULT_CLOUD_SOLR_XML,
             JettyConfig.builder().setContext("/solr").build(),
-            zkTestServer);
+            zkTestServer,
+            false);
 
     // #init-client
 
@@ -859,10 +860,10 @@ public class SolrTest {
     // #init-client
     SolrTest.solrClient = solrClient;
 
-    ((ZkClientClusterStateProvider) solrClient.getClusterStateProvider())
-        .uploadConfig(confDir.toPath(), "conf");
+    // ((ZkClientClusterStateProvider) solrClient.getClusterStateProvider())
+    //    .uploadConfig(confDir.toPath(), "conf");
 
-    solrClient.setIdField("router");
+    // solrClient.setIdField("router");
 
     assertTrue(!solrClient.getClusterState().getLiveNodes().isEmpty());
   }
