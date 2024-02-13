@@ -430,8 +430,8 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion) ++ Mockito)
 
-  val SolrjVersion = "9.4.1"
-  val SolrVersionForDocs = "9_4"
+  val SolrjVersion = "9.5.0"
+  val SolrVersionForDocs = "9_5"
 
   val Solr = Seq(
     libraryDependencies ++= Seq(
