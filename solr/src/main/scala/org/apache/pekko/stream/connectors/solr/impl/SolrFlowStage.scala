@@ -114,8 +114,7 @@ private final class SolrFlowLogic[T, C](
 
       message.routingFieldValue.foreach { routingFieldValue =>
         val routingField = client match {
-          case csc: CloudSolrClient =>
-            Option(csc.getIdField)
+          case csc: CloudSolrClient => Some("id")
           case _ => None
         }
         routingField.foreach { routingField =>
