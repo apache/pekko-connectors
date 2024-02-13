@@ -25,6 +25,7 @@ import pekko.stream.connectors.solr.scaladsl.{ SolrFlow, SolrSink, SolrSource }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.testkit.TestKit
+import org.apache.solr.client.solrj.embedded.JettyConfig
 import org.apache.solr.client.solrj.impl.{ CloudSolrClient, ZkClientClusterStateProvider }
 import org.apache.solr.client.solrj.io.stream.expr.{ StreamExpressionParser, StreamFactory }
 import org.apache.solr.client.solrj.io.stream.{ CloudSolrStream, StreamContext, TupleStream }
@@ -32,7 +33,6 @@ import org.apache.solr.client.solrj.io.{ SolrClientCache, Tuple }
 import org.apache.solr.client.solrj.request.{ CollectionAdminRequest, UpdateRequest }
 import org.apache.solr.cloud.{ MiniSolrCloudCluster, ZkTestServer }
 import org.apache.solr.common.SolrInputDocument
-import org.apache.solr.embedded.JettyConfig
 import org.junit.Assert.assertTrue
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -738,14 +738,13 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       testWorkingDir.toPath,
       MiniSolrCloudCluster.DEFAULT_CLOUD_SOLR_XML,
       JettyConfig.builder.setContext("/solr").build,
-      zkTestServer,
-      false)
-    // solrClient.getClusterStateProvider
-    //  .asInstanceOf[ZkClientClusterStateProvider]
-     // .uploadConfig(confDir.toPath, "conf")
-    // solrClient.setIdField("router")
+      zkTestServer)
+    solrClient.getClusterStateProvider
+      .asInstanceOf[ZkClientClusterStateProvider]
+      .uploadConfig(confDir.toPath, "conf")
+    solrClient.setIdField("router")
 
-    assertTrue(!solrClient.getClusterState.getLiveNodes.isEmpty)
+    assertTrue(!solrClient.getZkStateReader.getClusterState.getLiveNodes.isEmpty)
   }
 
   private val number = new AtomicInteger(2)
