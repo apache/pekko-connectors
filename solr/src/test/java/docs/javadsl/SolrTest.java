@@ -30,7 +30,6 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.embedded.JettyConfig;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.ZkClientClusterStateProvider;
 import org.apache.solr.client.solrj.io.SolrClientCache;
@@ -47,6 +46,7 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.cloud.MiniSolrCloudCluster;
 import org.apache.solr.cloud.ZkTestServer;
 import org.apache.solr.common.SolrInputDocument;
+import org.apache.solr.embedded.JettyConfig;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -508,8 +508,8 @@ public class SolrTest {
         SolrSource.fromTupleStream(stream2)
             .map(
                 t -> {
-                  String id = t.fields.get("title").toString();
-                  String comment = t.fields.get("comment").toString();
+                  String id = t.getFields().get("title").toString();
+                  String comment = t.getFields().get("comment").toString();
                   Map<String, Object> m2 = new HashMap<>();
                   m2.put("set", (comment + " It's is a good book!!!"));
                   Map<String, Map<String, Object>> updates = new HashMap<>();
@@ -593,8 +593,8 @@ public class SolrTest {
         SolrSource.fromTupleStream(stream2)
             .map(
                 t -> {
-                  String id = t.fields.get("title").toString();
-                  String comment = t.fields.get("comment").toString();
+                  String id = t.getFields().get("title").toString();
+                  String comment = t.getFields().get("comment").toString();
                   Map<String, Object> m2 = new HashMap<>();
                   m2.put("set", (comment + " It's is a good book!!!"));
                   Map<String, Map<String, Object>> updates = new HashMap<>();
@@ -678,7 +678,7 @@ public class SolrTest {
         SolrSource.fromTupleStream(stream2)
             .map(
                 t -> {
-                  String id = t.fields.get("title").toString();
+                  String id = t.getFields().get("title").toString();
                   return WriteMessage.<SolrInputDocument>createDeleteByQueryMessage(
                       "title:\"" + id + "\"");
                 })
@@ -864,7 +864,7 @@ public class SolrTest {
 
     solrClient.setIdField("router");
 
-    assertTrue(!solrClient.getZkStateReader().getClusterState().getLiveNodes().isEmpty());
+    assertTrue(!solrClient.getClusterState().getLiveNodes().isEmpty());
   }
 
   private static AtomicInteger number = new AtomicInteger(2);
