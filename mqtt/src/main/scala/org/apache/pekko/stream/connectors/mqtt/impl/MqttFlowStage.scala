@@ -25,7 +25,9 @@ import pekko.stream.connectors.mqtt._
 import pekko.stream.connectors.mqtt.scaladsl.MqttMessageWithAck
 import pekko.stream.stage._
 import pekko.util.ByteString
+
 import org.eclipse.paho.client.mqttv3.{
+  DisconnectedBufferOptions,
   IMqttActionListener,
   IMqttAsyncClient,
   IMqttDeliveryToken,
@@ -41,8 +43,6 @@ import scala.collection.mutable
 import scala.concurrent.{ Future, Promise }
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
-import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions
-import pekko.stream.connectors.mqtt.MqttOfflinePersistenceSettings
 
 /**
  * INTERNAL API
