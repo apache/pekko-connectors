@@ -20,7 +20,7 @@ import org.eclipse.paho.client.mqttv3.{ MqttClientPersistence, MqttConnectOption
 
 import scala.collection.immutable
 import scala.collection.immutable.Map
-import scala.concurrent.duration.{ FiniteDuration, _ }
+import scala.concurrent.duration._
 
 /**
  * Quality of Service constants as defined in
