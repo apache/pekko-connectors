@@ -26,7 +26,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.3"
-  val AwsSdk2Version = "2.23.21"
+  val AwsSdk2Version = "2.24.5"
   val AwsSdk2SqsVersion = "2.24.5" // latest AwsSdk2Version causes us test issues with SQS
   val AwsSpiPekkoHttpVersion = "0.1.0"
   val NettyVersion = "4.1.106.Final"
@@ -37,7 +37,7 @@ object Dependencies {
   val ScalaTestVersion = "3.2.18"
   val TestContainersScalaTestVersion = "0.41.0"
   val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
-  val protobufJavaVersion = "3.25.2"
+  val protobufJavaVersion = "3.25.3"
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.17.0"
 
@@ -192,7 +192,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.22.1" % Test,
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.23.0" % Test,
         "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
@@ -393,7 +393,7 @@ object Dependencies {
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
   val SpringWeb = {
-    val SpringVersion = "5.3.31"
+    val SpringVersion = "5.3.32"
     val SpringBootVersion = "2.7.18"
     Seq(
       libraryDependencies ++= Seq(
@@ -457,7 +457,7 @@ object Dependencies {
 
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
-      "com.github.jnr" % "jffi" % "1.3.12", // classifier "complete", // Is the classifier needed anymore?
+      "com.github.jnr" % "jffi" % "1.3.13", // classifier "complete", // Is the classifier needed anymore?
       "com.github.jnr" % "jnr-unixsocket" % "0.38.21"))
 
   val Xml = Seq(
