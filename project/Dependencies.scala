@@ -20,6 +20,7 @@ object Dependencies {
   val Scala3 = "3.3.1"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
+  val JavaSpecVersion = sys.props("java.specification.version").toDouble
   val PekkoVersion = PekkoCoreDependency.version
   val PekkoBinaryVersion = PekkoVersion.take(3)
 
@@ -393,8 +394,8 @@ object Dependencies {
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
   val SpringWeb = {
-    val SpringVersion = "5.3.32"
-    val SpringBootVersion = "2.7.18"
+    val SpringVersion = if (JavaSpecVersion >= 17) "6.1.4" else "5.3.32"
+    val SpringBootVersion = if (JavaSpecVersion >= 17) "3.2.2" else "2.7.18"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
@@ -402,7 +403,8 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-autoconfigure" % SpringBootVersion, // TODO should this be provided?
         "org.springframework.boot" % "spring-boot-configuration-processor" % SpringBootVersion % Optional,
         // for examples
-        "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
+        "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test,
+        "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test))
   }
 
   val SlickVersion = "3.4.1"
