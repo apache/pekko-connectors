@@ -114,7 +114,7 @@ private final class SolrFlowLogic[T, C](
       message.routingFieldValue.foreach { routingFieldValue =>
         val routingField = client match {
           case csc: CloudSolrClient => {
-            val docCollection = Option(csc.getZkStateReader.getClusterState.getCollectionOrNull(collection))
+            val docCollection = Option(csc.getZkStateReader.getCollection(collection))
             docCollection.flatMap { dc =>
               Option(dc.getRouter.getRouteField(dc))
             }
