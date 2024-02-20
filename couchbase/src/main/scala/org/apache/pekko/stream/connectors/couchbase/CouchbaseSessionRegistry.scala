@@ -99,7 +99,7 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
       // we won cas, initialize session
       val session = clusterRegistry
         .clusterFor(key.settings)
-        .flatMap(cluster => CouchbaseSession(cluster, key.bucketName)(blockingDispatcher))(
+        .map(cluster => CouchbaseSession(cluster, key.bucketName)(blockingDispatcher))(
           ExecutionContexts.parasitic)
       promise.completeWith(session)
       promise.future

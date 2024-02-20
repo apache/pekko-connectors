@@ -13,20 +13,21 @@
 
 package docs.scaladsl
 
+import com.couchbase.client.core.error.ConfigException
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import pekko.stream.connectors.couchbase.scaladsl.{CouchbaseSession, DiscoverySupport}
+import pekko.stream.connectors.couchbase.{CouchbaseSessionRegistry, CouchbaseSessionSettings}
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import com.couchbase.client.java.document.JsonDocument
-import com.typesafe.config.{ Config, ConfigFactory }
+import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.pekko.stream.connectors.couchbase.testing.JsonDocument
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
@@ -51,7 +52,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
         .withEnrichAsync(DiscoverySupport.nodes())
       val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings, bucketName)
       // #registry
-      sessionFuture.failed.futureValue shouldBe a[com.couchbase.client.core.config.ConfigurationException]
+      sessionFuture.failed.futureValue shouldBe a[ConfigException]
     }
 
     "be created from settings" in {
@@ -65,13 +66,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
       val documentFuture = sessionFuture.flatMap { session =>
         val id = "myId"
-        val documentFuture: Future[Option[JsonDocument]] = session.get(id)
-        documentFuture.flatMap {
-          case Some(jsonDocument) =>
-            Future.successful(jsonDocument)
-          case None =>
-            Future.failed(new RuntimeException(s"document $id wasn't found"))
-        }
+        session.get(id,classOf[JsonDocument])
       }
       // #create
       documentFuture.failed.futureValue shouldBe a[RuntimeException]

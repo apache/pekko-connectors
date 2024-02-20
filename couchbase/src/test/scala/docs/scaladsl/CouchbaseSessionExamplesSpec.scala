@@ -13,19 +13,19 @@
 
 package docs.scaladsl
 
+import com.couchbase.client.core.error.DocumentNotFoundException
 import org.apache.pekko
-import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
-import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
-import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import com.couchbase.client.java.document.JsonDocument
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
-
-import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import pekko.stream.connectors.couchbase.{CouchbaseSessionRegistry, CouchbaseSessionSettings}
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import pekko.stream.connectors.couchbase.testing.{CouchbaseSupport, JsonDocument}
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 
 class CouchbaseSessionExamplesSpec
     extends AnyWordSpec
@@ -43,13 +43,13 @@ class CouchbaseSessionExamplesSpec
   "a Couchbasesession" should {
     "be managed by the registry" in {
       // #registry
-      import com.couchbase.client.java.env.{ CouchbaseEnvironment, DefaultCouchbaseEnvironment }
+      import com.couchbase.client.java.env.ClusterEnvironment
 
       // Pekko extension (singleton per actor system)
       val registry = CouchbaseSessionRegistry(actorSystem)
 
       // If connecting to more than one Couchbase cluster, the environment should be shared
-      val environment: CouchbaseEnvironment = DefaultCouchbaseEnvironment.create()
+      val environment: ClusterEnvironment = ClusterEnvironment.create()
       actorSystem.registerOnTermination {
         environment.shutdown()
       }
@@ -63,49 +63,29 @@ class CouchbaseSessionExamplesSpec
 
     "be created from settings" in {
       // #create
-
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       val sessionSettings = CouchbaseSessionSettings(actorSystem)
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings, bucketName)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
-
-      val documentFuture = sessionFuture.flatMap { session =>
-        val id = "myId"
-        val documentFuture: Future[Option[JsonDocument]] = session.get(id)
-        documentFuture.flatMap {
-          case Some(jsonDocument) =>
-            Future.successful(jsonDocument)
-          case None =>
-            Future.failed(new RuntimeException(s"document $id wasn't found"))
-        }
-      }
-      // #create
-      documentFuture.failed.futureValue shouldBe a[RuntimeException]
+      val id = "myId"
+      val documentFuture = sessionFuture.map(session =>session.get(id, classOf[JsonDocument]))
+      documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
     }
 
     "be created from a bucket" in {
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       // #fromBucket
-      import com.couchbase.client.java.auth.PasswordAuthenticator
-      import com.couchbase.client.java.{ Bucket, CouchbaseCluster }
-
-      val cluster: CouchbaseCluster = CouchbaseCluster.create("localhost")
-      cluster.authenticate(new PasswordAuthenticator("Administrator", "password"))
-      val bucket: Bucket = cluster.openBucket("pekko")
-      val session: CouchbaseSession = CouchbaseSession(bucket)
+      import com.couchbase.client.java.AsyncCluster
+      val asyncCluster = AsyncCluster.connect("localhost", "Administrator", "password")
+      val bucket = asyncCluster.bucket("pekko")
+      val session: CouchbaseSession = CouchbaseSession(asyncCluster, bucket.name())
       actorSystem.registerOnTermination {
         session.close()
       }
-
       val id = "myId"
-      val documentFuture = session.get(id).flatMap {
-        case Some(jsonDocument) =>
-          Future.successful(jsonDocument)
-        case None =>
-          Future.failed(new RuntimeException(s"document $id wasn't found"))
-      }
+      val documentFuture = session.get(id)
       // #fromBucket
-      documentFuture.failed.futureValue shouldBe a[RuntimeException]
+      documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
     }
   }
 }

@@ -19,7 +19,7 @@ import com.couchbase.client.java.manager.query.QueryIndex
 import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseMutationResult, CouchbaseSessionSettings }
+import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseWriteResult, CouchbaseSessionSettings }
 import org.apache.pekko.stream.connectors.couchbase.impl.CouchbaseSessionImpl
 import org.apache.pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JavaDslCouchbaseSession }
 import org.apache.pekko.stream.scaladsl.Source
@@ -55,8 +55,8 @@ object CouchbaseSession {
    * multiple `CouchbaseSession`s. The cluster client's life-cycle is the user's responsibility.
    */
   def apply(cluster: AsyncCluster, bucketName: String, scope: Option[String] = Option.empty,
-      collection: Option[String] = Option.empty)(implicit ec: ExecutionContext): Future[CouchbaseSession] =
-    Future(create(cluster, bucketName, scope, collection))
+      collection: Option[String] = Option.empty)(implicit ec: ExecutionContext): CouchbaseSession =
+    create(cluster, bucketName, scope, collection)
 
   /**
    * Create a given bucket using a pre-existing cluster client, allowing for it to be shared among

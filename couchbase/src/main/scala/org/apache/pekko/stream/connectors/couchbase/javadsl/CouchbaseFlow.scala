@@ -20,7 +20,7 @@ import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{
   scaladsl,
   CouchbaseDeleteResult,
-  CouchbaseMutationResult,
+  CouchbaseWriteResult,
   CouchbaseSessionSettings,
   CouchbaseWriteSettings
 }
@@ -70,7 +70,7 @@ object CouchbaseFlow {
   def upsertWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: T => String): Flow[T, CouchbaseMutationResult[T], NotUsed] =
+      getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
     scaladsl.CouchbaseFlow.upsertWithResult(sessionSettings, writeSettings, bucketName, getId).asJava
 
   /**
@@ -98,7 +98,7 @@ object CouchbaseFlow {
   def replaceWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: T => String): Flow[T, CouchbaseMutationResult[T], NotUsed] =
+      getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
     scaladsl.CouchbaseFlow.replaceWithResult(sessionSettings, writeSettings, bucketName, getId).asJava
 
   /**

@@ -13,29 +13,24 @@
 
 package docs.scaladsl
 
+import com.couchbase.client.core.error.{DocumentNotFoundException, DurabilityAmbiguousException}
+import com.couchbase.client.java.kv.GetResult
 import org.apache.pekko
 import pekko.Done
-import pekko.stream.connectors.couchbase.{
-  CouchbaseDeleteFailure,
-  CouchbaseDeleteResult,
-  CouchbaseWriteFailure,
-  CouchbaseWriteResult,
-  CouchbaseWriteSettings
-}
+import pekko.stream.connectors.couchbase.{CouchbaseDeleteFailure, CouchbaseDeleteResult, CouchbaseWriteFailure, CouchbaseWriteResult, CouchbaseWriteSettings}
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
-import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, TestObject }
+import pekko.stream.connectors.couchbase.testing.{CouchbaseSupport, JsonDocument, TestObject}
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{ Sink, Source }
-import com.couchbase.client.java.error.DocumentDoesNotExistException
+import pekko.stream.scaladsl.{Keep, Sink, Source}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest._
 
 //#write-settings
-import com.couchbase.client.java.{ PersistTo, ReplicateTo }
+import com.couchbase.client.java.kv.{PersistTo, ReplicateTo}
 //#write-settings
 
 import pekko.stream.testkit.scaladsl.StreamTestKit._
-import com.couchbase.client.java.document.{ BinaryDocument, RawJsonDocument, StringDocument }
+import org.apache.pekko.stream.connectors.couchbase.testing.{BinaryDocument, StringDocument}
 
 import scala.collection.immutable
 import scala.collection.immutable.Seq
@@ -43,14 +38,13 @@ import scala.concurrent.duration._
 import scala.concurrent.Future
 
 //#init-sourceBulk
-import com.couchbase.client.java.document.JsonDocument
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 //#init-sourceBulk
 
 class CouchbaseFlowSpec
-    extends AnyWordSpec
+  extends AnyWordSpec
     with BeforeAndAfterAll
     with BeforeAndAfterEach
     with CouchbaseSupport
@@ -62,6 +56,7 @@ class CouchbaseFlowSpec
   override implicit def patienceConfig: PatienceConfig = PatienceConfig(10.seconds, 250.millis)
 
   override def beforeAll(): Unit = super.beforeAll()
+
   override def afterAll(): Unit = super.afterAll()
 
   "Couchbase settings" should {
@@ -96,15 +91,15 @@ class CouchbaseFlowSpec
           .single(sampleData)
           .map(toRawJsonDocument)
           .via(
-            CouchbaseFlow.upsertDoc(
+            CouchbaseFlow.upsert(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.ignore)
       result.futureValue
-
-      val msgFuture: Future[Option[RawJsonDocument]] = session.get(sampleData.id, classOf[RawJsonDocument])
-      msgFuture.futureValue.get.id() shouldEqual sampleData.id
+      val msgFuture: Future[StringDocument] = session.get(sampleData.id, classOf[StringDocument])
+      msgFuture.futureValue.id shouldEqual sampleData.id
 
     }
 
@@ -123,13 +118,14 @@ class CouchbaseFlowSpec
             CouchbaseFlow.upsert(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.ignore)
       // #upsert
       jsonDocumentUpsert.futureValue
 
-      val msgFuture: Future[Option[JsonDocument]] = session.get(obj.id)
-      msgFuture.futureValue.get.content().get("value") shouldEqual obj.value
+      val msgFuture: Future[JsonDocument] = session.get(obj.id, classOf[JsonDocument])
+      msgFuture.futureValue.content.get("value") shouldEqual obj.value
     }
 
     "insert StringDocument" in assertAllStagesStopped {
@@ -140,16 +136,17 @@ class CouchbaseFlowSpec
           .single(sampleData)
           .map(toStringDocument)
           .via(
-            CouchbaseFlow.upsertDoc(
+            CouchbaseFlow.upsert(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.ignore)
       // #upsert
       stringDocumentUpsert.futureValue
 
-      val msgFuture: Future[Option[StringDocument]] = session.get(sampleData.id, classOf[StringDocument])
-      msgFuture.futureValue.get.id() shouldEqual sampleData.id
+      val msgFuture: Future[StringDocument] = session.get(sampleData.id, classOf[StringDocument])
+      msgFuture.futureValue.id shouldEqual sampleData.id
     }
 
     "insert BinaryDocument" in assertAllStagesStopped {
@@ -157,39 +154,40 @@ class CouchbaseFlowSpec
         Source
           .single(sampleData)
           .map(toBinaryDocument)
-          .via(CouchbaseFlow.upsertDoc(sessionSettings, writeSettings, bucketName))
+          .via(CouchbaseFlow.upsert(sessionSettings, writeSettings, bucketName, _.id))
           .runWith(Sink.ignore)
       result.futureValue
 
-      val msgFuture: Future[Option[BinaryDocument]] = session.get(sampleData.id, classOf[BinaryDocument])
-      msgFuture.futureValue.get.id() shouldEqual sampleData.id
+      val msgFuture: Future[BinaryDocument] = session.get(sampleData.id, classOf[BinaryDocument])
+      msgFuture.futureValue.id shouldEqual sampleData.id
     }
 
     "insert multiple RawJsonDocuments" in assertAllStagesStopped {
       val bulkUpsertResult: Future[Done] = Source(sampleSequence)
         .map(toRawJsonDocument)
         .via(
-          CouchbaseFlow.upsertDoc(
+          CouchbaseFlow.upsert(
             sessionSettings,
             writeSettings.withParallelism(2),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.ignore)
 
       bulkUpsertResult.futureValue
 
-      val resultsAsFuture: Future[immutable.Seq[RawJsonDocument]] =
+      val resultsAsFuture: Future[immutable.Seq[StringDocument]] =
         Source(sampleSequence.map(_.id))
-          .via(CouchbaseFlow.fromId(sessionSettings, bucketName, classOf[RawJsonDocument]))
+          .via(CouchbaseFlow.fromId(sessionSettings, bucketName, classOf[StringDocument]))
           .runWith(Sink.seq)
 
-      resultsAsFuture.futureValue.map(_.id()) should contain.inOrderOnly("First", "Second", "Third", "Fourth")
+      resultsAsFuture.futureValue.map(_.id) should contain.inOrderOnly("First", "Second", "Third", "Fourth")
     }
 
     "insert multiple JsonDocuments" in assertAllStagesStopped {
       val bulkUpsertResult: Future[Done] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
-          CouchbaseFlow.upsert(sessionSettings, writeSettings.withParallelism(2), bucketName))
+          CouchbaseFlow.upsert(sessionSettings, writeSettings.withParallelism(2), bucketName, _.id))
         .runWith(Sink.ignore)
 
       bulkUpsertResult.futureValue
@@ -206,17 +204,18 @@ class CouchbaseFlowSpec
           .runWith(Sink.seq)
       // #fromId
 
-      futureResult.futureValue.map(_.id()) should contain.inOrderOnly("First", "Second", "Third", "Fourth")
+      futureResult.futureValue.map(_.id) should contain.inOrderOnly("First", "Second", "Third", "Fourth")
     }
 
     "insert multiple StringDocuments" in assertAllStagesStopped {
       val bulkUpsertResult: Future[Done] = Source(sampleSequence)
         .map(toStringDocument)
         .via(
-          CouchbaseFlow.upsertDoc(
+          CouchbaseFlow.upsert(
             sessionSettings,
             writeSettings.withParallelism(2),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.ignore)
       bulkUpsertResult.futureValue
 
@@ -229,17 +228,18 @@ class CouchbaseFlowSpec
               classOf[StringDocument]))
           .runWith(Sink.seq)
 
-      resultsAsFuture.futureValue.map(_.id()) should contain.inOrder("First", "Second", "Third", "Fourth")
+      resultsAsFuture.futureValue.map(_.id) should contain.inOrder("First", "Second", "Third", "Fourth")
     }
 
     "insert multiple BinaryDocuments" in assertAllStagesStopped {
       val bulkUpsertResult: Future[Done] = Source(sampleSequence)
         .map(toBinaryDocument)
         .via(
-          CouchbaseFlow.upsertDoc(
+          CouchbaseFlow.upsert(
             sessionSettings,
             writeSettings.withParallelism(2),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.ignore)
       bulkUpsertResult.futureValue
 
@@ -251,7 +251,7 @@ class CouchbaseFlowSpec
               bucketName,
               classOf[BinaryDocument]))
           .runWith(Sink.seq)
-      resultsAsFuture.futureValue.map(_.id()) shouldBe Seq("First", "Second", "Third", "Fourth")
+      resultsAsFuture.futureValue.map(_.id) shouldBe Seq("First", "Second", "Third", "Fourth")
     }
 
     "fails stream when ReplicateTo higher then #of nodes" in assertAllStagesStopped {
@@ -263,10 +263,11 @@ class CouchbaseFlowSpec
               .withParallelism(2)
               .withPersistTo(PersistTo.THREE)
               .withTimeout(1.seconds),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.seq)
 
-      bulkUpsertResult.failed.futureValue shouldBe a[com.couchbase.client.java.error.DurabilityException]
+      bulkUpsertResult.failed.futureValue shouldBe a[com.couchbase.client.core.error.DurableWriteReCommitInProgressException]
     }
   }
 
@@ -278,10 +279,11 @@ class CouchbaseFlowSpec
           .single(sampleData)
           .map(toRawJsonDocument)
           .via(
-            CouchbaseFlow.upsertDoc(
+            CouchbaseFlow.upsert(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.ignore)
       // wait til operation completed
       upsertFuture.futureValue
@@ -301,10 +303,9 @@ class CouchbaseFlowSpec
 
       Thread.sleep(1000)
 
-      val msgFuture: Future[Option[RawJsonDocument]] = session.get(sampleData.id, classOf[RawJsonDocument])
-      msgFuture.futureValue shouldBe empty
+      val msgFuture: Future[StringDocument] = session.get(sampleData.id, classOf[StringDocument])
 
-      val getFuture: Future[RawJsonDocument] =
+      val getFuture: Future[StringDocument] =
         Source
           .single(sampleData.id)
           .via(
@@ -312,7 +313,7 @@ class CouchbaseFlowSpec
               .fromId(
                 sessionSettings,
                 bucketName,
-                classOf[RawJsonDocument]))
+                classOf[StringDocument]))
           .runWith(Sink.head)
       getFuture.failed.futureValue shouldBe a[NoSuchElementException]
     }
@@ -321,7 +322,7 @@ class CouchbaseFlowSpec
       val bulkUpsertResult: Future[Done] = Source(sampleSequence)
         .map(toRawJsonDocument)
         .via(
-          CouchbaseFlow.upsertDoc(sessionSettings, writeSettings.withParallelism(2), bucketName))
+          CouchbaseFlow.upsert(sessionSettings, writeSettings.withParallelism(2), bucketName, _.id))
         .runWith(Sink.ignore)
       bulkUpsertResult.futureValue
 
@@ -329,12 +330,12 @@ class CouchbaseFlowSpec
         .via(
           CouchbaseFlow.delete(sessionSettings, writeSettings.withParallelism(2), bucketName))
         .runWith(Sink.ignore)
-      deleteFuture.failed.futureValue shouldBe a[DocumentDoesNotExistException]
+      deleteFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
 
-      val getFuture: Future[Seq[RawJsonDocument]] =
+      val getFuture: Future[Seq[StringDocument]] =
         Source(sampleSequence.map(_.id))
           .via(
-            CouchbaseFlow.fromId(sessionSettings, bucketName, classOf[RawJsonDocument]))
+            CouchbaseFlow.fromId(sessionSettings, bucketName, classOf[StringDocument]))
           .runWith(Sink.seq)
       getFuture.futureValue shouldBe empty
     }
@@ -352,7 +353,7 @@ class CouchbaseFlowSpec
         .via(
           CouchbaseFlow.fromId(sessionSettings, queryBucketName))
         .runWith(Sink.head)
-      result.futureValue.id() shouldEqual id
+      result.futureValue.id shouldEqual id
     }
 
     "get document in flow that does not exist" in assertAllStagesStopped {
@@ -401,15 +402,16 @@ class CouchbaseFlowSpec
             CouchbaseFlow.replace(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.ignore)
       // #replace
       replaceFuture.futureValue
 
       Thread.sleep(1000)
 
-      val msgFuture: Future[Option[JsonDocument]] = session.get(obj.id)
-      msgFuture.futureValue.get.content().get("value") shouldEqual obj.value
+      val msgFuture: Future[JsonDocument] = session.get(obj.id, classOf[JsonDocument])
+      msgFuture.futureValue.content.get("value") shouldEqual obj.value
     }
 
     "replace multiple RawJsonDocuments" in assertAllStagesStopped {
@@ -422,10 +424,11 @@ class CouchbaseFlowSpec
       val bulkReplaceResult: Future[Done] = Source(replaceSequence)
         .map(toRawJsonDocument)
         .via(
-          CouchbaseFlow.replaceDoc(
+          CouchbaseFlow.replace(
             sessionSettings,
             writeSettings.withParallelism(2),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.ignore)
 
       bulkReplaceResult.futureValue
@@ -435,7 +438,7 @@ class CouchbaseFlowSpec
           .via(CouchbaseFlow.fromId(sessionSettings, bucketName))
           .runWith(Sink.seq)
 
-      resultsAsFuture.futureValue.map(doc => doc.content().get("value")) should contain.inOrderOnly("First",
+      resultsAsFuture.futureValue.map(doc => doc.content.get("value")) should contain.inOrderOnly("First",
         "SecondReplace",
         "ThirdReplace",
         "Fourth")
@@ -452,10 +455,11 @@ class CouchbaseFlowSpec
         .single(obj)
         .map(toJsonDocument)
         .via(
-          CouchbaseFlow.replaceDoc(
+          CouchbaseFlow.replace(
             sessionSettings,
             writeSettings,
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.ignore)
       // #replaceDocreplace
 
@@ -463,8 +467,8 @@ class CouchbaseFlowSpec
 
       Thread.sleep(1000)
 
-      val msgFuture: Future[Option[JsonDocument]] = session.get(obj.id)
-      msgFuture.futureValue.get.content().get("value") shouldEqual obj.value
+      val msgFuture: Future[JsonDocument] = session.get(obj.id, classOf[JsonDocument])
+      msgFuture.futureValue.content.get("value") shouldEqual obj.value
     }
 
     "fails stream when ReplicateTo higher then #of nodes" in assertAllStagesStopped {
@@ -479,10 +483,11 @@ class CouchbaseFlowSpec
               .withParallelism(2)
               .withPersistTo(PersistTo.THREE)
               .withTimeout(1.seconds),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.seq)
-
-      bulkReplaceResult.failed.futureValue shouldBe a[com.couchbase.client.java.error.DurabilityException]
+      // todo: update DurabilityAmbiguousException
+      bulkReplaceResult.failed.futureValue shouldBe a[DurabilityAmbiguousException]
     }
   }
 
@@ -490,18 +495,19 @@ class CouchbaseFlowSpec
     "write documents" in assertAllStagesStopped {
       // #upsertDocWithResult
 
-      val result: Future[immutable.Seq[CouchbaseWriteResult[RawJsonDocument]]] =
+      val result: Future[immutable.Seq[CouchbaseWriteResult[StringDocument]]] =
         Source(sampleSequence)
           .map(toRawJsonDocument)
           .via(
-            CouchbaseFlow.upsertDocWithResult(
+            CouchbaseFlow.upsertWithResult(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.seq)
 
-      val failedDocs: immutable.Seq[CouchbaseWriteFailure[RawJsonDocument]] = result.futureValue.collect {
-        case res: CouchbaseWriteFailure[RawJsonDocument] => res
+      val failedDocs: immutable.Seq[CouchbaseWriteFailure[StringDocument]] = result.futureValue.collect {
+        case res: CouchbaseWriteFailure[StringDocument] => res
       }
       // #upsertDocWithResult
 
@@ -515,19 +521,20 @@ class CouchbaseFlowSpec
       val result: Future[immutable.Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
-          CouchbaseFlow.upsertDocWithResult(sessionSettings,
+          CouchbaseFlow.upsertWithResult(sessionSettings,
             writeSettings
               .withParallelism(2)
               .withPersistTo(PersistTo.THREE)
               .withTimeout(1.seconds),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.seq)
 
       result.futureValue should have size sampleSequence.size
       val failedDocs: immutable.Seq[CouchbaseWriteFailure[JsonDocument]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[JsonDocument] => res
       }
-      failedDocs.head.failure shouldBe a[com.couchbase.client.java.error.DurabilityException]
+      failedDocs.head.failure shouldBe a[DurabilityAmbiguousException]
     }
 
   }
@@ -558,11 +565,11 @@ class CouchbaseFlowSpec
               bucketName))
           .runWith(Sink.head)
       // #deleteWithResult
-      deleteFuture.failed.futureValue shouldBe a[DocumentDoesNotExistException]
+      deleteFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
 
       deleteResult.futureValue shouldBe a[CouchbaseDeleteFailure]
       deleteResult.futureValue.id shouldBe "non-existent"
-      deleteResult.mapTo[CouchbaseDeleteFailure].futureValue.failure shouldBe a[DocumentDoesNotExistException]
+      deleteResult.mapTo[CouchbaseDeleteFailure].futureValue.failure shouldBe a[DocumentNotFoundException]
     }
   }
 
@@ -573,18 +580,19 @@ class CouchbaseFlowSpec
 
       // #replaceDocWithResult
 
-      val result: Future[immutable.Seq[CouchbaseWriteResult[RawJsonDocument]]] =
+      val result: Future[immutable.Seq[CouchbaseWriteResult[StringDocument]]] =
         Source(sampleSequence)
           .map(toRawJsonDocument)
           .via(
-            CouchbaseFlow.replaceDocWithResult(
+            CouchbaseFlow.replaceWithResult(
               sessionSettings,
               writeSettings,
-              bucketName))
+              bucketName,
+              _.id))
           .runWith(Sink.seq)
 
-      val failedDocs: immutable.Seq[CouchbaseWriteFailure[RawJsonDocument]] = result.futureValue.collect {
-        case res: CouchbaseWriteFailure[RawJsonDocument] => res
+      val failedDocs: immutable.Seq[CouchbaseWriteFailure[StringDocument]] = result.futureValue.collect {
+        case res: CouchbaseWriteFailure[StringDocument] => res
       }
       // #replaceDocWithResult
 
@@ -600,19 +608,20 @@ class CouchbaseFlowSpec
       val result: Future[immutable.Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
-          CouchbaseFlow.replaceDocWithResult(sessionSettings,
+          CouchbaseFlow.replaceWithResult(sessionSettings,
             writeSettings
               .withParallelism(2)
               .withPersistTo(PersistTo.THREE)
               .withTimeout(1.seconds),
-            bucketName))
+            bucketName,
+            _.id))
         .runWith(Sink.seq)
 
       result.futureValue should have size sampleSequence.size
       val failedDocs: immutable.Seq[CouchbaseWriteFailure[JsonDocument]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[JsonDocument] => res
       }
-      failedDocs.head.failure shouldBe a[com.couchbase.client.java.error.DocumentDoesNotExistException]
+      failedDocs.head.failure shouldBe a[DurabilityAmbiguousException]
     }
   }
 }

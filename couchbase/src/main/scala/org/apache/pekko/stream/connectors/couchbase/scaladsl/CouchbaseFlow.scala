@@ -90,9 +90,9 @@ object CouchbaseFlow {
   def upsertWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: T => String): Flow[T, CouchbaseMutationResult[T], NotUsed] = {
+      getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
 
-    val flow: Flow[T, CouchbaseMutationResult[T], Future[NotUsed]] = Flow
+    val flow: Flow[T, CouchbaseWriteResult[T], Future[NotUsed]] = Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
@@ -101,9 +101,9 @@ object CouchbaseFlow {
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.upsert(getId(doc), doc, writeSettings.toUpsertOption)
-                .map(result => CouchbaseMutationSuccess(id, doc, result))
+                .map(result => CouchbaseWriteSuccess(id, doc, result))
                 .recover {
-                  case exception => CouchbaseMutationFailure(id, doc, exception)
+                  case exception => CouchbaseWriteFailure(id, doc, exception)
                 })
           })
       }
@@ -133,7 +133,7 @@ object CouchbaseFlow {
   def replace[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: T => String): Flow[T, MutationResult, NotUsed] =
+      getId: T => String): Flow[T, MutationResult, T] =
     Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
@@ -142,7 +142,7 @@ object CouchbaseFlow {
             session.flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))(
               materializer.system.dispatcher))
       }
-      .mapMaterializedValue(_ => NotUsed)
+      .mapMaterializedValue(doc=>doc)
 
   /**
    * Create a flow to replace a Couchbase document of the given class and emit a result so that write failures
@@ -151,8 +151,8 @@ object CouchbaseFlow {
   def replaceWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: T => String): Flow[T, CouchbaseMutationResult[T], NotUsed] = {
-    val flow: Flow[T, CouchbaseMutationResult[T], Future[NotUsed]] = Flow
+      getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
+    val flow: Flow[T, CouchbaseWriteResult[T], Future[NotUsed]] = Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
@@ -161,9 +161,9 @@ object CouchbaseFlow {
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))
-              .map(res => CouchbaseMutationSuccess(id, doc, res))
+              .map(res => CouchbaseWriteSuccess(id, doc, res))
               .recover {
-                case exception => CouchbaseMutationFailure(id, doc, exception)
+                case exception => CouchbaseWriteFailure(id, doc, exception)
               }
           })
       }
