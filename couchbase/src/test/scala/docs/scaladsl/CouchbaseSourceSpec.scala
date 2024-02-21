@@ -14,19 +14,19 @@
 package docs.scaladsl
 
 import org.apache.pekko
-import pekko.stream.connectors.couchbase.scaladsl.{CouchbaseSession, CouchbaseSource}
+import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, CouchbaseSource }
 import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit._
-import com.couchbase.client.java.{AsyncCluster, Bucket, Cluster}
+import com.couchbase.client.java.{ AsyncCluster, Bucket, Cluster }
 import com.couchbase.client.java.query.QueryResult
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
 import scala.collection.immutable.Seq
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -44,7 +44,6 @@ class CouchbaseSourceSpec
 
     "run simple Statement Query" in assertAllStagesStopped {
       // #statement
-
 
       val resultAsFuture: Future[Seq[QueryResult]] =
         CouchbaseSource

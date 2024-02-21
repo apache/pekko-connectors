@@ -13,24 +13,30 @@
 
 package docs.scaladsl
 
-import com.couchbase.client.core.error.{DocumentNotFoundException, DurabilityAmbiguousException}
+import com.couchbase.client.core.error.{ DocumentNotFoundException, DurabilityAmbiguousException }
 import com.couchbase.client.java.kv.GetResult
 import org.apache.pekko
 import pekko.Done
-import pekko.stream.connectors.couchbase.{CouchbaseDeleteFailure, CouchbaseDeleteResult, CouchbaseWriteFailure, CouchbaseWriteResult, CouchbaseWriteSettings}
+import pekko.stream.connectors.couchbase.{
+  CouchbaseDeleteFailure,
+  CouchbaseDeleteResult,
+  CouchbaseWriteFailure,
+  CouchbaseWriteResult,
+  CouchbaseWriteSettings
+}
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
-import pekko.stream.connectors.couchbase.testing.{CouchbaseSupport, JsonDocument, TestObject}
+import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, JsonDocument, TestObject }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{Keep, Sink, Source}
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest._
 
 //#write-settings
-import com.couchbase.client.java.kv.{PersistTo, ReplicateTo}
+import com.couchbase.client.java.kv.{ PersistTo, ReplicateTo }
 //#write-settings
 
 import pekko.stream.testkit.scaladsl.StreamTestKit._
-import org.apache.pekko.stream.connectors.couchbase.testing.{BinaryDocument, StringDocument}
+import org.apache.pekko.stream.connectors.couchbase.testing.{ BinaryDocument, StringDocument }
 
 import scala.collection.immutable
 import scala.collection.immutable.Seq
@@ -44,7 +50,7 @@ import org.scalatest.wordspec.AnyWordSpec
 //#init-sourceBulk
 
 class CouchbaseFlowSpec
-  extends AnyWordSpec
+    extends AnyWordSpec
     with BeforeAndAfterAll
     with BeforeAndAfterEach
     with CouchbaseSupport
@@ -267,7 +273,8 @@ class CouchbaseFlowSpec
             _.id))
         .runWith(Sink.seq)
 
-      bulkUpsertResult.failed.futureValue shouldBe a[com.couchbase.client.core.error.DurableWriteReCommitInProgressException]
+      bulkUpsertResult.failed.futureValue shouldBe a[
+        com.couchbase.client.core.error.DurableWriteReCommitInProgressException]
     }
   }
 

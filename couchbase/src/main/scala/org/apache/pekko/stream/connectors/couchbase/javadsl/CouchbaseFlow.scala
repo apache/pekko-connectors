@@ -20,8 +20,8 @@ import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{
   scaladsl,
   CouchbaseDeleteResult,
-  CouchbaseWriteResult,
   CouchbaseSessionSettings,
+  CouchbaseWriteResult,
   CouchbaseWriteSettings
 }
 import pekko.stream.javadsl.Flow

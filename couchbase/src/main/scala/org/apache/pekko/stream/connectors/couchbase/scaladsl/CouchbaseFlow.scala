@@ -133,7 +133,7 @@ object CouchbaseFlow {
   def replace[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: T => String): Flow[T, MutationResult, T] =
+      getId: T => String): Flow[T, MutationResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
@@ -142,7 +142,7 @@ object CouchbaseFlow {
             session.flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))(
               materializer.system.dispatcher))
       }
-      .mapMaterializedValue(doc=>doc)
+      .mapMaterializedValue(_ => NotUsed)
 
   /**
    * Create a flow to replace a Couchbase document of the given class and emit a result so that write failures
@@ -157,7 +157,7 @@ object CouchbaseFlow {
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc => {
-            val id = getId(id)
+            val id = getId(doc)
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
               .flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))

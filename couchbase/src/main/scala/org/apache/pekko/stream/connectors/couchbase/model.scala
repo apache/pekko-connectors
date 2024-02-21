@@ -14,19 +14,8 @@
 package org.apache.pekko.stream.connectors.couchbase
 
 import com.couchbase.client.java.env.ClusterEnvironment
-import com.couchbase.client.java.kv.{
-  CommonDurabilityOptions,
-  InsertOptions,
-  MutationResult,
-  PersistTo,
-  RemoveOptions,
-  ReplaceOptions,
-  ReplicateTo,
-  UpsertOptions
-}
-import com.couchbase.client.java.query.QueryResult
+import com.couchbase.client.java.kv._
 import com.typesafe.config.Config
-import org.apache.pekko
 import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.util.FutureConverters._
@@ -295,8 +284,8 @@ sealed trait CouchbaseWriteResult[T] {
 /**
  * Emitted for a successful Couchbase write operation.
  */
-final case class CouchbaseWriteSuccess[T] private[couchbase](override val id: String, override val doc: T,
-                                                             result: MutationResult)
+final case class CouchbaseWriteSuccess[T] private[couchbase] (override val id: String, override val doc: T,
+    result: MutationResult)
     extends CouchbaseWriteResult[T] {
   val isSuccess: Boolean = true
   val isFailure: Boolean = false
@@ -305,8 +294,8 @@ final case class CouchbaseWriteSuccess[T] private[couchbase](override val id: St
 /**
  * Emitted for a failed Couchbase write operation.
  */
-final case class CouchbaseWriteFailure[T] private[couchbase](override val id: String, override val doc: T,
-                                                             failure: Throwable)
+final case class CouchbaseWriteFailure[T] private[couchbase] (override val id: String, override val doc: T,
+    failure: Throwable)
     extends CouchbaseWriteResult[T] {
   val isSuccess: Boolean = false
   val isFailure: Boolean = true

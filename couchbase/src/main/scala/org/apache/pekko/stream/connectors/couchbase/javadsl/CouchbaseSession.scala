@@ -20,9 +20,7 @@ import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.annotation.DoNotInherit
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
-import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionImpl, CouchbaseSessionScalaAdapter }
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
 import pekko.stream.javadsl.Source
 import pekko.util.FutureConverters._

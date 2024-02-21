@@ -13,13 +13,13 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import com.couchbase.client.java.json.JsonValue
 import org.apache.pekko
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
-
-import java.util.concurrent.CompletionStage
 import pekko.stream.javadsl.{ Keep, Sink }
 import pekko.{ Done, NotUsed }
+
+import com.couchbase.client.java.json.JsonValue
+import java.util.concurrent.CompletionStage
 
 /**
  * Java API: Factory methods for Couchbase sinks.

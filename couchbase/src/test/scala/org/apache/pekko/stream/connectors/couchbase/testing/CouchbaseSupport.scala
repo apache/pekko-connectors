@@ -13,16 +13,16 @@
 
 package org.apache.pekko.stream.connectors.couchbase.testing
 
-import com.couchbase.client.core.deps.io.netty.buffer.{ByteBuf, Unpooled}
+import com.couchbase.client.core.deps.io.netty.buffer.{ ByteBuf, Unpooled }
 import com.couchbase.client.core.deps.io.netty.util.CharsetUtil
 import com.couchbase.client.java.json.JsonObject
 import com.couchbase.client.java.kv.ReplicateTo
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.couchbase.scaladsl.{CouchbaseFlow, CouchbaseSession}
-import pekko.stream.connectors.couchbase.{CouchbaseSessionSettings, CouchbaseWriteSettings}
-import pekko.stream.scaladsl.{Sink, Source}
+import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ccompat.JavaConverters._
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory
 import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 
 case class TestObject(id: String, value: String)
 
@@ -117,7 +117,6 @@ trait CouchbaseSupport {
 }
 
 final class CouchbaseSupportClass extends CouchbaseSupport
-
 
 trait Document[T] {
   def id: String

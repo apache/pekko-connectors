@@ -19,12 +19,12 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pekko.stream.connectors.couchbase.{CouchbaseSessionRegistry, CouchbaseSessionSettings}
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
-import pekko.stream.connectors.couchbase.testing.{CouchbaseSupport, JsonDocument}
+import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, JsonDocument }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 
 class CouchbaseSessionExamplesSpec
@@ -68,7 +68,7 @@ class CouchbaseSessionExamplesSpec
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings, bucketName)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
       val id = "myId"
-      val documentFuture = sessionFuture.map(session =>session.get(id, classOf[JsonDocument]))
+      val documentFuture = sessionFuture.map(session => session.get(id, classOf[JsonDocument]))
       documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
     }
 

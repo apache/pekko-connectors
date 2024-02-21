@@ -26,12 +26,12 @@ services:
     ports:
       - "9042:9042"
   couchbase:
-    image: couchbase:community-5.1.1
+    image: couchbase:community-7.2.4
     ports:
       - "8091-8094:8091-8094"
       - "11210:11210"
   couchbase_prep:
-    image: couchbase:community-5.1.1
+    image: couchbase:community-7.2.4
     links:
       - "couchbase"
     entrypoint: ""

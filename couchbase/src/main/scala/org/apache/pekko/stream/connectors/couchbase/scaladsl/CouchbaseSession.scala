@@ -19,7 +19,7 @@ import com.couchbase.client.java.manager.query.QueryIndex
 import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseWriteResult, CouchbaseSessionSettings }
+import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteResult }
 import org.apache.pekko.stream.connectors.couchbase.impl.CouchbaseSessionImpl
 import org.apache.pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JavaDslCouchbaseSession }
 import org.apache.pekko.stream.scaladsl.Source
