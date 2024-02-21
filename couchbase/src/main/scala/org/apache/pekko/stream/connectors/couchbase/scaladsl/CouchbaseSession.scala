@@ -13,17 +13,18 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
+import org.apache.pekko
+import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import org.apache.pekko.stream.connectors.couchbase.impl.CouchbaseSessionImpl
+import org.apache.pekko.stream.connectors.couchbase.javadsl
+import org.apache.pekko.stream.scaladsl.Source
+
 import com.couchbase.client.java._
 import com.couchbase.client.java.kv._
 import com.couchbase.client.java.manager.query.QueryIndex
 import com.couchbase.client.java.query.QueryResult
-import org.apache.pekko
-import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteResult }
-import org.apache.pekko.stream.connectors.couchbase.impl.CouchbaseSessionImpl
-import org.apache.pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JavaDslCouchbaseSession }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -106,7 +107,7 @@ trait CouchbaseSession {
 
   def underlying: AsyncCluster
 
-  def asJava: JavaDslCouchbaseSession
+  def asJava: javadsl.CouchbaseSession
 
   /**
    * Insert a JSON document using the given write settings.
@@ -120,7 +121,7 @@ trait CouchbaseSession {
    * @param getOptions Query configuration, such as configuring timeout time
    * @return A document if found or none if there is no document for the id
    */
-  def get(id: String, getOptions: GetOptions = GetOptions.getOptions): Future[GetResult]
+  def get(id: String, getOptions: GetOptions): Future[GetResult]
 
   /**
    * @return A document of the given type if found or none if there is no document for the id

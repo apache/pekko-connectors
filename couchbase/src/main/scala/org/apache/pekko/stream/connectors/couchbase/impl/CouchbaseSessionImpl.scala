@@ -15,9 +15,9 @@ package org.apache.pekko.stream.connectors.couchbase.impl
 
 import com.couchbase.client.java._
 import com.couchbase.client.java.kv._
-import com.couchbase.client.java.manager.query.{ CreateQueryIndexOptions, QueryIndex }
+import com.couchbase.client.java.manager.query.{CreateQueryIndexOptions, QueryIndex}
 import com.couchbase.client.java.query.QueryResult
-import org.apache.pekko.{ Done, NotUsed }
+import org.apache.pekko.{Done, NotUsed}
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession
 import org.apache.pekko.stream.connectors.couchbase.scaladsl
@@ -25,7 +25,7 @@ import org.apache.pekko.stream.javadsl.Source
 import org.apache.pekko.util.FutureConverters.CompletionStageOps
 
 import java.util.concurrent.CompletionStage
-import scala.jdk.CollectionConverters.SeqHasAsJava
+import scala.jdk.CollectionConverters.{IterableHasAsScala, SeqHasAsJava}
 import scala.language.implicitConversions
 
 /**
@@ -79,6 +79,6 @@ final private[couchbase] class CouchbaseSessionImpl(cluster: AsyncCluster,
     cluster.queryIndexes().createIndex(bucket.name(), indexName, fieldsAsJava, options).thenApply(_ => true)
   }
 
-  override def listIndexes(): Source[List[QueryIndex], NotUsed] =
+  override def listIndexes(): Source[java.util.List[QueryIndex], NotUsed] =
     Source.future(cluster.queryIndexes().getAllIndexes(bucket.name()).asScala)
 }

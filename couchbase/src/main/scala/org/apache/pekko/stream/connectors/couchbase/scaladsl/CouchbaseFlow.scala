@@ -14,12 +14,12 @@
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
 import com.couchbase.client.java.json.JsonValue
-import com.couchbase.client.java.kv.{ GetResult, MutationResult }
+import com.couchbase.client.java.kv.{GetOptions, GetResult, MutationResult}
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.connectors.couchbase._
 import org.apache.pekko.stream.scaladsl.Flow
 
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * Scala API: Factory methods for Couchbase flows.
@@ -34,7 +34,7 @@ object CouchbaseFlow {
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
         Flow[String]
-          .mapAsync(1)(id => session.flatMap(_.get(id))(materializer.system.dispatcher))
+          .mapAsync(1)(id => session.flatMap(_.get(id, GetOptions.getOptions))(materializer.system.dispatcher))
       }
       .mapMaterializedValue(_ => NotUsed)
 

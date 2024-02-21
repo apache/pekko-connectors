@@ -151,5 +151,5 @@ abstract class CouchbaseSession {
   /**
    * List the existing secondary indexes for the bucket
    */
-  def listIndexes(): Source[List[QueryIndex], NotUsed]
+  def listIndexes(): Source[java.util.List[QueryIndex], NotUsed]
 }

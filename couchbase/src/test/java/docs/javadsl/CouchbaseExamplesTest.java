@@ -206,7 +206,7 @@ public class CouchbaseExamplesTest {
     CompletionStage<MutationResult> jsonDocumentUpsert =
         Source.single(obj)
             .map(support::toJsonDocument)
-            .viaMat(CouchbaseFlow.upsert(sessionSettings, writeSettings, bucketName, JsonDocument::id), Keep.right())
+            .via(CouchbaseFlow.upsert(sessionSettings, writeSettings, bucketName, JsonDocument::id))
             .runWith(Sink.head(), actorSystem);
     // #upsert
     MutationResult mutationResult = jsonDocumentUpsert.toCompletableFuture().get(3, TimeUnit.SECONDS);
