@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.jms
 
 import javax.jms._
 import jmstestkit.JmsBroker
-import com.github.pjfanning.jmswrapper.WrappedConnectionFactory
 
 import scala.util.Random
 
@@ -28,7 +27,7 @@ abstract class JmsSharedServerSpec extends JmsSpec {
 
   override def beforeAll(): Unit = {
     jmsBroker = JmsBroker()
-    connectionFactory = new WrappedConnectionFactory(jmsBroker.createConnectionFactory)
+    connectionFactory = jmsBroker.createConnectionFactory
     Thread.sleep(500)
   }
 
