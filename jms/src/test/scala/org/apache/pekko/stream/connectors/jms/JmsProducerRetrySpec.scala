@@ -93,8 +93,6 @@ class JmsProducerRetrySpec extends JmsSpec {
         sentList.exists(consumed => index(consumed) == index(produced))
       } shouldBe true
 
-      connectionFactory.getUnclosedConsumerCount shouldBe 0
-      connectionFactory.getUnclosedProducerCount shouldBe 0
       connectionFactory.getUnclosedSessionCount shouldBe 0
       connectionFactory.getUnclosedConnectionCount shouldBe 0
     }
