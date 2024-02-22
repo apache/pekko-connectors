@@ -21,6 +21,8 @@ import pekko.stream.OverflowStrategy
 import pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
 import pekko.stream.connectors.jms.scaladsl.{ JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
+
+import com.github.pjfanning.jmswrapper.WrappedConnectionFactory
 import javax.jms._
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito._
@@ -311,7 +313,7 @@ class JmsConnectionStatusSpec extends JmsSpec {
     }
 
     "reflect connection status on connection retries" in withServer() { server =>
-      val connectionFactory = server.createConnectionFactory
+      val connectionFactory = new WrappedConnectionFactory(server.createConnectionFactory)
       val jmsSink = textSink(
         JmsProducerSettings(producerConfig, connectionFactory)
           .withQueue("test")

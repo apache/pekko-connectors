@@ -19,6 +19,8 @@ import org.apache.pekko
 import pekko.stream._
 import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsProducer }
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
+
+import com.github.pjfanning.jmswrapper.WrappedConnectionFactory
 import javax.jms.{ JMSException, Message, TextMessage }
 import org.mockito.ArgumentMatchers.{ any, anyInt, anyLong }
 import org.mockito.Mockito.when
@@ -34,7 +36,7 @@ class JmsProducerRetrySpec extends JmsSpec {
 
   "JmsProducer retries" should {
     "retry sending on network failures" in withServer() { server =>
-      val connectionFactory = server.createConnectionFactory
+      val connectionFactory = new WrappedConnectionFactory(server.createConnectionFactory)
       val jms = JmsProducer
         .flow[JmsMapMessage](
           JmsProducerSettings(producerConfig, connectionFactory)
@@ -90,10 +92,15 @@ class JmsProducerRetrySpec extends JmsSpec {
       resultList.forall { produced =>
         sentList.exists(consumed => index(consumed) == index(produced))
       } shouldBe true
+
+      connectionFactory.getUnclosedConsumerCount shouldBe 0
+      connectionFactory.getUnclosedProducerCount shouldBe 0
+      connectionFactory.getUnclosedSessionCount shouldBe 0
+      connectionFactory.getUnclosedConnectionCount shouldBe 0
     }
 
     "fail sending only after max retries" in withServer() { server =>
-      val connectionFactory = server.createConnectionFactory
+      val connectionFactory = new WrappedConnectionFactory(server.createConnectionFactory)
       val jms = JmsProducer
         .flow[JmsMapMessage](
           JmsProducerSettings(producerConfig, connectionFactory)
