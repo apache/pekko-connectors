@@ -93,8 +93,10 @@ class JmsProducerRetrySpec extends JmsSpec {
         sentList.exists(consumed => index(consumed) == index(produced))
       } shouldBe true
 
-      connectionFactory.getUnclosedSessionCount shouldBe 0
-      connectionFactory.getUnclosedConnectionCount shouldBe 0
+      eventually {
+        connectionFactory.getUnclosedSessionCount shouldBe 0
+        connectionFactory.getUnclosedConnectionCount shouldBe 0
+      }
     }
 
     "fail sending only after max retries" in withServer() { server =>
@@ -153,8 +155,10 @@ class JmsProducerRetrySpec extends JmsSpec {
       val failure = result.failed.futureValue
       failure shouldBe a[UnsupportedMapMessageEntryType]
 
-      wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
-      wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
+      eventually {
+        wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
+        wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
+      }
     }
 
     "invoke supervisor when send fails" in withConnectionFactory() { connectionFactory =>
@@ -185,8 +189,10 @@ class JmsProducerRetrySpec extends JmsSpec {
 
       deciderCalls.get shouldBe 1
 
-      wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
-      wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
+      eventually {
+        wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
+        wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
+      }
     }
 
     "retry send as often as configured" in withMockedProducer { ctx =>
