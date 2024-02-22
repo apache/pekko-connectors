@@ -508,8 +508,8 @@ public class SolrTest {
         SolrSource.fromTupleStream(stream2)
             .map(
                 t -> {
-                  String id = t.fields.get("title").toString();
-                  String comment = t.fields.get("comment").toString();
+                  String id = t.getFields().get("title").toString();
+                  String comment = t.getFields().get("comment").toString();
                   Map<String, Object> m2 = new HashMap<>();
                   m2.put("set", (comment + " It's is a good book!!!"));
                   Map<String, Map<String, Object>> updates = new HashMap<>();
@@ -593,8 +593,8 @@ public class SolrTest {
         SolrSource.fromTupleStream(stream2)
             .map(
                 t -> {
-                  String id = t.fields.get("title").toString();
-                  String comment = t.fields.get("comment").toString();
+                  String id = t.getFields().get("title").toString();
+                  String comment = t.getFields().get("comment").toString();
                   Map<String, Object> m2 = new HashMap<>();
                   m2.put("set", (comment + " It's is a good book!!!"));
                   Map<String, Map<String, Object>> updates = new HashMap<>();
@@ -678,7 +678,7 @@ public class SolrTest {
         SolrSource.fromTupleStream(stream2)
             .map(
                 t -> {
-                  String id = t.fields.get("title").toString();
+                  String id = t.getFields().get("title").toString();
                   return WriteMessage.<SolrInputDocument>createDeleteByQueryMessage(
                       "title:\"" + id + "\"");
                 })
@@ -861,8 +861,6 @@ public class SolrTest {
 
     ((ZkClientClusterStateProvider) solrClient.getClusterStateProvider())
         .uploadConfig(confDir.toPath(), "conf");
-
-    solrClient.setIdField("router");
 
     assertTrue(!solrClient.getZkStateReader().getClusterState().getLiveNodes().isEmpty());
   }
