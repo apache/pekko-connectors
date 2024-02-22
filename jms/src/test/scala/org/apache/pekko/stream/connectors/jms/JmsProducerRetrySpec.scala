@@ -130,12 +130,16 @@ class JmsProducerRetrySpec extends JmsSpec {
       val expectedDelay = 100L + 400L + 600L
       failureTime - crashTime shouldBe >(expectedDelay)
       failure shouldBe RetrySkippedOnMissingConnection
+
+      connectionFactory.getUnclosedSessionCount shouldBe 0
+      connectionFactory.getUnclosedConnectionCount shouldBe 0
     }
 
     "fail immediately on non-recoverable errors" in withConnectionFactory() { connectionFactory =>
+      val wrappedConnectionFactory = new WrappedConnectionFactory(connectionFactory)
       val jms = JmsProducer
         .flow[JmsMapMessage](
-          JmsProducerSettings(producerConfig, connectionFactory)
+          JmsProducerSettings(producerConfig, wrappedConnectionFactory)
             .withQueue("test")
             .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries()))
         .withAttributes(ActorAttributes.supervisionStrategy(stoppingDecider))
@@ -148,9 +152,13 @@ class JmsProducerRetrySpec extends JmsSpec {
 
       val failure = result.failed.futureValue
       failure shouldBe a[UnsupportedMapMessageEntryType]
+
+      wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
+      wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
     }
 
     "invoke supervisor when send fails" in withConnectionFactory() { connectionFactory =>
+      val wrappedConnectionFactory = new WrappedConnectionFactory(connectionFactory)
       val deciderCalls = new AtomicInteger()
       val decider: Supervision.Decider = { ex =>
         deciderCalls.incrementAndGet()
@@ -159,7 +167,7 @@ class JmsProducerRetrySpec extends JmsSpec {
 
       val jms = JmsProducer
         .flow[JmsMapMessage](
-          JmsProducerSettings(producerConfig, connectionFactory)
+          JmsProducerSettings(producerConfig, wrappedConnectionFactory)
             .withQueue("test")
             .withSendRetrySettings(SendRetrySettings(system).withInfiniteRetries()))
         .withAttributes(ActorAttributes.supervisionStrategy(decider))
@@ -176,6 +184,9 @@ class JmsProducerRetrySpec extends JmsSpec {
       list shouldBe List("1", "3")
 
       deciderCalls.get shouldBe 1
+
+      wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
+      wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
     }
 
     "retry send as often as configured" in withMockedProducer { ctx =>

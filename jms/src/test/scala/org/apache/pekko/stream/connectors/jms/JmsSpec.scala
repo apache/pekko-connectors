@@ -20,7 +20,6 @@ import pekko.testkit.TestKit
 
 import javax.jms._
 import jmstestkit.JmsBroker
-import com.github.pjfanning.jmswrapper.WrappedConnectionFactory
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito.when
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
@@ -50,7 +49,7 @@ abstract class JmsSpec
 
   def withConnectionFactory()(test: ConnectionFactory => Unit): Unit =
     withServer() { server =>
-      test(new WrappedConnectionFactory(server.createConnectionFactory))
+      test(server.createConnectionFactory)
     }
 
   def withServer()(test: JmsBroker => Unit): Unit = {
