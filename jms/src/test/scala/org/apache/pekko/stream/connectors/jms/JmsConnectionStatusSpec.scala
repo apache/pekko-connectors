@@ -21,6 +21,8 @@ import pekko.stream.OverflowStrategy
 import pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
 import pekko.stream.connectors.jms.scaladsl.{ JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
+
+import com.github.pjfanning.jmswrapper.WrappedConnectionFactory
 import javax.jms._
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito._
@@ -38,8 +40,9 @@ class JmsConnectionStatusSpec extends JmsSpec {
 
     "report disconnected on producer stream failure" in withConnectionFactory() { connectionFactory =>
       val connectedLatch = new CountDownLatch(1)
+      val wrappedConnectionFactory = new WrappedConnectionFactory(connectionFactory)
 
-      val jmsSink = textSink(JmsProducerSettings(producerConfig, connectionFactory).withQueue("test"))
+      val jmsSink = textSink(JmsProducerSettings(producerConfig, wrappedConnectionFactory).withQueue("test"))
       val exception = new RuntimeException("failing stage")
 
       val producerStatus = Source
@@ -63,6 +66,9 @@ class JmsConnectionStatusSpec extends JmsSpec {
 
       status should havePublishedState(Failing(exception))
       status should havePublishedState(Failed(exception))
+
+      wrappedConnectionFactory.getUnclosedSessionCount shouldBe 0
+      wrappedConnectionFactory.getUnclosedConnectionCount shouldBe 0
     }
 
     "report multiple connection attempts" in withMockedProducer { ctx =>

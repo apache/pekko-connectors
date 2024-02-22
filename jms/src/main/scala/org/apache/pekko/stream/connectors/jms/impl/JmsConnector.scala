@@ -145,7 +145,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
   }
 
   private def handleRetriableException(ex: Throwable): Unit = {
-    jmsSessions = Seq.empty
+    closeSessions()
     connectionState match {
       case JmsConnectorInitializing(_, attempt, backoffMaxed, _) =>
         maybeReconnect(ex, attempt, backoffMaxed)
