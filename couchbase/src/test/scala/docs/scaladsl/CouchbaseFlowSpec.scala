@@ -13,17 +13,17 @@
 
 package docs.scaladsl
 
-import com.couchbase.client.core.error.{DocumentNotFoundException, DurabilityAmbiguousException}
-import com.couchbase.client.java.kv.{GetOptions, GetResult}
+import com.couchbase.client.core.error.{ DocumentNotFoundException, DurabilityAmbiguousException }
+import com.couchbase.client.java.kv.{ GetOptions, GetResult, MutationResult }
 import org.apache.pekko
-import pekko.Done
-import pekko.stream.connectors.couchbase.{CouchbaseDeleteFailure, CouchbaseDeleteResult, CouchbaseWriteFailure, CouchbaseWriteResult, CouchbaseWriteSettings}
-import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
-import pekko.stream.connectors.couchbase.testing.{CouchbaseSupport, JsonDocument, TestObject}
-import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{Keep, Sink, Source}
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest._
+import org.scalatest.concurrent.ScalaFutures
+import pekko.Done
+import pekko.stream.connectors.couchbase._
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
+import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, JsonDocument, TestObject }
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.stream.scaladsl.{ Sink, Source }
 
 import scala.jdk.FutureConverters.CompletionStageOps
 
@@ -31,11 +31,10 @@ import scala.jdk.FutureConverters.CompletionStageOps
 import com.couchbase.client.java.kv.{ PersistTo, ReplicateTo }
 //#write-settings
 
-import pekko.stream.testkit.scaladsl.StreamTestKit._
 import org.apache.pekko.stream.connectors.couchbase.testing.{ BinaryDocument, StringDocument }
+import pekko.stream.testkit.scaladsl.StreamTestKit._
 
 import scala.collection.immutable
-import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 import scala.concurrent.Future
 
@@ -128,7 +127,7 @@ class CouchbaseFlowSpec
       // #upsert
       jsonDocumentUpsert.futureValue
 
-      val msgFuture: Future[JsonDocument] = session.get(bucketName, obj.id, classOf[JsonDocument])
+      val msgFuture: Future[JsonDocument] = session.get(session.collection(bucketName), obj.id, classOf[JsonDocument])
       msgFuture.futureValue.content.get("value") shouldEqual obj.value
     }
 
@@ -149,7 +148,8 @@ class CouchbaseFlowSpec
       // #upsert
       stringDocumentUpsert.futureValue
 
-      val msgFuture: Future[StringDocument] = session.get(bucketName, sampleData.id, classOf[StringDocument])
+      val msgFuture: Future[StringDocument] =
+        session.get(session.collection(bucketName), sampleData.id, classOf[StringDocument])
       msgFuture.futureValue.id shouldEqual sampleData.id
     }
 
@@ -162,7 +162,8 @@ class CouchbaseFlowSpec
           .runWith(Sink.ignore)
       result.futureValue
 
-      val msgFuture: Future[BinaryDocument] = session.get(bucketName, sampleData.id, classOf[BinaryDocument])
+      val msgFuture: Future[BinaryDocument] =
+        session.get(session.collection(bucketName), sampleData.id, classOf[BinaryDocument])
       msgFuture.futureValue.id shouldEqual sampleData.id
     }
 
@@ -205,6 +206,7 @@ class CouchbaseFlowSpec
             CouchbaseFlow.fromId(
               sessionSettings,
               bucketName))
+          .map(_.contentAs(classOf[JsonDocument]))
           .runWith(Sink.seq)
       // #fromId
 
@@ -259,7 +261,7 @@ class CouchbaseFlowSpec
     }
 
     "fails stream when ReplicateTo higher then #of nodes" in assertAllStagesStopped {
-      val bulkUpsertResult: Future[immutable.Seq[JsonDocument]] = Source(sampleSequence)
+      val bulkUpsertResult: Future[immutable.Seq[MutationResult]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
           CouchbaseFlow.upsert(sessionSettings,
@@ -308,7 +310,8 @@ class CouchbaseFlowSpec
 
       Thread.sleep(1000)
 
-      val msgFuture: Future[StringDocument] = session.get(bucketName, sampleData.id, classOf[StringDocument])
+      val msgFuture: Future[StringDocument] =
+        session.get(session.collection(bucketName), sampleData.id, classOf[StringDocument])
 
       val getFuture: Future[StringDocument] =
         Source
@@ -357,6 +360,7 @@ class CouchbaseFlowSpec
         .single(id)
         .via(
           CouchbaseFlow.fromId(sessionSettings, queryBucketName))
+        .map(_.contentAs(classOf[JsonDocument]))
         .runWith(Sink.head)
       result.futureValue.id shouldEqual id
     }
@@ -367,6 +371,7 @@ class CouchbaseFlowSpec
       val result: Future[JsonDocument] = Source
         .single(id)
         .via(CouchbaseFlow.fromId(sessionSettings, bucketName))
+        .map(_.contentAs(classOf[JsonDocument]))
         .runWith(Sink.head)
       result.failed.futureValue shouldBe a[NoSuchElementException]
     }
@@ -376,6 +381,7 @@ class CouchbaseFlowSpec
 
       val result: Future[Seq[JsonDocument]] = Source(sampleSequence.map(_.id))
         .via(CouchbaseFlow.fromId(sessionSettings, queryBucketName))
+        .map(_.contentAs(classOf[JsonDocument]))
         .runWith(Sink.seq)
       result.futureValue.map(_.id) shouldBe Seq("First", "Second", "Third", "Fourth")
     }
@@ -386,6 +392,7 @@ class CouchbaseFlowSpec
       val result: Future[Seq[JsonDocument]] = Source
         .apply(sampleSequence.map(_.id) :+ "Not Existing Id")
         .via(CouchbaseFlow.fromId(sessionSettings, queryBucketName))
+        .map(_.contentAs(classOf[JsonDocument]))
         .runWith(Sink.seq)
       result.futureValue.map(_.id) shouldBe Seq("First", "Second", "Third", "Fourth")
     }
@@ -415,7 +422,7 @@ class CouchbaseFlowSpec
 
       Thread.sleep(1000)
 
-      val msgFuture: Future[JsonDocument] = session.get(bucketName, obj.id, classOf[JsonDocument])
+      val msgFuture: Future[JsonDocument] = session.get(session.collection(bucketName), obj.id, classOf[JsonDocument])
       msgFuture.futureValue.content.get("value") shouldEqual obj.value
     }
 
@@ -441,6 +448,7 @@ class CouchbaseFlowSpec
       val resultsAsFuture: Future[immutable.Seq[JsonDocument]] =
         Source(sampleSequence.map(_.id))
           .via(CouchbaseFlow.fromId(sessionSettings, bucketName))
+          .map(_.contentAs(classOf[JsonDocument]))
           .runWith(Sink.seq)
 
       resultsAsFuture.futureValue.map(doc => doc.content.get("value")) should contain.inOrderOnly("First",
@@ -472,7 +480,7 @@ class CouchbaseFlowSpec
 
       Thread.sleep(1000)
 
-      val msgFuture: Future[JsonDocument] = session.get(bucketName, obj.id, classOf[JsonDocument])
+      val msgFuture: Future[JsonDocument] = session.get(session.collection(bucketName), obj.id, classOf[JsonDocument])
       msgFuture.futureValue.content.get("value") shouldEqual obj.value
     }
 
@@ -480,7 +488,7 @@ class CouchbaseFlowSpec
 
       upsertSampleData(bucketName)
 
-      val bulkReplaceResult: Future[immutable.Seq[JsonDocument]] = Source(sampleSequence)
+      val bulkReplaceResult: Future[immutable.Seq[MutationResult]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
           CouchbaseFlow.replace(sessionSettings,

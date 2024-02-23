@@ -18,7 +18,7 @@ import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.annotation.InternalApi
 import pekko.discovery.Discovery
-import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.stream.connectors.couchbase.CouchbaseSessionSetting
 import pekko.util.JavaDurationConverters._
 import pekko.util.FunctionConverters._
 import pekko.util.FutureConverters._
@@ -62,7 +62,7 @@ sealed class DiscoverySupport private {
    */
   def nodes(
       config: Config)(
-      implicit system: ClassicActorSystemProvider): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = {
+      implicit system: ClassicActorSystemProvider): CouchbaseSessionSetting => Future[CouchbaseSessionSetting] = {
     implicit val ec: ExecutionContext = system.classicSystem.dispatcher
     settings =>
       readNodes(config)
@@ -72,7 +72,7 @@ sealed class DiscoverySupport private {
   }
 
   private[couchbase] def nodes(config: Config,
-      system: ActorSystem): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
+      system: ActorSystem): CouchbaseSessionSetting => Future[CouchbaseSessionSetting] =
     nodes(config)(system)
 
   /**
@@ -82,7 +82,7 @@ sealed class DiscoverySupport private {
   private[couchbase] def getNodes(
       config: Config,
       system: ClassicActorSystemProvider)
-      : java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]] =
+      : java.util.function.Function[CouchbaseSessionSetting, CompletionStage[CouchbaseSessionSetting]] =
     nodes(config)(system).andThen(_.asJava).asJava
 
   /**
@@ -90,15 +90,15 @@ sealed class DiscoverySupport private {
    * to be used as Couchbase `nodes`.
    */
   def nodes()(
-      implicit system: ClassicActorSystemProvider): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
+      implicit system: ClassicActorSystemProvider): CouchbaseSessionSetting => Future[CouchbaseSessionSetting] =
     nodes(system.classicSystem)
 
   /**
    * Expects a `service` section in `pekko.connectors.couchbase.session` and reads the given service name's address
    * to be used as Couchbase `nodes`.
    */
-  def nodes(system: ActorSystem): CouchbaseSessionSettings => Future[CouchbaseSessionSettings] =
-    nodes(system.settings.config.getConfig(CouchbaseSessionSettings.configPath))(system)
+  def nodes(system: ActorSystem): CouchbaseSessionSetting => Future[CouchbaseSessionSetting] =
+    nodes(system.settings.config.getConfig(CouchbaseSessionSetting.configPath))(system)
 
 }
 

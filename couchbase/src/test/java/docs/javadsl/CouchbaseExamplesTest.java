@@ -13,8 +13,9 @@
 
 package docs.javadsl;
 
-import com.couchbase.client.core.error.DocumentExistsException;
+import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.env.ClusterEnvironment;
+import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetOptions;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.MutationResult;
@@ -54,7 +55,7 @@ import java.util.concurrent.*;
 // #registry
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
 // #session
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSetting;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 // #session
 // #registry
@@ -76,10 +77,11 @@ import static org.junit.Assert.assertTrue;
 
 public class CouchbaseExamplesTest {
 
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
+  @Rule
+  public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final CouchbaseSupportClass support = new CouchbaseSupportClass();
-  private static final CouchbaseSessionSettings sessionSettings = support.sessionSettings();
+  private static final CouchbaseSessionSetting sessionSettings = support.sessionSettings();
   private static final String bucketName = support.bucketName();
   private static final String queryBucketName = support.queryBucketName();
   private static ActorSystem actorSystem;
@@ -114,8 +116,8 @@ public class CouchbaseExamplesTest {
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
     actorSystem.registerOnTermination(() -> environment.shutdown());
 
-    CouchbaseSessionSettings sessionSettings =
-        CouchbaseSessionSettings.create(actorSystem).withEnvironment(environment);
+    CouchbaseSessionSetting sessionSettings =
+        CouchbaseSessionSetting.create(actorSystem).withEnvironment(environment);
     CompletionStage<CouchbaseSession> sessionCompletionStage =
         registry.getSessionFor(sessionSettings);
     // #registry
@@ -125,22 +127,19 @@ public class CouchbaseExamplesTest {
   }
 
   @Test
-  public void session() {
+  public void session() throws Exception {
     // #session
 
     Executor executor = Executors.newSingleThreadExecutor();
-    CouchbaseSessionSettings sessionSettings = CouchbaseSessionSettings.create(actorSystem);
-    CompletionStage<CouchbaseSession> sessionCompletionStage =
-        CouchbaseSession.create(sessionSettings, executor);
-    actorSystem.registerOnTermination(
-        () -> sessionCompletionStage.thenAccept(CouchbaseSession::close));
-
+    CouchbaseSessionSetting sessionSettings = CouchbaseSessionSetting.create(actorSystem);
+    CompletionStage<CouchbaseSession> sessionCompletionStage = CouchbaseSession.create(sessionSettings, executor);
+    actorSystem.registerOnTermination(() -> sessionCompletionStage.thenAccept(CouchbaseSession::close));
     sessionCompletionStage.thenAccept(
         session -> {
           String id = "myId";
-          CompletionStage<GetResult> documentCompletionStage = session.collection(bucketName).get(id, GetOptions.getOptions());
-          documentCompletionStage.whenComplete((result,exception) -> {
-            if (exception==null) {
+          CompletableFuture<GetResult> documentCompletionStage = session.collection(bucketName).get(id, GetOptions.getOptions());
+          documentCompletionStage.whenComplete((result, exception) -> {
+            if (exception != null) {
               System.out.println("Document " + id + " wasn't found");
             } else {
               System.out.println(result.contentAsObject());
@@ -148,6 +147,7 @@ public class CouchbaseExamplesTest {
           });
         });
     // #session
+    Thread.sleep(1000); // wait future
   }
 
   @Test
@@ -155,11 +155,11 @@ public class CouchbaseExamplesTest {
     support.upsertSampleData(queryBucketName);
     // #statement
 
-    CompletionStage<List<QueryResult>> listCompletionStage = CouchbaseSource.fromQuery(
-            sessionSettings, "select * from " + bucketName +" limit 10")
-        .runWith(Sink.seq(), actorSystem);
+    CompletionStage<List<JsonObject>> listCompletionStage = CouchbaseSource.fromQueryJson(
+            sessionSettings, "select * from " + queryBucketName + " limit 10")
+        .runWith(Sink.head(), actorSystem);
     // #statement
-    List<QueryResult> jsonObjects =
+    List<JsonObject> jsonObjects =
         listCompletionStage.toCompletableFuture().get(3, TimeUnit.SECONDS);
     assertEquals(4, jsonObjects.size());
   }
@@ -271,7 +271,7 @@ public class CouchbaseExamplesTest {
     jsonDocumentReplace.toCompletableFuture().get(3, TimeUnit.SECONDS);
   }
 
-  @Test(expected = DocumentExistsException.class)
+  @Test(expected = DocumentNotFoundException.class)
   public void replaceFailsWhenDocumentDoesntExists() throws Throwable {
 
     support.cleanAllInBucket(bucketName);

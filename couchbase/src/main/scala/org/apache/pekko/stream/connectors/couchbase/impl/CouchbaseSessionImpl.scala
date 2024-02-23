@@ -14,13 +14,14 @@
 package org.apache.pekko.stream.connectors.couchbase.impl
 
 import com.couchbase.client.java._
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko.Done
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession
 import org.apache.pekko.stream.connectors.couchbase.scaladsl
 
 import java.util.concurrent.{ CompletableFuture, CompletionStage }
-import scala.language.implicitConversions
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 /**
  * INTERNAL API
@@ -50,6 +51,6 @@ final private[couchbase] class CouchbaseSessionImpl(cluster: AsyncCluster)
   override def collection(bucketName: String, scopeName: String, collectionName: String): AsyncCollection =
     bucket(bucketName).scope(scopeName).collection(collectionName)
 
-  override def get[T](bucketName: String, id: String, target: Class[T]): CompletableFuture[T] =
-    collection(bucketName).get(id).thenApply(_.contentAs(target))
+  override def get[T](collection: AsyncCollection, id: String, target: Class[T]): CompletableFuture[T] =
+    collection.get(id).thenApply(_.contentAs(target))
 }

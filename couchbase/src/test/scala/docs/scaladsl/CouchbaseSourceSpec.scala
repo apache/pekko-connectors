@@ -13,22 +13,22 @@
 
 package docs.scaladsl
 
+import com.couchbase.client.java.json.JsonObject
+
 import org.apache.pekko
-import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, CouchbaseSource }
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSource
 import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit._
-import com.couchbase.client.java.{ AsyncCluster, Bucket, Cluster }
-import com.couchbase.client.java.query.QueryResult
+
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
-
-import scala.collection.immutable.Seq
-import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
+import scala.concurrent.duration._
+import scala.concurrent.Future
 
 class CouchbaseSourceSpec
     extends AnyWordSpec
@@ -45,10 +45,10 @@ class CouchbaseSourceSpec
     "run simple Statement Query" in assertAllStagesStopped {
       // #statement
 
-      val resultAsFuture: Future[Seq[QueryResult]] =
+      val resultAsFuture: Future[Seq[JsonObject]] =
         CouchbaseSource
-          .fromQuery(sessionSettings, s"select * from $queryBucketName limit 10")
-          .runWith(Sink.seq)
+          .fromQueryJson(sessionSettings, s"select * from $queryBucketName limit 10")
+          .runWith(Sink.head)
       // #statement
 
       resultAsFuture.futureValue.length shouldEqual 4

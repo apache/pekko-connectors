@@ -17,7 +17,7 @@ import com.couchbase.client.core.error.ConfigException
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.pekko.stream.connectors.couchbase.testing.JsonDocument
@@ -48,7 +48,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
       val registry = CouchbaseSessionRegistry(actorSystem)
 
-      val sessionSettings = CouchbaseSessionSettings(actorSystem)
+      val sessionSettings = CouchbaseSessionSetting(actorSystem)
         .withEnrichAsync(DiscoverySupport.nodes())
       val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
@@ -59,14 +59,14 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
       // #create
 
       implicit val ec: ExecutionContext = actorSystem.dispatcher
-      val sessionSettings = CouchbaseSessionSettings(actorSystem)
+      val sessionSettings = CouchbaseSessionSetting(actorSystem)
         .withEnrichAsync(DiscoverySupport.nodes())
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
 
       val documentFuture = sessionFuture.flatMap { session =>
         val id = "myId"
-        session.get(bucketName, id, classOf[JsonDocument])
+        session.get(session.collection(bucketName), id, classOf[JsonDocument])
       }
       // #create
       documentFuture.failed.futureValue shouldBe a[RuntimeException]

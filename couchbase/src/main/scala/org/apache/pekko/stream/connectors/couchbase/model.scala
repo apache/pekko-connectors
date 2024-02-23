@@ -121,7 +121,7 @@ final class CouchbaseWriteSettings private (val parallelism: Int,
     ")"
 }
 
-object CouchbaseSessionSettings {
+object CouchbaseSessionSetting {
 
   val configPath = "pekko.connectors.couchbase.session"
 
@@ -130,11 +130,11 @@ object CouchbaseSessionSettings {
    * Load the session from the given config object, expects the config object to have the fields `username`,
    * `password` and `nodes`. Using it means first looking your config namespace up yourself using `config.getConfig("some.path")`.
    */
-  def apply(config: Config): CouchbaseSessionSettings = {
+  def apply(config: Config): CouchbaseSessionSetting = {
     val username = config.getString("username")
     val password = config.getString("password")
     val nodes = config.getStringList("nodes").asScala.toList
-    new CouchbaseSessionSettings(username, password, nodes, environment = None, enrichAsync = Future.successful)
+    new CouchbaseSessionSetting(username, password, nodes, environment = None, enrichAsync = Future.successful)
   }
 
   /**
@@ -142,7 +142,7 @@ object CouchbaseSessionSettings {
    * Load the session from the default config path `pekko.connectors.couchbase.session`, expects the config object to have the fields `username`,
    * `password` and `nodes`.
    */
-  def apply(system: ActorSystem): CouchbaseSessionSettings =
+  def apply(system: ActorSystem): CouchbaseSessionSetting =
     apply(system.settings.config.getConfig(configPath))
 
   /**
@@ -150,19 +150,19 @@ object CouchbaseSessionSettings {
    * Load the session from the default config path `pekko.connectors.couchbase.session`, expects the config object to have the fields `username`,
    * `password` and `nodes`.
    */
-  def apply(system: ClassicActorSystemProvider): CouchbaseSessionSettings =
+  def apply(system: ClassicActorSystemProvider): CouchbaseSessionSetting =
     apply(system.classicSystem)
 
   /**
    * Scala API:
    */
-  def apply(username: String, password: String): CouchbaseSessionSettings =
-    new CouchbaseSessionSettings(username, password, Nil, environment = None, enrichAsync = Future.successful)
+  def apply(username: String, password: String): CouchbaseSessionSetting =
+    new CouchbaseSessionSetting(username, password, Nil, environment = None, enrichAsync = Future.successful)
 
   /**
    * Java API:
    */
-  def create(username: String, password: String): CouchbaseSessionSettings =
+  def create(username: String, password: String): CouchbaseSessionSetting =
     apply(username, password)
 
   /**
@@ -170,14 +170,14 @@ object CouchbaseSessionSettings {
    * Load the session from the given config object, expects the config object to have the fields `username`,
    * `password` and `nodes`. Using it means first looking your config namespace up yourself using `config.getConfig("some.path")`.
    */
-  def create(config: Config): CouchbaseSessionSettings = apply(config)
+  def create(config: Config): CouchbaseSessionSetting = apply(config)
 
   /**
    * Java API:
    * Load the session from the default config path `pekko.connectors.couchbase.session`, expects the config object to have the fields `username`,
    * `password` and `nodes`.
    */
-  def create(system: ActorSystem): CouchbaseSessionSettings =
+  def create(system: ActorSystem): CouchbaseSessionSetting =
     apply(system.settings.config.getConfig(configPath))
 
   /**
@@ -185,38 +185,38 @@ object CouchbaseSessionSettings {
    * Load the session from the default config path `pekko.connectors.couchbase.session`, expects the config object to have the fields `username`,
    * `password` and `nodes`.
    */
-  def create(system: ClassicActorSystemProvider): CouchbaseSessionSettings =
+  def create(system: ClassicActorSystemProvider): CouchbaseSessionSetting =
     apply(system.classicSystem)
 }
 
-final class CouchbaseSessionSettings private (
+final class CouchbaseSessionSetting private (
     val username: String,
     val password: String,
     val nodes: immutable.Seq[String],
     val environment: Option[ClusterEnvironment],
-    val enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]) {
+    val enrichAsync: CouchbaseSessionSetting => Future[CouchbaseSessionSetting]) {
 
-  def withUsername(username: String): CouchbaseSessionSettings =
+  def withUsername(username: String): CouchbaseSessionSetting =
     copy(username = username)
 
-  def withPassword(password: String): CouchbaseSessionSettings =
+  def withPassword(password: String): CouchbaseSessionSetting =
     copy(password = password)
 
-  def withNodes(nodes: String): CouchbaseSessionSettings =
+  def withNodes(nodes: String): CouchbaseSessionSetting =
     copy(nodes = nodes :: Nil)
 
-  def withNodes(nodes: immutable.Seq[String]): CouchbaseSessionSettings =
+  def withNodes(nodes: immutable.Seq[String]): CouchbaseSessionSetting =
     copy(nodes = nodes)
 
   /** Java API */
-  def withNodes(nodes: java.util.List[String]): CouchbaseSessionSettings =
+  def withNodes(nodes: java.util.List[String]): CouchbaseSessionSetting =
     copy(nodes = nodes.asScala.toList)
 
   /**
    * Scala API:
    * Allows to provide an asynchronous method to update the settings.
    */
-  def withEnrichAsync(value: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]): CouchbaseSessionSettings =
+  def withEnrichAsync(value: CouchbaseSessionSetting => Future[CouchbaseSessionSetting]): CouchbaseSessionSetting =
     copy(enrichAsync = value)
 
   /**
@@ -224,11 +224,11 @@ final class CouchbaseSessionSettings private (
    * Allows to provide an asynchronous method to update the settings.
    */
   def withEnrichAsyncCs(
-      value: java.util.function.Function[CouchbaseSessionSettings, CompletionStage[CouchbaseSessionSettings]])
-      : CouchbaseSessionSettings =
-    copy(enrichAsync = (s: CouchbaseSessionSettings) => value.apply(s).asScala)
+      value: java.util.function.Function[CouchbaseSessionSetting, CompletionStage[CouchbaseSessionSetting]])
+      : CouchbaseSessionSetting =
+    copy(enrichAsync = (s: CouchbaseSessionSetting) => value.apply(s).asScala)
 
-  def withEnvironment(environment: ClusterEnvironment): CouchbaseSessionSettings =
+  def withEnvironment(environment: ClusterEnvironment): CouchbaseSessionSetting =
     copy(environment = Some(environment))
 
   /**
@@ -236,19 +236,18 @@ final class CouchbaseSessionSettings private (
    * Used internally to apply the asynchronous settings enrichment function.
    */
   @InternalApi
-  def enriched: Future[CouchbaseSessionSettings] = enrichAsync(this)
+  def enriched: Future[CouchbaseSessionSetting] = enrichAsync(this)
 
   private def copy(
       username: String = username,
       password: String = password,
       nodes: immutable.Seq[String] = nodes,
       environment: Option[ClusterEnvironment] = environment,
-      enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync)
-      : CouchbaseSessionSettings =
-    new CouchbaseSessionSettings(username, password, nodes, environment, enrichAsync)
+      enrichAsync: CouchbaseSessionSetting => Future[CouchbaseSessionSetting] = enrichAsync): CouchbaseSessionSetting =
+    new CouchbaseSessionSetting(username, password, nodes, environment, enrichAsync)
 
   override def equals(other: Any): Boolean = other match {
-    case that: CouchbaseSessionSettings =>
+    case that: CouchbaseSessionSetting =>
       username == that.username &&
       password == that.password &&
       nodes == that.nodes &&

@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.couchbase.javadsl;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSetting;
 import com.typesafe.config.Config;
 
 import java.util.concurrent.CompletionStage;
@@ -34,7 +34,7 @@ public final class DiscoverySupport {
    * be used as Couchbase `nodes`.
    */
   public static java.util.function.Function<
-          CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
+      CouchbaseSessionSetting, CompletionStage<CouchbaseSessionSetting>>
       getNodes(Config config, ActorSystem system) {
     return SUPPORT.getNodes(config, system);
   }
@@ -44,7 +44,7 @@ public final class DiscoverySupport {
    * be used as Couchbase `nodes`.
    */
   public static java.util.function.Function<
-          CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
+      CouchbaseSessionSetting, CompletionStage<CouchbaseSessionSetting>>
       getNodes(Config config, ClassicActorSystemProvider system) {
     return getNodes(config, system.classicSystem());
   }
@@ -54,10 +54,10 @@ public final class DiscoverySupport {
    * be used as Couchbase `nodes`.
    */
   public static java.util.function.Function<
-          CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
+      CouchbaseSessionSetting, CompletionStage<CouchbaseSessionSetting>>
       getNodes(ActorSystem system) {
     return SUPPORT.getNodes(
-        system.settings().config().getConfig(CouchbaseSessionSettings.configPath()), system);
+        system.settings().config().getConfig(CouchbaseSessionSetting.configPath()), system);
   }
 
   /**
@@ -65,7 +65,7 @@ public final class DiscoverySupport {
    * be used as Couchbase `nodes`.
    */
   public static java.util.function.Function<
-          CouchbaseSessionSettings, CompletionStage<CouchbaseSessionSettings>>
+      CouchbaseSessionSetting, CompletionStage<CouchbaseSessionSetting>>
       getNodes(ClassicActorSystemProvider system) {
     return getNodes(system.classicSystem());
   }

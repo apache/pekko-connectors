@@ -13,7 +13,7 @@
 
 package org.apache.pekko.stream.connectors.couchbase.impl
 
-import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, AsyncCollection, AsyncScope, Collection }
+import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, AsyncCollection, AsyncScope }
 import org.apache.pekko.Done
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.couchbase.{ javadsl, scaladsl }
@@ -52,6 +52,6 @@ private[couchbase] final class CouchbaseSessionScalaAdapter(delegate: javadsl.Co
   override def collection(bucketName: String, scopeName: String, collectionName: String): AsyncCollection =
     delegate.collection(bucketName, scopeName, collectionName)
 
-  override def get[T](bucketName: String, id: String, target: Class[T]): Future[T] =
-    delegate.get(bucketName, id, target).asScala
+  override def get[T](collection: AsyncCollection, id: String, target: Class[T]): Future[T] =
+    delegate.get(collection, id, target).asScala
 }

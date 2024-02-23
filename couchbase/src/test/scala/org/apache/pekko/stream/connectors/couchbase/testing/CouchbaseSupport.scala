@@ -21,7 +21,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSetting, CouchbaseWriteSettings }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ccompat.JavaConverters._
 import com.fasterxml.jackson.databind.json.JsonMapper
@@ -57,7 +57,7 @@ trait CouchbaseSupport {
 
   val sampleJavaList: java.util.List[TestObject] = sampleSequence.asJava
 
-  val sessionSettings = CouchbaseSessionSettings(actorSystem)
+  val sessionSettings = CouchbaseSessionSetting(actorSystem)
   val writeSettings: CouchbaseWriteSettings = CouchbaseWriteSettings().withReplicateTo(ReplicateTo.NONE)
   val bucketName = "pekko"
   val queryBucketName = "pekkoquery"

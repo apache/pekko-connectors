@@ -13,38 +13,37 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java.analytics.AnalyticsResult
+import com.couchbase.client.java.json.JsonObject
 import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import org.apache.pekko.util.FutureConverters.CompletionStageOps
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
 import pekko.stream.scaladsl.Source
+
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 /**
  * Scala API: Factory methods for Couchbase sources.
  */
 object CouchbaseSource {
 
-  /**
-   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
-   */
-  def fromQuery(sessionSettings: CouchbaseSessionSettings, statement: String): Source[QueryResult, NotUsed] =
+  private def queryResult(sessionSettings: CouchbaseSessionSetting, statement: String): Source[QueryResult, NotUsed] =
     Source
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
-        Source.future(session.flatMap(_.underlying.query(statement).asScala)(materializer.system.dispatcher))
+        implicit val exec = materializer.system.dispatcher
+        Source.future(session.flatMap(_.underlying.query(statement).asScala))
       }.mapMaterializedValue(_ => NotUsed)
 
   /**
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
    */
-  def fromAnalyticsQuery(sessionSettings: CouchbaseSessionSettings, query: String): Source[AnalyticsResult, NotUsed] =
-    Source
-      .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
-        Source.future(session.flatMap(_.underlying.analyticsQuery(query).asScala)(materializer.system.dispatcher))
-      }
-      .mapMaterializedValue(_ => NotUsed)
+  def fromQueryJson(sessionSettings: CouchbaseSessionSetting, statement: String): Source[List[JsonObject], NotUsed] =
+    queryResult(sessionSettings, statement).map(_.rowsAsObject().asScala.toList)
+
+  def fromQuery[T](
+      sessionSettings: CouchbaseSessionSetting, statement: String, target: Class[T]): Source[List[T], NotUsed] =
+    queryResult(sessionSettings, statement).map(_.rowsAs(target).asScala.toList)
 
 }

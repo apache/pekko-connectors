@@ -19,7 +19,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, JsonDocument }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
@@ -54,7 +54,7 @@ class CouchbaseSessionExamplesSpec
         environment.shutdown()
       }
 
-      val sessionSettings = CouchbaseSessionSettings(actorSystem)
+      val sessionSettings = CouchbaseSessionSetting(actorSystem)
         .withEnvironment(environment)
       val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
@@ -64,11 +64,12 @@ class CouchbaseSessionExamplesSpec
     "be created from settings" in {
       // #create
       implicit val ec: ExecutionContext = actorSystem.dispatcher
-      val sessionSettings = CouchbaseSessionSettings(actorSystem)
+      val sessionSettings = CouchbaseSessionSetting(actorSystem)
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
       val id = "myId"
-      val documentFuture = sessionFuture.map(session => session.get(bucketName, id, classOf[JsonDocument]))
+      val documentFuture =
+        sessionFuture.map(session => session.get(session.collection(bucketName), id, classOf[JsonDocument]))
       documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
     }
   }

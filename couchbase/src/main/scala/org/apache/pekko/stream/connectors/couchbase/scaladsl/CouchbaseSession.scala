@@ -14,11 +14,12 @@
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
 import com.couchbase.client.java._
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
-import org.apache.pekko.stream.connectors.couchbase.{ javadsl, CouchbaseSessionSettings }
+import pekko.Done
+import pekko.annotation.{ DoNotInherit, InternalApi }
+import pekko.stream.connectors.couchbase.{ javadsl, CouchbaseSessionSetting }
+import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
 
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -29,7 +30,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  */
 object CouchbaseSession {
 
-  def apply(settings: CouchbaseSessionSettings)(
+  def apply(settings: CouchbaseSessionSetting)(
       implicit ec: ExecutionContext): Future[CouchbaseSession] =
     createClusterClient(settings).map(c => create(c))
 
@@ -56,17 +57,17 @@ object CouchbaseSession {
    * The life-cycle of it is the user's responsibility.
    */
   @InternalApi
-  private[couchbase] def createClusterClient(settings: CouchbaseSessionSettings)(
+  private[couchbase] def createClusterClient(settings: CouchbaseSessionSetting)(
       implicit ec: ExecutionContext): Future[AsyncCluster] =
     settings.enriched
       .flatMap { enrichedSettings =>
         Future(enrichedSettings.environment match {
           case Some(environment) =>
             ClusterOptions
-              .clusterOptions(enrichedSettings.username, enrichedSettings.username)
+              .clusterOptions(enrichedSettings.username, enrichedSettings.password)
               .environment(environment)
           case None =>
-            ClusterOptions.clusterOptions(enrichedSettings.username, enrichedSettings.username)
+            ClusterOptions.clusterOptions(enrichedSettings.username, enrichedSettings.password)
         }).map { clusterOptions =>
           Cluster.connect(enrichedSettings.nodes.mkString(","), clusterOptions).async()
         }
@@ -89,5 +90,5 @@ trait CouchbaseSession extends CouchbaseSessionCommon {
    */
   def close(): Future[Done]
 
-  def get[T](bucketName: String, id: String, target: Class[T]): Future[T]
+  def get[T](collection: AsyncCollection, id: String, target: Class[T]): Future[T]
 }

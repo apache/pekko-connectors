@@ -16,7 +16,7 @@ package docs.javadsl;
 import org.apache.pekko.actor.ActorSystem;
 // #registry
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSetting;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.DiscoverySupport;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 // #registry
@@ -60,8 +60,8 @@ public class DiscoveryTest {
 
     CouchbaseSessionRegistry registry = CouchbaseSessionRegistry.get(actorSystem);
 
-    CouchbaseSessionSettings sessionSettings =
-        CouchbaseSessionSettings.create(actorSystem)
+    CouchbaseSessionSetting sessionSettings =
+        CouchbaseSessionSetting.create(actorSystem)
             .withEnrichAsyncCs(DiscoverySupport.getNodes(actorSystem));
     CompletionStage<CouchbaseSession> session = registry.getSessionFor(sessionSettings);
     // #registry
