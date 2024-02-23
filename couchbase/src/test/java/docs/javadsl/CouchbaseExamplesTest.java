@@ -117,7 +117,7 @@ public class CouchbaseExamplesTest {
     CouchbaseSessionSettings sessionSettings =
         CouchbaseSessionSettings.create(actorSystem).withEnvironment(environment);
     CompletionStage<CouchbaseSession> sessionCompletionStage =
-        registry.getSessionFor(sessionSettings, bucketName);
+        registry.getSessionFor(sessionSettings);
     // #registry
     CouchbaseSession session =
         sessionCompletionStage.toCompletableFuture().get(3, TimeUnit.SECONDS);
@@ -131,14 +131,14 @@ public class CouchbaseExamplesTest {
     Executor executor = Executors.newSingleThreadExecutor();
     CouchbaseSessionSettings sessionSettings = CouchbaseSessionSettings.create(actorSystem);
     CompletionStage<CouchbaseSession> sessionCompletionStage =
-        CouchbaseSession.create(sessionSettings, bucketName, executor);
+        CouchbaseSession.create(sessionSettings, executor);
     actorSystem.registerOnTermination(
         () -> sessionCompletionStage.thenAccept(CouchbaseSession::close));
 
     sessionCompletionStage.thenAccept(
         session -> {
           String id = "myId";
-          CompletionStage<GetResult> documentCompletionStage = session.get(id, GetOptions.getOptions());
+          CompletionStage<GetResult> documentCompletionStage = session.collection(bucketName).get(id, GetOptions.getOptions());
           documentCompletionStage.whenComplete((result,exception) -> {
             if (exception==null) {
               System.out.println("Document " + id + " wasn't found");
@@ -155,8 +155,8 @@ public class CouchbaseExamplesTest {
     support.upsertSampleData(queryBucketName);
     // #statement
 
-    CompletionStage<List<QueryResult>> listCompletionStage = CouchbaseSource.fromStatement(
-            sessionSettings, "select * from " + bucketName +" limit 10", bucketName)
+    CompletionStage<List<QueryResult>> listCompletionStage = CouchbaseSource.fromQuery(
+            sessionSettings, "select * from " + bucketName +" limit 10")
         .runWith(Sink.seq(), actorSystem);
     // #statement
     List<QueryResult> jsonObjects =

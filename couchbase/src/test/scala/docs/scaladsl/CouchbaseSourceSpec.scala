@@ -47,27 +47,9 @@ class CouchbaseSourceSpec
 
       val resultAsFuture: Future[Seq[QueryResult]] =
         CouchbaseSource
-          .fromStatement(sessionSettings, s"select * from $queryBucketName limit 10", bucketName)
+          .fromQuery(sessionSettings, s"select * from $queryBucketName limit 10")
           .runWith(Sink.seq)
       // #statement
-
-      resultAsFuture.futureValue.length shouldEqual 4
-    }
-
-    // TODO implement overload in CouchbaseSource?
-    "allow explicit bucket creation" in assertAllStagesStopped {
-      implicit val ec: ExecutionContext = actorSystem.dispatcher
-      val asyncCluster = AsyncCluster.connect("localhost", "Administrator", "password")
-      val bucket = asyncCluster.bucket("pekko")
-      val session: CouchbaseSession = CouchbaseSession(asyncCluster, bucket.name())
-      actorSystem.registerOnTermination {
-        asyncCluster.disconnect()
-      }
-
-      val resultAsFuture: Future[Seq[QueryResult]] =
-        session
-          .streamedQuery(s"select * from $queryBucketName limit 10")
-          .runWith(Sink.seq)
 
       resultAsFuture.futureValue.length shouldEqual 4
     }

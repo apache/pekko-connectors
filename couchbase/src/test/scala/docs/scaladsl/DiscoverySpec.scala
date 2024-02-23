@@ -50,7 +50,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
       val sessionSettings = CouchbaseSessionSettings(actorSystem)
         .withEnrichAsync(DiscoverySupport.nodes())
-      val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings, bucketName)
+      val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
       sessionFuture.failed.futureValue shouldBe a[ConfigException]
     }
@@ -61,12 +61,12 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       val sessionSettings = CouchbaseSessionSettings(actorSystem)
         .withEnrichAsync(DiscoverySupport.nodes())
-      val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings, bucketName)
+      val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
 
       val documentFuture = sessionFuture.flatMap { session =>
         val id = "myId"
-        session.get(id, classOf[JsonDocument])
+        session.get(bucketName, id, classOf[JsonDocument])
       }
       // #create
       documentFuture.failed.futureValue shouldBe a[RuntimeException]

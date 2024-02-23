@@ -49,7 +49,7 @@ object CouchbaseSessionRegistry extends ExtensionId[CouchbaseSessionRegistry] wi
 
   override def lookup: ExtensionId[CouchbaseSessionRegistry] = this
 
-  private case class SessionKey(settings: CouchbaseSessionSettings, bucketName: String)
+  private case class SessionKey(settings: CouchbaseSessionSettings)
 }
 
 final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extension {
@@ -69,9 +69,9 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
    * Note that the session must not be stopped manually, it is shut down when the actor system is shutdown,
    * if you need a more fine grained life cycle control, create the CouchbaseSession manually instead.
    */
-  def sessionFor(settings: CouchbaseSessionSettings, bucketName: String): Future[CouchbaseSession] =
+  def sessionFor(settings: CouchbaseSessionSettings): Future[CouchbaseSession] =
     settings.enriched.flatMap { enrichedSettings =>
-      val key = SessionKey(enrichedSettings, bucketName)
+      val key = SessionKey(enrichedSettings)
       sessions.get.get(key) match {
         case Some(futureSession) => futureSession
         case _                   => startSession(key)
@@ -85,8 +85,8 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
    * Note that the session must not be stopped manually, it is shut down when the actor system is shutdown,
    * if you need a more fine grained life cycle control, create the CouchbaseSession manually instead.
    */
-  def getSessionFor(settings: CouchbaseSessionSettings, bucketName: String): CompletionStage[JCouchbaseSession] =
-    sessionFor(settings, bucketName)
+  def getSessionFor(settings: CouchbaseSessionSettings): CompletionStage[JCouchbaseSession] =
+    sessionFor(settings)
       .map(_.asJava)(ExecutionContexts.parasitic)
       .asJava
 
@@ -99,7 +99,7 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
       // we won cas, initialize session
       val session = clusterRegistry
         .clusterFor(key.settings)
-        .map(cluster => CouchbaseSession(cluster, key.bucketName)(blockingDispatcher))(
+        .map(cluster => CouchbaseSession(cluster))(
           ExecutionContexts.parasitic)
       promise.completeWith(session)
       promise.future

@@ -13,11 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java.json.JsonValue
+import com.couchbase.client.java.json.{JsonObject, JsonValue}
 import org.apache.pekko
 import pekko.Done
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
-import pekko.stream.scaladsl.{ Keep, Sink }
+import pekko.stream.connectors.couchbase.{CouchbaseSessionSettings, CouchbaseWriteSettings}
+import pekko.stream.scaladsl.{Keep, Sink}
 
 import scala.concurrent.Future
 
@@ -32,7 +32,7 @@ object CouchbaseSink {
   def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: JsonValue => String): Sink[JsonValue, Future[Done]] =
+      getId: JsonObject => String): Sink[JsonObject, Future[Done]] =
     CouchbaseFlow
       .upsertJson(sessionSettings, writeSettings, bucketName, getId)
       .toMat(Sink.ignore)(Keep.right)

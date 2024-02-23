@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
+import com.couchbase.client.java.analytics.AnalyticsResult
 import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.{ scaladsl, CouchbaseSessionSettings }
+import pekko.stream.connectors.couchbase.{scaladsl, CouchbaseSessionSettings}
 import pekko.stream.javadsl.Source
 
 /**
@@ -25,19 +26,17 @@ import pekko.stream.javadsl.Source
 object CouchbaseSource {
 
   /**
-   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.document.JsonDocument JsonDocument]]s.
+   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.analytics.AnalyticsResult]].
    */
-  def fromStatement(sessionSettings: CouchbaseSessionSettings,
-      statement: String,
-      bucketName: String): Source[QueryResult, NotUsed] =
-    scaladsl.CouchbaseSource.fromStatement(sessionSettings, statement, bucketName).asJava
+  def fromQuery(sessionSettings: CouchbaseSessionSettings,
+                statement: String): Source[QueryResult, NotUsed] =
+    scaladsl.CouchbaseSource.fromQuery(sessionSettings, statement).asJava
 
   /**
-   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.document.JsonDocument JsonDocument]]s.
+   * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.analytics.AnalyticsResult]].
    */
-  def fromN1qlQuery(sessionSettings: CouchbaseSessionSettings,
-      query: String,
-      bucketName: String): Source[QueryResult, NotUsed] =
-    scaladsl.CouchbaseSource.fromN1qlQuery(sessionSettings, query, bucketName).asJava
+  def fromAnalyticsQuery(sessionSettings: CouchbaseSessionSettings,
+                         query: String): Source[AnalyticsResult, NotUsed] =
+    scaladsl.CouchbaseSource.fromAnalyticsQuery(sessionSettings, query).asJava
 
 }

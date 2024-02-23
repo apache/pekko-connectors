@@ -13,19 +13,13 @@
 
 package org.apache.pekko.stream.connectors.couchbase.impl
 
-import com.couchbase.client.java.AsyncCluster
-import com.couchbase.client.java.kv._
-import com.couchbase.client.java.manager.query.QueryIndex
-import com.couchbase.client.java.query.QueryResult
-import org.apache.pekko.{Done, NotUsed}
+import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, AsyncCollection, AsyncScope, Collection }
+import org.apache.pekko.Done
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.couchbase.{ javadsl, scaladsl }
-
-import org.apache.pekko.stream.scaladsl.Source
 import org.apache.pekko.util.FutureConverters._
 
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 /**
  * INTERNAL API
@@ -39,91 +33,25 @@ private[couchbase] final class CouchbaseSessionScalaAdapter(delegate: javadsl.Co
   override def underlying: AsyncCluster = delegate.underlying
 
   /**
-   * Insert a JSON document using the given write settings.
-   *
-   * For inserting other types of documents see `insertDoc`.
-   */
-  override def insert(id: String, document: Object, insertOptions: InsertOptions = InsertOptions.insertOptions()): Future[MutationResult] =
-    delegate.insert(id, document, insertOptions).asScala
-
-  /**
-   * @return A document if found or none if there is no document for the id
-   */
-  override def get(id: String, getOptions: GetOptions): Future[GetResult] =
-    delegate.get(id, getOptions).asScala
-
-  /**
-   * @return A document if found or none if there is no document for the id
-   */
-  override def get[T](id: String, documentClass: Class[T], getOptions: GetOptions = GetOptions.getOptions): Future[T] =
-    delegate.get(id, documentClass, getOptions).asScala
-
-  /**
-   * Upsert using the given write settings.
-   *
-   * For inserting other types of documents see `upsertDoc`.
-   *
-   * @return a Future that completes when the upsert is done
-   */
-  override def upsert[T](id: String, document: T, upsertOptions: UpsertOptions = UpsertOptions.upsertOptions()): Future[MutationResult] =
-    delegate.upsert(id, document, upsertOptions).asScala
-
-  /**
-   * Replace using the default write settings
-   *
-   * For replacing other types of documents see `replaceDoc`.
-   *
-   * @return a Future that completes when the replace is done
-   */
-  override def replace[T](id: String, document: T, replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions()): Future[MutationResult] =
-    delegate.replace(id, document, replaceOptions).asScala
-
-  /**
-   * Remove a document by id using the default write settings.
-   *
-   * @return Future that completes when the document has been removed, if there is no such document
-   *         the Future is failed with a `DocumentDoesNotExistException`
-   */
-  override def remove(id: String, removeOptions: RemoveOptions = RemoveOptions.removeOptions())
-  : Future[MutationResult] =
-    delegate.remove(id, removeOptions).asScala
-
-  override def streamedQuery(query: String): Source[QueryResult, NotUsed] =
-    delegate.streamedQuery(query).asScala
-
-  /**
-   * Create or increment a counter
-   *
-   * @param id What counter document id
-   * @return The value of the counter after applying the delta
-   */
-  override def counter(id: String, incrementOptions: IncrementOptions = IncrementOptions.incrementOptions())
-  : Future[CounterResult] =
-    delegate.counter(id, incrementOptions).asScala
-
-  /**
    * Close the session and release all resources it holds. Subsequent calls to other methods will likely fail.
    */
   override def close(): Future[Done] =
     delegate.close().asScala
 
-  /**
-   * Create a secondary index for the current bucket.
-   *
-   * @param indexName     the name of the index.
-   * @param ignoreIfExist if a secondary index already exists with that name, an exception will be thrown unless this
-   *                      is set to true.
-   * @param fields        the JSON fields to index
-   * @return a [[java.util.concurrent.Future]] of `true` if the index was/will be effectively created, `false`
-   *         if the index existed and ignoreIfExist` is true. Completion of the `Future` does not guarantee the index
-   *         is online and ready to be used.
-   */
-  override def createIndex(indexName: String, ignoreIfExist: Boolean, fields: String*): Future[Boolean] =
-    delegate.createIndex(indexName, ignoreIfExist, fields: _*).asScala
+  override def bucket(bucketName: String): AsyncBucket = delegate.bucket(bucketName)
 
-  /**
-   * List the existing secondary indexes for the bucket
-   */
-  override def listIndexes(): Source[List[QueryIndex], NotUsed] =
-    delegate.listIndexes().asScala.map(_.asScala.toList)
+  override def scope(bucketName: String): AsyncScope = delegate.scope(bucketName)
+
+  override def scope(bucketName: String, scopeName: String): AsyncScope = delegate.scope(bucketName, scopeName)
+
+  override def collection(bucketName: String): AsyncCollection = delegate.collection(bucketName)
+
+  override def collection(bucketName: String, collectionName: String): AsyncCollection =
+    delegate.collection(bucketName, collectionName)
+
+  override def collection(bucketName: String, scopeName: String, collectionName: String): AsyncCollection =
+    delegate.collection(bucketName, scopeName, collectionName)
+
+  override def get[T](bucketName: String, id: String, target: Class[T]): Future[T] =
+    delegate.get(bucketName, id, target).asScala
 }

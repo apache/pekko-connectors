@@ -13,8 +13,10 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
+import com.couchbase.client.java.analytics.AnalyticsResult
 import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
+import org.apache.pekko.util.FutureConverters.CompletionStageOps
 import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.scaladsl.Source
@@ -27,30 +29,21 @@ object CouchbaseSource {
   /**
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
    */
-  def fromStatement(sessionSettings: CouchbaseSessionSettings,
-      statement: String,
-      bucketName: String): Source[QueryResult, NotUsed] =
+  def fromQuery(sessionSettings: CouchbaseSessionSettings, statement: String): Source[QueryResult, NotUsed] =
     Source
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
-        Source
-          .future(session.map(_.streamedQuery(statement))(materializer.system.dispatcher))
-          .flatMapConcat(identity)
-      }
-      .mapMaterializedValue(_ => NotUsed)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
+        Source.future(session.flatMap(_.underlying.query(statement).asScala)(materializer.system.dispatcher))
+      }.mapMaterializedValue(_ => NotUsed)
 
   /**
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
    */
-  def fromN1qlQuery(sessionSettings: CouchbaseSessionSettings,
-      query: String,
-      bucketName: String): Source[QueryResult, NotUsed] =
+  def fromAnalyticsQuery(sessionSettings: CouchbaseSessionSettings, query: String): Source[AnalyticsResult, NotUsed] =
     Source
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
-        Source
-          .future(session.map(_.streamedQuery(query))(materializer.system.dispatcher))
-          .flatMapConcat(identity)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
+        Source.future(session.flatMap(_.underlying.analyticsQuery(query).asScala)(materializer.system.dispatcher))
       }
       .mapMaterializedValue(_ => NotUsed)
 

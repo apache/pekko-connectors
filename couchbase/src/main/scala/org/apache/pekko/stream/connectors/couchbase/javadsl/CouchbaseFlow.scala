@@ -13,17 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import com.couchbase.client.java.json.JsonValue
-import com.couchbase.client.java.kv.{ GetResult, MutationResult }
+import com.couchbase.client.java.json.{JsonObject, JsonValue}
+import com.couchbase.client.java.kv.{GetResult, MutationResult}
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.{
-  scaladsl,
-  CouchbaseDeleteResult,
-  CouchbaseSessionSettings,
-  CouchbaseWriteResult,
-  CouchbaseWriteSettings
-}
+import pekko.stream.connectors.couchbase.{scaladsl, CouchbaseDeleteResult, CouchbaseSessionSettings, CouchbaseWriteResult, CouchbaseWriteSettings}
 import pekko.stream.javadsl.Flow
 
 /**
@@ -51,7 +45,7 @@ object CouchbaseFlow {
   def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: JsonValue => String): Flow[JsonValue, MutationResult, NotUsed] =
+      getId: JsonObject => String): Flow[JsonObject, MutationResult, NotUsed] =
     scaladsl.CouchbaseFlow.upsertJson(sessionSettings, writeSettings, bucketName, getId).asJava
 
   /**

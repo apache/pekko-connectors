@@ -56,7 +56,7 @@ class CouchbaseSessionExamplesSpec
 
       val sessionSettings = CouchbaseSessionSettings(actorSystem)
         .withEnvironment(environment)
-      val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings, bucketName)
+      val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
       sessionFuture.futureValue shouldBe a[CouchbaseSession]
     }
@@ -65,26 +65,10 @@ class CouchbaseSessionExamplesSpec
       // #create
       implicit val ec: ExecutionContext = actorSystem.dispatcher
       val sessionSettings = CouchbaseSessionSettings(actorSystem)
-      val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings, bucketName)
+      val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
       val id = "myId"
-      val documentFuture = sessionFuture.map(session => session.get(id, classOf[JsonDocument]))
-      documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
-    }
-
-    "be created from a bucket" in {
-      implicit val ec: ExecutionContext = actorSystem.dispatcher
-      // #fromBucket
-      import com.couchbase.client.java.AsyncCluster
-      val asyncCluster = AsyncCluster.connect("localhost", "Administrator", "password")
-      val bucket = asyncCluster.bucket("pekko")
-      val session: CouchbaseSession = CouchbaseSession(asyncCluster, bucket.name())
-      actorSystem.registerOnTermination {
-        session.close()
-      }
-      val id = "myId"
-      val documentFuture = session.get(id)
-      // #fromBucket
+      val documentFuture = sessionFuture.map(session => session.get(bucketName, id, classOf[JsonDocument]))
       documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
     }
   }

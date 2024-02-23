@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java.json.JsonValue
-import com.couchbase.client.java.kv.{GetOptions, GetResult, MutationResult}
+import com.couchbase.client.java.json.{ JsonObject, JsonValue }
+import com.couchbase.client.java.kv.{ GetOptions, GetResult, MutationResult }
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.connectors.couchbase._
 import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko.util.FutureConverters.CompletionStageOps
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 /**
  * Scala API: Factory methods for Couchbase flows.
@@ -32,11 +33,13 @@ object CouchbaseFlow {
   def fromId(sessionSettings: CouchbaseSessionSettings, bucketName: String): Flow[String, GetResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[String]
-          .mapAsync(1)(id => session.flatMap(_.get(id, GetOptions.getOptions))(materializer.system.dispatcher))
-      }
-      .mapMaterializedValue(_ => NotUsed)
+          .mapAsync(1)(id =>
+            session.flatMap(_.collection(bucketName)
+              .get(id, GetOptions.getOptions)
+              .asScala)(materializer.system.dispatcher))
+      }.mapMaterializedValue(_ => NotUsed)
 
   /**
    * Create a flow to query Couchbase for by `id` and emit documents of the given class.
@@ -46,9 +49,13 @@ object CouchbaseFlow {
       target: Class[T]): Flow[String, T, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[String]
-          .mapAsync(1)(id => session.flatMap(_.get(id, target))(materializer.system.dispatcher))
+          .mapAsync(1)(id =>
+            session.flatMap(_.collection(bucketName)
+              .get(id, GetOptions.getOptions)
+              .thenApply(_.contentAs(target))
+              .asScala)(materializer.system.dispatcher))
       }.mapMaterializedValue(_ => NotUsed)
 
   /**
@@ -57,13 +64,15 @@ object CouchbaseFlow {
   def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
-      getId: JsonValue => String): Flow[JsonValue, MutationResult, NotUsed] =
+      getId: JsonObject => String): Flow[JsonObject, MutationResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
-        Flow[JsonValue]
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
+        Flow[JsonObject]
           .mapAsync(writeSettings.parallelism)(doc =>
-            session.flatMap(_.upsert(getId(doc), doc, writeSettings.toUpsertOption))(materializer.system.dispatcher))
+            session.flatMap(_.collection(bucketName)
+              .upsert(getId(doc), doc, writeSettings.toUpsertOption)
+              .asScala)(materializer.system.dispatcher))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -76,10 +85,12 @@ object CouchbaseFlow {
       getId: T => String): Flow[T, MutationResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc =>
-            session.flatMap(_.upsert(getId(doc), doc, writeSettings.toUpsertOption))(materializer.system.dispatcher))
+            session.flatMap(_.collection(bucketName)
+              .upsert(getId(doc), doc, writeSettings.toUpsertOption)
+              .asScala)(materializer.system.dispatcher))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -94,13 +105,15 @@ object CouchbaseFlow {
 
     val flow: Flow[T, CouchbaseWriteResult[T], Future[NotUsed]] = Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc => {
             val id = getId(doc)
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
-              .flatMap(_.upsert(getId(doc), doc, writeSettings.toUpsertOption)
+              .flatMap(_.collection(bucketName)
+                .upsert(getId(doc), doc, writeSettings.toUpsertOption)
+                .asScala
                 .map(result => CouchbaseWriteSuccess(id, doc, result))
                 .recover {
                   case exception => CouchbaseWriteFailure(id, doc, exception)
@@ -119,11 +132,12 @@ object CouchbaseFlow {
       getId: JsonValue => String): Flow[JsonValue, MutationResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[JsonValue]
           .mapAsync(writeSettings.parallelism)(doc =>
-            session.flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))(
-              materializer.system.dispatcher))
+            session.flatMap(_.collection(bucketName)
+              .replace(getId(doc), doc, writeSettings.toReplaceOption)
+              .asScala)(materializer.system.dispatcher))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -136,10 +150,11 @@ object CouchbaseFlow {
       getId: T => String): Flow[T, MutationResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc =>
-            session.flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))(
+            session.flatMap(_.collection(bucketName).replace(getId(doc), doc,
+              writeSettings.toReplaceOption).asScala)(
               materializer.system.dispatcher))
       }
       .mapMaterializedValue(_ => NotUsed)
@@ -154,13 +169,13 @@ object CouchbaseFlow {
       getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
     val flow: Flow[T, CouchbaseWriteResult[T], Future[NotUsed]] = Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[T]
           .mapAsync(writeSettings.parallelism)(doc => {
             val id = getId(doc)
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
-              .flatMap(_.replace(getId(doc), doc, writeSettings.toReplaceOption))
+              .flatMap(_.collection(bucketName).replace(getId(doc), doc, writeSettings.toReplaceOption).asScala)
               .map(res => CouchbaseWriteSuccess(id, doc, res))
               .recover {
                 case exception => CouchbaseWriteFailure(id, doc, exception)
@@ -178,12 +193,12 @@ object CouchbaseFlow {
       bucketName: String): Flow[String, String, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[String]
           .mapAsync(writeSettings.parallelism)(id => {
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
-              .flatMap(_.remove(id, writeSettings.toRemoveOption))
+              .flatMap(_.collection(bucketName).remove(id, writeSettings.toRemoveOption).asScala)
               .map(_ => id)
           })
       }
@@ -197,17 +212,16 @@ object CouchbaseFlow {
       bucketName: String): Flow[String, CouchbaseDeleteResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
-        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings, bucketName)
+        val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
         Flow[String]
           .mapAsync(writeSettings.parallelism)(id => {
             implicit val executor: ExecutionContext = materializer.system.dispatcher
             session
-              .flatMap(_.remove(id, writeSettings.toRemoveOption))
+              .flatMap(_.collection(bucketName).remove(id, writeSettings.toRemoveOption).asScala)
               .map(result => CouchbaseDeleteSuccess(id, result))
               .recover {
                 case exception => CouchbaseDeleteFailure(id, exception)
               }
           })
-      }
-      .mapMaterializedValue(_ => NotUsed)
+      }.mapMaterializedValue(_ => NotUsed)
 }
