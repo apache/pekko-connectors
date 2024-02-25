@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java.json.JsonObject
-import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
-import org.apache.pekko.util.FutureConverters.CompletionStageOps
 import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.scaladsl.Source
+import pekko.util.FutureConverters.CompletionStageOps
+
+import com.couchbase.client.java.json.JsonObject
+import com.couchbase.client.java.query.QueryResult
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 

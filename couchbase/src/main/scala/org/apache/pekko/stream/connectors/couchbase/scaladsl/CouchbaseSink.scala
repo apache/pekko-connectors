@@ -13,11 +13,12 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.scaladsl.{ Keep, Sink }
+
+import com.couchbase.client.java.json.JsonObject
 
 import scala.concurrent.Future
 

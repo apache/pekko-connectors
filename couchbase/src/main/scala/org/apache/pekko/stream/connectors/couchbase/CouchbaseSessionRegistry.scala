@@ -13,8 +13,6 @@
 
 package org.apache.pekko.stream.connectors.couchbase
 
-import java.util.concurrent.CompletionStage
-import java.util.concurrent.atomic.AtomicReference
 import org.apache.pekko
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import pekko.dispatch.ExecutionContexts
@@ -22,6 +20,9 @@ import pekko.stream.connectors.couchbase.impl.CouchbaseClusterRegistry
 import pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JCouchbaseSession }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import pekko.util.FutureConverters._
+
+import java.util.concurrent.CompletionStage
+import java.util.concurrent.atomic.AtomicReference
 
 import scala.annotation.tailrec
 import scala.concurrent.{ Future, Promise }

@@ -13,18 +13,13 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import com.couchbase.client.java.json.{ JsonObject, JsonValue }
-import com.couchbase.client.java.kv.{ GetResult, MutationResult }
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.{
-  scaladsl,
-  CouchbaseDeleteResult,
-  CouchbaseSessionSettings,
-  CouchbaseWriteResult,
-  CouchbaseWriteSettings
-}
+import pekko.stream.connectors.couchbase._
 import pekko.stream.javadsl.Flow
+
+import com.couchbase.client.java.json.{ JsonObject, JsonValue }
+import com.couchbase.client.java.kv.{ GetResult, MutationResult }
 
 /**
  * Java API: Factory methods for Couchbase flows.

@@ -13,14 +13,16 @@
 
 package org.apache.pekko.stream.connectors.couchbase
 
+import org.apache.pekko
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.annotation.InternalApi
+import pekko.util.FutureConverters._
+import pekko.util.ccompat.JavaConverters._
+import pekko.util.JavaDurationConverters.ScalaDurationOps
+
 import com.couchbase.client.java.env.ClusterEnvironment
 import com.couchbase.client.java.kv._
 import com.typesafe.config.Config
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.util.FutureConverters._
-import org.apache.pekko.util.ccompat.JavaConverters._
-import org.apache.pekko.util.JavaDurationConverters.ScalaDurationOps
 
 import java.util.concurrent.{ CompletionStage, TimeUnit }
 import scala.collection.immutable
@@ -243,7 +245,8 @@ final class CouchbaseSessionSettings private (
       password: String = password,
       nodes: immutable.Seq[String] = nodes,
       environment: Option[ClusterEnvironment] = environment,
-      enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync): CouchbaseSessionSettings =
+      enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync)
+      : CouchbaseSessionSettings =
     new CouchbaseSessionSettings(username, password, nodes, environment, enrichAsync)
 
   override def equals(other: Any): Boolean = other match {

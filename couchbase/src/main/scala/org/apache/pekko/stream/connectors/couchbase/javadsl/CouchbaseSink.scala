@@ -17,6 +17,7 @@ import org.apache.pekko
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.javadsl.{ Keep, Sink }
 import pekko.{ Done, NotUsed }
+
 import com.couchbase.client.java.json.{ JsonObject, JsonValue }
 
 import java.util.concurrent.CompletionStage

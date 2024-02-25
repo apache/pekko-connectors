@@ -13,13 +13,14 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java._
-import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import pekko.Done
 import pekko.annotation.{ DoNotInherit, InternalApi }
 import pekko.stream.connectors.couchbase.{ javadsl, CouchbaseSessionSettings }
 import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
+
+import com.couchbase.client.java._
+import com.couchbase.client.java.json.JsonObject
 
 import scala.concurrent.{ ExecutionContext, Future }
 

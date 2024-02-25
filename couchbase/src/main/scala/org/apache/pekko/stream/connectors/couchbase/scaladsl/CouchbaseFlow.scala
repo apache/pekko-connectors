@@ -13,14 +13,15 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import com.couchbase.client.java.json.{ JsonObject, JsonValue }
-import com.couchbase.client.java.kv.{ GetOptions, GetResult, MutationResult }
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.couchbase._
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.util.FutureConverters.CompletionStageOps
-
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.couchbase._
+import pekko.stream.scaladsl.Flow
+import pekko.util.FutureConverters.CompletionStageOps
 import scala.concurrent.{ ExecutionContext, Future }
+
+import com.couchbase.client.java.json.JsonObject
+import com.couchbase.client.java.kv.{ GetOptions, GetResult, MutationResult }
 
 /**
  * Scala API: Factory methods for Couchbase flows.

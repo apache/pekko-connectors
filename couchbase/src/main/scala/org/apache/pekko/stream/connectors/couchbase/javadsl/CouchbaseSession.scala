@@ -13,16 +13,18 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
-import com.couchbase.client.java.{ AsyncCluster, AsyncCollection }
-import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
+import pekko.Done
 import pekko.annotation.DoNotInherit
 import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
-import pekko.util.FutureConverters._
+
+import com.couchbase.client.java.json.JsonObject
+import com.couchbase.client.java.{ AsyncCluster, AsyncCollection }
 import java.util.concurrent.{ CompletableFuture, CompletionStage, Executor }
+
+import pekko.util.FutureConverters._
 import scala.concurrent.ExecutionContext
 
 /**

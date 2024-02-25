@@ -13,7 +13,6 @@
 
 package org.apache.pekko.stream.connectors.couchbase.scaladsl
 
-import java.util.concurrent.CompletionStage
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.annotation.InternalApi
@@ -22,7 +21,10 @@ import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
 import pekko.util.JavaDurationConverters._
 import pekko.util.FunctionConverters._
 import pekko.util.FutureConverters._
+
 import com.typesafe.config.Config
+
+import java.util.concurrent.CompletionStage
 
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
