@@ -14,18 +14,17 @@
 package docs.scaladsl
 
 import com.couchbase.client.core.error.ConfigException
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.typesafe.config.{ Config, ConfigFactory }
-import org.apache.pekko.stream.connectors.couchbase.testing.JsonDocument
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 
@@ -52,7 +51,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
         .withEnrichAsync(DiscoverySupport.nodes())
       val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
-      sessionFuture.failed.futureValue shouldBe a[ConfigException]
+      sessionFuture.futureValue
     }
 
     "be created from settings" in {
@@ -66,7 +65,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
       val documentFuture = sessionFuture.flatMap { session =>
         val id = "myId"
-        session.get(session.collection(bucketName), id, classOf[JsonDocument])
+        session.get(session.collection(bucketName), id, classOf[JsonObject])
       }
       // #create
       documentFuture.failed.futureValue shouldBe a[RuntimeException]

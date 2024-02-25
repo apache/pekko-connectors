@@ -53,4 +53,8 @@ final private[couchbase] class CouchbaseSessionImpl(cluster: AsyncCluster)
 
   override def get[T](collection: AsyncCollection, id: String, target: Class[T]): CompletableFuture[T] =
     collection.get(id).thenApply(_.contentAs(target))
+
+  override def getJson(collection: AsyncCollection, id: String): CompletableFuture[JsonObject] =
+    collection.get(id).thenApply(_.contentAsObject())
+
 }

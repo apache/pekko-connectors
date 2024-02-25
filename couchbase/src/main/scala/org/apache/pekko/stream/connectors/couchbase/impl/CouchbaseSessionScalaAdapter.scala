@@ -14,11 +14,11 @@
 package org.apache.pekko.stream.connectors.couchbase.impl
 
 import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, AsyncCollection, AsyncScope }
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko.Done
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.couchbase.{ javadsl, scaladsl }
 import org.apache.pekko.util.FutureConverters._
-
 import scala.concurrent.Future
 
 /**
@@ -54,4 +54,7 @@ private[couchbase] final class CouchbaseSessionScalaAdapter(delegate: javadsl.Co
 
   override def get[T](collection: AsyncCollection, id: String, target: Class[T]): Future[T] =
     delegate.get(collection, id, target).asScala
+
+  override def getJson(collection: AsyncCollection, id: String): Future[JsonObject] =
+    delegate.getJson(collection, id).asScala
 }

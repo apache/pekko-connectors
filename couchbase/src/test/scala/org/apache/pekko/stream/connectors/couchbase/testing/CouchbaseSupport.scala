@@ -15,23 +15,23 @@ package org.apache.pekko.stream.connectors.couchbase.testing
 
 import com.couchbase.client.core.deps.io.netty.buffer.{ ByteBuf, Unpooled }
 import com.couchbase.client.core.deps.io.netty.util.CharsetUtil
+import com.couchbase.client.java.codec.JacksonJsonSerializer
+import com.couchbase.client.java.env.ClusterEnvironment
 import com.couchbase.client.java.json.JsonObject
 import com.couchbase.client.java.kv.ReplicateTo
-import org.apache.pekko
-import pekko.Done
-import pekko.actor.ActorSystem
-import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionSetting, CouchbaseWriteSettings }
-import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.util.ccompat.JavaConverters._
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import org.apache.pekko
 import org.slf4j.LoggerFactory
-
-import scala.collection.immutable.Seq
+import pekko.Done
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSetting, CouchbaseWriteSettings }
+import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
+import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.util.ccompat.JavaConverters._
+import scala.concurrent.{ Await, Future }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import scala.concurrent.{ Await, Future }
 
 case class TestObject(id: String, value: String)
 
@@ -56,8 +56,12 @@ trait CouchbaseSupport {
     TestObject("Fourth", "Fourth"))
 
   val sampleJavaList: java.util.List[TestObject] = sampleSequence.asJava
-
+  // couchbase use jackson, serializer for scala
+  val environment = ClusterEnvironment.builder()
+    .jsonSerializer(JacksonJsonSerializer.create(CouchbaseSupport.jacksonMapper))
+    .build()
   val sessionSettings = CouchbaseSessionSetting(actorSystem)
+    .withEnvironment(environment)
   val writeSettings: CouchbaseWriteSettings = CouchbaseWriteSettings().withReplicateTo(ReplicateTo.NONE)
   val bucketName = "pekko"
   val queryBucketName = "pekkoquery"
@@ -71,29 +75,33 @@ trait CouchbaseSupport {
 
   def toRawJsonDocument(testObject: TestObject): StringDocument = {
     val json = CouchbaseSupport.jacksonMapper.writeValueAsString(testObject)
-    new StringDocument(testObject.id, json)
+    StringDocument(testObject.id, json)
   }
 
-  def toJsonDocument(testObject: TestObject): JsonDocument = {
-    val jsonObject = JsonObject.create().put("id", testObject.id).put("value", testObject.value)
-    new JsonDocument(testObject.id, jsonObject)
+  def toJsonDocument(testObject: TestObject): JsonObject = {
+    JsonObject.create().put("id", testObject.id).put("value", testObject.value)
   }
 
   def toStringDocument(testObject: TestObject): StringDocument = {
     val json = CouchbaseSupport.jacksonMapper.writeValueAsString(testObject)
-    new StringDocument(testObject.id, json)
+    StringDocument(testObject.id, json)
   }
 
   def toBinaryDocument(testObject: TestObject): BinaryDocument = {
+
     val json = CouchbaseSupport.jacksonMapper.writeValueAsString(testObject)
     val toWrite = Unpooled.copiedBuffer(json, CharsetUtil.UTF_8)
-    new BinaryDocument(testObject.id, toWrite)
+    BinaryDocument(testObject.id, toWrite)
+  }
+
+  def toJsonObject(string: String) = {
+    CouchbaseSupport.jacksonMapper.reader().readTree(string)
   }
 
   def upsertSampleData(bucketName: String): Unit = {
     val bulkUpsertResult: Future[Done] = Source(sampleSequence)
       .map(toJsonDocument)
-      .via(CouchbaseFlow.upsert(sessionSettings, CouchbaseWriteSettings.inMemory, bucketName, _.id))
+      .via(CouchbaseFlow.upsert(sessionSettings, CouchbaseWriteSettings.inMemory, bucketName, _.getString("id")))
       .runWith(Sink.ignore)
     Await.result(bulkUpsertResult, 5.seconds)
     // all queries are Eventual Consistent, se we need to wait for index refresh!!
@@ -120,12 +128,11 @@ final class CouchbaseSupportClass extends CouchbaseSupport
 
 trait Document[T] {
   def id: String
-
   def content: T
 }
 
-class JsonDocument(override val id: String, override val content: JsonObject) extends Document[JsonObject]
+case class StringDocument(id: String, content: String)
+    extends Document[String]
 
-class StringDocument(override val id: String, override val content: String) extends Document[String]
-
-class BinaryDocument(override val id: String, override val content: ByteBuf) extends Document[ByteBuf]
+case class BinaryDocument(id: String, content: ByteBuf)
+    extends Document[ByteBuf]

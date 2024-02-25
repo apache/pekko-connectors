@@ -13,6 +13,13 @@
 
 package docs.javadsl;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import com.couchbase.client.core.error.DocumentNotFoundException;
 import com.couchbase.client.java.env.ClusterEnvironment;
 import com.couchbase.client.java.json.JsonObject;
@@ -21,59 +28,43 @@ import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.MutationResult;
 import com.couchbase.client.java.kv.PersistTo;
 import com.couchbase.client.java.kv.ReplicateTo;
-import com.couchbase.client.java.query.QueryResult;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
-// #deleteWithResult
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseDeleteResult;
-// #deleteWithResult
-// #upsertDocWithResult
-// #upsertDocWithResult
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSetting;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteFailure;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteResult;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteSettings;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseFlow;
+import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSource;
 import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupportClass;
-import org.apache.pekko.stream.connectors.couchbase.testing.JsonDocument;
 import org.apache.pekko.stream.connectors.couchbase.testing.StringDocument;
 import org.apache.pekko.stream.connectors.couchbase.testing.TestObject;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
-import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
-
-
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
-// #registry
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
-// #session
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSetting;
-import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
-// #session
-// #registry
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-// #sessionFromBucket
-// #sessionFromBucket
-// #statement
-
-// #statement
 
 import scala.concurrent.duration.FiniteDuration;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 public class CouchbaseExamplesTest {
 
@@ -206,7 +197,7 @@ public class CouchbaseExamplesTest {
     CompletionStage<MutationResult> jsonDocumentUpsert =
         Source.single(obj)
             .map(support::toJsonDocument)
-            .via(CouchbaseFlow.upsert(sessionSettings, writeSettings, bucketName, JsonDocument::id))
+            .via(CouchbaseFlow.upsert(sessionSettings, writeSettings, bucketName, s -> s.getString("id")))
             .runWith(Sink.head(), actorSystem);
     // #upsert
     MutationResult mutationResult = jsonDocumentUpsert.toCompletableFuture().get(3, TimeUnit.SECONDS);
@@ -264,7 +255,7 @@ public class CouchbaseExamplesTest {
     CompletionStage<MutationResult> jsonDocumentReplace =
         Source.single(obj)
             .map(support::toJsonDocument)
-            .via(CouchbaseFlow.replace(sessionSettings, writeSettings, bucketName, JsonDocument::id))
+            .via(CouchbaseFlow.replace(sessionSettings, writeSettings, bucketName, s -> s.getString("id")))
             .runWith(Sink.head(), actorSystem);
     // #replace
 
@@ -284,7 +275,7 @@ public class CouchbaseExamplesTest {
 
     CompletionStage<MutationResult> jsonDocumentReplace = Source.single(obj)
         .map(support::toJsonDocument)
-        .viaMat(CouchbaseFlow.replace(sessionSettings, writeSettings, bucketName, JsonDocument::id), Keep.both())
+        .via(CouchbaseFlow.replace(sessionSettings, writeSettings, bucketName, s -> s.getString("id")))
         .runWith(Sink.head(), actorSystem);
     // #replace
 

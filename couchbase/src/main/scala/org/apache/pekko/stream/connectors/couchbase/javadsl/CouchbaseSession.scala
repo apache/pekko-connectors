@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
 import com.couchbase.client.java.{ AsyncCluster, AsyncCollection }
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import org.apache.pekko.Done
 import org.apache.pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
@@ -21,7 +22,6 @@ import pekko.annotation.DoNotInherit
 import pekko.stream.connectors.couchbase.CouchbaseSessionSetting
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
 import pekko.util.FutureConverters._
-
 import java.util.concurrent.{ CompletableFuture, CompletionStage, Executor }
 import scala.concurrent.ExecutionContext
 
@@ -82,4 +82,6 @@ abstract class CouchbaseSession extends CouchbaseSessionCommon {
   def close(): CompletionStage[Done]
 
   def get[T](collection: AsyncCollection, id: String, target: Class[T]): CompletableFuture[T]
+
+  def getJson(collection: AsyncCollection, id: String): CompletableFuture[JsonObject]
 }

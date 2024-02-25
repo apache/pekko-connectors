@@ -91,4 +91,6 @@ trait CouchbaseSession extends CouchbaseSessionCommon {
   def close(): Future[Done]
 
   def get[T](collection: AsyncCollection, id: String, target: Class[T]): Future[T]
+
+  def getJson(collection: AsyncCollection, id: String): Future[JsonObject]
 }

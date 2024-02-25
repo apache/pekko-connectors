@@ -14,6 +14,7 @@
 package docs.scaladsl
 
 import com.couchbase.client.core.error.DocumentNotFoundException
+import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -21,9 +22,8 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
-import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, JsonDocument }
+import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 
@@ -68,9 +68,8 @@ class CouchbaseSessionExamplesSpec
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
       val id = "myId"
-      val documentFuture =
-        sessionFuture.map(session => session.get(session.collection(bucketName), id, classOf[JsonDocument]))
-      documentFuture.failed.futureValue shouldBe a[DocumentNotFoundException]
+      val documentFuture = sessionFuture.flatMap(session => session.getJson(session.collection(bucketName), id))
+      documentFuture.failed.futureValue.getCause shouldBe a[DocumentNotFoundException]
     }
   }
 }

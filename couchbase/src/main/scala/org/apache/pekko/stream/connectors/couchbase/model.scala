@@ -270,7 +270,7 @@ final class CouchbaseSessionSetting private (
 /**
  * Wrapper to for handling Couchbase write failures in-stream instead of failing the stream.
  */
-sealed trait CouchbaseWriteResult[T] {
+trait CouchbaseWriteResult[T] {
   def isSuccess: Boolean
 
   def isFailure: Boolean
