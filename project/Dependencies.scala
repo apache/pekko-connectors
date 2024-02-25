@@ -389,7 +389,7 @@ object Dependencies {
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.3.0" % Test,
-      "com.github.tomakehurst" % "wiremock-jre8" % "2.35.1" % Test,
+      "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
