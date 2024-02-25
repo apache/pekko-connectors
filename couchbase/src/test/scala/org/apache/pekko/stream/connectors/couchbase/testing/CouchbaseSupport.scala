@@ -25,7 +25,7 @@ import org.apache.pekko
 import org.slf4j.LoggerFactory
 import pekko.Done
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionSetting, CouchbaseWriteSettings }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ccompat.JavaConverters._
@@ -60,7 +60,7 @@ trait CouchbaseSupport {
   val environment = ClusterEnvironment.builder()
     .jsonSerializer(JacksonJsonSerializer.create(CouchbaseSupport.jacksonMapper))
     .build()
-  val sessionSettings = CouchbaseSessionSetting(actorSystem)
+  val sessionSettings = CouchbaseSessionSettings(actorSystem)
     .withEnvironment(environment)
   val writeSettings: CouchbaseWriteSettings = CouchbaseWriteSettings().withReplicateTo(ReplicateTo.NONE)
   val bucketName = "pekko"

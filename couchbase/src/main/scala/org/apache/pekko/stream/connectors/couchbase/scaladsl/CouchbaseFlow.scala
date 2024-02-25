@@ -30,7 +30,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to query Couchbase for by `id` and emit [[com.couchbase.client.java.kv.GetResult]].
    */
-  def fromId(sessionSettings: CouchbaseSessionSetting, bucketName: String): Flow[String, GetResult, NotUsed] =
+  def fromId(sessionSettings: CouchbaseSessionSettings, bucketName: String): Flow[String, GetResult, NotUsed] =
     Flow
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
@@ -44,14 +44,14 @@ object CouchbaseFlow {
   /**
    * Create a flow to query Couchbase for by `id` and emit documents of the given class.
    */
-  def fromId[T](sessionSettings: CouchbaseSessionSetting, bucketName: String,
+  def fromId[T](sessionSettings: CouchbaseSessionSettings, bucketName: String,
       target: Class[T]): Flow[String, T, NotUsed] =
     fromId(sessionSettings, bucketName).map(_.contentAs(target))
 
   /**
    * Create a flow to update or insert a Couchbase [[com.couchbase.client.java.kv.MutationResult]].
    */
-  def upsertJson(sessionSettings: CouchbaseSessionSetting,
+  def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: JsonObject => String): Flow[JsonObject, MutationResult, NotUsed] =
@@ -60,7 +60,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to update or insert a Couchbase document of the given class.
    */
-  def upsert[T](sessionSettings: CouchbaseSessionSetting,
+  def upsert[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, MutationResult, NotUsed] =
@@ -79,7 +79,7 @@ object CouchbaseFlow {
    * Create a flow to update or insert a Couchbase document of the given class and emit a result so that write failures
    * can be handled in-stream.
    */
-  def upsertWithResult[T](sessionSettings: CouchbaseSessionSetting,
+  def upsertWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
@@ -107,7 +107,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to replace a Couchbase [[com.couchbase.client.java.json.JsonObject]].
    */
-  def replaceJson(sessionSettings: CouchbaseSessionSetting,
+  def replaceJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: JsonObject => String): Flow[JsonObject, MutationResult, NotUsed] =
@@ -116,7 +116,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to replace a Couchbase document of the given class.
    */
-  def replace[T](sessionSettings: CouchbaseSessionSetting,
+  def replace[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, MutationResult, NotUsed] =
@@ -134,7 +134,7 @@ object CouchbaseFlow {
    * Create a flow to replace a Couchbase document of the given class and emit a result so that write failures
    * can be handled in-stream.
    */
-  def replaceWithResult[T](sessionSettings: CouchbaseSessionSetting,
+  def replaceWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] = {
@@ -160,7 +160,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to delete documents from Couchbase by `id`. Emits the same `id`.
    */
-  def delete(sessionSettings: CouchbaseSessionSetting,
+  def delete(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[String, String, NotUsed] =
     Flow
@@ -179,7 +179,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to delete documents from Couchbase by `id` and emit operation outcome containing the same `id`.
    */
-  def deleteWithResult(sessionSettings: CouchbaseSessionSetting,
+  def deleteWithResult(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[String, CouchbaseDeleteResult, NotUsed] =
     Flow

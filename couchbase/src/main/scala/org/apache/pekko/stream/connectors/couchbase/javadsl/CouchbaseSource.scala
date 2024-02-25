@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.couchbase.javadsl
 import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.{ scaladsl, CouchbaseSessionSetting }
+import pekko.stream.connectors.couchbase.{ scaladsl, CouchbaseSessionSettings }
 import pekko.stream.javadsl.Source
 
 import scala.jdk.CollectionConverters.SeqHasAsJava
@@ -30,10 +30,10 @@ object CouchbaseSource {
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.analytics.AnalyticsResult]].
    */
   def fromQueryJson(
-      sessionSetting: CouchbaseSessionSetting, statement: String): Source[java.util.List[JsonObject], NotUsed] =
+      sessionSetting: CouchbaseSessionSettings, statement: String): Source[java.util.List[JsonObject], NotUsed] =
     scaladsl.CouchbaseSource.fromQueryJson(sessionSetting, statement).map(_.asJava).asJava
 
-  def fromQuery[T](sessionSettings: CouchbaseSessionSetting, statement: String, target: Class[T])
+  def fromQuery[T](sessionSettings: CouchbaseSessionSettings, statement: String, target: Class[T])
       : Source[java.util.List[T], NotUsed] =
     scaladsl.CouchbaseSource.fromQuery(sessionSettings, statement, target).map(_.asJava).asJava
 

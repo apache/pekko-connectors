@@ -19,7 +19,7 @@ import org.apache.pekko
 import org.apache.pekko.Done
 import org.apache.pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
 import pekko.annotation.DoNotInherit
-import pekko.stream.connectors.couchbase.CouchbaseSessionSetting
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
 import pekko.util.FutureConverters._
 import java.util.concurrent.{ CompletableFuture, CompletionStage, Executor }
@@ -36,7 +36,7 @@ object CouchbaseSession {
    * Create a session against the given bucket. The couchbase client used to connect will be created and then closed when
    * the session is closed.
    */
-  def create(settings: CouchbaseSessionSetting, executor: Executor): CompletionStage[CouchbaseSession] = {
+  def create(settings: CouchbaseSessionSettings, executor: Executor): CompletionStage[CouchbaseSession] = {
     ScalaDslCouchbaseSession
       .createClusterClient(settings)(executionContext(executor))
       .map(create)(executionContext(executor))
@@ -47,7 +47,7 @@ object CouchbaseSession {
    * Connects to a Couchbase cluster by creating an `AsyncCluster`.
    * The life-cycle of it is the user's responsibility.
    */
-  def createClient(settings: CouchbaseSessionSetting, executor: Executor): CompletionStage[AsyncCluster] = {
+  def createClient(settings: CouchbaseSessionSettings, executor: Executor): CompletionStage[AsyncCluster] = {
     ScalaDslCouchbaseSession
       .createClusterClient(settings)(executionContext(executor))
       .asJava

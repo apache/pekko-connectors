@@ -18,7 +18,7 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.event.Logging
-import pekko.stream.connectors.couchbase.CouchbaseSessionSetting
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import com.couchbase.client.java.AsyncCluster
 
@@ -35,16 +35,16 @@ final private[couchbase] class CouchbaseClusterRegistry(system: ActorSystem) {
 
   private val blockingDispatcher = system.dispatchers.lookup("pekko.actor.default-blocking-io-dispatcher")
 
-  private val clusters = new AtomicReference(Map.empty[CouchbaseSessionSetting, Future[AsyncCluster]])
+  private val clusters = new AtomicReference(Map.empty[CouchbaseSessionSettings, Future[AsyncCluster]])
 
-  def clusterFor(settings: CouchbaseSessionSetting): Future[AsyncCluster] =
+  def clusterFor(settings: CouchbaseSessionSettings): Future[AsyncCluster] =
     clusters.get.get(settings) match {
       case Some(futureSession) => futureSession
       case _                   => createClusterClient(settings)
     }
 
   @tailrec
-  private def createClusterClient(settings: CouchbaseSessionSetting): Future[AsyncCluster] = {
+  private def createClusterClient(settings: CouchbaseSessionSettings): Future[AsyncCluster] = {
     val promise = Promise[AsyncCluster]()
     val oldClusters = clusters.get()
     val newClusters = oldClusters.updated(settings, promise.future)

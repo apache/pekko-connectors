@@ -18,7 +18,7 @@ import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import pekko.Done
 import pekko.annotation.{ DoNotInherit, InternalApi }
-import pekko.stream.connectors.couchbase.{ javadsl, CouchbaseSessionSetting }
+import pekko.stream.connectors.couchbase.{ javadsl, CouchbaseSessionSettings }
 import pekko.stream.connectors.couchbase.impl.{ CouchbaseSessionCommon, CouchbaseSessionImpl }
 
 import scala.concurrent.{ ExecutionContext, Future }
@@ -30,7 +30,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  */
 object CouchbaseSession {
 
-  def apply(settings: CouchbaseSessionSetting)(
+  def apply(settings: CouchbaseSessionSettings)(
       implicit ec: ExecutionContext): Future[CouchbaseSession] =
     createClusterClient(settings).map(c => create(c))
 
@@ -57,7 +57,7 @@ object CouchbaseSession {
    * The life-cycle of it is the user's responsibility.
    */
   @InternalApi
-  private[couchbase] def createClusterClient(settings: CouchbaseSessionSetting)(
+  private[couchbase] def createClusterClient(settings: CouchbaseSessionSettings)(
       implicit ec: ExecutionContext): Future[AsyncCluster] =
     settings.enriched
       .flatMap { enrichedSettings =>

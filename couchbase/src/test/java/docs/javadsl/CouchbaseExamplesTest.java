@@ -32,7 +32,7 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseDeleteResult;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSetting;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteFailure;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteResult;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteSettings;
@@ -72,7 +72,7 @@ public class CouchbaseExamplesTest {
   public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final CouchbaseSupportClass support = new CouchbaseSupportClass();
-  private static final CouchbaseSessionSetting sessionSettings = support.sessionSettings();
+  private static final CouchbaseSessionSettings sessionSettings = support.sessionSettings();
   private static final String bucketName = support.bucketName();
   private static final String queryBucketName = support.queryBucketName();
   private static ActorSystem actorSystem;
@@ -107,8 +107,8 @@ public class CouchbaseExamplesTest {
     ClusterEnvironment environment = ClusterEnvironment.builder().build();
     actorSystem.registerOnTermination(() -> environment.shutdown());
 
-    CouchbaseSessionSetting sessionSettings =
-        CouchbaseSessionSetting.create(actorSystem).withEnvironment(environment);
+    CouchbaseSessionSettings sessionSettings =
+        CouchbaseSessionSettings.create(actorSystem).withEnvironment(environment);
     CompletionStage<CouchbaseSession> sessionCompletionStage =
         registry.getSessionFor(sessionSettings);
     // #registry
@@ -122,7 +122,7 @@ public class CouchbaseExamplesTest {
     // #session
 
     Executor executor = Executors.newSingleThreadExecutor();
-    CouchbaseSessionSetting sessionSettings = CouchbaseSessionSetting.create(actorSystem);
+    CouchbaseSessionSettings sessionSettings = CouchbaseSessionSettings.create(actorSystem);
     CompletionStage<CouchbaseSession> sessionCompletionStage = CouchbaseSession.create(sessionSettings, executor);
     actorSystem.registerOnTermination(() -> sessionCompletionStage.thenAccept(CouchbaseSession::close));
     sessionCompletionStage.thenAccept(

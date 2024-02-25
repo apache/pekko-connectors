@@ -20,7 +20,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
@@ -54,7 +54,7 @@ class CouchbaseSessionExamplesSpec
         environment.shutdown()
       }
 
-      val sessionSettings = CouchbaseSessionSetting(actorSystem)
+      val sessionSettings = CouchbaseSessionSettings(actorSystem)
         .withEnvironment(environment)
       val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
@@ -64,7 +64,7 @@ class CouchbaseSessionExamplesSpec
     "be created from settings" in {
       // #create
       implicit val ec: ExecutionContext = actorSystem.dispatcher
-      val sessionSettings = CouchbaseSessionSetting(actorSystem)
+      val sessionSettings = CouchbaseSessionSettings(actorSystem)
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
       val id = "myId"

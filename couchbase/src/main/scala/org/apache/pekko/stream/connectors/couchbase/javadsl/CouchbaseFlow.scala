@@ -20,7 +20,7 @@ import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{
   scaladsl,
   CouchbaseDeleteResult,
-  CouchbaseSessionSetting,
+  CouchbaseSessionSettings,
   CouchbaseWriteResult,
   CouchbaseWriteSettings
 }
@@ -34,13 +34,13 @@ object CouchbaseFlow {
   /**
    * Create a flow to query Couchbase for by `id` and emit [[com.couchbase.client.java.kv.GetResult]].
    */
-  def fromId(sessionSettings: CouchbaseSessionSetting, bucketName: String): Flow[String, GetResult, NotUsed] =
+  def fromId(sessionSettings: CouchbaseSessionSettings, bucketName: String): Flow[String, GetResult, NotUsed] =
     scaladsl.CouchbaseFlow.fromId(sessionSettings, bucketName).asJava
 
   /**
    * Create a flow to query Couchbase for by `id` and emit documents of the given class.
    */
-  def fromId[T](sessionSettings: CouchbaseSessionSetting,
+  def fromId[T](sessionSettings: CouchbaseSessionSettings,
       bucketName: String,
       target: Class[T]): Flow[String, T, NotUsed] =
     scaladsl.CouchbaseFlow.fromId(sessionSettings, bucketName, target).asJava
@@ -48,7 +48,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to update or insert a Couchbase [[com.couchbase.client.java.kv.GetResult]].
    */
-  def upsertJson(sessionSettings: CouchbaseSessionSetting,
+  def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: JsonObject => String): Flow[JsonObject, MutationResult, NotUsed] =
@@ -57,7 +57,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to update or insert a Couchbase document of the given class.
    */
-  def upsert[T](sessionSettings: CouchbaseSessionSetting,
+  def upsert[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, MutationResult, NotUsed] =
@@ -67,7 +67,7 @@ object CouchbaseFlow {
    * Create a flow to update or insert a Couchbase document of the given class and emit a result so that write failures
    * can be handled in-stream.
    */
-  def upsertWithResult[T](sessionSettings: CouchbaseSessionSetting,
+  def upsertWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
@@ -76,7 +76,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to replace a Couchbase [[com.couchbase.client.java.json.JsonValue]].
    */
-  def replaceJson(sessionSettings: CouchbaseSessionSetting,
+  def replaceJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: JsonValue => String): Flow[JsonValue, MutationResult, NotUsed] =
@@ -85,7 +85,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to replace a Couchbase document of the given class.
    */
-  def replace[T](sessionSettings: CouchbaseSessionSetting,
+  def replace[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, MutationResult, NotUsed] =
@@ -95,7 +95,7 @@ object CouchbaseFlow {
    * Create a flow to replace a Couchbase document of the given class and emit a result so that write failures
    * can be handled in-stream.
    */
-  def replaceWithResult[T](sessionSettings: CouchbaseSessionSetting,
+  def replaceWithResult[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
@@ -104,7 +104,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to delete documents from Couchbase by `id`. Emits the same `id`.
    */
-  def delete(sessionSettings: CouchbaseSessionSetting,
+  def delete(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[String, String, NotUsed] =
     scaladsl.CouchbaseFlow.delete(sessionSettings, writeSettings, bucketName).asJava
@@ -112,7 +112,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to delete documents from Couchbase by `id` and emit operation outcome containing the same `id`.
    */
-  def deleteWithResult(sessionSettings: CouchbaseSessionSetting,
+  def deleteWithResult(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[String, CouchbaseDeleteResult, NotUsed] =
     scaladsl.CouchbaseFlow.deleteWithResult(sessionSettings, writeSettings, bucketName).asJava

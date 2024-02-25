@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.couchbase.javadsl
 
 import org.apache.pekko
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionSetting, CouchbaseWriteSettings }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.javadsl.{ Keep, Sink }
 import pekko.{ Done, NotUsed }
 import com.couchbase.client.java.json.{ JsonObject, JsonValue }
@@ -29,7 +29,7 @@ object CouchbaseSink {
   /**
    * Create a sink to update or insert a Couchbase [[com.couchbase.client.java.document.JsonDocument JsonDocument]].
    */
-  def upsertJson(sessionSettings: CouchbaseSessionSetting,
+  def upsertJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: JsonObject => String): Sink[JsonObject, CompletionStage[Done]] =
@@ -40,7 +40,7 @@ object CouchbaseSink {
   /**
    * Create a sink to update or insert a Couchbase document of the given class.
    */
-  def upsert[T](sessionSettings: CouchbaseSessionSetting,
+  def upsert[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: T => String): Sink[T, CompletionStage[Done]] =
@@ -51,7 +51,7 @@ object CouchbaseSink {
   /**
    * Create a sink to replace a Couchbase [[com.couchbase.client.java.document.JsonDocument JsonDocument]].
    */
-  def replaceJson(sessionSettings: CouchbaseSessionSetting,
+  def replaceJson(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String,
       getId: JsonValue => String): Sink[JsonValue, CompletionStage[Done]] =
@@ -62,7 +62,7 @@ object CouchbaseSink {
   /**
    * Create a sink to replace a Couchbase document of the given class.
    */
-  def replace[T](sessionSettings: CouchbaseSessionSetting,
+  def replace[T](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String, getId: T => String): Sink[T, CompletionStage[Done]] =
     CouchbaseFlow
@@ -72,7 +72,7 @@ object CouchbaseSink {
   /**
    * Create a sink to delete documents from Couchbase by `id`.
    */
-  def delete(sessionSettings: CouchbaseSessionSetting,
+  def delete(sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Sink[String, CompletionStage[Done]] =
     CouchbaseFlow

@@ -18,7 +18,7 @@ import com.couchbase.client.java.query.QueryResult
 import org.apache.pekko
 import org.apache.pekko.util.FutureConverters.CompletionStageOps
 import pekko.NotUsed
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.scaladsl.Source
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
@@ -28,7 +28,7 @@ import scala.jdk.CollectionConverters.CollectionHasAsScala
  */
 object CouchbaseSource {
 
-  private def queryResult(sessionSettings: CouchbaseSessionSetting, statement: String): Source[QueryResult, NotUsed] =
+  private def queryResult(sessionSettings: CouchbaseSessionSettings, statement: String): Source[QueryResult, NotUsed] =
     Source
       .fromMaterializer { (materializer, _) =>
         val session = CouchbaseSessionRegistry(materializer.system).sessionFor(sessionSettings)
@@ -39,11 +39,11 @@ object CouchbaseSource {
   /**
    * Create a source query Couchbase by statement, emitted as [[com.couchbase.client.java.json.JsonValue]]s.
    */
-  def fromQueryJson(sessionSettings: CouchbaseSessionSetting, statement: String): Source[List[JsonObject], NotUsed] =
+  def fromQueryJson(sessionSettings: CouchbaseSessionSettings, statement: String): Source[List[JsonObject], NotUsed] =
     queryResult(sessionSettings, statement).map(_.rowsAsObject().asScala.toList)
 
   def fromQuery[T](
-      sessionSettings: CouchbaseSessionSetting, statement: String, target: Class[T]): Source[List[T], NotUsed] =
+      sessionSettings: CouchbaseSessionSettings, statement: String, target: Class[T]): Source[List[T], NotUsed] =
     queryResult(sessionSettings, statement).map(_.rowsAs(target).asScala.toList)
 
 }

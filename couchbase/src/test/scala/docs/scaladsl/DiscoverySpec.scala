@@ -18,7 +18,7 @@ import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSetting }
+import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
@@ -47,7 +47,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
 
       val registry = CouchbaseSessionRegistry(actorSystem)
 
-      val sessionSettings = CouchbaseSessionSetting(actorSystem)
+      val sessionSettings = CouchbaseSessionSettings(actorSystem)
         .withEnrichAsync(DiscoverySupport.nodes())
       val sessionFuture: Future[CouchbaseSession] = registry.sessionFor(sessionSettings)
       // #registry
@@ -58,7 +58,7 @@ class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
       // #create
 
       implicit val ec: ExecutionContext = actorSystem.dispatcher
-      val sessionSettings = CouchbaseSessionSetting(actorSystem)
+      val sessionSettings = CouchbaseSessionSettings(actorSystem)
         .withEnrichAsync(DiscoverySupport.nodes())
       val sessionFuture: Future[CouchbaseSession] = CouchbaseSession(sessionSettings)
       actorSystem.registerOnTermination(sessionFuture.flatMap(_.close()))
