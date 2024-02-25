@@ -7,8 +7,6 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
-dependencyOverrides += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
-
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.7")
 addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.0.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.32")
@@ -29,13 +27,15 @@ addSbtPlugin(("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.0").excludeAll(
   "com.lightbend.paradox", "sbt-paradox",
   "com.lightbend.paradox" % "sbt-paradox-apidoc",
   "com.lightbend.paradox" % "sbt-paradox-project-info"))
-addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox" % "0.9.2").force())
-addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-apidoc" % "0.10.1").force())
-addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-project-info" % "2.0.0").force())
+addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox" % "0.9.2").force().exclude("com.typesafe.sbt", "sbt-web"))
+addSbtPlugin("com.github.sbt" % "sbt-web" % "1.5.4") // sbt-paradox 0.9.2 depends on old sbt-web 1.4.x, but we want a newer version
+addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-apidoc" % "0.10.1").force().exclude("com.typesafe.sbt", "sbt-web"))
+addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-project-info" % "2.0.0").force()
+  .exclude("com.typesafe.sbt", "sbt-web"))
 
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "1.4.1")
+addSbtPlugin(("com.github.sbt" % "sbt-site-paradox" % "1.5.0").exclude("com.typesafe.sbt", "sbt-web"))
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
 addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.0.2")
 // templating
