@@ -15,7 +15,7 @@ object Dependencies {
 
   val CronBuild = sys.env.get("GITHUB_EVENT_NAME").contains("schedule")
 
-  val Scala213 = "2.13.12" // update even in link-validator.conf
+  val Scala213 = "2.13.13" // update even in link-validator.conf
   val Scala212 = "2.12.19"
   val Scala3 = "3.3.1"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
@@ -26,7 +26,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.3"
-  val AwsSdk2Version = "2.24.10"
+  val AwsSdk2Version = "2.24.11"
   val AwsSdk2SqsVersion = "2.20.162" // latest AwsSdk2Version causes us test issues with SQS
   val AwsSpiPekkoHttpVersion = "0.1.0"
   val NettyVersion = "4.1.107.Final"
@@ -56,7 +56,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = "3.2.17.0" // https://github.com/scalatest/scalatest/issues/2311
+  val scalaTestMockitoVersion = "3.2.18.0" // https://github.com/scalatest/scalatest/issues/2311
 
   val CouchbaseVersion = "2.7.23"
   val CouchbaseVersionForDocs = "2.7"
@@ -330,7 +330,7 @@ object Dependencies {
         organization = "org.apache.pekko"))) ++ Seq(
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.4").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.5.5").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
