@@ -2,11 +2,7 @@ name: Link Validator
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    tags-ignore:
-      - v*
+  pull_request:
   schedule:
     - cron:  '0 6 * * 1'
 
