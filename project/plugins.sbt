@@ -34,6 +34,7 @@ addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-apidoc" % "1.1.0").excludeA
 addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-project-info" % "3.0.1").excludeAll(
   "com.lightbend.paradox", "sbt-paradox"))
 dependencyOverrides += "org.parboiled" % "parboiled-java" % "1.3.1"
+dependencyOverrides += "com.lightbend.paradox" %% "paradox" % "0.9.2"
 
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
