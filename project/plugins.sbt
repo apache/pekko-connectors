@@ -21,19 +21,8 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-java-formatter" % "0.8.0")
 
 // docs
 
-// We have to deliberately use older versions of sbt-paradox because current Pekko sbt build
-// only loads on JDK 1.8 so we need to bring in older versions of parboiled which support JDK 1.8
-addSbtPlugin(("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.0").excludeAll(
-  "com.lightbend.paradox", "sbt-paradox",
-  "com.lightbend.paradox" % "sbt-paradox-apidoc",
-  "com.lightbend.paradox" % "sbt-paradox-project-info"))
-addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox" % "0.9.2").force().exclude("com.typesafe.sbt", "sbt-web"))
-addSbtPlugin("com.github.sbt" % "sbt-web" % "1.5.4") // sbt-paradox 0.9.2 depends on old sbt-web 1.4.x, but we want a newer version
-addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-apidoc" % "1.1.0").excludeAll(
-  "com.lightbend.paradox", "sbt-paradox"))
-addSbtPlugin(("com.lightbend.paradox" % "sbt-paradox-project-info" % "3.0.1").excludeAll(
-  "com.lightbend.paradox", "sbt-paradox"))
-dependencyOverrides += "org.parboiled" % "parboiled-java" % "1.3.1"
+resolvers += Resolver.ApacheMavenSnapshotsRepo
+addSbtPlugin("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.1-RC1+3-2b1f8708-SNAPSHOT")
 
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.5.0")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
