@@ -42,7 +42,7 @@ object Dependencies {
   val scalaCheckVersion = "1.17.0"
 
   val LogbackForSlf4j1Version = "1.2.13"
-  val LogbackForSlf4j2Version = "1.3.14"
+  val LogbackForSlf4j2Version = "1.5.2"
   val LogbackVersion = if (PekkoBinaryVersion == "1.0") LogbackForSlf4j1Version else LogbackForSlf4j2Version
 
   /**
