@@ -129,13 +129,13 @@ public class SlickTest {
     assertThrows(
         ExecutionException.class,
         () ->
-            usersSource.runWith(slickSink, system).toCompletableFuture().get(10, TimeUnit.SECONDS));
+            usersSource.runWith(slickSink, system).toCompletableFuture().get(5, TimeUnit.SECONDS));
   }
 
   @Test
   public void testSinkWithoutParallelismAndReadBackWithSource() throws Exception {
     final Sink<User, CompletionStage<Done>> slickSink = Slick.sink(session, insertUser);
-    usersSource.runWith(slickSink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
+    usersSource.runWith(slickSink, system).toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     assertEqualsUsers();
   }
@@ -143,7 +143,7 @@ public class SlickTest {
   @Test
   public void testSinkPSWithoutParallelismAndReadBackWithSource() throws Exception {
     final Sink<User, CompletionStage<Done>> slickSink = Slick.sink(session, insertUserPS);
-    usersSource.runWith(slickSink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
+    usersSource.runWith(slickSink, system).toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     assertEqualsUsers();
   }
@@ -151,7 +151,7 @@ public class SlickTest {
   @Test
   public void testSinkWithParallelismOf4AndReadBackWithSource() throws Exception {
     final Sink<User, CompletionStage<Done>> slickSink = Slick.sink(session, 4, insertUser);
-    usersSource.runWith(slickSink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
+    usersSource.runWith(slickSink, system).toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     assertEqualsUsers();
   }
@@ -159,7 +159,7 @@ public class SlickTest {
   @Test
   public void testSinkPSWithParallelismOf4AndReadBackWithSource() throws Exception {
     final Sink<User, CompletionStage<Done>> slickSink = Slick.sink(session, 4, insertUserPS);
-    usersSource.runWith(slickSink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
+    usersSource.runWith(slickSink, system).toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     assertEqualsUsers();
   }
@@ -178,7 +178,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(insertionResult.size(), 1);
     assertEquals(insertionResult.get(0), Integer.valueOf(-1));
@@ -192,7 +192,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(users.size(), insertionResult.size());
     assertEqualsUsers();
@@ -206,7 +206,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(users.size(), insertionResult.size());
     assertEqualsUsers();
@@ -220,7 +220,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(users.size(), insertionResult.size());
     assertEqualsUsers();
@@ -234,7 +234,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(users.size(), insertionResult.size());
     assertEqualsUsers();
@@ -249,7 +249,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(SlickTest.users, new HashSet<>(insertedUsers));
     assertEqualsUsers();
@@ -264,7 +264,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(SlickTest.users, new HashSet<>(insertedUsers));
     assertEqualsUsers();
@@ -279,7 +279,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(users, new HashSet<>(insertedUsers));
     assertEqualsUsers();
@@ -294,7 +294,7 @@ public class SlickTest {
             .via(slickFlow)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
-            .get(10, TimeUnit.SECONDS);
+            .get(5, TimeUnit.SECONDS);
 
     assertEquals(users, new HashSet<>(insertedUsers));
     assertEqualsUsers();
@@ -335,7 +335,7 @@ public class SlickTest {
                   return commitToKafka.apply(kafkaMessage.offset);
                 })
             .runWith(Sink.ignore(), system);
-    resultFuture.toCompletableFuture().get(10, TimeUnit.SECONDS);
+    resultFuture.toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     assertEquals(users.size(), committedOffsets.size());
     assertEqualsUsers();
@@ -348,7 +348,7 @@ public class SlickTest {
 
     final CompletionStage<List<User>> foundUsersFuture = slickSource.runWith(Sink.seq(), system);
     final Set<User> foundUsers =
-        new HashSet<>(foundUsersFuture.toCompletableFuture().get(10, TimeUnit.SECONDS));
+        new HashSet<>(foundUsersFuture.toCompletableFuture().get(5, TimeUnit.SECONDS));
 
     assertEquals(foundUsers, users);
   }
@@ -358,7 +358,7 @@ public class SlickTest {
       Source.single(statement)
           .runWith(Slick.sink(session), system)
           .toCompletableFuture()
-          .get(10, TimeUnit.SECONDS);
+          .get(5, TimeUnit.SECONDS);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
