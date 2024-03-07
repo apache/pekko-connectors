@@ -348,7 +348,7 @@ public class SlickTest {
 
     final CompletionStage<List<User>> foundUsersFuture = slickSource.runWith(Sink.seq(), system);
     final Set<User> foundUsers =
-        new HashSet<>(foundUsersFuture.toCompletableFuture().get(5, TimeUnit.SECONDS));
+        new HashSet<>(foundUsersFuture.toCompletableFuture().get(3, TimeUnit.SECONDS));
 
     assertEquals(foundUsers, users);
   }
@@ -358,7 +358,7 @@ public class SlickTest {
       Source.single(statement)
           .runWith(Slick.sink(session), system)
           .toCompletableFuture()
-          .get(5, TimeUnit.SECONDS);
+          .get(3, TimeUnit.SECONDS);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
