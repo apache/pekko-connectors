@@ -28,10 +28,7 @@ import pekko.stream.javadsl._
 import pekko.util.FunctionConverters._
 import pekko.util.FutureConverters._
 import slick.dbio.DBIO
-import slick.jdbc.GetResult
-import slick.jdbc.SQLActionBuilder
-import slick.jdbc.SetParameter
-import slick.jdbc.SimpleJdbcAction
+import slick.jdbc.{ GetResult, SQLActionBuilder, SetParameter, SimpleJdbcAction }
 
 import scala.concurrent.ExecutionContext
 
@@ -54,6 +51,7 @@ object Slick {
       session: SlickSession,
       query: String,
       mapper: JFunction[SlickRow, T]): Source[T, NotUsed] = {
+
     val streamingAction = SQLActionBuilder(query, SetParameter.SetUnit).as[T](toSlick(mapper))
 
     ScalaSlick

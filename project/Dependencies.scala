@@ -403,13 +403,14 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
   }
 
-  val SlickVersion = "3.4.1"
+  val SlickVersion = "3.5.0"
   val Slick = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test,
       "com.h2database" % "h2" % "2.2.224" % Test))
+
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
       ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(

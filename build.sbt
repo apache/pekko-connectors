@@ -447,8 +447,13 @@ def pekkoConnectorProject(projectId: String,
       name := s"pekko-connectors-$projectId",
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
-      mimaPreviousArtifacts := Set(
-        organization.value %% name.value % mimaCompareVersion),
+      mimaPreviousArtifacts := {
+        if (moduleName == "slick") {
+          Set.empty
+        } else {
+          Set(organization.value %% name.value % mimaCompareVersion)
+        }
+      },
       mimaBinaryIssueFilters ++= Seq(
         ProblemFilters.exclude[Problem]("*.impl.*"),
         // generated code
