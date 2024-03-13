@@ -58,7 +58,7 @@ object Dependencies {
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
   val scalaTestMockitoVersion = "3.2.18.0" // https://github.com/scalatest/scalatest/issues/2311
 
-  val CouchbaseVersion = "2.7.23"
+  val CouchbaseVersion = "3.6.0"
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.23.0"
