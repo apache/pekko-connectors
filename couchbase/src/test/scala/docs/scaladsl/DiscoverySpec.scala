@@ -13,20 +13,23 @@
 
 package docs.scaladsl
 
-import com.couchbase.client.core.error.ConfigException
 import com.couchbase.client.java.json.JsonObject
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
 import org.apache.pekko
-import pekko.actor.ActorSystem
-import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession, DiscoverySupport }
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
-import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import com.typesafe.config.{ Config, ConfigFactory }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.couchbase.CouchbaseSessionRegistry
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
+import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
+import pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.concurrent.{ ExecutionContext, Future }
 
 class DiscoverySpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 

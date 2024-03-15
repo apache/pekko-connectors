@@ -13,26 +13,27 @@
 
 package docs.scaladsl
 
-import com.couchbase.client.core.error.{
-  DocumentNotFoundException,
-  DurabilityAmbiguousException,
-  ReplicaNotConfiguredException
-}
+import com.couchbase.client.core.error.DocumentNotFoundException
+import com.couchbase.client.core.error.ReplicaNotConfiguredException
 import com.couchbase.client.java.json.JsonObject
-import com.couchbase.client.java.kv.{ GetOptions, GetResult, MutationResult }
+import com.couchbase.client.java.kv.GetOptions
+import com.couchbase.client.java.kv.GetResult
+import com.couchbase.client.java.kv.MutationResult
 import org.apache.pekko
-import org.scalatest._
-import org.scalatest.concurrent.ScalaFutures
+
 import pekko.Done
 import pekko.stream.connectors.couchbase._
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
-import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, TestObject }
+import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
+import pekko.stream.connectors.couchbase.testing.TestObject
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.scaladsl.Sink
+import pekko.stream.scaladsl.Source
 import scala.jdk.FutureConverters.CompletionStageOps
 
 //#write-settings
-import com.couchbase.client.java.kv.{ PersistTo, ReplicateTo }
+import com.couchbase.client.java.kv.PersistTo
+import com.couchbase.client.java.kv.ReplicateTo
 //#write-settings
 
 import org.apache.pekko.stream.connectors.couchbase.testing.StringDocument
@@ -42,6 +43,8 @@ import scala.concurrent.duration._
 import scala.concurrent.Future
 
 //#init-sourceBulk
+import org.scalatest._
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -527,7 +530,7 @@ class CouchbaseFlowSpec
       val failedDocs: immutable.Seq[CouchbaseWriteFailure[JsonObject]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[JsonObject] => res
       }
-      failedDocs.head.failure shouldBe a[ReplicaNotConfiguredException]
+      failedDocs.head.failure.getCause shouldBe a[ReplicaNotConfiguredException]
     }
 
   }

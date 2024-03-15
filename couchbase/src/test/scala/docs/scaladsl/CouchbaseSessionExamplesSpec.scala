@@ -14,17 +14,18 @@
 package docs.scaladsl
 
 import com.couchbase.client.core.error.DocumentNotFoundException
-import com.couchbase.client.java.json.JsonObject
 import org.apache.pekko
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import pekko.stream.connectors.couchbase.{ CouchbaseSessionRegistry, CouchbaseSessionSettings }
+import pekko.stream.connectors.couchbase.CouchbaseSessionRegistry
+import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import pekko.stream.connectors.couchbase.testing.CouchbaseSupport
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import scala.concurrent.duration._
 
 class CouchbaseSessionExamplesSpec

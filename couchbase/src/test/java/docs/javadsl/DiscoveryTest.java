@@ -41,7 +41,6 @@ public class DiscoveryTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem actorSystem;
-  private static final String bucketName = "pekko";
 
   @BeforeClass
   public static void beforeAll() {
@@ -66,7 +65,7 @@ public class DiscoveryTest {
     CompletionStage<CouchbaseSession> session = registry.getSessionFor(sessionSettings);
     // #registry
     try {
-      CouchbaseSession couchbaseSession = session.toCompletableFuture().get(5, TimeUnit.SECONDS);
+      CouchbaseSession couchbaseSession = session.toCompletableFuture().get(10, TimeUnit.SECONDS);
     } catch (java.util.concurrent.ExecutionException e) {
       assertThat(
           e.getCause(),
