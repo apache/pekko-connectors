@@ -15,13 +15,12 @@ package org.apache.pekko.stream.connectors.couchbase.impl
 
 import com.couchbase.client.java._
 import com.couchbase.client.java.json.JsonObject
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionStage
 import org.apache.pekko.Done
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession
 import org.apache.pekko.stream.connectors.couchbase.scaladsl
-
-import java.util.concurrent.{ CompletableFuture, CompletionStage }
-import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 /**
  * INTERNAL API

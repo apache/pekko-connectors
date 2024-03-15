@@ -17,10 +17,8 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{ scaladsl, CouchbaseSessionSettings }
 import pekko.stream.javadsl.Source
-
 import com.couchbase.client.java.json.JsonObject
-
-import scala.jdk.CollectionConverters.SeqHasAsJava
+import scala.collection.JavaConverters.seqAsJavaListConverter
 
 /**
  * Java API: Factory methods for Couchbase sources.

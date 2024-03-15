@@ -57,8 +57,6 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
 
   import CouchbaseSessionRegistry._
 
-  private val blockingDispatcher = system.dispatchers.lookup("pekko.actor.default-blocking-io-dispatcher")
-
   private val clusterRegistry = new CouchbaseClusterRegistry(system)
 
   private val sessions = new AtomicReference(Map.empty[SessionKey, Future[CouchbaseSession]])
