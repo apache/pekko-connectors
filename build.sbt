@@ -14,7 +14,6 @@ ThisBuild / pekkoInlineEnabled := false
 
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := true
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
