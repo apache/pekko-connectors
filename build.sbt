@@ -10,7 +10,7 @@
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
 
 sourceDistName := "apache-pekko-connectors"
-sourceDistIncubating := true
+sourceDistIncubating := false
 ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
@@ -344,7 +344,7 @@ lazy val docs = project
   .settings(
     Compile / paradox / name := "Apache Pekko Connectors",
     publish / skip := true,
-    pekkoParadoxGithub := Some("https://github.com/apache/incubator-pekko-connectors"),
+    pekkoParadoxGithub := Some("https://github.com/apache/pekko-connectors"),
     makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
     Preprocess / siteSubdirName := s"api/pekko-connectors/${projectInfoVersion.value}",
@@ -359,7 +359,7 @@ lazy val docs = project
       "pekko.version" -> Dependencies.PekkoVersion,
       "pekko-http.version" -> Dependencies.PekkoHttpVersion,
       "hadoop.version" -> Dependencies.HadoopVersion,
-      "extref.github.base_url" -> s"https://github.com/apache/incubator-pekko-connectors/tree/${if (isSnapshot.value) "main"
+      "extref.github.base_url" -> s"https://github.com/apache/pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
       "scaladoc.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",

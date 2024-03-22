@@ -31,12 +31,12 @@ object Common extends AutoPlugin {
   val isScala3 = Def.setting(scalaBinaryVersion.value == "3")
 
   override def globalSettings = Seq(
-    scmInfo := Some(ScmInfo(url("https://github.com/apache/incubator-pekko-connectors"),
-      "git@github.com:apache/incubator-pekko-connectors.git")),
+    scmInfo := Some(ScmInfo(url("https://github.com/apache/pekko-connectors"),
+      "git@github.com:apache/pekko-connectors.git")),
     developers += Developer("contributors",
       "Contributors",
       "dev@pekko.apache.org",
-      url("https://github.com/apache/incubator-pekko-connectors/graphs/contributors")),
+      url("https://github.com/apache/pekko-connectors/graphs/contributors")),
     description := "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Pekko.",
     fatalWarnings := true,
     mimaReportSignatureProblems := true,
@@ -76,7 +76,7 @@ object Common extends AutoPlugin {
       Seq(
         "-doc-source-url", {
           val branch = if (isSnapshot.value) "main" else s"v${version.value}"
-          s"https://github.com/apache/incubator-pekko-connectors/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
+          s"https://github.com/apache/pekko-connectors/tree/${branch}€{FILE_PATH_EXT}#L€{FILE_LINE}"
         },
         "-doc-canonical-base-url",
         "https://pekko.apache.org/api/pekko-connectors/current/"),
