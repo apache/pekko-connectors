@@ -1922,7 +1922,7 @@ class MqttSessionSpec
       // longer patience needed since Akka 2.6
       implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(1.second), scaled(50.millis))
 
-      // https://github.com/apache/incubator-pekko-connectors/issues/148
+      // https://github.com/apache/pekko-connectors/issues/148
       eventually(timeout(Span(1, Minutes))) {
         val serverSession = ActorMqttServerSession(settings.withProducerPubAckRecTimeout(10.millis))
 

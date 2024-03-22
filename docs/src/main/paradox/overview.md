@@ -12,10 +12,10 @@ There are a few blog posts and presentations about Apache Pekko Connectors out t
 
 The code in this documentation is compiled against:
 
-* Apache Pekko Connectors $project.version$ ([Github](https://github.com/apache/incubator-pekko-connectors), [API docs](https://pekko.apache.org/api/pekko-connectors/current/org/apache/pekko/stream/connectors/index.html))
+* Apache Pekko Connectors $project.version$ ([Github](https://github.com/apache/pekko-connectors), [API docs](https://pekko.apache.org/api/pekko-connectors/current/org/apache/pekko/stream/connectors/index.html))
 * Scala $scala.binary.version$ (all modules are available for Scala 2.13)
-* Apache Pekko Streams $pekko.version$+ (@extref:[Reference](pekko:stream/index.html), [Github](https://github.com/apache/incubator-pekko))
-* Apache Pekko HTTP $pekko-http.version$+ (@extref:[Reference](pekko-http:), [Github](https://github.com/apache/incubator-pekko-http))
+* Apache Pekko Streams $pekko.version$+ (@extref:[Reference](pekko:stream/index.html), [Github](https://github.com/apache/pekko))
+* Apache Pekko HTTP $pekko-http.version$+ (@extref:[Reference](pekko-http:), [Github](https://github.com/apache/pekko-http))
 
 See @ref:[Apache Pekko Connectors versioning](other-docs/versioning.md) for more details.
 
@@ -25,7 +25,7 @@ If you want to try out a connector that has not yet been released, give @ref[sna
 
 ## Contributing
 
-Please feel free to contribute to Apache Pekko Connectors by reporting issues you identify, or by suggesting changes to the code. Please refer to our [contributing instructions](https://github.com/apache/incubator-pekko-connectors/blob/main/CONTRIBUTING.md) and our [contributor advice](https://github.com/apache/incubator-pekko-connectors/blob/main/contributor-advice.md) to learn how it can be done. The target structure for Apache Pekko Connectors connectors is illustrated by the @ref[Reference connector](reference.md).
+Please feel free to contribute to Apache Pekko Connectors by reporting issues you identify, or by suggesting changes to the code. Please refer to our [contributing instructions](https://github.com/apache/pekko-connectors/blob/main/CONTRIBUTING.md) and our [contributor advice](https://github.com/apache/pekko-connectors/blob/main/contributor-advice.md) to learn how it can be done. The target structure for Apache Pekko Connectors connectors is illustrated by the @ref[Reference connector](reference.md).
 
 We want Apache Pekko and Apache Pekko Connectors to strive in a welcoming and open atmosphere and expect all contributors to respect our [code of conduct](https://www.apache.org/foundation/policies/conduct.html).
 
