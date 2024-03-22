@@ -8,7 +8,7 @@ on:
 jobs:
   publish:
     # runs on main repo only
-    if: github.repository == 'apache/incubator-pekko-connectors'
+    if: github.repository == 'apache/pekko-connectors'
     name: Publish
     runs-on: ubuntu-20.04
     env:

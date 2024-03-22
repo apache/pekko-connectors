@@ -6,7 +6,7 @@ You're always welcome to submit your PR straight away and start the discussion (
 
 # The Pekko Community
 
-If you have questions about the contribution process or to discuss specific issues, we will be happy to try to help via the usual [communication channels](https://github.com/apache/incubator-pekko-connectors?tab=readme-ov-file#community). 
+If you have questions about the contribution process or to discuss specific issues, we will be happy to try to help via the usual [communication channels](https://github.com/apache/pekko-connectors?tab=readme-ov-file#community). 
 
 # Contributing to Pekko Connectors
 
@@ -14,12 +14,12 @@ If you have questions about the contribution process or to discuss specific issu
 
 This is the process for committing code into main.
 
-1. To avoid duplicated effort, it might be good to check the [issue tracker](https://github.com/apache/incubator-pekko-connectors/issues) and [existing pull requests](https://github.com/apache/incubator-pekko-connectors/pulls) for existing work.
-   - If there is no ticket yet, feel free to [create one](https://github.com/apache/incubator-pekko-connectors/issues/new) to discuss the problem and the approach you want to take to solve it.
+1. To avoid duplicated effort, it might be good to check the [issue tracker](https://github.com/apache/pekko-connectors/issues) and [existing pull requests](https://github.com/apache/pekko-connectors/pulls) for existing work.
+   - If there is no ticket yet, feel free to [create one](https://github.com/apache/pekko-connectors/issues/new) to discuss the problem and the approach you want to take to solve it.
 
 1. Perform your work according to the [pull request requirements](#pull-request-requirements).
 
-1. When the feature or fix is completed you should open a [Pull Request](https://help.github.com/articles/using-pull-requests) on [GitHub](https://github.com/apache/incubator-pekko-connectors/pulls). Prefix your PR title with a marker to show which module it affects (eg. "JMS", or "AWS S3").
+1. When the feature or fix is completed you should open a [Pull Request](https://help.github.com/articles/using-pull-requests) on [GitHub](https://github.com/apache/pekko-connectors/pulls). Prefix your PR title with a marker to show which module it affects (eg. "JMS", or "AWS S3").
 
 1. The Pull Request should be reviewed by other maintainers (as many as feasible/practical). Outside contributors are encouraged to participate in the review process, it is not a closed process.
 
@@ -36,11 +36,11 @@ You can run tests using [sbt](https://www.scala-sbt.org/). With this repo, you w
 
 This repo is for connectors that integrate with 3rd party services (e.g. AWS S3, FTP, Hive). For many connectors, you will need to use [Docker Compose](https://docs.docker.com/compose/) to start servers that the Pekko Connector tests will need to interact with. The tests don't expect to interact with live resources but instead expect to work with local services that provide the right functionality.
 
-You can get an idea of what Docker commands that you need to run tests for specific connectors by looking at the GitHub Actions workflow [check-build-test.yml](https://github.com/apache/incubator-pekko-connectors/blob/75e9a4867eec3e1c2b971eb7e13a0f0b9dbddab3/.github/workflows/check-build-test.yml#L78-L125).
+You can get an idea of what Docker commands that you need to run tests for specific connectors by looking at the GitHub Actions workflow [check-build-test.yml](https://github.com/apache/pekko-connectors/blob/75e9a4867eec3e1c2b971eb7e13a0f0b9dbddab3/.github/workflows/check-build-test.yml#L78-L125).
 
 The Docker setup in many cases requires the use of shell scripts that are designed to run inside Docker containers and are not designed for users to be running on their own machines. Please take care when running any shell scripts in this repo.
 
-To continue with the FTP connector as an example, you will need to run this [script](https://github.com/apache/incubator-pekko-connectors/blob/main/scripts/ftp-servers.sh) (that runs Docker Compose commands) before running the tests.
+To continue with the FTP connector as an example, you will need to run this [script](https://github.com/apache/pekko-connectors/blob/main/scripts/ftp-servers.sh) (that runs Docker Compose commands) before running the tests.
 
 ```
 ./scripts/ftp-servers.sh
@@ -116,7 +116,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 ## How To Enforce These Guidelines?
 
-1. [GitHub actions](https://github.com/apache/incubator-pekko-connectors/actions) automatically merge the code, builds it, runs the tests and sets Pull Request status accordingly of results in GitHub.
+1. [GitHub actions](https://github.com/apache/pekko-connectors/actions) automatically merge the code, builds it, runs the tests and sets Pull Request status accordingly of results in GitHub.
 1. [Scalafmt](http://scalameta.org/scalafmt/) enforces some of the code style rules.
 1. [sbt-header plugin](https://github.com/sbt/sbt-header) manages consistent copyright headers in every source file.
 1. Enabling `fatalWarnings := true` for all projects.
