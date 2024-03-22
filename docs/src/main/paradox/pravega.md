@@ -181,4 +181,4 @@ Scala
 
 ## Support
 
-* [Supported channels](https://github.com/apache/incubator-pekko-connectors#community)
+* [Supported channels](https://github.com/apache/pekko-connectors#community)
