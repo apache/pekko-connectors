@@ -29,7 +29,7 @@ object Dependencies {
   val AwsSdk2Version = "2.25.11"
   val AwsSdk2SqsVersion = "2.20.162" // latest AwsSdk2Version causes us test issues with SQS
   val AwsSpiPekkoHttpVersion = "0.1.1"
-  val NettyVersion = "4.1.107.Final"
+  val NettyVersion = "4.1.108.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = PekkoHttpDependency.version
