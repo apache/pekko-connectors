@@ -356,6 +356,7 @@ lazy val docs = project
       ("http://www\\.scala-lang\\.org/".r, _ => "https://www\\.scala-lang\\.org/"),
       ("https://javadoc\\.io/page/".r, _ => "https://javadoc\\.io/static/")),
     Paradox / siteSubdirName := s"docs/pekko-connectors/${projectInfoVersion.value}",
+    Global / pekkoParadoxIncubatorNotice := None,
     paradoxProperties ++= Map(
       "pekko.version" -> Dependencies.PekkoVersion,
       "pekko-http.version" -> Dependencies.PekkoHttpVersion,
