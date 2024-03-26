@@ -59,32 +59,29 @@ object BigQueryStorage {
       tableId: String,
       dataFormat: DataFormat,
       readOptions: Option[TableReadOptions] = None,
-      maxNumStreams: Int = 0)(implicit um: FromByteStringUnmarshaller[A]): Source[A, Future[NotUsed]] = {
+      maxNumStreams: Int = 0)(implicit um: FromByteStringUnmarshaller[A]): Source[A, Future[NotUsed]] =
     Source.fromMaterializer { (mat, attr) =>
-      {
-        implicit val materializer: Materializer = mat
-        implicit val executionContext: ExecutionContextExecutor = materializer.executionContext
-        val client = reader(mat.system, attr).client
-        readSession(client, projectId, datasetId, tableId, dataFormat, readOptions, maxNumStreams)
-          .map { session =>
-            SDKClientSource.read(client, session).map { source =>
-              source
-                .mapAsync(1)(resp => {
-                  val bytes =
-                    if (resp.isArrowRecordBatch)
-                      resp.arrowRecordBatch.get.serializedRecordBatch
-                    else
-                      resp.avroRows.get.serializedBinaryRows
-                  um(ByteString(bytes.toByteArray))
-                })
-            }
+      implicit val materializer: Materializer = mat
+      implicit val executionContext: ExecutionContextExecutor = materializer.executionContext
+      val client = reader(mat.system, attr).client
+      readSession(client, projectId, datasetId, tableId, dataFormat, readOptions, maxNumStreams)
+        .map { session =>
+          SDKClientSource.read(client, session).map { source =>
+            source
+              .mapAsync(1) { resp =>
+                val bytes =
+                  if (resp.isArrowRecordBatch)
+                    resp.arrowRecordBatch.get.serializedRecordBatch
+                  else
+                    resp.avroRows.get.serializedBinaryRows
+                um(ByteString(bytes.toByteArray))
+              }
           }
-          .map(a => a.reduceOption((a, b) => a.merge(b)))
-          .filter(a => a.isDefined)
-          .flatMapConcat(a => a.get)
-      }
+        }
+        .map(a => a.reduceOption((a, b) => a.merge(b)))
+        .filter(a => a.isDefined)
+        .flatMapConcat(a => a.get)
     }
-  }
 
   private[scaladsl] def readSession(client: BigQueryReadClient,
       projectId: String,

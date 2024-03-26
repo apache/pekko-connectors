@@ -54,9 +54,8 @@ import scala.collection.mutable.Queue
       if (res.isEmpty) {
         settings.retrieveRetryTimeout match {
           case Some(timeout) =>
-            if (isAvailable(out)) {
+            if (isAvailable(out))
               scheduleOnce(NotUsed, timeout)
-            }
           case None => complete(out)
         }
       } else {
@@ -69,11 +68,10 @@ import scala.collection.mutable.Queue
       out,
       new OutHandler {
         override def onPull(): Unit =
-          if (!buffer.isEmpty) {
+          if (buffer.nonEmpty)
             push(out, buffer.dequeue())
-          } else {
+          else
             retrieveMessages()
-          }
       })
   }
 }

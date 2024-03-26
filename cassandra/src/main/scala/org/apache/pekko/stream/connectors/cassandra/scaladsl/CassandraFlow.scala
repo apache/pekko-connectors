@@ -42,7 +42,7 @@ object CassandraFlow {
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: (T, PreparedStatement) => BoundStatement)(
-      implicit session: CassandraSession): Flow[T, T, NotUsed] = {
+      implicit session: CassandraSession): Flow[T, T, NotUsed] =
     Flow
       .lazyFutureFlow { () =>
         val prepare = session.prepare(cqlStatement)
@@ -55,7 +55,6 @@ object CassandraFlow {
         }(session.ec)
       }
       .mapMaterializedValue(_ => NotUsed)
-  }
 
   /**
    * A flow writing to Cassandra for every stream element, passing context along.
@@ -72,7 +71,7 @@ object CassandraFlow {
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: (T, PreparedStatement) => BoundStatement)(
-      implicit session: CassandraSession): FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
+      implicit session: CassandraSession): FlowWithContext[T, Ctx, T, Ctx, NotUsed] =
     FlowWithContext.fromTuples {
       Flow
         .lazyFutureFlow { () =>
@@ -88,7 +87,6 @@ object CassandraFlow {
         }
         .mapMaterializedValue(_ => NotUsed)
     }
-  }
 
   /**
    * Creates a flow that uses [[com.datastax.oss.driver.api.core.cql.BatchStatement]] and groups the
@@ -114,7 +112,7 @@ object CassandraFlow {
   def createBatch[T, K](writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: (T, PreparedStatement) => BoundStatement,
-      groupingKey: T => K)(implicit session: CassandraSession): Flow[T, T, NotUsed] = {
+      groupingKey: T => K)(implicit session: CassandraSession): Flow[T, T, NotUsed] =
     Flow
       .lazyFutureFlow { () =>
         val prepareStatement: Future[PreparedStatement] = session.prepare(cqlStatement)
@@ -132,5 +130,4 @@ object CassandraFlow {
         }(session.ec)
       }
       .mapMaterializedValue(_ => NotUsed)
-  }
 }

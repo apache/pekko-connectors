@@ -73,8 +73,8 @@ class DiskBufferSpec(_system: ActorSystem)
   }
 
   it should "delete its temp file after N materializations" in {
-    val tmpDir = Files.createTempDirectory("DiskBufferSpec").toFile()
-    val before = tmpDir.list().size
+    val tmpDir = Files.createTempDirectory("DiskBufferSpec").toFile
+    val before = tmpDir.list().length
     val chunk = Source(Vector(ByteString(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)))
       .via(new DiskBuffer(2, 200, Some(tmpDir.toPath)))
       .runWith(Sink.seq)
@@ -84,14 +84,14 @@ class DiskBufferSpec(_system: ActorSystem)
     chunk shouldBe a[DiskChunk]
     val source = chunk.asInstanceOf[DiskChunk].data
 
-    tmpDir.list().size should be(before + 1)
+    tmpDir.list().length should be(before + 1)
 
     source.runWith(Sink.ignore).futureValue
-    tmpDir.list().size should be(before + 1)
+    tmpDir.list().length should be(before + 1)
 
     source.runWith(Sink.ignore).futureValue
     eventually {
-      tmpDir.list().size should be(before)
+      tmpDir.list().length should be(before)
     }
 
   }

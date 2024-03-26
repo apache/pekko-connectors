@@ -19,5 +19,5 @@ public enum CsvQuotingStyle {
   ALWAYS,
 
   /** Quote only fields requiring quotes */
-  REQUIRED;
+  REQUIRED
 }

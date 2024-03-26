@@ -46,7 +46,7 @@ private[geode] abstract class GeodeCache(geodeSettings: GeodeSettings) {
    * <li>customized by client application</li>
    * </ul>
    */
-  final protected def newCacheFactory(): ClientCacheFactory = {
+  private final def newCacheFactory(): ClientCacheFactory = {
     val factory = configure(new ClientCacheFactory().setPdxSerializer(serializer))
     geodeSettings.configure.map(_(factory)).getOrElse(factory)
   }

@@ -55,7 +55,7 @@ class SplitAfterSizeSpec(_system: ActorSystem)
       .via(
         SplitAfterSize(10, MaxChunkSize)(Flow[ByteString])
           .prefixAndTail(10)
-          .map { case (prefix, tail) => prefix }
+          .map { case (prefix, _) => prefix }
           .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(
@@ -69,7 +69,7 @@ class SplitAfterSizeSpec(_system: ActorSystem)
       .via(
         SplitAfterSize(10, maxChunkSize = 15)(Flow[ByteString])
           .prefixAndTail(10)
-          .map { case (prefix, tail) => prefix }
+          .map { case (prefix, _) => prefix }
           .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(
@@ -83,7 +83,7 @@ class SplitAfterSizeSpec(_system: ActorSystem)
       .via(
         SplitAfterSize(10, maxChunkSize = 15)(Flow[ByteString])
           .prefixAndTail(10)
-          .map { case (prefix, tail) => prefix }
+          .map { case (prefix, _) => prefix }
           .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(
@@ -97,7 +97,7 @@ class SplitAfterSizeSpec(_system: ActorSystem)
       .via(
         SplitAfterSize(10, maxChunkSize = 15)(Flow[ByteString])
           .prefixAndTail(10)
-          .map { case (prefix, tail) => prefix }
+          .map { case (prefix, _) => prefix }
           .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(
@@ -112,7 +112,7 @@ class SplitAfterSizeSpec(_system: ActorSystem)
       .via(
         SplitAfterSize(10, maxChunkSize = 15)(Flow[ByteString])
           .prefixAndTail(10)
-          .map { case (prefix, tail) => prefix }
+          .map { case (prefix, _) => prefix }
           .concatSubstreams)
       .runWith(Sink.seq)
       .futureValue should be(

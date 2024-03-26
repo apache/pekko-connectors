@@ -94,7 +94,7 @@ public class SnsPublisherTest {
             // .overrideConfiguration(...)
             .build();
 
-    system.registerOnTermination(() -> awsSnsClient.close());
+    system.registerOnTermination(awsSnsClient::close);
     // #init-client
 
     return awsSnsClient;

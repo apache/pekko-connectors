@@ -139,7 +139,7 @@ class ReferenceSpec extends AnyWordSpec with BeforeAndAfterAll with ScalaFutures
 
   }
 
-  override def afterAll() =
+  override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
 
 }

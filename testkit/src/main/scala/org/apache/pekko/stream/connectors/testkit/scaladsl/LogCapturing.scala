@@ -51,17 +51,15 @@ trait LogCapturing extends BeforeAndAfterAll { self: TestSuite =>
 
   private val myLogger = LoggerFactory.getLogger(classOf[LogCapturing])
 
-  override protected def afterAll(): Unit = {
-    try {
+  override protected def afterAll(): Unit =
+    try
       super.afterAll()
-    } catch {
+    catch {
       case NonFatal(e) =>
         myLogger.error("Exception from afterAll", e)
         capturingAppender.flush()
-    } finally {
+    } finally
       capturingAppender.clear()
-    }
-  }
 
   abstract override def withFixture(test: NoArgTest): Outcome = {
     sourceActorSytem.foreach(MDC.put("sourceActorSystem", _))

@@ -38,7 +38,7 @@ sealed trait ValveSwitch {
    *
    * @return A future that completes with [[SwitchMode]] to indicate the current state of the valve
    */
-  def getMode(): Future[SwitchMode]
+  def getMode: Future[SwitchMode]
 }
 
 object Valve {
@@ -105,11 +105,10 @@ final class Valve[A](mode: SwitchMode) extends GraphStageWithMaterializedValue[F
               true
 
             case Close =>
-              if (isAvailable(in)) {
+              if (isAvailable(in))
                 push(out, grab(in))
-              } else if (isAvailable(out) && !hasBeenPulled(in)) {
+              else if (isAvailable(out) && !hasBeenPulled(in))
                 pull(in)
-              }
 
               mode = SwitchMode.Open
               true
@@ -127,7 +126,7 @@ final class Valve[A](mode: SwitchMode) extends GraphStageWithMaterializedValue[F
         promise.future
       }
 
-      override def getMode(): Future[SwitchMode] = {
+      override def getMode: Future[SwitchMode] = {
         val promise = Promise[SwitchMode]()
         getModeCallback.invoke(promise)
         promise.future
@@ -137,18 +136,16 @@ final class Valve[A](mode: SwitchMode) extends GraphStageWithMaterializedValue[F
     setHandlers(in, out, this)
 
     override def onPush(): Unit =
-      if (isOpen) {
+      if (isOpen)
         push(out, grab(in))
-      }
 
     override def onPull(): Unit =
-      if (isOpen) {
+      if (isOpen)
         pull(in)
-      }
 
     private def isOpen = mode == SwitchMode.Open
 
-    override def preStart() =
+    override def preStart(): Unit =
       promise.success(switch)
   }
 

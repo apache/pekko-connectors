@@ -60,7 +60,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
       val connectionSettings: S = _connectionSettings
       val ftpClient: S => FtpClient = self.ftpClient
       val ftpLike: FtpLike[FtpClient, S] = _ftpLike
-      override val branchSelector: (FtpFile) => Boolean = _branchSelector
+      override val branchSelector: FtpFile => Boolean = _branchSelector
       override val emitTraversedDirectories: Boolean = _emitTraversedDirectories
     }
 
@@ -116,7 +116,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
 
   protected[this] def createMoveSink(
       _destinationPath: FtpFile => String,
-      _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]) =
+      _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]): FtpMoveSink[FtpClient, S] =
     new FtpMoveSink[FtpClient, S] {
       val connectionSettings: S = _connectionSettings
       val ftpClient: S => FtpClient = self.ftpClient
@@ -125,7 +125,7 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
     }
 
   protected[this] def createRemoveSink(
-      _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]) =
+      _connectionSettings: S)(implicit _ftpLike: FtpLike[FtpClient, S]): FtpRemoveSink[FtpClient, S] =
     new FtpRemoveSink[FtpClient, S] {
       val connectionSettings: S = _connectionSettings
       val ftpClient: S => FtpClient = self.ftpClient
@@ -143,10 +143,10 @@ private[ftp] trait FtpSourceFactory[FtpClient, S <: RemoteFileSettings] { self =
  */
 @InternalApi
 private[ftp] trait FtpSource extends FtpSourceFactory[FTPClient, FtpSettings] {
-  protected final val FtpBrowserSourceName = "FtpBrowserSource"
-  protected final val FtpIOSourceName = "FtpIOSource"
-  protected final val FtpDirectorySource = "FtpDirectorySource"
-  protected final val FtpIOSinkName = "FtpIOSink"
+  private final val FtpBrowserSourceName = "FtpBrowserSource"
+  private final val FtpIOSourceName = "FtpIOSource"
+  private final val FtpDirectorySource = "FtpDirectorySource"
+  private final val FtpIOSinkName = "FtpIOSink"
 
   protected val ftpClient: FtpSettings => FTPClient = _ => new FTPClient
   protected val ftpBrowserSourceName: String = FtpBrowserSourceName
@@ -160,18 +160,16 @@ private[ftp] trait FtpSource extends FtpSourceFactory[FTPClient, FtpSettings] {
  */
 @InternalApi
 private[ftp] trait FtpsSource extends FtpSourceFactory[FTPClient, FtpsSettings] {
-  protected final val FtpsBrowserSourceName = "FtpsBrowserSource"
-  protected final val FtpsIOSourceName = "FtpsIOSource"
-  protected final val FtpsDirectorySource = "FtpsDirectorySource"
-  protected final val FtpsIOSinkName = "FtpsIOSink"
+  private final val FtpsBrowserSourceName = "FtpsBrowserSource"
+  private final val FtpsIOSourceName = "FtpsIOSource"
+  private final val FtpsDirectorySource = "FtpsDirectorySource"
+  private final val FtpsIOSinkName = "FtpsIOSink"
 
-  protected val ftpClient: FtpsSettings => FTPClient = settings => {
-    if (settings.useUpdatedFtpsClient) {
+  protected val ftpClient: FtpsSettings => FTPClient = settings =>
+    if (settings.useUpdatedFtpsClient)
       new FTPSClient(settings.useFtpsImplicit)
-    } else {
+    else
       new LegacyFtpsClient(settings.useFtpsImplicit)
-    }
-  }
   protected val ftpBrowserSourceName: String = FtpsBrowserSourceName
   protected val ftpIOSourceName: String = FtpsIOSourceName
   protected val ftpIOSinkName: String = FtpsIOSinkName
@@ -183,10 +181,10 @@ private[ftp] trait FtpsSource extends FtpSourceFactory[FTPClient, FtpsSettings] 
  */
 @InternalApi
 private[ftp] trait SftpSource extends FtpSourceFactory[SSHClient, SftpSettings] {
-  protected final val sFtpBrowserSourceName = "sFtpBrowserSource"
-  protected final val sFtpIOSourceName = "sFtpIOSource"
-  protected final val sFtpDirectorySource = "sFtpDirectorySource"
-  protected final val sFtpIOSinkName = "sFtpIOSink"
+  private final val sFtpBrowserSourceName = "sFtpBrowserSource"
+  private final val sFtpIOSourceName = "sFtpIOSource"
+  private final val sFtpDirectorySource = "sFtpDirectorySource"
+  private final val sFtpIOSinkName = "sFtpIOSink"
 
   def sshClient(): SSHClient = new SSHClient()
   protected val ftpClient: SftpSettings => SSHClient = _ => sshClient()

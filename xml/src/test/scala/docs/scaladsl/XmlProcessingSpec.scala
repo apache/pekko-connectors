@@ -75,7 +75,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
       val result: Future[immutable.Seq[String]] = Source
         .single(doc)
         .via(XmlParsing.parser)
-        .statefulMap(() => new StringBuilder())((textBuffer, parseEvent) => {
+        .statefulMap(() => new StringBuilder())((textBuffer, parseEvent) =>
             parseEvent match {
               case _: StartElement =>
                 textBuffer.clear()
@@ -88,8 +88,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
                 (textBuffer, None)
               case _ =>
                 (textBuffer, None)
-            }
-          }, textBuffer => Some(Some(textBuffer.toString)))
+            }, textBuffer => Some(Some(textBuffer.toString)))
         .collect {
           case Some(txt) => txt
         }

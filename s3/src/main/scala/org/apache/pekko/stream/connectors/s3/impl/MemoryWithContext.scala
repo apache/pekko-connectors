@@ -35,9 +35,9 @@ import scala.collection.mutable.ListBuffer
  */
 @InternalApi private[impl] final class MemoryWithContext[C](maxSize: Int)
     extends GraphStage[FlowShape[(ByteString, C), (Chunk, immutable.Iterable[C])]] {
-  val in = Inlet[(ByteString, C)]("MemoryBuffer.in")
-  val out = Outlet[(Chunk, immutable.Iterable[C])]("MemoryBuffer.out")
-  override val shape = FlowShape.of(in, out)
+  val in: Inlet[(ByteString, C)] = Inlet[(ByteString, C)]("MemoryBuffer.in")
+  val out: Outlet[(Chunk, immutable.Iterable[C])] = Outlet[(Chunk, immutable.Iterable[C])]("MemoryBuffer.out")
+  override val shape: FlowShape[(ByteString, C), (Chunk, immutable.Iterable[C])] = FlowShape.of(in, out)
 
   override def createLogic(attr: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with InHandler with OutHandler {
@@ -48,9 +48,9 @@ import scala.collection.mutable.ListBuffer
 
       override def onPush(): Unit = {
         val (elem, context) = grab(in)
-        if (buffer.size + elem.size > maxSize) {
+        if (buffer.size + elem.size > maxSize)
           failStage(new IllegalStateException("Buffer size of " + maxSize + " bytes exceeded."))
-        } else {
+        else {
           buffer ++= elem
           // This is a corner case where context can have a sentinel value of null which represents the initial empty
           // stream. We don't want to add null's into the final output

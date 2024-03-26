@@ -35,9 +35,8 @@ object XmlParsing {
   val configureDefault: AsyncXMLInputFactory => Unit = { factory =>
     factory.setProperty(XMLInputFactory.SUPPORT_DTD, false)
     factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false)
-    if (factory.isPropertySupported(XMLConstants.FEATURE_SECURE_PROCESSING)) {
+    if (factory.isPropertySupported(XMLConstants.FEATURE_SECURE_PROCESSING))
       factory.setProperty(XMLConstants.FEATURE_SECURE_PROCESSING, true)
-    }
   }
 
   /**

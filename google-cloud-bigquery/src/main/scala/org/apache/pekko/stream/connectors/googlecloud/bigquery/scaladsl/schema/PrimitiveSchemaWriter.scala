@@ -21,8 +21,7 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
 
 private[schema] final class PrimitiveSchemaWriter[T](`type`: TableFieldSchemaType) extends SchemaWriter[T] {
 
-  override def write(name: String, mode: TableFieldSchemaMode): TableFieldSchema = {
+  override def write(name: String, mode: TableFieldSchemaMode): TableFieldSchema =
     TableFieldSchema(name, `type`, Some(mode), None)
-  }
 
 }

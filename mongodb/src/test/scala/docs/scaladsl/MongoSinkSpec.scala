@@ -56,9 +56,8 @@ class MongoSinkSpec
   implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 5.seconds, interval = 50.millis)
 
-  override protected def beforeAll(): Unit = {
+  override protected def beforeAll(): Unit =
     Source.fromPublisher(db.drop()).runWith(Sink.headOption).futureValue
-  }
 
   private val client = MongoClients.create(s"mongodb://localhost:27017")
   private val db = client.getDatabase("MongoSinkSpec").withCodecRegistry(codecRegistry)

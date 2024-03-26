@@ -56,7 +56,7 @@ class PravegaKVTableSpec extends PravegaBaseSpec with Repeated {
 
       val readingDone = PravegaTable
         .source(scope, tableName, tableSettings)
-        .toMat(Sink.fold(0) { (sum, value) =>
+        .toMat(Sink.fold(0) { (sum, _) =>
           sum + 1
         })(Keep.right)
         .run()

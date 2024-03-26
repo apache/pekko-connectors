@@ -19,11 +19,11 @@ class MalformedCsvException private[csv] (val lineNo: Long, val bytePos: Int, ms
    * Java API:
    * Returns the line number where the parser failed.
    */
-  def getLineNo = lineNo
+  def getLineNo: Long = lineNo
 
   /**
    * Java API:
    * Returns the byte within the parsed line where the parser failed.
    */
-  def getBytePos = bytePos
+  def getBytePos: Int = bytePos
 }

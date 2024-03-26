@@ -26,16 +26,14 @@ import scalapb.UnknownFieldSet
 @InternalApi private[storage] object ProtobufConverters {
 
   implicit class TableReadOptionsAsScala(val readOption: TableReadOptions) {
-    def asScala(): ReadSession.TableReadOptions = {
+    def asScala(): ReadSession.TableReadOptions =
       ReadSession.TableReadOptions(
         selectedFields = selectedFields(),
         rowRestriction = readOption.getRowRestriction,
         unknownFields = unknownFields())
-    }
 
-    private final def selectedFields(): Seq[String] = {
+    private final def selectedFields(): Seq[String] =
       readOption.getSelectedFieldsList.asScala.map(s => s.asInstanceOf[String]).toSeq
-    }
 
     private final def unknownFields(): scalapb.UnknownFieldSet = {
       val map = readOption.getUnknownFields
@@ -46,13 +44,12 @@ import scalapb.UnknownFieldSet
       scalapb.UnknownFieldSet(map)
     }
 
-    private final def unknownField(field: com.google.protobuf.UnknownFieldSet.Field): UnknownFieldSet.Field = {
+    private final def unknownField(field: com.google.protobuf.UnknownFieldSet.Field): UnknownFieldSet.Field =
       UnknownFieldSet.Field(
         varint = field.getVarintList.asScala.map(_.asInstanceOf[Long]).toSeq,
         fixed64 = field.getFixed64List.asScala.map(_.asInstanceOf[Long]).toSeq,
         fixed32 = field.getFixed32List.asScala.map(_.asInstanceOf[Int]).toSeq,
         lengthDelimited = field.getLengthDelimitedList.asScala.toSeq)
-    }
 
   }
 

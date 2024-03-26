@@ -27,7 +27,7 @@ final class EventBridgePublishSettings private (val concurrency: Int) {
 
   def withConcurrency(concurrency: Int): EventBridgePublishSettings = copy(concurrency = concurrency)
 
-  def copy(concurrency: Int) = new EventBridgePublishSettings(concurrency)
+  def copy(concurrency: Int): EventBridgePublishSettings = new EventBridgePublishSettings(concurrency)
 
   override def toString: String =
     "EventBridgePublishSettings(" +

@@ -57,11 +57,9 @@ abstract class JmsSpec
     try {
       test(jmsBroker)
       Thread.sleep(500)
-    } finally {
-      if (jmsBroker.isStarted) {
+    } finally
+      if (jmsBroker.isStarted)
         jmsBroker.stop()
-      }
-    }
   }
 
   def withMockedProducer(test: ProducerMock => Unit): Unit = test(ProducerMock())

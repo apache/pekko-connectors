@@ -68,10 +68,10 @@ object Mqtt {
 
 /** INTERNAL API - taken from Pekko streams - perhaps it should be made public */
 private[scaladsl] class CoupledTerminationBidi[I, O] extends GraphStage[BidiShape[I, I, O, O]] {
-  val in1: Inlet[I] = Inlet("CoupledCompletion.in1")
-  val out1: Outlet[I] = Outlet("CoupledCompletion.out1")
-  val in2: Inlet[O] = Inlet("CoupledCompletion.in2")
-  val out2: Outlet[O] = Outlet("CoupledCompletion.out2")
+  private val in1: Inlet[I] = Inlet("CoupledCompletion.in1")
+  private val out1: Outlet[I] = Outlet("CoupledCompletion.out1")
+  private val in2: Inlet[O] = Inlet("CoupledCompletion.in2")
+  private val out2: Outlet[O] = Outlet("CoupledCompletion.out2")
   override val shape: BidiShape[I, I, O, O] = BidiShape(in1, out1, in2, out2)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic = new GraphStageLogic(shape) {

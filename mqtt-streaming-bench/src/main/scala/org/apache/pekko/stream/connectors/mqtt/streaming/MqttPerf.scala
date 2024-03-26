@@ -36,11 +36,10 @@ object MqttPerf {
   def main(args: Array[String]): Unit = {
     val test = new MqttPerf()
     test.setup()
-    try {
+    try
       for (_ <- 0 until 10000) test.serverPublish()
-    } finally {
+    finally
       test.tearDown()
-    }
   }
 }
 
@@ -83,7 +82,7 @@ class MqttPerf {
       .bind(host, port)
       .flatMapMerge(
         1,
-        { connection =>
+        connection =>
           Source
             .fromGraph(serverSource)
             .via(
@@ -97,14 +96,12 @@ class MqttPerf {
                 server.offer(Command(subAck.copy(packetId = s.packetId)))
               case Right(Event(_: PubAck, _)) =>
                 pubAckReceivedLock.lock()
-                try {
+                try
                   pubAckReceived.signal()
-                } finally {
+                finally
                   pubAckReceivedLock.unlock()
-                }
               case _ =>
-            })
-        })
+            }))
       .toMat(Sink.ignore)(Keep.left)
       .run()
     Await.ready(bound, 3.seconds)
@@ -135,11 +132,10 @@ class MqttPerf {
   def serverPublish(): Unit = {
     serverSession ! streaming.Command(streaming.Publish("some-topic", ByteString("some-payload")))
     pubAckReceivedLock.lock()
-    try {
+    try
       pubAckReceived.await(3, TimeUnit.SECONDS)
-    } finally {
+    finally
       pubAckReceivedLock.unlock()
-    }
   }
 
   @TearDown

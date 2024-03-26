@@ -82,8 +82,8 @@ class HBaseStageSpec
   // #create-converter-increment
 
   // #create-converter-complex
-  val mutationsHBaseConverter: Person => immutable.Seq[Mutation] = { person =>
-    if (person.id != 0) {
+  val mutationsHBaseConverter: Person => immutable.Seq[Mutation] = person =>
+    if (person.id != 0)
       if (person.name.isEmpty) {
         // Delete the specified row
         val delete = new Delete(s"id_${person.id}")
@@ -98,10 +98,8 @@ class HBaseStageSpec
 
         List(put, increment)
       }
-    } else {
+    else
       List.empty
-    }
-  }
   // #create-converter-complex
 
   // #create-settings

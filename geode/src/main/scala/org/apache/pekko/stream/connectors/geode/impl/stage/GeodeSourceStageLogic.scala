@@ -18,6 +18,7 @@ import pekko.annotation.InternalApi
 import pekko.stream.SourceShape
 import pekko.stream.stage.{ AsyncCallback, GraphStageLogic }
 import org.apache.geode.cache.client.ClientCache
+import org.apache.geode.cache.query.QueryService
 
 import scala.util.{ Failure, Success, Try }
 
@@ -29,7 +30,7 @@ private[geode] abstract class GeodeSourceStageLogic[V](shape: SourceShape[V], cl
 
   val onConnect: AsyncCallback[Unit]
 
-  lazy val qs = clientCache.getQueryService()
+  lazy val qs: QueryService = clientCache.getQueryService()
 
   def executeQuery(): Try[java.util.Iterator[V]]
 

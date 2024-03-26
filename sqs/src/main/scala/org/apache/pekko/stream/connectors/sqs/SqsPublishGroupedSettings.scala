@@ -43,7 +43,7 @@ final class SqsPublishGroupedSettings private (val maxBatchSize: Int,
       maxBatchWait = maxBatchWait,
       concurrentRequests = concurrentRequests)
 
-  override def toString =
+  override def toString: String =
     "SqsPublishGroupedSettings(" +
     s"maxBatchSize=$maxBatchSize," +
     s"maxBatchWait=$maxBatchWait," +

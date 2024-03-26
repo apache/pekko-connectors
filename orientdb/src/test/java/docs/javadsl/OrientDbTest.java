@@ -333,12 +333,7 @@ public class OrientDbTest {
             new messagesFromKafka("Effective Akka", new KafkaOffset(2)));
 
     Consumer<KafkaOffset> commitToKafka =
-        new Consumer<KafkaOffset>() {
-          @Override
-          public void accept(KafkaOffset kafkaOffset) {
-            committedOffsets.add(kafkaOffset.getOffset());
-          }
-        };
+            kafkaOffset -> committedOffsets.add(kafkaOffset.getOffset());
 
     Source.from(messagesFromKafkas)
         .map(
@@ -373,7 +368,7 @@ public class OrientDbTest {
 
     assertEquals(
         messagesFromKafkas.stream()
-            .map(m -> m.getBook_title())
+            .map(messagesFromKafka::getBook_title)
             .sorted()
             .collect(Collectors.toList()),
         result2.stream().sorted().collect(Collectors.toList()));

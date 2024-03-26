@@ -28,7 +28,7 @@ final class Credentials private (
     username = username,
     password = password)
 
-  override def toString =
+  override def toString: String =
     "Credentials(" +
     s"username=$username," +
     s"password=${"*" * password.length}" +

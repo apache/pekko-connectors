@@ -74,7 +74,7 @@ class SlickSpec
     sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
 
   def getAllUsersFromDb: Future[Set[User]] = Slick.source(selectAllUsers).runWith(Sink.seq).map(_.toSet)
-  def populate() = {
+  def populate(): Unit = {
     val actions = users.map(insertUser)
 
     // This uses the standard Slick API exposed by the Slick session
@@ -108,9 +108,8 @@ class SlickSpec
           .runWith(Sink.head)
           .futureValue
         assert(result === true)
-      } finally {
+      } finally
         slickSessionCreatedForDbAndProfile.close()
-      }
     }
   }
 
@@ -172,7 +171,7 @@ class SlickSpec
         .runWith(Sink.seq)
         .futureValue
 
-      inserted must have size (users.size)
+      inserted must have size users.size
       inserted.toSet mustBe Set(1)
 
       getAllUsersFromDb.futureValue mustBe users
@@ -184,7 +183,7 @@ class SlickSpec
         .runWith(Sink.seq)
         .futureValue
 
-      inserted must have size (users.size)
+      inserted must have size users.size
       inserted.toSet mustBe Set(1)
 
       getAllUsersFromDb.futureValue mustBe users
@@ -194,7 +193,7 @@ class SlickSpec
       val inserted = Source(users)
         .grouped(10)
         .via(
-          Slick.flow(parallelism = 4, (group: Seq[User]) => group.map(insertUser(_)).reduceLeft(_.andThen(_))))
+          Slick.flow(parallelism = 4, (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
         .runWith(Sink.seq)
         .futureValue
 
@@ -215,7 +214,7 @@ class SlickSpec
         .runWith(Sink.seq)
         .futureValue
 
-      inserted must have size (users.size)
+      inserted must have size users.size
       inserted.map(_._1).toSet mustBe users
       inserted.map(_._2).toSet mustBe Set(1)
 
@@ -225,13 +224,12 @@ class SlickSpec
     "insert 40 records into a table (parallelism = 4)" in {
       val inserted = Source(users)
         .via(Slick.flowWithPassThrough(parallelism = 4,
-          user => {
-            insertUser(user).map(insertCount => (user, insertCount))
-          }))
+          user =>
+            insertUser(user).map(insertCount => (user, insertCount))))
         .runWith(Sink.seq)
         .futureValue
 
-      inserted must have size (users.size)
+      inserted must have size users.size
       inserted.map(_._1).toSet mustBe users
       inserted.map(_._2).toSet mustBe Set(1)
 
@@ -251,7 +249,7 @@ class SlickSpec
         .runWith(Sink.fold(Seq.empty[(User, Int)])((a, b) => a ++ b))
         .futureValue
 
-      inserted must have size (users.size)
+      inserted must have size users.size
       inserted.map(_._1).toSet mustBe users
       inserted.map(_._2).toSet mustBe Set(1)
 
@@ -265,8 +263,8 @@ class SlickSpec
       // After we've written them to a db with Slick, we want
       // to commit the offset to Kafka
 
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage[A](msg: A, offset: KafkaOffset) {
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage[A](msg: A, offset: KafkaOffset) {
         // map the msg and keep the offset
         def map[B](f: A => B): KafkaMessage[B] = KafkaMessage(f(msg), offset)
       }
@@ -295,7 +293,7 @@ class SlickSpec
       Await.ready(f1, Duration.Inf)
 
       // Make sure all messages was committed to kafka
-      committedOffsets.map(_.offset).sorted mustBe ((0 until (users.size)).toList)
+      committedOffsets.map(_.offset).sorted mustBe (0 until users.size).toList
 
       // Assert that all docs were written to db
       getAllUsersFromDb.futureValue mustBe users
@@ -323,7 +321,7 @@ class SlickSpec
       Source(users)
         .grouped(10)
         .runWith(
-          Slick.sink(parallelism = 4, (group: Seq[User]) => group.map(insertUser(_)).reduceLeft(_.andThen(_))))
+          Slick.sink(parallelism = 4, (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
         .futureValue
 
       getAllUsersFromDb.futureValue mustBe users

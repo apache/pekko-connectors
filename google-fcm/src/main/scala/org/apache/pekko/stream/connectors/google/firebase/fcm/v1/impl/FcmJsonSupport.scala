@@ -23,7 +23,7 @@ import spray.json._
  * INTERNAL API
  */
 @InternalApi
-private[fcm] case class FcmSend(validate_only: Boolean, message: FcmNotification)
+private[fcm] final case class FcmSend(validate_only: Boolean, message: FcmNotification)
 
 /**
  * INTERNAL API
@@ -35,14 +35,14 @@ private[fcm] object FcmJsonSupport extends DefaultJsonProtocol with SprayJsonSup
   implicit object FcmSuccessResponseJsonFormat extends RootJsonFormat[FcmSuccessResponse] {
     def write(c: FcmSuccessResponse): JsValue = JsString(c.name)
 
-    def read(value: JsValue) = value match {
+    def read(value: JsValue): FcmSuccessResponse = value match {
       case JsObject(fields) if fields.contains("name") => FcmSuccessResponse(fields("name").convertTo[String])
       case other                                       => throw DeserializationException(s"object containing `name` expected, but we get $other")
     }
   }
   implicit object FcmErrorResponseJsonFormat extends RootJsonFormat[FcmErrorResponse] {
     def write(c: FcmErrorResponse): JsValue = c.rawError.parseJson
-    def read(value: JsValue) = FcmErrorResponse(value.toString)
+    def read(value: JsValue): FcmErrorResponse = FcmErrorResponse(value.toString)
   }
 
   implicit object FcmResponseFormat extends RootJsonReader[FcmResponse] {

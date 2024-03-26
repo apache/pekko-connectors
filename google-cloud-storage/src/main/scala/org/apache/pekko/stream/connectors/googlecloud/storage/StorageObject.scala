@@ -97,7 +97,7 @@ final class StorageObject private (
     val acl: Option[List[ObjectAccessControls]]) {
 
   /** Java API */
-  def getContentType: pekko.http.javadsl.model.ContentType = contentType.asInstanceOf[ContentType]
+  def getContentType: pekko.http.javadsl.model.ContentType = contentType
   def getTimeDeleted: Optional[OffsetDateTime] = timeDeleted.toJava
   def getContentDisposition: Optional[String] = contentDisposition.toJava
   def getContentEncoding: Optional[String] = contentEncoding.toJava
@@ -162,7 +162,7 @@ final class StorageObject private (
       name: String = name,
       bucket: String = bucket,
       generation: Long = generation,
-      contentType: ContentType = maybeContentType.getOrElse(null),
+      contentType: ContentType = maybeContentType.orNull,
       maybeContentType: Option[ContentType] = maybeContentType,
       size: Long = size,
       etag: String = etag,
@@ -230,7 +230,7 @@ final class StorageObject private (
     owner = owner,
     acl = acl)
 
-  override def toString =
+  override def toString: String =
     "StorageObject(" +
     s"kind=$kind," +
     s"id=$id," +

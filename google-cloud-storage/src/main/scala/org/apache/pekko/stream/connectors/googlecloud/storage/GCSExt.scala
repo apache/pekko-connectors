@@ -26,7 +26,7 @@ final class GCSExt private (sys: ExtendedActorSystem) extends Extension {
 }
 
 object GCSExt extends ExtensionId[GCSExt] with ExtensionIdProvider {
-  override def lookup = GCSExt
+  override def lookup: GCSExt.type = GCSExt
   override def createExtension(system: ExtendedActorSystem) = new GCSExt(system)
 
   /**

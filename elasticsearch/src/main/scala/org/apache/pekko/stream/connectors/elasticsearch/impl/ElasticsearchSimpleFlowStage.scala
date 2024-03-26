@@ -44,7 +44,9 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
   private val in =
     Inlet[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]])]("messagesAndResultPassthrough")
   private val out = Outlet[immutable.Seq[WriteResult[T, C]]]("result")
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]), immutable.Seq[
+      WriteResult[T, C]]] =
+    FlowShape(in, out)
 
   private val restApi: RestBulkApi[T, C] = settings.apiVersion match {
     case ApiVersion.V5 =>
@@ -143,14 +145,13 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
       }
       val messageResults = restApi.toWriteResults(messages, response)
 
-      if (log.isErrorEnabled) {
+      if (log.isErrorEnabled)
         messageResults.filterNot(_.success).foreach { failure =>
           if (failure.getError.isPresent) {
             log.error(s"Received error from elastic when attempting to index documents. Error: {}",
               failure.getError.get)
           }
         }
-      }
 
       emit(out, messageResults ++ resultsPassthrough)
       if (isClosed(in)) completeStage()
@@ -158,9 +159,8 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     }
 
     private def tryPull(): Unit =
-      if (!isClosed(in) && !hasBeenPulled(in)) {
+      if (!isClosed(in) && !hasBeenPulled(in))
         pull(in)
-      }
 
     override def onUpstreamFinish(): Unit =
       if (!inflight) completeStage()

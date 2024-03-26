@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
  * AndroidConfig model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidConfig
  */
-case class AndroidConfig(
+final case class AndroidConfig(
     collapse_key: Option[String] = None,
     priority: Option[AndroidMessagePriority] = None,
     ttl: Option[String] = None,
@@ -53,7 +53,7 @@ object AndroidConfig {
  * AndroidNotification model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidNotification
  */
-case class AndroidNotification(
+final case class AndroidNotification(
     title: Option[String] = None,
     body: Option[String] = None,
     icon: Option[String] = None,
@@ -181,7 +181,7 @@ case object Secret extends Visibility
  * LightSettings model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#LightSettings
  */
-case class LightSettings(
+final case class LightSettings(
     color: Option[Color] = None,
     light_on_duration: Option[String] = None,
     light_off_duration: Option[String] = None) {
@@ -202,4 +202,4 @@ object LightSettings {
  * Color model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#Color
  */
-case class Color(red: Double, green: Double, blue: Double, alpha: Double)
+final case class Color(red: Double, green: Double, blue: Double, alpha: Double)

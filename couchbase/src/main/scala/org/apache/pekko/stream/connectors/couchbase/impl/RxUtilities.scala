@@ -29,22 +29,15 @@ import scala.concurrent.{ Future, Promise }
 @InternalApi
 private[couchbase] object RxUtilities {
 
-  val unfoldDocument = new Func1[AsyncN1qlQueryRow, JsonObject] {
-    def call(row: AsyncN1qlQueryRow): JsonObject =
-      row.value()
-  }
+  val unfoldDocument: Func1[AsyncN1qlQueryRow, JsonObject] = (row: AsyncN1qlQueryRow) => row.value()
 
-  val failStreamOnError = new Func1[JsonObject, Observable[JsonObject]] {
-    override def call(err: JsonObject): Observable[JsonObject] =
-      Observable.error(CouchbaseResponseException(err))
-  }
+  val failStreamOnError: Func1[JsonObject, Observable[JsonObject]] =
+    (err: JsonObject) => Observable.error(CouchbaseResponseException(err))
 
-  val unfoldJsonObjects = new Func1[AsyncN1qlQueryResult, Observable[JsonObject]] {
-    def call(t: AsyncN1qlQueryResult): Observable[JsonObject] = {
-      val data: Observable[JsonObject] = t.rows().map(unfoldDocument)
-      val errors = t.errors().flatMap(failStreamOnError)
-      data.mergeWith(errors)
-    }
+  val unfoldJsonObjects: Func1[AsyncN1qlQueryResult, Observable[JsonObject]] = (t: AsyncN1qlQueryResult) => {
+    val data: Observable[JsonObject] = t.rows().map(unfoldDocument)
+    val errors = t.errors().flatMap(failStreamOnError)
+    data.mergeWith(errors)
   }
 
   def singleObservableToFuture[T](o: Observable[T], id: Any): Future[T] = {
@@ -68,12 +61,12 @@ private[couchbase] object RxUtilities {
     p.future
   }
 
-  def func1Observable[T, R](fun: T => Observable[R]) =
+  def func1Observable[T, R](fun: T => Observable[R]): Func1[T, Observable[R]] =
     new Func1[T, Observable[R]]() {
       override def call(b: T): Observable[R] = fun(b)
     }
 
-  def func1[T, R](fun: T => R) =
+  def func1[T, R](fun: T => R): Func1[T, R] =
     new Func1[T, R]() {
       override def call(b: T): R = fun(b)
     }

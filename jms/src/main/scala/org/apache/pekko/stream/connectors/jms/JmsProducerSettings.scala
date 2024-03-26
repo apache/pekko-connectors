@@ -103,7 +103,7 @@ final class JmsProducerSettings private (
     timeToLive = timeToLive,
     connectionStatusSubscriptionTimeout = connectionStatusSubscriptionTimeout)
 
-  override def toString =
+  override def toString: String =
     "JmsProducerSettings(" +
     s"connectionFactory=$connectionFactory," +
     s"connectionRetrySettings=$connectionRetrySettings," +

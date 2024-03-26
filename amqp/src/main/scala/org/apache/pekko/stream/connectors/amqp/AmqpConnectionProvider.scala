@@ -138,17 +138,16 @@ final class AmqpDetailsConnectionProvider private (
       factory.setPassword(credentials.password)
     }
     virtualHost.foreach(factory.setVirtualHost)
-    sslConfiguration.foreach(sslConfiguration => {
+    sslConfiguration.foreach { sslConfiguration =>
       if (sslConfiguration.protocol.isDefined) {
         if (sslConfiguration.trustManager.isDefined)
           factory.useSslProtocol(sslConfiguration.protocol.get, sslConfiguration.trustManager.get)
         else factory.useSslProtocol(sslConfiguration.protocol.get)
-      } else if (sslConfiguration.context.isDefined) {
+      } else if (sslConfiguration.context.isDefined)
         factory.useSslProtocol(sslConfiguration.context.get)
-      } else {
+      else
         factory.useSslProtocol()
-      }
-    })
+    }
     requestedHeartbeat.foreach(factory.setRequestedHeartbeat)
     connectionTimeout.foreach(factory.setConnectionTimeout)
     handshakeTimeout.foreach(factory.setHandshakeTimeout)
@@ -244,9 +243,8 @@ object AmqpCredentials {
 final class AmqpSSLConfiguration private (val protocol: Option[String] = None,
     val trustManager: Option[TrustManager] = None,
     val context: Option[SSLContext] = None) {
-  if (protocol.isDefined && context.isDefined) {
+  if (protocol.isDefined && context.isDefined)
     throw new IllegalArgumentException("Protocol and context can't be defined in the same AmqpSSLConfiguration.")
-  }
 
   def withProtocol(protocol: String): AmqpSSLConfiguration =
     copy(protocol = Some(protocol))
@@ -419,10 +417,8 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
               throw new ConcurrentModificationException(
                 "Unexpected concurrent modification while closing the connection.")
           }
-        } else {
-          if (!state.compareAndSet(c, Connected(cachedConnection, clients - 1)))
-            releaseRecursive(amqpConnectionProvider, connection)
-        }
+        } else if (!state.compareAndSet(c, Connected(cachedConnection, clients - 1)))
+          releaseRecursive(amqpConnectionProvider, connection)
       case Closing => releaseRecursive(amqpConnectionProvider, connection)
     }
 

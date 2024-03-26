@@ -144,7 +144,7 @@ class JmsConnectionStatusSpec extends JmsSpec {
       val connectionStatus = Source.tick(10.millis, 20.millis, "text").runWith(jmsSink).connectorState
       val status = connectionStatus.runWith(Sink.queue())
 
-      eventually { status should havePublishedState(Failing(securityException)) }
+      eventually(status should havePublishedState(Failing(securityException)))
       status should havePublishedState(Failed(securityException))
     }
 
@@ -261,12 +261,12 @@ class JmsConnectionStatusSpec extends JmsSpec {
 
       val status = consumerControl.connectorState.runWith(Sink.queue())
 
-      eventually { status should havePublishedState(Connected) }
+      eventually(status should havePublishedState(Connected))
 
       connectedLatch.countDown()
 
-      eventually { status should havePublishedState(Completing) }
-      eventually { status should havePublishedState(Completed) }
+      eventually(status should havePublishedState(Completing))
+      eventually(status should havePublishedState(Completed))
     }
 
     "report completion on stream shutdown / cancel" in withConnectionFactory() { connectionFactory =>
@@ -284,17 +284,17 @@ class JmsConnectionStatusSpec extends JmsSpec {
       val consumerConnected = consumerControl.connectorState.runWith(Sink.queue())
       val producerConnected = producerStatus.connectorState.runWith(Sink.queue())
 
-      eventually { consumerConnected should havePublishedState(Connected) }
-      eventually { producerConnected should havePublishedState(Connected) }
+      eventually(consumerConnected should havePublishedState(Connected))
+      eventually(producerConnected should havePublishedState(Connected))
 
       cancellable.cancel()
       consumerControl.shutdown()
 
-      eventually { consumerConnected should havePublishedState(Completing) }
-      eventually { consumerConnected should havePublishedState(Completed) }
+      eventually(consumerConnected should havePublishedState(Completing))
+      eventually(consumerConnected should havePublishedState(Completed))
 
-      eventually { producerConnected should havePublishedState(Completing) }
-      eventually { producerConnected should havePublishedState(Completed) }
+      eventually(producerConnected should havePublishedState(Completing))
+      eventually(producerConnected should havePublishedState(Completed))
     }
 
     "report failure on external stream abort" in withConnectionFactory() { connectionFactory =>
@@ -308,7 +308,7 @@ class JmsConnectionStatusSpec extends JmsSpec {
 
       val consumerConnected = consumerControl.connectorState.runWith(Sink.queue())
 
-      eventually { consumerConnected should havePublishedState(Connected) }
+      eventually(consumerConnected should havePublishedState(Connected))
 
       consumerControl.abort(exception)
 
@@ -348,19 +348,19 @@ class JmsConnectionStatusSpec extends JmsSpec {
         producerStatus.connectorState.buffer(10, OverflowStrategy.backpressure).runWith(Sink.queue())
 
       for (_ <- 1 to 20) {
-        eventually { consumerConnected should havePublishedState(Connected) }
-        eventually { producerConnected should havePublishedState(Connected) }
+        eventually(consumerConnected should havePublishedState(Connected))
+        eventually(producerConnected should havePublishedState(Connected))
 
         server.stop()
 
-        eventually { consumerConnected should havePublishedState(Disconnected) }
-        eventually { producerConnected should havePublishedState(Disconnected) }
+        eventually(consumerConnected should havePublishedState(Disconnected))
+        eventually(producerConnected should havePublishedState(Disconnected))
 
         server.restart()
       }
 
-      eventually { consumerConnected should havePublishedState(Connected) }
-      eventually { producerConnected should havePublishedState(Connected) }
+      eventually(consumerConnected should havePublishedState(Connected))
+      eventually(producerConnected should havePublishedState(Connected))
     }
   }
 

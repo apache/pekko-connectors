@@ -33,16 +33,14 @@ abstract class JmsSharedServerSpec extends JmsSpec {
 
   override protected def afterAll(): Unit = {
     super.afterAll()
-    if (jmsBroker != null && jmsBroker.isStarted) {
+    if (jmsBroker != null && jmsBroker.isStarted)
       jmsBroker.stop()
-    }
   }
 
   protected def isQueueEmpty(queueName: String): Boolean = jmsBroker.service.checkQueueSize(queueName)
 
-  override def withConnectionFactory()(test: ConnectionFactory => Unit): Unit = {
+  override def withConnectionFactory()(test: ConnectionFactory => Unit): Unit =
     test(connectionFactory)
-  }
 
   def createName(prefix: String) = prefix + Random.nextInt().toString
 

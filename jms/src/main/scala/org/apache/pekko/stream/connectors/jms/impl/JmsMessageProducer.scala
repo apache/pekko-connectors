@@ -79,7 +79,7 @@ private class JmsMessageProducer(jmsProducer: jms.MessageProducer, jmsSession: J
       case objectMessage: JmsObjectMessagePassThrough[_] =>
         jmsSession.session.createObjectMessage(objectMessage.serializable)
 
-      case pt: JmsPassThrough[_] => throw new IllegalArgumentException("can't create message for JmsPassThrough")
+      case _: JmsPassThrough[_] => throw new IllegalArgumentException("can't create message for JmsPassThrough")
 
     }
 
@@ -137,9 +137,8 @@ private class JmsMessageProducer(jmsProducer: jms.MessageProducer, jmsSession: J
 private[impl] object JmsMessageProducer {
   def apply(jmsSession: JmsProducerSession, settings: JmsProducerSettings, epoch: Int): JmsMessageProducer = {
     val producer = jmsSession.session.createProducer(null)
-    if (settings.timeToLive.nonEmpty) {
+    if (settings.timeToLive.nonEmpty)
       producer.setTimeToLive(settings.timeToLive.get.toMillis)
-    }
     new JmsMessageProducer(producer, jmsSession, epoch)
   }
 }

@@ -60,7 +60,7 @@ private[connectors] object implicits {
     def withDefaultRetry: FromResponseUnmarshaller[Throwable] =
       Unmarshaller.withMaterializer { implicit ec => implicit mat => response =>
         um(response).map {
-          case ex =>
+          ex =>
             response.status match {
               case TooManyRequests | InternalServerError | BadGateway | ServiceUnavailable | GatewayTimeout => Retry(ex)
               case _                                                                                        => ex

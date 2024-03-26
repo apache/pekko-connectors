@@ -33,20 +33,18 @@ import pekko.util.ByteString
  */
 @InternalApi private[impl] object SplitAfterSizeWithContext {
   def apply[I, M, C](minChunkSize: Int)(
-      in: Flow[(I, C), (ByteString, C), M]): SubFlow[(ByteString, C), M, in.Repr, in.Closed] = {
-
+      in: Flow[(I, C), (ByteString, C), M]): SubFlow[(ByteString, C), M, in.Repr, in.Closed] =
     in.via(insertMarkers(minChunkSize)).splitWhen(_ == NewStream).collect {
       case (bs: ByteString, context: C @unchecked) => (bs, context)
     }
-  }
 
   private case object NewStream
 
   private def insertMarkers[C](minChunkSize: Long) =
     new GraphStage[FlowShape[(ByteString, C), Any]] {
-      val in = Inlet[(ByteString, C)]("SplitAfterSize.in")
-      val out = Outlet[Any]("SplitAfterSize.out")
-      override val shape = FlowShape.of(in, out)
+      val in: Inlet[(ByteString, C)] = Inlet[(ByteString, C)]("SplitAfterSize.in")
+      val out: Outlet[Any] = Outlet[Any]("SplitAfterSize.out")
+      override val shape: FlowShape[(ByteString, C), Any] = FlowShape.of(in, out)
 
       override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
         new GraphStageLogic(shape) with OutHandler with InHandler {

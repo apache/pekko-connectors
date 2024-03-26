@@ -97,9 +97,8 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
     for {
       i <- 1 to bufferToBatchRatio
       message <- defaultMessages
-    } {
-      probe.requestNext() shouldEqual message
     }
+      probe.requestNext() shouldEqual message
     probe.cancel()
   }
 
@@ -115,7 +114,7 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
         def answer(invocation: InvocationOnMock) = {
           requestsCounter += 1
 
-          if (requestsCounter > firstWithDataCount && requestsCounter <= firstWithDataCount + thenEmptyCount) {
+          if (requestsCounter > firstWithDataCount && requestsCounter <= firstWithDataCount + thenEmptyCount)
             pekko.pattern
               .after(timeout, system.scheduler) {
                 Future.successful(
@@ -126,13 +125,12 @@ class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContex
               }(system.dispatcher)
               .asJava
               .toCompletableFuture
-          } else {
+          else
             CompletableFuture.completedFuture(
               ReceiveMessageResponse
                 .builder()
                 .messages(defaultMessages: _*)
                 .build())
-          }
         }
       })
 

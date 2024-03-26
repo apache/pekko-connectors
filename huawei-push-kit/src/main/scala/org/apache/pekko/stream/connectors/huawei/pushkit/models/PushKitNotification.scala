@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.huawei.pushkit.models
  * Message model.
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
  */
-case class PushKitNotification(data: Option[String] = None,
+final case class PushKitNotification(data: Option[String] = None,
     notification: Option[BasicNotification] = None,
     android: Option[AndroidConfig] = None,
     apns: Option[ApnsConfig] = None,

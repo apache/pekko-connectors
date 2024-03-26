@@ -30,7 +30,7 @@ object DeleteOrUpdateMessage {
   }
 
   object UpdateVisibility {
-    def apply(timeout: Int) =
+    def apply(timeout: Int): UpdateVisibility =
       new UpdateVisibility(timeout)
   }
 

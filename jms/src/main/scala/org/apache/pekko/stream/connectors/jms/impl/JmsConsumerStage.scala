@@ -64,12 +64,10 @@ private[jms] final class JmsConsumerStage(settings: JmsConsumerSettings, destina
       jmsSession
         .createConsumer(settings.selector)
         .map { consumer =>
-          consumer.setMessageListener(new jms.MessageListener {
-            def onMessage(message: jms.Message): Unit = {
-              backpressure.acquire()
-              handleMessage.invoke(message)
-            }
-          })
+          consumer.setMessageListener { (message: jms.Message) =>
+            backpressure.acquire()
+            handleMessage.invoke(message)
+          }
         }
         .onComplete(sessionOpenedCB.invoke)
   }

@@ -45,11 +45,10 @@ private[auth] final class GoogleOAuth2Credentials(credentials: OAuth2Credentials
     }
   }
 
-  private def requestMetadata(implicit ec: ExecutionContext): Future[util.Map[String, util.List[String]]] = {
+  private def requestMetadata(implicit ec: ExecutionContext): Future[util.Map[String, util.List[String]]] =
     credentials.get().map { token =>
       util.Collections.singletonMap("Authorization", util.Collections.singletonList(token.toString))
     }
-  }
 
   override def refresh(): Unit = credentials.refresh()
 }

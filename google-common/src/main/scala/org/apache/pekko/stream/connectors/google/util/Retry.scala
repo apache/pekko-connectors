@@ -48,7 +48,7 @@ object Retry {
   def create(ex: Throwable): Throwable = apply(ex)
 
   /**
-   * A wrapper around Akka's [[pekko.pattern.RetrySupport]] which requires opt-in.
+   * A wrapper around Pekko's [[pekko.pattern.RetrySupport]] which requires opt-in.
    * An exception will trigger a retry only if it is wrapped in [[Retry]].
    * Note that the exception will be unwrapped, should all the retry attempts fail
    * (i.e., this method will never raise a [[Retry]], only its underlying exception).

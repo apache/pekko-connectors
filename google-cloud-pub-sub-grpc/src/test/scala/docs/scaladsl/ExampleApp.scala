@@ -77,15 +77,15 @@ object ExampleApp {
 
     Source
       .tick(0.seconds, 1.second, ())
-      .map(_ => {
+      .map { _ =>
         val temp = math.random() * 10 + 15
         f"Current temperature is: $temp%2.2f"
-      })
+      }
       .delay(1.second, DelayOverflowStrategy.backpressure)
       .map(publish(projectId, topic)(_))
       .via(GooglePubSub.publish(parallelism = 1))
       .to(Sink.ignore)
-      .mapMaterializedValue(Future.successful(_))
+      .mapMaterializedValue(Future.successful)
       .run()
   }
 

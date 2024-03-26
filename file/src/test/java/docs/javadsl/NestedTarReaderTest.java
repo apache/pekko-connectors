@@ -73,7 +73,7 @@ public class NestedTarReaderTest {
     List<TarArchiveMetadata> metadata =
         process(file, tempDir, system).toCompletableFuture().get(1, TimeUnit.MINUTES);
     List<String> names =
-        metadata.stream().map(md -> md.filePathName()).collect(Collectors.toList());
+        metadata.stream().map(TarArchiveMetadata::filePathName).collect(Collectors.toList());
     assertThat(names.size(), is(1281));
   }
 

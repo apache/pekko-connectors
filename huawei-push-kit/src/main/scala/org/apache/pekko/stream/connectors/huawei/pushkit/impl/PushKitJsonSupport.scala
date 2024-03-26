@@ -25,7 +25,7 @@ import spray.json._
  * INTERNAL API
  */
 @InternalApi
-private[pushkit] case class PushKitSend(validate_only: Boolean, message: PushKitNotification)
+private[pushkit] final case class PushKitSend(validate_only: Boolean, message: PushKitNotification)
 
 /**
  * INTERNAL API
@@ -48,7 +48,7 @@ private[pushkit] object PushKitJsonSupport extends DefaultJsonProtocol with Spra
   implicit object HmsResponseJsonFormat extends RootJsonFormat[PushKitResponse] {
     def write(c: PushKitResponse): JsValue = c.toJson(this)
 
-    def read(value: JsValue) = value match {
+    def read(value: JsValue): PushKitResponse = value match {
       case JsObject(fields) if fields.contains("code") && fields.contains("msg") =>
         PushKitResponse(
           requestId = if (fields.contains("requestId")) fields("requestId").convertTo[String] else null,

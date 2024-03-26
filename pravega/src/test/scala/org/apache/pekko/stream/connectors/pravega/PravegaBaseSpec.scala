@@ -34,7 +34,7 @@ abstract class PravegaBaseSpec
     with AnyWordSpecLike
     with ScalaFutures
     with Matchers {
-  val logger = LoggerFactory.getLogger(this.getClass())
+  val logger = LoggerFactory.getLogger(this.getClass)
 
   def time[R](label: String, block: => R): R = {
     val t0 = System.nanoTime() / 1000000
@@ -49,7 +49,7 @@ abstract class PravegaBaseSpec
 
   def newKeyValueTableName() = "scala-test-kv-table" + UUID.randomUUID().toString
 
-  def createStream(scope: String, streamName: String) = {
+  def createStream(scope: String, streamName: String): Unit = {
     val streamManager = StreamManager.create(URI.create("tcp://localhost:9090"))
     if (streamManager.createScope(scope))
       logger.info(s"Created scope [$scope].")
@@ -69,9 +69,8 @@ abstract class PravegaBaseSpec
     val streamManager = StreamManager.create(URI.create("tcp://localhost:9090"))
     if (streamManager.createScope(scope))
       logger.info(s"Created scope [$scope].")
-    else {
+    else
       logger.info(s"Scope [$scope] already exists.")
-    }
     streamManager.close()
     val clientConfig = ClientConfig
       .builder()

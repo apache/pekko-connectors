@@ -27,14 +27,12 @@ class GeodeFlowSpec extends GeodeBaseSpec {
 
   "Pekko Connectors geode" should {
     "create settings" in {
-      {
-        val hostname = "localhost"
-        // #connection
-        val geodeSettings = GeodeSettings(hostname, port = 10334)
-          .withConfiguration(c => c.setPoolIdleTimeout(10))
-        // #connection
-        geodeSettings.toString should include("port=10334")
-      }
+      val hostname = "localhost"
+      // #connection
+      val geodeSettings = GeodeSettings(hostname, port = 10334)
+        .withConfiguration(c => c.setPoolIdleTimeout(10))
+      // #connection
+      geodeSettings.toString should include("port=10334")
     }
 
     it { geodeSettings =>

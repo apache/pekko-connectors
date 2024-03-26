@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MongoSourceTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -141,13 +142,11 @@ public class MongoSourceTest {
   public void streamTheResultOfMongoQueryThatResultsInNoData() throws Exception {
     final Source<Document, NotUsed> source = MongoSource.create(numbersDocumentColl.find());
 
-    assertEquals(
-        true,
-        source
-            .runWith(Sink.seq(), system)
-            .toCompletableFuture()
-            .get(5, TimeUnit.SECONDS)
-            .isEmpty());
+      assertTrue(source
+              .runWith(Sink.seq(), system)
+              .toCompletableFuture()
+              .get(5, TimeUnit.SECONDS)
+              .isEmpty());
   }
 
   private List<Integer> seed() throws Exception {

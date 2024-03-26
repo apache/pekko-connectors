@@ -62,9 +62,9 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
   private val _underlyingSession: Future[CqlSession] = sessionProvider
     .connect()
     .flatMap { cqlSession =>
-      cqlSession.getMetrics.ifPresent(metrics => {
+      cqlSession.getMetrics.ifPresent { metrics =>
         CassandraMetricsRegistry(system).addMetrics(metricsCategory, metrics.getRegistry)
-      })
+      }
       init(cqlSession).map(_ => cqlSession)
     }
     .recover {
@@ -94,7 +94,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
   /**
    * Meta data about the Cassandra server, such as its version.
    */
-  def serverMetaData: Future[CassandraServerMetaData] = {
+  def serverMetaData: Future[CassandraServerMetaData] =
     cachedServerMetaData match {
       case OptionVal.Some(cached) =>
         cached
@@ -122,7 +122,6 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
         result
       case other => throw new MatchError(other)
     }
-  }
 
   /**
    * Execute <a href="https://docs.datastax.com/en/dse/6.7/cql/">CQL commands</a>
@@ -171,11 +170,10 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * The returned `Future` is completed when the statement has been
    * successfully executed, or if it fails.
    */
-  def executeWrite(stmt: Statement[_]): Future[Done] = {
+  def executeWrite(stmt: Statement[_]): Future[Done] =
     underlying().flatMap { cqlSession =>
       cqlSession.executeAsync(stmt).asScala.map(_ => Done)
     }
-  }
 
   /**
    * Prepare, bind and execute one statement in one go.
@@ -187,18 +185,16 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * The returned `Future` is completed when the statement has been
    * successfully executed, or if it fails.
    */
-  def executeWrite(stmt: String, bindValues: AnyRef*): Future[Done] = {
+  def executeWrite(stmt: String, bindValues: AnyRef*): Future[Done] =
     bind(stmt, bindValues).flatMap(b => executeWrite(b))
-  }
 
   /**
    * INTERNAL API
    */
-  @InternalApi private[pekko] def selectResultSet(stmt: Statement[_]): Future[AsyncResultSet] = {
+  @InternalApi private[pekko] def selectResultSet(stmt: Statement[_]): Future[AsyncResultSet] =
     underlying().flatMap { s =>
       s.executeAsync(stmt).asScala
     }
-  }
 
   /**
    * Execute a select statement. First you must `prepare` the
@@ -212,7 +208,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: Statement[_]): Source[Row, NotUsed] = {
+  def select(stmt: Statement[_]): Source[Row, NotUsed] =
     Source
       .futureSource {
         underlying().map { cqlSession =>
@@ -220,7 +216,6 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
         }
       }
       .mapMaterializedValue(_ => NotUsed)
-  }
 
   /**
    * Execute a select statement created by `prepare`.
@@ -233,7 +228,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: Future[Statement[_]]): Source[Row, NotUsed] = {
+  def select(stmt: Future[Statement[_]]): Source[Row, NotUsed] =
     Source
       .futureSource {
         underlying().flatMap(cqlSession => stmt.map(cqlSession -> _)).map {
@@ -242,7 +237,6 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
         }
       }
       .mapMaterializedValue(_ => NotUsed)
-  }
 
   /**
    * Prepare, bind and execute a select statement in one go.
@@ -254,9 +248,8 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: String, bindValues: AnyRef*): Source[Row, NotUsed] = {
+  def select(stmt: String, bindValues: AnyRef*): Source[Row, NotUsed] =
     select(bind(stmt, bindValues))
-  }
 
   /**
    * Execute a select statement. First you must `prepare` the statement and
@@ -269,11 +262,10 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    *
    * The returned `Future` is completed with the found rows.
    */
-  def selectAll(stmt: Statement[_]): Future[immutable.Seq[Row]] = {
+  def selectAll(stmt: Statement[_]): Future[immutable.Seq[Row]] =
     select(stmt)
       .runWith(Sink.seq)
       .map(_.toVector) // Sink.seq returns Seq, not immutable.Seq (compilation issue in Eclipse)
-  }
 
   /**
    * Prepare, bind and execute a select statement in one go. Only use this method
@@ -284,9 +276,8 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    *
    * The returned `Future` is completed with the found rows.
    */
-  def selectAll(stmt: String, bindValues: AnyRef*): Future[immutable.Seq[Row]] = {
+  def selectAll(stmt: String, bindValues: AnyRef*): Future[immutable.Seq[Row]] =
     bind(stmt, bindValues).flatMap(bs => selectAll(bs))
-  }
 
   /**
    * Execute a select statement that returns one row. First you must `prepare` the
@@ -298,11 +289,10 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * The returned `Future` is completed with the first row,
    * if any.
    */
-  def selectOne(stmt: Statement[_]): Future[Option[Row]] = {
+  def selectOne(stmt: Statement[_]): Future[Option[Row]] =
     selectResultSet(stmt).map { rs =>
       Option(rs.one()) // rs.one returns null if exhausted
     }
-  }
 
   /**
    * Prepare, bind and execute a select statement that returns one row.
@@ -312,15 +302,13 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * The returned `Future` is completed with the first row,
    * if any.
    */
-  def selectOne(stmt: String, bindValues: AnyRef*): Future[Option[Row]] = {
+  def selectOne(stmt: String, bindValues: AnyRef*): Future[Option[Row]] =
     bind(stmt, bindValues).flatMap(bs => selectOne(bs))
-  }
 
-  private def bind(stmt: String, bindValues: Seq[AnyRef]): Future[BoundStatement] = {
+  private def bind(stmt: String, bindValues: Seq[AnyRef]): Future[BoundStatement] =
     prepare(stmt).map { ps =>
       if (bindValues.isEmpty) ps.bind()
       else ps.bind(bindValues: _*)
     }
-  }
 
 }

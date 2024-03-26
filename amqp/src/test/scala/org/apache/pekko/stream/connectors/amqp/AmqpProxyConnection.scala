@@ -29,21 +29,21 @@ import com.rabbitmq.client._
  *                 otherwise undefined
  */
 class AmqpProxyConnection(protected val delegate: Connection) extends Connection {
-  override def getAddress: InetAddress = delegate.getAddress()
+  override def getAddress: InetAddress = delegate.getAddress
 
-  override def getPort: Int = delegate.getPort()
+  override def getPort: Int = delegate.getPort
 
-  override def getChannelMax: Int = delegate.getChannelMax()
+  override def getChannelMax: Int = delegate.getChannelMax
 
-  override def getFrameMax: Int = delegate.getFrameMax()
+  override def getFrameMax: Int = delegate.getFrameMax
 
-  override def getHeartbeat: Int = delegate.getHeartbeat()
+  override def getHeartbeat: Int = delegate.getHeartbeat
 
-  override def getClientProperties: util.Map[String, AnyRef] = delegate.getClientProperties()
+  override def getClientProperties: util.Map[String, AnyRef] = delegate.getClientProperties
 
-  override def getClientProvidedName: String = delegate.getClientProvidedName()
+  override def getClientProvidedName: String = delegate.getClientProvidedName
 
-  override def getServerProperties: util.Map[String, AnyRef] = delegate.getServerProperties()
+  override def getServerProperties: util.Map[String, AnyRef] = delegate.getServerProperties
 
   override def createChannel(): Channel = delegate.createChannel()
 
@@ -76,9 +76,9 @@ class AmqpProxyConnection(protected val delegate: Connection) extends Connection
 
   override def clearBlockedListeners(): Unit = delegate.clearBlockedListeners()
 
-  override def getExceptionHandler: ExceptionHandler = delegate.getExceptionHandler()
+  override def getExceptionHandler: ExceptionHandler = delegate.getExceptionHandler
 
-  override def getId: String = delegate.getId()
+  override def getId: String = delegate.getId
 
   override def setId(s: String): Unit = delegate.setId(s)
 
@@ -88,9 +88,9 @@ class AmqpProxyConnection(protected val delegate: Connection) extends Connection
   override def removeShutdownListener(shutdownListener: ShutdownListener): Unit =
     delegate.removeShutdownListener(shutdownListener)
 
-  override def getCloseReason: ShutdownSignalException = delegate.getCloseReason()
+  override def getCloseReason: ShutdownSignalException = delegate.getCloseReason
 
   override def notifyListeners(): Unit = delegate.notifyListeners()
 
-  override def isOpen: Boolean = delegate.isOpen()
+  override def isOpen: Boolean = delegate.isOpen
 }

@@ -51,7 +51,7 @@ class BigQueryEndToEndSpec
     }
   }
 
-  override def afterAll() = {
+  override def afterAll(): Unit = {
     system.terminate()
     if (hoverfly.getMode == HoverflyMode.CAPTURE)
       hoverfly.exportSimulation(new File("hoverfly/BigQueryEndToEndSpec.json").toPath)
@@ -114,14 +114,13 @@ class BigQueryEndToEndSpec
           case Seq(job) =>
             pattern
               .retry(
-                () => {
+                () =>
                   BigQuery.job(job.jobReference.flatMap(_.jobId).get).flatMap { job =>
                     if (job.status.map(_.state).contains(JobState.Done))
                       Future.successful(job)
                     else
                       Future.failed(new RuntimeException("Job not done."))
-                  }
-                },
+                  },
                 60,
                 if (hoverfly.getMode == HoverflyMode.SIMULATE) 0.seconds else 1.second)
               .map { job =>

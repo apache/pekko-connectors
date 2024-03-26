@@ -94,15 +94,13 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
 
   def constructElasticsearchParams(indexName: String,
       typeName: String,
-      apiVersion: ApiVersionBase): ElasticsearchParams = {
-    if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V5) {
+      apiVersion: ApiVersionBase): ElasticsearchParams =
+    if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V5)
       ElasticsearchParams.V5(indexName, typeName)
-    } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V7) {
+    else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V7)
       ElasticsearchParams.V7(indexName)
-    } else if (apiVersion == OpensearchApiVersion.V1) {
+    else if (apiVersion == OpensearchApiVersion.V1)
       OpensearchParams.V1(indexName)
-    } else {
+    else
       throw new IllegalArgumentException(s"API version $apiVersion is not supported")
-    }
-  }
 }

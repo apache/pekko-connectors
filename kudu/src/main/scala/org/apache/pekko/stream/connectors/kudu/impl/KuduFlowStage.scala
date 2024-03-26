@@ -21,7 +21,7 @@ import pekko.stream.stage._
 import pekko.util.ccompat.JavaConverters._
 import org.apache.kudu.Schema
 import org.apache.kudu.Type._
-import org.apache.kudu.client.{ KuduClient, KuduTable, PartialRow }
+import org.apache.kudu.client.{ KuduClient, KuduSession, KuduTable, PartialRow }
 
 import scala.util.control.NonFatal
 
@@ -38,9 +38,9 @@ private[kudu] class KuduFlowStage[A](settings: KuduTableSettings[A], kuduClient:
   private val in = Inlet[A]("messages")
   private val out = Outlet[A]("result")
 
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[A, A] = FlowShape(in, out)
 
-  def copyToInsertRow(insertPartialRow: PartialRow, partialRow: PartialRow, schema: Schema): Unit =
+  private def copyToInsertRow(insertPartialRow: PartialRow, partialRow: PartialRow, schema: Schema): Unit =
     schema.getColumns.asScala.foreach { cSch =>
       val columnName = cSch.getName
       val kuduType = cSch.getType
@@ -54,19 +54,19 @@ private[kudu] class KuduFlowStage[A](settings: KuduTableSettings[A], kuduClient:
         case BOOL   => insertPartialRow.addBoolean(columnName, partialRow.getBoolean(columnName))
         case FLOAT  => insertPartialRow.addFloat(columnName, partialRow.getFloat(columnName))
         case DOUBLE => insertPartialRow.addDouble(columnName, partialRow.getDouble(columnName))
-        case _      => throw new UnsupportedOperationException(s"Unknown type ${kuduType}")
+        case _      => throw new UnsupportedOperationException(s"Unknown type $kuduType")
       }
     }
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with StageLogging with KuduCapabilities with OutHandler with InHandler {
 
-      override protected def logSource = classOf[KuduFlowStage[A]]
+      override protected def logSource: Class[KuduFlowStage[A]] = classOf[KuduFlowStage[A]]
 
       lazy val table: KuduTable =
         getOrCreateTable(kuduClient, settings.tableName, settings.schema, settings.createTableOptions)
 
-      val session = kuduClient.newSession()
+      val session: KuduSession = kuduClient.newSession()
 
       setHandlers(in, out, this)
 
@@ -75,7 +75,7 @@ private[kudu] class KuduFlowStage[A](settings: KuduTableSettings[A], kuduClient:
       override def onPush(): Unit = {
         val msg = grab(in)
         val insert = table.newUpsert()
-        val partialRow = insert.getRow()
+        val partialRow = insert.getRow
         copyToInsertRow(partialRow, settings.converter(msg), table.getSchema)
         session.apply(insert)
         push(out, msg)

@@ -1054,7 +1054,7 @@ object S3 {
       uploadId: String,
       previousParts: java.lang.Iterable[Part],
       contentType: ContentType,
-      s3Headers: S3Headers): Sink[ByteString, CompletionStage[MultipartUploadResult]] = {
+      s3Headers: S3Headers): Sink[ByteString, CompletionStage[MultipartUploadResult]] =
     S3Stream
       .resumeMultipartUpload(S3Location(bucket, key),
         uploadId,
@@ -1063,7 +1063,6 @@ object S3 {
         s3Headers)
       .mapMaterializedValue(_.asJava)
       .asJava
-  }
 
   /**
    * Resumes from a previously aborted multipart upload by providing the uploadId and previous upload part identifiers
@@ -1135,7 +1134,7 @@ object S3 {
       previousParts: java.lang.Iterable[Part],
       chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _],
       contentType: ContentType,
-      s3Headers: S3Headers): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] = {
+      s3Headers: S3Headers): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
     S3Stream
       .resumeMultipartUploadWithContext[C](
         S3Location(bucket, key),
@@ -1152,7 +1151,6 @@ object S3 {
       .contramap[JPair[ByteString, C]](_.toScala)
       .mapMaterializedValue(_.asJava)
       .asJava
-  }
 
   /**
    * Resumes from a previously aborted multipart upload by providing the uploadId and previous upload part identifiers.

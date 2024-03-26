@@ -45,7 +45,7 @@ class HmsTokenApiSpec
     with BeforeAndAfterAll
     with LogCapturing {
 
-  override def afterAll() =
+  override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
 
   implicit val defaultPatience: PatienceConfig =

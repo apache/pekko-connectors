@@ -52,9 +52,8 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
             isBuffering = false
             buffer.clear()
             emit(out, Characters(coalesced), () => emit(out, other, () => if (isClosed(in)) completeStage()))
-          } else {
+          } else
             push(out, other)
-          }
       }
 
       override def onUpstreamFinish(): Unit =

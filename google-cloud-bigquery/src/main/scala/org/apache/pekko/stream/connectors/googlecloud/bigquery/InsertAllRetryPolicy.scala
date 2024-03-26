@@ -31,7 +31,7 @@ object InsertAllRetryPolicy {
   /**
    * Java API: Never retry failed insert requests
    */
-  def never = Never
+  def never: Never.type = Never
 
   /**
    * Retry failed insert requests without deduplication
@@ -44,7 +44,7 @@ object InsertAllRetryPolicy {
   /**
    * Java API: Retry failed insert requests without deduplication
    */
-  def withoutDeduplication = WithDeduplication
+  def withoutDeduplication: WithDeduplication.type = WithDeduplication
 
   /**
    * Retry failed insert requests with best-effort deduplication
@@ -59,5 +59,5 @@ object InsertAllRetryPolicy {
    * Java API: Retry failed insert requests with best-effort deduplication
    * @see [[https://cloud.google.com/bigquery/streaming-data-into-bigquery#dataconsistency BigQuery reference]]
    */
-  def withDeduplication = WithDeduplication
+  def withDeduplication: WithDeduplication.type = WithDeduplication
 }

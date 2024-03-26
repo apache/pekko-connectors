@@ -129,19 +129,18 @@ protected[pubsub] trait GooglePubSub {
   /**
    * Creates a source pulling messages from a subscription.
    */
-  def subscribe(subscription: String, config: PubSubConfig): Source[ReceivedMessage, Cancellable] = {
+  def subscribe(subscription: String, config: PubSubConfig): Source[ReceivedMessage, Cancellable] =
     Source
       .tick(0.seconds, 1.second, Done)
       .via(subscribeFlow(subscription, config))
-  }
 
   /**
    * Creates a flow pulling messages from a subscription.
    */
-  def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] = {
+  def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
     flow(config)(httpApi.pull(subscription, config.pullReturnImmediately, config.pullMaxMessagesPerInternalBatch))
       .mapConcat(_.receivedMessages.getOrElse(Seq.empty[ReceivedMessage]).toIndexedSeq)
-  }.mapMaterializedValue(_ => Future.successful(NotUsed))
+      .mapMaterializedValue(_ => Future.successful(NotUsed))
 
   /**
    * Creates a flow for acknowledging messages on a subscription.

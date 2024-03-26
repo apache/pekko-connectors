@@ -18,7 +18,9 @@ import pekko.annotation.InternalApi
 import pekko.stream.connectors.jms.{ Destination, JmsBrowseSettings }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+
 import javax.jms
+import javax.jms.Message
 
 /**
  * Internal API.
@@ -27,7 +29,7 @@ import javax.jms
 private[jms] final class JmsBrowseStage(settings: JmsBrowseSettings, queue: Destination)
     extends GraphStage[SourceShape[jms.Message]] {
   private val out = Outlet[jms.Message]("JmsBrowseStage.out")
-  val shape = SourceShape(out)
+  val shape: SourceShape[Message] = SourceShape(out)
 
   override protected def initialAttributes: Attributes =
     super.initialAttributes and Attributes.name("JmsBrowse") and ActorAttributes.IODispatcher
@@ -68,10 +70,9 @@ private[jms] final class JmsBrowseStage(settings: JmsBrowseSettings, queue: Dest
       }
 
       def onPull(): Unit =
-        if (messages.hasMoreElements) {
+        if (messages.hasMoreElements)
           push(out, messages.nextElement())
-        } else {
+        else
           complete(out)
-        }
     }
 }

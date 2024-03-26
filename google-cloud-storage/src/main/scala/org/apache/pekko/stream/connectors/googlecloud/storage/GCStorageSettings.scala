@@ -76,7 +76,7 @@ final class GCStorageSettings private (
     tokenUrl = tokenUrl,
     tokenScope = tokenScope)
 
-  override def toString =
+  override def toString: String =
     "GCStorageSettings(" +
     s"projectId=$projectId," +
     s"clientEmail=$clientEmail," +
@@ -192,12 +192,12 @@ object GCStorageSettings {
   def apply(system: ActorSystem): GCStorageSettings = apply(system.settings.config.getConfig(ConfigPath))
 
   /**
-   * Java API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.
+   * Java API: Creates [[GCStorageSettings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.
    */
   def create(system: ClassicActorSystemProvider): GCStorageSettings = apply(system.classicSystem)
 
   /**
-   * Java API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
+   * Java API: Creates [[GCStorageSettings]] from the [[com.typesafe.config.Config Config]] attached to an [[pekko.actor.ActorSystem]].
    */
   def create(system: ActorSystem): GCStorageSettings = apply(system)
 }

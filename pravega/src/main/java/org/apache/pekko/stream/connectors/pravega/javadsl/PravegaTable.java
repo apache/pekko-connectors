@@ -29,14 +29,8 @@ import org.apache.pekko.util.FutureConverters;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
-import java.nio.ByteBuffer;
-
-import io.pravega.client.tables.TableKey;
 
 import org.apache.pekko.util.OptionConverters;
-
-import scala.Option;
 
 @ApiMayChange
 public class PravegaTable {
@@ -73,6 +67,6 @@ public class PravegaTable {
   public static <K, V> Flow<K, Optional<V>, NotUsed> readFlow(
       String scope, String tableName, TableSettings<K, V> tableSettings) {
     return Flow.fromGraph(new PravegaTableReadFlow<K, V>(scope, tableName, tableSettings))
-        .map(o -> OptionConverters.toJava(o));
+        .map(OptionConverters::toJava);
   }
 }

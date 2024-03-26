@@ -86,8 +86,8 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
     sinkFactory: C => Sink[T, Future[R]])
     extends GraphStageWithMaterializedValue[SinkShape[T], Future[Done]] {
 
-  val in = Inlet[T]("LogRotatorSink.in")
-  override val shape = SinkShape.of(in)
+  private val in: Inlet[T] = Inlet[T]("LogRotatorSink.in")
+  override val shape: SinkShape[T] = SinkShape.of(in)
 
   override def createLogicAndMaterializedValue(inheritedAttributes: Attributes): (GraphStageLogic, Future[Done]) = {
     val promise = Promise[Done]()
@@ -96,32 +96,30 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
   }
 
   private final class Logic(promise: Promise[Done]) extends GraphStageLogic(shape) {
-    val triggerGenerator: T => Option[C] = triggerGeneratorCreator()
-    var sourceOut: SubSourceOutlet[T] = _
-    var sinkCompletions: immutable.Seq[Future[R]] = immutable.Seq.empty
-    var isFinishing = false
+    private val triggerGenerator: T => Option[C] = triggerGeneratorCreator()
+    private var sourceOut: SubSourceOutlet[T] = _
+    private var sinkCompletions: immutable.Seq[Future[R]] = immutable.Seq.empty
+    private var isFinishing = false
 
-    def failThisStage(ex: Throwable): Unit =
+    private def failThisStage(ex: Throwable): Unit =
       if (!promise.isCompleted) {
-        if (sourceOut != null) {
+        if (sourceOut != null)
           sourceOut.fail(ex)
-        }
         cancel(in)
         promise.failure(ex)
       }
 
-    def completeThisStage() = {
-      if (sourceOut != null) {
+    private def completeThisStage() = {
+      if (sourceOut != null)
         sourceOut.complete()
-      }
       implicit val executionContext: ExecutionContext = pekko.dispatch.ExecutionContexts.parasitic
       promise.completeWith(Future.sequence(sinkCompletions).map(_ => Done))
     }
 
-    def checkTrigger(data: T): Option[C] =
-      try {
+    private def checkTrigger(data: T): Option[C] =
+      try
         triggerGenerator(data)
-      } catch {
+      catch {
         case ex: Throwable =>
           failThisStage(ex)
           None
@@ -173,7 +171,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
           .map(_ => Done)(pekko.dispatch.ExecutionContexts.parasitic)
       }
 
-    def futureCB(newFuture: Future[R]) =
+    def futureCB(newFuture: Future[R]): AsyncCallback[Holder[R]] =
       getAsyncCallback[Holder[R]](sinkCompletionCallbackHandler(newFuture))
 
     // we recreate the tail of the stream, and emit the data for the next req
@@ -181,12 +179,10 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
       val prevOut = Option(sourceOut)
 
       sourceOut = new SubSourceOutlet[T]("LogRotatorSink.sub-out")
-      sourceOut.setHandler(new OutHandler {
-        override def onPull(): Unit = {
-          sourceOut.push(data)
-          switchToNormalMode()
-        }
-      })
+      sourceOut.setHandler { () =>
+        sourceOut.push(data)
+        switchToNormalMode()
+      }
       setHandler(in, rotateInHandler)
       val newFuture = Source
         .fromGraph(sourceOut.source)
@@ -202,23 +198,18 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
     }
 
     // we change path if needed or push the grabbed data
-    def switchToNormalMode(): Unit = {
-      if (isFinishing) {
+    def switchToNormalMode(): Unit =
+      if (isFinishing)
         completeThisStage()
-      } else {
+      else {
         setHandler(in, normalModeInHandler)
-        sourceOut.setHandler(new OutHandler {
-          override def onPull(): Unit =
-            pull(in)
-        })
+        sourceOut.setHandler(() => pull(in))
       }
-    }
-    val rotateInHandler =
+    val rotateInHandler: InHandler =
       new InHandler {
-        override def onPush(): Unit = {
+        override def onPush(): Unit =
           require(requirement = false,
             "No push should happen while we are waiting for the substream to grab the dangling data!")
-        }
         override def onUpstreamFinish(): Unit = {
           setKeepGoing(true)
           isFinishing = true
@@ -226,7 +217,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
         override def onUpstreamFailure(ex: Throwable): Unit =
           failThisStage(ex)
       }
-    val normalModeInHandler = new InHandler {
+    val normalModeInHandler: InHandler = new InHandler {
       override def onPush(): Unit = {
         val data = grab(in)
         checkTrigger(data) match {
@@ -235,9 +226,8 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
         }
       }
 
-      override def onUpstreamFinish(): Unit = {
+      override def onUpstreamFinish(): Unit =
         completeThisStage()
-      }
 
       override def onUpstreamFailure(ex: Throwable): Unit =
         failThisStage(ex)

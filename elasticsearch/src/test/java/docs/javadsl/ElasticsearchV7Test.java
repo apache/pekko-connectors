@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ElasticsearchV7Test extends ElasticsearchTestBase {
   @BeforeClass
@@ -184,7 +185,7 @@ public class ElasticsearchV7Test extends ElasticsearchTestBase {
     flushAndRefresh("sink3");
 
     for (WriteResult<Book, NotUsed> aResult1 : result1) {
-      assertEquals(true, aResult1.success());
+        assertTrue(aResult1.success());
     }
 
     // Assert docs in sink3/book
@@ -240,7 +241,7 @@ public class ElasticsearchV7Test extends ElasticsearchTestBase {
     flushAndRefresh(indexName);
 
     for (WriteResult<String, NotUsed> aResult1 : result1) {
-      assertEquals(true, aResult1.success());
+        assertTrue(aResult1.success());
     }
 
     CompletionStage<List<String>> f2 =
@@ -411,10 +412,7 @@ public class ElasticsearchV7Test extends ElasticsearchTestBase {
                     .withApiVersion(ApiVersion.V7),
                 TestDoc.class,
                 new ObjectMapper())
-            .map(
-                o -> {
-                  return o.source(); // These documents will only have property id, a and c (not
-                })
+            .map(ReadResult::source) // These documents will only have property id, a and c (not
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get();
@@ -424,10 +422,7 @@ public class ElasticsearchV7Test extends ElasticsearchTestBase {
     assertEquals(
         docs.size(),
         result.stream()
-            .filter(
-                d -> {
-                  return d.a != null && d.b == null;
-                })
+            .filter(d -> d.a != null && d.b == null)
             .collect(Collectors.toList())
             .size());
   }

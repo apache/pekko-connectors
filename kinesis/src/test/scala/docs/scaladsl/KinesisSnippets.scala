@@ -106,9 +106,8 @@ object KinesisSnippets {
   // #error-handling
   val flowWithErrors: Flow[PutRecordsRequestEntry, PutRecordsResultEntry, NotUsed] = KinesisFlow("myStreamName")
     .map { response =>
-      if (response.errorCode() ne null) {
+      if (response.errorCode() ne null)
         throw new RuntimeException(response.errorCode())
-      }
 
       response
     }

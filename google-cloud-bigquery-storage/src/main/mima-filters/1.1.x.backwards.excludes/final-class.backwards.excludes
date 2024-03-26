@@ -1,0 +1,2 @@
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecordAvroImpl")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecordMapImpl")

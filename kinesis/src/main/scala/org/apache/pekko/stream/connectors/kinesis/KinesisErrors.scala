@@ -28,7 +28,7 @@ object KinesisErrors {
       with KinesisSourceError
 
   sealed trait KinesisFlowErrors extends NoStackTrace
-  case class FailurePublishingRecords(e: Throwable)
+  final case class FailurePublishingRecords(e: Throwable)
       extends RuntimeException(s"Failure publishing records to Kinesis. Reason : ${e.getMessage}", e)
       with KinesisFlowErrors
 }

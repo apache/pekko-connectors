@@ -45,7 +45,7 @@ import scala.collection.immutable
 
   private val in = Inlet[immutable.Seq[ByteString]]("CsvToMap.in")
   private val out = Outlet[Map[String, V]]("CsvToMap.out")
-  override val shape = FlowShape.of(in, out)
+  override val shape: FlowShape[immutable.Seq[ByteString], Map[String, V]] = FlowShape.of(in, out)
 
   val fieldValuePlaceholder: V
 
@@ -59,21 +59,19 @@ import scala.collection.immutable
 
       override def onPush(): Unit = {
         val elem = grab(in)
-        if (combineAll) {
+        if (combineAll)
           process(elem, combineUsingPlaceholder(elem))
-        } else {
+        else
           process(elem, headers => headers.get.zip(transformElements(elem)).toMap)
-        }
       }
 
-      private def process(elem: immutable.Seq[ByteString], combine: => Headers => Map[String, V]): Unit = {
-        if (headers.isDefined) {
+      private def process(elem: immutable.Seq[ByteString], combine: => Headers => Map[String, V]): Unit =
+        if (headers.isDefined)
           push(out, combine(headers))
-        } else {
+        else {
           headers = Some(elem.map(_.decodeString(charset)))
           pull(in)
         }
-      }
 
       override def onPull(): Unit = pull(in)
     }

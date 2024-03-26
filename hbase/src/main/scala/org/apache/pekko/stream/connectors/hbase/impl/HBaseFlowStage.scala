@@ -29,12 +29,12 @@ private[hbase] class HBaseFlowStage[A](settings: HTableSettings[A]) extends Grap
   private val in = Inlet[A]("messages")
   private val out = Outlet[A]("result")
 
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[A, A] = FlowShape(in, out)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with StageLogging with HBaseCapabilities {
 
-      override protected def logSource = classOf[HBaseFlowStage[A]]
+      override protected def logSource: Class[HBaseFlowStage[A]] = classOf[HBaseFlowStage[A]]
 
       implicit val connection: Connection = connect(settings.conf)
 
@@ -42,19 +42,19 @@ private[hbase] class HBaseFlowStage[A](settings: HTableSettings[A]) extends Grap
 
       setHandler(out,
         new OutHandler {
-          override def onPull() =
+          override def onPull(): Unit =
             pull(in)
         })
 
       setHandler(
         in,
         new InHandler {
-          override def onPush() = {
+          override def onPush(): Unit = {
             val msg = grab(in)
 
             val mutations = settings.converter(msg)
 
-            for (mutation <- mutations) {
+            for (mutation <- mutations)
               mutation match {
                 case x: Put       => table.put(x)
                 case x: Delete    => table.delete(x)
@@ -62,14 +62,13 @@ private[hbase] class HBaseFlowStage[A](settings: HTableSettings[A]) extends Grap
                 case x: Increment => table.increment(x)
                 case _            =>
               }
-            }
 
             push(out, msg)
           }
 
         })
 
-      override def postStop() = {
+      override def postStop(): Unit = {
         log.debug("Stage completed")
         try {
           table.close()

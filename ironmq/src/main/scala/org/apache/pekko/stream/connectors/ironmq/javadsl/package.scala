@@ -40,9 +40,7 @@ package object javadsl {
   }
 
   private[javadsl] implicit class RichScalaCommittable(cm: ScalaCommittable) {
-    def asJava: Committable = new Committable {
-      override def commit(): CompletionStage[Done] = cm.commit().asJava
-    }
+    def asJava: Committable = () => cm.commit().asJava
   }
 
   private[javadsl] implicit class RichCommittableMessage(cm: CommittableMessage) {
@@ -53,9 +51,7 @@ package object javadsl {
   }
 
   private[javadsl] implicit class RichCommittable(cm: Committable) {
-    def asScala: ScalaCommittable = new ScalaCommittable {
-      override def commit(): Future[Done] = cm.commit().asScala
-    }
+    def asScala: ScalaCommittable = () => cm.commit().asScala
   }
 
 }

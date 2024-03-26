@@ -44,12 +44,10 @@ class GeodeContinuousSourceSpec extends GeodeBaseSpec {
             .continuousQuery[Person](Symbol("test"), s"select * from /persons")
             .runWith(Sink.fold(0) { (c, p) =>
               log.debug(s"$p $c")
-              if (c == 19) {
+              if (c == 19)
                 geode.closeContinuousQuery(Symbol("test")).foreach { _ =>
                   log.debug("test cQuery is closed")
                 }
-
-              }
               c + 1
             })
         // #continuousQuery

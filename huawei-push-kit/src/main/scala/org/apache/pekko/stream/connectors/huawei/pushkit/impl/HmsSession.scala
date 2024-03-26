@@ -26,7 +26,7 @@ import scala.concurrent.Future
  */
 @InternalApi
 private class HmsSession(conf: HmsSettings, tokenApi: HmsTokenApi) {
-  protected var maybeAccessToken: Option[Future[AccessTokenExpiry]] = None
+  private var maybeAccessToken: Option[Future[AccessTokenExpiry]] = None
 
   private def getNewToken()(implicit materializer: Materializer): Future[AccessTokenExpiry] = {
     val accessToken = tokenApi.getAccessToken(clientId = conf.appId, privateKey = conf.appSecret)
@@ -42,11 +42,10 @@ private class HmsSession(conf: HmsSettings, tokenApi: HmsTokenApi) {
     maybeAccessToken
       .getOrElse(getNewToken())
       .flatMap { result =>
-        if (expiresSoon(result)) {
+        if (expiresSoon(result))
           getNewToken()
-        } else {
+        else
           Future.successful(result)
-        }
       }
       .map(_.accessToken)
   }

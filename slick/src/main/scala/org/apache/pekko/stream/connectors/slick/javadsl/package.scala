@@ -37,7 +37,7 @@ sealed abstract class SlickSession {
 }
 
 private[slick] abstract class SlickSessionFactory {
-  protected final class SlickSessionConfigBackedImpl(val slick: DatabaseConfig[JdbcProfile]) extends SlickSession {
+  private final class SlickSessionConfigBackedImpl(val slick: DatabaseConfig[JdbcProfile]) extends SlickSession {
     val db: JdbcBackend#Database = slick.db
     val profile: JdbcProfile = slick.profile
   }
@@ -66,20 +66,20 @@ object SlickSession extends SlickSessionFactory
  *          in SlickSource to map result set rows back to Java objects.
  */
 final class SlickRow private[javadsl] (delegate: PositionedResult) {
-  final def nextBoolean(): java.lang.Boolean = delegate.nextBoolean()
-  final def nextBigDecimal(): java.math.BigDecimal = delegate.nextBigDecimal().bigDecimal
-  final def nextBlob(): java.sql.Blob = delegate.nextBlob()
-  final def nextByte(): java.lang.Byte = delegate.nextByte()
-  final def nextBytes(): Array[java.lang.Byte] = delegate.nextBytes().map(Byte.box(_))
-  final def nextClob(): java.sql.Clob = delegate.nextClob()
-  final def nextDate(): java.sql.Date = delegate.nextDate()
-  final def nextDouble(): java.lang.Double = delegate.nextDouble()
-  final def nextFloat(): java.lang.Float = delegate.nextFloat()
-  final def nextInt(): java.lang.Integer = delegate.nextInt()
-  final def nextLong(): java.lang.Long = delegate.nextLong()
-  final def nextObject(): java.lang.Object = delegate.nextObject()
-  final def nextShort(): java.lang.Short = delegate.nextShort()
-  final def nextString(): java.lang.String = delegate.nextString()
-  final def nextTime(): java.sql.Time = delegate.nextTime()
-  final def nextTimestamp(): java.sql.Timestamp = delegate.nextTimestamp()
+  def nextBoolean(): java.lang.Boolean = delegate.nextBoolean()
+  def nextBigDecimal(): java.math.BigDecimal = delegate.nextBigDecimal().bigDecimal
+  def nextBlob(): java.sql.Blob = delegate.nextBlob()
+  def nextByte(): java.lang.Byte = delegate.nextByte()
+  def nextBytes(): Array[java.lang.Byte] = delegate.nextBytes().map(Byte.box)
+  def nextClob(): java.sql.Clob = delegate.nextClob()
+  def nextDate(): java.sql.Date = delegate.nextDate()
+  def nextDouble(): java.lang.Double = delegate.nextDouble()
+  def nextFloat(): java.lang.Float = delegate.nextFloat()
+  def nextInt(): java.lang.Integer = delegate.nextInt()
+  def nextLong(): java.lang.Long = delegate.nextLong()
+  def nextObject(): java.lang.Object = delegate.nextObject()
+  def nextShort(): java.lang.Short = delegate.nextShort()
+  def nextString(): java.lang.String = delegate.nextString()
+  def nextTime(): java.sql.Time = delegate.nextTime()
+  def nextTimestamp(): java.sql.Timestamp = delegate.nextTimestamp()
 }

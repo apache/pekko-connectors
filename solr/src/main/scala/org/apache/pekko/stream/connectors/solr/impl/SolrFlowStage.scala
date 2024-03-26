@@ -46,7 +46,8 @@ private[solr] final class SolrFlowStage[T, C](
 
   private val in = Inlet[immutable.Seq[WriteMessage[T, C]]]("messages")
   private val out = Outlet[immutable.Seq[WriteResult[T, C]]]("result")
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]] =
+    FlowShape(in, out)
 
   override protected def initialAttributes: Attributes =
     super.initialAttributes and Attributes(ActorAttributes.IODispatcher)
@@ -90,9 +91,8 @@ private final class SolrFlowLogic[T, C](
   }
 
   private def tryPull(): Unit =
-    if (!isClosed(in) && !hasBeenPulled(in)) {
+    if (!isClosed(in) && !hasBeenPulled(in))
       pull(in)
-    }
 
   private def updateBulkToSolr(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {
     val docs = messages.flatMap(_.source.map(messageBinder))
@@ -113,12 +113,11 @@ private final class SolrFlowLogic[T, C](
 
       message.routingFieldValue.foreach { routingFieldValue =>
         val routingField = client match {
-          case csc: CloudSolrClient => {
+          case csc: CloudSolrClient =>
             val docCollection = Option(csc.getZkStateReader.getCollection(collection))
             docCollection.flatMap { dc =>
               Option(dc.getRouter.getRouteField(dc))
             }
-          }
           case _ => None
         }
         routingField.foreach { routingField =>
@@ -130,10 +129,9 @@ private final class SolrFlowLogic[T, C](
       }
 
       message.updates.foreach {
-        case (field, updates) => {
-          val jMap = updates.asInstanceOf[Map[String, Any]].asJava
+        case (field, updates) =>
+          val jMap = updates.asJava
           doc.addField(field, jMap)
-        }
       }
       doc
     }
@@ -183,14 +181,13 @@ private final class SolrFlowLogic[T, C](
         case DeleteByQuery => Option(deleteEachByQuery(current))
         case PassThrough   => None
       }
-      if (remaining.nonEmpty) {
+      if (remaining.nonEmpty)
         send(remaining)
-      } else {
+      else
         response
-      }
     }
 
-    val response = if (messages.nonEmpty) send(messages).fold(0) { _.getStatus }
+    val response = if (messages.nonEmpty) send(messages).fold(0)(_.getStatus)
     else 0
 
     log.debug("Handle the response with {}", response)

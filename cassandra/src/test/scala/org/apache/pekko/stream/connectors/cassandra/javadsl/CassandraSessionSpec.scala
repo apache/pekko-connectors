@@ -46,7 +46,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
   private val dataTableName = "testcounts"
   lazy val dataTable = s"$keyspaceName.$dataTableName"
 
-  def insertDataTable() = {
+  def insertDataTable() =
     withSchemaMetadataDisabled {
       for {
         _ <- lifecycleSession.executeDDL(s"""CREATE TABLE IF NOT EXISTS $dataTable (
@@ -66,7 +66,6 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('B', 'f', 6);"))
       } yield Done
     }.futureValue mustBe Done
-  }
 
   override def beforeAll(): Unit = {
     super.beforeAll()

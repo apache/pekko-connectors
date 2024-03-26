@@ -76,7 +76,7 @@ public class ExampleTest {
             // #init-client
             .build();
 
-    system.registerOnTermination(() -> client.close());
+    system.registerOnTermination(client::close);
 
     // #init-client
 

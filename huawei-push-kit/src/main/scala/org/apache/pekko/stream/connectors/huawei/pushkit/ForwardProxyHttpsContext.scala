@@ -29,17 +29,16 @@ import javax.net.ssl.{ SSLContext, TrustManagerFactory }
 @InternalApi
 private[pushkit] object ForwardProxyHttpsContext {
 
-  val SSL = "SSL"
-  val X509 = "X509"
+  private val SSL = "SSL"
+  private val X509 = "X509"
 
   implicit class ForwardProxyHttpsContext(forwardProxy: ForwardProxy) {
 
-    def httpsContext(system: ActorSystem): HttpsConnectionContext = {
+    def httpsContext(system: ActorSystem): HttpsConnectionContext =
       forwardProxy.trustPem match {
         case Some(trustPem) => createHttpsContext(trustPem)
         case None           => Http()(system).defaultClientHttpsContext
       }
-    }
   }
 
   private def createHttpsContext(trustPem: ForwardProxyTrustPem) = {

@@ -48,7 +48,7 @@ object Reference {
    * If the operator needs an ExecutionContext, take it as an implicit parameter.
    */
   def flowAsyncMapped()(implicit ec: ExecutionContext): Flow[ReferenceWriteMessage, ReferenceWriteResult, NotUsed] =
-    flow().mapAsync(parallelism = 4)(m => Future { m })
+    flow().mapAsync(parallelism = 4)(m => Future(m))
 
   /**
    * An implementation of a flow that needs access to materializer or attributes during materialization.

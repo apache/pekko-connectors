@@ -45,7 +45,7 @@ final class CassandraSessionPerformanceSpec extends CassandraSpecBase(ActorSyste
   // only using one primary key in this test
   private val id = "1"
 
-  def insertDataTable() = {
+  def insertDataTable() =
     lifecycleSession
       .executeDDL(s"""CREATE TABLE IF NOT EXISTS $dataTable (
                      |    partition_id bigint,
@@ -66,7 +66,6 @@ final class CassandraSessionPerformanceSpec extends CassandraSpecBase(ActorSyste
           .runWith(Sink.ignore)
       }
       .futureValue
-  }
 
   override def beforeAll(): Unit = {
     super.beforeAll()

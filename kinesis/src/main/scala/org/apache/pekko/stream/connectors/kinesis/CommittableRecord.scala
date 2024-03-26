@@ -58,12 +58,11 @@ abstract class CommittableRecord @InternalApi private[kinesis] (
    * See [[software.amazon.kinesis.processor.RecordProcessorCheckpointer]]
    */
   def tryToCheckpoint(): Unit =
-    if (canBeCheckpointed) {
+    if (canBeCheckpointed)
       try forceCheckpoint()
       catch {
         case _: ShutdownException => ()
       }
-    }
 
   /**
    * Basic checkpoint method, the caller should decide if it's safe

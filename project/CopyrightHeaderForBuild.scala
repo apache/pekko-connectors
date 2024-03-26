@@ -18,7 +18,7 @@ import sbt.{ inConfig, Compile, Def, PluginTrigger, Test, _ }
 object CopyrightHeaderForBuild extends CopyrightHeader {
   override def trigger: PluginTrigger = noTrigger
 
-  override def projectSettings: Seq[Def.Setting[_]] = {
+  override def projectSettings: Seq[Def.Setting[_]] =
     Seq(Compile, Test).flatMap { config =>
       inConfig(config) {
         Seq(
@@ -28,5 +28,4 @@ object CopyrightHeaderForBuild extends CopyrightHeader {
           headerMappings := headerMappings.value ++ Map(HeaderFileType.scala -> cStyleComment))
       }
     }
-  }
 }

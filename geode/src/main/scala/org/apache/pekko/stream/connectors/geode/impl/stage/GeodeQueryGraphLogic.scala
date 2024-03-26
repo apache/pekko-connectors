@@ -20,6 +20,7 @@ import pekko.stream.stage.StageLogging
 import org.apache.geode.cache.client.ClientCache
 import org.apache.geode.cache.query.SelectResults
 
+import java.util
 import scala.util.Try
 
 @InternalApi
@@ -29,7 +30,7 @@ private[geode] abstract class GeodeQueryGraphLogic[V](val shape: SourceShape[V],
     extends GeodeSourceStageLogic[V](shape, clientCache)
     with StageLogging {
 
-  override def executeQuery() = Try {
+  override def executeQuery(): Try[util.Iterator[V]] = Try {
     qs.newQuery(query)
       .execute()
       .asInstanceOf[SelectResults[V]]

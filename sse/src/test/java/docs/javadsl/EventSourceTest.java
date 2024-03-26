@@ -47,8 +47,7 @@ public class EventSourceTest {
     // #event-source
 
     final Http http = Http.get(system);
-    Function<HttpRequest, CompletionStage<HttpResponse>> send =
-        (request) -> http.singleRequest(request);
+    Function<HttpRequest, CompletionStage<HttpResponse>> send = http::singleRequest;
 
     final Uri targetUri = Uri.create(String.format("http://%s:%d", host, port));
     final Optional<String> lastEventId = Optional.of("2");

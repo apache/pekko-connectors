@@ -51,7 +51,7 @@ final class MetaHeaders private (val metaHeaders: Map[String, String]) {
 }
 
 object MetaHeaders {
-  def apply(metaHeaders: Map[String, String]) =
+  def apply(metaHeaders: Map[String, String]): MetaHeaders =
     new MetaHeaders(metaHeaders)
 
   def create(metaHeaders: java.util.Map[String, String]): MetaHeaders =

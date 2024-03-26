@@ -104,16 +104,15 @@ private[jms] final class JmsAckSession(override val connection: jms.Connection,
 
   override def abortSession(): Unit = stopMessageListenerAndCloseSession()
 
-  private def stopMessageListenerAndCloseSession(): Unit = {
-    try {
+  private def stopMessageListenerAndCloseSession(): Unit =
+    try
       drainAcks()
-    } finally {
+    finally {
       ackQueue.put(Left(SessionClosed))
       session.close()
     }
-  }
 
-  def ackBackpressure() = {
+  def ackBackpressure(): Unit =
     ackQueue.take() match {
       case Left(SessionClosed) =>
         listenerRunning = false
@@ -121,7 +120,6 @@ private[jms] final class JmsAckSession(override val connection: jms.Connection,
         action()
         pendingAck -= 1
     }
-  }
 
   @tailrec
   def drainAcks(): Unit =

@@ -40,7 +40,8 @@ private[orientdb] class OrientDbFlowStage[T, C](
 
   private val in = Inlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("in")
   private val out = Outlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("out")
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T, C]]] =
+    FlowShape(in, out)
   override def initialAttributes: Attributes =
     // see https://orientdb.com/docs/last/Java-Multi-Threading.html
     super.initialAttributes.and(ActorAttributes.Dispatcher("pekko.connectors.orientdb.pinned-dispatcher"))
@@ -92,13 +93,12 @@ private[orientdb] class OrientDbFlowStage[T, C](
 
   }
 
-  final class ORecordLogic(className: String) extends OrientDbLogic {
+  private final class ORecordLogic(className: String) extends OrientDbLogic {
 
     override def preStart(): Unit = {
       super.preStart()
-      if (!client.getMetadata.getSchema.existsClass(className)) {
+      if (!client.getMetadata.getSchema.existsClass(className))
         client.getMetadata.getSchema.createClass(className)
-      }
     }
 
     protected def write(messages: immutable.Seq[OrientDbWriteMessage[T, C]]): Unit =
@@ -121,7 +121,7 @@ private[orientdb] class OrientDbFlowStage[T, C](
       }
   }
 
-  final class OrientDbTypedLogic(clazz: Class[T]) extends OrientDbLogic() {
+  private final class OrientDbTypedLogic(clazz: Class[T]) extends OrientDbLogic() {
 
     override def preStart(): Unit = {
       super.preStart()

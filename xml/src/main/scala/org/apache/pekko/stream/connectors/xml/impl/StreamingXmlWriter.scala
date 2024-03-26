@@ -14,14 +14,14 @@
 package org.apache.pekko.stream.connectors.xml.impl
 
 import java.nio.charset.Charset
-
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import pekko.stream.connectors.xml._
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import pekko.util.{ ByteString, ByteStringBuilder }
-import javax.xml.stream.XMLOutputFactory
+
+import javax.xml.stream.{ XMLOutputFactory, XMLStreamWriter }
 
 /**
  * INTERNAL API
@@ -39,23 +39,21 @@ import javax.xml.stream.XMLOutputFactory
     new GraphStageLogic(shape) with InHandler with OutHandler {
       val byteStringBuilder = new ByteStringBuilder()
 
-      val output = xmlOutputFactory.createXMLStreamWriter(byteStringBuilder.asOutputStream, charset.name())
+      val output: XMLStreamWriter =
+        xmlOutputFactory.createXMLStreamWriter(byteStringBuilder.asOutputStream, charset.name())
 
       setHandlers(in, out, this)
 
       def writeAttributes(attributes: List[Attribute]): Unit =
-        attributes.foreach { att =>
-          att match {
-            case Attribute(name, value, Some(prefix), Some(namespace)) =>
-              output.writeAttribute(prefix, namespace, name, value)
-            case Attribute(name, value, None, Some(namespace)) =>
-              output.writeAttribute(namespace, name, value)
-            case Attribute(name, value, Some(_), None) =>
-              output.writeAttribute(name, value)
-            case Attribute(name, value, None, None) =>
-              output.writeAttribute(name, value)
-          }
-
+        attributes.foreach {
+          case Attribute(name, value, Some(prefix), Some(namespace)) =>
+            output.writeAttribute(prefix, namespace, name, value)
+          case Attribute(name, value, None, Some(namespace)) =>
+            output.writeAttribute(namespace, name, value)
+          case Attribute(name, value, Some(_), None) =>
+            output.writeAttribute(name, value)
+          case Attribute(name, value, None, None) =>
+            output.writeAttribute(name, value)
         }
 
       override def onPush(): Unit = {
@@ -113,9 +111,8 @@ import javax.xml.stream.XMLOutputFactory
       override def onUpstreamFinish(): Unit = {
         output.flush()
         val finalData = byteStringBuilder.result().compact
-        if (finalData.length != 0) {
+        if (finalData.nonEmpty)
           emit(out, finalData)
-        }
         super.onUpstreamFinish()
       }
     }

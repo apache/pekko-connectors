@@ -43,7 +43,7 @@ private[hbase] final class HBaseSourceLogic[A](scan: Scan,
   implicit val connection: Connection = connect(settings.conf)
 
   lazy val table: Table = getOrCreateTable(settings.tableName, settings.columnFamilies).get
-  private var results: java.util.Iterator[Result] = null
+  private var results: java.util.Iterator[Result] = _
 
   setHandler(out, this)
 
@@ -57,18 +57,17 @@ private[hbase] final class HBaseSourceLogic[A](scan: Scan,
     }
 
   override def postStop(): Unit =
-    try {
+    try
       table.close()
-    } catch {
+    catch {
       case NonFatal(exc) =>
         failStage(exc)
     }
 
   override def onPull(): Unit =
-    if (results.hasNext) {
+    if (results.hasNext)
       emit(out, results.next)
-    } else {
+    else
       completeStage()
-    }
 
 }

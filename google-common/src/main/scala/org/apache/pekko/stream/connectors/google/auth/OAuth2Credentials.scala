@@ -30,7 +30,7 @@ import scala.concurrent.{ ExecutionContext, Future, Promise }
 private[auth] object OAuth2Credentials {
   sealed abstract class Command
   final case class TokenRequest(promise: Promise[OAuth2BearerToken], settings: RequestSettings) extends Command
-  final case object ForceRefresh extends Command
+  case object ForceRefresh extends Command
 }
 
 @InternalApi
@@ -61,7 +61,7 @@ private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit m
         Int.MaxValue,
         OverflowStrategy.fail)
       .to(
-        Sink.fromMaterializer { (mat, attr) =>
+        Sink.fromMaterializer { (mat, _) =>
           Sink.foldAsync(Option.empty[AccessToken]) {
             case (cachedToken @ Some(token), TokenRequest(promise, _)) if !token.expiresSoon()(Clock.systemUTC()) =>
               promise.success(OAuth2BearerToken(token.token))

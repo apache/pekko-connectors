@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * Configure Elastiscsearch sources.
+ * Configure Elasticsearch sources.
  */
 final class ElasticsearchSourceSettings private (connection: ElasticsearchConnectionSettings,
     bufferSize: Int,

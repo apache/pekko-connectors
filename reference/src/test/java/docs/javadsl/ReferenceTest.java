@@ -112,7 +112,7 @@ public class ReferenceTest {
         new HashMap<String, Long>() {
           {
             put("rps", 20L);
-            put("rpm", Long.valueOf(30L));
+            put("rpm", 30L);
           }
         };
 

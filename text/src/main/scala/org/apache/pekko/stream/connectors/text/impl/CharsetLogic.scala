@@ -37,12 +37,11 @@ private[impl] trait Decoding {
   protected def decode(bytes: ByteBuffer): Unit = {
     val chars = CharBuffer.allocate(bytes.limit())
     val result = decoder.decode(bytes, chars, false)
-    if (result.isOverflow) {
+    if (result.isOverflow)
       failStage(new IllegalArgumentException(s"Incoming bytes decoded into more characters: $result"))
-    } else {
-      if (result.isError) {
+    else {
+      if (result.isError)
         result.throwException()
-      }
       val count = chars.position()
       chars.rewind()
       decoded(chars, count, bytes)
@@ -81,12 +80,11 @@ private[impl] trait Encoding {
   protected def encode(chars: CharBuffer): Unit = {
     val bytes = ByteBuffer.allocate((chars.limit() * encoder.maxBytesPerChar().toDouble).toInt)
     val result = encoder.encode(chars, bytes, false)
-    if (result.isOverflow) {
+    if (result.isOverflow)
       failStage(new IllegalArgumentException(s"Incoming chars decoded into more than expected characters: $result"))
-    } else {
-      if (result.isError) {
+    else {
+      if (result.isError)
         result.throwException()
-      }
       val count = bytes.position()
       bytes.rewind()
       bytes.limit(count)

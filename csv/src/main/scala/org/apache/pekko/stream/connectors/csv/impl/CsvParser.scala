@@ -128,9 +128,8 @@ import scala.collection.mutable
     val line = maybeExtractLine(requireLineEnd)
     if (line.nonEmpty) {
       currentLineNo += 1
-      if (state == LineEnd || !requireLineEnd) {
+      if (state == LineEnd || !requireLineEnd)
         state = LineStart
-      }
       resetLine()
       columns.clear()
     }
@@ -147,7 +146,7 @@ import scala.collection.mutable
     lineBytesDropped = 0
   }
 
-  private[this] def dropReadBuffer() = {
+  private[this] def dropReadBuffer(): Unit = {
     buffer = buffer.drop(pos)
     lineBytesDropped += pos
     pos = 0
@@ -186,13 +185,13 @@ import scala.collection.mutable
 
   }
 
-  private[this] def noCharEscaped() =
+  private[this] def noCharEscaped(): Nothing =
     throw new MalformedCsvException(currentLineNo,
       lineLength,
       s"wrong escaping at $currentLineNo:$lineLength, no character after escape")
 
   private[this] def checkForByteOrderMark(): Unit =
-    if (buffer.length >= 2) {
+    if (buffer.length >= 2)
       if (buffer.startsWith(ByteOrderMark.UTF_8)) {
         advance(3)
         fieldStart = 3
@@ -207,7 +206,6 @@ import scala.collection.mutable
           throw new UnsupportedCharsetException("UTF-32 BE")
         }
       }
-    }
 
   private[this] def parseLine(): Unit = {
     if (firstData) {
@@ -330,7 +328,7 @@ import scala.collection.mutable
                 lineLength,
                 s"wrong escaping at $currentLineNo:$lineLength, quote is escaped as ${quoteChar.toChar}${quoteChar.toChar}")
 
-            case b =>
+            case _ =>
               fieldBuilder.add(escapeChar)
               state = WithinField
 
@@ -375,7 +373,7 @@ import scala.collection.mutable
               state = WithinQuotedField
               advance()
 
-            case b =>
+            case _ =>
               fieldBuilder.add(escapeChar)
               state = WithinQuotedField
           }
@@ -387,7 +385,7 @@ import scala.collection.mutable
               state = WithinQuotedField
               advance()
 
-            case b =>
+            case _ =>
               state = WithinField
           }
 

@@ -39,9 +39,7 @@ trait AbstractAvroParquetBase {
 
   val genFinalFile: Gen[String] = for {
     fileName <- Gen.alphaLowerStr
-  } yield {
-    folder + "/" + fileName + ".parquet"
-  }
+  } yield folder + "/" + fileName + ".parquet"
 
   val genFile: Gen[String] = Gen.oneOf(Seq(Gen.alphaLowerStr.sample.get + ".parquet"))
 

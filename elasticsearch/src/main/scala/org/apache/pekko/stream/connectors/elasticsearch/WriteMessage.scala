@@ -181,7 +181,7 @@ trait MessageWriter[T] {
   def convert(message: T): String
 }
 
-sealed class StringMessageWriter private () extends MessageWriter[String] {
+sealed class StringMessageWriter extends MessageWriter[String] {
   override def convert(message: String): String = message
 }
 

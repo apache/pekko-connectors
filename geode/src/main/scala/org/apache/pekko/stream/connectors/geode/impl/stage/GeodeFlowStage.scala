@@ -31,26 +31,26 @@ private[geode] class GeodeFlowStage[K, T <: AnyRef](cache: ClientCache, settings
   private val in = Inlet[T]("geode.in")
   private val out = Outlet[T]("geode.out")
 
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[T, T] = FlowShape(in, out)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with StageLogging with GeodeCapabilities[K, T] {
 
-      override protected def logSource = classOf[GeodeFlowStage[K, T]]
+      override protected def logSource: Class[GeodeFlowStage[K, T]] = classOf[GeodeFlowStage[K, T]]
 
-      val regionSettings = settings
+      val regionSettings: RegionSettings[K, T] = settings
 
-      val clientCache = cache
+      val clientCache: ClientCache = cache
 
       setHandler(out,
         new OutHandler {
-          override def onPull() =
+          override def onPull(): Unit =
             pull(in)
         })
 
       setHandler(in,
         new InHandler {
-          override def onPush() = {
+          override def onPush(): Unit = {
             val msg = grab(in)
 
             put(msg)
@@ -60,7 +60,7 @@ private[geode] class GeodeFlowStage[K, T <: AnyRef](cache: ClientCache, settings
 
         })
 
-      override def postStop() = {
+      override def postStop(): Unit = {
         log.debug("Stage completed")
         close()
       }

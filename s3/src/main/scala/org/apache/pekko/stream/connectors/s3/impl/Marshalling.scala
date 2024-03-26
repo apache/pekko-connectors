@@ -32,7 +32,7 @@ import scala.xml.NodeSeq
 @InternalApi private[impl] object Marshalling {
   import ScalaXmlSupport._
 
-  implicit val bucketVersioningUnmarshaller: FromEntityUnmarshaller[BucketVersioningResult] = {
+  implicit val bucketVersioningUnmarshaller: FromEntityUnmarshaller[BucketVersioningResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -43,17 +43,15 @@ import scala.xml.NodeSeq
         val MFADelete = (x \ "MfaDelete").headOption.map(_.exists(_.text == "Enabled"))
         BucketVersioningResult(status, MFADelete)
     }
-  }
 
-  implicit val multipartUploadUnmarshaller: FromEntityUnmarshaller[MultipartUpload] = {
+  implicit val multipartUploadUnmarshaller: FromEntityUnmarshaller[MultipartUpload] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
         MultipartUpload((x \ "Bucket").text, (x \ "Key").text, (x \ "UploadId").text)
     }
-  }
 
-  implicit val completeMultipartUploadResultUnmarshaller: FromEntityUnmarshaller[CompleteMultipartUploadResult] = {
+  implicit val completeMultipartUploadResultUnmarshaller: FromEntityUnmarshaller[CompleteMultipartUploadResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`),
       MediaTypes.`text/event-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
@@ -65,12 +63,11 @@ import scala.xml.NodeSeq
           (x \ "Key").text,
           (x \ "ETag").text.drop(1).dropRight(1))
     }
-  }
 
-  val isTruncated = "IsTruncated"
-  val apiV2ContinuationToken = "NextContinuationToken"
+  private val isTruncated = "IsTruncated"
+  private val apiV2ContinuationToken = "NextContinuationToken"
 
-  implicit val listBucketResultUnmarshaller: FromEntityUnmarshaller[ListBucketResult] = {
+  implicit val listBucketResultUnmarshaller: FromEntityUnmarshaller[ListBucketResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -99,9 +96,8 @@ import scala.xml.NodeSeq
               (c \ "Prefix").text)
           })
     }
-  }
 
-  implicit val copyPartResultUnmarshaller: FromEntityUnmarshaller[CopyPartResult] = {
+  implicit val copyPartResultUnmarshaller: FromEntityUnmarshaller[CopyPartResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -109,9 +105,8 @@ import scala.xml.NodeSeq
         val eTag = (x \ "ETag").text
         CopyPartResult(lastModified, Utils.removeQuotes(eTag))
     }
-  }
 
-  implicit val listBucketsResultUnmarshaller: FromEntityUnmarshaller[ListBucketsResult] = {
+  implicit val listBucketsResultUnmarshaller: FromEntityUnmarshaller[ListBucketsResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -129,9 +124,8 @@ import scala.xml.NodeSeq
           .getOrElse(Nil)
         ListBucketsResult(bucketsRoot)
     }
-  }
 
-  implicit val listMultipartUploadsResultUnmarshaller: FromEntityUnmarshaller[ListMultipartUploadsResult] = {
+  implicit val listMultipartUploadsResultUnmarshaller: FromEntityUnmarshaller[ListMultipartUploadsResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -180,9 +174,8 @@ import scala.xml.NodeSeq
           uploads,
           commonPrefixes)
     }
-  }
 
-  implicit val listPartsResultUnmarshaller: FromEntityUnmarshaller[ListPartsResult] = {
+  implicit val listPartsResultUnmarshaller: FromEntityUnmarshaller[ListPartsResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -233,9 +226,8 @@ import scala.xml.NodeSeq
           owner,
           storageClass)
     }
-  }
 
-  implicit val listObjectVersionsResultUnmarshaller: FromEntityUnmarshaller[ListObjectVersionsResult] = {
+  implicit val listObjectVersionsResultUnmarshaller: FromEntityUnmarshaller[ListObjectVersionsResult] =
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
       case x =>
@@ -303,5 +295,4 @@ import scala.xml.NodeSeq
           commonPrefixes,
           deleteMarkers)
     }
-  }
 }

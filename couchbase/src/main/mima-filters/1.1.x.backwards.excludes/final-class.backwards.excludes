@@ -1,0 +1,1 @@
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry$SessionKey")

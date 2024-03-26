@@ -59,11 +59,9 @@ private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwar
         case None => http.singleRequest(HttpRequest(HttpMethods.POST, authUrl, entity = requestEntity))
       }
       result <- Unmarshal(response.entity).to[OAuthResponse]
-    } yield {
-      AccessTokenExpiry(
-        accessToken = result.access_token,
-        expiresAt = expiresAt)
-    }
+    } yield AccessTokenExpiry(
+      accessToken = result.access_token,
+      expiresAt = expiresAt)
   }
 }
 
@@ -72,6 +70,6 @@ private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwar
  */
 @InternalApi
 private[pushkit] object HmsTokenApi {
-  case class AccessTokenExpiry(accessToken: String, expiresAt: Long)
-  case class OAuthResponse(access_token: String, token_type: String, expires_in: Int)
+  final case class AccessTokenExpiry(accessToken: String, expiresAt: Long)
+  final case class OAuthResponse(access_token: String, token_type: String, expires_in: Int)
 }

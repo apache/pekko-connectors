@@ -38,7 +38,7 @@ public final class Directory {
   /**
    * Recursively list files and directories in the given directory, depth first, with a maximum
    * directory depth limit and a possibly set of options (See {@link java.nio.file.Files#walk} for
-   * details.
+   * details).
    */
   public static Source<Path, NotUsed> walk(
       Path directory, int maxDepth, FileVisitOption... options) {

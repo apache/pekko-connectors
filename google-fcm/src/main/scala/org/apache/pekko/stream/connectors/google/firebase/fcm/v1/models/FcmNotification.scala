@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
  * Firebase Cloud Message model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
  */
-case class FcmNotification(
+final case class FcmNotification(
     data: Option[Map[String, String]] = None,
     notification: Option[BasicNotification] = None,
     android: Option[AndroidConfig] = None,

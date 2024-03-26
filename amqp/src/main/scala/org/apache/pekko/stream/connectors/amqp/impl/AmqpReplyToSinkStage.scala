@@ -31,7 +31,7 @@ import scala.concurrent.{ Future, Promise }
 private[amqp] final class AmqpReplyToSinkStage(replyToSinkSettings: AmqpReplyToSinkSettings)
     extends GraphStageWithMaterializedValue[SinkShape[WriteMessage], Future[Done]] { stage =>
 
-  val in = Inlet[WriteMessage]("AmqpReplyToSink.in")
+  val in: Inlet[WriteMessage] = Inlet[WriteMessage]("AmqpReplyToSink.in")
 
   override def shape: SinkShape[WriteMessage] = SinkShape.of(in)
 
@@ -82,9 +82,8 @@ private[amqp] final class AmqpReplyToSinkStage(replyToSinkSettings: AmqpReplyToS
                   elem.immediate,
                   elem.properties.orNull,
                   elem.bytes.toArray)
-              } else if (settings.failIfReplyToMissing) {
+              } else if (settings.failIfReplyToMissing)
                 onFailure(new RuntimeException("Reply-to header was not set"))
-              }
 
               tryPull(in)
             }

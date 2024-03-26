@@ -1,0 +1,5 @@
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.kinesis.KinesisErrors$FailurePublishingRecords")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.kinesis.ShardIterator$AfterSequenceNumber")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.kinesis.ShardIterator$AtSequenceNumber")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.kinesis.ShardIterator$AtTimestamp")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors$FailurePublishingRecords")

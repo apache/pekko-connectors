@@ -27,12 +27,12 @@ private[ftp] trait FtpBrowserGraphStage[FtpClient, S <: RemoteFileSettings]
     extends FtpGraphStage[FtpClient, S, FtpFile] {
   val ftpLike: FtpLike[FtpClient, S]
 
-  val branchSelector: FtpFile => Boolean = f => true
+  val branchSelector: FtpFile => Boolean = _ => true
 
   def emitTraversedDirectories: Boolean = false
 
-  def createLogic(inheritedAttributes: Attributes): FtpGraphStageLogic[FtpFile, FtpClient, S] = {
-    val logic = new FtpGraphStageLogic[FtpFile, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
+  def createLogic(inheritedAttributes: Attributes): FtpGraphStageLogic[FtpFile, FtpClient, S] =
+    new FtpGraphStageLogic[FtpFile, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
 
       private[this] var buffer: Seq[FtpFile] = Seq.empty[FtpFile]
 
@@ -89,7 +89,4 @@ private[ftp] trait FtpBrowserGraphStage[FtpClient, S <: RemoteFileSettings]
           graphStageFtpLike.listFiles(basePath, handler.get)
 
     } // end of stage logic
-
-    logic
-  }
 }

@@ -35,11 +35,9 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
   private val baseSourceSettings = ElasticsearchSourceSettings(connectionSettings).withApiVersion(ApiVersion.V7)
   private val baseWriteSettings = ElasticsearchWriteSettings(connectionSettings).withApiVersion(ApiVersion.V7)
 
-  override protected def beforeAll() = {
-    insertTestData(connectionSettings)
-  }
+  override protected def beforeAll(): Unit = insertTestData(connectionSettings)
 
-  override def afterAll() = {
+  override def afterAll(): Unit = {
     val deleteRequest = HttpRequest(HttpMethods.DELETE)
       .withUri(Uri(connectionSettings.baseUrl).withPath(Path("/_all")))
     http.singleRequest(deleteRequest).futureValue
@@ -172,8 +170,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // After we've written them to Elastic, we want
       // to commit the offset to Kafka
 
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage(book: Book, offset: KafkaOffset)
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage(book: Book, offset: KafkaOffset)
 
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
@@ -222,8 +220,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // After we've written them to Elastic, we want
       // to commit the offset to Kafka
 
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage(book: Book, offset: KafkaOffset)
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage(book: Book, offset: KafkaOffset)
 
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),
@@ -273,8 +271,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // After we've written them to Elastic, we want
       // to commit the offset to Kafka
 
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage(book: Book, offset: KafkaOffset)
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage(book: Book, offset: KafkaOffset)
 
       val messagesFromKafka = List(
         KafkaMessage(Book("Book A", shouldSkip = Some(true)), KafkaOffset(0)),
@@ -330,8 +328,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // After we've written them to Elastic, we want
       // to commit the offset to Kafka
 
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage(book: Book, offset: KafkaOffset)
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage(book: Book, offset: KafkaOffset)
 
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1", shouldSkip = Some(true)), KafkaOffset(0)),
@@ -456,7 +454,7 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       import spray.json._
       import DefaultJsonProtocol._
 
-      case class TestDoc(id: String, a: String, b: Option[String], c: String)
+      final case class TestDoc(id: String, a: String, b: Option[String], c: String)
 
       implicit val formatVersionTestDoc: JsonFormat[TestDoc] = jsonFormat4(TestDoc.apply)
 

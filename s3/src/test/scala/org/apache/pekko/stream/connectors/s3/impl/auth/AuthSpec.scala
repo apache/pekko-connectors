@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import org.scalatest.flatspec.AnyFlatSpec
 
-class authSpec extends AnyFlatSpec {
+class AuthSpec extends AnyFlatSpec {
 
   "encodeHex" should "encode string to hex string" in {
     assert(encodeHex("1234+abcd".getBytes()) == "313233342b61626364")

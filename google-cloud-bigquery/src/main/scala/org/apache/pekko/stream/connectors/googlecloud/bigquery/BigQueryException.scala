@@ -28,8 +28,8 @@ import scala.annotation.nowarn
 
 final case class BigQueryException private (override val info: ErrorInfo, raw: String)
     extends ExceptionWithErrorInfo(info) {
-  def getInfo = info
-  def getRaw = raw
+  def getInfo: ErrorInfo = info
+  def getRaw: String = raw
 }
 
 object BigQueryException {

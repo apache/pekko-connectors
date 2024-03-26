@@ -94,7 +94,7 @@ object GooglePubSub {
         Source
           .tick(0.seconds, pollInterval, request)
           .mapMaterializedValue(cancellable.success)
-          .mapAsync(1)(client.pull(_))
+          .mapAsync(1)(client.pull)
           .mapConcat(_.receivedMessages.toVector)
           .mapMaterializedValue(_ => cancellable.future)
       }
@@ -121,7 +121,7 @@ object GooglePubSub {
    *
    * @param parallelism controls how many acknowledgements can be in-flight at any given time
    */
-  def acknowledge(parallelism: Int): Sink[AcknowledgeRequest, Future[Done]] = {
+  def acknowledge(parallelism: Int): Sink[AcknowledgeRequest, Future[Done]] =
     Sink
       .fromMaterializer { (mat, attr) =>
         Flow[AcknowledgeRequest]
@@ -129,7 +129,6 @@ object GooglePubSub {
           .toMat(Sink.ignore)(Keep.right)
       }
       .mapMaterializedValue(_.flatMap(identity)(ExecutionContexts.parasitic))
-  }
 
   private def publisher(mat: Materializer, attr: Attributes) =
     attr

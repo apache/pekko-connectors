@@ -52,11 +52,11 @@ import pekko.annotation.InternalApi
   require(maxMaterializations > 0, "maxMaterializations should be at least 1")
   require(maxSize > 0, "maximumSize should be at least 1")
 
-  val in = Inlet[ByteString]("DiskBuffer.in")
-  val out = Outlet[Chunk]("DiskBuffer.out")
-  override val shape = FlowShape.of(in, out)
+  val in: Inlet[ByteString] = Inlet[ByteString]("DiskBuffer.in")
+  val out: Outlet[Chunk] = Outlet[Chunk]("DiskBuffer.out")
+  override val shape: FlowShape[ByteString, Chunk] = FlowShape.of(in, out)
 
-  override def initialAttributes =
+  override def initialAttributes: Attributes =
     super.initialAttributes and Attributes.name("DiskBuffer") and ActorAttributes.IODispatcher
 
   override def createLogic(attr: Attributes): GraphStageLogic =
@@ -74,9 +74,8 @@ import pekko.annotation.InternalApi
       override def onPush(): Unit = {
         val elem = grab(in)
         length += elem.size
-        if (length > maxSize) {
+        if (length > maxSize)
           throw new BufferOverflowException()
-        }
 
         pathOut.write(elem.toArray)
         pull(in)
@@ -89,9 +88,9 @@ import pekko.annotation.InternalApi
 
       override def postStop(): Unit =
         // close stream even if we didn't emit
-        try {
+        try
           pathOut.close()
-        } catch { case x: Throwable => () }
+        catch { case _: Throwable => () }
 
       private def emit(): Unit = {
         pathOut.close()
@@ -101,7 +100,6 @@ import pekko.annotation.InternalApi
           if (deleteCounter.decrementAndGet() <= 0)
             f.onComplete { _ =>
               path.delete()
-
             }(ExecutionContexts.parasitic)
           NotUsed
         }

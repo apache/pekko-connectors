@@ -32,7 +32,7 @@ private[pekko] final class JsonStreamReader(path: JsonPath) extends GraphStage[F
 
   private val in = Inlet[ByteString]("Json.in")
   private val out = Outlet[ByteString]("Json.out")
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[ByteString, ByteString] = FlowShape(in, out)
 
   override def initialAttributes: Attributes = Attributes.name(s"jsonReader($path)")
 
@@ -48,10 +48,9 @@ private[pekko] final class JsonStreamReader(path: JsonPath) extends GraphStage[F
       private val config = surfer.configBuilder
         .bind(path,
           new JsonPathListener {
-            override def onValue(value: Any, context: ParsingContext): Unit = {
+            override def onValue(value: Any, context: ParsingContext): Unit =
               // see https://github.com/lampepfl/dotty/issues/17946
               buffer = buffer.enqueue[ByteString](ByteString(value.toString))
-            }
           })
         .build
       private val parser = surfer.createNonBlockingParser(config)
@@ -64,20 +63,19 @@ private[pekko] final class JsonStreamReader(path: JsonPath) extends GraphStage[F
         val array = input.toArray
 
         // Feeding the parser will fail in situations like invalid JSON being provided.
-        try {
+        try
           parser.feed(array, 0, array.length)
-        } catch {
+        catch {
           case e: JsonSurfingException => failStage(e)
         }
 
         if (buffer.nonEmpty) {
           emitMultiple(out, buffer)
           buffer = Queue.empty[ByteString]
-        } else {
+        } else
           // Iff the buffer is empty, we haven't consumed any values yet
           // and thus we still need to fulfill downstream need.
           tryPull(in)
-        }
       }
 
       override def onUpstreamFinish(): Unit =

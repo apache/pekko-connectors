@@ -1,0 +1,4 @@
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GrpcPublisherExt.lookup")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GrpcPublisherExt.lookup")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GrpcPublisherExt.lookup")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GrpcPublisherExt.lookup")

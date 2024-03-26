@@ -25,7 +25,7 @@ final class SolrUpdateSettings private (
       commitWithin: Int): SolrUpdateSettings = new SolrUpdateSettings(
     commitWithin = commitWithin)
 
-  override def toString =
+  override def toString: String =
     "SolrUpdateSettings(" +
     s"commitWithin=$commitWithin" +
     ")"
@@ -33,7 +33,7 @@ final class SolrUpdateSettings private (
 
 object SolrUpdateSettings {
 
-  val Defaults = new SolrUpdateSettings(-1)
+  val Defaults: SolrUpdateSettings = new SolrUpdateSettings(-1)
 
   /** Scala API */
   def apply(): SolrUpdateSettings = Defaults

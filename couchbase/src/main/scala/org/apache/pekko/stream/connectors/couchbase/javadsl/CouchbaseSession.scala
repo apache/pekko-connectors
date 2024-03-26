@@ -274,7 +274,7 @@ abstract class CouchbaseSession {
    *                      is set to true.
    * @param fields the JSON fields to index - each can be either `String` or [[com.couchbase.client.java.query.dsl.Expression]]
    * @return a [[java.util.concurrent.CompletionStage]] of `true` if the index was/will be effectively created, `false`
-   *      if the index existed and ignoreIfExist` is true. Completion of the `CompletionStage` does not guarantee the index
+   *      if the index existed and `ignoreIfExist` is true. Completion of the `CompletionStage` does not guarantee the index
    *      is online and ready to be used.
    */
   def createIndex(indexName: String, ignoreIfExist: Boolean, fields: AnyRef*): CompletionStage[Boolean]

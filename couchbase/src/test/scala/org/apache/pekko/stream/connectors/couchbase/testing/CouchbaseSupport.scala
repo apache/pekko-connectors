@@ -34,7 +34,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }
 
-case class TestObject(id: String, value: String)
+final case class TestObject(id: String, value: String)
 
 private[couchbase] object CouchbaseSupport {
   val jacksonMapper = JsonMapper.builder()

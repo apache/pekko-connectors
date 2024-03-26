@@ -28,13 +28,12 @@ private[ftp] trait FtpOperations extends CommonFtpOperations { self: FtpLike[FTP
   def connect(connectionSettings: FtpSettings)(implicit ftpClient: FTPClient): Try[Handler] = Try {
     connectionSettings.proxy.foreach(ftpClient.setProxy)
 
-    if (ftpClient.getAutodetectUTF8() != connectionSettings.autodetectUTF8) {
+    if (ftpClient.getAutodetectUTF8 != connectionSettings.autodetectUTF8)
       ftpClient.setAutodetectUTF8(connectionSettings.autodetectUTF8)
-    }
 
-    try {
+    try
       ftpClient.connect(connectionSettings.host, connectionSettings.port)
-    } catch {
+    catch {
       case e: java.net.ConnectException =>
         throw new java.net.ConnectException(
           e.getMessage + s" host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
@@ -47,19 +46,16 @@ private[ftp] trait FtpOperations extends CommonFtpOperations { self: FtpLike[FTP
     ftpClient.login(
       connectionSettings.credentials.username,
       connectionSettings.credentials.password)
-    if (ftpClient.getReplyCode == 530) {
+    if (ftpClient.getReplyCode == 530)
       throw new FtpAuthenticationException(
         s"unable to login to host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
             .fold("")("proxy=" + _.toString)}")
-    }
 
-    if (connectionSettings.binary) {
+    if (connectionSettings.binary)
       ftpClient.setFileType(FTP.BINARY_FILE_TYPE)
-    }
 
-    if (connectionSettings.passiveMode) {
+    if (connectionSettings.passiveMode)
       ftpClient.enterLocalPassiveMode()
-    }
 
     ftpClient
   }

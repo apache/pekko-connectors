@@ -37,14 +37,14 @@ private[connectors] object UserAccessCredentials {
     new UserAccessCredentials(clientId, clientSecret, refreshToken, projectId)
   }
 
-  def apply(c: Config)(implicit system: ClassicActorSystemProvider): Credentials = {
-    if (c.getString("client-id").nonEmpty) {
+  def apply(c: Config)(implicit system: ClassicActorSystemProvider): Credentials =
+    if (c.getString("client-id").nonEmpty)
       apply(
         clientId = c.getString("client-id"),
         clientSecret = c.getString("client-secret"),
         refreshToken = c.getString("refresh-token"),
         projectId = c.getString("project-id"))
-    } else {
+    else {
       val src = Source.fromFile(c.getString("path"))
       val credentials = JsonParser(src.mkString).convertTo[UserAccessCredentialsFile]
       src.close()
@@ -54,7 +54,6 @@ private[connectors] object UserAccessCredentials {
         refreshToken = credentials.refresh_token,
         projectId = credentials.quota_project_id)
     }
-  }
 
   final case class UserAccessCredentialsFile(client_id: String,
       client_secret: String,
@@ -73,7 +72,6 @@ private final class UserAccessCredentials(clientId: String,
 
   override protected def getAccessToken()(implicit mat: Materializer,
       settings: RequestSettings,
-      clock: Clock): Future[AccessToken] = {
+      clock: Clock): Future[AccessToken] =
     UserAccessMetadata.getAccessToken(clientId, clientSecret, refreshToken)
-  }
 }

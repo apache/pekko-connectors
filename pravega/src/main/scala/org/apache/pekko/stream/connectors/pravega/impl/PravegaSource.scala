@@ -31,6 +31,7 @@ import pekko.stream.ActorAttributes
 import pekko.stream.stage.AsyncCallback
 
 import java.util.UUID
+import scala.annotation.tailrec
 import scala.util.{ Failure, Success, Try }
 
 @InternalApi private final class PravegaSourcesStageLogic[A](
@@ -41,7 +42,7 @@ import scala.util.{ Failure, Success, Try }
     with PravegaCapabilities
     with StageLogging {
 
-  protected val scope = readerGroup.getScope
+  protected val scope: String = readerGroup.getScope
 
   override protected def logSource = classOf[PravegaSourcesStageLogic[A]]
 
@@ -59,6 +60,7 @@ import scala.util.{ Failure, Success, Try }
     out,
     new OutHandler {
 
+      @tailrec
       override def onPull(): Unit = {
         val eventRead = reader.readNextEvent(readerSettings.timeout)
         if (eventRead.isCheckpoint) {
@@ -83,7 +85,7 @@ import scala.util.{ Failure, Success, Try }
       startupPromise.success(Done)
     } catch {
       case NonFatal(exception) =>
-        log.error(exception.getMessage())
+        log.error(exception.getMessage)
         failStage(exception)
     }
   }

@@ -78,7 +78,7 @@ final class GrpcPublisherExt private (sys: ExtendedActorSystem) extends Extensio
 }
 
 object GrpcPublisherExt extends ExtensionId[GrpcPublisherExt] with ExtensionIdProvider {
-  override def lookup = GrpcPublisherExt
+  override def lookup: GrpcPublisherExt.type = GrpcPublisherExt
   override def createExtension(system: ExtendedActorSystem) = new GrpcPublisherExt(system)
 
   /**

@@ -25,7 +25,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
 
 @JsonPropertyOrder(alphabetic = true)
-case class A(integer: Int, long: Long, float: Float, double: Double, string: String, boolean: Boolean, record: B) {
+final case class A(integer: Int, long: Long, float: Float, double: Double, string: String, boolean: Boolean,
+    record: B) {
 
   @JsonCreator
   def this(@JsonProperty("f") f: JsonNode) =
@@ -51,7 +52,7 @@ case class A(integer: Int, long: Long, float: Float, double: Double, string: Str
 
 @JsonPropertyOrder(alphabetic = true)
 @JsonInclude(Include.NON_NULL)
-case class B(nullable: Option[String], bytes: ByteString, repeated: Seq[C]) {
+final case class B(nullable: Option[String], bytes: ByteString, repeated: Seq[C]) {
   def this(node: JsonNode) =
     this(
       Option(node.get("f").get(0).get("v").textValue()),
@@ -64,7 +65,7 @@ case class B(nullable: Option[String], bytes: ByteString, repeated: Seq[C]) {
 }
 
 @JsonPropertyOrder(alphabetic = true)
-case class C(numeric: BigDecimal, date: LocalDate, time: LocalTime, dateTime: LocalDateTime, timestamp: Instant) {
+final case class C(numeric: BigDecimal, date: LocalDate, time: LocalTime, dateTime: LocalDateTime, timestamp: Instant) {
 
   def this(node: JsonNode) =
     this(

@@ -23,7 +23,7 @@ import scala.concurrent.duration.{ Duration, FiniteDuration }
 /**
  * Settings for AzureQueueSource
  *
- * @param initalVisibilityTimeout Specifies how many seconds a message becomes invisible after it has been dequeued.
+ * @param initialVisibilityTimeout Specifies how many seconds a message becomes invisible after it has been dequeued.
  *        See parameter of the same name in [[com.microsoft.azure.storage.queue.CloudQueue$.retrieveMessages]].
  * @param batchSize Specifies how many message are fetched in one batch.
  *        (This is the numberOfMessages parameter in [[com.microsoft.azure.storage.queue.CloudQueue$.retrieveMessages]].)
@@ -45,7 +45,7 @@ final class AzureQueueSourceSettings private (
   def withRetrieveRetryTimeout(retrieveRetryTimeout: FiniteDuration): AzureQueueSourceSettings =
     copy(retrieveRetryTimeout = Some(retrieveRetryTimeout))
 
-  def withRetrieveRetryTimeout(retrieveRetryTimeout: JavaDuration) =
+  def withRetrieveRetryTimeout(retrieveRetryTimeout: JavaDuration): AzureQueueSourceSettings =
     copy(retrieveRetryTimeout = Some(Duration.fromNanos(retrieveRetryTimeout.toNanos)))
 
   /**

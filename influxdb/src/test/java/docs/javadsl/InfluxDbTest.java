@@ -123,10 +123,10 @@ public class InfluxDbTest {
         InfluxDbSource.typed(InfluxDbCpu.class, InfluxDbReadSettings.Default(), influxDB, query)
             .map(
                 cpu -> {
-                  InfluxDbCpu clonedCpu = cpu.cloneAt(cpu.getTime().plusSeconds(60000l));
+                  InfluxDbCpu clonedCpu = cpu.cloneAt(cpu.getTime().plusSeconds(60000L));
                   return InfluxDbWriteMessage.create(clonedCpu, NotUsed.notUsed());
                 })
-            .groupedWithin(10, Duration.of(50l, ChronoUnit.MILLIS))
+            .groupedWithin(10, Duration.of(50L, ChronoUnit.MILLIS))
             .runWith(InfluxDbSink.typed(InfluxDbCpu.class, influxDB), system);
     // #run-typed
 
@@ -146,9 +146,9 @@ public class InfluxDbTest {
 
     CompletionStage<Done> completionStage =
         InfluxDbSource.create(influxDB, query)
-            .map(queryResult -> points(queryResult))
+            .map(this::points)
             .mapConcat(i -> i)
-            .groupedWithin(10, Duration.of(50l, ChronoUnit.MILLIS))
+            .groupedWithin(10, Duration.of(50L, ChronoUnit.MILLIS))
             .runWith(InfluxDbSink.create(influxDB), system);
     // #run-query-result
 
@@ -195,7 +195,7 @@ public class InfluxDbTest {
     // After we've written them to InfluxDb, we want
     // to commit the offset to Kafka
 
-    /** Just clean the previous data */
+    /* Just clean the previous data **/
     influxDB.query(new Query("DELETE FROM cpu"));
 
     List<Integer> committedOffsets = new ArrayList<>();
@@ -219,10 +219,8 @@ public class InfluxDbTest {
 
     Source.from(messageFromKafka)
         .map(
-            kafkaMessage -> {
-              return InfluxDbWriteMessage.create(
-                  kafkaMessage.influxDbCpu, kafkaMessage.kafkaOffset);
-            })
+            kafkaMessage -> InfluxDbWriteMessage.create(
+                  kafkaMessage.influxDbCpu, kafkaMessage.kafkaOffset))
         .groupedWithin(10, Duration.ofMillis(10))
         .via(InfluxDbFlow.typedWithPassThrough(InfluxDbCpu.class, influxDB))
         .map(
@@ -248,7 +246,7 @@ public class InfluxDbTest {
                 InfluxDbReadSettings.Default(),
                 influxDB,
                 new Query("SELECT*FROM cpu"))
-            .map(m -> m.getHostname())
+            .map(Cpu::getHostname)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get(10, TimeUnit.SECONDS);

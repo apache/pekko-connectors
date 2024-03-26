@@ -33,7 +33,7 @@ private[influxdb] final class InfluxDbSourceStage[T](clazz: Class[T],
     extends GraphStage[SourceShape[T]] {
 
   val out: Outlet[T] = Outlet("InfluxDb.out")
-  override val shape = SourceShape(out)
+  override val shape: SourceShape[T] = SourceShape(out)
 
   override protected def initialAttributes: Attributes =
     super.initialAttributes and Attributes(ActorAttributes.IODispatcher)
@@ -55,7 +55,7 @@ private[influxdb] final class InfluxDbSourceLogic[T](clazz: Class[T],
     shape: SourceShape[T])
     extends InfluxDbBaseSourceLogic[T](influxDB, query, outlet, shape) {
 
-  var resultMapperHelper: PekkoConnectorsResultMapperHelper = _
+  private var resultMapperHelper: PekkoConnectorsResultMapperHelper = _
 
   override def preStart(): Unit = {
     resultMapperHelper = new PekkoConnectorsResultMapperHelper
@@ -65,18 +65,14 @@ private[influxdb] final class InfluxDbSourceLogic[T](clazz: Class[T],
   override def onPull(): Unit =
     this.dataRetrieved match {
       case None => completeStage()
-      case Some(queryResult) => {
-        for (result <- queryResult.getResults.asScala) {
-          if (result.hasError) {
+      case Some(queryResult) =>
+        for (result <- queryResult.getResults.asScala)
+          if (result.hasError)
             failStage(new InfluxDBException(result.getError))
-          } else {
-            for (series <- result.getSeries.asScala) {
+          else
+            for (series <- result.getSeries.asScala)
               emitMultiple(outlet, resultMapperHelper.parseSeriesAs(clazz, series, settings.precision))
-            }
-          }
-        }
         dataRetrieved = None
-      }
     }
 
 }
@@ -89,7 +85,7 @@ private[influxdb] final class InfluxDbRawSourceStage(query: Query, influxDB: Inf
     extends GraphStage[SourceShape[QueryResult]] {
 
   val out: Outlet[QueryResult] = Outlet("InfluxDb.out")
-  override val shape = SourceShape(out)
+  override val shape: SourceShape[QueryResult] = SourceShape(out)
 
   override protected def initialAttributes: Attributes =
     super.initialAttributes and Attributes(ActorAttributes.IODispatcher)
@@ -112,10 +108,9 @@ private[influxdb] final class InfluxDbSourceRawLogic(query: Query,
   override def onPull(): Unit =
     dataRetrieved match {
       case None => completeStage()
-      case Some(queryResult) => {
+      case Some(queryResult) =>
         emit(outlet, queryResult)
         dataRetrieved = None
-      }
     }
 
   override protected def validateTotalResults: Boolean = true
@@ -134,13 +129,13 @@ private[impl] sealed abstract class InfluxDbBaseSourceLogic[T](influxDB: InfluxD
 
   setHandler(outlet, this)
 
-  var queryExecuted: Boolean = false
+  private var queryExecuted: Boolean = false
   var dataRetrieved: Option[QueryResult] = None
 
   override def preStart(): Unit =
     runQuery()
 
-  private def runQuery() =
+  private def runQuery(): Unit =
     if (!queryExecuted) {
       val queryResult = influxDB.query(query)
       if (!queryResult.hasError) {
@@ -155,7 +150,7 @@ private[impl] sealed abstract class InfluxDbBaseSourceLogic[T](influxDB: InfluxD
 
   protected def validateTotalResults: Boolean = false
 
-  private def failOnError(result: QueryResult) =
+  private def failOnError(result: QueryResult): Unit =
     if (validateTotalResults) {
       val totalErrors = result.getResults.asScala
         .filter(_.hasError)

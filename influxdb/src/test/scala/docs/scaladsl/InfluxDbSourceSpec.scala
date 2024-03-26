@@ -52,7 +52,7 @@ class InfluxDbSourceSpec
   override def beforeEach(): Unit =
     populateDatabase(influxDB, classOf[InfluxDbSourceCpu])
 
-  override def afterEach() =
+  override def afterEach(): Unit =
     cleanDatabase(influxDB, DatabaseName)
 
   "support source" in assertAllStagesStopped {
@@ -62,7 +62,7 @@ class InfluxDbSourceSpec
     val influxDBResult = InfluxDbSource(influxDB, query).runWith(Sink.seq)
     val resultToAssert = influxDBResult.futureValue.head
 
-    val values = resultToAssert.getResults.get(0).getSeries().get(0).getValues
+    val values = resultToAssert.getResults.get(0).getSeries.get(0).getValues
 
     values.size() mustBe 2
   }
@@ -86,7 +86,7 @@ class InfluxDbSourceSpec
     val influxDBResult = InfluxDbSource(influxDB, query).runWith(Sink.seq)
     val resultToAssert = influxDBResult.futureValue.head
 
-    val valuesFetched = resultToAssert.getResults.get(0).getSeries().get(0).getValues
+    val valuesFetched = resultToAssert.getResults.get(0).getSeries.get(0).getValues
     valuesFetched.size() mustBe 2
 
     val error = resultToAssert.getResults.get(1).getError

@@ -70,7 +70,7 @@ final class Bucket private (
     selfLink = selfLink,
     etag = etag)
 
-  override def toString =
+  override def toString: String =
     "BucketInfo(" +
     s"name=$name," +
     s"location=$location," +
