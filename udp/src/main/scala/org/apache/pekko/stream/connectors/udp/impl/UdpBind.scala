@@ -42,7 +42,7 @@ import scala.concurrent.{ Future, Promise }
   private var listener: ActorRef = _
 
   override def preStart(): Unit = {
-    implicit val sender = getStageActor(processIncoming).ref
+    implicit val sender: ActorRef = getStageActor(processIncoming).ref
     IO(Udp) ! Udp.Bind(sender, localAddress, options)
   }
 
@@ -59,21 +59,19 @@ import scala.concurrent.{ Future, Promise }
       boundPromise.failure(ex)
       failStage(ex)
     case (_, Udp.Received(data, sender)) =>
-      if (isAvailable(out)) {
+      if (isAvailable(out))
         push(out, Datagram(data, sender))
-      }
     case _ =>
   }
 
-  private def unbindListener() =
-    if (listener != null) {
+  private def unbindListener(): Unit =
+    if (listener != null)
       listener ! Udp.Unbind
-    }
 
   setHandler(
     in,
     new InHandler {
-      override def onPush() = {
+      override def onPush(): Unit = {
         val msg = grab(in)
         listener ! Udp.Send(msg.data, msg.remote)
         pull(in)
@@ -96,7 +94,8 @@ import scala.concurrent.{ Future, Promise }
   val out: Outlet[Datagram] = Outlet("UdpBindFlow.in")
 
   val shape: FlowShape[Datagram, Datagram] = FlowShape.of(in, out)
-  override def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
+  override def createLogicAndMaterializedValue(
+      inheritedAttributes: Attributes): (UdpBindLogic, Future[InetSocketAddress]) = {
     val boundPromise = Promise[InetSocketAddress]()
     (new UdpBindLogic(localAddress, options, boundPromise)(shape), boundPromise.future)
   }

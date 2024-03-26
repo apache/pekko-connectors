@@ -23,11 +23,10 @@ import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 
 object AvroSource {
 
-  def readRecordsMerged(client: BigQueryReadClient, readSession: ReadSession): Source[List[BigQueryRecord], NotUsed] = {
+  def readRecordsMerged(client: BigQueryReadClient, readSession: ReadSession): Source[List[BigQueryRecord], NotUsed] =
     readMerged(client, readSession)
       .map(a => AvroDecoder(readSession.schema.avroSchema.get.schema).decodeRows(a.serializedBinaryRows))
       .map(_.map(BigQueryRecord.fromAvro))
-  }
 
   def readMerged(client: BigQueryReadClient, session: ReadSession): Source[AvroRows, NotUsed] =
     read(client, session).reduce((a, b) => a.merge(b))

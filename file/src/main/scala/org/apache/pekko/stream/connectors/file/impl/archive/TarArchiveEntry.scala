@@ -71,7 +71,7 @@ import pekko.util.ByteString
   val fileNamePrefixLength = 155
   val headerLength = 512
 
-  private val fixedData1 = {
+  private val fixedData1 =
     // [108, 116)
     padded(ByteString("0755"), fileModeLength) ++
     empty(
@@ -79,17 +79,15 @@ import pekko.util.ByteString
       ownerIdLength +
       // [116, 124)
       groupIdLength)
-  }
 
-  private val fixedData2 = {
+  private val fixedData2 =
     // [148, 156)
     ByteString("        ") // headerChecksumLength
-  }
 
   // [156, 157)
   // linkIndicatorLength
 
-  private val fixedData3 = {
+  private val fixedData3 =
     empty(
       // [157, 257)
       linkFileNameLength) ++
@@ -107,7 +105,6 @@ import pekko.util.ByteString
       deviceMajorNumberLength +
       // [337, 345)
       deviceMinorNumberLength)
-  }
 
   private def padded(bytes: ByteString, targetSize: Int): ByteString = {
     require(bytes.size <= targetSize,
@@ -116,9 +113,8 @@ import pekko.util.ByteString
     else bytes
   }
 
-  private def empty(size: Int) = {
+  private def empty(size: Int) =
     ByteString.fromArrayUnsafe(new Array[Byte](size))
-  }
 
   def parse(bs: ByteString): TarArchiveMetadata = {
     require(bs.length >= headerLength, s"the tar archive header is expected to be at least 512 bytes")

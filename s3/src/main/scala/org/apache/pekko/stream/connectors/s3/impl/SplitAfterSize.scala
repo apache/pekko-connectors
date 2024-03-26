@@ -47,9 +47,9 @@ import scala.annotation.tailrec
 
   private def insertMarkers(minChunkSize: Long, maxChunkSize: Int): GraphStage[FlowShape[ByteString, Any]] =
     new GraphStage[FlowShape[ByteString, Any]] {
-      val in = Inlet[ByteString]("SplitAfterSize.in")
-      val out = Outlet[Any]("SplitAfterSize.out")
-      override val shape = FlowShape.of(in, out)
+      val in: Inlet[ByteString] = Inlet[ByteString]("SplitAfterSize.in")
+      val out: Outlet[Any] = Outlet[Any]("SplitAfterSize.out")
+      override val shape: FlowShape[ByteString, Any] = FlowShape.of(in, out)
 
       override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
         new GraphStageLogic(shape) with OutHandler with InHandler {
@@ -59,9 +59,9 @@ import scala.annotation.tailrec
           override def onPush(): Unit = {
             val elem = grab(in)
             count += elem.size
-            if (count > maxChunkSize) {
+            if (count > maxChunkSize)
               splitElement(elem, elem.size - (count - maxChunkSize))
-            } else if (count >= minChunkSize) {
+            else if (count >= minChunkSize) {
               count = 0
               emitMultiple(out, elem :: NewStream :: Nil)
             } else emit(out, elem)

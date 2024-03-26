@@ -73,7 +73,8 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
   val shape: SourceShape[ByteString] = SourceShape(Outlet[ByteString](s"$name.out"))
   val out: Outlet[ByteString] = shape.outlets.head.asInstanceOf[Outlet[ByteString]]
 
-  def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
+  def createLogicAndMaterializedValue(
+      inheritedAttributes: Attributes): (FtpGraphStageLogic[ByteString, FtpClient, S], Future[IOResult]) = {
 
     val matValuePromise = Promise[IOResult]()
 
@@ -86,14 +87,14 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
         out,
         new OutHandler {
           def onPull(): Unit =
-            try {
+            try
               readChunk() match {
                 case Some(bs) =>
                   push(out, bs)
                 case None =>
                   complete(out)
               }
-            } catch {
+            catch {
               case NonFatal(e) =>
                 failed = true
                 matFailure(e)
@@ -102,7 +103,7 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
         }) // end of handler
 
       override def postStop(): Unit =
-        try {
+        try
           isOpt.foreach { os =>
             try {
               os.close()
@@ -123,9 +124,8 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
                 throw e
             }
           }
-        } finally {
+        finally
           super.postStop()
-        }
 
       protected[this] def doPreStart(): Unit =
         isOpt = graphStageFtpLike match {
@@ -194,7 +194,8 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
   val shape: SinkShape[ByteString] = SinkShape(Inlet[ByteString](s"$name.in"))
   val in: Inlet[ByteString] = shape.inlets.head.asInstanceOf[Inlet[ByteString]]
 
-  def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
+  def createLogicAndMaterializedValue(
+      inheritedAttributes: Attributes): (FtpGraphStageLogic[ByteString, FtpClient, S], Future[IOResult]) = {
 
     val matValuePromise = Promise[IOResult]()
 
@@ -225,7 +226,7 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
         }) // end of handler
 
       override def postStop(): Unit =
-        try {
+        try
           osOpt.foreach { os =>
             try {
               os.close()
@@ -246,9 +247,8 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
                 throw e
             }
           }
-        } finally {
+        finally
           super.postStop()
-        }
 
       protected[this] def doPreStart(): Unit = {
         osOpt = Some(graphStageFtpLike.storeFileOutputStream(path, handler.get, append).get)
@@ -262,7 +262,7 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
         matValuePromise.tryFailure(new IOOperationIncompleteException(writtenBytesTotal, t))
 
       /** BLOCKING I/O WRITE */
-      private[this] def write(bytes: ByteString) =
+      private[this] def write(bytes: ByteString): Unit =
         osOpt.foreach { os =>
           os.write(bytes.toArray)
           writtenBytesTotal += bytes.size
@@ -289,36 +289,34 @@ private[ftp] trait FtpMoveSink[FtpClient, S <: RemoteFileSettings]
 
   def shape: SinkShape[FtpFile] = SinkShape(in)
 
-  def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
+  def createLogicAndMaterializedValue(
+      inheritedAttributes: Attributes): (FtpGraphStageLogic[FtpFile, FtpClient, S], Future[IOResult]) = {
     val matValuePromise = Promise[IOResult]()
     var numberOfMovedFiles = 0
 
     val logic = new FtpGraphStageLogic[FtpFile, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
-      {
-        setHandler(
-          in,
-          new InHandler {
-            override def onPush(): Unit = {
-              try {
-                val sourcePath = grab(in)
-                graphStageFtpLike.move(sourcePath.path, destinationPath(sourcePath), handler.get)
-                numberOfMovedFiles = numberOfMovedFiles + 1
-                pull(in)
-              } catch {
-                case NonFatal(e) =>
-                  failed = true
-                  matFailure(e)
-                  failStage(e)
-              }
+      setHandler(
+        in,
+        new InHandler {
+          override def onPush(): Unit =
+            try {
+              val sourcePath = grab(in)
+              graphStageFtpLike.move(sourcePath.path, destinationPath(sourcePath), handler.get)
+              numberOfMovedFiles = numberOfMovedFiles + 1
+              pull(in)
+            } catch {
+              case NonFatal(e) =>
+                failed = true
+                matFailure(e)
+                failStage(e)
             }
 
-            override def onUpstreamFailure(exception: Throwable): Unit = {
-              matFailure(exception)
-              failed = true
-              super.onUpstreamFailure(exception)
-            }
-          })
-      }
+          override def onUpstreamFailure(exception: Throwable): Unit = {
+            matFailure(exception)
+            failed = true
+            super.onUpstreamFailure(exception)
+          }
+        })
 
       protected[this] def doPreStart(): Unit = pull(in)
 
@@ -346,34 +344,32 @@ private[ftp] trait FtpRemoveSink[FtpClient, S <: RemoteFileSettings]
 
   def shape: SinkShape[FtpFile] = SinkShape(in)
 
-  def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
+  def createLogicAndMaterializedValue(
+      inheritedAttributes: Attributes): (FtpGraphStageLogic[Unit, FtpClient, S], Future[IOResult]) = {
     val matValuePromise = Promise[IOResult]()
     var numberOfRemovedFiles = 0
     val logic = new FtpGraphStageLogic[Unit, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
-      {
-        setHandler(
-          in,
-          new InHandler {
-            override def onPush(): Unit = {
-              try {
-                graphStageFtpLike.remove(grab(in).path, handler.get)
-                numberOfRemovedFiles = numberOfRemovedFiles + 1
-                pull(in)
-              } catch {
-                case NonFatal(e) =>
-                  failed = true
-                  matFailure(e)
-                  failStage(e)
-              }
+      setHandler(
+        in,
+        new InHandler {
+          override def onPush(): Unit =
+            try {
+              graphStageFtpLike.remove(grab(in).path, handler.get)
+              numberOfRemovedFiles = numberOfRemovedFiles + 1
+              pull(in)
+            } catch {
+              case NonFatal(e) =>
+                failed = true
+                matFailure(e)
+                failStage(e)
             }
 
-            override def onUpstreamFailure(exception: Throwable): Unit = {
-              matFailure(exception)
-              failed = true
-              super.onUpstreamFailure(exception)
-            }
-          })
-      }
+          override def onUpstreamFailure(exception: Throwable): Unit = {
+            matFailure(exception)
+            failed = true
+            super.onUpstreamFailure(exception)
+          }
+        })
 
       protected[this] def doPreStart(): Unit = pull(in)
 

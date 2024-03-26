@@ -270,9 +270,9 @@ class AmqpConnectorsSpec extends AmqpSpec {
         .take(input.size)
         .runWith(Sink.seq)
 
-      result.futureValue.map(cm => {
+      result.futureValue.map { cm =>
         noException should be thrownBy cm.ack().futureValue
-      })
+      }
     }
 
     "not republish message without autoAck(false) if nack is sent" in assertAllStagesStopped {

@@ -45,7 +45,7 @@ import scala.collection.immutable
 
   private val in = Inlet[immutable.Seq[ByteString]]("CsvToMap.in")
   private val out = Outlet[Map[String, V]]("CsvToMap.out")
-  override val shape = FlowShape.of(in, out)
+  override val shape: FlowShape[immutable.Seq[ByteString], Map[String, V]] = FlowShape.of(in, out)
 
   val fieldValuePlaceholder: V
 

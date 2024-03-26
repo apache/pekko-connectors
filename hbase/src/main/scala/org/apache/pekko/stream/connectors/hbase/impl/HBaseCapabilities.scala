@@ -30,20 +30,18 @@ import scala.language.postfixOps
 
 private[impl] trait HBaseCapabilities { this: StageLogging =>
 
-  def twr[A <: Closeable, B](resource: A)(doWork: A => B): Try[B] =
-    try {
+  private def twr[A <: Closeable, B](resource: A)(doWork: A => B): Try[B] =
+    try
       Success(doWork(resource))
-    } catch {
+    catch {
       case e: Exception => Failure(e)
-    } finally {
-      try {
-        if (resource != null) {
+    } finally
+      try
+        if (resource != null)
           resource.close()
-        }
-      } catch {
+      catch {
         case e: Exception => log.error(e, e.getMessage) // should be logged
       }
-    }
 
   /**
    * Connect to hbase cluster.
@@ -52,7 +50,7 @@ private[impl] trait HBaseCapabilities { this: StageLogging =>
    * @param timeout in second
    * @return
    */
-  def connect(conf: Configuration, timeout: Int = 10) =
+  def connect(conf: Configuration, timeout: Int = 10): Connection =
     Await.result(Future(ConnectionFactory.createConnection(conf)), timeout seconds)
 
   private[impl] def getOrCreateTable(tableName: TableName, columnFamilies: Seq[String])(

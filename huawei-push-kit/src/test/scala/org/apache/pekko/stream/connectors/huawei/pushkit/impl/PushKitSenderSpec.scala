@@ -47,7 +47,7 @@ class PushKitSenderSpec
 
   import PushKitJsonSupport._
 
-  override def afterAll() =
+  override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
 
   implicit val defaultPatience: PatienceConfig =

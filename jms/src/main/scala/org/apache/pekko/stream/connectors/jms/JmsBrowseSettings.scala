@@ -68,7 +68,7 @@ final class JmsBrowseSettings private (
     selector = selector,
     acknowledgeMode = acknowledgeMode)
 
-  override def toString =
+  override def toString: String =
     "JmsBrowseSettings(" +
     s"connectionFactory=$connectionFactory," +
     s"connectionRetrySettings=$connectionRetrySettings," +

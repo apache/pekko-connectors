@@ -47,9 +47,9 @@ object CouchbaseSessionRegistry extends ExtensionId[CouchbaseSessionRegistry] wi
   override def get(system: pekko.actor.ActorSystem): CouchbaseSessionRegistry =
     super.apply(system)
 
-  override def lookup: ExtensionId[CouchbaseSessionRegistry] = this
+  override def lookup: CouchbaseSessionRegistry.type = CouchbaseSessionRegistry
 
-  private case class SessionKey(settings: CouchbaseSessionSettings, bucketName: String)
+  private final case class SessionKey(settings: CouchbaseSessionSettings, bucketName: String)
 }
 
 final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extension {

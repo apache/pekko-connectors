@@ -147,7 +147,7 @@ import scala.collection.mutable
     lineBytesDropped = 0
   }
 
-  private[this] def dropReadBuffer() = {
+  private[this] def dropReadBuffer(): Unit = {
     buffer = buffer.drop(pos)
     lineBytesDropped += pos
     pos = 0
@@ -186,7 +186,7 @@ import scala.collection.mutable
 
   }
 
-  private[this] def noCharEscaped() =
+  private[this] def noCharEscaped(): Nothing =
     throw new MalformedCsvException(currentLineNo,
       lineLength,
       s"wrong escaping at $currentLineNo:$lineLength, no character after escape")
@@ -330,7 +330,7 @@ import scala.collection.mutable
                 lineLength,
                 s"wrong escaping at $currentLineNo:$lineLength, quote is escaped as ${quoteChar.toChar}${quoteChar.toChar}")
 
-            case b =>
+            case _ =>
               fieldBuilder.add(escapeChar)
               state = WithinField
 
@@ -375,7 +375,7 @@ import scala.collection.mutable
               state = WithinQuotedField
               advance()
 
-            case b =>
+            case _ =>
               fieldBuilder.add(escapeChar)
               state = WithinQuotedField
           }
@@ -387,7 +387,7 @@ import scala.collection.mutable
               state = WithinQuotedField
               advance()
 
-            case b =>
+            case _ =>
               state = WithinField
           }
 

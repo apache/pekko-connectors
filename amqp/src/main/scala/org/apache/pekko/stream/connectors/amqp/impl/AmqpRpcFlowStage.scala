@@ -42,8 +42,8 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
     extends GraphStageWithMaterializedValue[FlowShape[WriteMessage, CommittableReadResult], Future[String]] {
   stage =>
 
-  val in = Inlet[WriteMessage]("AmqpRpcFlow.in")
-  val out = Outlet[CommittableReadResult]("AmqpRpcFlow.out")
+  val in: Inlet[WriteMessage] = Inlet[WriteMessage]("AmqpRpcFlow.in")
+  val out: Outlet[CommittableReadResult] = Outlet[CommittableReadResult]("AmqpRpcFlow.out")
 
   override def shape: FlowShape[WriteMessage, CommittableReadResult] = FlowShape.of(in, out)
 

@@ -23,7 +23,8 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import pekko.util.ByteString
 
 /**
- * Internal Java API: Converts incoming {@link Collection}<{@link ByteString}> to {@link java.util.Map}<String, ByteString>.
+ * Internal Java API: Converts incoming [[ju.Collection]] containing a [[ByteString]] to [[ju.Map]] with [[String]] as
+ * key.
  *
  * @param columnNames If given, these names are used as map keys; if not first stream element is used
  * @param charset Character set used to convert header line ByteString to String
@@ -72,7 +73,7 @@ import pekko.util.ByteString
           }
         })
 
-      private def process(elem: ju.Collection[ByteString], combine: ju.Collection[V] => ju.Map[String, V]) = {
+      private def process(elem: ju.Collection[ByteString], combine: ju.Collection[V] => ju.Map[String, V]): Unit = {
         if (headers.isPresent) {
           val map = combine(transformElements(elem))
           push(out, map)

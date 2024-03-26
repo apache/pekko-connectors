@@ -45,7 +45,7 @@ class QueueOfferStateSpec
   private implicit val ec: ExecutionContext = system.dispatcher
 
   private val baseBehavior = Behaviors.receivePartial[Msg] {
-    case (context, DoubleIt(n, reply)) =>
+    case (_, DoubleIt(n, reply)) =>
       reply.tell(n * 2)
 
       Behaviors.same

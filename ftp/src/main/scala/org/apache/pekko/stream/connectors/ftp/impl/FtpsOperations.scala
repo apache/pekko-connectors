@@ -41,9 +41,8 @@ private[ftp] trait FtpsOperations extends CommonFtpOperations {
         case _ =>
       }
 
-      if (ftpClient.getAutodetectUTF8() != connectionSettings.autodetectUTF8) {
+      if (ftpClient.getAutodetectUTF8 != connectionSettings.autodetectUTF8)
         ftpClient.setAutodetectUTF8(connectionSettings.autodetectUTF8)
-      }
 
       ftpClient.connect(connectionSettings.host, connectionSettings.port)
 
@@ -52,19 +51,16 @@ private[ftp] trait FtpsOperations extends CommonFtpOperations {
       ftpClient.login(
         connectionSettings.credentials.username,
         connectionSettings.credentials.password)
-      if (ftpClient.getReplyCode == 530) {
+      if (ftpClient.getReplyCode == 530)
         throw new FtpAuthenticationException(
           s"unable to login to host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
               .fold("")("proxy=" + _.toString)}")
-      }
 
-      if (connectionSettings.binary) {
+      if (connectionSettings.binary)
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE)
-      }
 
-      if (connectionSettings.passiveMode) {
+      if (connectionSettings.passiveMode)
         ftpClient.enterLocalPassiveMode()
-      }
 
       ftpClient
     }

@@ -105,7 +105,7 @@ final class WriteMessage[T, C] private (
     updates = updates,
     passThrough = passThrough)
 
-  override def toString =
+  override def toString: String =
     "WriteMessage(" +
     s"operation=$operation," +
     s"idField=$idField," +

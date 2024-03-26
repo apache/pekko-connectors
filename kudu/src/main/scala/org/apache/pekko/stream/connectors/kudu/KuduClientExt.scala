@@ -21,7 +21,7 @@ import org.apache.kudu.client.KuduClient
  * Manages one [[org.apache.kudu.client.KuduClient]] per `ActorSystem`.
  */
 final class KuduClientExt private (sys: ExtendedActorSystem) extends Extension {
-  val client = {
+  val client: KuduClient = {
     val masterAddress = sys.settings.config.getString("pekko.connectors.kudu.master-address")
     new KuduClient.KuduClientBuilder(masterAddress).build
   }
@@ -30,7 +30,7 @@ final class KuduClientExt private (sys: ExtendedActorSystem) extends Extension {
 }
 
 object KuduClientExt extends ExtensionId[KuduClientExt] with ExtensionIdProvider {
-  override def lookup = KuduClientExt
+  override def lookup: KuduClientExt.type = KuduClientExt
   override def createExtension(system: ExtendedActorSystem) = new KuduClientExt(system)
 
   /**

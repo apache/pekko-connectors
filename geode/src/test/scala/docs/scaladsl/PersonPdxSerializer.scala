@@ -23,14 +23,14 @@ object PersonPdxSerializer extends PekkoPdxSerializer[Person] {
   override def clazz: Class[Person] = classOf[Person]
 
   override def toData(o: scala.Any, out: PdxWriter): Boolean =
-    if (o.isInstanceOf[Person]) {
-      val p = o.asInstanceOf[Person]
-      out.writeInt("id", p.id)
-      out.writeString("name", p.name)
-      out.writeDate("birthDate", p.birthDate)
-      true
-    } else
-      false
+    o match {
+      case p: Person =>
+        out.writeInt("id", p.id)
+        out.writeString("name", p.name)
+        out.writeDate("birthDate", p.birthDate)
+        true
+      case _ => false
+    }
 
   override def fromData(clazz: Class[_], in: PdxReader): AnyRef = {
     val id: Int = in.readInt("id")

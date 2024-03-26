@@ -25,10 +25,10 @@ import pekko.util.ByteString
 @InternalApi private[file] class EnsureByteStreamSize(expectedSize: Long)
     extends GraphStage[FlowShape[ByteString, ByteString]] {
 
-  val in = Inlet[ByteString]("EnsureByteStreamSize.in")
-  val out = Outlet[ByteString]("EnsureByteStreamSize.out")
+  val in: Inlet[ByteString] = Inlet[ByteString]("EnsureByteStreamSize.in")
+  val out: Outlet[ByteString] = Outlet[ByteString]("EnsureByteStreamSize.out")
 
-  override val shape = FlowShape.of(in, out)
+  override val shape: FlowShape[ByteString, ByteString] = FlowShape.of(in, out)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic = new GraphStageLogic(shape) {
     private var currentSize = 0L
@@ -42,16 +42,14 @@ import pekko.util.ByteString
           push(out, elem)
         }
 
-        override def onUpstreamFinish(): Unit = {
+        override def onUpstreamFinish(): Unit =
           if (currentSize == expectedSize) super.onUpstreamFinish()
-          else failStage(new IllegalStateException(s"Expected ${expectedSize} bytes but got ${currentSize} bytes"))
-        }
+          else failStage(new IllegalStateException(s"Expected $expectedSize bytes but got $currentSize bytes"))
       })
     setHandler(out,
       new OutHandler {
-        override def onPull(): Unit = {
+        override def onPull(): Unit =
           pull(in)
-        }
       })
   }
 

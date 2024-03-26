@@ -166,13 +166,13 @@ final class ForwardProxyCredentials private (val username: String, val password:
   /** Java API */
   def getPassword: String = password
 
-  def withUsername(username: String) = copy(username = username)
-  def withPassword(password: String) = copy(password = password)
+  def withUsername(username: String): ForwardProxyCredentials = copy(username = username)
+  def withPassword(password: String): ForwardProxyCredentials = copy(password = password)
 
   private def copy(username: String = username, password: String = password) =
     new ForwardProxyCredentials(username, password)
 
-  override def toString =
+  override def toString: String =
     "ForwardProxyCredentials(" +
     s"username=$username," +
     s"password=******" +
@@ -198,29 +198,29 @@ final class ForwardProxyCredentials private (val username: String, val password:
 object ForwardProxy {
 
   /** Scala API */
-  def apply(host: String, port: Int) =
+  def apply(host: String, port: Int): ForwardProxy =
     new ForwardProxy(host, port, Option.empty, Option.empty)
 
-  def apply(host: String, port: Int, credentials: Option[ForwardProxyCredentials]) =
+  def apply(host: String, port: Int, credentials: Option[ForwardProxyCredentials]): ForwardProxy =
     new ForwardProxy(host, port, credentials, Option.empty)
 
   def apply(host: String,
       port: Int,
       credentials: Option[ForwardProxyCredentials],
-      trustPem: Option[ForwardProxyTrustPem]) =
+      trustPem: Option[ForwardProxyTrustPem]): ForwardProxy =
     new ForwardProxy(host, port, credentials, trustPem)
 
   /** Java API */
-  def create(host: String, port: Int) =
+  def create(host: String, port: Int): ForwardProxy =
     apply(host, port)
 
-  def create(host: String, port: Int, credentials: Option[ForwardProxyCredentials]) =
+  def create(host: String, port: Int, credentials: Option[ForwardProxyCredentials]): ForwardProxy =
     apply(host, port, credentials)
 
   def create(host: String,
       port: Int,
       credentials: Option[ForwardProxyCredentials],
-      trustPem: Option[ForwardProxyTrustPem]) =
+      trustPem: Option[ForwardProxyTrustPem]): ForwardProxy =
     apply(host, port, credentials, trustPem)
 
 }
@@ -246,9 +246,9 @@ final class ForwardProxy private (val host: String,
 
   def getForwardProxyTrustPem: java.util.Optional[ForwardProxyTrustPem] = trustPem.toJava
 
-  def withHost(host: String) = copy(host = host)
-  def withPort(port: Int) = copy(port = port)
-  def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
+  def withHost(host: String): ForwardProxy = copy(host = host)
+  def withPort(port: Int): ForwardProxy = copy(port = port)
+  def withCredentials(credentials: ForwardProxyCredentials): ForwardProxy = copy(credentials = Option(credentials))
 
   private def copy(host: String = host,
       port: Int = port,
@@ -256,7 +256,7 @@ final class ForwardProxy private (val host: String,
       trustPem: Option[ForwardProxyTrustPem] = trustPem) =
     new ForwardProxy(host, port, credentials, trustPem)
 
-  override def toString =
+  override def toString: String =
     "ForwardProxy(" +
     s"host=$host," +
     s"port=$port," +
@@ -333,16 +333,14 @@ object FcmSettings {
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
-  def create(clientEmail: String, privateKey: String, projectId: String): FcmSettings = {
+  def create(clientEmail: String, privateKey: String, projectId: String): FcmSettings =
     apply(clientEmail, privateKey, projectId)
-  }
 
   /**
    * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
    */
   @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
   @Deprecated
-  def create(clientEmail: String, privateKey: String, projectId: String, forwardProxy: ForwardProxy): FcmSettings = {
+  def create(clientEmail: String, privateKey: String, projectId: String, forwardProxy: ForwardProxy): FcmSettings =
     apply(clientEmail, privateKey, projectId, forwardProxy)
-  }
 }

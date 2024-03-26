@@ -57,10 +57,10 @@ sealed trait JmsConnectorState {
 
 object JmsConnectorState {
   case object Disconnected extends JmsConnectorState
-  case class Connecting(attempt: Int) extends JmsConnectorState
+  final case class Connecting(attempt: Int) extends JmsConnectorState
   case object Connected extends JmsConnectorState
   case object Completing extends JmsConnectorState
   case object Completed extends JmsConnectorState
-  case class Failing(exception: Throwable) extends JmsConnectorState
-  case class Failed(exception: Throwable) extends JmsConnectorState
+  final case class Failing(exception: Throwable) extends JmsConnectorState
+  final case class Failed(exception: Throwable) extends JmsConnectorState
 }

@@ -69,7 +69,6 @@ import io.pravega.client.tables.TableKey
     if (onAir.decrementAndGet == 0 && upstreamEnded) {
       log.debug("Stage completed after upstream finish")
       completeStage()
-
     }
   }
 
@@ -124,9 +123,8 @@ import io.pravega.client.tables.TableKey
   setHandler(
     out,
     new OutHandler {
-      override def onPull(): Unit = {
+      override def onPull(): Unit =
         pull(in)
-      }
     })
 
   /**
@@ -137,7 +135,7 @@ import io.pravega.client.tables.TableKey
     Try(table.close()) match {
       case Failure(exception) =>
         log.error(exception, "Error while closing table [{}]", tableName)
-      case Success(value) =>
+      case Success(_) =>
         log.debug("Closed table [{}]", tableName)
     }
     keyValueTableFactory.close()
@@ -145,7 +143,7 @@ import io.pravega.client.tables.TableKey
 
 }
 @InternalApi private[pravega] final class PravegaTableWriteFlow[KVPair, K, V](
-    kvpToTuple2: KVPair => Tuple2[K, V],
+    kvpToTuple2: KVPair => (K, V),
     scope: String,
     streamName: String,
     tableWriterSettings: TableWriterSettings[K, V]) extends GraphStage[FlowShape[KVPair, KVPair]] {

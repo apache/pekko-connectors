@@ -23,15 +23,14 @@ object SDKClientSource {
 
   private val RequestParamsHeader = "x-goog-request-params"
 
-  def read(client: BigQueryReadClient, readSession: ReadSession): Seq[Source[ReadRowsResponse.Rows, NotUsed]] = {
+  def read(client: BigQueryReadClient, readSession: ReadSession): Seq[Source[ReadRowsResponse.Rows, NotUsed]] =
     readSession.streams
-      .map(stream => {
+      .map { stream =>
         client
           .readRows()
           .addHeader(RequestParamsHeader, s"read_stream=${stream.name}")
           .invoke(ReadRowsRequest(stream.name))
           .map(_.rows)
-      })
-  }
+      }
 
 }

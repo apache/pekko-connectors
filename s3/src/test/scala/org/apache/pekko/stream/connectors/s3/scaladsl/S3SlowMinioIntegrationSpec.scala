@@ -64,9 +64,8 @@ class S3SlowMinioIntegrationSpec
 
   implicit val defaultPatience: PatienceConfig = PatienceConfig(90.seconds, 100.millis)
 
-  override protected def beforeAll(): Unit = {
+  override protected def beforeAll(): Unit =
     Await.ready(S3.makeBucket(defaultBucket).recover { case _ => Done }, 10.seconds)
-  }
   override protected def afterAll(): Unit = TestKit.shutdownActorSystem(actorSystem)
 
   def config(): Config = {

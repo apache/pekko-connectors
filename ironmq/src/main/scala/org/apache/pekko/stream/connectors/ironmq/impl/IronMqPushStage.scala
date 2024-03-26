@@ -90,13 +90,12 @@ private[ironmq] class IronMqPushStage(queueName: String, settings: IronMqSetting
             tryPull(in)
         })
 
-      private def checkForCompletion() =
-        if (isClosed(in) && runningFutures <= 0) {
+      private def checkForCompletion(): Unit =
+        if (isClosed(in) && runningFutures <= 0)
           exceptionFromUpstream match {
             case None     => completeStage()
             case Some(ex) => failStage(ex)
           }
-        }
 
       private val futureCompleted = getAsyncCallback[Unit] { _ =>
         runningFutures = runningFutures - 1

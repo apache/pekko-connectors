@@ -148,12 +148,11 @@ class TarArchiveSpec
     val tenDigits = ByteString("1234567890")
     val metadata1 = TarArchiveMetadata("dir/file1.txt", tenDigits.length)
 
-    val oneFileArchive = {
+    val oneFileArchive =
       Source
         .single(metadata1 -> Source.single(tenDigits))
         .via(Archive.tar())
         .runWith(collectByteString)
-    }
 
     "emit one file" in {
       val tar =
@@ -161,7 +160,7 @@ class TarArchiveSpec
           .future(oneFileArchive)
           .via(Archive.tarReader())
           .mapAsync(1) {
-            case in @ (metadata, source) =>
+            case (metadata, source) =>
               source.runWith(collectByteString).map { bs =>
                 metadata -> bs
               }
@@ -295,8 +294,7 @@ class TarArchiveSpec
         .future(input)
         .via(Archive.tarReader())
         .mapAsync(1) {
-          case (metadata, source) =>
-            source.runWith(Sink.ignore)
+          case (_, source) => source.runWith(Sink.ignore)
         }
         .runWith(Sink.ignore)
       val error = tar.failed.futureValue
@@ -345,12 +343,12 @@ class TarArchiveSpec
       val tenDigits = ByteString("1234567890")
       val metadata1 = TarArchiveMetadata("dir/file1.txt", tenDigits.length)
 
-      val nestedArchive = {
+      val nestedArchive =
         Source
           .single(metadata1 -> Source.single(tenDigits))
           .via(Archive.tar())
           .runWith(collectByteString)
-      }
+
       val outerArchive: Future[ByteString] =
         Source
           .future(nestedArchive)
@@ -368,7 +366,7 @@ class TarArchiveSpec
       res.futureValue shouldBe Seq("nested.tar", "file1.txt")
     }
 
-    def untar(): Flow[ByteString, TarArchiveMetadata, NotUsed] = {
+    def untar(): Flow[ByteString, TarArchiveMetadata, NotUsed] =
       Archive
         .tarReader()
         .log("untar")
@@ -385,7 +383,6 @@ class TarArchiveSpec
         }
         .flatMapConcat(identity)
         .log("untarred")
-    }
   }
 
   private def getPathFromResources(fileName: String): Path =
@@ -398,7 +395,7 @@ class TarArchiveSpec
   }
 
   // returns None if tar executable is not available on PATH
-  private def untar(tarPath: Path, args: String): Option[Map[String, ByteString]] = {
+  private def untar(tarPath: Path, args: String): Option[Map[String, ByteString]] =
     if (ExecutableUtils.isOnPath("tar")) {
       val tmpDir = Files.createTempDirectory("ArchiveSpec")
       try {
@@ -412,11 +409,9 @@ class TarArchiveSpec
             .filter(path => Files.isRegularFile(path))
             .map(path => tmpDir.relativize(path).toString -> ByteString(Files.readAllBytes(path)))
             .toMap)
-      } finally {
+      } finally
         Files.walk(tmpDir).sorted(Comparator.reverseOrder()).iterator().asScala.foreach(p => Files.delete(p))
-      }
     } else None
-  }
 
   override def afterAll(): Unit = {
     super.afterAll()

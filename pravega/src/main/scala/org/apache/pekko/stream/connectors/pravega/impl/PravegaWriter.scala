@@ -13,6 +13,7 @@
 
 package org.apache.pekko.stream.connectors.pravega.impl
 
+import io.pravega.client.stream.EventStreamWriter
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.pravega.WriterSettings
@@ -20,7 +21,7 @@ import pekko.stream.stage.StageLogging
 @InternalApi private[pravega] trait PravegaWriter extends PravegaCapabilities {
   this: StageLogging =>
 
-  def createWriter[A](streamName: String, writerSettings: WriterSettings[A]) =
+  def createWriter[A](streamName: String, writerSettings: WriterSettings[A]): EventStreamWriter[A] =
     eventStreamClientFactory.createEventWriter(
       streamName,
       writerSettings.serializer,

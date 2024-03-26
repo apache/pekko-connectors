@@ -36,7 +36,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
   system.registerOnTermination(session.close())
 
   // The example domain
-  case class User(id: Int, name: String)
+  final case class User(id: Int, name: String)
 
   // We need this to automatically transform result rows
   // into instances of the User class.
@@ -57,10 +57,7 @@ object SlickSourceWithPlainSQLQueryExample extends App {
       .runWith(Sink.ignore)
   // #source-example
 
-  done.onComplete {
-    case _ =>
-      system.terminate()
-  }
+  done.onComplete(_ => system.terminate())
 }
 
 object SlickSourceWithTypedQueryExample extends App {
@@ -89,10 +86,7 @@ object SlickSourceWithTypedQueryExample extends App {
       .runWith(Sink.ignore)
   // #source-with-typed-query
 
-  done.onComplete {
-    case _ =>
-      system.terminate()
-  }
+  done.onComplete(_ => system.terminate())
 }
 
 object SlickSinkExample extends App {
@@ -104,7 +98,7 @@ object SlickSinkExample extends App {
   system.registerOnTermination(session.close())
 
   // The example domain
-  case class User(id: Int, name: String)
+  final case class User(id: Int, name: String)
   val users = (1 to 42).map(i => User(i, s"Name$i"))
 
   // This import enables the use of the Slick sql"...",
@@ -121,10 +115,7 @@ object SlickSinkExample extends App {
           sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"))
   // #sink-example
 
-  done.onComplete {
-    case _ =>
-      system.terminate()
-  }
+  done.onComplete(_ => system.terminate())
 }
 
 object SlickFlowExample extends App {
@@ -136,7 +127,7 @@ object SlickFlowExample extends App {
   system.registerOnTermination(session.close())
 
   // The example domain
-  case class User(id: Int, name: String)
+  final case class User(id: Int, name: String)
   val users = (1 to 42).map(i => User(i, s"Name$i"))
 
   // This import enables the use of the Slick sql"...",
@@ -164,10 +155,10 @@ object SlickFlowExample extends App {
 object SlickFlowWithPassThroughExample extends App {
 
   // mimics a Kafka 'Committable' type
-  case class CommittableOffset(offset: Int) {
+  final case class CommittableOffset(offset: Int) {
     def commit: Future[Done] = Future.successful(Done)
   }
-  case class KafkaMessage[A](msg: A, offset: CommittableOffset) {
+  final case class KafkaMessage[A](msg: A, offset: CommittableOffset) {
     // map the msg and keep the offset
     def map[B](f: A => B): KafkaMessage[B] = KafkaMessage(f(msg), offset)
   }
@@ -180,7 +171,7 @@ object SlickFlowWithPassThroughExample extends App {
   system.registerOnTermination(session.close())
 
   // The example domain
-  case class User(id: Int, name: String)
+  final case class User(id: Int, name: String)
   val users = (1 to 42).map(i => User(i, s"Name$i"))
   val messagesFromKafka = users.zipWithIndex.map { case (user, index) => KafkaMessage(user, CommittableOffset(index)) }
 
@@ -210,8 +201,5 @@ object SlickFlowWithPassThroughExample extends App {
       .runWith(Sink.ignore)
   // #flowWithPassThrough-example
 
-  done.onComplete {
-    case _ =>
-      system.terminate()
-  }
+  done.onComplete(_ => system.terminate())
 }

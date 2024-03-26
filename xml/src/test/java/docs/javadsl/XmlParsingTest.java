@@ -74,8 +74,7 @@ public class XmlParsingTest {
 
         resultStage
             .thenAccept(
-                (list) -> {
-                    assertThat(
+                (list) -> assertThat(
                         list,
                         hasItems(
                             StartDocument.getInstance(),
@@ -87,8 +86,7 @@ public class XmlParsingTest {
                             Characters.create("elem2"),
                             EndElement.create("elem"),
                             EndElement.create("doc"),
-                            EndDocument.getInstance()));
-                })
+                            EndDocument.getInstance())))
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
     }
@@ -108,13 +106,11 @@ public class XmlParsingTest {
                             return Pair.create(textBuffer, Optional.<String>empty());
                         case XMLEndElement:
                             EndElement s = (EndElement) parseEvent;
-                            switch (s.localName()) {
-                                case "elem":
-                                    String text = textBuffer.toString();
-                                    return Pair.create(textBuffer, Optional.of(text));
-                                default:
-                                    return Pair.create(textBuffer, Optional.<String>empty());
+                            if (s.localName().equals("elem")) {
+                                String text = textBuffer.toString();
+                                return Pair.create(textBuffer, Optional.of(text));
                             }
+                            return Pair.create(textBuffer, Optional.<String>empty());
                         case XMLCharacters:
                         case XMLCData:
                             TextEvent t = (TextEvent) parseEvent;
@@ -148,8 +144,7 @@ public class XmlParsingTest {
 
         resultStage
             .thenAccept(
-                (list) -> {
-                    assertThat(
+                (list) -> assertThat(
                         list,
                         hasItems(
                             StartDocument.getInstance(),
@@ -161,8 +156,7 @@ public class XmlParsingTest {
                             Characters.create("elem2"),
                             EndElement.create("elem"),
                             EndElement.create("doc"),
-                            EndDocument.getInstance()));
-                })
+                            EndDocument.getInstance())))
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
         assertThat(configWasCalled[0], is(true));
@@ -194,16 +188,14 @@ public class XmlParsingTest {
 
         resultStage
             .thenAccept(
-                (list) -> {
-                    assertThat(
+                (list) -> assertThat(
                         list,
                         hasItems(
                             Characters.create("i1"),
                             StartElement.create("sub", Collections.emptyMap()),
                             Characters.create("i2"),
                             EndElement.create("sub"),
-                            Characters.create("i3")));
-                })
+                            Characters.create("i3"))))
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
     }
@@ -234,11 +226,9 @@ public class XmlParsingTest {
 
         resultStage
             .thenAccept(
-                (list) -> {
-                    assertThat(
+                (list) -> assertThat(
                         list.stream().map(e -> XmlHelper.asString(e).trim()).collect(Collectors.toList()),
-                        hasItems("<item>i1</item>", "<item><sub>i2</sub></item>", "<item>i3</item>"));
-                })
+                        hasItems("<item>i1</item>", "<item><sub>i2</sub></item>", "<item>i3</item>")))
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
     }

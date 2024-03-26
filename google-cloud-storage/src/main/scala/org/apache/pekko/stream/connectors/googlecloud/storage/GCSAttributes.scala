@@ -34,13 +34,13 @@ object GCSAttributes {
 final class GCSSettingsPath private (val path: String) extends Attribute
 
 object GCSSettingsPath {
-  val Default = GCSSettingsPath(GCSSettings.ConfigPath)
+  val Default: GCSSettingsPath = GCSSettingsPath(GCSSettings.ConfigPath)
 
-  def apply(path: String) = new GCSSettingsPath(path)
+  def apply(path: String): GCSSettingsPath = new GCSSettingsPath(path)
 }
 
 final class GCSSettingsValue private (val settings: GCSSettings) extends Attribute
 
 object GCSSettingsValue {
-  def apply(settings: GCSSettings) = new GCSSettingsValue(settings)
+  def apply(settings: GCSSettings): GCSSettingsValue = new GCSSettingsValue(settings)
 }

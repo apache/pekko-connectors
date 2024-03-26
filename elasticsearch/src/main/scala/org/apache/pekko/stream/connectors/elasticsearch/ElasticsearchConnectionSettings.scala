@@ -45,13 +45,13 @@ final class ElasticsearchConnectionSettings private (
   def withHeaders(
       headers: java.util.List[pekko.http.javadsl.model.HttpHeader]): ElasticsearchConnectionSettings = {
     val scalaHeaders = headers.asScala
-      .map(x => {
+      .map { x =>
         HttpHeader.parse(x.name(), x.value()) match {
           case ParsingResult.Ok(header, _) => header
           case ParsingResult.Error(error) =>
             throw new Exception(s"Unable to convert java HttpHeader to scala HttpHeader: ${error.summary}")
         }
-      })
+      }
       .toList
 
     copy(headers = scalaHeaders)
@@ -80,9 +80,8 @@ final class ElasticsearchConnectionSettings private (
   }
 
   def withSSLContext(
-      sslContext: SSLContext): ElasticsearchConnectionSettings = {
+      sslContext: SSLContext): ElasticsearchConnectionSettings =
     copy(connectionContext = Option(ConnectionContext.httpsClient(sslContext)))
-  }
 
   def hasConnectionContextDefined: Boolean = connectionContext.isDefined
 

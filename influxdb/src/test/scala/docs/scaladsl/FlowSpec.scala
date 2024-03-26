@@ -85,8 +85,8 @@ class FlowSpec
     // After we've written them to InfluxDB, we want
     // to commit the offset to Kafka
 
-    case class KafkaOffset(offset: Int)
-    case class KafkaMessage(cpu: InfluxDbFlowCpu, offset: KafkaOffset)
+    final case class KafkaOffset(offset: Int)
+    final case class KafkaMessage(cpu: InfluxDbFlowCpu, offset: KafkaOffset)
 
     val messagesFromKafka = List(
       KafkaMessage(new InfluxDbFlowCpu(Instant.now().minusSeconds(1000), "local_1", "eu-west-2", 1.4d, true, 123L),

@@ -55,7 +55,6 @@ object LogRotatorSink {
   def createFromFunctionAndOptions(
       triggerGeneratorCreator: function.Creator[function.Function[ByteString, Optional[Path]]],
       fileOpenOptions: java.util.Set[StandardOpenOption]): javadsl.Sink[ByteString, CompletionStage[Done]] = {
-
     val logRotatorSink = new scaladsl.SinkToCompletionStage[ByteString, Done](pekko.stream.connectors.file.scaladsl
       .LogRotatorSink(asScala(triggerGeneratorCreator), fileOpenOptions.asScala.toSet))
     new javadsl.Sink(logRotatorSink.toCompletionStage())

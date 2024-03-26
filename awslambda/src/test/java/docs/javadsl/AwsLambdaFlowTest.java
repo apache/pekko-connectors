@@ -66,9 +66,7 @@ public class AwsLambdaFlowTest {
     InvokeResponse invokeResponse = InvokeResponse.builder().build();
     when(awsLambdaClient.invoke(eq(invokeRequest)))
         .thenAnswer(
-            invocation -> {
-              return CompletableFuture.completedFuture(invokeResponse);
-            });
+            invocation -> CompletableFuture.completedFuture(invokeResponse));
     Flow<InvokeRequest, InvokeResponse, NotUsed> flow = AwsLambdaFlow.create(awsLambdaClient, 1);
     Source<InvokeRequest, NotUsed> source = Source.single(invokeRequest);
     final CompletionStage<List<InvokeResponse>> stage =

@@ -23,7 +23,7 @@ import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 object AwsLambdaFlow {
 
   /**
-   * Scala API: creates a [[AwsLambdaFlowStage]] for a AWS Lambda function invocation using [[LambdaAsyncClient]]
+   * Scala API: creates a [[AwsLambdaFlow]] for a AWS Lambda function invocation using [[LambdaAsyncClient]]
    */
   def apply(
       parallelism: Int)(implicit awsLambdaClient: LambdaAsyncClient): Flow[InvokeRequest, InvokeResponse, NotUsed] =

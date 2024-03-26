@@ -62,9 +62,9 @@ object BigQueryAvroStorage {
       maxNumStreams: Int): Source[java.util.List[BigQueryRecord], CompletionStage[NotUsed]] =
     scstorage.BigQueryAvroStorage
       .readRecordsMerged(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         stream.asJava
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 
@@ -104,9 +104,9 @@ object BigQueryAvroStorage {
       maxNumStreams: Int): Source[java.util.List[Source[BigQueryRecord, NotUsed]], CompletionStage[NotUsed]] =
     scstorage.BigQueryAvroStorage
       .readRecords(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         stream.map(_.asJava).asJava
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 
@@ -143,9 +143,9 @@ object BigQueryAvroStorage {
       maxNumStreams: Int): Source[(AvroSchema, Source[AvroRows, NotUsed]), CompletionStage[NotUsed]] =
     scstorage.BigQueryAvroStorage
       .readMerged(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         (stream._1, stream._2.asJava)
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 
@@ -185,9 +185,9 @@ object BigQueryAvroStorage {
       maxNumStreams: Int): Source[(AvroSchema, java.util.List[Source[AvroRows, NotUsed]]), CompletionStage[NotUsed]] =
     scstorage.BigQueryAvroStorage
       .read(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         (stream._1, stream._2.map(_.asJava).asJava)
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 

@@ -29,7 +29,7 @@ object ExecutableUtils {
     paths.exists(path => Files.isExecutable(path.resolve(bin)))
   }
 
-  def run(bin: String, args: Seq[String], cwd: Path, input: ByteString = ByteString.empty): Future[ByteString] = {
+  def run(bin: String, args: Seq[String], cwd: Path, input: ByteString = ByteString.empty): Future[ByteString] =
     Future {
       val proc = Process(Seq(bin) ++ args, cwd.toFile)
       var stdout = Option.empty[ByteString]
@@ -50,12 +50,10 @@ object ExecutableUtils {
         case code => throw new RuntimeException(s"Subprocess exited with code $code\n\n${stderr.get.utf8String}")
       }
     }(scala.concurrent.ExecutionContext.Implicits.global)
-  }
 
-  private def writeStream(stream: OutputStream, content: ByteString): Unit = {
+  private def writeStream(stream: OutputStream, content: ByteString): Unit =
     try stream.write(content.toArray)
     finally stream.close()
-  }
 
   private def readStream(stream: InputStream): ByteString = {
     val reader = new BufferedInputStream(stream)

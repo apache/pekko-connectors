@@ -52,27 +52,23 @@ final class LogCapturingJunit4 extends TestRule {
   private val myLogger = LoggerFactory.getLogger(classOf[LogCapturingJunit4])
 
   override def apply(base: Statement, description: Description): Statement = {
-    new Statement {
-      override def evaluate(): Unit = {
-        try {
-          myLogger.info(s"Logging started for test [${description.getClassName}: ${description.getMethodName}]")
-          base.evaluate()
-          myLogger.info(
-            s"Logging finished for test [${description.getClassName}: ${description.getMethodName}] that was successful")
-        } catch {
-          case NonFatal(e) =>
-            println(
-              s"--> [${Console.BLUE}${description.getClassName}: ${description.getMethodName}${Console.RESET}] " +
-              s"Start of log messages of test that failed with ${e.getMessage}")
-            capturingAppender.flush()
-            println(
-              s"<-- [${Console.BLUE}${description.getClassName}: ${description.getMethodName}${Console.RESET}] " +
-              s"End of log messages of test that failed with ${e.getMessage}")
-            throw e
-        } finally {
-          capturingAppender.clear()
-        }
-      }
-    }
+    () =>
+      try {
+        myLogger.info(s"Logging started for test [${description.getClassName}: ${description.getMethodName}]")
+        base.evaluate()
+        myLogger.info(
+          s"Logging finished for test [${description.getClassName}: ${description.getMethodName}] that was successful")
+      } catch {
+        case NonFatal(e) =>
+          println(
+            s"--> [${Console.BLUE}${description.getClassName}: ${description.getMethodName}${Console.RESET}] " +
+            s"Start of log messages of test that failed with ${e.getMessage}")
+          capturingAppender.flush()
+          println(
+            s"<-- [${Console.BLUE}${description.getClassName}: ${description.getMethodName}${Console.RESET}] " +
+            s"End of log messages of test that failed with ${e.getMessage}")
+          throw e
+      } finally
+        capturingAppender.clear()
   }
 }

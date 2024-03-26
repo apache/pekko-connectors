@@ -41,14 +41,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class S3Test extends S3WireMockBase {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -269,7 +267,7 @@ public class S3Test extends S3WireMockBase {
 
     byte[] result = resultCompletionStage.toCompletableFuture().get(5, TimeUnit.SECONDS);
 
-    assertTrue(Arrays.equals(rangeOfBody(), result));
+      assertArrayEquals(rangeOfBody(), result);
   }
 
   @Test
@@ -289,7 +287,7 @@ public class S3Test extends S3WireMockBase {
 
     byte[] result = resultCompletionStage.toCompletableFuture().get(5, TimeUnit.SECONDS);
 
-    assertTrue(Arrays.equals(rangeOfBodySSE(), result));
+    assertArrayEquals(rangeOfBodySSE(), result);
   }
 
   @Test

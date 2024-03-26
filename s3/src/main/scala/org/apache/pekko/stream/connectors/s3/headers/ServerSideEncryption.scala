@@ -45,7 +45,7 @@ object ServerSideEncryption {
     new CustomerKeys(key)
 }
 
-final class AES256 private[headers] () extends ServerSideEncryption {
+final class AES256 private[headers] extends ServerSideEncryption {
   @InternalApi private[s3] override def headers: immutable.Seq[HttpHeader] =
     RawHeader("x-amz-server-side-encryption", "AES256") :: Nil
 
@@ -59,8 +59,8 @@ final class AES256 private[headers] () extends ServerSideEncryption {
     ")"
 
   override def equals(other: Any): Boolean = other match {
-    case that: AES256 => true
-    case _            => false
+    case _: AES256 => true
+    case _         => false
   }
 
   override def hashCode(): Int =

@@ -69,7 +69,7 @@ class AvroParquetSourceSpec
       val n: Int = 4
       val file: String = genFinalFile.sample.get
       val documents: List[Document] = genDocuments(n).sample.get
-      val avroDocuments: List[Record] = documents.map(format.to(_))
+      val avroDocuments: List[Record] = documents.map(format.to)
       Source(avroDocuments)
         .toMat(AvroParquetSink(parquetWriter(file, conf, schema)))(Keep.right)
         .run()

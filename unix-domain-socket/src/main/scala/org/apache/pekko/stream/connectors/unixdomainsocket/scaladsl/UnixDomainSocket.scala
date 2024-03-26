@@ -18,7 +18,7 @@ import java.nio.file.Path
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, ExtensionId, ExtensionIdProvider }
 import pekko.stream._
 import pekko.stream.connectors.unixdomainsocket.impl.UnixDomainSocketImpl
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
@@ -42,8 +42,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
   override def createExtension(system: ExtendedActorSystem) =
     new UnixDomainSocket(system)
 
-  override def lookup: ExtensionId[_ <: Extension] =
-    UnixDomainSocket
+  override def lookup: UnixDomainSocket.type = UnixDomainSocket
 
   /**
    * * Represents a successful server binding.

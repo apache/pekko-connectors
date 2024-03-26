@@ -43,7 +43,7 @@ object XmlParsing {
    */
   def parser(
       configureFactory: Consumer[AsyncXMLInputFactory]): pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
-    xml.scaladsl.XmlParsing.parser(false, configureFactory.accept(_)).asJava
+    xml.scaladsl.XmlParsing.parser(false, configureFactory.accept).asJava
 
   /**
    * Parser Flow that takes a stream of ByteStrings and parses them to XML events similar to SAX.
@@ -51,7 +51,7 @@ object XmlParsing {
   def parser(
       ignoreInvalidChars: Boolean,
       configureFactory: Consumer[AsyncXMLInputFactory]): pekko.stream.javadsl.Flow[ByteString, ParseEvent, NotUsed] =
-    xml.scaladsl.XmlParsing.parser(ignoreInvalidChars, configureFactory.accept(_)).asJava
+    xml.scaladsl.XmlParsing.parser(ignoreInvalidChars, configureFactory.accept).asJava
 
   /**
    * A Flow that transforms a stream of XML ParseEvents. This stage coalesces consequitive CData and Characters

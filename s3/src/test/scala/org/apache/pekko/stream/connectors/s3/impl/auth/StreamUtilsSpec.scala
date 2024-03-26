@@ -49,14 +49,13 @@ class StreamUtilsSpec(_system: ActorSystem)
 
   val fs = Jimfs.newFileSystem("FileSourceSpec", Configuration.unix())
 
-  val TestText = {
+  val TestText =
     ("a" * 1000) +
     ("b" * 1000) +
     ("c" * 1000) +
     ("d" * 1000) +
     ("e" * 1000) +
     ("f" * 1000)
-  }
 
   val bigFile: Path = {
     val f = Files.createTempFile(fs.getPath("/"), "file-source-spec", ".tmp")
@@ -86,9 +85,8 @@ class StreamUtilsSpec(_system: ActorSystem)
     val buffer = new Array[Byte](1024)
 
     var bytesRead: Int = dis.read(buffer)
-    while (bytesRead > -1) {
+    while (bytesRead > -1)
       bytesRead = dis.read(buffer)
-    }
 
     whenReady(flow) { result =>
       result should contain theSameElementsInOrderAs dis.getMessageDigest.digest()

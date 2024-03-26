@@ -292,7 +292,7 @@ object JmsByteMessage {
   /**
    * create a byte message
    */
-  def apply(bytes: Array[Byte]) = new JmsByteMessage(bytes = bytes)
+  def apply(bytes: Array[Byte]): JmsByteMessage = new JmsByteMessage(bytes = bytes)
 
   /**
    * Java API: create a byte message with pass-through
@@ -466,7 +466,7 @@ object JmsByteStringMessage {
   /**
    * Create a byte message from a ByteString
    */
-  def apply(byteString: ByteString) = new JmsByteStringMessage(byteString)
+  def apply(byteString: ByteString): JmsByteStringMessage = new JmsByteStringMessage(byteString)
 
   /**
    * Java API: Create a byte message from a ByteString with a pass-through attached
@@ -478,7 +478,7 @@ object JmsByteStringMessage {
   /**
    * Java API: Create a byte message from a ByteString
    */
-  def create(byteString: ByteString) = apply(byteString)
+  def create(byteString: ByteString): JmsByteStringMessage = apply(byteString)
 
   /**
    * Create a byte message from a [[javax.jms.BytesMessage]] with pass-through

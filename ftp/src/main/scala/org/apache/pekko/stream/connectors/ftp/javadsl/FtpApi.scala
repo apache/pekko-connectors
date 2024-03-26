@@ -29,6 +29,8 @@ import pekko.{ Done, NotUsed }
 import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.FTPClient
 
+import scala.annotation.tailrec
+
 @DoNotInherit
 sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory[FtpClient, S] =>
 
@@ -211,7 +213,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
    * @param basePath path to start with
    * @param name name of a directory to create
    * @param connectionSettings connection settings
-   * @param materializer materializer
+   * @param mat materializer
    * @return [[java.util.concurrent.CompletionStage CompletionStage]] of [[pekko.Done]] indicating a materialized, asynchronous request
    * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
    */
@@ -275,9 +277,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
   def remove(connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]]
 
   protected[javadsl] def func[T, R](f: T => R): pekko.japi.function.Function[T, R] =
-    new pekko.japi.function.Function[T, R] {
-      override def apply(param: T): R = f(param)
-    }
+    (param: T) => f(param)
 }
 
 object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
@@ -344,12 +344,12 @@ object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
     mkdir(basePath, name, connectionSettings).runWith(sink, mat)
   }
 
+  @tailrec
   def mkdirAsync(basePath: String,
       name: String,
       connectionSettings: S,
-      system: ClassicActorSystemProvider): CompletionStage[Done] = {
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
     mkdirAsync(basePath, name, connectionSettings, system.classicSystem)
-  }
 
   def toPath(path: String, connectionSettings: S, append: Boolean): Sink[ByteString, CompletionStage[IOResult]] = {
     import pekko.util.FutureConverters._
@@ -438,12 +438,12 @@ object Ftps extends FtpApi[FTPClient, FtpsSettings] with FtpsSourceParams {
     mkdir(basePath, name, connectionSettings).runWith(sink, mat)
   }
 
+  @tailrec
   def mkdirAsync(basePath: String,
       name: String,
       connectionSettings: S,
-      system: ClassicActorSystemProvider): CompletionStage[Done] = {
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
     mkdirAsync(basePath, name, connectionSettings, system.classicSystem)
-  }
 
   def toPath(path: String, connectionSettings: S, append: Boolean): Sink[ByteString, CompletionStage[IOResult]] = {
     import pekko.util.FutureConverters._
@@ -536,9 +536,8 @@ class SftpApi extends FtpApi[SSHClient, SftpSettings] with SftpSourceParams {
   def mkdirAsync(basePath: String,
       name: String,
       connectionSettings: S,
-      system: ClassicActorSystemProvider): CompletionStage[Done] = {
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
     mkdirAsync(basePath, name, connectionSettings, system.classicSystem)
-  }
 
   def toPath(path: String, connectionSettings: S, append: Boolean): Sink[ByteString, CompletionStage[IOResult]] = {
     import pekko.util.FutureConverters._

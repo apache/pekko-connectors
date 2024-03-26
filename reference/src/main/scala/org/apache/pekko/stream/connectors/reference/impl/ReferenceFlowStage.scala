@@ -62,7 +62,7 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 /**
  * INTERNAL API
  */
-@InternalApi private[reference] final class ReferenceFlowStage()
+@InternalApi private[reference] final class ReferenceFlowStage
     extends GraphStage[FlowShape[ReferenceWriteMessage, ReferenceWriteResult]] {
   val in: Inlet[ReferenceWriteMessage] = Inlet(Logging.simpleName(this) + ".in")
   val out: Outlet[ReferenceWriteResult] = Outlet(Logging.simpleName(this) + ".out")

@@ -34,7 +34,7 @@ final class OrientDbSourceSettings private (
     skip = skip,
     limit = limit)
 
-  override def toString =
+  override def toString: String =
     "OrientDBSourceSettings(" +
     s"oDatabasePool=$oDatabasePool," +
     s"skip=$skip," +

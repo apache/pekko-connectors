@@ -22,7 +22,7 @@ import pekko.stream.connectors.kinesis.{ CommittableRecord, KinesisSchedulerSour
 import pekko.stream.stage._
 import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import software.amazon.kinesis.coordinator.Scheduler
-import software.amazon.kinesis.processor.{ ShardRecordProcessor, ShardRecordProcessorFactory }
+import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -37,8 +37,8 @@ private[kinesis] object KinesisSchedulerSourceStage {
 
   sealed trait Command
   final case class NewRecord(cr: CommittableRecord) extends Command
-  final case object Pump extends Command
-  final case object Complete extends Command
+  case object Pump extends Command
+  case object Complete extends Command
   final case class SchedulerShutdown(result: Try[_]) extends Command
 
 }
@@ -64,7 +64,8 @@ private[kinesis] class KinesisSchedulerSourceStage(
     new Logic(matValue) -> matValue.future
   }
 
-  final class Logic(matValue: Promise[Scheduler]) extends GraphStageLogic(shape) with StageLogging with OutHandler {
+  private final class Logic(matValue: Promise[Scheduler]) extends GraphStageLogic(shape) with StageLogging
+      with OutHandler {
     setHandler(out, this)
 
     import KinesisSchedulerSourceStage._
@@ -78,10 +79,7 @@ private[kinesis] class KinesisSchedulerSourceStage(
 
     override def preStart(): Unit = {
       implicit val ec: ExecutionContext = executionContext(attributes)
-      val scheduler = schedulerBuilder(new ShardRecordProcessorFactory {
-        override def shardRecordProcessor(): ShardRecordProcessor =
-          new ShardProcessor(newRecordCallback)
-      })
+      val scheduler = schedulerBuilder(() => new ShardProcessor(newRecordCallback))
       schedulerOpt = Some(scheduler)
       Future(scheduler.run()).onComplete(result => callback.invoke(SchedulerShutdown(result)))
       matValue.success(scheduler)
@@ -115,7 +113,7 @@ private[kinesis] class KinesisSchedulerSourceStage(
       schedulerOpt.foreach(scheduler =>
         if (!scheduler.shutdownComplete()) scheduler.shutdown())
 
-    protected def executionContext(attributes: Attributes): ExecutionContext = {
+    private def executionContext(attributes: Attributes): ExecutionContext = {
       val dispatcherId = (attributes.get[ActorAttributes.Dispatcher](ActorAttributes.IODispatcher) match {
         case ActorAttributes.Dispatcher("") =>
           ActorAttributes.IODispatcher

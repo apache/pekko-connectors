@@ -38,13 +38,13 @@ import scala.util.{ Failure, Success, Try }
  * INTERNAL API
  */
 @InternalApi
-private[elasticsearch] case class ScrollResponse[T](error: Option[String], result: Option[ScrollResult[T]])
+private[elasticsearch] final case class ScrollResponse[T](error: Option[String], result: Option[ScrollResult[T]])
 
 /**
  * INTERNAL API
  */
 @InternalApi
-private[elasticsearch] case class ScrollResult[T](scrollId: Option[String], messages: Seq[ReadResult[T]])
+private[elasticsearch] final case class ScrollResult[T](scrollId: Option[String], messages: Seq[ReadResult[T]])
 
 /**
  * INTERNAL API

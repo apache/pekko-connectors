@@ -58,7 +58,6 @@ private[impl] abstract class RestBulkApi[T, C] {
   private def buildMessageResults(items: JsArray,
       messages: immutable.Seq[WriteMessage[T, C]]): immutable.Seq[WriteResult[T, C]] = {
     val ret = new immutable.VectorBuilder[WriteResult[T, C]]
-    ret.sizeHint(messages)
     val itemsIter = items.elements.iterator
     messages.foreach { message =>
       if (message.operation == Nop) {

@@ -46,13 +46,13 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
 
   private var query: CqQuery = _
 
-  override def executeQuery() = Try {
+  override def executeQuery(): Try[util.Iterator[V]] = Try {
 
     val cqf = new CqAttributesFactory()
 
     val eventListener = new CqListenerAdapter() {
       override def onEvent(ev: CqEvent): Unit =
-        onGeodeElement(ev.getNewValue().asInstanceOf[V])
+        onGeodeElement(ev.getNewValue.asInstanceOf[V])
 
       override def onError(ev: CqEvent): Unit =
         log.error(ev.getThrowable, s"$ev")
@@ -68,11 +68,11 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
 
     query = qs.newCq(queryName, sql, cqa)
 
-    buildInitialResulsIterator(query)
+    buildInitialResultsIterator(query)
 
   }
 
-  private def buildInitialResulsIterator(q: CqQuery) = {
+  private def buildInitialResultsIterator(q: CqQuery) = {
     val res = q.executeWithInitialResults[Struct]
     val it = res.iterator()
     new util.Iterator[V] {
@@ -86,12 +86,12 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
   /**
    * May lock on semaphore.acquires().
    */
-  protected def onGeodeElement(v: V): Unit = {
+  private def onGeodeElement(v: V): Unit = {
     semaphore.acquire()
     onElement.invoke(v)
   }
 
-  protected def incomingQueueIsEmpty = incomingQueue.isEmpty
+  protected def incomingQueueIsEmpty: Boolean = incomingQueue.isEmpty
 
   protected def enqueue(v: V): Unit =
     incomingQueue.enqueue(v)
@@ -105,7 +105,7 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
   /**
    * Pushes an element downstream and releases a semaphore acquired in onGeodeElement.
    */
-  protected def pushElement(out: Outlet[V], element: V) = {
+  protected def pushElement(out: Outlet[V], element: V): Unit = {
     push(out, element)
     semaphore.release()
   }
@@ -122,12 +122,12 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
   @volatile
   private var upstreamTerminated = false
 
-  val inFinish: AsyncCallback[Unit] = getAsyncCallback[Unit] { v =>
+  private val inFinish: AsyncCallback[Unit] = getAsyncCallback[Unit] { _ =>
     upstreamTerminated = true
-    handleTerminaison()
+    handleTermination()
   }
 
-  def handleTerminaison() =
+  def handleTermination(): Unit =
     if (upstreamTerminated && incomingQueue.isEmpty)
       completeStage()
 

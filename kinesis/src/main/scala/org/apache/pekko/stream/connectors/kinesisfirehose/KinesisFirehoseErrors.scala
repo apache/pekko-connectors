@@ -22,6 +22,6 @@ object KinesisFirehoseErrors {
   case object GetRecordsError extends KinesisSourceError
 
   sealed trait KinesisFlowErrors extends NoStackTrace
-  case class FailurePublishingRecords(e: Throwable) extends RuntimeException(e) with KinesisFlowErrors
+  final case class FailurePublishingRecords(e: Throwable) extends RuntimeException(e) with KinesisFlowErrors
 
 }

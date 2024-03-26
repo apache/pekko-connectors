@@ -56,8 +56,8 @@ import org.slf4j.LoggerFactory
  * the captured logging events are flushed to the appenders defined for the
  * org.apache.pekko.actor.testkit.typed.internal.CapturingAppenderDelegate logger.
  *
- * The flushing on test failure is handled by [[pekko.actor.testkit.typed.scaladsl.LogCapturing]]
- * for ScalaTest and [[pekko.actor.testkit.typed.javadsl.LogCapturing]] for JUnit.
+ * The flushing on test failure is handled by [[org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing]]
+ * for ScalaTest and [[org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4]] for JUnit.
  *
  * Use configuration like the following the logback-test.xml:
  *
@@ -102,13 +102,11 @@ import org.slf4j.LoggerFactory
     import pekko.util.ccompat.JavaConverters._
     val logbackLogger = getLogbackLogger(classOf[CapturingAppender].getName + "Delegate")
     val appenders = logbackLogger.iteratorForAppenders().asScala.filterNot(_ == this).toList
-    for (event <- buffer; appender <- appenders) {
+    for (event <- buffer; appender <- appenders)
       if (sourceActorSystem.isEmpty
         || event.getMDCPropertyMap.get("sourceActorSystem") == null
-        || sourceActorSystem.contains(event.getMDCPropertyMap.get("sourceActorSystem"))) {
+        || sourceActorSystem.contains(event.getMDCPropertyMap.get("sourceActorSystem")))
         appender.doAppend(event)
-      }
-    }
     clear()
   }
 

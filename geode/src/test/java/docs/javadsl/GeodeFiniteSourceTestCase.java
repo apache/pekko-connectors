@@ -35,9 +35,7 @@ public class GeodeFiniteSourceTestCase extends GeodeBaseTestCase {
         geode
             .query("select * from /persons", new PersonPdxSerializer())
             .runForeach(
-                p -> {
-                  LOGGER.debug(p.toString());
-                },
+                p -> LOGGER.debug(p.toString()),
                 system);
     // #query
 
@@ -47,9 +45,7 @@ public class GeodeFiniteSourceTestCase extends GeodeBaseTestCase {
         geode
             .query("select * from /animals", new AnimalPdxSerializer())
             .runForeach(
-                p -> {
-                  LOGGER.debug(p.toString());
-                },
+                p -> LOGGER.debug(p.toString()),
                 system);
 
     animalsDone.toCompletableFuture().get();

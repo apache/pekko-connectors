@@ -23,13 +23,13 @@ trait BigQueryRecord {
 
 object BigQueryRecord {
 
-  def fromMap(map: Map[String, Object]): BigQueryRecord = new BigQueryRecordMapImpl(map)
+  def fromMap(map: Map[String, Object]): BigQueryRecord = BigQueryRecordMapImpl(map)
 
-  def fromAvro(record: GenericRecord): BigQueryRecord = new BigQueryRecordAvroImpl(record)
+  def fromAvro(record: GenericRecord): BigQueryRecord = BigQueryRecordAvroImpl(record)
 
 }
 
-case class BigQueryRecordAvroImpl(record: GenericRecord) extends BigQueryRecord {
+final case class BigQueryRecordAvroImpl(record: GenericRecord) extends BigQueryRecord {
 
   override def get(column: String): Option[Object] = Option(record.get(column))
 
@@ -42,7 +42,7 @@ case class BigQueryRecordAvroImpl(record: GenericRecord) extends BigQueryRecord 
 
 }
 
-case class BigQueryRecordMapImpl(map: Map[String, Object]) extends BigQueryRecord {
+final case class BigQueryRecordMapImpl(map: Map[String, Object]) extends BigQueryRecord {
 
   override def get(column: String): Option[Object] = map.get(column)
 

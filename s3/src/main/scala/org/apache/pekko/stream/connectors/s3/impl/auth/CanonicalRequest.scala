@@ -56,17 +56,17 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
   }
 
   // https://tools.ietf.org/html/rfc3986#section-2.3
-  def isUnreservedCharacter(c: Char): Boolean =
+  private def isUnreservedCharacter(c: Char): Boolean =
     c.isLetterOrDigit || c == '-' || c == '.' || c == '_' || c == '~'
 
   // https://tools.ietf.org/html/rfc3986#section-2.2
   // Excludes "/" as it is an exception according to spec.
   val reservedCharacters: String = ":?#[]@!$&'()*+,;="
 
-  def isReservedCharacter(c: Char): Boolean =
+  private def isReservedCharacter(c: Char): Boolean =
     reservedCharacters.contains(c)
 
-  def canonicalQueryString(query: Query): String = {
+  private def canonicalQueryString(query: Query): String = {
     def uriEncode(s: String): String = s.flatMap {
       case c if isUnreservedCharacter(c) => c.toString
       case c                             => "%" + Integer.toHexString(c).toUpperCase
@@ -78,7 +78,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
       .mkString("&")
   }
 
-  def canonicalHeaderString(headers: Seq[HttpHeader]): String =
+  private def canonicalHeaderString(headers: Seq[HttpHeader]): String =
     headers
       .groupBy(_.lowercaseName)
       .map {
@@ -92,10 +92,10 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
       .map { case (name, value) => s"$name:$value" }
       .mkString("\n")
 
-  def signedHeadersString(headers: Seq[HttpHeader]): String =
+  private def signedHeadersString(headers: Seq[HttpHeader]): String =
     headers.map(_.lowercaseName).distinct.sorted.mkString(";")
 
-  def pathEncode(path: Path): String =
+  private def pathEncode(path: Path): String =
     if (path.isEmpty) "/"
     else {
       path.toString.flatMap {

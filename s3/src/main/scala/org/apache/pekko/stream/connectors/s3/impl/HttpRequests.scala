@@ -283,12 +283,10 @@ import scala.xml.NodeSeq
     // @formatter:on
     for {
       entity <- Marshal(payload).to[RequestEntity]
-    } yield {
-      s3Request(
-        S3Location(upload.bucket, upload.key),
-        HttpMethods.POST,
-        _.withQuery(Query("uploadId" -> upload.uploadId))).withEntity(entity).withDefaultHeaders(headers)
-    }
+    } yield s3Request(
+      S3Location(upload.bucket, upload.key),
+      HttpMethods.POST,
+      _.withQuery(Query("uploadId" -> upload.uploadId))).withEntity(entity).withDefaultHeaders(headers)
   }
 
   def createBucketRegionPayload(region: Region)(implicit ec: ExecutionContext): Future[RequestEntity] = {
@@ -340,7 +338,7 @@ import scala.xml.NodeSeq
   }
 
   @throws(classOf[IllegalUriException])
-  private[this] def requestAuthority(bucket: String, region: Region)(implicit conf: S3Settings): Authority = {
+  private[this] def requestAuthority(bucket: String, region: Region)(implicit conf: S3Settings): Authority =
     (conf.endpointUrl, conf.accessStyle) match {
       case (None, PathAccessStyle) =>
         Authority(Uri.Host(s"s3.$region.amazonaws.com"))
@@ -354,7 +352,6 @@ import scala.xml.NodeSeq
       case (Some(endpointUrl), VirtualHostAccessStyle) =>
         Uri(endpointUrl.replace(BucketPattern, bucket)).authority
     }
-  }
 
   private[this] def requestUri(bucket: String, key: Option[String])(implicit conf: S3Settings): Uri = {
     val basePath = conf.accessStyle match {
@@ -384,8 +381,7 @@ import scala.xml.NodeSeq
       val fixedPath = rawPath.replaceAll("\\+", "%2B")
       require(rawUri.startsWith(rawPath))
       fixedPath + rawUri.drop(rawPath.length)
-    } else {
+    } else
       rawUri
-    }
   }
 }

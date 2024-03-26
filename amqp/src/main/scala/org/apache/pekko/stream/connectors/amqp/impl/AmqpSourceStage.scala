@@ -96,7 +96,7 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
             val message = if (ackRequired) {
 
               new CommittableReadResult {
-                override val message = ReadResult(ByteString(body), envelope, properties)
+                override val message: ReadResult = ReadResult(ByteString(body), envelope, properties)
 
                 override def ack(multiple: Boolean): Future[Done] = {
                   val promise = Promise[Done]()

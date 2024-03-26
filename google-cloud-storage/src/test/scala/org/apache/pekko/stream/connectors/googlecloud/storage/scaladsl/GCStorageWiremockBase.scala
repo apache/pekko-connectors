@@ -100,7 +100,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
     }
   }
 
-  def mockTokenApi: SimulationSource = {
+  def mockTokenApi: SimulationSource =
     dsl(
       service("oauth2.googleapis.com")
         .post("/token")
@@ -111,7 +111,6 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
             .header("Content-Type", "application/json")
             .body(
               s"""{"access_token": "${TestCredentials.accessToken}", "token_type": "String", "expires_in": 3600}""")))
-  }
 
   def storageService = service("storage.googleapis.com")
 
@@ -463,7 +462,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .get(s"/storage/v1/b/$bucketName/o")
         .queryParam("prettyPrint", "false")
         .inplace(b => folder.foreach(f => b.queryParam("prefix", f)))
-        .inplace(b => { if (versions) b.queryParam("versions", "true") })
+        .inplace(b => if (versions) b.queryParam("versions", "true"))
         .willReturn(
           response()
             .status(200)
@@ -472,7 +471,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
         .get(s"/storage/v1/b/$bucketName/o")
         .queryParam("prettyPrint", "false")
         .inplace(b => folder.foreach(f => b.queryParam("prefix", f)))
-        .inplace(b => { if (versions) b.queryParam("versions", "true") })
+        .inplace(b => if (versions) b.queryParam("versions", "true"))
         .queryParam("pageToken", nextPageToken)
         .willReturn(
           response()

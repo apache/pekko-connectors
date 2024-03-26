@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class OpensearchV1Test extends ElasticsearchTestBase {
   @BeforeClass
@@ -188,7 +189,7 @@ public class OpensearchV1Test extends ElasticsearchTestBase {
     flushAndRefresh("sink3");
 
     for (WriteResult<Book, NotUsed> aResult1 : result1) {
-      assertEquals(true, aResult1.success());
+        assertTrue(aResult1.success());
     }
 
     // Assert docs in sink3/book
@@ -246,7 +247,7 @@ public class OpensearchV1Test extends ElasticsearchTestBase {
     flushAndRefresh(indexName);
 
     for (WriteResult<String, NotUsed> aResult1 : result1) {
-      assertEquals(true, aResult1.success());
+        assertTrue(aResult1.success());
     }
 
     CompletionStage<List<String>> f2 =
@@ -414,7 +415,8 @@ public class OpensearchV1Test extends ElasticsearchTestBase {
     searchParams.put("query", "{\"match_all\": {}}");
     searchParams.put("_source", "[\"id\", \"a\", \"c\"]");
 
-    List<TestDoc> result =
+      // These documents will only have property id, a and c (not
+      List<TestDoc> result =
         ElasticsearchSource.<TestDoc>typed(
                 constructElasticsearchParams(indexName, typeName, OpensearchApiVersion.V1),
                 searchParams, // <-- Using searchParams
@@ -422,10 +424,7 @@ public class OpensearchV1Test extends ElasticsearchTestBase {
                     .withApiVersion(OpensearchApiVersion.V1),
                 TestDoc.class,
                 new ObjectMapper())
-            .map(
-                o -> {
-                  return o.source(); // These documents will only have property id, a and c (not
-                })
+            .map(ReadResult::source)
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get();
@@ -435,10 +434,7 @@ public class OpensearchV1Test extends ElasticsearchTestBase {
     assertEquals(
         docs.size(),
         result.stream()
-            .filter(
-                d -> {
-                  return d.a != null && d.b == null;
-                })
+            .filter(d -> d.a != null && d.b == null)
             .collect(Collectors.toList())
             .size());
   }

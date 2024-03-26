@@ -34,7 +34,7 @@ object JmsCorrelationId {
   /**
    * Java API: create [[JmsCorrelationId]]
    */
-  def create(correlationId: String) = JmsCorrelationId(correlationId)
+  def create(correlationId: String): JmsCorrelationId = JmsCorrelationId(correlationId)
 }
 
 final case class JmsReplyTo(jmsDestination: Destination) extends JmsHeader {
@@ -46,12 +46,12 @@ object JmsReplyTo {
   /**
    * Reply to a queue with given name.
    */
-  def queue(name: String) = JmsReplyTo(Queue(name))
+  def queue(name: String): JmsReplyTo = JmsReplyTo(Queue(name))
 
   /**
    * Reply to a topic with given name.
    */
-  def topic(name: String) = JmsReplyTo(Topic(name))
+  def topic(name: String): JmsReplyTo = JmsReplyTo(Topic(name))
 }
 
 final case class JmsType(jmsType: String) extends JmsHeader {
@@ -63,7 +63,7 @@ object JmsType {
   /**
    * Java API: create [[JmsType]]
    */
-  def create(jmsType: String) = JmsType(jmsType)
+  def create(jmsType: String): JmsType = JmsType(jmsType)
 }
 
 final case class JmsTimeToLive(timeInMillis: Long) extends JmsHeader {
@@ -80,7 +80,7 @@ object JmsTimeToLive {
   /**
    * Java API: create [[JmsTimeToLive]]
    */
-  def create(timeToLive: Long, unit: TimeUnit) = JmsTimeToLive(unit.toMillis(timeToLive))
+  def create(timeToLive: Long, unit: TimeUnit): JmsTimeToLive = JmsTimeToLive(unit.toMillis(timeToLive))
 }
 
 /**
@@ -95,7 +95,7 @@ object JmsPriority {
   /**
    * Java API: create [[JmsPriority]]
    */
-  def create(priority: Int) = JmsPriority(priority)
+  def create(priority: Int): JmsPriority = JmsPriority(priority)
 }
 
 /**
@@ -110,7 +110,7 @@ object JmsDeliveryMode {
   /**
    * Java API: create [[JmsDeliveryMode]]
    */
-  def create(deliveryMode: Int) = JmsDeliveryMode(deliveryMode)
+  def create(deliveryMode: Int): JmsDeliveryMode = JmsDeliveryMode(deliveryMode)
 }
 
 final case class JmsMessageId(jmsMessageId: String) extends JmsHeader {
@@ -122,7 +122,7 @@ object JmsMessageId {
   /**
    * Java API: create [[JmsMessageId]]
    */
-  def create(messageId: String) = JmsMessageId(messageId)
+  def create(messageId: String): JmsMessageId = JmsMessageId(messageId)
 }
 
 final case class JmsTimestamp(jmsTimestamp: Long) extends JmsHeader {
@@ -134,7 +134,7 @@ object JmsTimestamp {
   /**
    * Java API: create [[JmsTimestamp]]
    */
-  def create(timestamp: Long) = JmsTimestamp(timestamp)
+  def create(timestamp: Long): JmsTimestamp = JmsTimestamp(timestamp)
 }
 
 final case class JmsRedelivered(jmsRedelivered: Boolean) extends JmsHeader {
@@ -146,7 +146,7 @@ object JmsRedelivered {
   /**
    * Java API: create [[JmsRedelivered]]
    */
-  def create(redelivered: Boolean) = JmsRedelivered(redelivered)
+  def create(redelivered: Boolean): JmsRedelivered = JmsRedelivered(redelivered)
 }
 
 final case class JmsExpiration(jmsExpiration: Long) extends JmsHeader {
@@ -158,5 +158,5 @@ object JmsExpiration {
   /**
    * Java API: create [[JmsExpiration]]
    */
-  def create(expiration: Long) = JmsExpiration(expiration)
+  def create(expiration: Long): JmsExpiration = JmsExpiration(expiration)
 }

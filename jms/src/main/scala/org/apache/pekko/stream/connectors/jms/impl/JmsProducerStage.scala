@@ -143,9 +143,8 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
         new InHandler {
           override def onUpstreamFinish(): Unit = if (inFlightMessages.isEmpty) publishAndCompleteStage()
 
-          override def onUpstreamFailure(ex: Throwable): Unit = {
+          override def onUpstreamFailure(ex: Throwable): Unit =
             publishAndFailStage(ex)
-          }
 
           override def onPush(): Unit = {
             val elem: E = grab(in)
@@ -188,9 +187,8 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
           Future(jmsProducer.send(envelope)).andThen {
             case tried => sendCompletedCB.invoke((send, tried, jmsProducer))
           }
-        } else {
+        } else
           nextTryOrFail(send, RetrySkippedOnMissingConnection)
-        }
       }
 
       def nextTryOrFail(send: SendAttempt[E], ex: Throwable): Unit = {
@@ -235,13 +233,13 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
           tryPull(in)
 
       private def pushNextIfPossible(): Unit =
-        if (inFlightMessages.isEmpty) {
+        if (inFlightMessages.isEmpty)
           // no messages in flight, are we about to complete?
           if (isClosed(in)) publishAndCompleteStage() else pullIfNeeded()
-        } else if (inFlightMessages.peek().elem eq NotYetThere) {
+        else if (inFlightMessages.peek().elem eq NotYetThere)
           // next message to be produced is still not there, we need to wait.
           pullIfNeeded()
-        } else if (isAvailable(out)) {
+        else if (isAvailable(out)) {
           val holder = inFlightMessages.dequeue()
           holder.elem match {
             case Success(elem) =>
@@ -266,14 +264,14 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
 @InternalApi
 private[jms] object JmsProducerStage {
 
-  val NotYetThere = Failure(new Exception with NoStackTrace)
+  private val NotYetThere = Failure(new Exception with NoStackTrace)
 
   /*
    * NOTE: the following code is heavily inspired by org.apache.pekko.stream.impl.fusing.MapAsync
    *
    * To get a condensed view of what the Holder is about, have a look there too.
    */
-  class Holder[A](var elem: Try[A]) extends (Try[A] => Unit) {
+  private final class Holder[A](var elem: Try[A]) extends (Try[A] => Unit) {
 
     // To support both fail-fast when the supervision directive is Stop
     // and not calling the decider multiple times, we need to cache the decider result and re-use that
@@ -292,7 +290,7 @@ private[jms] object JmsProducerStage {
     override def apply(t: Try[A]): Unit = elem = t
   }
 
-  case class SendAttempt[E <: JmsEnvelope[_]](envelope: E,
+  private final case class SendAttempt[E <: JmsEnvelope[_]](envelope: E,
       holder: Holder[E],
       attempt: Int = 0,
       backoffMaxed: Boolean = false)

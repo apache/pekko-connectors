@@ -25,7 +25,7 @@ import scala.collection.immutable
 
 @InternalApi private[streaming] object MqttFrameStage {
   @tailrec
-  def frames(
+  private def frames(
       maxPacketSize: Int,
       bytesReceived: ByteString,
       bytesToEmit: Vector[ByteString]): Either[IllegalStateException, (immutable.Iterable[ByteString], ByteString)] = {
@@ -41,12 +41,10 @@ import scala.collection.immutable
           if (bytesReceived.size >= packetSize) {
             val (b0, b1) = bytesReceived.splitAt(packetSize)
             frames(maxPacketSize, b1, bytesToEmit :+ b0)
-          } else {
+          } else
             Right((bytesToEmit, bytesReceived))
-          }
-        } else {
+        } else
           Left(new IllegalStateException(s"Max packet size of $maxPacketSize exceeded with $packetSize"))
-        }
       case _: Left[BufferUnderflow.type, Int] @unchecked =>
         Right((bytesToEmit, bytesReceived))
     }

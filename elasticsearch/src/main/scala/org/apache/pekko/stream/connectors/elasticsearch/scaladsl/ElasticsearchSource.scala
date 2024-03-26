@@ -128,10 +128,9 @@ object ElasticsearchSource {
     override def convert(json: String): impl.ScrollResponse[T] = {
       val jsObj = json.parseJson.asJsObject
       jsObj.fields.get("error") match {
-        case Some(error) => {
+        case Some(error) =>
           impl.ScrollResponse(Some(error.toString), None)
-        }
-        case None => {
+        case None =>
           val scrollId = jsObj.fields.get("_scroll_id").map(v => v.asInstanceOf[JsString].value)
           val hits = jsObj.fields("hits").asJsObject.fields("hits").asInstanceOf[JsArray]
           val messages = hits.elements.map { element =>
@@ -143,7 +142,6 @@ object ElasticsearchSource {
             new ReadResult(id, source.convertTo[T], version)
           }
           impl.ScrollResponse(None, Some(impl.ScrollResult(scrollId, messages)))
-        }
       }
     }
 

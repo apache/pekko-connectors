@@ -1,0 +1,4 @@
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.ironmq.Message")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.ironmq.Message$Ids")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.ironmq.PushMessage")
+ProblemFilters.exclude[FinalClassProblem]("org.apache.pekko.stream.connectors.ironmq.javadsl.CommittablePushMessage")

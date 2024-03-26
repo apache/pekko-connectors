@@ -281,7 +281,7 @@ class IntegrationSpec
     }
   }
 
-  override def afterAll() =
+  override def afterAll(): Unit =
     system.terminate()
 
 }

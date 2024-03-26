@@ -44,7 +44,9 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
   private val in =
     Inlet[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]])]("messagesAndResultPassthrough")
   private val out = Outlet[immutable.Seq[WriteResult[T, C]]]("result")
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]), immutable.Seq[
+      WriteResult[T, C]]] =
+    FlowShape(in, out)
 
   private val restApi: RestBulkApi[T, C] = settings.apiVersion match {
     case ApiVersion.V5 =>

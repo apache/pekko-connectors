@@ -48,24 +48,22 @@ private[file] class TarReaderStage
 
       setHandlers(flowIn, flowOut, new CollectHeader(ByteString.empty))
 
-      def readHeader(buffer: ByteString): Unit = {
-        if (buffer.length >= TarArchiveEntry.headerLength) {
+      def readHeader(buffer: ByteString): Unit =
+        if (buffer.length >= TarArchiveEntry.headerLength)
           readFile(buffer)
-        } else {
+        else {
           tryPullIfNeeded()
           setHandlers(flowIn, flowOut, new CollectHeader(buffer))
         }
-      }
 
       def readFile(headerBuffer: ByteString): Unit = {
-        def pushSource(metadata: TarArchiveMetadata, buffer: ByteString): Unit = {
+        def pushSource(metadata: TarArchiveMetadata, buffer: ByteString): Unit =
           if (buffer.length >= metadata.size) {
             val (emit, remain) = buffer.splitAt(metadata.size.toInt)
             log.debug("emitting completed source for [{}]", metadata)
             push(flowOut, metadata -> Source.single(emit))
             readTrailer(metadata, remain, subSource = None)
           } else setHandlers(flowIn, flowOut, new CollectFile(metadata, buffer))
-        }
 
         if (headerBuffer.head == 0) {
           log.debug("empty filename, detected EOF padding, completing")
@@ -74,11 +72,10 @@ private[file] class TarReaderStage
         } else {
           val metadata = TarArchiveEntry.parse(headerBuffer)
           val buffer = headerBuffer.drop(TarArchiveEntry.headerLength)
-          if (isAvailable(flowOut)) {
+          if (isAvailable(flowOut))
             pushSource(metadata, buffer)
-          } else {
+          else
             setHandlers(flowIn, flowOut, new PushSourceOnPull(metadata, buffer))
-          }
         }
 
         final class PushSourceOnPull(metadata: TarArchiveMetadata, buffer: ByteString)
@@ -106,7 +103,7 @@ private[file] class TarReaderStage
         } else setHandlers(flowIn, flowOut, new ReadPastTrailer(metadata, buffer, subSource))
       }
 
-      override protected def onTimer(timerKey: Any): Unit = {
+      override protected def onTimer(timerKey: Any): Unit =
         timerKey match {
           case SubscriptionTimeout(subSource) =>
             import StreamSubscriptionTimeoutTerminationMode._
@@ -131,12 +128,10 @@ private[file] class TarReaderStage
           case other =>
             log.warning("unexpected timer [{}]", other)
         }
-      }
 
-      private def tryPullIfNeeded(): Unit = {
+      private def tryPullIfNeeded(): Unit =
         if (!hasBeenPulled(flowIn))
           tryPull(flowIn)
-      }
 
       /**
        * Don't react on downstream pulls until we have something to push.
@@ -164,20 +159,18 @@ private[file] class TarReaderStage
 
         override def onPush(): Unit = {
           buffer ++= grab(flowIn)
-          if (buffer.length >= TarArchiveEntry.headerLength) {
+          if (buffer.length >= TarArchiveEntry.headerLength)
             readFile(buffer)
-          } else {
+          else
             tryPullIfNeeded()
-          }
         }
 
-        override def onUpstreamFinish(): Unit = {
+        override def onUpstreamFinish(): Unit =
           if (buffer.isEmpty) completeStage()
           else
             failStage(
               new TarReaderException(
                 s"incomplete tar header: received ${buffer.length} bytes, expected ${TarArchiveEntry.headerLength} bytes"))
-        }
       }
 
       /**
@@ -191,18 +184,15 @@ private[file] class TarReaderStage
         private val subSource: FileOutSubSource = {
           val sub = new FileOutSubSource()
           val timeoutSignal = SubscriptionTimeout(sub)
-          sub.setHandler(new OutHandler {
-            override def onPull(): Unit = {
-              cancelTimer(timeoutSignal)
-              if (buffer.nonEmpty) {
-                subPush(buffer)
-                buffer = ByteString.empty
-                if (isClosed(flowIn)) onUpstreamFinish()
-              } else {
-                tryPullIfNeeded()
-              }
-            }
-          })
+          sub.setHandler { () =>
+            cancelTimer(timeoutSignal)
+            if (buffer.nonEmpty) {
+              subPush(buffer)
+              buffer = ByteString.empty
+              if (isClosed(flowIn)) onUpstreamFinish()
+            } else
+              tryPullIfNeeded()
+          }
           val timeout = attributes.get[ActorAttributes.StreamSubscriptionTimeout].get.timeout
           scheduleOnce(timeoutSignal, timeout)
           sub
@@ -224,17 +214,15 @@ private[file] class TarReaderStage
           }
         }
 
-        override def onPush(): Unit = {
+        override def onPush(): Unit =
           subPush(grab(flowIn))
-        }
 
-        override def onUpstreamFinish(): Unit = {
-          if (buffer.isEmpty) {
+        override def onUpstreamFinish(): Unit =
+          if (buffer.isEmpty)
             failStage(
               new TarReaderException(
                 s"incomplete tar file contents for [${metadata.filePath}] expected ${metadata.size} bytes, received $emitted bytes"))
-          } else setKeepGoing(true)
-        }
+          else setKeepGoing(true)
 
       }
 
@@ -259,24 +247,22 @@ private[file] class TarReaderStage
                 tryPullIfNeeded()
             }
             readHeader(buffer.drop(trailerLength))
-          } else {
+          } else
             tryPullIfNeeded()
-          }
         }
 
-        override def onUpstreamFinish(): Unit = {
+        override def onUpstreamFinish(): Unit =
           if (buffer.length == trailerLength) completeStage()
           else
             failStage(
               new TarReaderException(
-                s"incomplete tar file trailer for [${metadata.filePath}] expected ${trailerLength} bytes, received ${buffer.length} bytes"))
-        }
+                s"incomplete tar file trailer for [${metadata.filePath}] expected $trailerLength bytes, received ${buffer.length} bytes"))
       }
 
       /**
        * "At the end of the archive file there are two 512-byte blocks filled with binary zeros as an end-of-file marker."
        */
-      private final class FlushEndOfFilePadding() extends InHandler with IgnoreDownstreamPull {
+      private final class FlushEndOfFilePadding extends InHandler with IgnoreDownstreamPull {
 
         override def onPush(): Unit = {
           grab(flowIn)

@@ -81,11 +81,10 @@ object Common extends AutoPlugin {
         "-doc-canonical-base-url",
         "https://pekko.apache.org/api/pekko-connectors/current/"),
     Compile / doc / scalacOptions ++= {
-      if (isScala3.value) {
+      if (isScala3.value)
         Seq("-skip-packages:" + packagesToSkip)
-      } else {
+      else
         Seq("-skip-packages", packagesToSkip)
-      }
     },
     Compile / doc / scalacOptions -= "-Werror",
     compile / javacOptions ++= Seq(

@@ -37,10 +37,10 @@ final class DocumentUpdate private (val filter: Bson, val update: Bson) {
 }
 
 object DocumentUpdate {
-  def apply(filter: Bson, update: Bson) = new DocumentUpdate(filter, update)
+  def apply(filter: Bson, update: Bson): DocumentUpdate = new DocumentUpdate(filter, update)
 
   /**
    * Java Api
    */
-  def create(filter: Bson, update: Bson) = DocumentUpdate(filter, update)
+  def create(filter: Bson, update: Bson): DocumentUpdate = DocumentUpdate(filter, update)
 }

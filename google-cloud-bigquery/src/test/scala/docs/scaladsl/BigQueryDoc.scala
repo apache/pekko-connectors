@@ -88,11 +88,9 @@ class BigQueryDoc {
   val people: List[Person] = ???
 
   // #job-status
-  def checkIfJobsDone(jobReferences: Seq[JobReference]): Future[Boolean] = {
-    for {
-      jobs <- Future.sequence(jobReferences.map(ref => BigQuery.job(ref.jobId.get)))
-    } yield jobs.forall(job => job.status.exists(_.state == JobState.Done))
-  }
+  def checkIfJobsDone(jobReferences: Seq[JobReference]): Future[Boolean] = for {
+    jobs <- Future.sequence(jobReferences.map(ref => BigQuery.job(ref.jobId.get)))
+  } yield jobs.forall(job => job.status.exists(_.state == JobState.Done))
 
   val isDone: Future[Boolean] = for {
     jobs <- Source(people).via(peopleLoadFlow).runWith(Sink.seq)

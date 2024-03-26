@@ -210,9 +210,8 @@ sealed abstract class AttributeName(val name: String)
  * https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html#API_ReceiveMessage_RequestParameters
  */
 sealed abstract class MessageSystemAttributeName(_name: String) extends AttributeName(_name) {
-  protected def this(messageSystemAttributeName: model.MessageSystemAttributeName) = {
+  protected def this(messageSystemAttributeName: model.MessageSystemAttributeName) =
     this(messageSystemAttributeName.toString)
-  }
 }
 
 // All is missing in [[software.amazon.awssdk.services.sqs.model.MessageSystemAttributeName]]
@@ -237,12 +236,12 @@ case object SequenceNumber extends MessageSystemAttributeName(model.MessageSyste
  * https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html#API_ReceiveMessage_RequestParameters
  */
 object MessageSystemAttributeName {
-  val all = All
-  val approximateFirstReceiveTimestamp = ApproximateFirstReceiveTimestamp
-  val approximateReceiveCount = ApproximateReceiveCount
-  val senderId = SenderId
-  val sentTimestamp = SentTimestamp
-  val messageDeduplicationId = MessageDeduplicationId
-  val messageGroupId = MessageGroupId
-  val sequenceNumber = SequenceNumber
+  val all: All.type = All
+  val approximateFirstReceiveTimestamp: ApproximateFirstReceiveTimestamp.type = ApproximateFirstReceiveTimestamp
+  val approximateReceiveCount: ApproximateReceiveCount.type = ApproximateReceiveCount
+  val senderId: SenderId.type = SenderId
+  val sentTimestamp: SentTimestamp.type = SentTimestamp
+  val messageDeduplicationId: MessageDeduplicationId.type = MessageDeduplicationId
+  val messageGroupId: MessageGroupId.type = MessageGroupId
+  val sequenceNumber: SequenceNumber.type = SequenceNumber
 }

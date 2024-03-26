@@ -87,9 +87,8 @@ object HmsSettings {
       appSecret: String,
       isTest: Boolean,
       maxConcurrentConnections: Int,
-      forwardProxy: ForwardProxy): HmsSettings = {
+      forwardProxy: ForwardProxy): HmsSettings =
     apply(appId, appSecret, isTest, maxConcurrentConnections, Option(forwardProxy))
-  }
 
   def apply(
       appId: String,
@@ -105,7 +104,7 @@ object HmsSettings {
       appId: String,
       appSecret: String,
       isTest: Boolean,
-      maxConcurrentConnections: Int) = apply(appId, appSecret, isTest, maxConcurrentConnections)
+      maxConcurrentConnections: Int): HmsSettings = apply(appId, appSecret, isTest, maxConcurrentConnections)
 
   def apply(
       appId: String,
@@ -116,9 +115,8 @@ object HmsSettings {
    */
   def create(
       appId: String,
-      appSecret: String) = {
+      appSecret: String): HmsSettings =
     apply(appId, appSecret)
-  }
 
   def apply(
       appId: String,
@@ -132,7 +130,7 @@ object HmsSettings {
   def create(
       appId: String,
       appSecret: String,
-      forwardProxy: ForwardProxy) = apply(appId, appSecret, Option(forwardProxy))
+      forwardProxy: ForwardProxy): HmsSettings = apply(appId, appSecret, Option(forwardProxy))
 
 }
 
@@ -143,11 +141,11 @@ final case class HmsSettings @InternalApi private (
     maxConcurrentConnections: Int,
     forwardProxy: Option[ForwardProxy]) {
 
-  def getAppId = appId
-  def getAppSecret = appSecret
-  def isTest = test
-  def getMaxConcurrentConnections = maxConcurrentConnections
-  def getForwardProxy = forwardProxy
+  def getAppId: String = appId
+  def getAppSecret: String = appSecret
+  def isTest: Boolean = test
+  def getMaxConcurrentConnections: Int = maxConcurrentConnections
+  def getForwardProxy: Option[ForwardProxy] = forwardProxy
 
   def withAppId(value: String): HmsSettings = copy(appId = value)
   def withAppSecret(value: String): HmsSettings = copy(appSecret = value)
@@ -182,7 +180,7 @@ object ForwardProxy {
   def apply(host: String,
       port: Int,
       credentials: Option[ForwardProxyCredentials],
-      trustPem: Option[ForwardProxyTrustPem]) =
+      trustPem: Option[ForwardProxyTrustPem]): ForwardProxy =
     new ForwardProxy(host, port, credentials, trustPem)
 
   /**
@@ -191,25 +189,25 @@ object ForwardProxy {
   def create(host: String,
       port: Int,
       credentials: Option[ForwardProxyCredentials],
-      trustPem: Option[ForwardProxyTrustPem]) =
+      trustPem: Option[ForwardProxyTrustPem]): ForwardProxy =
     apply(host, port, credentials, trustPem)
 
-  def apply(host: String, port: Int) =
+  def apply(host: String, port: Int): ForwardProxy =
     new ForwardProxy(host, port, Option.empty, Option.empty)
 
   /**
    * Java API.
    */
-  def create(host: String, port: Int) =
+  def create(host: String, port: Int): ForwardProxy =
     apply(host, port)
 
-  def apply(host: String, port: Int, credentials: Option[ForwardProxyCredentials]) =
+  def apply(host: String, port: Int, credentials: Option[ForwardProxyCredentials]): ForwardProxy =
     new ForwardProxy(host, port, credentials, Option.empty)
 
   /**
    * Java API.
    */
-  def create(host: String, port: Int, credentials: Option[ForwardProxyCredentials]) =
+  def create(host: String, port: Int, credentials: Option[ForwardProxyCredentials]): ForwardProxy =
     apply(host, port, credentials)
 }
 
@@ -218,15 +216,15 @@ final case class ForwardProxy @InternalApi private (host: String,
     credentials: Option[ForwardProxyCredentials],
     trustPem: Option[ForwardProxyTrustPem]) {
 
-  def getHost = host
-  def getPort = port
-  def getCredentials = credentials
-  def getForwardProxyTrustPem = trustPem
+  def getHost: String = host
+  def getPort: Int = port
+  def getCredentials: Option[ForwardProxyCredentials] = credentials
+  def getForwardProxyTrustPem: Option[ForwardProxyTrustPem] = trustPem
 
-  def withHost(host: String) = copy(host = host)
-  def withPort(port: Int) = copy(port = port)
-  def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
-  def withTrustPem(trustPem: ForwardProxyTrustPem) = copy(trustPem = Option(trustPem))
+  def withHost(host: String): ForwardProxy = copy(host = host)
+  def withPort(port: Int): ForwardProxy = copy(port = port)
+  def withCredentials(credentials: ForwardProxyCredentials): ForwardProxy = copy(credentials = Option(credentials))
+  def withTrustPem(trustPem: ForwardProxyTrustPem): ForwardProxy = copy(trustPem = Option(trustPem))
 }
 
 object ForwardProxyCredentials {
@@ -246,8 +244,8 @@ final case class ForwardProxyCredentials @InternalApi private (username: String,
   def getUsername: String = username
   def getPassword: String = password
 
-  def withUsername(username: String) = copy(username = username)
-  def withPassword(password: String) = copy(password = password)
+  def withUsername(username: String): ForwardProxyCredentials = copy(username = username)
+  def withPassword(password: String): ForwardProxyCredentials = copy(password = password)
 }
 
 object ForwardProxyTrustPem {

@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.sqs.impl
 
 import org.apache.pekko
+import org.apache.pekko.stream.Supervision.Decider
 import pekko.annotation.InternalApi
 import pekko.stream.ActorAttributes.SupervisionStrategy
 import pekko.stream.Attributes.name
@@ -31,8 +32,7 @@ import scala.util.{ Failure, Success }
  * Internal API.
  */
 @InternalApi private[impl] object BufferImpl {
-  val FixedQueueSize = 128
-  val FixedQueueMask = 127
+  private val FixedQueueSize = 128
 
   def apply[T](size: Int, effectiveAttributes: Attributes): Buffer[T] =
     apply(size, effectiveAttributes.mandatoryAttribute[ActorAttributes.MaxFixedBufferSize].size)
@@ -52,16 +52,16 @@ import scala.util.{ Failure, Success }
   private val in = Inlet[In]("BalancingMapAsync.in")
   private val out = Outlet[Out]("BalancingMapAsync.out")
 
-  override def initialAttributes = name("BalancingMapAsync")
+  override def initialAttributes: Attributes = name("BalancingMapAsync")
 
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[In, Out] = FlowShape(in, out)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with InHandler with OutHandler {
 
-      lazy val decider = inheritedAttributes.mandatoryAttribute[SupervisionStrategy].decider
+      lazy val decider: Decider = inheritedAttributes.mandatoryAttribute[SupervisionStrategy].decider
       var buffer: Buffer[Holder[Out]] = _
-      var parallelism = maxParallelism
+      var parallelism: Int = maxParallelism
 
       private val futureCB = getAsyncCallback[Holder[Out]](holder =>
         holder.elem match {

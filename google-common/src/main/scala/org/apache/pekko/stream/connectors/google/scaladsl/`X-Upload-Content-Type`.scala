@@ -40,7 +40,7 @@ final case class `X-Upload-Content-Type` private[connectors] (contentType: Conte
   override def value(): String = contentType.toString()
   override def renderInRequests(): Boolean = true
   override def renderInResponses(): Boolean = false
-  override def companion = `X-Upload-Content-Type`
+  override def companion: `X-Upload-Content-Type`.type = `X-Upload-Content-Type`
 
   /**
    * Java API

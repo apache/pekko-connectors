@@ -78,9 +78,8 @@ private[ironmq] final class IronMqPullStage(queueName: String, settings: IronMqS
         new OutHandler {
 
           override def onPull(): Unit = {
-            if (!isTimerActive(FetchMessagesTimerKey)) {
+            if (!isTimerActive(FetchMessagesTimerKey))
               scheduleAtFixedRate(FetchMessagesTimerKey, fetchInterval, fetchInterval)
-            }
             deliveryMessages()
           }
         })

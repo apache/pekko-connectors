@@ -79,7 +79,7 @@ final class GrpcSubscriberExt private (sys: ExtendedActorSystem) extends Extensi
 }
 
 object GrpcSubscriberExt extends ExtensionId[GrpcSubscriberExt] with ExtensionIdProvider {
-  override def lookup = GrpcSubscriberExt
+  override def lookup: GrpcSubscriberExt.type = GrpcSubscriberExt
   override def createExtension(system: ExtendedActorSystem) = new GrpcSubscriberExt(system)
 
   /**

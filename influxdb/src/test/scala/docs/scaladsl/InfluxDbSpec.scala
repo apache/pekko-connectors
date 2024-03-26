@@ -50,9 +50,9 @@ class InfluxDbSpec
   // #define-class
   override protected def beforeAll(): Unit = {
     // #init-client
-    influxDB = InfluxDBFactory.connect(INFLUXDB_URL, USERNAME, PASSWORD);
-    influxDB.setDatabase(DatabaseName);
-    influxDB.query(new Query("CREATE DATABASE " + DatabaseName, DatabaseName));
+    influxDB = InfluxDBFactory.connect(INFLUXDB_URL, USERNAME, PASSWORD)
+    influxDB.setDatabase(DatabaseName)
+    influxDB.query(new Query("CREATE DATABASE " + DatabaseName, DatabaseName))
     // #init-client
   }
 
@@ -62,11 +62,11 @@ class InfluxDbSpec
   override def beforeEach(): Unit =
     populateDatabase(influxDB, classOf[InfluxDbSpecCpu])
 
-  override def afterEach() =
+  override def afterEach(): Unit =
     cleanDatabase(influxDB, DatabaseName)
 
   "support typed source" in assertAllStagesStopped {
-    val query = new Query("SELECT * FROM cpu", DatabaseName);
+    val query = new Query("SELECT * FROM cpu", DatabaseName)
     val measurements =
       InfluxDbSource.typed(classOf[InfluxDbSpecCpu], InfluxDbReadSettings(), influxDB, query).runWith(Sink.seq)
 
@@ -76,16 +76,14 @@ class InfluxDbSpec
   "InfluxDbFlow" should {
 
     "consume and publish measurements using typed" in assertAllStagesStopped {
-      val query = new Query("SELECT * FROM cpu", DatabaseName);
+      val query = new Query("SELECT * FROM cpu", DatabaseName)
 
       // #run-typed
       val f1 = InfluxDbSource
         .typed(classOf[InfluxDbSpecCpu], InfluxDbReadSettings(), influxDB, query)
         .map { (cpu: InfluxDbSpecCpu) =>
-          {
-            val clonedCpu = cpu.cloneAt(cpu.getTime.plusSeconds(60000))
-            List(InfluxDbWriteMessage(clonedCpu))
-          }
+          val clonedCpu = cpu.cloneAt(cpu.getTime.plusSeconds(60000))
+          List(InfluxDbWriteMessage(clonedCpu))
         }
         .runWith(InfluxDbSink.typed(classOf[InfluxDbSpecCpu]))
       // #run-typed
@@ -100,7 +98,7 @@ class InfluxDbSpec
 
     "consume and publish measurements" in assertAllStagesStopped {
       // #run-query-result
-      val query = new Query("SELECT * FROM cpu", DatabaseName);
+      val query = new Query("SELECT * FROM cpu", DatabaseName)
 
       val f1 = InfluxDbSource(influxDB, query)
         .map(resultToPoints)

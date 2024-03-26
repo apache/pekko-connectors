@@ -25,6 +25,7 @@ import pekko.actor.{
 import pekko.stream.scaladsl.Flow
 import pekko.util.ByteString
 import com.typesafe.config.Config
+import org.apache.pekko.NotUsed
 
 /**
  * Some connectors might require an external resource that is used in the
@@ -41,18 +42,18 @@ import com.typesafe.config.Config
  */
 final class Resource private (val settings: ResourceSettings) {
   // a resource that is to be used when creating Pekko Stream operators.
-  val connection = Flow[ByteString].map(_.reverse)
+  val connection: Flow[ByteString, ByteString, NotUsed] = Flow[ByteString].map(_.reverse)
 
   /**
    * Resource cleanup logic
    */
-  def cleanup() = {}
+  def cleanup(): Unit = {}
 }
 
 object Resource {
-  def apply(settings: ResourceSettings) = new Resource(settings)
+  def apply(settings: ResourceSettings): Resource = new Resource(settings)
 
-  def create(settings: ResourceSettings) = Resource(settings)
+  def create(settings: ResourceSettings): Resource = Resource(settings)
 }
 
 /**
@@ -68,7 +69,7 @@ final class ResourceSettings private (val msg: String) {
  * instance for reading values from HOCON.
  */
 object ResourceSettings {
-  val ConfigPath = "pekko.connectors.reference"
+  val ConfigPath: String = "pekko.connectors.reference"
 
   def apply(msg: String): ResourceSettings = new ResourceSettings(msg)
 
@@ -122,7 +123,7 @@ final class ResourceExt private (sys: ExtendedActorSystem) extends Extension {
 }
 
 object ResourceExt extends ExtensionId[ResourceExt] with ExtensionIdProvider {
-  override def lookup = ResourceExt
+  override def lookup: ResourceExt.type = ResourceExt
   override def createExtension(system: ExtendedActorSystem) = new ResourceExt(system)
 
   /**

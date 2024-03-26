@@ -30,7 +30,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  * [[https://pekko.apache.org/docs/pekko/current/discovery/index.html Pekko Discovery]]
  * is enabled by setting the `service-discovery.name` in the given `CassandraSession` config.
  *
- * Pekko Discovery overwrites the basic.contact-points` from the configuration with addresses
+ * Pekko Discovery overwrites the `basic.contact-points` from the configuration with addresses
  * provided by the configured Pekko Discovery mechanism.
  *
  * Example using config-based Pekko Discovery:

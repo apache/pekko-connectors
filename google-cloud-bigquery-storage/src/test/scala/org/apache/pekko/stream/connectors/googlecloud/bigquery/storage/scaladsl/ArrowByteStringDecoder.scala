@@ -48,7 +48,7 @@ class ArrowByteStringDecoder(val schema: ArrowSchema) extends FromByteStringUnma
     val deserializedBatch = MessageSerializer.deserializeRecordBatch(new ReadChannel(
         new ByteArrayReadableSeekableByteChannel(
           batch.toByteBuffer.array())),
-      allocator);
+      allocator)
     loader.load(deserializedBatch)
     deserializedBatch.close()
 
@@ -58,16 +58,15 @@ class ArrowByteStringDecoder(val schema: ArrowSchema) extends FromByteStringUnma
     val recordsList = ListBuffer[BigQueryRecord]()
     for (i <- 0 until root.getRowCount) {
       val map = mutable.Map[String, Object]()
-      for (fv <- fvs) {
+      for (fv <- fvs)
         map.put(rs.get(i).getName, fv.getObject(i))
-      }
       recordsList += BigQueryRecord.fromMap(map.toMap)
     }
 
-    root.clear();
+    root.clear()
 
-    root.close();
-    allocator.close();
+    root.close()
+    allocator.close()
 
     Future(recordsList.toList)
   }

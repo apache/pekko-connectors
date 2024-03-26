@@ -113,7 +113,7 @@ object MFAStatus {
   case object Disabled extends MFAStatus
 
   /** Java API */
-  val disabled = Disabled
+  val disabled: Disabled.type = Disabled
 
 }
 
@@ -125,10 +125,10 @@ object BucketVersioningStatus {
   case object Suspended extends BucketVersioningStatus
 
   /** Java API */
-  val enabled = Enabled
+  val enabled: Enabled.type = Enabled
 
   /** Java API */
-  val suspended = Suspended
+  val suspended: Suspended.type = Suspended
 }
 
 final class BucketVersioningResult private (val status: Option[BucketVersioningStatus],
@@ -296,9 +296,8 @@ final class MultipartUpload private (val bucket: String, val key: String, val up
 object MultipartUpload {
 
   /** Scala API */
-  def apply(bucket: String, key: String, uploadId: String): MultipartUpload = {
+  def apply(bucket: String, key: String, uploadId: String): MultipartUpload =
     new MultipartUpload(bucket, key, uploadId)
-  }
 
   /** Java API */
   def create(bucket: String, key: String, uploadId: String): MultipartUpload = apply(bucket, key, uploadId)
@@ -1503,7 +1502,7 @@ final class ObjectMetadata private (
 
 }
 object ObjectMetadata {
-  def apply(metadata: Seq[HttpHeader]) = new ObjectMetadata(metadata)
+  def apply(metadata: Seq[HttpHeader]): ObjectMetadata = new ObjectMetadata(metadata)
 }
 
 /**
@@ -1534,15 +1533,13 @@ object BucketAndKey {
   private val bucketRegexPathStyle = "(/\\.\\.)|(\\.\\./)".r
   private val bucketRegexDns = "[^a-z0-9\\-\\.]{1,255}|[\\.]{2,}".r
 
-  def pathStyleValid(bucket: String) = {
+  def pathStyleValid(bucket: String): Boolean =
     bucketRegexPathStyle.findFirstIn(bucket).isEmpty && ".." != bucket
-  }
 
-  def dnsValid(bucket: String) = {
+  def dnsValid(bucket: String): Boolean =
     bucketRegexDns.findFirstIn(bucket).isEmpty
-  }
 
-  private[s3] def validateBucketName(bucket: String, conf: S3Settings): Unit = {
+  private[s3] def validateBucketName(bucket: String, conf: S3Settings): Unit =
     if (conf.accessStyle == PathAccessStyle) {
       if (!pathStyleValid(bucket)) {
         throw IllegalUriException(
@@ -1558,16 +1555,13 @@ object BucketAndKey {
         case None => ()
       }
     }
-  }
 
   def objectKeyValid(key: String): Boolean = !key.split("/").contains("..")
 
-  private[s3] def validateObjectKey(key: String, conf: S3Settings): Unit = {
+  private[s3] def validateObjectKey(key: String, conf: S3Settings): Unit =
     if (conf.validateObjectKey && !objectKeyValid(key))
       throw IllegalUriException(
         "The object key contains sub-dir selection with `..`",
         "Selecting sub-directories with `..` is forbidden (see the `validate-object-key` setting).")
-
-  }
 
 }

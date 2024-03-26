@@ -38,14 +38,14 @@ private[geode] class GeodeFiniteSourceStage[V](cache: ClientCache, sql: String)
 
     (new GeodeQueryGraphLogic[V](shape, cache, sql) {
 
-        override val onConnect: AsyncCallback[Unit] = getAsyncCallback[Unit] { v =>
+        override val onConnect: AsyncCallback[Unit] = getAsyncCallback[Unit] { _ =>
           subPromise.success(Done)
         }
 
         setHandler(
           out,
           new OutHandler {
-            override def onPull() =
+            override def onPull(): Unit =
               if (initialResultsIterator.hasNext)
                 push(out, initialResultsIterator.next())
               else

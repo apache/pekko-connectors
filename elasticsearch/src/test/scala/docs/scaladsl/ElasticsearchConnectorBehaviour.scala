@@ -452,7 +452,7 @@ trait ElasticsearchConnectorBehaviour {
 
       "read and write document-version if configured to do so" in {
 
-        case class VersionTestDoc(id: String, name: String, value: Int)
+        final case class VersionTestDoc(id: String, name: String, value: Int)
         implicit val formatVersionTestDoc: JsonFormat[VersionTestDoc] = jsonFormat3(VersionTestDoc.apply)
 
         val indexName = "version-test-scala"

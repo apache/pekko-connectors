@@ -64,10 +64,10 @@ object KinesisSchedulerSource {
 
   private val checkpointRecordBatch =
     Flow[immutable.Seq[CommittableRecord]]
-      .map(records => {
+      .map { records =>
         records.max(CommittableRecord.orderBySequenceNumber).tryToCheckpoint()
         records
-      })
+      }
       .mapConcat(identity)
       .map(_.record)
       .addAttributes(Attributes(ActorAttributes.IODispatcher))

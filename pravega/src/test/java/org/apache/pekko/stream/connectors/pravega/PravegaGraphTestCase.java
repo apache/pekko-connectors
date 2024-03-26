@@ -95,7 +95,7 @@ public class PravegaGraphTestCase extends PravegaBaseTestCase {
 
     Pair<UniqueKillSwitch, CompletionStage<Integer>> pair =
         Pravega.source(readerGroup, readerSettings)
-            .map(e -> e.message())
+            .map(PravegaEvent::message)
             .viaMat(KillSwitches.single(), Keep.right())
             .toMat(
                 Sink.fold(

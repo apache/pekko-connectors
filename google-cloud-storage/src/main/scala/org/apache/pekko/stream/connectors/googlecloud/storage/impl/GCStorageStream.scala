@@ -180,7 +180,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 
     sealed trait RewriteState
     case object Starting extends RewriteState
-    case class Running(rewriteToken: String) extends RewriteState
+    final case class Running(rewriteToken: String) extends RewriteState
     case object Finished extends RewriteState
 
     val sourcePath = getObjectPath(sourceBucket, sourceObjectName)

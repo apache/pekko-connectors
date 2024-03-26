@@ -1,0 +1,4 @@
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.unixdomainsocket.javadsl.UnixDomainSocket.lookup")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.unixdomainsocket.javadsl.UnixDomainSocket.lookup")
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.lookup")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.lookup")

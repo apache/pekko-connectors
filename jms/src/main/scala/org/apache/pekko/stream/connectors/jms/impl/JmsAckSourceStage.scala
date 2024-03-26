@@ -63,20 +63,19 @@ private[jms] final class JmsAckSourceStage(settings: JmsConsumerSettings, destin
           session
             .createConsumer(settings.selector)
             .map { consumer =>
-              consumer.setMessageListener((message: jms.Message) => {
+              consumer.setMessageListener { (message: jms.Message) =>
                 if (session.isListenerRunning)
                   try {
                     handleMessage.invoke(AckEnvelope(message, session))
                     session.pendingAck += 1
-                    if (session.maxPendingAcksReached) {
+                    if (session.maxPendingAcksReached)
                       session.ackBackpressure()
-                    }
                     session.drainAcks()
                   } catch {
                     case e: jms.JMSException =>
                       handleError.invoke(e)
                   }
-              })
+              }
             }
             .onComplete(sessionOpenedCB.invoke)
 

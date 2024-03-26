@@ -76,9 +76,8 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
   override def beforeAll() = {
     oServerAdmin = new OServerAdmin(url).connect(username, password)
-    if (!oServerAdmin.existsDatabase(dbName, "plocal")) {
+    if (!oServerAdmin.existsDatabase(dbName, "plocal"))
       oServerAdmin.createDatabase(dbName, "document", "plocal")
-    }
 
     // #init-settings
 
@@ -101,15 +100,14 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
     flush(sourceClass, "book_title", "Akka Concurrency")
   }
 
-  override def afterAll() = {
+  override def afterAll(): Unit = {
     unregister(sourceClass)
     unregister(sink4)
     unregister(sink5)
     unregister(sink7)
 
-    if (oServerAdmin.existsDatabase(dbName, "plocal")) {
+    if (oServerAdmin.existsDatabase(dbName, "plocal"))
       oServerAdmin.dropDatabase(dbName, "plocal")
-    }
     oServerAdmin.close()
 
     client.close()
@@ -253,8 +251,8 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       // After we've written them to oRIENTdb, we want
       // to commit the offset to Kafka
 
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage(book: Book, offset: KafkaOffset)
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage(book: Book, offset: KafkaOffset)
 
       val messagesFromKafka = List(
         KafkaMessage(Book("Book 1"), KafkaOffset(0)),

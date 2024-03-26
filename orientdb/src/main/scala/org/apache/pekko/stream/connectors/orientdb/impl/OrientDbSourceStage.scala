@@ -55,7 +55,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
             new Logic {
               override protected def runQuery(): util.List[T] =
                 client.query[util.List[T]](
-                  new OSQLSynchQuery[T](s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"))
+                  new OSQLSynchQuery[T](s"SELECT * FROM $className SKIP $skip LIMIT ${settings.limit}"))
             }
         }
 
@@ -85,7 +85,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
                 oObjectClient
                   .query[util.List[T]](
                     new OSQLSynchQuery[T](
-                      s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"))
+                      s"SELECT * FROM $className SKIP $skip LIMIT ${settings.limit}"))
             }
         }
 

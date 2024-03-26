@@ -37,7 +37,7 @@ object CouchbaseWriteSettings {
   /**
    * Simple settings not requiring replication nor persistence.
    */
-  val inMemory = CouchbaseWriteSettings(1, ReplicateTo.NONE, PersistTo.NONE, 2.seconds)
+  val inMemory: CouchbaseWriteSettings = CouchbaseWriteSettings(1, ReplicateTo.NONE, PersistTo.NONE, 2.seconds)
 
   def apply(): CouchbaseWriteSettings = inMemory
 

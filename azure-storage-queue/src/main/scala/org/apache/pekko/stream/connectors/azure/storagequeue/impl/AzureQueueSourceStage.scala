@@ -69,7 +69,7 @@ import scala.collection.mutable.Queue
       out,
       new OutHandler {
         override def onPull(): Unit =
-          if (!buffer.isEmpty) {
+          if (buffer.nonEmpty) {
             push(out, buffer.dequeue())
           } else {
             retrieveMessages()

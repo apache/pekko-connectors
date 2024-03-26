@@ -35,17 +35,15 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) {
       val zis = new ZipInputStream(new FileInputStream(f), fileCharset)
-      var entry: ZipEntry = null
+      var entry: ZipEntry = _
       val data = new Array[Byte](chunkSize)
 
-      def seek() = {
+      def seek(): Unit =
         while ({
-          entry = zis.getNextEntry()
+          entry = zis.getNextEntry
           entry != null && entry.getName != n.name
-        }) {
+        })
           zis.closeEntry()
-        }
-      }
 
       setHandler(
         out,
@@ -53,17 +51,15 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
           override def onPull(): Unit = {
             if (entry == null) {
               seek()
-              if (entry == null) {
+              if (entry == null)
                 failStage(new Exception("After a seek the part is not found"))
-              }
             }
 
             val c = zis.read(data, 0, chunkSize)
-            if (c == -1) {
+            if (c == -1)
               completeStage()
-            } else {
+            else
               push(out, ByteString.fromArray(data, 0, c))
-            }
           }
         })
 

@@ -193,7 +193,8 @@ class WriterSettingsBuilder[Message](
       f: EventWriterConfigBuilder => EventWriterConfigBuilder): WriterSettingsBuilder[Message] =
     copy(eventWriterConfigCustomizer = Some(f))
 
-  def withClientConfig(clientConfig: ClientConfig) = copy(clientConfig = Some(clientConfig))
+  def withClientConfig(clientConfig: ClientConfig): WriterSettingsBuilder[Message] =
+    copy(clientConfig = Some(clientConfig))
 
   def clientConfigBuilder(
       clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder): WriterSettingsBuilder[Message] =
@@ -282,7 +283,7 @@ object WriterSettingsBuilder {
   private def eventWriterConfig(readerConfig: Config): EventWriterConfigBuilder = {
     val builder = EventWriterConfig.builder()
 
-    implicit val config = readerConfig.getConfig("config")
+    implicit val config: Config = readerConfig.getConfig("config")
 
     extractBoolean("automatically-note-time")(builder.automaticallyNoteTime)
     extractInt("backoff-multiple")(builder.backoffMultiple)
@@ -314,7 +315,8 @@ class TableReaderSettingsBuilder[K, V](
       : TableReaderSettingsBuilder[K, V] =
     copy(keyValueTableClientConfigurationBuilderCustomizer = Some(f))
 
-  def withClientConfigModifier(clientConfig: ClientConfig) = copy(clientConfig = Some(clientConfig))
+  def withClientConfigModifier(clientConfig: ClientConfig): TableReaderSettingsBuilder[K, V] =
+    copy(clientConfig = Some(clientConfig))
 
   def withMaximumInflightMessages(i: Int): TableReaderSettingsBuilder[K, V] = copy(maximumInflightMessages = i)
 
@@ -440,7 +442,8 @@ class TableWriterSettingsBuilder[K, V](
       : TableWriterSettingsBuilder[K, V] =
     copy(keyValueTableClientConfigurationBuilderCustomizer = Some(f))
 
-  def withClientConfig(clientConfig: ClientConfig) = copy(clientConfig = Some(clientConfig))
+  def withClientConfig(clientConfig: ClientConfig): TableWriterSettingsBuilder[K, V] =
+    copy(clientConfig = Some(clientConfig))
 
   def clientConfigBuilder(
       clientConfigCustomization: ClientConfigBuilder => ClientConfigBuilder): TableWriterSettingsBuilder[K, V] =
@@ -546,9 +549,9 @@ private[pravega] class ReaderBasicSetting(
     var groupName: Option[String] = None,
     var readerId: Option[String] = None,
     var timeout: Duration = Duration.ofSeconds(5)) {
-  def withGroupName(name: String) = groupName = Some(name)
-  def withReaderId(name: String) = readerId = Some(name)
-  def withTimeout(t: Duration) = timeout = t
+  def withGroupName(name: String): Unit = groupName = Some(name)
+  def withReaderId(name: String): Unit = readerId = Some(name)
+  def withTimeout(t: Duration): Unit = timeout = t
 }
 
 /**
@@ -615,7 +618,7 @@ private[pravega] object ConfigHelper {
     val builder = ReaderConfig
       .builder()
 
-    implicit val c = config.getConfig("config")
+    implicit val c: Config = config.getConfig("config")
     extractBoolean("disable-time-windows")(builder.disableTimeWindows)
     extractLong("initial-allocation-delay")(builder.initialAllocationDelay)
 
@@ -625,7 +628,7 @@ private[pravega] object ConfigHelper {
   def buildClientConfigFromTypeSafeConfig(config: Config): ClientConfig = {
     val builder = ClientConfig.builder()
 
-    implicit val c = config.getConfig("client-config")
+    implicit val c: Config = config.getConfig("client-config")
     extractString("controller-uri") { uri =>
       builder.controllerURI(new URI(uri))
     }

@@ -13,4 +13,4 @@
 
 package docs.scaladsl
 
-case class Person(id: Int, firstname: String)
+final case class Person(id: Int, firstname: String)

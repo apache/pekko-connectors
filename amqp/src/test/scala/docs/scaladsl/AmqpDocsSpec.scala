@@ -35,7 +35,7 @@ class AmqpDocsSpec extends AmqpSpec {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
 
-  val businessLogic: CommittableReadResult => Future[CommittableReadResult] = Future.successful(_)
+  val businessLogic: CommittableReadResult => Future[CommittableReadResult] = Future.successful
 
   "The AMQP Connectors" should {
 
@@ -158,7 +158,7 @@ class AmqpDocsSpec extends AmqpSpec {
       val mergingFlow = mergedSources
         .viaMat(KillSwitches.single)(Keep.right)
         .to(Sink.fold(Set.empty[Int]) {
-          case (seen, (branch, element)) =>
+          case (seen, (branch, _)) =>
             if (seen.size == fanoutSize) completion.trySuccess(Done)
             seen + branch
         })

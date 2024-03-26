@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.{ JsonCreator, JsonProperty }
 import spray.json.JsonFormat
 
 import java.util
-
+import java.util.Optional
 import scala.annotation.nowarn
 
 /**
@@ -41,23 +41,23 @@ final case class ErrorProto private[bigquery] (reason: Option[String], location:
       @JsonProperty(value = "message") message: String) =
     this(Option(reason), Option(location), Option(message))
 
-  def getReason = reason.toJava
-  def getLocation = location.toJava
-  def getMessage = message.toJava
+  def getReason: Optional[String] = reason.toJava
+  def getLocation: Optional[String] = location.toJava
+  def getMessage: Optional[String] = message.toJava
 
-  def withReason(reason: Option[String]) =
+  def withReason(reason: Option[String]): ErrorProto =
     copy(reason = reason)
-  def withReason(reason: util.Optional[String]) =
+  def withReason(reason: util.Optional[String]): ErrorProto =
     copy(reason = reason.toScala)
 
-  def withLocation(location: Option[String]) =
+  def withLocation(location: Option[String]): ErrorProto =
     copy(location = location)
-  def withLocation(location: util.Optional[String]) =
+  def withLocation(location: util.Optional[String]): ErrorProto =
     copy(location = location.toScala)
 
-  def withMessage(message: Option[String]) =
+  def withMessage(message: Option[String]): ErrorProto =
     copy(message = message)
-  def withMessage(message: util.Optional[String]) =
+  def withMessage(message: util.Optional[String]): ErrorProto =
     copy(message = message.toScala)
 }
 
@@ -72,7 +72,8 @@ object ErrorProto {
    * @param message A human-readable description of the error
    * @return an [[ErrorProto]]
    */
-  def create(reason: util.Optional[String], location: util.Optional[String], message: util.Optional[String]) =
+  def create(
+      reason: util.Optional[String], location: util.Optional[String], message: util.Optional[String]): ErrorProto =
     ErrorProto(reason.toScala, location.toScala, message.toScala)
 
   implicit val format: JsonFormat[ErrorProto] = jsonFormat3(apply)

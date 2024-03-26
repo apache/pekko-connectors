@@ -40,10 +40,10 @@ object CassandraSessionRegistry extends ExtensionId[CassandraSessionRegistry] wi
   def createExtension(system: ClassicActorSystemProvider): CassandraSessionRegistry =
     createExtension(system.classicSystem.asInstanceOf[ExtendedActorSystem])
 
-  override def lookup: ExtensionId[CassandraSessionRegistry] = this
+  override def lookup: CassandraSessionRegistry.type = CassandraSessionRegistry
 
   /** Hash key for `sessions`. */
-  private case class SessionKey(configPath: String)
+  private final case class SessionKey(configPath: String)
 
   private def sessionKey(settings: CassandraSessionSettings) = SessionKey(settings.configPath)
 }

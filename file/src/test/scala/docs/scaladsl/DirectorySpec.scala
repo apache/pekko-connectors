@@ -135,4 +135,4 @@ class DirectorySpec
     fs.close()
 }
 
-case class SomeContext()
+final case class SomeContext()

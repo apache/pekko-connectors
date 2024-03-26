@@ -24,11 +24,11 @@ import io.circe.{ Decoder, Encoder, Json }
  *
  * @param name The name associated with this Queue.
  */
-private[ironmq] case class Queue(name: Queue.Name)
+private[ironmq] final case class Queue(name: Queue.Name)
 
 private[ironmq] object Queue {
 
-  case class Name(value: String) extends AnyVal {
+  final case class Name(value: String) extends AnyVal {
     override def toString: String = value
   }
 }

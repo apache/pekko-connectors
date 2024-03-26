@@ -29,7 +29,7 @@ private[geode] class GeodeContinuousSourceStage[V](cache: ClientCache, name: Str
   override protected def initialAttributes: Attributes =
     super.initialAttributes and Attributes.name("GeodeContinuousSource") and ActorAttributes.IODispatcher
 
-  val out = Outlet[V](s"geode.continuousSource")
+  val out: Outlet[V] = Outlet[V](s"geode.continuousSource")
 
   override def shape: SourceShape[V] = SourceShape.of(out)
 
@@ -38,16 +38,16 @@ private[geode] class GeodeContinuousSourceStage[V](cache: ClientCache, name: Str
 
     (new GeodeCQueryGraphLogic[V](shape, cache, name, sql) {
 
-        override val onConnect: AsyncCallback[Unit] = getAsyncCallback[Unit] { v =>
+        override val onConnect: AsyncCallback[Unit] = getAsyncCallback[Unit] { _ =>
           subPromise.success(Done)
         }
 
         val onElement: AsyncCallback[V] = getAsyncCallback[V] { element =>
-          if (isAvailable(out) && incomingQueueIsEmpty) {
+          if (isAvailable(out) && incomingQueueIsEmpty)
             pushElement(out, element)
-          } else
+          else
             enqueue(element)
-          handleTerminaison()
+          handleTermination()
         }
 
         //
@@ -56,14 +56,14 @@ private[geode] class GeodeContinuousSourceStage[V](cache: ClientCache, name: Str
         setHandler(
           out,
           new OutHandler {
-            override def onPull() = {
+            override def onPull(): Unit = {
               if (initialResultsIterator.hasNext)
                 push(out, initialResultsIterator.next())
               else
                 dequeue().foreach { e =>
                   pushElement(out, e)
                 }
-              handleTerminaison()
+              handleTermination()
             }
           })
 

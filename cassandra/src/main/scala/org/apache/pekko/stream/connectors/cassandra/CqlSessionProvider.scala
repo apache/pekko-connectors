@@ -75,7 +75,7 @@ object CqlSessionProvider {
    */
   def apply(system: ExtendedActorSystem, config: Config): CqlSessionProvider = {
     val className = config.getString("session-provider")
-    val dynamicAccess = system.asInstanceOf[ExtendedActorSystem].dynamicAccess
+    val dynamicAccess = system.dynamicAccess
     val clazz = dynamicAccess.getClassFor[CqlSessionProvider](className).get
     def instantiate(args: immutable.Seq[(Class[_], AnyRef)]) =
       dynamicAccess.createInstanceFor[CqlSessionProvider](clazz, args)
@@ -83,9 +83,9 @@ object CqlSessionProvider {
     val params = List((classOf[ActorSystem], system), (classOf[Config], config))
     instantiate(params)
       .recoverWith {
-        case x: NoSuchMethodException => instantiate(params.take(1))
+        case _: NoSuchMethodException => instantiate(params.take(1))
       }
-      .recoverWith { case x: NoSuchMethodException => instantiate(Nil) }
+      .recoverWith { case _: NoSuchMethodException => instantiate(Nil) }
       .recoverWith {
         case ex: Exception =>
           Failure(

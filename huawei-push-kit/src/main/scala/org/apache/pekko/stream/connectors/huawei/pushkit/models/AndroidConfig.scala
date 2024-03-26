@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.huawei.pushkit.models
  * AndroidConfig model.
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
  */
-case class AndroidConfig(collapse_key: Option[Int] = None,
+final case class AndroidConfig(collapse_key: Option[Int] = None,
     ttl: Option[String] = None,
     bi_tag: Option[String] = None,
     receipt_id: Option[String] = None,
@@ -51,7 +51,7 @@ object AndroidConfig {
  *
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
  */
-case class AndroidNotification(title: Option[String] = None,
+final case class AndroidNotification(title: Option[String] = None,
     body: Option[String] = None,
     icon: Option[String] = None,
     color: Option[String] = None,
@@ -132,7 +132,7 @@ object AndroidNotification {
 /**
  * LightSettings model.
  */
-case class LightSettings(color: Option[Color] = None,
+final case class LightSettings(color: Option[Color] = None,
     light_on_duration: Option[String] = None,
     light_off_duration: Option[String] = None) {
   def withColor(color: Color): LightSettings = this.copy(color = Option(color))
@@ -151,7 +151,7 @@ object LightSettings {
 /**
  * Color model.
  */
-case class Color(alpha: Option[Float] = None,
+final case class Color(alpha: Option[Float] = None,
     red: Option[Float] = None,
     green: Option[Float] = None,
     blue: Option[Float] = None) {
@@ -173,7 +173,7 @@ object Color {
 /**
  * Click Action model.
  */
-case class ClickAction(`type`: Option[Int] = None,
+final case class ClickAction(`type`: Option[Int] = None,
     intent: Option[String] = None,
     url: Option[String] = None,
     action: Option[String] = None) {
@@ -195,7 +195,8 @@ object ClickAction {
 /**
  * BadgeNotification model.
  */
-case class BadgeNotification(add_num: Option[Int] = None, `class`: Option[String] = None, set_num: Option[Int] = None) {
+final case class BadgeNotification(add_num: Option[Int] = None, `class`: Option[String] = None,
+    set_num: Option[Int] = None) {
   def withAddNum(value: Int): BadgeNotification = this.copy(add_num = Option(value))
   def withClass(value: String): BadgeNotification = this.copy(`class` = Option(value))
   def withSetNum(value: Int): BadgeNotification = this.copy(set_num = Option(value))
@@ -209,7 +210,7 @@ object BadgeNotification {
 /**
  * Button model.
  */
-case class Button(name: Option[String] = None,
+final case class Button(name: Option[String] = None,
     action_type: Option[Int] = None,
     intent_type: Option[Int] = None,
     intent: Option[String] = None,

@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
  * WebpushConfig model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#WebpushConfig
  */
-case class WebPushConfig(headers: Option[Map[String, String]] = None,
+final case class WebPushConfig(headers: Option[Map[String, String]] = None,
     data: Option[Map[String, String]] = None,
     notification: Option[String] = None,
     fcm_options: Option[FcmOption] = None) {

@@ -30,9 +30,9 @@ import pekko.util.ByteString
  * @param maxSize Maximum size to buffer
  */
 @InternalApi private[impl] final class MemoryBuffer(maxSize: Int) extends GraphStage[FlowShape[ByteString, Chunk]] {
-  val in = Inlet[ByteString]("MemoryBuffer.in")
-  val out = Outlet[Chunk]("MemoryBuffer.out")
-  override val shape = FlowShape.of(in, out)
+  val in: Inlet[ByteString] = Inlet[ByteString]("MemoryBuffer.in")
+  val out: Outlet[Chunk] = Outlet[Chunk]("MemoryBuffer.out")
+  override val shape: FlowShape[ByteString, Chunk] = FlowShape.of(in, out)
 
   override def createLogic(attr: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with InHandler with OutHandler {
@@ -42,9 +42,9 @@ import pekko.util.ByteString
 
       override def onPush(): Unit = {
         val elem = grab(in)
-        if (buffer.size + elem.size > maxSize) {
+        if (buffer.size + elem.size > maxSize)
           failStage(new IllegalStateException("Buffer size of " + maxSize + " bytes exceeded."))
-        } else {
+        else {
           buffer ++= elem
           pull(in)
         }

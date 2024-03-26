@@ -100,7 +100,7 @@ object Credentials {
  * Credentials for accessing Google APIs
  */
 @DoNotInherit
-abstract class Credentials private[auth] () {
+abstract class Credentials private[auth] {
 
   private[google] def projectId: String
 

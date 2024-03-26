@@ -63,9 +63,9 @@ object BigQueryArrowStorage {
       maxNumStreams: Int): Source[java.util.List[BigQueryRecord], CompletionStage[NotUsed]] =
     scstorage.BigQueryArrowStorage
       .readRecordsMerged(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         stream.asJava
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 
@@ -105,9 +105,9 @@ object BigQueryArrowStorage {
       maxNumStreams: Int): Source[java.util.List[Source[BigQueryRecord, NotUsed]], CompletionStage[NotUsed]] =
     scstorage.BigQueryArrowStorage
       .readRecords(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         stream.map(_.asJava).asJava
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 
@@ -147,9 +147,9 @@ object BigQueryArrowStorage {
       maxNumStreams: Int): Source[(ArrowSchema, Source[ArrowRecordBatch, NotUsed]), CompletionStage[NotUsed]] =
     scstorage.BigQueryArrowStorage
       .readMerged(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         (stream._1, stream._2.asJava)
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 
@@ -194,9 +194,9 @@ object BigQueryArrowStorage {
       : Source[(ArrowSchema, java.util.List[Source[ArrowRecordBatch, NotUsed]]), CompletionStage[NotUsed]] =
     scstorage.BigQueryArrowStorage
       .read(projectId, datasetId, tableId, readOptions, maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         (stream._1, stream._2.map(_.asJava).asJava)
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 

@@ -115,7 +115,7 @@ public class PravegaReadWriteDocs extends PravegaPekkoTestCaseSupport {
 
     final CompletionStage<Done> pair =
         PravegaTable.source("an_existing_scope", "an_existing_tableName", tableReaderSettings)
-            .to(Sink.foreach((TableEntry<String> kvp) -> processKVP(kvp)))
+            .to(Sink.foreach(PravegaReadWriteDocs::processKVP))
             .run(system);
     // #table-reading
 

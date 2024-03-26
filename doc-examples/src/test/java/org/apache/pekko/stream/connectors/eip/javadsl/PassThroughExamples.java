@@ -128,7 +128,7 @@ class PassThroughFlowKafkaCommitExample {
     Consumer.DrainingControl<Done> control =
         Consumer.committableSource(consumerSettings, Subscriptions.topics("topic1"))
             .via(PassThroughFlow.create(writeFlow, Keep.right()))
-            .map(i -> i.committableOffset())
+            .map(ConsumerMessage.CommittableMessage::committableOffset)
             .toMat(Committer.sink(comitterSettings), Keep.both())
             .mapMaterializedValue(Consumer::createDrainingControl)
             .run(system);

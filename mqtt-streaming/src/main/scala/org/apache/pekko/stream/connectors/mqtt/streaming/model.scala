@@ -36,22 +36,22 @@ import scala.concurrent.{ ExecutionContext, Promise }
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 object ControlPacketType {
-  val Reserved1 = ControlPacketType(0)
-  val CONNECT = ControlPacketType(1)
-  val CONNACK = ControlPacketType(2)
-  val PUBLISH = ControlPacketType(3)
-  val PUBACK = ControlPacketType(4)
-  val PUBREC = ControlPacketType(5)
-  val PUBREL = ControlPacketType(6)
-  val PUBCOMP = ControlPacketType(7)
-  val SUBSCRIBE = ControlPacketType(8)
-  val SUBACK = ControlPacketType(9)
-  val UNSUBSCRIBE = ControlPacketType(10)
-  val UNSUBACK = ControlPacketType(11)
-  val PINGREQ = ControlPacketType(12)
-  val PINGRESP = ControlPacketType(13)
-  val DISCONNECT = ControlPacketType(14)
-  val Reserved2 = ControlPacketType(15)
+  val Reserved1: ControlPacketType = ControlPacketType(0)
+  val CONNECT: ControlPacketType = ControlPacketType(1)
+  val CONNACK: ControlPacketType = ControlPacketType(2)
+  val PUBLISH: ControlPacketType = ControlPacketType(3)
+  val PUBACK: ControlPacketType = ControlPacketType(4)
+  val PUBREC: ControlPacketType = ControlPacketType(5)
+  val PUBREL: ControlPacketType = ControlPacketType(6)
+  val PUBCOMP: ControlPacketType = ControlPacketType(7)
+  val SUBSCRIBE: ControlPacketType = ControlPacketType(8)
+  val SUBACK: ControlPacketType = ControlPacketType(9)
+  val UNSUBSCRIBE: ControlPacketType = ControlPacketType(10)
+  val UNSUBACK: ControlPacketType = ControlPacketType(11)
+  val PINGREQ: ControlPacketType = ControlPacketType(12)
+  val PINGRESP: ControlPacketType = ControlPacketType(13)
+  val DISCONNECT: ControlPacketType = ControlPacketType(14)
+  val Reserved2: ControlPacketType = ControlPacketType(15)
 }
 @InternalApi
 final case class ControlPacketType(underlying: Int) extends AnyVal
@@ -61,19 +61,19 @@ final case class ControlPacketType(underlying: Int) extends AnyVal
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 object ControlPacketFlags {
-  val None = ControlPacketFlags(0)
-  val ReservedGeneral = ControlPacketFlags(0)
-  val ReservedPubRel = ControlPacketFlags(1 << 1)
-  val ReservedSubscribe = ControlPacketFlags(1 << 1)
-  val ReservedUnsubscribe = ControlPacketFlags(1 << 1)
-  val ReservedUnsubAck = ControlPacketFlags(1 << 1)
-  val DUP = ControlPacketFlags(1 << 3)
-  val QoSAtMostOnceDelivery = ControlPacketFlags(0)
-  val QoSAtLeastOnceDelivery = ControlPacketFlags(1 << 1)
-  val QoSExactlyOnceDelivery = ControlPacketFlags(2 << 1)
-  val QoSReserved = ControlPacketFlags(3 << 1)
-  val QoSFailure = ControlPacketFlags(1 << 7)
-  val RETAIN = ControlPacketFlags(1)
+  val None: ControlPacketFlags = ControlPacketFlags(0)
+  val ReservedGeneral: ControlPacketFlags = ControlPacketFlags(0)
+  val ReservedPubRel: ControlPacketFlags = ControlPacketFlags(1 << 1)
+  val ReservedSubscribe: ControlPacketFlags = ControlPacketFlags(1 << 1)
+  val ReservedUnsubscribe: ControlPacketFlags = ControlPacketFlags(1 << 1)
+  val ReservedUnsubAck: ControlPacketFlags = ControlPacketFlags(1 << 1)
+  val DUP: ControlPacketFlags = ControlPacketFlags(1 << 3)
+  val QoSAtMostOnceDelivery: ControlPacketFlags = ControlPacketFlags(0)
+  val QoSAtLeastOnceDelivery: ControlPacketFlags = ControlPacketFlags(1 << 1)
+  val QoSExactlyOnceDelivery: ControlPacketFlags = ControlPacketFlags(2 << 1)
+  val QoSReserved: ControlPacketFlags = ControlPacketFlags(3 << 1)
+  val QoSFailure: ControlPacketFlags = ControlPacketFlags(1 << 7)
+  val RETAIN: ControlPacketFlags = ControlPacketFlags(1)
 }
 
 @InternalApi
@@ -116,14 +116,14 @@ case object Reserved2 extends ControlPacket(ControlPacketType.Reserved2, Control
 final case class PacketId(underlying: Int) extends AnyVal
 
 object ConnectFlags {
-  val None = ConnectFlags(0)
-  val Reserved = ConnectFlags(1)
-  val CleanSession = ConnectFlags(1 << 1)
-  val WillFlag = ConnectFlags(1 << 2)
-  val WillQoS = ConnectFlags(3 << 3)
-  val WillRetain = ConnectFlags(1 << 5)
-  val PasswordFlag = ConnectFlags(1 << 6)
-  val UsernameFlag = ConnectFlags(1 << 7)
+  val None: ConnectFlags = ConnectFlags(0)
+  val Reserved: ConnectFlags = ConnectFlags(1)
+  val CleanSession: ConnectFlags = ConnectFlags(1 << 1)
+  val WillFlag: ConnectFlags = ConnectFlags(1 << 2)
+  val WillQoS: ConnectFlags = ConnectFlags(3 << 3)
+  val WillRetain: ConnectFlags = ConnectFlags(1 << 5)
+  val PasswordFlag: ConnectFlags = ConnectFlags(1 << 6)
+  val UsernameFlag: ConnectFlags = ConnectFlags(1 << 7)
 }
 
 /**
@@ -218,8 +218,8 @@ final case class Connect(protocolName: Connect.ProtocolName,
 }
 
 object ConnAckFlags {
-  val None = ConnAckFlags(0)
-  val SessionPresent = ConnAckFlags(1)
+  val None: ConnAckFlags = ConnAckFlags(0)
+  val SessionPresent: ConnAckFlags = ConnAckFlags(1)
 }
 
 /**
@@ -229,12 +229,12 @@ object ConnAckFlags {
 final case class ConnAckFlags private[streaming] (underlying: Int) extends AnyVal
 
 object ConnAckReturnCode {
-  val ConnectionAccepted = ConnAckReturnCode(0)
-  val ConnectionRefusedUnacceptableProtocolVersion = ConnAckReturnCode(1)
-  val ConnectionRefusedIdentifierRejected = ConnAckReturnCode(2)
-  val ConnectionRefusedServerUnavailable = ConnAckReturnCode(3)
-  val ConnectionRefusedBadUsernameOrPassword = ConnAckReturnCode(4)
-  val ConnectionRefusedNotAuthorized = ConnAckReturnCode(5)
+  val ConnectionAccepted: ConnAckReturnCode = ConnAckReturnCode(0)
+  val ConnectionRefusedUnacceptableProtocolVersion: ConnAckReturnCode = ConnAckReturnCode(1)
+  val ConnectionRefusedIdentifierRejected: ConnAckReturnCode = ConnAckReturnCode(2)
+  val ConnectionRefusedServerUnavailable: ConnAckReturnCode = ConnAckReturnCode(3)
+  val ConnectionRefusedBadUsernameOrPassword: ConnAckReturnCode = ConnAckReturnCode(4)
+  val ConnectionRefusedNotAuthorized: ConnAckReturnCode = ConnAckReturnCode(5)
 }
 
 /**
@@ -493,7 +493,7 @@ object MqttCodec {
   /**
    * Not enough bytes in the byte iterator
    */
-  final case object BufferUnderflow extends DecodeError
+  case object BufferUnderflow extends DecodeError
 
   /**
    * Cannot determine the type/flags combination of the control packet
@@ -516,7 +516,7 @@ object MqttCodec {
   /**
    * Bit 0 of the connect flag was set - which it should not be as it is reserved.
    */
-  final case object ConnectFlagReservedSet extends DecodeError
+  case object ConnectFlagReservedSet extends DecodeError
 
   /**
    * Something is wrong with the connect message
@@ -898,16 +898,15 @@ object MqttCodec {
         if ((connectAckFlags & 0xFE) == 0) {
           val resultCode = v.getByte & 0xFF
           Right(ConnAck(ConnAckFlags(connectAckFlags), ConnAckReturnCode(resultCode)))
-        } else {
+        } else
           Left(ConnectAckFlagReservedBitsSet)
-        }
       } catch {
         case _: NoSuchElementException => Left(BufferUnderflow)
       }
 
     // 3.3 PUBLISH – Publish message
     def decodePublish(l: Int, flags: ControlPacketFlags): Either[DecodeError, Publish] =
-      try {
+      try
         if (!flags.contains(ControlPacketFlags.QoSReserved)) {
           val packetLen = v.len
           val topicName = v.decodeString()
@@ -926,7 +925,7 @@ object MqttCodec {
         } else {
           Left(InvalidQoS)
         }
-      } catch {
+      catch {
         case _: NoSuchElementException => Left(BufferUnderflow)
       }
 
@@ -980,23 +979,21 @@ object MqttCodec {
             val packetLenAtTopicFilter = v.len
             val topicFilter = (v.decodeString(), ControlPacketFlags(v.getByte & 0xFF))
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
-          } else {
+          } else
             topicFilters
-          }
         val topicFilters = decodeTopicFilters(l - (packetLen - v.len), Vector.empty)
         val topicFiltersValid = topicFilters.nonEmpty && topicFilters.foldLeft(true) {
           case (true, (Right(_), tff)) if tff.underlying < ControlPacketFlags.QoSReserved.underlying => true
           case _                                                                                     => false
         }
-        if (topicFiltersValid) {
+        if (topicFiltersValid)
           Right(Subscribe(packetId,
             topicFilters.flatMap {
               case (Right(tfs), tff) => List(tfs -> tff)
               case _                 => List.empty
             }))
-        } else {
+        else
           Left(BadSubscribeMessage(packetId, topicFilters))
-        }
       } catch {
         case _: NoSuchElementException => Left(BufferUnderflow)
       }
@@ -1012,9 +1009,8 @@ object MqttCodec {
             val packetLenAtTopicFilter = v.len
             val returnCode = ControlPacketFlags(v.getByte & 0xFF)
             decodeReturnCodes(remainingLen - (packetLenAtTopicFilter - v.len), returnCodes :+ returnCode)
-          } else {
+          } else
             returnCodes
-          }
         val returnCodes = decodeReturnCodes(l - (packetLen - v.len), Vector.empty)
         Right(SubAck(packetId, returnCodes))
       } catch {
@@ -1034,9 +1030,8 @@ object MqttCodec {
             val packetLenAtTopicFilter = v.len
             val topicFilter = v.decodeString()
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
-          } else {
+          } else
             topicFilters
-          }
         val topicFilters = decodeTopicFilters(l - (packetLen - v.len), Vector.empty)
         val topicFiltersValid = topicFilters.nonEmpty && topicFilters.foldLeft(true) {
           case (true, Right(_)) => true

@@ -63,7 +63,7 @@ class CassandraSessionSettings private (val configPath: String,
 
 object CassandraSessionSettings {
 
-  val ConfigPath = "pekko.connectors.cassandra"
+  val ConfigPath: String = "pekko.connectors.cassandra"
 
   def apply(): CassandraSessionSettings = apply(ConfigPath)
 

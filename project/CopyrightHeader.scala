@@ -124,9 +124,8 @@ trait CopyrightHeader extends AutoPlugin {
   private def isLightbendCopyrighted(text: String): Boolean =
     StringUtils.containsIgnoreCase(text, "lightbend inc.")
 
-  private def isOnlyLightbendCopyrightAnnotated(text: String): Boolean = {
+  private def isOnlyLightbendCopyrightAnnotated(text: String): Boolean =
     isLightbendCopyrighted(text) && !isApacheCopyrighted(text)
-  }
 }
 
 object CopyrightHeader extends CopyrightHeader

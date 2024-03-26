@@ -29,7 +29,7 @@ import org.apache.hadoop.io.compress.CompressionCodec
 object HdfsSource {
 
   /**
-   * Java API: creates a [[Source]] that consumes as [[ByteString]]
+   * Java API: creates a [[javadsl.Source]] that consumes as [[ByteString]]
    *
    * @param fs Hadoop file system
    * @param path the file to open
@@ -40,7 +40,7 @@ object HdfsSource {
     ScalaHdfsSource.data(fs, path).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * Java API: creates a [[Source]] that consumes as [[ByteString]]
+   * Java API: creates a [[javadsl.Source]] that consumes as [[ByteString]]
    *
    * @param fs Hadoop file system
    * @param path the file to open
@@ -53,7 +53,7 @@ object HdfsSource {
     ScalaHdfsSource.data(fs, path, chunkSize).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * Java API: creates a [[Source]] that consumes as [[ByteString]]
+   * Java API: creates a [[javadsl.Source]] that consumes as [[ByteString]]
    *
    * @param fs Hadoop file system
    * @param path the file to open
@@ -66,7 +66,7 @@ object HdfsSource {
     ScalaHdfsSource.compressed(fs, path, codec).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * Java API: creates a [[Source]] that consumes as [[ByteString]]
+   * Java API: creates a [[javadsl.Source]] that consumes as [[ByteString]]
    *
    * @param fs Hadoop file system
    * @param path the file to open
@@ -81,7 +81,7 @@ object HdfsSource {
     ScalaHdfsSource.compressed(fs, path, codec, chunkSize).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * Java API: creates a [[Source]] that consumes as [[(K, V]]
+   * Java API: creates a [[javadsl.Source]] that consumes as [[(K, V)]]
    *
    * @param fs Hadoop file system
    * @param path the file to open

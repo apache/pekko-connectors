@@ -74,7 +74,6 @@ private[connectors] object PaginatedRequest {
       .mapMaterializedValue(_ => NotUsed)
   }
 
-  private def addPageToken(request: HttpRequest, query: Query): String => HttpRequest = { pageToken =>
+  private def addPageToken(request: HttpRequest, query: Query): String => HttpRequest = pageToken =>
     request.withUri(request.uri.withQuery(Query.Cons("pageToken", pageToken, query)))
-  }
 }

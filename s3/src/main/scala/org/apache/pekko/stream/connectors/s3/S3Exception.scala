@@ -36,7 +36,7 @@ class S3Exception @InternalApi private[s3] (val statusCode: StatusCode,
 }
 
 object S3Exception {
-  def apply(response: String, statusCode: StatusCode): S3Exception = {
+  def apply(response: String, statusCode: StatusCode): S3Exception =
     try {
       val xmlResponse = XML.loadString(response)
       new S3Exception(
@@ -46,8 +46,7 @@ object S3Exception {
         (xmlResponse \ "RequestId").text,
         (xmlResponse \ "Resource").text)
     } catch {
-      case e: Exception =>
+      case _: Exception =>
         new S3Exception(statusCode, statusCode.toString, response, "-", "-")
     }
-  }
 }

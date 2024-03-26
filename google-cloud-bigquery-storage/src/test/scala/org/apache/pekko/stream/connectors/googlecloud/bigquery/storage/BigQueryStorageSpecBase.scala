@@ -38,24 +38,20 @@ abstract class BigQueryStorageSpecBase(_port: Int) extends BigQueryMockData with
 
   private val binding: Promise[Http.ServerBinding] = Promise[Http.ServerBinding]()
 
-  def storageAvroSchema = {
+  def storageAvroSchema =
     AvroSchema(com.google.cloud.bigquery.storage.v1.avro.AvroSchema.of(FullAvroSchema.toString))
-  }
 
-  def storageArrowSchema = {
+  def storageArrowSchema =
     ArrowSchema(
       com.google.cloud.bigquery.storage.v1.arrow.ArrowSchema.of(ByteString.copyFromUtf8(FullArrowSchema.toJson)))
-  }
 
-  def storageAvroRows = {
+  def storageAvroRows =
     AvroRows(recordsAsRows(FullAvroRecord))
-  }
 
   def startMock(): Promise[Http.ServerBinding] = {
     val bindingRes = new BigQueryMockServer(bqPort).run().futureValue
     binding.success(bindingRes)
   }
-  def stopMock(): Done = {
+  def stopMock(): Done =
     binding.future.futureValue.unbind().futureValue
-  }
 }

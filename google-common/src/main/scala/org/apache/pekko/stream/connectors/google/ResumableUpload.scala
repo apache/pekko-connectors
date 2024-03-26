@@ -181,9 +181,9 @@ private[connectors] object ResumableUpload {
     Flow[ByteString]
       .statefulMap(() => ByteString.newBuilder)((chunkBuilder, bytes) => {
           chunkBuilder ++= bytes
-          if (chunkBuilder.length < chunkSize) {
+          if (chunkBuilder.length < chunkSize)
             (chunkBuilder, ByteString.empty)
-          } else if (chunkBuilder.length == chunkSize) {
+          else if (chunkBuilder.length == chunkSize) {
             val chunk = chunkBuilder.result()
             chunkBuilder.clear()
             (chunkBuilder, chunk)

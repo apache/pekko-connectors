@@ -25,11 +25,10 @@ import scala.concurrent.Future
 @InternalApi
 private[auth] object ComputeEngineCredentials {
 
-  def apply(scopes: Set[String])(implicit system: ClassicActorSystemProvider): Future[Credentials] = {
+  def apply(scopes: Set[String])(implicit system: ClassicActorSystemProvider): Future[Credentials] =
     GoogleComputeMetadata
       .getProjectId()
       .map(projectId => new ComputeEngineCredentials(projectId, scopes))(system.classicSystem.dispatcher)
-  }
 
 }
 

@@ -151,7 +151,7 @@ class SnsPublishMockingSpec extends AnyFlatSpec with DefaultTestContext with Mat
   }
 
   it should "fail stage if upstream failure occurs" in {
-    case class MyCustomException(message: String) extends Exception(message)
+    final case class MyCustomException(message: String) extends Exception(message)
 
     val (probe, future) = TestSource.probe[String].via(SnsPublisher.flow("topic-arn")).toMat(Sink.seq)(Keep.both).run()
     probe.sendError(MyCustomException("upstream failure"))

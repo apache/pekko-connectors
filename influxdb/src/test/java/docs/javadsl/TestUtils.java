@@ -48,10 +48,10 @@ public class TestUtils {
             Instant.class, String.class, String.class, Double.class, Boolean.class, Long.class);
     Object firstCore =
         cons.newInstance(
-            Instant.now().minusSeconds(1000), "local_1", "eu-west-2", 1.4d, true, 123l);
+            Instant.now().minusSeconds(1000), "local_1", "eu-west-2", 1.4d, true, 123L);
     influxDBMapper.save(firstCore);
     Object secondCore =
-        cons.newInstance(Instant.now().minusSeconds(500), "local_2", "eu-west-2", 1.4d, true, 123l);
+        cons.newInstance(Instant.now().minusSeconds(500), "local_2", "eu-west-2", 1.4d, true, 123L);
     influxDBMapper.save(secondCore);
   }
 

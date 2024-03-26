@@ -30,9 +30,7 @@ trait PdxDecoder[A] {
 object PdxDecoder extends ObjectDecoder {
 
   private[pekko] def instance[A](f: (PdxReader, Symbol) => Try[A]): PdxDecoder[A] =
-    new PdxDecoder[A] {
-      def decode(reader: PdxReader, fieldName: Symbol) = f(reader, fieldName)
-    }
+    (reader: PdxReader, fieldName: Symbol) => f(reader, fieldName)
 
   implicit val booleanDecoder: PdxDecoder[Boolean] = instance {
     case (reader, fieldName) =>

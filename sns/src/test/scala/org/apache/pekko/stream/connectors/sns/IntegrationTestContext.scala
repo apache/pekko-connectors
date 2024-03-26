@@ -52,12 +52,11 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
     topicArn = createTopic()
   }
 
-  override protected def afterAll(): Unit = {
+  override protected def afterAll(): Unit =
     Http()
       .shutdownAllConnectionPools()
       .flatMap(_ => system.terminate())(ExecutionContext.global)
       .futureValue
-  }
 
   def createAsyncClient(endEndpoint: String): SnsAsyncClient = {
     // #init-client

@@ -54,9 +54,8 @@ import scala.collection.immutable
 
       override def onPull(): Unit = pull(in)
 
-      val matching: InHandler = new InHandler {
-
-        override def onPush(): Unit = grab(in) match {
+      val matching: InHandler = () =>
+        grab(in) match {
           case start: StartElement =>
             val element = createElement(start)
             elementStack.headOption.foreach { head =>
@@ -86,17 +85,15 @@ import scala.collection.immutable
               element.appendChild(doc.createTextNode(text.text))
             }
             pull(in)
-          case other =>
+          case _ =>
             pull(in)
         }
-      }
 
       if (path.isEmpty) setHandler(in, matching) else setHandler(in, partialMatch)
       setHandler(out, this)
 
-      lazy val partialMatch: InHandler = new InHandler {
-
-        override def onPush(): Unit = grab(in) match {
+      lazy val partialMatch: InHandler = () =>
+        grab(in) match {
           case start: StartElement =>
             if (start.localName == expected.head) {
               matchedSoFar = expected.head :: matchedSoFar
@@ -114,11 +111,9 @@ import scala.collection.immutable
             expected = matchedSoFar.head :: expected
             matchedSoFar = matchedSoFar.tail
             pull(in)
-          case other =>
+          case _ =>
             pull(in)
         }
-
-      }
 
       lazy val noMatch: InHandler = new InHandler {
         var depth = 0
@@ -131,7 +126,7 @@ import scala.collection.immutable
             if (depth == 0) setHandler(in, partialMatch)
             else depth -= 1
             pull(in)
-          case other =>
+          case _ =>
             pull(in)
         }
       }

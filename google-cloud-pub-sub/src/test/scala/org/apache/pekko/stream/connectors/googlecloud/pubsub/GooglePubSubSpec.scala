@@ -47,9 +47,8 @@ class GooglePubSubSpec
 
   implicit val system: ActorSystem = ActorSystem()
 
-  override protected def afterAll(): Unit = {
+  override protected def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
-  }
 
   private trait Fixtures {
     lazy val mockHttpApi = mock[PubSubApi]

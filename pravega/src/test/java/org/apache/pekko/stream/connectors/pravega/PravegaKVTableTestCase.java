@@ -99,14 +99,13 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
                 Sink.fold(
                     "",
                     (acc, p) -> {
-                      if (acc == "") return p.value();
+                      if (acc.isEmpty()) return p.value();
                       return acc + ", " + p.value();
                     }),
                 system);
 
     String result = readingDone.toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
-    Assert.assertTrue(
-        String.format("Read 2 elements [%s]", result), result.equals("One, Two, Three, Four"));
+      Assert.assertEquals(String.format("Read 2 elements [%s]", result), "One, Two, Three, Four", result);
 
     Flow<Integer, Optional<String>, NotUsed> readFlow =
         PravegaTable.readFlow(scope, tableName, tableReaderSettings);

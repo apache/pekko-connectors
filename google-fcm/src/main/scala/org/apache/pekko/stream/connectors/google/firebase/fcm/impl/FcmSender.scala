@@ -56,11 +56,10 @@ private[fcm] class FcmSender {
 
   implicit private val unmarshaller: FromResponseUnmarshaller[FcmSuccessResponse] = Unmarshaller.withMaterializer {
     implicit ec => implicit mat => (response: HttpResponse) =>
-      if (response.status.isSuccess) {
+      if (response.status.isSuccess)
         Unmarshal(response.entity).to[FcmSuccessResponse]
-      } else {
+      else
         Unmarshal(response.entity).to[FcmErrorResponse].map(error => throw FcmErrorException(error))
-      }
   }.withDefaultRetry
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.impl.FcmErrorException */

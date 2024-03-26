@@ -125,9 +125,8 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
             if (id % 2 == 0 && !rolledBackSet.contains(id)) {
               rolledBackSet.add(id)
               env.rollback()
-            } else {
+            } else
               env.commit()
-            }
             env.message.asInstanceOf[TextMessage].getText
           }
           .runWith(Sink.seq)
@@ -465,10 +464,7 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
 
         val r = new java.util.Random
 
-        val thisDecider: Supervision.Decider = {
-          case ex =>
-            Supervision.resume
-        }
+        val thisDecider: Supervision.Decider = _ => Supervision.resume
 
         val (killSwitch, streamDone) = jmsSource
           .throttle(10, 1.second, 2, ThrottleMode.shaping)
@@ -558,10 +554,9 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
           .toMat(
             Sink.foreach { env =>
               val text = env.message.asInstanceOf[TextMessage].getText
-              if (r.nextInt(3) <= 1) {
+              if (r.nextInt(3) <= 1)
                 // Artificially timing out this message
                 Thread.sleep(20)
-              }
               resultQueue.add(text)
               env.commit()
             })(Keep.both)
@@ -637,10 +632,9 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
           .throttle(10, 1.second, 2, ThrottleMode.shaping)
           .toMat(
             Sink.foreach { env =>
-              if (r.nextInt(3) <= 1) {
+              if (r.nextInt(3) <= 1)
                 // Artificially timing out this message
                 Thread.sleep(20)
-              }
               env.commit()
             })(Keep.both)
           .run()

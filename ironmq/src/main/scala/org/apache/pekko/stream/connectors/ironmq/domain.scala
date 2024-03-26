@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.ironmq
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 import org.apache.pekko.util.JavaDurationConverters._
 
-case class PushMessage(body: String, delay: FiniteDuration = Duration.Zero)
+final case class PushMessage(body: String, delay: FiniteDuration = Duration.Zero)
 
 object PushMessage {
 
@@ -33,13 +33,13 @@ object PushMessage {
  * @param body The pushed message content.
  * @param noOfReservations It is the count of how many time the message has been reserved (and released or expired) previously
  */
-case class Message(messageId: Message.Id, body: String, noOfReservations: Int)
+final case class Message(messageId: Message.Id, body: String, noOfReservations: Int)
 
 object Message {
 
-  case class Id(value: String) extends AnyVal {
+  final case class Id(value: String) extends AnyVal {
     override def toString: String = value
   }
 
-  case class Ids(ids: List[Id])
+  final case class Ids(ids: List[Id])
 }

@@ -55,7 +55,7 @@ class AmqpGraphStageLogicConnectionShutdownSpec
   val shutdownsAdded = new AtomicInteger()
   val shutdownsRemoved = new AtomicInteger()
 
-  override def beforeEach() = {
+  override def beforeEach(): Unit = {
     shutdownsAdded.set(0)
     shutdownsRemoved.set(0)
   }

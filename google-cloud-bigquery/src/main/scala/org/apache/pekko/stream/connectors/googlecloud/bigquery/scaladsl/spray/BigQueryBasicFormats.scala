@@ -22,8 +22,8 @@ import spray.json.{ deserializationError, JsBoolean, JsFalse, JsNumber, JsString
 trait BigQueryBasicFormats {
 
   implicit object IntJsonFormat extends BigQueryJsonFormat[Int] {
-    def write(x: Int) = JsNumber(x)
-    def read(value: JsValue) = value match {
+    def write(x: Int): JsNumber = JsNumber(x)
+    def read(value: JsValue): Int = value match {
       case JsNumber(x) if x.isValidInt       => x.intValue
       case BigQueryNumber(x) if x.isValidInt => x.intValue
       case x                                 => deserializationError("Expected Int as JsNumber or JsString, but got " + x)
@@ -31,12 +31,12 @@ trait BigQueryBasicFormats {
   }
 
   implicit object LongJsonFormat extends BigQueryJsonFormat[Long] {
-    def write(x: Long) =
+    def write(x: Long): JsValue =
       if (-9007199254740991L <= x & x <= 9007199254740991L)
         JsNumber(x)
       else
         JsString(x.toString)
-    def read(value: JsValue) = value match {
+    def read(value: JsValue): Long = value match {
       case JsNumber(x) if x.isValidLong       => x.longValue
       case BigQueryNumber(x) if x.isValidLong => x.longValue
       case x                                  => deserializationError("Expected Long as JsNumber or JsString, but got " + x)
@@ -44,8 +44,8 @@ trait BigQueryBasicFormats {
   }
 
   implicit object FloatJsonFormat extends BigQueryJsonFormat[Float] {
-    def write(x: Float) = JsNumber(x)
-    def read(value: JsValue) = value match {
+    def write(x: Float): JsValue = JsNumber(x)
+    def read(value: JsValue): Float = value match {
       case JsNumber(x)       => x.floatValue
       case BigQueryNumber(x) => x.floatValue
       case x                 => deserializationError("Expected Float as JsNumber or JsString, but got " + x)
@@ -53,8 +53,8 @@ trait BigQueryBasicFormats {
   }
 
   implicit object DoubleJsonFormat extends BigQueryJsonFormat[Double] {
-    def write(x: Double) = JsNumber(x)
-    def read(value: JsValue) = value match {
+    def write(x: Double): JsValue = JsNumber(x)
+    def read(value: JsValue): Double = value match {
       case JsNumber(x)       => x.doubleValue
       case BigQueryNumber(x) => x.doubleValue
       case x                 => deserializationError("Expected Double as JsNumber or JsString, but got " + x)
@@ -62,8 +62,8 @@ trait BigQueryBasicFormats {
   }
 
   implicit object ByteJsonFormat extends BigQueryJsonFormat[Byte] {
-    def write(x: Byte) = JsNumber(x)
-    def read(value: JsValue) = value match {
+    def write(x: Byte): JsNumber = JsNumber(x)
+    def read(value: JsValue): Byte = value match {
       case JsNumber(x) if x.isValidByte       => x.byteValue
       case BigQueryNumber(x) if x.isValidByte => x.byteValue
       case x                                  => deserializationError("Expected Byte as JsNumber or JsString, but got " + x)
@@ -71,8 +71,8 @@ trait BigQueryBasicFormats {
   }
 
   implicit object ShortJsonFormat extends BigQueryJsonFormat[Short] {
-    def write(x: Short) = JsNumber(x)
-    def read(value: JsValue) = value match {
+    def write(x: Short): JsNumber = JsNumber(x)
+    def read(value: JsValue): Short = value match {
       case JsNumber(x) if x.isValidShort       => x.shortValue
       case BigQueryNumber(x) if x.isValidShort => x.shortValue
       case x                                   => deserializationError("Expected Short as JsNumber or JsString, but got " + x)
@@ -80,11 +80,11 @@ trait BigQueryBasicFormats {
   }
 
   implicit object BigDecimalJsonFormat extends BigQueryJsonFormat[BigDecimal] {
-    def write(x: BigDecimal) = {
+    def write(x: BigDecimal): JsString = {
       require(x ne null)
       JsString(x.toString)
     }
-    def read(value: JsValue) = value match {
+    def read(value: JsValue): BigDecimal = value match {
       case JsNumber(x)       => x
       case BigQueryNumber(x) => x
       case x                 => deserializationError("Expected BigDecimal as JsNumber or JsString, but got " + x)
@@ -92,11 +92,11 @@ trait BigQueryBasicFormats {
   }
 
   implicit object BigIntJsonFormat extends BigQueryJsonFormat[BigInt] {
-    def write(x: BigInt) = {
+    def write(x: BigInt): JsString = {
       require(x ne null)
       JsString(x.toString)
     }
-    def read(value: JsValue) = value match {
+    def read(value: JsValue): BigInt = value match {
       case JsNumber(x)       => x.toBigInt
       case BigQueryNumber(x) => x.toBigInt
       case x                 => deserializationError("Expected BigInt as JsNumber or JsString, but got " + x)
@@ -104,13 +104,13 @@ trait BigQueryBasicFormats {
   }
 
   implicit object UnitJsonFormat extends BigQueryJsonFormat[Unit] {
-    def write(x: Unit) = JsNumber(1)
+    def write(x: Unit): JsNumber = JsNumber(1)
     def read(value: JsValue): Unit = {}
   }
 
   implicit object BooleanJsonFormat extends BigQueryJsonFormat[Boolean] {
-    def write(x: Boolean) = JsBoolean(x)
-    def read(value: JsValue) = value match {
+    def write(x: Boolean): JsBoolean = JsBoolean(x)
+    def read(value: JsValue): Boolean = value match {
       case JsTrue | JsString("true")   => true
       case JsFalse | JsString("false") => false
       case x                           => deserializationError("Expected Boolean as JsBoolean or JsString, but got " + x)
@@ -118,27 +118,27 @@ trait BigQueryBasicFormats {
   }
 
   implicit object CharJsonFormat extends BigQueryJsonFormat[Char] {
-    def write(x: Char) = JsString(String.valueOf(x))
-    def read(value: JsValue) = value match {
+    def write(x: Char): JsString = JsString(String.valueOf(x))
+    def read(value: JsValue): Char = value match {
       case JsString(x) if x.length == 1 => x.charAt(0)
       case x                            => deserializationError("Expected Char as single-character JsString, but got " + x)
     }
   }
 
   implicit object StringJsonFormat extends BigQueryJsonFormat[String] {
-    def write(x: String) = {
+    def write(x: String): JsString = {
       require(x ne null)
       JsString(x)
     }
-    def read(value: JsValue) = value match {
+    def read(value: JsValue): String = value match {
       case JsString(x) => x
       case x           => deserializationError("Expected String as JsString, but got " + x)
     }
   }
 
   implicit object SymbolJsonFormat extends BigQueryJsonFormat[Symbol] {
-    def write(x: Symbol) = JsString(x.name)
-    def read(value: JsValue) = value match {
+    def write(x: Symbol): JsString = JsString(x.name)
+    def read(value: JsValue): Symbol = value match {
       case JsString(x) => Symbol(x)
       case x           => deserializationError("Expected Symbol as JsString, but got " + x)
     }
@@ -146,8 +146,8 @@ trait BigQueryBasicFormats {
 
   implicit object ByteStringJsonFormat extends BigQueryJsonFormat[ByteString] {
     import java.nio.charset.StandardCharsets.US_ASCII
-    def write(x: ByteString) = JsString(x.encodeBase64.decodeString(US_ASCII))
-    def read(value: JsValue) = value match {
+    def write(x: ByteString): JsString = JsString(x.encodeBase64.decodeString(US_ASCII))
+    def read(value: JsValue): ByteString = value match {
       case BigQueryBytes(x) => x
       case x                => deserializationError("Expected ByteString as JsString, but got " + x)
     }

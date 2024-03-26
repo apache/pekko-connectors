@@ -34,19 +34,18 @@ private[connectors] object ServiceAccountCredentials {
     new ServiceAccountCredentials(projectId, clientEmail, privateKey, scopes)
 
   def apply(c: Config, scopes: Set[String])(implicit system: ClassicActorSystemProvider): Credentials = {
-    val (projectId, clientEmail, privateKey) = {
-      if (c.getString("private-key").nonEmpty) {
+    val (projectId, clientEmail, privateKey) =
+      if (c.getString("private-key").nonEmpty)
         (
           c.getString("project-id"),
           c.getString("client-email"),
           c.getString("private-key"))
-      } else {
+      else {
         val src = Source.fromFile(c.getString("path"))
         val credentials = JsonParser(src.mkString).convertTo[ServiceAccountCredentialsFile]
         src.close()
         (credentials.project_id, credentials.client_email, credentials.private_key)
       }
-    }
     require(
       projectId.nonEmpty && clientEmail.nonEmpty && privateKey.nonEmpty && scopes.nonEmpty && scopes.forall(_.nonEmpty),
       "Service account requires that project-id, client-email, private-key, and at least one scope are specified.")
@@ -67,7 +66,6 @@ private final class ServiceAccountCredentials(projectId: String,
 
   override protected def getAccessToken()(implicit mat: Materializer,
       settings: RequestSettings,
-      clock: Clock): Future[AccessToken] = {
+      clock: Clock): Future[AccessToken] =
     GoogleOAuth2.getAccessToken(clientEmail, privateKey, scopes)
-  }
 }

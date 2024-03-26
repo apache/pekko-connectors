@@ -438,9 +438,8 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
       Http().singleRequest(req).futureValue shouldBe a[HttpResponse]
 
       probe.expectMsgType[HttpRequest]
-    } finally {
+    } finally
       TestKit.shutdownActorSystem(system)
-    }
   }
 
   it should "add two (source, range) headers to multipart upload (copy) request when byte range populated" in {

@@ -25,7 +25,7 @@ object OrientDbWriteMessage {
     OrientDbWriteMessage(oDocument, NotUsed)
 
   // Java-api - with passThrough
-  def create[T, C](oDocument: T, passThrough: C) =
+  def create[T, C](oDocument: T, passThrough: C): OrientDbWriteMessage[T, C] =
     OrientDbWriteMessage(oDocument, passThrough)
 }
 

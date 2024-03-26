@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.pravega.impl
 
+import io.pravega.client.ClientConfig
+
 import java.util.concurrent.{ CompletableFuture, Semaphore }
 import org.apache.pekko
 import pekko.annotation.InternalApi
@@ -38,7 +40,7 @@ import scala.util.{ Failure, Success, Try }
   private def in = shape.in
   private def out = shape.out
 
-  val clientConfig = writerSettings.clientConfig
+  val clientConfig: ClientConfig = writerSettings.clientConfig
 
   private var writer: EventStreamWriter[A] = _
 
@@ -58,9 +60,9 @@ import scala.util.{ Failure, Success, Try }
    * Initialization logic
    */
   override def preStart(): Unit =
-    try {
+    try
       writer = createWriter(streamName, writerSettings)
-    } catch {
+    catch {
       case NonFatal(ex) => failStage(ex)
     }
 
@@ -96,9 +98,8 @@ import scala.util.{ Failure, Success, Try }
   setHandler(
     out,
     new OutHandler {
-      override def onPull(): Unit = {
+      override def onPull(): Unit =
         pull(in)
-      }
     })
 
   /**
@@ -109,7 +110,7 @@ import scala.util.{ Failure, Success, Try }
     Try(writer.close()) match {
       case Failure(exception) =>
         log.error(exception, "Error while closing writer to stream [{}] in scope [{}}]", streamName, scope)
-      case Success(value) =>
+      case Success(_) =>
         log.debug("Closed writer to stream [{}] in scope [{}}]", streamName, scope)
     }
     close()

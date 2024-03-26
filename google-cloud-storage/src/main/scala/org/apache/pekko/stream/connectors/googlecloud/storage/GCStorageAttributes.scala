@@ -49,9 +49,9 @@ final class GCStorageSettingsPath private (val path: String) extends Attribute
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageSettingsPath {
-  val Default = GCStorageSettingsPath(GCStorageSettings.ConfigPath)
+  val Default: GCStorageSettingsPath = GCStorageSettingsPath(GCStorageSettings.ConfigPath)
 
-  def apply(path: String) = new GCStorageSettingsPath(path)
+  def apply(path: String): GCStorageSettingsPath = new GCStorageSettingsPath(path)
 }
 
 /**
@@ -67,5 +67,5 @@ final class GCStorageSettingsValue private (val settings: GCStorageSettings) ext
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleAttributes", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageSettingsValue {
-  def apply(settings: GCStorageSettings) = new GCStorageSettingsValue(settings)
+  def apply(settings: GCStorageSettings): GCStorageSettingsValue = new GCStorageSettingsValue(settings)
 }

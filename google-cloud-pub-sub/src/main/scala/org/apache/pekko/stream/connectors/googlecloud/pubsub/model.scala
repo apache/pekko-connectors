@@ -136,13 +136,15 @@ final class PublishMessage private (val data: String,
 }
 
 object PublishMessage {
-  def apply(data: String, attributes: immutable.Map[String, String]) = new PublishMessage(data, Some(attributes), None)
-  def apply(data: String, attributes: Option[immutable.Map[String, String]], orderingKey: Option[String]) =
+  def apply(data: String, attributes: immutable.Map[String, String]): PublishMessage =
+    new PublishMessage(data, Some(attributes), None)
+  def apply(
+      data: String, attributes: Option[immutable.Map[String, String]], orderingKey: Option[String]): PublishMessage =
     new PublishMessage(data, attributes, orderingKey)
-  def apply(data: String, attributes: Option[immutable.Map[String, String]]) =
+  def apply(data: String, attributes: Option[immutable.Map[String, String]]): PublishMessage =
     new PublishMessage(data, attributes, None)
-  def apply(data: String) = new PublishMessage(data, None, None)
-  def create(data: String) = new PublishMessage(data, None, None)
+  def apply(data: String): PublishMessage = new PublishMessage(data, None, None)
+  def create(data: String): PublishMessage = new PublishMessage(data, None, None)
 
   /**
    * Java API
@@ -204,14 +206,14 @@ object PubSubMessage {
   def apply(data: Option[String],
       attributes: Option[immutable.Map[String, String]],
       messageId: String,
-      publishTime: Instant) =
+      publishTime: Instant): PubSubMessage =
     new PubSubMessage(data, attributes, messageId, publishTime, None)
 
   def apply(data: Option[String] = None,
       attributes: Option[immutable.Map[String, String]] = None,
       messageId: String,
       publishTime: Instant,
-      orderingKey: Option[String] = None) =
+      orderingKey: Option[String] = None): PubSubMessage =
     new PubSubMessage(data, attributes, messageId, publishTime, orderingKey)
 
   /**
@@ -276,7 +278,7 @@ final class ReceivedMessage private (val ackId: String, val message: PubSubMessa
 
   override def hashCode: Int = java.util.Objects.hash(ackId, message)
 
-  override def toString: String = "ReceivedMessage(ackId=" + ackId.toString + ",message=" + message.toString + ")"
+  override def toString: String = "ReceivedMessage(ackId=" + ackId + ",message=" + message.toString + ")"
 }
 
 object ReceivedMessage {
@@ -348,7 +350,7 @@ private final class PullResponse private[pubsub] (val receivedMessages: Option[i
 
 object PullResponse {
 
-  @InternalApi private[pubsub] def apply(receivedMessages: Option[immutable.Seq[ReceivedMessage]]) =
+  @InternalApi private[pubsub] def apply(receivedMessages: Option[immutable.Seq[ReceivedMessage]]): PullResponse =
     new PullResponse(receivedMessages)
 
 }

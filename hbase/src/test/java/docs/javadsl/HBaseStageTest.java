@@ -34,6 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -63,89 +64,64 @@ public class HBaseStageTest {
   // #create-converter-put
   Function<Person, List<Mutation>> hBaseConverter =
       person -> {
-        try {
-          Put put = new Put(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Put put = new Put(String.format("id_%d", person.id).getBytes(StandardCharsets.UTF_8));
           put.addColumn(
-              "info".getBytes("UTF-8"), "name".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
+              "info".getBytes(StandardCharsets.UTF_8), "name".getBytes(StandardCharsets.UTF_8), person.name.getBytes(StandardCharsets.UTF_8));
 
           return Collections.singletonList(put);
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-          return Collections.emptyList();
-        }
       };
   // #create-converter-put
 
   // #create-converter-append
   Function<Person, List<Mutation>> appendHBaseConverter =
       person -> {
-        try {
-          Append append = new Append(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Append append = new Append(String.format("id_%d", person.id).getBytes(StandardCharsets.UTF_8));
           append.add(
-              "info".getBytes("UTF-8"), "aliases".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
+              "info".getBytes(StandardCharsets.UTF_8), "aliases".getBytes(StandardCharsets.UTF_8), person.name.getBytes(StandardCharsets.UTF_8));
 
           return Collections.singletonList(append);
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-          return Collections.emptyList();
-        }
       };
   // #create-converter-append
 
   // #create-converter-delete
   Function<Person, List<Mutation>> deleteHBaseConverter =
       person -> {
-        try {
-          Delete delete = new Delete(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Delete delete = new Delete(String.format("id_%d", person.id).getBytes(StandardCharsets.UTF_8));
 
           return Collections.singletonList(delete);
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-          return Collections.emptyList();
-        }
       };
   // #create-converter-delete
 
   // #create-converter-increment
   Function<Person, List<Mutation>> incrementHBaseConverter =
       person -> {
-        try {
-          Increment increment = new Increment(String.format("id_%d", person.id).getBytes("UTF-8"));
-          increment.addColumn("info".getBytes("UTF-8"), "numberOfChanges".getBytes("UTF-8"), 1);
+          Increment increment = new Increment(String.format("id_%d", person.id).getBytes(StandardCharsets.UTF_8));
+          increment.addColumn("info".getBytes(StandardCharsets.UTF_8), "numberOfChanges".getBytes(StandardCharsets.UTF_8), 1);
 
           return Collections.singletonList(increment);
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-          return Collections.emptyList();
-        }
       };
   // #create-converter-increment
 
   // #create-converter-complex
   Function<Person, List<Mutation>> complexHBaseConverter =
       person -> {
-        try {
-          byte[] id = String.format("id_%d", person.id).getBytes("UTF-8");
-          byte[] infoFamily = "info".getBytes("UTF-8");
+          byte[] id = String.format("id_%d", person.id).getBytes(StandardCharsets.UTF_8);
+          byte[] infoFamily = "info".getBytes(StandardCharsets.UTF_8);
 
           if (person.id != 0 && person.name.isEmpty()) {
             Delete delete = new Delete(id);
             return Collections.singletonList(delete);
           } else if (person.id != 0) {
             Put put = new Put(id);
-            put.addColumn(infoFamily, "name".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
+            put.addColumn(infoFamily, "name".getBytes(StandardCharsets.UTF_8), person.name.getBytes(StandardCharsets.UTF_8));
 
             Increment increment = new Increment(id);
-            increment.addColumn(infoFamily, "numberOfChanges".getBytes("UTF-8"), 1);
+            increment.addColumn(infoFamily, "numberOfChanges".getBytes(StandardCharsets.UTF_8), 1);
 
             return Arrays.asList(put, increment);
           } else {
             return Collections.emptyList();
           }
-        } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
-          return Collections.emptyList();
-        }
       };
   // #create-converter-complex
 
@@ -213,7 +189,7 @@ public class HBaseStageTest {
     assertEquals(Done.getInstance(), o.toCompletableFuture().get(5, TimeUnit.SECONDS));
 
     // #source
-    Scan scan = new Scan(new Get("id_300".getBytes("UTF-8")));
+    Scan scan = new Scan(new Get("id_300".getBytes(StandardCharsets.UTF_8)));
 
     CompletionStage<List<Result>> f =
         HTableStage.source(scan, tableSettings).runWith(Sink.seq(), system);

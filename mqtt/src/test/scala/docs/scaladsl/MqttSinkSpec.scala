@@ -68,7 +68,7 @@ class MqttSinkSpec extends MqttSpecBase("MqttSinkSpec") {
 
       val messages = messagesFuture.futureValue
       (messages should have).length(numOfMessages)
-      messages.foreach { _ shouldBe msg }
+      messages.foreach(_ shouldBe msg)
     }
 
     "connection should fail to wrong broker" in {

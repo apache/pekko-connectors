@@ -26,8 +26,8 @@ final class StorageClass private (val storageClass: String) {
 }
 
 object StorageClass {
-  val Standard = new StorageClass("STANDARD")
-  val InfrequentAccess = new StorageClass("STANDARD_IA")
-  val Glacier = new StorageClass("GLACIER")
-  val ReducedRedundancy = new StorageClass("REDUCED_REDUNDANCY")
+  val Standard: StorageClass = new StorageClass("STANDARD")
+  val InfrequentAccess: StorageClass = new StorageClass("STANDARD_IA")
+  val Glacier: StorageClass = new StorageClass("GLACIER")
+  val ReducedRedundancy: StorageClass = new StorageClass("REDUCED_REDUNDANCY")
 }

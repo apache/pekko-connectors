@@ -43,9 +43,9 @@ private[kinesis] object KinesisSourceStage {
 
   private[kinesis] final case class GetRecordsFailure(ex: Throwable)
 
-  private[kinesis] final case object Pump
+  private[kinesis] case object Pump
 
-  private[kinesis] final case object GetRecords
+  private[kinesis] case object GetRecords
 
 }
 
@@ -102,16 +102,14 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
           if (result.nextShardIterator == null) {
             log.info("Shard {} returned a null iterator and will now complete.", shardId)
             completeStage()
-          } else {
+          } else
             currentShardIterator = result.nextShardIterator
-          }
           if (records.nonEmpty) {
             records.foreach(buffer.enqueue(_))
             self.become(ready)
             self.ref ! Pump
-          } else {
+          } else
             scheduleOnce(GetRecords, refreshInterval)
-          }
 
         case (_, GetRecordsFailure(ex)) =>
           val error = new Errors.GetRecordsError(shardId, ex)

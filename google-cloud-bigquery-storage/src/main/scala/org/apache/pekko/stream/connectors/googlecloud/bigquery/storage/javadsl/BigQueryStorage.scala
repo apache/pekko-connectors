@@ -122,9 +122,9 @@ object BigQueryStorage {
       : Source[(ReadSession.Schema, java.util.List[Source[ReadRowsResponse.Rows, NotUsed]]), CompletionStage[NotUsed]] =
     scstorage.BigQueryStorage
       .create(projectId, datasetId, tableId, dataFormat, readOptions.map(_.asScala()), maxNumStreams)
-      .map(stream => {
+      .map { stream =>
         (stream._1, stream._2.map(_.asJava).asJava)
-      })
+      }
       .asJava
       .mapMaterializedValue(_.asJava)
 

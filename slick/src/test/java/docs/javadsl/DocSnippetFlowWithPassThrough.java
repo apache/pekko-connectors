@@ -111,8 +111,6 @@ public class DocSnippetFlowWithPassThrough {
     // #flowWithPassThrough-example
 
     done.whenComplete(
-        (value, exception) -> {
-          system.terminate();
-        });
+        (value, exception) -> system.terminate());
   }
 }

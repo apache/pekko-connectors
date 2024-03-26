@@ -25,7 +25,6 @@ import pekko.testkit.TestKit
 import org.mockito.ArgumentMatchers.{ any => mockitoAny, eq => mockitoEq }
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -72,10 +71,8 @@ class AwsLambdaFlowSpec
     "call a single invoke request" in assertAllStagesStopped {
 
       when(
-        awsLambdaClient.invoke(mockitoEq(invokeRequest))).thenAnswer(new Answer[CompletableFuture[InvokeResponse]] {
-        override def answer(invocation: InvocationOnMock): CompletableFuture[InvokeResponse] =
-          CompletableFuture.completedFuture(invokeResponse)
-      })
+        awsLambdaClient.invoke(mockitoEq(invokeRequest))).thenAnswer((invocation: InvocationOnMock) =>
+        CompletableFuture.completedFuture(invokeResponse))
 
       val (probe, future) = TestSource.probe[InvokeRequest].via(lambdaFlow).toMat(Sink.seq)(Keep.both).run()
       probe.sendNext(invokeRequest)
@@ -89,14 +86,12 @@ class AwsLambdaFlowSpec
     "call with exception" in assertAllStagesStopped {
 
       when(
-        awsLambdaClient.invoke(mockitoAny[InvokeRequest]())).thenAnswer(new Answer[CompletableFuture[InvokeResponse]] {
-        override def answer(invocation: InvocationOnMock): CompletableFuture[InvokeResponse] = {
-          val exception = new RuntimeException("Error in lambda")
-          val future = new CompletableFuture[InvokeResponse]()
-          future.completeExceptionally(exception)
-          future
-        }
-      })
+        awsLambdaClient.invoke(mockitoAny[InvokeRequest]())).thenAnswer { (invocation: InvocationOnMock) =>
+        val exception = new RuntimeException("Error in lambda")
+        val future = new CompletableFuture[InvokeResponse]()
+        future.completeExceptionally(exception)
+        future
+      }
 
       val (probe, future) = TestSource.probe[InvokeRequest].via(lambdaFlow).toMat(Sink.seq)(Keep.both).run()
 

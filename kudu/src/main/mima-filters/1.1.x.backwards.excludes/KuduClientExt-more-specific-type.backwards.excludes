@@ -1,0 +1,2 @@
+ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.apache.pekko.stream.connectors.kudu.KuduClientExt.lookup")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.kudu.KuduClientExt.lookup")

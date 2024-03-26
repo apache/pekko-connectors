@@ -78,9 +78,8 @@ trait DefaultTestContext extends Matchers with BeforeAndAfterAll with ScalaFutur
         .shutdownAllConnectionPools()
         .flatMap(_ => system.terminate())(ExecutionContext.global)
         .futureValue shouldBe a[Terminated]
-    } finally {
+    } finally
       super.afterAll()
-    }
 
   protected def closeSqsClient(): Unit = sqsClient.close()
 

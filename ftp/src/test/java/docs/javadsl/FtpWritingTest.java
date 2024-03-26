@@ -66,10 +66,8 @@ public class FtpWritingTest extends BaseFtpSupport {
             .withPassiveMode(true)
             // only useful for debugging
             .withConfigureConnectionConsumer(
-                (FTPClient ftpClient) -> {
-                  ftpClient.addProtocolCommandListener(
-                      new PrintCommandListener(new PrintWriter(System.out), true));
-                });
+                (FTPClient ftpClient) -> ftpClient.addProtocolCommandListener(
+                      new PrintCommandListener(new PrintWriter(System.out), true)));
     // #create-settings
     return ftpSettings;
   }

@@ -118,7 +118,7 @@ public class UdpTest {
       }
 
       networkInterface.getInterfaceAddresses().stream()
-          .map(a -> a.getBroadcast())
+          .map(InterfaceAddress::getBroadcast)
           .filter(Objects::nonNull)
           .forEach(broadcastList::add);
     }

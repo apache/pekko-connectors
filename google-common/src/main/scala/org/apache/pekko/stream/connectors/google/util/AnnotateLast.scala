@@ -47,12 +47,11 @@ private[google] object AnnotateLast {
 
   def apply[T]: Flow[T, MaybeLast[T], NotUsed] =
     Flow[T]
-      .statefulMap(() => Option.empty[T])((maybePreviousElement, elem) => {
+      .statefulMap(() => Option.empty[T])((maybePreviousElement, elem) =>
           maybePreviousElement match {
             case Some(previousElem) => (Some(elem), Some(NotLast(previousElem)))
             case None               => (Some(elem), None)
-          }
-        }, _.map(elem => Some(Last(elem))))
+          }, _.map(elem => Some(Last(elem))))
       .collect {
         case Some(elem) => elem
       }
