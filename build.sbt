@@ -11,7 +11,7 @@ import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCh
 
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
-ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
