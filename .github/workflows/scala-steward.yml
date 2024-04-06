@@ -9,6 +9,7 @@ jobs:
   scala-steward:
     runs-on: ubuntu-22.04
     name: Launch Scala Steward
+    if: github.repository == 'apache/pekko-connectors'
     steps:
       - name: Launch Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
