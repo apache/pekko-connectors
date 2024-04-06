@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Launch Scala Steward
         uses: scala-steward-org/scala-steward-action@v2
+        env:
+          JAVA_OPTS: "-Xms1g -Xmx3g -Xss6M"
         with:
           github-app-id: ${{ secrets.SCALA_STEWARD_APP_ID }}
           github-app-installation-id: ${{ secrets.SCALA_STEWARD_INSTALLATION_ID }}
