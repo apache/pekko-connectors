@@ -596,7 +596,7 @@ object S3Settings {
             val aki = c.getString("aws.credentials.access-key-id")
             val sak = c.getString("aws.credentials.secret-access-key")
             val tokenPath = "aws.credentials.token"
-            val creds = if (c.hasPath(tokenPath)) {
+            val creds: AwsCredentials = if (c.hasPath(tokenPath)) {
               AwsSessionCredentials.create(aki, sak, c.getString(tokenPath))
             } else {
               AwsBasicCredentials.create(aki, sak)
