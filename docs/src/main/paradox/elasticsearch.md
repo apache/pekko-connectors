@@ -77,7 +77,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #run-typed }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #run-typed }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #run-typed }
 
 ### With JSON source
 
@@ -87,7 +87,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #run-jsobject }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #run-jsobject }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #run-jsobject }
 
 
 ### Writing to Elasticsearch
@@ -106,7 +106,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #multiple-operations }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #multiple-operations }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #multiple-operations }
 
 ### Source configuration
 
@@ -189,7 +189,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #run-flow }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #run-flow }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #run-flow }
 
 
 ### Storing documents from Strings
@@ -200,7 +200,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #string }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #string }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #string }
 
 
 
@@ -212,7 +212,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #kafka-example }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #kafka-example }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #kafka-example }
 
 
 ### Specifying custom index-name for every document
@@ -248,7 +248,7 @@ Scala
 : @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/ElasticsearchV6Spec.scala) { #custom-search-params }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV5Test.java) { #custom-search-params }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/ElasticsearchV6Test.java) { #custom-search-params }
 
 
 #### Routing
