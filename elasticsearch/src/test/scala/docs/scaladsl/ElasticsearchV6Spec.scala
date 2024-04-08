@@ -36,7 +36,7 @@ import scala.collection.immutable
 import scala.concurrent.Future
 import spray.json._
 
-class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils {
+class ElasticsearchV6Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils {
 
   private val connectionSettings: ElasticsearchConnectionSettings = ElasticsearchConnectionSettings(
     "http://localhost:9201")

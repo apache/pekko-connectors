@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ElasticsearchV5Test extends ElasticsearchTestBase {
+public class ElasticsearchV6Test extends ElasticsearchTestBase {
   @BeforeClass
   public static void setup() throws IOException {
     setupBase();
