@@ -27,7 +27,6 @@ object Dependencies {
 
   val AvroVersion = "1.11.3"
   val AwsSdk2Version = "2.25.26"
-  val AwsSdk2SqsVersion = "2.20.162" // latest AwsSdk2Version causes us test issues with SQS
   val AwsSpiPekkoHttpVersion = "0.1.1"
   val NettyVersion = "4.1.108.Final"
   // Sync with plugins.sbt
@@ -443,7 +442,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
         ExclusionRule(organization = "org.apache.pekko")),
-      ("software.amazon.awssdk" % "sqs" % AwsSdk2SqsVersion).excludeAll(
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
