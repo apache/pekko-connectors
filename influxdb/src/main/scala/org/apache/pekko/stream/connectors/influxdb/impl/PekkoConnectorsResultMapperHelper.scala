@@ -34,7 +34,7 @@ import org.influxdb.dto.Point
 @InternalApi
 private[impl] class PekkoConnectorsResultMapperHelper {
 
-  val CLASS_FIELD_CACHE: ConcurrentHashMap[String, ConcurrentMap[String, Field]] = new ConcurrentHashMap();
+  private val CLASS_FIELD_CACHE: ConcurrentHashMap[String, ConcurrentMap[String, Field]] = new ConcurrentHashMap()
 
   private val FRACTION_MIN_WIDTH = 0
   private val FRACTION_MAX_WIDTH = 9
@@ -47,10 +47,10 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     .toFormatter
 
   private[impl] def databaseName(point: Class[_]): String =
-    point.getAnnotation(classOf[Measurement]).database();
+    point.getAnnotation(classOf[Measurement]).database()
 
   private[impl] def retentionPolicy(point: Class[_]): String =
-    point.getAnnotation(classOf[Measurement]).retentionPolicy();
+    point.getAnnotation(classOf[Measurement]).retentionPolicy()
 
   private[impl] def convertModelToPoint[T](model: T): Point = {
     throwExceptionIfMissingAnnotation(model.getClass)
@@ -59,61 +59,56 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     val colNameAndFieldMap: ConcurrentMap[String, Field] = CLASS_FIELD_CACHE.get(model.getClass.getName)
 
     try {
-      val modelType = model.getClass();
-      val measurement = measurementName(modelType);
-      val timeUnit: TimeUnit = this.timeUnit(modelType);
-      val time = timeUnit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-      val pointBuilder: Point.Builder = Point.measurement(measurement).time(time, timeUnit);
+      val modelType = model.getClass
+      val measurement = measurementName(modelType)
+      val timeUnit: TimeUnit = this.timeUnit(modelType)
+      val time = timeUnit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+      val pointBuilder: Point.Builder = Point.measurement(measurement).time(time, timeUnit)
 
       for (key <- colNameAndFieldMap.keySet().asScala) {
         val field = colNameAndFieldMap.get(key)
         val column = field.getAnnotation(classOf[Column])
         val columnName: String = column.name()
-        val fieldType: Class[_] = field.getType()
+        val fieldType: Class[_] = field.getType
 
-        val isAccessible = field.isAccessible() // deprecated in JDK 11+
-        if (!isAccessible) {
-          field.setAccessible(true);
-        }
+        val isAccessible = field.isAccessible // deprecated in JDK 11+
+        if (!isAccessible)
+          field.setAccessible(true)
 
-        val value = field.get(model);
+        val value = field.get(model)
 
-        if (column.tag()) {
-          pointBuilder.tag(columnName, value.toString());
-        } else if ("time".equals(columnName)) {
-          if (value != null) {
-            setTime(pointBuilder, fieldType, timeUnit, value);
-          }
-        } else {
-          setField(pointBuilder, fieldType, columnName, value);
-        }
+        if (column.tag())
+          pointBuilder.tag(columnName, value.toString)
+        else if ("time".equals(columnName)) {
+          if (value != null)
+            setTime(pointBuilder, fieldType, timeUnit, value)
+        } else
+          setField(pointBuilder, fieldType, columnName, value)
       }
 
-      pointBuilder.build();
+      pointBuilder.build()
     } catch {
       case e: IllegalArgumentException => throw new InfluxDBMapperException(e);
     }
   }
 
-  private[impl] def cacheClassFields(clazz: Class[_]) =
+  private[impl] def cacheClassFields(clazz: Class[_]): Unit =
     if (!CLASS_FIELD_CACHE.containsKey(clazz.getName)) {
       val initialMap: ConcurrentMap[String, Field] = new ConcurrentHashMap()
       var influxColumnAndFieldMap = CLASS_FIELD_CACHE.putIfAbsent(clazz.getName, initialMap)
 
-      if (influxColumnAndFieldMap == null) {
-        influxColumnAndFieldMap = initialMap;
-      }
+      if (influxColumnAndFieldMap == null)
+        influxColumnAndFieldMap = initialMap
 
-      var c = clazz;
+      var c = clazz
 
       while (c != null) {
-        for (field <- c.getDeclaredFields()) {
-          val colAnnotation = field.getAnnotation(classOf[Column]);
-          if (colAnnotation != null) {
-            influxColumnAndFieldMap.put(colAnnotation.name(), field);
-          }
+        for (field <- c.getDeclaredFields) {
+          val colAnnotation = field.getAnnotation(classOf[Column])
+          if (colAnnotation != null)
+            influxColumnAndFieldMap.put(colAnnotation.name(), field)
         }
-        c = c.getSuperclass();
+        c = c.getSuperclass
       }
     }
 
@@ -125,7 +120,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
   }
 
   private def measurementName(point: Class[_]): String =
-    point.getAnnotation(classOf[Measurement]).name();
+    point.getAnnotation(classOf[Measurement]).name()
 
   private def timeUnit(point: Class[_]): TimeUnit =
     point.getAnnotation(classOf[Measurement]).timeUnit()
@@ -164,9 +159,8 @@ private[impl] class PekkoConnectorsResultMapperHelper {
       val obj: T = clazz.getDeclaredConstructor().newInstance()
       for (i <- 0 until columns.size()) {
         val correspondingField = fieldMap.get(columns.get(i))
-        if (correspondingField != null) {
+        if (correspondingField != null)
           setFieldValue(obj, correspondingField, values.get(i), precision)
-        }
       }
       obj
     } catch {
@@ -180,7 +174,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     if (value == null) return
     val fieldType = field.getType
     try {
-      val isAccessible = field.isAccessible() // deprecated in JDK 11+
+      val isAccessible = field.isAccessible // deprecated in JDK 11+
       if (!isAccessible) field.setAccessible(true)
       if (fieldValueModified(fieldType, field, obj, value, precision) || fieldValueForPrimitivesModified(
           fieldType,
@@ -191,10 +185,10 @@ private[impl] class PekkoConnectorsResultMapperHelper {
         s"""Class '${obj.getClass.getName}' field '${field.getName}' is from an unsupported type '${field.getType}'."""
       throw new InfluxDBMapperException(msg)
     } catch {
-      case e: ClassCastException =>
+      case _: ClassCastException =>
         val msg =
           s"""Class '${obj.getClass.getName}' field '${field.getName}' was defined with a different field type and caused a ClassCastException.
-             |The correct type is '${value.getClass.getName}' (current field value: '${value}')""".stripMargin
+             |The correct type is '${value.getClass.getName}' (current field value: '$value')""".stripMargin
         throw new InfluxDBMapperException(msg)
     }
   }
@@ -214,9 +208,8 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     } else if (classOf[Boolean].isAssignableFrom(fieldType)) {
       field.setBoolean(obj, String.valueOf(value).toBoolean)
       true
-    } else {
+    } else
       false
-    }
 
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
@@ -236,9 +229,8 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     } else if (classOf[java.lang.Boolean].isAssignableFrom(fieldType)) {
       field.set(obj, value.asInstanceOf[java.lang.Boolean])
       true
-    } else {
+    } else
       false
-    }
 
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
@@ -254,19 +246,17 @@ private[impl] class PekkoConnectorsResultMapperHelper {
       val instant: Instant = getInstant(field, value, precision)
       field.set(obj, instant)
       true
-    } else {
+    } else
       false
-    }
 
   private def getInstant(field: Field, value: Any, precision: TimeUnit): Instant =
-    if (value.isInstanceOf[String]) Instant.from(RFC3339_FORMATTER.parse(String.valueOf(value)))
-    else if (value.isInstanceOf[java.lang.Long]) Instant.ofEpochMilli(toMillis(value.asInstanceOf[Long], precision))
-    else if (value.isInstanceOf[java.lang.Double])
-      Instant.ofEpochMilli(toMillis(value.asInstanceOf[java.lang.Double].longValue, precision))
-    else if (value.isInstanceOf[java.lang.Integer])
-      Instant.ofEpochMilli(toMillis(value.asInstanceOf[Integer].longValue, precision))
-    else {
-      throw new InfluxDBMapperException(s"""Unsupported type ${field.getClass} for field ${field.getName}""")
+    value match {
+      case _: String                => Instant.from(RFC3339_FORMATTER.parse(String.valueOf(value)))
+      case _: java.lang.Long        => Instant.ofEpochMilli(toMillis(value.asInstanceOf[Long], precision))
+      case double: java.lang.Double => Instant.ofEpochMilli(toMillis(double.longValue, precision))
+      case integer: Integer         => Instant.ofEpochMilli(toMillis(integer.longValue, precision))
+      case _ =>
+        throw new InfluxDBMapperException(s"""Unsupported type ${field.getClass} for field ${field.getName}""")
     }
 
   private def toMillis(value: Long, precision: TimeUnit) = TimeUnit.MILLISECONDS.convert(value, precision)

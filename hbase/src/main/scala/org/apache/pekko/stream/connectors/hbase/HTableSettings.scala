@@ -75,7 +75,7 @@ object HTableSettings {
   def apply[T](conf: Configuration,
       tableName: TableName,
       columnFamilies: immutable.Seq[String],
-      converter: T => immutable.Seq[Mutation]) =
+      converter: T => immutable.Seq[Mutation]): HTableSettings[T] =
     new HTableSettings(conf, tableName, columnFamilies, converter)
 
   /**

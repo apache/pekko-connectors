@@ -32,7 +32,7 @@ import scala.concurrent.duration._
 class JmsProducerRetrySpec extends JmsSpec {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(20.seconds)
-  val stoppingDecider: Supervision.Decider = ex => Supervision.Stop
+  val stoppingDecider: Supervision.Decider = _ => Supervision.Stop
 
   "JmsProducer retries" should {
     "retry sending on network failures" in withServer() { server =>
@@ -114,7 +114,7 @@ class JmsProducerRetrySpec extends JmsSpec {
                 .withMaxRetries(3)))
         .withAttributes(ActorAttributes.supervisionStrategy(stoppingDecider))
 
-      val (cancellable, result) = Source
+      val (_, result) = Source
         .tick(50.millis, 50.millis, "")
         .zipWithIndex
         .map(e => JmsMapMessage(Map("time" -> System.currentTimeMillis(), "index" -> e._2)))
@@ -164,7 +164,7 @@ class JmsProducerRetrySpec extends JmsSpec {
     "invoke supervisor when send fails" in withConnectionFactory() { connectionFactory =>
       val wrappedConnectionFactory = new WrappedConnectionFactory(connectionFactory)
       val deciderCalls = new AtomicInteger()
-      val decider: Supervision.Decider = { ex =>
+      val decider: Supervision.Decider = { _ =>
         deciderCalls.incrementAndGet()
         Supervision.Resume
       }

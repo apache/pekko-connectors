@@ -51,7 +51,7 @@ class UdpSpec
   private def msg(msg: String, destination: InetSocketAddress) =
     Datagram(ByteString(msg), destination)
 
-  override def afterAll() =
+  override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
 
   "UDP stream" must {

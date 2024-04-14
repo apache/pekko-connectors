@@ -35,19 +35,17 @@ object BehaviorRunner {
       case (b, StoredMessage(msg)) =>
         val nextBehavior = Behavior.interpretMessage(b, context, msg)
 
-        if ((nextBehavior ne Behaviors.same) && (nextBehavior ne Behaviors.unhandled)) {
+        if ((nextBehavior ne Behaviors.same) && (nextBehavior ne Behaviors.unhandled))
           nextBehavior
-        } else {
+        else
           b
-        }
 
       case (b, StoredSignal(signal)) =>
         val nextBehavior = Behavior.interpretSignal(b, context, signal)
 
-        if ((nextBehavior ne Behaviors.same) && (nextBehavior ne Behaviors.unhandled)) {
+        if ((nextBehavior ne Behaviors.same) && (nextBehavior ne Behaviors.unhandled))
           nextBehavior
-        } else {
+        else
           b
-        }
     }
 }

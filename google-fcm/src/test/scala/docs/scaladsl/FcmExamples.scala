@@ -73,7 +73,7 @@ class FcmExamples {
         headers = Option(Map.empty),
         data = Option(Map.empty),
         notification =
-          Option("{\"title\": \"web-title\", \"body\": \"web-body\", \"icon\": \"http://example.com/icon.png\"}")))
+          Option("{\"title\": \"web-title\", \"body\": \"web-body\", \"icon\": \"https://example.com/icon.png\"}")))
   val sendable = buildedNotification.isSendable
   // #noti-create
 

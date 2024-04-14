@@ -159,14 +159,13 @@ trait S3IntegrationSpec
     }
 
     val makeBuckets = for {
-      _ <- {
+      _ <-
         createBucket(bucketWithDots, versioning = false, bucketWithDotsReference,
           attributes(
             _.withS3RegionProvider(
               new AwsRegionProvider {
                 val getRegion: Region = Region.EU_CENTRAL_1
               })))
-      }
       _ <- createBucket(defaultBucket, versioning = false, defaultBucketReference, attributes)
       _ <- createBucket(bucketWithVersioning, versioning = true, bucketWithVersioningReference, attributes)
       _ = nonExistingBucketReference.set(nonExistingBucket)
@@ -352,9 +351,7 @@ trait S3IntegrationSpec
       metaBefore <- S3.getObjectMetadata(defaultBucket, objectKey).withAttributes(attributes).runWith(Sink.head)
       delete <- S3.deleteObject(defaultBucket, objectKey).withAttributes(attributes).runWith(Sink.head)
       metaAfter <- S3.getObjectMetadata(defaultBucket, objectKey).withAttributes(attributes).runWith(Sink.head)
-    } yield {
-      (put, delete, metaBefore, metaAfter)
-    }
+    } yield (put, delete, metaBefore, metaAfter)
 
     val (putResult, _, metaBefore, metaAfter) = result.futureValue
     putResult.eTag should not be empty
@@ -659,8 +656,7 @@ trait S3IntegrationSpec
       stringAcc: BigInt = BigInt(0),
       currentChunk: Int = 0,
       currentChunkSize: Int = 0,
-      result: Vector[ByteString] = Vector.empty): Vector[ByteString] = {
-
+      result: Vector[ByteString] = Vector.empty): Vector[ByteString] =
     if (currentChunk == numberOfChunks)
       result
     else {
@@ -679,13 +675,12 @@ trait S3IntegrationSpec
               result.updated(currentChunk, appendedString))
           } else {
             val newChunk = currentChunk + 1
-            val (newResult, newChunkSize) = {
+            val (newResult, newChunkSize) =
               // // We are at the last index at this point so don't append a new entry at the end of the Vector
               if (currentChunk == numberOfChunks - 1)
                 (result, currentChunkSize)
               else
                 (result :+ newString, newString.length)
-            }
             createStringCollectionWithMinChunkSizeRec(numberOfChunks, newAcc, newChunk, newChunkSize, newResult)
           }
         case None =>
@@ -695,7 +690,6 @@ trait S3IntegrationSpec
           createStringCollectionWithMinChunkSizeRec(numberOfChunks, newAcc, currentChunk, initial.length, firstResult)
       }
     }
-  }
 
   /**
    * Creates a `List` of `ByteString` where the size of each ByteString is guaranteed to be at least `S3.MinChunkSize`
@@ -886,8 +880,7 @@ trait S3IntegrationSpec
       stringAcc: BigInt = BigInt(0),
       currentChunk: Int = 0,
       currentChunkSize: Int = 0,
-      result: Vector[Vector[(ByteString, BigInt)]] = Vector.empty): Vector[Vector[(ByteString, BigInt)]] = {
-
+      result: Vector[Vector[(ByteString, BigInt)]] = Vector.empty): Vector[Vector[(ByteString, BigInt)]] =
     if (currentChunk == numberOfChunks)
       result
     else {
@@ -906,13 +899,12 @@ trait S3IntegrationSpec
               result.updated(currentChunk, newEntry))
           } else {
             val newChunk = currentChunk + 1
-            val (newResult, newChunkSize) = {
+            val (newResult, newChunkSize) =
               // // We are at the last index at this point so don't append a new entry at the end of the Vector
               if (currentChunk == numberOfChunks - 1)
                 (result, currentChunkSize)
               else
                 (result :+ Vector((newString, newAcc)), newString.length)
-            }
             createStringCollectionContextWithMinChunkSizeRec(numberOfChunks, newAcc, newChunk, newChunkSize, newResult)
           }
         case None =>
@@ -926,7 +918,6 @@ trait S3IntegrationSpec
             firstResult)
       }
     }
-  }
 
   /**
    * Creates a `List` of `List[(ByteString, BigInt)]` where the accumulated size of each ByteString in the list is
@@ -1295,8 +1286,8 @@ class AWSS3IntegrationSpec extends TestKit(ActorSystem("AWSS3IntegrationSpec")) 
   // Since S3 accounts share global state, we should randomly generate bucket names so concurrent tests
   // against an S3 account don't conflict with each other
   override val randomlyGenerateBucketNames: Boolean =
-    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.randomlyGenerateBucketNames")
-      .map(_.toBoolean).getOrElse(true)
+    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.randomlyGenerateBucketNames").forall(
+      _.toBoolean)
 }
 
 /*
@@ -1338,10 +1329,9 @@ object S3IntegrationSpec {
   val NonExistingBucket = "nowhere"
 
   val AWSS3EnableListAllMyBucketsTests =
-    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableListAllMyBucketsTests")
-      .map(_.toBoolean).getOrElse(true)
+    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableListAllMyBucketsTests").forall(
+      _.toBoolean)
 
   val AWSS3EnableMFATests =
-    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableMFATests")
-      .map(_.toBoolean).getOrElse(true)
+    sys.props.get("pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableMFATests").forall(_.toBoolean)
 }

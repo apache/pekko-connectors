@@ -55,15 +55,14 @@ import scala.collection.immutable.Iterable
     case _ =>
   }
 
-  private def stopSimpleSender() =
-    if (simpleSender != null) {
+  private def stopSimpleSender(): Unit =
+    if (simpleSender != null)
       simpleSender ! PoisonPill
-    }
 
   setHandler(
     in,
     new InHandler {
-      override def onPush() = {
+      override def onPush(): Unit = {
         val msg = grab(in)
         simpleSender ! Udp.Send(msg.data, msg.remote)
         push(out, msg)

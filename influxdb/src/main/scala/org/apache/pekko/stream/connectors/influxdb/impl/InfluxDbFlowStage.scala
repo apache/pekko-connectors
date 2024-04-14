@@ -18,6 +18,7 @@ import pekko.annotation.InternalApi
 import pekko.stream._
 import pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteResult }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
+import pekko.util.unused
 import org.influxdb.InfluxDB
 
 import scala.collection.immutable
@@ -36,7 +37,9 @@ private[influxdb] class InfluxDbFlowStage[C](
   private val in = Inlet[immutable.Seq[InfluxDbWriteMessage[Point, C]]]("in")
   private val out = Outlet[immutable.Seq[InfluxDbWriteResult[Point, C]]]("out")
 
-  override val shape = FlowShape(in, out)
+  override val shape
+      : FlowShape[immutable.Seq[InfluxDbWriteMessage[Point, C]], immutable.Seq[InfluxDbWriteResult[Point, C]]] =
+    FlowShape(in, out)
 
   override protected def initialAttributes: Attributes =
     super.initialAttributes and Attributes(ActorAttributes.IODispatcher)
@@ -51,14 +54,15 @@ private[influxdb] class InfluxDbFlowStage[C](
  */
 @InternalApi
 private[influxdb] class InfluxDbMapperFlowStage[T, C](
-    clazz: Class[T],
+    clazz: Class[T] @unused,
     influxDB: InfluxDB)
     extends GraphStage[FlowShape[immutable.Seq[InfluxDbWriteMessage[T, C]], immutable.Seq[InfluxDbWriteResult[T, C]]]] {
 
   private val in = Inlet[immutable.Seq[InfluxDbWriteMessage[T, C]]]("in")
   private val out = Outlet[immutable.Seq[InfluxDbWriteResult[T, C]]]("out")
 
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[immutable.Seq[InfluxDbWriteMessage[T, C]], immutable.Seq[InfluxDbWriteResult[T, C]]] =
+    FlowShape(in, out)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new InfluxDbMapperRecordLogic(influxDB, in, out, shape)
@@ -70,7 +74,6 @@ private[influxdb] class InfluxDbMapperFlowStage[T, C](
  */
 @InternalApi
 private[influxdb] sealed abstract class InfluxDbLogic[T, C](
-    influxDB: InfluxDB,
     in: Inlet[immutable.Seq[InfluxDbWriteMessage[T, C]]],
     out: Outlet[immutable.Seq[InfluxDbWriteResult[T, C]]],
     shape: FlowShape[immutable.Seq[InfluxDbWriteMessage[T, C]], immutable.Seq[InfluxDbWriteResult[T, C]]])
@@ -88,7 +91,7 @@ private[influxdb] sealed abstract class InfluxDbLogic[T, C](
     val messages = grab(in)
     if (messages.nonEmpty) {
       write(messages)
-      val writtenMessages = messages.map(m => new InfluxDbWriteResult(m, None))
+      val writtenMessages = messages.map(m => InfluxDbWriteResult(m, None))
       emit(out, writtenMessages)
     }
 
@@ -97,7 +100,7 @@ private[influxdb] sealed abstract class InfluxDbLogic[T, C](
 
   protected def toBatchPoints(databaseName: Option[String],
       retentionPolicy: Option[String],
-      seq: Seq[InfluxDbWriteMessage[T, C]]) = {
+      seq: Seq[InfluxDbWriteMessage[T, C]]): BatchPoints = {
 
     val builder = BatchPoints.database(databaseName.orNull)
 
@@ -105,7 +108,7 @@ private[influxdb] sealed abstract class InfluxDbLogic[T, C](
 
     @tailrec
     def convert(messages: Seq[InfluxDbWriteMessage[T, C]]): BatchPoints =
-      if (messages.size == 0) builder.build()
+      if (messages.isEmpty) builder.build()
       else {
         builder.point(messages.head.point.asInstanceOf[Point])
         convert(messages.tail)
@@ -125,7 +128,7 @@ private[influxdb] final class InfluxDbRecordLogic[C](
     in: Inlet[immutable.Seq[InfluxDbWriteMessage[Point, C]]],
     out: Outlet[immutable.Seq[InfluxDbWriteResult[Point, C]]],
     shape: FlowShape[immutable.Seq[InfluxDbWriteMessage[Point, C]], immutable.Seq[InfluxDbWriteResult[Point, C]]])
-    extends InfluxDbLogic(influxDB, in, out, shape) {
+    extends InfluxDbLogic(in, out, shape) {
 
   override protected def write(messages: immutable.Seq[InfluxDbWriteMessage[Point, C]]): Unit =
     messages
@@ -143,7 +146,7 @@ private[influxdb] final class InfluxDbMapperRecordLogic[T, C](
     in: Inlet[immutable.Seq[InfluxDbWriteMessage[T, C]]],
     out: Outlet[immutable.Seq[InfluxDbWriteResult[T, C]]],
     shape: FlowShape[immutable.Seq[InfluxDbWriteMessage[T, C]], immutable.Seq[InfluxDbWriteResult[T, C]]])
-    extends InfluxDbLogic(influxDB, in, out, shape) {
+    extends InfluxDbLogic(in, out, shape) {
 
   private val mapperHelper: PekkoConnectorsResultMapperHelper = new PekkoConnectorsResultMapperHelper
 
@@ -153,7 +156,7 @@ private[influxdb] final class InfluxDbMapperRecordLogic[T, C](
       .map(convertToBatchPoints)
       .foreach(influxDB.write)
 
-  def groupByDbRp(im: InfluxDbWriteMessage[T, C]) =
+  private def groupByDbRp(im: InfluxDbWriteMessage[T, C]) =
     (
       im.databaseName match {
         case dbn: Some[String] => dbn
@@ -164,7 +167,7 @@ private[influxdb] final class InfluxDbMapperRecordLogic[T, C](
         case None              => Some(mapperHelper.retentionPolicy(im.point.getClass))
       })
 
-  def convertToBatchPoints(wm: ((Some[String], Some[String]), immutable.Seq[InfluxDbWriteMessage[T, C]])) =
+  private def convertToBatchPoints(wm: ((Some[String], Some[String]), immutable.Seq[InfluxDbWriteMessage[T, C]])) =
     toBatchPoints(wm._1._1,
       wm._1._2,
       wm._2.map(im => im.withPoint(mapperHelper.convertModelToPoint(im.point).asInstanceOf[T])))

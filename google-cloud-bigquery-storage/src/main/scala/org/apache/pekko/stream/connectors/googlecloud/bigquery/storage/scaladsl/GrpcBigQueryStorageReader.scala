@@ -48,7 +48,7 @@ final class GrpcBigQueryStorageReaderExt private (sys: ExtendedActorSystem) exte
 }
 
 object GrpcBigQueryStorageReaderExt extends ExtensionId[GrpcBigQueryStorageReaderExt] with ExtensionIdProvider {
-  override def lookup = GrpcBigQueryStorageReaderExt
+  override def lookup: GrpcBigQueryStorageReaderExt.type = GrpcBigQueryStorageReaderExt
   override def createExtension(system: ExtendedActorSystem) = new GrpcBigQueryStorageReaderExt(system)
 
   /**

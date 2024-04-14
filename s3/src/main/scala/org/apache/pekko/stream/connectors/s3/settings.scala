@@ -310,13 +310,12 @@ object RetrySettings {
       FiniteDuration(maxBackoff.toNanos, TimeUnit.NANOSECONDS),
       randomFactor)
 
-  def apply(config: Config): RetrySettings = {
+  def apply(config: Config): RetrySettings =
     RetrySettings(
       config.getInt("max-retries"),
       FiniteDuration(config.getDuration("min-backoff").toNanos, TimeUnit.NANOSECONDS),
       FiniteDuration(config.getDuration("max-backoff").toNanos, TimeUnit.NANOSECONDS),
       config.getDouble("random-factor"))
-  }
 }
 
 final class MultipartUploadSettings private (val retrySettings: RetrySettings) {
@@ -403,7 +402,7 @@ final class S3Settings private (
   def withS3RegionProvider(value: AwsRegionProvider): S3Settings = copy(s3RegionProvider = value)
 
   def withAccessStyle(value: AccessStyle): S3Settings =
-    if (accessStyle == value) this else copy(accessStyle = value);
+    if (accessStyle == value) this else copy(accessStyle = value)
 
   def withEndpointUrl(value: String): S3Settings = copy(endpointUrl = Option(value))
   def withListBucketApiVersion(value: ApiVersion): S3Settings =
@@ -510,14 +509,13 @@ object S3Settings {
         throw new IllegalArgumentException(s"Buffer type must be 'memory' or 'disk'. Got: [$other]")
     }
 
-    val maybeProxy = for {
-      host <- Try(c.getString("proxy.host")).toOption if host.nonEmpty
-    } yield {
-      Proxy(
+    val maybeProxy =
+      for {
+        host <- Try(c.getString("proxy.host")).toOption if host.nonEmpty
+      } yield Proxy(
         host,
         c.getInt("proxy.port"),
         Uri.httpScheme(c.getBoolean("proxy.secure")))
-    }
 
     val maybeForwardProxy =
       if (c.hasPath("forward-proxy") && c.hasPath("forward-proxy.host") && c.hasPath("forward-proxy.port"))
@@ -545,11 +543,10 @@ object S3Settings {
           s"'path-style-access' must be 'false', 'true' or 'force'. Got: [$other]. Prefer using access-style instead.")
     }
 
-    val endpointUrl = if (c.hasPath("endpoint-url")) {
-      Option(c.getString("endpoint-url"))
-    } else {
-      None
-    }.orElse(maybeProxy.map(p => s"${p.scheme}://${p.host}:${p.port}"))
+    val endpointUrl = (if (c.hasPath("endpoint-url"))
+                         Option(c.getString("endpoint-url"))
+                       else
+                         None).orElse(maybeProxy.map(p => s"${p.scheme}://${p.host}:${p.port}"))
 
     if (endpointUrl.isEmpty && accessStyle == PathAccessStyle)
       log.warn(
@@ -567,11 +564,11 @@ object S3Settings {
     val regionProvider = {
       val regionProviderPath = "aws.region.provider"
 
-      val staticRegionProvider = new AwsRegionProvider {
+      val staticRegionProvider: AwsRegionProvider = new AwsRegionProvider {
         lazy val getRegion: Region = Region.of(c.getString("aws.region.default-region"))
       }
 
-      if (c.hasPath(regionProviderPath)) {
+      if (c.hasPath(regionProviderPath))
         c.getString(regionProviderPath) match {
           case "static" =>
             staticRegionProvider
@@ -579,15 +576,14 @@ object S3Settings {
           case _ =>
             new DefaultAwsRegionProviderChain()
         }
-      } else {
+      else
         new DefaultAwsRegionProviderChain()
-      }
     }
 
     val credentialsProvider = {
       val credProviderPath = "aws.credentials.provider"
 
-      if (c.hasPath(credProviderPath)) {
+      if (c.hasPath(credProviderPath))
         c.getString(credProviderPath) match {
           case "default" =>
             DefaultCredentialsProvider.create()
@@ -596,11 +592,10 @@ object S3Settings {
             val aki = c.getString("aws.credentials.access-key-id")
             val sak = c.getString("aws.credentials.secret-access-key")
             val tokenPath = "aws.credentials.token"
-            val creds: AwsCredentials = if (c.hasPath(tokenPath)) {
+            val creds: AwsCredentials = if (c.hasPath(tokenPath))
               AwsSessionCredentials.create(aki, sak, c.getString(tokenPath))
-            } else {
+            else
               AwsBasicCredentials.create(aki, sak)
-            }
             StaticCredentialsProvider.create(creds)
 
           case "anon" =>
@@ -609,9 +604,8 @@ object S3Settings {
           case _ =>
             DefaultCredentialsProvider.create()
         }
-      } else {
+      else
         DefaultCredentialsProvider.create()
-      }
     }
 
     val apiVersion = Try(c.getInt("list-bucket-api-version") match {

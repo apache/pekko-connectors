@@ -74,11 +74,10 @@ private[impl] final class RestBulkApiV5[T, C](indexName: String,
     }
 
   override def constructSharedFields(message: WriteMessage[T, C]): Seq[(String, JsString)] = {
-    val operationFields = if (allowExplicitIndex) {
+    val operationFields = if (allowExplicitIndex)
       Seq("_index" -> JsString(message.indexName.getOrElse(indexName)), typeNameTuple)
-    } else {
+    else
       Seq(typeNameTuple)
-    }
 
     operationFields ++ message.customMetadata.map { case (field, value) => field -> JsString(value) }
   }

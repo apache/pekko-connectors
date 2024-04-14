@@ -75,7 +75,7 @@ import scala.util.{ Either, Failure, Success }
       packetRouter: ActorRef[LocalPacketRouter.Request[Event]],
       override val settings: MqttSessionSettings)
       extends Data(publish, publishData, settings)
-  final case class Publishing(remote: SourceQueueWithComplete[ForwardPublishingCommand],
+  private final case class Publishing(remote: SourceQueueWithComplete[ForwardPublishingCommand],
       packetId: PacketId,
       override val publish: Publish,
       override val publishData: PublishData,
@@ -85,11 +85,11 @@ import scala.util.{ Either, Failure, Success }
 
   sealed abstract class Event
   final case class AcquiredPacketId(packetId: PacketId) extends Event
-  final case object UnacquiredPacketId extends Event
-  case object ReceivePubAckRecTimeout extends Event
+  private case object UnacquiredPacketId extends Event
+  private case object ReceivePubAckRecTimeout extends Event
   final case class PubAckReceivedFromRemote(local: Promise[ForwardPubAck]) extends Event
   final case class PubRecReceivedFromRemote(local: Promise[ForwardPubRec]) extends Event
-  case object ReceivePubCompTimeout extends Event
+  private case object ReceivePubCompTimeout extends Event
   final case class PubCompReceivedFromRemote(local: Promise[ForwardPubComp]) extends Event
   case object ReceiveConnect extends Event
 
@@ -107,7 +107,7 @@ import scala.util.{ Either, Failure, Success }
 
   // State event handling
 
-  def preparePublish(data: Start)(implicit mat: Materializer): Behavior[Event] = Behaviors.setup { context =>
+  private def preparePublish(data: Start)(implicit mat: Materializer): Behavior[Event] = Behaviors.setup { context =>
     def requestPacketId(): Unit = {
       val reply = Promise[LocalPacketRouter.Registered]()
       data.packetRouter ! LocalPacketRouter.Register(context.self.unsafeUpcast, reply)
@@ -149,78 +149,80 @@ import scala.util.{ Either, Failure, Success }
       }
   }
 
-  def publishUnacknowledged(data: Publishing)(implicit mat: Materializer): Behavior[Event] = Behaviors.withTimers {
-    val ReceivePubackrec = "producer-receive-pubackrec"
-    timer =>
-      if (data.settings.producerPubAckRecTimeout.toNanos > 0L)
-        timer.startSingleTimer(ReceivePubackrec, ReceivePubAckRecTimeout, data.settings.producerPubAckRecTimeout)
+  private def publishUnacknowledged(data: Publishing)(implicit mat: Materializer): Behavior[Event] =
+    Behaviors.withTimers {
+      val ReceivePubackrec = "producer-receive-pubackrec"
+      timer =>
+        if (data.settings.producerPubAckRecTimeout.toNanos > 0L)
+          timer.startSingleTimer(ReceivePubackrec, ReceivePubAckRecTimeout, data.settings.producerPubAckRecTimeout)
 
-      Behaviors
-        .receive[Event] {
-          case (_, PubAckReceivedFromRemote(local))
-              if data.publish.flags.contains(ControlPacketFlags.QoSAtLeastOnceDelivery) =>
-            local.success(ForwardPubAck(data.publishData))
-            Behaviors.stopped
+        Behaviors
+          .receive[Event] {
+            case (_, PubAckReceivedFromRemote(local))
+                if data.publish.flags.contains(ControlPacketFlags.QoSAtLeastOnceDelivery) =>
+              local.success(ForwardPubAck(data.publishData))
+              Behaviors.stopped
 
-          case (_, PubRecReceivedFromRemote(local))
-              if data.publish.flags.contains(ControlPacketFlags.QoSAtMostOnceDelivery) =>
-            local.success(ForwardPubRec(data.publishData))
-            timer.cancel(ReceivePubackrec)
-            publishAcknowledged(data)
+            case (_, PubRecReceivedFromRemote(local))
+                if data.publish.flags.contains(ControlPacketFlags.QoSAtMostOnceDelivery) =>
+              local.success(ForwardPubRec(data.publishData))
+              timer.cancel(ReceivePubackrec)
+              publishAcknowledged(data)
 
-          case (context, ReceivePubAckRecTimeout | ReceiveConnect) =>
-            QueueOfferState.waitForQueueOfferCompleted(
-              data.remote
-                .offer(
-                  ForwardPublish(data.publish.copy(flags = data.publish.flags | ControlPacketFlags.DUP),
-                    Some(data.packetId))),
-              result => QueueOfferCompleted(result.toEither),
-              publishUnacknowledged(data),
-              stash = Vector.empty)
+            case (_, ReceivePubAckRecTimeout | ReceiveConnect) =>
+              QueueOfferState.waitForQueueOfferCompleted(
+                data.remote
+                  .offer(
+                    ForwardPublish(data.publish.copy(flags = data.publish.flags | ControlPacketFlags.DUP),
+                      Some(data.packetId))),
+                result => QueueOfferCompleted(result.toEither),
+                publishUnacknowledged(data),
+                stash = Vector.empty)
 
-          case _ =>
-            Behaviors.same
+            case _ =>
+              Behaviors.same
 
+          }
+          .receiveSignal {
+            case (_, PostStop) =>
+              data.remote.complete()
+              Behaviors.same
+          }
+    }
+
+  private def publishAcknowledged(data: Publishing)(implicit mat: Materializer): Behavior[Event] =
+    Behaviors.withTimers {
+      val ReceivePubrel = "producer-receive-pubrel"
+      timer =>
+        if (data.settings.producerPubCompTimeout.toNanos > 0L)
+          timer.startSingleTimer(ReceivePubrel, ReceivePubCompTimeout, data.settings.producerPubCompTimeout)
+
+        Behaviors.setup { _ =>
+          QueueOfferState.waitForQueueOfferCompleted(
+            data.remote
+              .offer(ForwardPubRel(data.publish, data.packetId)),
+            result => QueueOfferCompleted(result.toEither),
+            Behaviors
+              .receiveMessagePartial[Event] {
+                case PubCompReceivedFromRemote(local) =>
+                  local.success(ForwardPubComp(data.publishData))
+                  Behaviors.stopped
+                case ReceivePubCompTimeout | ReceiveConnect =>
+                  QueueOfferState.waitForQueueOfferCompleted(
+                    data.remote
+                      .offer(ForwardPubRel(data.publish, data.packetId)),
+                    result => QueueOfferCompleted(result.toEither),
+                    publishAcknowledged(data),
+                    stash = Vector.empty)
+              }
+              .receiveSignal {
+                case (_, PostStop) =>
+                  data.remote.complete()
+                  Behaviors.same
+              },
+            stash = Vector.empty)
         }
-        .receiveSignal {
-          case (_, PostStop) =>
-            data.remote.complete()
-            Behaviors.same
-        }
-  }
-
-  def publishAcknowledged(data: Publishing)(implicit mat: Materializer): Behavior[Event] = Behaviors.withTimers {
-    val ReceivePubrel = "producer-receive-pubrel"
-    timer =>
-      if (data.settings.producerPubCompTimeout.toNanos > 0L)
-        timer.startSingleTimer(ReceivePubrel, ReceivePubCompTimeout, data.settings.producerPubCompTimeout)
-
-      Behaviors.setup { context =>
-        QueueOfferState.waitForQueueOfferCompleted(
-          data.remote
-            .offer(ForwardPubRel(data.publish, data.packetId)),
-          result => QueueOfferCompleted(result.toEither),
-          Behaviors
-            .receiveMessagePartial[Event] {
-              case PubCompReceivedFromRemote(local) =>
-                local.success(ForwardPubComp(data.publishData))
-                Behaviors.stopped
-              case ReceivePubCompTimeout | ReceiveConnect =>
-                QueueOfferState.waitForQueueOfferCompleted(
-                  data.remote
-                    .offer(ForwardPubRel(data.publish, data.packetId)),
-                  result => QueueOfferCompleted(result.toEither),
-                  publishAcknowledged(data),
-                  stash = Vector.empty)
-            }
-            .receiveSignal {
-              case (_, PostStop) =>
-                data.remote.complete()
-                Behaviors.same
-            },
-          stash = Vector.empty)
-      }
-  }
+    }
 
 }
 
@@ -233,7 +235,7 @@ import scala.util.{ Either, Failure, Success }
   /*
    * No ACK received - the publication failed
    */
-  case class ConsumeFailed(publish: Publish) extends Exception(publish.toString) with NoStackTrace
+  private final case class ConsumeFailed(publish: Publish) extends Exception(publish.toString) with NoStackTrace
 
   /*
    * Construct with the starting state
@@ -260,7 +262,7 @@ import scala.util.{ Either, Failure, Success }
       override val packetRouter: ActorRef[RemotePacketRouter.Request[Event]],
       override val settings: MqttSessionSettings)
       extends Data(publish, clientId, packetId, packetRouter, settings)
-  final case class ClientConsuming(override val publish: Publish,
+  private final case class ClientConsuming(override val publish: Publish,
       override val clientId: Option[String],
       override val packetId: PacketId,
       override val packetRouter: ActorRef[RemotePacketRouter.Request[Event]],
@@ -268,15 +270,15 @@ import scala.util.{ Either, Failure, Success }
       extends Data(publish, clientId, packetId, packetRouter, settings)
 
   sealed abstract class Event
-  final case object RegisteredPacketId extends Event
-  final case object UnobtainablePacketId extends Event
+  case object RegisteredPacketId extends Event
+  case object UnobtainablePacketId extends Event
   final case class PubAckReceivedLocally(remote: Promise[ForwardPubAck.type]) extends Event
   final case class PubRecReceivedLocally(remote: Promise[ForwardPubRec.type]) extends Event
-  case object ReceivePubAckRecTimeout extends Event
+  private case object ReceivePubAckRecTimeout extends Event
   final case class PubRelReceivedFromRemote(local: Promise[ForwardPubRel.type]) extends Event
-  case object ReceivePubRelTimeout extends Event
+  private case object ReceivePubRelTimeout extends Event
   final case class PubCompReceivedLocally(remote: Promise[ForwardPubComp.type]) extends Event
-  case object ReceivePubCompTimeout extends Event
+  private case object ReceivePubCompTimeout extends Event
   final case class DupPublishReceivedFromRemote(local: Promise[ForwardPublish.type]) extends Event
 
   sealed abstract class Command
@@ -288,7 +290,7 @@ import scala.util.{ Either, Failure, Success }
 
   // State event handling
 
-  def prepareClientConsumption(data: Start): Behavior[Event] = Behaviors.setup { context =>
+  private def prepareClientConsumption(data: Start): Behavior[Event] = Behaviors.setup { context =>
     val reply = Promise[RemotePacketRouter.Registered.type]()
     data.packetRouter ! RemotePacketRouter.Register(context.self.unsafeUpcast, data.clientId, data.packetId, reply)
     import context.executionContext
@@ -310,7 +312,7 @@ import scala.util.{ Either, Failure, Success }
 
   }
 
-  def consumeUnacknowledged(data: ClientConsuming): Behavior[Event] = Behaviors.withTimers { timer =>
+  private def consumeUnacknowledged(data: ClientConsuming): Behavior[Event] = Behaviors.withTimers { timer =>
     val ReceivePubackrel = "consumer-receive-pubackrel"
     timer.startSingleTimer(ReceivePubackrel, ReceivePubAckRecTimeout, data.settings.consumerPubAckRecTimeout)
     Behaviors
@@ -330,7 +332,7 @@ import scala.util.{ Either, Failure, Success }
       }
   }
 
-  def consumeReceived(data: ClientConsuming): Behavior[Event] = Behaviors.withTimers { timer =>
+  private def consumeReceived(data: ClientConsuming): Behavior[Event] = Behaviors.withTimers { timer =>
     val ReceivePubrel = "consumer-receive-pubrel"
     timer.startSingleTimer(ReceivePubrel, ReceivePubRelTimeout, data.settings.consumerPubRelTimeout)
     Behaviors
@@ -347,7 +349,7 @@ import scala.util.{ Either, Failure, Success }
       }
   }
 
-  def consumeAcknowledged(data: ClientConsuming): Behavior[Event] = Behaviors.withTimers { timer =>
+  private def consumeAcknowledged(data: ClientConsuming): Behavior[Event] = Behaviors.withTimers { timer =>
     val ReceivePubcomp = "consumer-receive-pubcomp"
     timer.startSingleTimer(ReceivePubcomp, ReceivePubCompTimeout, data.settings.consumerPubCompTimeout)
     Behaviors
@@ -369,14 +371,15 @@ import scala.util.{ Either, Failure, Success }
   /*
    * Raised on routing if a packet id cannot determine an actor to route to
    */
-  case class CannotRoute(packetId: PacketId) extends Exception("packet id: " + packetId.underlying) with NoStackTrace
+  final case class CannotRoute(packetId: PacketId) extends Exception("packet id: " + packetId.underlying)
+      with NoStackTrace
 
   /*
    * In case some brokers treat 0 as no packet id, we set our min to 1
    * e.g. https://renesasrulz.com/synergy/synergy_tech_notes/f/technical-bulletin-board-notification-postings/8998/mqtt-client-packet-identifier-is-0-by-default-which-causes-azure-iot-hub-to-reset-connection
    */
-  val MinPacketId = PacketId(1)
-  val MaxPacketId = PacketId(0xFFFF)
+  val MinPacketId: PacketId = PacketId(1)
+  val MaxPacketId: PacketId = PacketId(0xFFFF)
 
   // Requests
 
@@ -402,11 +405,10 @@ import scala.util.{ Either, Failure, Success }
   def findNextPacketId[A](registrantsByPacketId: Map[PacketId, Registration[A]], after: PacketId): Option[PacketId] = {
     @annotation.tailrec
     def step(c: PacketId): Option[PacketId] = {
-      if (c.underlying == after.underlying) {
+      if (c.underlying == after.underlying)
         // this is a bug, given our guard for entry into `step` checks size. this
         // means an illegal packet was stored in the map
         throw new IllegalStateException("Cannot find a free packet id even though one is expected")
-      }
 
       if (c.underlying <= MaxPacketId.underlying && !registrantsByPacketId.contains(c))
         Some(c)
@@ -422,7 +424,7 @@ import scala.util.{ Either, Failure, Success }
       step(PacketId(after.underlying + 1))
   }
 
-  private[streaming] case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[_]])
+  private[streaming] final case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[_]])
 }
 
 /*
@@ -515,7 +517,8 @@ import scala.util.{ Either, Failure, Success }
   /*
    * Raised on routing if a packet id cannot determine an actor to route to
    */
-  case class CannotRoute(packetId: PacketId) extends Exception("packet id: " + packetId.underlying) with NoStackTrace
+  final case class CannotRoute(packetId: PacketId) extends Exception("packet id: " + packetId.underlying)
+      with NoStackTrace
 
   // Requests
 
@@ -539,7 +542,7 @@ import scala.util.{ Either, Failure, Success }
   // Replies
 
   sealed abstract class Reply
-  final case object Registered extends Reply
+  case object Registered extends Reply
 
   /*
    * Construct with the starting state
@@ -547,7 +550,7 @@ import scala.util.{ Either, Failure, Success }
   def apply[A]: Behavior[Request[A]] =
     new RemotePacketRouter[A].main(Map.empty, Map.empty)
 
-  private[streaming] case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[_]])
+  private[streaming] final case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[_]])
 }
 
 /*
@@ -639,31 +642,29 @@ object Topics {
   def filter(topicFilterName: String, topicName: String): Boolean = {
     @tailrec
     def matchStrings(tfn: String, tn: String): Boolean =
-      if (tfn == "/+" && tn == "/") {
+      if (tfn == "/+" && tn == "/")
         true
-      } else if (tfn.nonEmpty && tn.nonEmpty) {
+      else if (tfn.nonEmpty && tn.nonEmpty) {
         val tfnHead = tfn.charAt(0)
         val tnHead = tn.charAt(0)
-        if (tfnHead == '/' && tnHead != '/') {
+        if (tfnHead == '/' && tnHead != '/')
           false
-        } else if (tfnHead == '/' && tn.length == 1) {
+        else if (tfnHead == '/' && tn.length == 1)
           matchStrings(tfn, tn.tail)
-        } else if (tfnHead != '+' && tfnHead != '#' && tfnHead != tnHead) {
+        else if (tfnHead != '+' && tfnHead != '#' && tfnHead != tnHead)
           false
-        } else if (tfnHead == '+') {
+        else if (tfnHead == '+')
           matchStrings(tfn.tail, tn.tail.dropWhile(_ != '/'))
-        } else if (tfnHead == '#') {
+        else if (tfnHead == '#')
           matchStrings(tfn.tail, "")
-        } else {
+        else
           matchStrings(tfn.tail, tn.tail)
-        }
-      } else if (tfn.isEmpty && tn.isEmpty) {
+      } else if (tfn.isEmpty && tn.isEmpty)
         true
-      } else if (tfn == "/#" && tn.isEmpty) {
+      else if (tfn == "/#" && tn.isEmpty)
         true
-      } else {
+      else
         false
-      }
     matchStrings(topicFilterName, topicName)
   }
 }

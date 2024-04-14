@@ -37,7 +37,7 @@ import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 
 import java.util.{ SplittableRandom, UUID }
 import scala.collection.immutable.Seq
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
 
@@ -129,7 +129,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
         import BigQueryException._
         import SprayJsonSupport._
         implicit val system: ActorSystem = mat.system
-        implicit val ec = ExecutionContexts.parasitic
+        implicit val ec: ExecutionContext = ExecutionContexts.parasitic
         implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
 
         val uri = BigQueryEndpoints.tableDataInsertAll(settings.projectId, datasetId, tableId)

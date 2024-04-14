@@ -87,7 +87,7 @@ class SoftReferenceCacheSpec extends AnyWordSpec with Matchers {
       val ref = new AtomicReference(Option(new State()))
       ref.get.get.cache.lookup(0L, "0")
 
-      // dequeue/enqueue simulates memory visibility guarantees of Akka's async callbacks
+      // dequeue/enqueue simulates memory visibility guarantees of Pekko's async callbacks
       def dequeue(): Option[State] = {
         val seen = ref.get
         seen.filter(_ => ref.compareAndSet(seen, None))
@@ -98,7 +98,7 @@ class SoftReferenceCacheSpec extends AnyWordSpec with Matchers {
       // run test
       for (_ <- 1 to 4)
         Future {
-          while (!stop.get()) {
+          while (!stop.get())
             dequeue().foreach { state =>
               val count = state.counter + 1
               val cache = state.cache
@@ -116,7 +116,6 @@ class SoftReferenceCacheSpec extends AnyWordSpec with Matchers {
                 state
               }.foreach(enqueue)(org.apache.pekko.dispatch.ExecutionContexts.parasitic)
             }
-          }
         }
 
       // stop test
@@ -126,21 +125,18 @@ class SoftReferenceCacheSpec extends AnyWordSpec with Matchers {
       }
 
       Thread.sleep(9.seconds.toMillis)
-      while (!stop.get()) {
+      while (!stop.get())
         Thread.sleep(100)
-      }
       ec.shutdown()
 
-      while (ref.get.isEmpty) {
+      while (ref.get.isEmpty)
         Thread.sleep(10)
-      }
 
       info(s"Executed ${ref.get.get.counter} cache lookups")
 
       // verify
-      if (failed.get()) {
+      if (failed.get())
         fail("Synchronization was broken")
-      }
     }
   }
 }

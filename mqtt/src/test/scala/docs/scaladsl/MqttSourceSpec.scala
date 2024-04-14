@@ -148,9 +148,9 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       Await.ready(subscribed, timeout)
       Source(input).map(item => MqttMessage(topic, ByteString(item))).runWith(mqttSink).futureValue shouldBe Done
 
-      unackedResult.futureValue.map(msg => {
+      unackedResult.futureValue.map { msg =>
         noException should be thrownBy msg.ack().futureValue
-      })
+      }
     }
 
     "receive a message from a topic" in {
@@ -328,9 +328,9 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       Await.ready(subscribed, timeout)
 
       Source.single(msg).runWith(MqttSink(sinkSettings, MqttQoS.AtLeastOnce))
-      try {
+      try
         probe.requestNext()
-      } catch {
+      catch {
         case e: Exception =>
           log.debug(s"Ignoring $e", e)
       }
@@ -390,9 +390,9 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       // Ensure that the connection made it all the way to the server by waiting until it receives a message
       Await.ready(subscribed, timeout)
       Source.single(msg).runWith(MqttSink(sinkSettings, MqttQoS.AtLeastOnce))
-      try {
+      try
         probe.requestNext()
-      } catch {
+      catch {
         case e: Exception =>
           log.debug(s"Ignoring $e", e)
       }
@@ -440,9 +440,9 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       Await.ready(killSwitch, timeout)
 
       Source.single(msg).runWith(MqttSink(sinkSettings, MqttQoS.AtLeastOnce))
-      try {
+      try
         probe.requestNext()
-      } catch {
+      catch {
         case e: Exception =>
           log.debug(s"Ignoring $e", e)
       }

@@ -37,14 +37,14 @@ import software.amazon.awssdk.regions.Region
 
   def anonymous: Boolean = credentials.secretAccessKey() == None.orNull && credentials.accessKeyId() == None.orNull
 
-  val rawKey = new SecretKeySpec(s"AWS4${credentials.secretAccessKey}".getBytes, algorithm)
+  private val rawKey = new SecretKeySpec(s"AWS4${credentials.secretAccessKey}".getBytes, algorithm)
 
   val sessionToken: Option[String] = credentials match {
     case c: AwsSessionCredentials => Some(c.sessionToken)
     case _                        => None
   }
 
-  def signature(message: Array[Byte]): Array[Byte] = signWithKey(key, message)
+  private def signature(message: Array[Byte]): Array[Byte] = signWithKey(key, message)
 
   def hexEncodedSignature(message: Array[Byte]): String = encodeHex(signature(message))
 
@@ -53,13 +53,13 @@ import software.amazon.awssdk.regions.Region
   lazy val key: SecretKeySpec =
     wrapSignature(dateRegionServiceKey, "aws4_request".getBytes)
 
-  lazy val dateRegionServiceKey: SecretKeySpec =
+  private lazy val dateRegionServiceKey: SecretKeySpec =
     wrapSignature(dateRegionKey, scope.awsService.getBytes)
 
-  lazy val dateRegionKey: SecretKeySpec =
+  private lazy val dateRegionKey: SecretKeySpec =
     wrapSignature(dateKey, scope.awsRegion.id.getBytes)
 
-  lazy val dateKey: SecretKeySpec =
+  private lazy val dateKey: SecretKeySpec =
     wrapSignature(rawKey, scope.formattedDate.getBytes)
 
   private def wrapSignature(signature: SecretKeySpec, message: Array[Byte]): SecretKeySpec =

@@ -24,15 +24,14 @@ private[pekko] trait ObjectDecoder {
       implicit witness: Witness.Aux[K],
       hDecoder: Lazy[PdxDecoder[H]],
       tDecoder: Lazy[PdxDecoder[T]]): PdxDecoder[FieldType[K, H] :: T] = PdxDecoder.instance {
-    case (reader, fieldName) => {
+    case (reader, fieldName) =>
       val headField = hDecoder.value.decode(reader, witness.value)
       val tailFields = tDecoder.value.decode(reader, fieldName)
       (headField, tailFields) match {
         case (Success(h), Success(t)) => Success(field[K](h) :: t)
         case _                        => Failure(null)
       }
-    }
-    case e => Failure(null)
+    case _ => Failure(null)
   }
 
   implicit def objectDecoder[A, Repr <: HList](

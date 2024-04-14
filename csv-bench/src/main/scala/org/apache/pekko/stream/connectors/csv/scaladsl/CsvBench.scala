@@ -80,20 +80,17 @@ class CsvBench {
 
   @Benchmark
   def parse(bh: Blackhole): Unit = {
-    val futureDone = {
+    val futureDone =
       source
         .via(CsvParsing.lineScanner())
         .runForeach { fields =>
           bh.consume(fields.head.utf8String)
         }
-    }
     Await.result(futureDone, Duration.Inf)
   }
 
   @TearDown
-  def tearDown(): Unit = {
-    system.terminate()
-  }
+  def tearDown(): Unit = system.terminate()
 
   @Setup
   def setup(): Unit = {

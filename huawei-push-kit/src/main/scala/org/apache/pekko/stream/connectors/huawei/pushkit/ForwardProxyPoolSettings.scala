@@ -30,7 +30,7 @@ private[pushkit] object ForwardProxyPoolSettings {
 
   implicit class ForwardProxyPoolSettings(forwardProxy: ForwardProxy) {
 
-    def poolSettings(system: ActorSystem) = {
+    def poolSettings(system: ActorSystem): ConnectionPoolSettings = {
       val address = InetSocketAddress.createUnresolved(forwardProxy.host, forwardProxy.port)
       val transport = forwardProxy.credentials.fold(ClientTransport.httpsProxy(address))(c =>
         ClientTransport.httpsProxy(address, BasicHttpCredentials(c.username, c.password)))

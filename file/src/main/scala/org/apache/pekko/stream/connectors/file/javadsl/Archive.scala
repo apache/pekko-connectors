@@ -85,7 +85,5 @@ object Archive {
           Pair(metadata, source.asJava)
       })
 
-  private def func[T, R](f: T => R) = new pekko.japi.function.Function[T, R] {
-    override def apply(param: T): R = f(param)
-  }
+  private def func[T, R](f: T => R): pekko.japi.function.Function[T, R] = (param: T) => f(param)
 }

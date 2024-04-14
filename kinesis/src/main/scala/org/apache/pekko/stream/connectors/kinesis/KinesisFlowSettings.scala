@@ -20,7 +20,7 @@ final class KinesisFlowSettings private (val parallelism: Int,
 
   require(
     maxBatchSize >= 1 && maxBatchSize <= 500,
-    "Limit must be between 1 and 500. See: http://docs.aws.amazon.com/kinesis/latest/APIReference/API_PutRecords.html")
+    "Limit must be between 1 and 500. See: https://docs.aws.amazon.com/kinesis/latest/APIReference/API_PutRecords.html")
   require(maxRecordsPerSecond >= 1)
   require(maxBytesPerSecond >= 1)
 
@@ -39,7 +39,7 @@ final class KinesisFlowSettings private (val parallelism: Int,
     maxRecordsPerSecond = maxRecordsPerSecond,
     maxBytesPerSecond = maxBytesPerSecond)
 
-  override def toString =
+  override def toString: String =
     "KinesisFlowSettings(" +
     s"parallelism=$parallelism," +
     s"maxBatchSize=$maxBatchSize," +

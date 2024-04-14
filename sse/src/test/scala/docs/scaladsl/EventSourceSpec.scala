@@ -46,10 +46,10 @@ import org.scalatest.wordspec.AsyncWordSpec
 
 object EventSourceSpec {
 
-  final object Server {
+  object Server {
 
-    private final case object Bind
-    private final case object Unbind
+    private case object Bind
+    private case object Unbind
 
     private def route(size: Int, setEventId: Boolean): Route = {
       import Directives._
@@ -202,7 +202,7 @@ final class EventSourceSpec extends AsyncWordSpec with Matchers with BeforeAndAf
     }
   }
 
-  override protected def afterAll() = {
+  override protected def afterAll(): Unit = {
     Await.ready(system.terminate(), 42.seconds)
     super.afterAll()
   }

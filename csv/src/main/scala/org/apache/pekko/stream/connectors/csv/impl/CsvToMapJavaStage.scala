@@ -23,7 +23,8 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import pekko.util.ByteString
 
 /**
- * Internal Java API: Converts incoming {@link Collection}<{@link ByteString}> to {@link java.util.Map}<String, ByteString>.
+ * Internal Java API: Converts incoming [[ju.Collection]] containing a [[ByteString]] to [[ju.Map]] with [[String]] as
+ * key.
  *
  * @param columnNames If given, these names are used as map keys; if not first stream element is used
  * @param charset Character set used to convert header line ByteString to String
@@ -42,7 +43,7 @@ import pekko.util.ByteString
 
   private val in = Inlet[ju.Collection[ByteString]]("CsvToMap.in")
   private val out = Outlet[ju.Map[String, V]]("CsvToMap.out")
-  override val shape = FlowShape.of(in, out)
+  override val shape: FlowShape[ju.Collection[ByteString], ju.Map[String, V]] = FlowShape.of(in, out)
 
   val fieldValuePlaceholder: V
 
@@ -64,15 +65,14 @@ import pekko.util.ByteString
         new InHandler {
           override def onPush(): Unit = {
             val elem = grab(in)
-            if (combineAll) {
+            if (combineAll)
               process(elem, zipAllWithHeaders)
-            } else {
+            else
               process(elem, zipWithHeaders)
-            }
           }
         })
 
-      private def process(elem: ju.Collection[ByteString], combine: ju.Collection[V] => ju.Map[String, V]) = {
+      private def process(elem: ju.Collection[ByteString], combine: ju.Collection[V] => ju.Map[String, V]): Unit =
         if (headers.isPresent) {
           val map = combine(transformElements(elem))
           push(out, map)
@@ -80,7 +80,6 @@ import pekko.util.ByteString
           headers = ju.Optional.of(decode(elem))
           pull(in)
         }
-      }
 
       setHandler(out,
         new OutHandler {
@@ -91,9 +90,8 @@ import pekko.util.ByteString
         val map = new ju.HashMap[String, V]()
         val hIter = headers.get.iterator()
         val colIter = elem.iterator()
-        while (hIter.hasNext && colIter.hasNext) {
+        while (hIter.hasNext && colIter.hasNext)
           map.put(hIter.next(), colIter.next())
-        }
         map
       }
 
@@ -101,29 +99,25 @@ import pekko.util.ByteString
         val map = new ju.HashMap[String, V]()
         val hIter = headers.get.iterator()
         val colIter = elem.iterator()
-        if (headers.get.size() > elem.size()) {
-          while (hIter.hasNext) {
-            if (colIter.hasNext) {
+        if (headers.get.size() > elem.size())
+          while (hIter.hasNext)
+            if (colIter.hasNext)
               map.put(hIter.next(), colIter.next())
-            } else {
+            else
               map.put(hIter.next(), customFieldValuePlaceholder.orElse(fieldValuePlaceholder))
-            }
-          }
-        } else if (elem.size() > headers.get.size()) {
+        else if (elem.size() > headers.get.size()) {
           var index = 0
-          while (colIter.hasNext) {
-            if (hIter.hasNext) {
+          while (colIter.hasNext)
+            if (hIter.hasNext)
               map.put(hIter.next(), colIter.next())
-            } else {
+            else {
               map.put(headerPlaceholder.orElse("MissingHeader") + index, colIter.next())
               index = index + 1
             }
-          }
 
         } else {
-          while (hIter.hasNext && colIter.hasNext) {
+          while (hIter.hasNext && colIter.hasNext)
             map.put(hIter.next(), colIter.next())
-          }
         }
         map
       }

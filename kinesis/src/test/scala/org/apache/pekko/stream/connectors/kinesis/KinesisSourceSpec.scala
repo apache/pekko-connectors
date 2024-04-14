@@ -26,7 +26,6 @@ import pekko.util.ByteString
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
@@ -184,33 +183,25 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
   }
 
   trait WithGetShardIteratorSuccess { self: KinesisSpecContext =>
-    when(amazonKinesisAsync.getShardIterator(any[GetShardIteratorRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock): AnyRef =
-        CompletableFuture.completedFuture(getShardIteratorResult)
-    })
+    when(amazonKinesisAsync.getShardIterator(any[GetShardIteratorRequest])).thenAnswer((_: InvocationOnMock) =>
+      CompletableFuture.completedFuture(getShardIteratorResult))
   }
 
   trait WithGetShardIteratorFailure { self: KinesisSpecContext =>
-    when(amazonKinesisAsync.getShardIterator(any[GetShardIteratorRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock): AnyRef =
-        CompletableFuture.completedFuture(getShardIteratorResult)
-    })
+    when(amazonKinesisAsync.getShardIterator(any[GetShardIteratorRequest])).thenAnswer((_: InvocationOnMock) =>
+      CompletableFuture.completedFuture(getShardIteratorResult))
   }
 
   trait WithGetRecordsSuccess { self: KinesisSpecContext =>
-    when(amazonKinesisAsync.getRecords(any[GetRecordsRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock) =
-        CompletableFuture.completedFuture(getRecordsResult)
-    })
+    when(amazonKinesisAsync.getRecords(any[GetRecordsRequest])).thenAnswer((_: InvocationOnMock) =>
+      CompletableFuture.completedFuture(getRecordsResult))
   }
 
   trait WithGetRecordsFailure { self: KinesisSpecContext =>
-    when(amazonKinesisAsync.getRecords(any[GetRecordsRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock) = {
-        val future = new CompletableFuture[GetRecordsResponse]()
-        future.completeExceptionally(new Exception("fail"))
-        future
-      }
-    })
+    when(amazonKinesisAsync.getRecords(any[GetRecordsRequest])).thenAnswer { (_: InvocationOnMock) =>
+      val future = new CompletableFuture[GetRecordsResponse]()
+      future.completeExceptionally(new Exception("fail"))
+      future
+    }
   }
 }

@@ -42,9 +42,8 @@ import pekko.util.{ ByteString, ByteStringBuilder }
         if (isClosed(in)) {
           emptyStream = true
           completeStage()
-        } else {
+        } else
           pull(in)
-        }
     })
 
   setHandler(
@@ -68,9 +67,8 @@ import pekko.util.{ ByteString, ByteStringBuilder }
         if (result.nonEmpty) {
           builder.clear()
           push(out, result)
-        } else {
+        } else
           pull(in)
-        }
       }
 
       override def onUpstreamFinish(): Unit = {

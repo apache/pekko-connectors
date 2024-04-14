@@ -55,7 +55,8 @@ private[writer] final case class CompressedDataWriter(
     copy(maybeTargetPath = Some(outputFileWithExtension(rotationCount)))
   }
 
-  override protected def create(fs: FileSystem, file: Path): FSDataOutputStream = fs.create(file, overwrite)
+  override protected def create(fs: FileSystem, file: Path): FSDataOutputStream =
+    fs.create(file, overwrite)
 
   private def outputFileWithExtension(rotationCount: Long): Path = {
     val candidatePath = createTargetPath(pathGenerator, rotationCount)

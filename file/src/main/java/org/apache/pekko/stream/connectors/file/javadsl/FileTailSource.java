@@ -90,7 +90,7 @@ public final class FileTailSource {
         path,
         maxChunkSize,
         pollingInterval,
-        System.getProperty("line.separator"),
+        System.lineSeparator(),
         StandardCharsets.UTF_8);
   }
 }

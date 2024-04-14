@@ -34,7 +34,7 @@ final class GCStorageExt private (sys: ExtendedActorSystem) extends Extension {
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 object GCStorageExt extends ExtensionId[GCStorageExt] with ExtensionIdProvider {
-  override def lookup = GCStorageExt
+  override def lookup: GCStorageExt.type = GCStorageExt
   override def createExtension(system: ExtendedActorSystem) = new GCStorageExt(system)
 
   /**

@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, ExtensionId, ExtensionIdProvider }
 import pekko.stream.javadsl.{ Flow, Source }
 import pekko.stream.Materializer
 import pekko.util.ByteString
@@ -107,8 +107,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
    */
   override def get(system: ClassicActorSystemProvider): UnixDomainSocket = super.apply(system.classicSystem)
 
-  def lookup: ExtensionId[_ <: Extension] =
-    UnixDomainSocket
+  def lookup: UnixDomainSocket.type = UnixDomainSocket
 
   def createExtension(system: ExtendedActorSystem): UnixDomainSocket =
     new UnixDomainSocket(system)

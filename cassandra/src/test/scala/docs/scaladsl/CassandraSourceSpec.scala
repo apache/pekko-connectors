@@ -110,7 +110,7 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
 
   }
 
-  private def prepareIntTable(table: String) = {
+  private def prepareIntTable(table: String) =
     withSchemaMetadataDisabled {
       for {
         _ <- lifecycleSession.executeDDL(s"""
@@ -120,5 +120,4 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
         _ <- executeCql(data.map(i => s"INSERT INTO $table(id) VALUES ($i)"))
       } yield Done
     }.futureValue mustBe Done
-  }
 }

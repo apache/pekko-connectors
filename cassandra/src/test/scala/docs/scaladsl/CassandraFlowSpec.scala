@@ -82,7 +82,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       import pekko.stream.connectors.cassandra.scaladsl.CassandraFlow
       import com.datastax.oss.driver.api.core.cql.{ BoundStatement, PreparedStatement }
 
-      case class Person(id: Int, name: String, city: String)
+      final case class Person(id: Int, name: String, city: String)
 
       val persons =
         immutable.Seq(Person(12, "John", "London"), Person(43, "Umberto", "Roma"), Person(56, "James", "Chicago"))
@@ -98,7 +98,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
         .runWith(Sink.seq)
       // #prepared
 
-      written.futureValue must have size (persons.size)
+      written.futureValue must have size persons.size
 
       val rows = CassandraSource(s"SELECT * FROM $table")
         .map { row =>
@@ -120,8 +120,8 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
                          |);""".stripMargin)
       }.futureValue mustBe Done
 
-      case class Person(id: Int, name: String, city: String)
-      case class AckHandle(id: Int) {
+      final case class Person(id: Int, name: String, city: String)
+      final case class AckHandle(id: Int) {
         def ack(): Future[Done] = Future.successful(Done)
       }
       val persons =
@@ -170,7 +170,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
                          |);""".stripMargin)
       }.futureValue mustBe Done
 
-      case class Person(id: Int, name: String, city: String)
+      final case class Person(id: Int, name: String, city: String)
 
       val persons =
         immutable.Seq(Person(12, "John", "London"), Person(43, "Umberto", "Roma"), Person(56, "James", "Chicago"))

@@ -36,17 +36,17 @@ private[solr] final class SolrSourceStage(tupleStream: TupleStream) extends Grap
       setHandler(out, this)
 
       override def preStart(): Unit =
-        try {
+        try
           tupleStream.open()
-        } catch {
+        catch {
           case NonFatal(exc) =>
             failStage(exc)
         }
 
       override def postStop(): Unit =
-        try {
+        try
           tupleStream.close()
-        } catch {
+        catch {
           case NonFatal(exc) =>
             failStage(exc)
         }
@@ -55,13 +55,12 @@ private[solr] final class SolrSourceStage(tupleStream: TupleStream) extends Grap
 
       private def fetchFromSolr(): Unit = {
         val tuple = tupleStream.read()
-        if (tuple.EOF) {
+        if (tuple.EOF)
           completeStage()
-        } else if (tuple.EXCEPTION) {
+        else if (tuple.EXCEPTION)
           failStage(new IllegalStateException(tuple.getException))
-        } else {
+        else
           emit(out, tuple)
-        }
       }
 
     }

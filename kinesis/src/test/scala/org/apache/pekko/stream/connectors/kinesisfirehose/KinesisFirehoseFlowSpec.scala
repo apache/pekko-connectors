@@ -27,7 +27,6 @@ import pekko.util.ByteString
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
@@ -88,8 +87,8 @@ class KinesisFirehoseFlowSpec extends AnyWordSpec with Matchers with KinesisFire
   }
 
   trait WithPutRecordsSuccess { self: KinesisFirehoseFlowProbe =>
-    when(amazonKinesisFirehoseAsync.putRecordBatch(any[PutRecordBatchRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock) = {
+    when(amazonKinesisFirehoseAsync.putRecordBatch(any[PutRecordBatchRequest])).thenAnswer {
+      (invocation: InvocationOnMock) =>
         val request = invocation
           .getArgument[PutRecordBatchRequest](0)
         val result = PutRecordBatchResponse
@@ -98,18 +97,15 @@ class KinesisFirehoseFlowSpec extends AnyWordSpec with Matchers with KinesisFire
           .requestResponses(request.records.asScala.map(_ => publishedRecord).asJava)
           .build()
         CompletableFuture.completedFuture(result)
-      }
-    })
+    }
   }
 
   trait WithPutRecordsFailure { self: KinesisFirehoseFlowProbe =>
-    when(amazonKinesisFirehoseAsync.putRecordBatch(any[PutRecordBatchRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock) = {
-        val future = new CompletableFuture()
-        future.completeExceptionally(requestError)
-        future
-      }
-    })
+    when(amazonKinesisFirehoseAsync.putRecordBatch(any[PutRecordBatchRequest])).thenAnswer { (_: InvocationOnMock) =>
+      val future = new CompletableFuture()
+      future.completeExceptionally(requestError)
+      future
+    }
   }
 
 }

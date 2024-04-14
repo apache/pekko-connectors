@@ -19,7 +19,7 @@ sealed trait FcmOption
  * FcmOptions model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#FcmOptions
  */
-case class FcmOptions(analytics_label: String) extends FcmOption
+final case class FcmOptions(analytics_label: String) extends FcmOption
 
 object FcmOptions {
   def create(value: String): FcmOptions = FcmOptions(value)
@@ -29,7 +29,8 @@ object FcmOptions {
  * ApnsFcmOptions model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#ApnsFcmOptions
  */
-case class ApnsFcmOptions(analytics_label: Option[String] = None, image: Option[String] = None) extends FcmOption {
+final case class ApnsFcmOptions(
+    analytics_label: Option[String] = None, image: Option[String] = None) extends FcmOption {
   def withAnalyticsLabel(value: String): ApnsFcmOptions = this.copy(analytics_label = Option(value))
   def withImage(value: String): ApnsFcmOptions = this.copy(image = Option(value))
 }
@@ -42,7 +43,8 @@ object ApnsFcmOptions {
  * WebpushFcmOptions model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#WebpushFcmOptions
  */
-case class WebPushFcmOptions(analytics_label: Option[String] = None, link: Option[String] = None) extends FcmOption {
+final case class WebPushFcmOptions(
+    analytics_label: Option[String] = None, link: Option[String] = None) extends FcmOption {
   def withAnalyticsLabel(value: String): WebPushFcmOptions = this.copy(analytics_label = Option(value))
   def withLink(value: String): WebPushFcmOptions = this.copy(link = Option(value))
 }

@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
  * ApnsConfig model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#ApnsConfig
  */
-case class ApnsConfig(
+final case class ApnsConfig(
     headers: Option[Map[String, String]] = None,
     payload: Option[String] = None,
     fcm_options: Option[FcmOption] = None) {

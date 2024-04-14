@@ -20,14 +20,14 @@ import javax.jms
 
 import scala.concurrent.{ Future, Promise }
 
-case class AckEnvelope private[jms] (message: jms.Message, private val jmsSession: JmsAckSession) {
+final case class AckEnvelope private[jms] (message: jms.Message, private val jmsSession: JmsAckSession) {
 
-  val processed = new AtomicBoolean(false)
+  val processed: AtomicBoolean = new AtomicBoolean(false)
 
   def acknowledge(): Unit = if (processed.compareAndSet(false, true)) jmsSession.ack(message)
 }
 
-case class TxEnvelope private[jms] (message: jms.Message, private val jmsSession: JmsSession) {
+final case class TxEnvelope private[jms] (message: jms.Message, private val jmsSession: JmsSession) {
 
   private[this] val commitPromise = Promise[() => Unit]()
 

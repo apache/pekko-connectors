@@ -140,7 +140,7 @@ final class JmsConsumerSettings private (
     failStreamOnAckTimeout = failStreamOnAckTimeout,
     connectionStatusSubscriptionTimeout = connectionStatusSubscriptionTimeout)
 
-  override def toString =
+  override def toString: String =
     "JmsConsumerSettings(" +
     s"connectionFactory=$connectionFactory," +
     s"connectionRetrySettings=$connectionRetrySettings," +

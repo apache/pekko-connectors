@@ -50,7 +50,6 @@ private[pekko] trait LabelledGeneric[A] {
 @InternalApi
 private[pekko] object LabelledGeneric {
   type Aux[A, R] = LabelledGeneric[A] { type Repr = R }
-
   inline def apply[A](using l: LabelledGeneric[A]): LabelledGeneric.Aux[A, l.Repr] = l
 
   inline given productInst[A <: Product](

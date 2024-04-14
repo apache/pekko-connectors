@@ -51,7 +51,8 @@ class GoogleHttpSpec
     with ScalaFutures
     with MockitoSugar {
 
-  override def afterAll(): Unit = TestKit.shutdownActorSystem(system)
+  override def afterAll(): Unit =
+    TestKit.shutdownActorSystem(system)
 
   def mockHttp: HttpExt = {
     val http = mock[HttpExt]

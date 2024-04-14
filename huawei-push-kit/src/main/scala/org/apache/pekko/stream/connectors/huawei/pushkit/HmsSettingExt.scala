@@ -51,7 +51,7 @@ private[pushkit] object HmsSettingExt extends ExtensionId[HmsSettingExt] with Ex
 
   def apply()(implicit system: ActorSystem): HmsSettingExt = super.apply(system)
 
-  override def lookup = HmsSettingExt
+  override def lookup: HmsSettingExt.type = HmsSettingExt
   override def createExtension(system: ExtendedActorSystem) = new HmsSettingExt(system)
 
   /**

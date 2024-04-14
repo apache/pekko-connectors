@@ -20,12 +20,11 @@ import javax.jms.{ Connection, ConnectionFactory }
  */
 class CachedConnectionFactory(connFactory: ConnectionFactory) extends ConnectionFactory {
 
-  var cachedConnection: Connection = null
+  var cachedConnection: Connection = _
 
   override def createConnection(): Connection = {
-    if (cachedConnection == null) {
+    if (cachedConnection == null)
       cachedConnection = connFactory.createConnection()
-    }
     cachedConnection
   }
 

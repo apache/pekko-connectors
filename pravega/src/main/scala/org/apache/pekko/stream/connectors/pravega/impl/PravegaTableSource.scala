@@ -13,7 +13,6 @@
 
 package org.apache.pekko.stream.connectors.pravega.impl
 
-import java.util.function.Consumer
 import org.apache.pekko
 import pekko.stream.stage.{ AsyncCallback, GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, Outlet, SourceShape }
@@ -47,7 +46,8 @@ import io.pravega.common.util.AsyncIterator
     startupPromise: Promise[Done]) extends GraphStageLogic(shape)
     with StageLogging {
 
-  override protected def logSource = classOf[PravegaTableSourceStageLogic[K, V]]
+  override protected def logSource: Class[PravegaTableSourceStageLogic[K, V]] =
+    classOf[PravegaTableSourceStageLogic[K, V]]
 
   private def out = shape.out
 
@@ -60,16 +60,12 @@ import io.pravega.common.util.AsyncIterator
 
   private var closing = false
 
-  val logThat: AsyncCallback[String] = getAsyncCallback { message =>
-    log.info(message)
-  }
-
-  private def pushElement(out: Outlet[TableEntry[V]], element: TableEntry[V]) = {
+  private def pushElement(out: Outlet[TableEntry[V]], element: TableEntry[V]): Unit = {
     push(out, element)
     semaphore.release()
   }
 
-  val onElement: AsyncCallback[TableEntry[V]] = getAsyncCallback[TableEntry[V]] { element =>
+  private val onElement: AsyncCallback[TableEntry[V]] = getAsyncCallback[TableEntry[V]] { element =>
     if (isAvailable(out) && queue.isEmpty)
       pushElement(out, element)
     else
@@ -77,7 +73,7 @@ import io.pravega.common.util.AsyncIterator
 
   }
 
-  val onFinish: AsyncCallback[Unit] = getAsyncCallback[Unit] { _ =>
+  private val onFinish: AsyncCallback[Unit] = getAsyncCallback[Unit] { _ =>
     closing = true
     if (queue.isEmpty)
       completeStage()
@@ -88,32 +84,30 @@ import io.pravega.common.util.AsyncIterator
     out,
     new OutHandler {
       override def onPull(): Unit = {
-        if (!queue.isEmpty)
+        if (queue.nonEmpty)
           pushElement(out, queue.dequeue())
         if (closing && queue.isEmpty)
           completeStage()
       }
     })
 
-  def nextIteration(iterator: AsyncIterator[IteratorItem[JTableEntry]]): Unit =
+  private def nextIteration(iterator: AsyncIterator[IteratorItem[JTableEntry]]): Unit =
     iterator.getNext
-      .thenAccept(new Consumer[IteratorItem[JTableEntry]] {
-        override def accept(iteratorItem: IteratorItem[JTableEntry]): Unit = {
-          if (iteratorItem == null) {
-            onFinish.invoke(())
-          } else {
-            iteratorItem.getItems.stream().forEach { tableEntry =>
-              semaphore.acquire()
+      .thenAccept { (iteratorItem: IteratorItem[JTableEntry]) =>
+        if (iteratorItem == null)
+          onFinish.invoke(())
+        else {
+          iteratorItem.getItems.stream().forEach { tableEntry =>
+            semaphore.acquire()
 
-              val entry = new TableEntry(tableEntry.getKey(),
-                tableEntry.getVersion(),
-                tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
-              onElement.invoke(entry)
-            }
-            nextIteration(iterator)
+            val entry = new TableEntry(tableEntry.getKey,
+              tableEntry.getVersion,
+              tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue))
+            onElement.invoke(entry)
           }
+          nextIteration(iterator)
         }
-      })
+      }
 
   override def preStart(): Unit = {
     log.debug("Start consuming {} by {} ...", tableName, tableReaderSettings.maximumInflightMessages)
@@ -133,7 +127,7 @@ import io.pravega.common.util.AsyncIterator
       startupPromise.success(Done)
     } catch {
       case NonFatal(exception) =>
-        log.error(exception.getMessage())
+        log.error(exception.getMessage)
         failStage(exception)
     }
   }

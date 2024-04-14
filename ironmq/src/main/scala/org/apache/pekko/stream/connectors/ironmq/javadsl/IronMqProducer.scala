@@ -87,7 +87,7 @@ object IronMqProducer {
 
 }
 
-case class CommittablePushMessage[ToCommit](message: PushMessage, toCommit: ToCommit)
+final case class CommittablePushMessage[ToCommit](message: PushMessage, toCommit: ToCommit)
 
 object CommittablePushMessage {
 

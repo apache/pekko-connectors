@@ -287,7 +287,7 @@ final class MqttConnectionSettings private (val broker: String,
       sslProperties = sslProperties,
       offlinePersistenceSettings = offlinePersistenceSettings)
 
-  override def toString =
+  override def toString: String =
     "MqttConnectionSettings(" +
     s"broker=$broker," +
     s"clientId=$clientId," +

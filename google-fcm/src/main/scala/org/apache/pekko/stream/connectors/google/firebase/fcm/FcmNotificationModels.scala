@@ -23,13 +23,13 @@ object FcmNotificationModels {
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.BasicNotification */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.BasicNotification", "Alpakka 3.0.2")
   @Deprecated
-  case class BasicNotification(title: String, body: String)
+  final case class BasicNotification(title: String, body: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidNotification",
     "Alpakka 3.0.2")
   @Deprecated
-  case class AndroidNotification(
+  final case class AndroidNotification(
       title: String,
       body: String,
       icon: String,
@@ -45,7 +45,7 @@ object FcmNotificationModels {
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidConfig */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.AndroidConfig", "Alpakka 3.0.2")
   @Deprecated
-  case class AndroidConfig(
+  final case class AndroidConfig(
       collapse_key: String,
       priority: AndroidMessagePriority,
       ttl: String,
@@ -72,17 +72,18 @@ object FcmNotificationModels {
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig", "Alpakka 3.0.2")
   @Deprecated
-  case class WebPushNotification(title: String, body: String, icon: String)
+  final case class WebPushNotification(title: String, body: String, icon: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.WebPushConfig", "Alpakka 3.0.2")
   @Deprecated
-  case class WebPushConfig(headers: Map[String, String], data: Map[String, String], notification: WebPushNotification)
+  final case class WebPushConfig(headers: Map[String, String], data: Map[String, String],
+      notification: WebPushNotification)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.ApnsConfig */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.ApnsConfig", "Alpakka 3.0.2")
   @Deprecated
-  case class ApnsConfig(headers: Map[String, String], rawPayload: String)
+  final case class ApnsConfig(headers: Map[String, String], rawPayload: String)
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.NotificationTarget",
@@ -93,38 +94,38 @@ object FcmNotificationModels {
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Token */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Token", "Alpakka 3.0.2")
   @Deprecated
-  case class Token(token: String) extends NotificationTarget
+  final case class Token(token: String) extends NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Topic */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Topic", "Alpakka 3.0.2")
   @Deprecated
-  case class Topic(topic: String) extends NotificationTarget
+  final case class Topic(topic: String) extends NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition", "Alpakka 3.0.2")
   @Deprecated
-  case class Condition(conditionText: String) extends NotificationTarget
+  final case class Condition(conditionText: String) extends NotificationTarget
 
   /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition */
   @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.Condition", "Alpakka 3.0.2")
   @Deprecated
   object Condition {
     sealed trait ConditionBuilder {
-      def &&(condition: ConditionBuilder) = And(this, condition)
-      def ||(condition: ConditionBuilder) = Or(this, condition)
-      def unary_! = Not(this)
+      def &&(condition: ConditionBuilder): And = And(this, condition)
+      def ||(condition: ConditionBuilder): Or = Or(this, condition)
+      def unary_! : Not = Not(this)
       def toConditionText: String
     }
-    case class Topic(topic: String) extends ConditionBuilder {
+    final case class Topic(topic: String) extends ConditionBuilder {
       def toConditionText: String = s"'$topic' in topics"
     }
-    case class And(condition1: ConditionBuilder, condition2: ConditionBuilder) extends ConditionBuilder {
+    final case class And(condition1: ConditionBuilder, condition2: ConditionBuilder) extends ConditionBuilder {
       def toConditionText: String = s"(${condition1.toConditionText} && ${condition2.toConditionText})"
     }
-    case class Or(condition1: ConditionBuilder, condition2: ConditionBuilder) extends ConditionBuilder {
+    final case class Or(condition1: ConditionBuilder, condition2: ConditionBuilder) extends ConditionBuilder {
       def toConditionText: String = s"(${condition1.toConditionText} || ${condition2.toConditionText})"
     }
-    case class Not(condition: ConditionBuilder) extends ConditionBuilder {
+    final case class Not(condition: ConditionBuilder) extends ConditionBuilder {
       def toConditionText: String = s"!(${condition.toConditionText})"
     }
 
@@ -136,7 +137,7 @@ object FcmNotificationModels {
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification */
 @deprecated("Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmNotification", "Alpakka 3.0.2")
 @Deprecated
-case class FcmNotification(
+final case class FcmNotification(
     data: Option[Map[String, String]] = None,
     notification: Option[BasicNotification] = None,
     android: Option[AndroidConfig] = None,
@@ -172,7 +173,8 @@ object FcmNotification {
     empty.withBasicNotification(notification).withTarget(target)
   def apply(title: String, body: String, target: NotificationTarget): FcmNotification =
     empty.withBasicNotification(title, body).withTarget(target)
-  def basic(title: String, body: String, target: NotificationTarget) = FcmNotification(title, body, target)
+  def basic(title: String, body: String, target: NotificationTarget): FcmNotification =
+    FcmNotification(title, body, target)
 }
 
 /** Use org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.FcmResponse */

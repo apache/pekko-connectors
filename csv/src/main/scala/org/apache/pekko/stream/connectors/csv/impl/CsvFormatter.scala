@@ -65,45 +65,39 @@ import scala.collection.immutable
       while (index > -1) {
         builder ++= ByteString.apply(field.substring(lastIndex, index), charsetName)
         val char = field.charAt(index)
-        if (char == quoteChar) {
+        if (char == quoteChar)
           builder ++= duplicatedQuote
-        } else {
+        else
           builder ++= duplicatedEscape
-        }
         lastIndex = index + 1
         index = indexOfQuoteOrEscape(lastIndex)
       }
-      if (lastIndex < field.length) {
+      if (lastIndex < field.length)
         builder ++= ByteString(field.substring(lastIndex), charsetName)
-      }
     }
 
     def append(field: String) = {
       val (quoteIt, splitAt) = requiresQuotesOrSplit(field)
       if (quoteIt || quotingStyle == CsvQuotingStyle.Always) {
         builder ++= quoteBs
-        if (splitAt != -1) {
+        if (splitAt != -1)
           splitAndDuplicateQuotesAndEscapes(field, splitAt)
-        } else {
+        else
           builder ++= ByteString(field, charsetName)
-        }
         builder ++= quoteBs
-      } else {
+      } else
         builder ++= ByteString(field, charsetName)
-      }
     }
 
     val iterator = fields.iterator
     var hasNext = iterator.hasNext
     while (hasNext) {
       val next = iterator.next()
-      if (next != null) {
+      if (next != null)
         append(next.toString)
-      }
       hasNext = iterator.hasNext
-      if (hasNext) {
+      if (hasNext)
         builder ++= delimiterBs
-      }
     }
     builder ++= endOfLineBs
     builder.result()

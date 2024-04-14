@@ -21,7 +21,7 @@ require(args.length == 2, "usage: authors prevTag currTag")
 
 val gitCmd = "git log --no-merges --shortstat -z --minimal -w -C " + args(0) + ".." + args(1)
 
-case class Stats(name: String, email: String, commits: Int = 0, inserts: Int = 0, deletes: Int = 0, filesChanged: Int = 0)
+final case class Stats(name: String, email: String, commits: Int = 0, inserts: Int = 0, deletes: Int = 0, filesChanged: Int = 0)
 
 val AuthorExp = """Author: (.*) <([^>]+)>""".r
 val FilesExp = """(\d+)\sfile[s]? changed""".r

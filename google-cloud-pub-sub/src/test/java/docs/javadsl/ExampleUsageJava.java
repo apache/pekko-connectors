@@ -79,7 +79,7 @@ public class ExampleUsageJava {
     Source<PublishMessage, NotUsed> messageSource = Source.single(publishMessage);
     messageSource
         .groupedWithin(1000, Duration.ofMinutes(1))
-        .map(messages -> PublishRequest.create(messages))
+        .map(PublishRequest::create)
         .via(publishFlow)
         .runWith(Sink.ignore(), system);
     // #publish-fast
@@ -108,30 +108,24 @@ public class ExampleUsageJava {
     Sink<AcknowledgeRequest, CompletionStage<Done>> ackSink =
         GooglePubSub.acknowledge(subscription, config);
 
-    subscriptionSource
-        .map(
-            message -> {
-              // do something fun
-              return message.ackId();
-            })
+      // do something fun
+      subscriptionSource
+        .map(ReceivedMessage::ackId)
         .groupedWithin(1000, Duration.ofMinutes(1))
-        .map(acks -> AcknowledgeRequest.create(acks))
+        .map(AcknowledgeRequest::create)
         .to(ackSink);
     // #subscribe
 
     // #subscribe-source-control
-    Source.tick(Duration.ofSeconds(0), Duration.ofSeconds(10), Done.getInstance())
+      Source.tick(Duration.ofSeconds(0), Duration.ofSeconds(10), Done.getInstance())
         .via(
             RestartFlow.withBackoff(
                 RestartSettings.create(Duration.ofSeconds(1), Duration.ofSeconds(30), 0.2),
                 () -> GooglePubSub.subscribeFlow(subscription, config)))
-        .map(
-            message -> {
-              // do something fun
-              return message.ackId();
-            })
+        // do something fun
+        .map(ReceivedMessage::ackId)
         .groupedWithin(1000, Duration.ofMinutes(1))
-        .map(acks -> AcknowledgeRequest.create(acks))
+        .map(AcknowledgeRequest::create)
         .to(ackSink);
     // #subscribe-source-control
 
@@ -142,9 +136,9 @@ public class ExampleUsageJava {
 
     Sink<ReceivedMessage, NotUsed> batchAckSink =
         Flow.of(ReceivedMessage.class)
-            .map(t -> t.ackId())
+            .map(ReceivedMessage::ackId)
             .groupedWithin(1000, Duration.ofMinutes(1))
-            .map(ids -> AcknowledgeRequest.create(ids))
+            .map(AcknowledgeRequest::create)
             .to(ackSink);
 
     subscriptionSource.alsoTo(batchAckSink).to(processSink);

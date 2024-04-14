@@ -49,9 +49,8 @@ private[xml] object StreamingXmlParser {
       private val factory: AsyncXMLInputFactory = new InputFactoryImpl()
       configureFactory(factory)
       private val parser: AsyncXMLStreamReader[AsyncByteArrayFeeder] = factory.createAsyncForByteArray()
-      if (ignoreInvalidChars) {
+      if (ignoreInvalidChars)
         parser.getConfig.setIllegalCharHandler(new ReplacingIllegalCharHandler(0))
-      }
 
       setHandlers(in, out, this)
 
@@ -70,7 +69,7 @@ private[xml] object StreamingXmlParser {
       }
 
       @tailrec private def advanceParser(): Unit =
-        if (parser.hasNext) {
+        if (parser.hasNext)
           parser.next() match {
             case AsyncXMLStreamReader.EVENT_INCOMPLETE if isClosed(in) && !started => completeStage()
             case AsyncXMLStreamReader.EVENT_INCOMPLETE if isClosed(in)             => failStage(withStreamingFinishedException)
@@ -126,9 +125,9 @@ private[xml] object StreamingXmlParser {
             // Do not support DTD, SPACE, NAMESPACE, NOTATION_DECLARATION, ENTITY_DECLARATION, PROCESSING_INSTRUCTION
             // ATTRIBUTE is handled in START_ELEMENT implicitly
 
-            case x =>
+            case _ =>
               advanceParser()
           }
-        } else completeStage()
+        else completeStage()
     }
 }

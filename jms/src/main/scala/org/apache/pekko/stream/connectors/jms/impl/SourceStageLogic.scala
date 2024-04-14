@@ -18,7 +18,7 @@ import pekko.annotation.InternalApi
 import pekko.stream.connectors.jms.impl.InternalConnectionState.JmsConnectorStopping
 import pekko.stream.connectors.jms.{ Destination, JmsConsumerSettings }
 import pekko.stream.scaladsl.Source
-import pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
+import pekko.stream.stage.{ AsyncCallback, OutHandler, StageLogging, TimerGraphStageLogic }
 import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
 import pekko.{ Done, NotUsed }
 
@@ -84,7 +84,7 @@ private abstract class SourceStageLogic[T](shape: SourceShape[T],
     failStage(ex)
   }
 
-  protected val handleError = getAsyncCallback[Throwable] { e =>
+  protected val handleError: AsyncCallback[Throwable] = getAsyncCallback[Throwable] { e =>
     updateState(JmsConnectorStopping(Failure(e)))
     failStage(e)
   }
@@ -96,16 +96,15 @@ private abstract class SourceStageLogic[T](shape: SourceShape[T],
   }
 
   private[jms] val handleMessage = getAsyncCallback[T] { msg =>
-    if (isAvailable(out)) {
-      if (queue.isEmpty) {
+    if (isAvailable(out))
+      if (queue.isEmpty)
         pushMessage(msg)
-      } else {
+      else {
         pushMessage(queue.dequeue())
         queue.enqueue(msg)
       }
-    } else {
+    else
       queue.enqueue(msg)
-    }
   }
 
   protected def pushMessage(msg: T): Unit

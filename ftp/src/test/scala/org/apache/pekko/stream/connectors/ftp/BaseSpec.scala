@@ -69,7 +69,7 @@ trait BaseSpec
     cleanFiles()
   }
 
-  override protected def afterAll() = {
+  override protected def afterAll(): Unit = {
     TestKit.shutdownActorSystem(getSystem, verifySystemShutdown = true)
     super.afterAll()
   }

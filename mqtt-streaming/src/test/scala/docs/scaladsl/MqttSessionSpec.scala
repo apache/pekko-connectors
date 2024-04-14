@@ -413,9 +413,7 @@ class MqttSessionSpec
       for {
         _ <- firstClient.watchCompletion()
         _ <- secondClient.watchCompletion()
-      } yield {
-        session.shutdown()
-      }
+      } yield session.shutdown()
     }
 
     "receive a QoS 0 publication from a subscribed topic" in assertAllStagesStopped {
@@ -1796,11 +1794,9 @@ class MqttSessionSpec
 
       if (explicitDisconnect) {
         fromClientQueue1.offer(disconnectBytes)
-
         disconnectReceived.future.futureValue shouldBe Done
-      } else {
+      } else
         serverConnection1.complete()
-      }
 
       val (fromClientQueue2, serverConnection2) = server(ByteString(1))
 

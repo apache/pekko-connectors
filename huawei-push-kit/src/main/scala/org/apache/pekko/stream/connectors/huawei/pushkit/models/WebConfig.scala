@@ -17,7 +17,7 @@ package org.apache.pekko.stream.connectors.huawei.pushkit.models
  * WebPushConfig model.
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
  */
-case class WebConfig(hms_options: Option[String] = None,
+final case class WebConfig(hms_options: Option[String] = None,
     headers: Option[Map[String, String]] = None,
     notification: Option[WebNotification] = None) {
   def withHmsOptions(options: String): WebConfig = this.copy(hms_options = Option(options))
@@ -34,7 +34,7 @@ object WebConfig {
 /**
  * WebNotification model.
  */
-case class WebNotification(title: Option[String] = None,
+final case class WebNotification(title: Option[String] = None,
     body: Option[String] = None,
     icon: Option[String] = None,
     image: Option[String] = None,
@@ -72,7 +72,7 @@ object WebNotification {
 /**
  * WebActions model.
  */
-case class WebActions(action: Option[String] = None, icon: Option[String] = None, title: Option[String] = None) {
+final case class WebActions(action: Option[String] = None, icon: Option[String] = None, title: Option[String] = None) {
   def withAction(value: String): WebActions = this.copy(action = Option(value))
   def withIcon(value: String): WebActions = this.copy(icon = Option(value))
   def withTitle(value: String): WebActions = this.copy(title = Option(value))

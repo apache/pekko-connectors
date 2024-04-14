@@ -34,7 +34,7 @@ import java.util.Optional
 import scala.concurrent.duration._
 
 object GoogleSettings {
-  val ConfigPath = "pekko.connectors.google"
+  val ConfigPath: String = "pekko.connectors.google"
 
   /**
    * Reads from the given config.
@@ -50,7 +50,7 @@ object GoogleSettings {
   /**
    * Java API: Reads from the given config.
    */
-  def create(c: Config, system: ClassicActorSystemProvider) =
+  def create(c: Config, system: ClassicActorSystemProvider): GoogleSettings =
     apply(c)(system)
 
   /**
@@ -85,7 +85,7 @@ object GoogleSettings {
   /**
    * Java API
    */
-  def create(projectId: String, credentials: Credentials, requestSettings: RequestSettings) =
+  def create(projectId: String, credentials: Credentials, requestSettings: RequestSettings): GoogleSettings =
     GoogleSettings(projectId, credentials, requestSettings)
 
 }
@@ -94,15 +94,15 @@ object GoogleSettings {
 final case class GoogleSettings(projectId: String,
     credentials: Credentials,
     requestSettings: RequestSettings) {
-  def getProjectId = projectId
-  def getCredentials = credentials
-  def getRequestSettings = requestSettings
+  def getProjectId: String = projectId
+  def getCredentials: Credentials = credentials
+  def getRequestSettings: RequestSettings = requestSettings
 
-  def withProjectId(projectId: String) =
+  def withProjectId(projectId: String): GoogleSettings =
     copy(projectId = projectId)
-  def withCredentials(credentials: Credentials) =
+  def withCredentials(credentials: Credentials): GoogleSettings =
     copy(credentials = credentials)
-  def withRequestSettings(requestSettings: RequestSettings) =
+  def withRequestSettings(requestSettings: RequestSettings): GoogleSettings =
     copy(requestSettings = requestSettings)
 }
 
@@ -124,14 +124,14 @@ object RequestSettings {
       maybeForwardProxy)
   }
 
-  def create(config: Config)(implicit system: ClassicActorSystemProvider) = apply(config)
+  def create(config: Config)(implicit system: ClassicActorSystemProvider): RequestSettings = apply(config)
 
   def create(userIp: Optional[String],
       quotaUser: Optional[String],
       prettyPrint: Boolean,
       chunkSize: Int,
       retrySettings: RetrySettings,
-      forwardProxy: Optional[ForwardProxy]) =
+      forwardProxy: Optional[ForwardProxy]): RequestSettings =
     apply(userIp.toScala, quotaUser.toScala, prettyPrint, chunkSize, retrySettings, forwardProxy.toScala)
 }
 
@@ -148,30 +148,30 @@ final case class RequestSettings(
     (uploadChunkSize >= (256 * 1024)) & (uploadChunkSize % (256 * 1024) == 0),
     "Chunk size must be a multiple of 256 KiB")
 
-  def getUserIp = userIp.toJava
-  def getQuotaUser = quotaUser.toJava
-  def getPrettyPrint = prettyPrint
-  def getUploadChunkSize = uploadChunkSize
-  def getRetrySettings = retrySettings
-  def getForwardProxy = forwardProxy
+  def getUserIp: Optional[String] = userIp.toJava
+  def getQuotaUser: Optional[String] = quotaUser.toJava
+  def getPrettyPrint: Boolean = prettyPrint
+  def getUploadChunkSize: Int = uploadChunkSize
+  def getRetrySettings: RetrySettings = retrySettings
+  def getForwardProxy: Option[ForwardProxy] = forwardProxy
 
-  def withUserIp(userIp: Option[String]) =
+  def withUserIp(userIp: Option[String]): RequestSettings =
     copy(userIp = userIp)
-  def withUserIp(userIp: Optional[String]) =
+  def withUserIp(userIp: Optional[String]): RequestSettings =
     copy(userIp = userIp.toScala)
-  def withQuotaUser(quotaUser: Option[String]) =
+  def withQuotaUser(quotaUser: Option[String]): RequestSettings =
     copy(quotaUser = quotaUser)
-  def withQuotaUser(quotaUser: Optional[String]) =
+  def withQuotaUser(quotaUser: Optional[String]): RequestSettings =
     copy(quotaUser = quotaUser.toScala)
-  def withPrettyPrint(prettyPrint: Boolean) =
+  def withPrettyPrint(prettyPrint: Boolean): RequestSettings =
     copy(prettyPrint = prettyPrint)
-  def withUploadChunkSize(uploadChunkSize: Int) =
+  def withUploadChunkSize(uploadChunkSize: Int): RequestSettings =
     copy(uploadChunkSize = uploadChunkSize)
-  def withRetrySettings(retrySettings: RetrySettings) =
+  def withRetrySettings(retrySettings: RetrySettings): RequestSettings =
     copy(retrySettings = retrySettings)
-  def withForwardProxy(forwardProxy: Option[ForwardProxy]) =
+  def withForwardProxy(forwardProxy: Option[ForwardProxy]): RequestSettings =
     copy(forwardProxy = forwardProxy)
-  def withForwardProxy(forwardProxy: Optional[ForwardProxy]) =
+  def withForwardProxy(forwardProxy: Optional[ForwardProxy]): RequestSettings =
     copy(forwardProxy = forwardProxy.toScala)
 
   // Cache query string
@@ -183,17 +183,17 @@ final case class RequestSettings(
 
 object RetrySettings {
 
-  def apply(config: Config): RetrySettings = {
+  def apply(config: Config): RetrySettings =
     RetrySettings(
       config.getInt("max-retries"),
       config.getDuration("min-backoff").asScala,
       config.getDuration("max-backoff").asScala,
       config.getDouble("random-factor"))
-  }
 
-  def create(config: Config) = apply(config)
+  def create(config: Config): RetrySettings = apply(config)
 
-  def create(maxRetries: Int, minBackoff: time.Duration, maxBackoff: time.Duration, randomFactor: Double) =
+  def create(
+      maxRetries: Int, minBackoff: time.Duration, maxBackoff: time.Duration, randomFactor: Double): RetrySettings =
     apply(
       maxRetries,
       minBackoff.asScala,
@@ -205,22 +205,22 @@ final case class RetrySettings @InternalApi private (maxRetries: Int,
     minBackoff: FiniteDuration,
     maxBackoff: FiniteDuration,
     randomFactor: Double) {
-  def getMaxRetries = maxRetries
-  def getMinBackoff = minBackoff.asJava
-  def getMaxBackoff = maxBackoff.asJava
-  def getRandomFactor = randomFactor
+  def getMaxRetries: Int = maxRetries
+  def getMinBackoff: time.Duration = minBackoff.asJava
+  def getMaxBackoff: time.Duration = maxBackoff.asJava
+  def getRandomFactor: Double = randomFactor
 
-  def withMaxRetries(maxRetries: Int) =
+  def withMaxRetries(maxRetries: Int): RetrySettings =
     copy(maxRetries = maxRetries)
-  def withMinBackoff(minBackoff: FiniteDuration) =
+  def withMinBackoff(minBackoff: FiniteDuration): RetrySettings =
     copy(minBackoff = minBackoff)
-  def withMinBackoff(minBackoff: time.Duration) =
+  def withMinBackoff(minBackoff: time.Duration): RetrySettings =
     copy(minBackoff = minBackoff.asScala)
-  def withMaxBackoff(maxBackoff: FiniteDuration) =
+  def withMaxBackoff(maxBackoff: FiniteDuration): RetrySettings =
     copy(maxBackoff = maxBackoff)
-  def withMaxBackoff(maxBackoff: time.Duration) =
+  def withMaxBackoff(maxBackoff: time.Duration): RetrySettings =
     copy(maxBackoff = maxBackoff.asScala)
-  def withRandomFactor(randomFactor: Double) =
+  def withRandomFactor(randomFactor: Double): RetrySettings =
     copy(randomFactor = randomFactor)
 }
 
@@ -245,28 +245,28 @@ object ForwardProxy {
     ForwardProxy(scheme, c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem)
   }
 
-  def create(c: Config, system: ClassicActorSystemProvider) =
+  def create(c: Config, system: ClassicActorSystemProvider): ForwardProxy =
     apply(c)(system)
 
   def apply(scheme: String,
       host: String,
       port: Int,
       credentials: Option[BasicHttpCredentials],
-      trustPem: Option[String])(implicit system: ClassicActorSystemProvider): ForwardProxy = {
+      trustPem: Option[String])(implicit system: ClassicActorSystemProvider): ForwardProxy =
     ForwardProxy(
       trustPem.fold(Http(system.classicSystem).defaultClientHttpsContext)(ForwardProxyHttpsContext(_)),
       ForwardProxyPoolSettings(scheme, host, port, credentials)(system.classicSystem))
-  }
 
   def create(scheme: String,
       host: String,
       port: Int,
       credentials: Optional[jm.headers.BasicHttpCredentials],
       trustPem: Optional[String],
-      system: ClassicActorSystemProvider) =
+      system: ClassicActorSystemProvider): ForwardProxy =
     apply(scheme, host, port, credentials.toScala.map(_.asInstanceOf[BasicHttpCredentials]), trustPem.toScala)(system)
 
-  def create(connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings) =
+  def create(
+      connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings): ForwardProxy =
     apply(connectionContext.asInstanceOf[HttpsConnectionContext], poolSettings.asInstanceOf[ConnectionPoolSettings])
 }
 
@@ -274,12 +274,12 @@ final case class ForwardProxy @InternalApi private (connectionContext: HttpsConn
     poolSettings: ConnectionPoolSettings) {
   def getConnectionContext: jh.HttpsConnectionContext = connectionContext
   def getPoolSettings: jh.settings.ConnectionPoolSettings = poolSettings
-  def withConnectionContext(connectionContext: HttpsConnectionContext) =
+  def withConnectionContext(connectionContext: HttpsConnectionContext): ForwardProxy =
     copy(connectionContext = connectionContext)
-  def withConnectionContext(connectionContext: jh.HttpsConnectionContext) =
+  def withConnectionContext(connectionContext: jh.HttpsConnectionContext): ForwardProxy =
     copy(connectionContext = connectionContext.asInstanceOf[HttpsConnectionContext])
-  def withPoolSettings(poolSettings: ConnectionPoolSettings) =
+  def withPoolSettings(poolSettings: ConnectionPoolSettings): ForwardProxy =
     copy(poolSettings = poolSettings)
-  def withPoolSettings(poolSettings: jh.settings.ConnectionPoolSettings) =
+  def withPoolSettings(poolSettings: jh.settings.ConnectionPoolSettings): ForwardProxy =
     copy(poolSettings = poolSettings.asInstanceOf[ConnectionPoolSettings])
 }

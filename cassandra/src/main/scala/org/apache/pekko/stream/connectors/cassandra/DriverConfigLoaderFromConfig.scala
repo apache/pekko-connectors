@@ -41,9 +41,7 @@ class DriverConfigLoaderFromConfig(config: Config) extends DriverConfigLoader {
 
   private val driverConfig: DriverConfig = new TypesafeDriverConfig(config)
 
-  override def getInitialConfig: DriverConfig = {
-    driverConfig
-  }
+  override def getInitialConfig: DriverConfig = driverConfig
 
   override def onDriverInit(context: DriverContext): Unit = ()
 

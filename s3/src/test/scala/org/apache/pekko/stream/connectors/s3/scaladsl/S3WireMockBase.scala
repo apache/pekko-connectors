@@ -300,7 +300,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
     mockMultipartCompletion()
   }
 
-  def mockMultipartInitiation(): Unit = {
+  def mockMultipartInitiation(): Unit =
     mock
       .register(
         post(urlEqualTo(s"/$bucketKey?uploads")).willReturn(
@@ -314,9 +314,8 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Key>$bucketKey</Key>
                          |  <UploadId>$uploadId</UploadId>
                          |</InitiateMultipartUploadResult>""".stripMargin)))
-  }
 
-  def mockPartUpload(expectedBody: String): Unit = {
+  def mockPartUpload(expectedBody: String): Unit =
     mock.register(
       put(urlEqualTo(s"/$bucketKey?partNumber=1&uploadId=$uploadId"))
         .withRequestBody(if (expectedBody.isEmpty) absent() else matching(expectedBody))
@@ -326,9 +325,8 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
             .withHeader("x-amz-id-2", "Zn8bf8aEFQ+kBnGPBc/JaAf9SoWM68QDPS9+SyFwkIZOHUG2BiRLZi5oXw4cOCEt")
             .withHeader("x-amz-request-id", "5A37448A37622243")
             .withHeader("ETag", "\"" + etag + "\"")))
-  }
 
-  def mockMultipartCompletion(): Unit = {
+  def mockMultipartCompletion(): Unit =
     mock.register(
       post(urlEqualTo(s"/$bucketKey?uploadId=$uploadId"))
         .withRequestBody(containing("CompleteMultipartUpload"))
@@ -346,7 +344,6 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
                          |  <Key>$bucketKey</Key>
                          |  <ETag>"$etag"</ETag>
                          |</CompleteMultipartUploadResult>""".stripMargin)))
-  }
 
   def mockMultipartUploadInitiationWithTransientError(expectedBody: String, faultOrStatus: Either[Fault, Int]): Unit = {
     val scenarioName = "UploadWithTransientErrors"

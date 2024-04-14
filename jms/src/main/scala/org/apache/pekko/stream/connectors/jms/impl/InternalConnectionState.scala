@@ -33,12 +33,12 @@ private[jms] trait InternalConnectionState
 @InternalApi
 private[jms] object InternalConnectionState {
   case object JmsConnectorDisconnected extends InternalConnectionState
-  case class JmsConnectorInitializing(connection: Future[jms.Connection],
+  final case class JmsConnectorInitializing(connection: Future[jms.Connection],
       attempt: Int,
       backoffMaxed: Boolean,
       sessions: Int)
       extends InternalConnectionState
-  case class JmsConnectorConnected(connection: jms.Connection) extends InternalConnectionState
-  case class JmsConnectorStopping(completion: Try[Done]) extends InternalConnectionState
-  case class JmsConnectorStopped(completion: Try[Done]) extends InternalConnectionState
+  final case class JmsConnectorConnected(connection: jms.Connection) extends InternalConnectionState
+  final case class JmsConnectorStopping(completion: Try[Done]) extends InternalConnectionState
+  final case class JmsConnectorStopped(completion: Try[Done]) extends InternalConnectionState
 }

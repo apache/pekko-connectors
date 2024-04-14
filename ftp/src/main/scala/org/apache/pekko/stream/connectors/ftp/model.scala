@@ -129,7 +129,7 @@ final class FtpSettings private (
     configureConnection = configureConnection,
     proxy = proxy)
 
-  override def toString =
+  override def toString: String =
     "FtpSettings(" +
     s"host=$host," +
     s"port=$port," +
@@ -147,7 +147,7 @@ final class FtpSettings private (
 object FtpSettings {
 
   /** Default FTP port (21) */
-  final val DefaultFtpPort = 21
+  final val DefaultFtpPort: Int = 21
 
   /** Scala API */
   def apply(host: java.net.InetAddress): FtpSettings = new FtpSettings(
@@ -250,7 +250,7 @@ final class FtpsSettings private (
     keyManager = keyManager,
     trustManager = trustManager)
 
-  override def toString =
+  override def toString: String =
     "FtpsSettings(" +
     s"host=$host," +
     s"port=$port," +
@@ -272,7 +272,7 @@ final class FtpsSettings private (
 object FtpsSettings {
 
   /** Default FTPs port (2222) */
-  final val DefaultFtpsPort = 2222
+  final val DefaultFtpsPort: Int = 2222
 
   /** Scala API */
   def apply(host: java.net.InetAddress): FtpsSettings = new FtpsSettings(
@@ -344,7 +344,7 @@ final class SftpSettings private (
     proxy = proxy,
     maxUnconfirmedReads = maxUnconfirmedReads)
 
-  override def toString =
+  override def toString: String =
     "SftpSettings(" +
     s"host=$host," +
     s"port=$port," +
@@ -362,7 +362,7 @@ final class SftpSettings private (
 object SftpSettings {
 
   /** Default SFTP port (22) */
-  final val DefaultSftpPort = 22
+  final val DefaultSftpPort: Int = 22
 
   /** Scala API */
   def apply(host: java.net.InetAddress): SftpSettings = new SftpSettings(
@@ -392,7 +392,7 @@ abstract sealed class FtpCredentials {
  * FTP credentials factory
  */
 object FtpCredentials {
-  final val Anonymous = "anonymous"
+  final val Anonymous: String = "anonymous"
 
   val anonymous: FtpCredentials = AnonFtpCredentials
 
@@ -415,7 +415,7 @@ object FtpCredentials {
   final class NonAnonFtpCredentials @InternalApi private[FtpCredentials] (
       val username: String,
       val password: String) extends FtpCredentials {
-    override def toString =
+    override def toString: String =
       s"FtpCredentials(username=$username,password.nonEmpty=${password.nonEmpty})"
   }
 

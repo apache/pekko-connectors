@@ -39,7 +39,7 @@ final class KinesisFirehoseFlowSettings private (val parallelism: Int,
     maxRecordsPerSecond = maxRecordsPerSecond,
     maxBytesPerSecond = maxBytesPerSecond)
 
-  override def toString =
+  override def toString: String =
     "KinesisFirehoseFlowSettings(" +
     s"parallelism=$parallelism," +
     s"maxBatchSize=$maxBatchSize," +

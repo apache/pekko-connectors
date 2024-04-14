@@ -42,6 +42,6 @@ abstract class MqttSpecBase(name: String)
 
   val timeout = 5.seconds
 
-  override def afterAll() = TestKit.shutdownActorSystem(system)
+  override def afterAll(): Unit = TestKit.shutdownActorSystem(system)
 
 }

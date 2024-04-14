@@ -58,9 +58,7 @@ class Geode(settings: GeodeSettings) extends GeodeCache(settings) {
    */
   def query[V <: AnyRef](
       query: String)(implicit tag: ClassTag[V], enc: PdxEncoder[V], dec: PdxDecoder[V]): Source[V, Future[Done]] = {
-
     registerPDXSerializer(new ShapelessPdxSerializer[V](enc, dec), tag.runtimeClass)
-
     Source.fromGraph(new GeodeFiniteSourceStage[V](cache, query))
   }
 
@@ -91,15 +89,13 @@ trait PoolSubscription extends Geode {
   /**
    * Pool subscription is mandatory for continuous query.
    */
-  final override protected def configure(factory: ClientCacheFactory) =
+  final override protected def configure(factory: ClientCacheFactory): ClientCacheFactory =
     super.configure(factory).setPoolSubscriptionEnabled(true)
 
   def continuousQuery[V <: AnyRef](queryName: Symbol,
       query: String,
       serializer: PekkoPdxSerializer[V]): Source[V, Future[Done]] = {
-
     registerPDXSerializer(serializer, serializer.clazz)
-
     Source.fromGraph(new GeodeContinuousSourceStage[V](cache, queryName.name, query))
   }
 
@@ -115,7 +111,7 @@ trait PoolSubscription extends Geode {
     Source.fromGraph(new GeodeContinuousSourceStage[V](cache, queryName.name, query))
   }
 
-  def closeContinuousQuery(queryName: Symbol) =
+  def closeContinuousQuery(queryName: Symbol): Option[Unit] =
     for {
       qs <- Option(cache.getQueryService())
       query <- Option(qs.getCq(queryName.name))

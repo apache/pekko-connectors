@@ -47,11 +47,10 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
 
       proxy.foreach(p => ssh.setSocketFactory(new DefaultSocketFactory(p)))
 
-      if (!strictHostKeyChecking) {
+      if (!strictHostKeyChecking)
         ssh.addHostKeyVerifier(new PromiscuousVerifier)
-      } else {
+      else
         knownHosts.foreach(path => ssh.loadKnownHosts(new File(path)))
-      }
       ssh.connect(host.getHostAddress, port)
 
       sftpIdentity match {
@@ -66,13 +65,11 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
             })
 
             ssh.auth(credentials.username, passwordAuth, keyAuth)
-          } else {
+          } else
             ssh.auth(credentials.username, keyAuth)
-          }
         case None =>
-          if (credentials.password != "") {
+          if (credentials.password != "")
             ssh.authPassword(credentials.username, credentials.password)
-          }
       }
 
       ssh.newSFTPClient()
@@ -144,21 +141,19 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
           new remoteFile.ReadAheadRemoteFileInputStream(m, offset, 2048L) {
 
             override def close(): Unit =
-              try {
+              try
                 super.close()
-              } finally {
+              finally
                 remoteFile.close()
-              }
           }
         case _ =>
           new remoteFile.RemoteFileInputStream(offset) {
 
             override def close(): Unit =
-              try {
+              try
                 super.close()
-              } finally {
+              finally
                 remoteFile.close()
-              }
           }
       }
       Option(is).getOrElse {
@@ -177,9 +172,9 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
       val os = new remoteFile.RemoteFileOutputStream() {
 
         override def close(): Unit = {
-          try {
+          try
             remoteFile.close()
-          } catch {
+          catch {
             case e: IOException =>
           }
           super.close()

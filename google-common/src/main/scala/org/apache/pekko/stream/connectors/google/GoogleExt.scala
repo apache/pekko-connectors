@@ -47,8 +47,8 @@ private[google] object GoogleExt extends ExtensionId[GoogleExt] with ExtensionId
 
   def apply()(implicit system: ActorSystem): GoogleExt = super.apply(system)
 
-  override def lookup = GoogleExt
-  override def createExtension(system: ExtendedActorSystem) = new GoogleExt(system)
+  override def lookup: GoogleExt.type = GoogleExt
+  override def createExtension(system: ExtendedActorSystem): GoogleExt = new GoogleExt(system)
 
   /**
    * Java API.

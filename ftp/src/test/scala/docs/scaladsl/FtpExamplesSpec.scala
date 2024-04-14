@@ -56,9 +56,9 @@ class FtpExamplesSpec
       .withBinary(true)
       .withPassiveMode(true)
       // only useful for debugging
-      .withConfigureConnection((ftpClient: FTPClient) => {
+      .withConfigureConnection { (ftpClient: FTPClient) =>
         ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out), true))
-      })
+      }
     // #create-settings
     ftpSettings
   }

@@ -42,8 +42,8 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
     extends GraphStageWithMaterializedValue[FlowShape[WriteMessage, CommittableReadResult], Future[String]] {
   stage =>
 
-  val in = Inlet[WriteMessage]("AmqpRpcFlow.in")
-  val out = Outlet[CommittableReadResult]("AmqpRpcFlow.out")
+  val in: Inlet[WriteMessage] = Inlet[WriteMessage]("AmqpRpcFlow.in")
+  val out: Outlet[CommittableReadResult] = Outlet[CommittableReadResult]("AmqpRpcFlow.out")
 
   override def shape: FlowShape[WriteMessage, CommittableReadResult] = FlowShape.of(in, out)
 
@@ -70,7 +70,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
           val consumerCallback = getAsyncCallback(handleDelivery)
 
           val commitCallback = getAsyncCallback[AckArguments] {
-            case AckArguments(deliveryTag, multiple, promise) => {
+            case AckArguments(deliveryTag, multiple, promise) =>
               try {
                 channel.basicAck(deliveryTag, multiple)
                 unackedMessages -= 1
@@ -81,10 +81,9 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
               } catch {
                 case e: Throwable => promise.failure(e)
               }
-            }
           }
           val nackCallback = getAsyncCallback[NackArguments] {
-            case NackArguments(deliveryTag, multiple, requeue, promise) => {
+            case NackArguments(deliveryTag, multiple, requeue, promise) =>
               try {
                 channel.basicNack(deliveryTag, multiple, requeue)
                 unackedMessages -= 1
@@ -95,7 +94,6 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
               } catch {
                 case e: Throwable => promise.failure(e)
               }
-            }
           }
 
           val amqpSourceConsumer = new DefaultConsumer(channel) {
@@ -105,7 +103,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
                 body: Array[Byte]): Unit =
               consumerCallback.invoke(
                 new CommittableReadResult {
-                  override val message = ReadResult(ByteString(body), envelope, properties)
+                  override val message: ReadResult = ReadResult(ByteString(body), envelope, properties)
 
                   override def ack(multiple: Boolean): Future[Done] = {
                     val promise = Promise[Done]()
@@ -148,21 +146,19 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
         }
 
         def handleDelivery(message: CommittableReadResult): Unit =
-          if (isAvailable(out)) {
+          if (isAvailable(out))
             pushMessage(message)
-          } else if (queue.size + 1 > bufferSize) {
+          else if (queue.size + 1 > bufferSize)
             onFailure(new RuntimeException(s"Reached maximum buffer size $bufferSize"))
-          } else {
+          else
             queue.enqueue(message)
-          }
 
         setHandler(
           out,
           new OutHandler {
             override def onPull(): Unit =
-              if (queue.nonEmpty) {
+              if (queue.nonEmpty)
                 pushMessage(queue.dequeue())
-              }
 
             override def onDownstreamFinish(cause: Throwable): Unit = {
               setKeepGoing(true)
@@ -207,15 +203,14 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
 
               val expectedResponses: Int = {
                 val headers = props.getHeaders
-                if (headers == null) {
+                if (headers == null)
                   responsesPerMessage
-                } else {
+                else {
                   val r = headers.get("expectedReplies")
-                  if (r != null) {
+                  if (r != null)
                     r.asInstanceOf[Int]
-                  } else {
+                  else
                     responsesPerMessage
-                  }
                 }
               }
 

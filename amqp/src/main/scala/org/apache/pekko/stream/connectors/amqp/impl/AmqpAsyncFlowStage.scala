@@ -58,15 +58,14 @@ import scala.concurrent.{ Future, Promise }
           buffer += (tag -> AwaitingMessage(tag, passThrough))
 
         override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
-          if (multiple) {
+          if (multiple)
             dequeueWhile((t, _) => t <= tag)
-          } else {
+          else {
             setReady(tag)
-            if (isAtHead(tag)) {
+            if (isAtHead(tag))
               dequeueWhile((_, message) => message.ready)
-            } else {
+            else
               Seq.empty
-            }
           }
 
         private def dequeueWhile(

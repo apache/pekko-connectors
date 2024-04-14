@@ -72,9 +72,7 @@ import scala.concurrent.Promise
     val callback = getAsyncCallback[(DeliveryTag, Boolean)] {
       case (tag: DeliveryTag, multiple: Boolean) => confirmCallback(tag, multiple)
     }
-    new ConfirmCallback { // cant use function literal because it doesn't work with 2.11
-      override def handle(tag: DeliveryTag, multiple: Boolean): Unit = callback.invoke((tag, multiple))
-    }
+    (tag: DeliveryTag, multiple: Boolean) => callback.invoke((tag, multiple))
   }
 
   private def onConfirmation(tag: DeliveryTag, multiple: Boolean): Unit = {
@@ -155,9 +153,8 @@ import scala.concurrent.Promise
         if (noAwaitingMessages && exitQueue.isEmpty) {
           streamCompletion.success(Done)
           super.onUpstreamFinish()
-        } else {
+        } else
           log.debug("Received upstream finish signal - stage will be closed when all buffered messages are processed")
-        }
 
       private def publish(message: WriteMessage): DeliveryTag = {
         val tag: DeliveryTag = channel.getNextPublishSeqNo
@@ -193,10 +190,9 @@ import scala.concurrent.Promise
 
   override protected def onTimer(timerKey: Any): Unit =
     timerKey match {
-      case tag: DeliveryTag => {
+      case tag: DeliveryTag =>
         log.debug("Received timeout for deliveryTag {}.", tag)
         onRejection(tag, multiple = false)
-      }
       case _ => ()
     }
 

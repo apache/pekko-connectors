@@ -25,7 +25,7 @@ import pekko.util.ByteString
  */
 @InternalApi private[file] object TarArchiveManager {
 
-  def tarFlow(): Flow[(TarArchiveMetadata, Source[ByteString, _]), ByteString, NotUsed] = {
+  def tarFlow(): Flow[(TarArchiveMetadata, Source[ByteString, _]), ByteString, NotUsed] =
     Flow[(TarArchiveMetadata, Source[ByteString, Any])]
       .flatMapConcat {
         case (metadata, stream) =>
@@ -35,6 +35,5 @@ import pekko.util.ByteString
             .concat(stream.via(new EnsureByteStreamSize(metadata.size)))
             .concat(Source.single(entry.trailingBytes))
       }
-  }
 
 }

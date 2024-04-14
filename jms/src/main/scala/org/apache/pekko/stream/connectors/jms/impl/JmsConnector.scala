@@ -133,7 +133,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
         destination.name)
       publishAndFailStage(ex)
 
-    case _: jms.JMSException | _: JmsConnectTimedOut => handleRetriableException(ex)
+    case _: jms.JMSException | _: JmsConnectTimedOut => handleRetryableException(ex)
 
     case _ =>
       connectionState match {
@@ -144,7 +144,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
       }
   }
 
-  private def handleRetriableException(ex: Throwable): Unit = {
+  private def handleRetryableException(ex: Throwable): Unit = {
     closeSessions()
     connectionState match {
       case JmsConnectorInitializing(_, attempt, backoffMaxed, _) =>
@@ -152,7 +152,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
       case JmsConnectorConnected(_) | JmsConnectorDisconnected =>
         maybeReconnect(ex, 0, backoffMaxed = false)
       case _: JmsConnectorStopping | _: JmsConnectorStopped => logStoppingException(ex)
-      case other =>
+      case _ =>
         log.warning("received [{}] in connectionState={}", ex, connectionState)
     }
   }
@@ -172,15 +172,14 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     case Success(_) =>
       connectionState match {
         case init @ JmsConnectorInitializing(c, _, _, sessions) =>
-          if (sessions + 1 == jmsSettings.sessionCount) {
+          if (sessions + 1 == jmsSettings.sessionCount)
             c.foreach { c =>
               updateState(JmsConnectorConnected(c))
               log.info("{} connected", attributes.nameLifted.mkString)
             }
-          } else {
+          else
             updateState(init.copy(sessions = sessions + 1))
-          }
-        case s => ()
+        case _ => ()
       }
 
     case Failure(ex: jms.JMSException) =>
@@ -261,11 +260,11 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     allSessions.foreach(_.foreach(onSession.invoke))
   }
 
-  protected def closeConnection(connection: jms.Connection): Unit = {
-    try {
+  private def closeConnection(connection: jms.Connection): Unit = {
+    try
       // deregister exception listener to clear reference from JMS client to the Pekko stage
       connection.setExceptionListener(null)
-    } catch {
+    catch {
       case _: jms.JMSException => // ignore
     }
     try {
@@ -294,14 +293,13 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     closing
   }
 
-  private def closeSession(s: S): Unit = {
+  private def closeSession(s: S): Unit =
     try {
       cancelAckTimers(s)
       s.closeSession()
     } catch {
       case e: Throwable => log.error(e, "Error closing jms session")
     }
-  }
 
   protected def abortSessionsAsync(): Future[Unit] = {
     val aborting = Future
@@ -345,12 +343,10 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     val jmsConnection = openConnectionAttempt(startConnection)
     updateState(JmsConnectorInitializing(jmsConnection, attempt, backoffMaxed, 0))
     jmsConnection.map { connection =>
-      connection.setExceptionListener(new jms.ExceptionListener {
-        override def onException(ex: jms.JMSException): Unit = {
-          closeConnection(connection)
-          connectionFailedCB.invoke(ex)
-        }
-      })
+      connection.setExceptionListener { (ex: jms.JMSException) =>
+        closeConnection(connection)
+        connectionFailedCB.invoke(ex)
+      }
       connection
     }
   }
@@ -411,11 +407,11 @@ object JmsConnector {
   sealed trait ConnectionAttemptStatus
   case object Connecting extends ConnectionAttemptStatus
   case object Connected extends ConnectionAttemptStatus
-  case object TimedOut extends ConnectionAttemptStatus
+  private case object TimedOut extends ConnectionAttemptStatus
 
-  final case class AttemptConnect(attempt: Int, backoffMaxed: Boolean)
+  private final case class AttemptConnect(attempt: Int, backoffMaxed: Boolean)
   final case class FlushAcknowledgementsTimerKey(jmsSession: JmsAckSession)
-  case object ConnectionStatusTimeout
+  private case object ConnectionStatusTimeout
 
   def connection: InternalConnectionState => Future[jms.Connection] = {
     case InternalConnectionState.JmsConnectorInitializing(c, _, _, _) => c

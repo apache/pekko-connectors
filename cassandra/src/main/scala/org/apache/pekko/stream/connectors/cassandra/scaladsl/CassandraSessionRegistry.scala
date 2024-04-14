@@ -40,10 +40,10 @@ object CassandraSessionRegistry extends ExtensionId[CassandraSessionRegistry] wi
   def createExtension(system: ClassicActorSystemProvider): CassandraSessionRegistry =
     createExtension(system.classicSystem.asInstanceOf[ExtendedActorSystem])
 
-  override def lookup: ExtensionId[CassandraSessionRegistry] = this
+  override def lookup: CassandraSessionRegistry.type = CassandraSessionRegistry
 
   /** Hash key for `sessions`. */
-  private case class SessionKey(configPath: String)
+  private final case class SessionKey(configPath: String)
 
   private def sessionKey(settings: CassandraSessionSettings) = SessionKey(settings.configPath)
 }
@@ -83,9 +83,8 @@ final class CassandraSessionRegistry(system: ExtendedActorSystem) extends Extens
    * Note that the session must not be stopped manually, it is shut down when the actor system is shutdown,
    * if you need a more fine grained life cycle control, create the CassandraSession manually instead.
    */
-  def sessionFor(settings: CassandraSessionSettings): CassandraSession = {
+  def sessionFor(settings: CassandraSessionSettings): CassandraSession =
     sessionFor(settings, system.settings.config.getConfig(settings.configPath))
-  }
 
   /**
    * INTERNAL API: Possibility to initialize the `SessionProvider` with a custom `Config`

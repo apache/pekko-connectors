@@ -27,12 +27,12 @@ import scala.util.{ Failure, Success, Try }
   protected val scope: String
   protected val clientConfig: ClientConfig
 
-  lazy val eventStreamClientFactory = EventStreamClientFactory.withScope(scope, clientConfig)
+  lazy val eventStreamClientFactory: EventStreamClientFactory = EventStreamClientFactory.withScope(scope, clientConfig)
 
-  def close() = Try(eventStreamClientFactory.close()) match {
+  def close(): Unit = Try(eventStreamClientFactory.close()) match {
     case Failure(exception) =>
       log.error(exception, "Error while closing scope [{}]", scope)
-    case Success(value) =>
+    case Success(_) =>
       log.debug("Closed scope [{}]", scope)
   }
 

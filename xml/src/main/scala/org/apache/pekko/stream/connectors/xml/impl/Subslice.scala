@@ -62,42 +62,37 @@ import scala.collection.immutable
       if (path.isEmpty) setHandler(in, passThrough) else setHandler(in, partialMatch)
       setHandler(out, this)
 
-      lazy val partialMatch: InHandler = new InHandler {
-
-        override def onPush(): Unit = grab(in) match {
+      lazy val partialMatch: InHandler = () =>
+        grab(in) match {
           case StartElement(name, _, _, _, _) =>
             if (name == expected.head) {
               matchedSoFar = expected.head :: matchedSoFar
               expected = expected.tail
-              if (expected.isEmpty) {
+              if (expected.isEmpty)
                 setHandler(in, passThrough)
-              }
-            } else {
+            } else
               setHandler(in, noMatch)
-            }
             pull(in)
-          case EndElement(name) =>
+          case EndElement(_) =>
             expected = matchedSoFar.head :: expected
             matchedSoFar = matchedSoFar.tail
             pull(in)
-          case other =>
+          case _ =>
             pull(in)
         }
-
-      }
 
       lazy val noMatch: InHandler = new InHandler {
         var depth = 0
 
         override def onPush(): Unit = grab(in) match {
-          case start: StartElement =>
+          case _: StartElement =>
             depth += 1
             pull(in)
-          case end: EndElement =>
+          case _: EndElement =>
             if (depth == 0) setHandler(in, partialMatch)
             else depth -= 1
             pull(in)
-          case other =>
+          case _ =>
             pull(in)
         }
       }

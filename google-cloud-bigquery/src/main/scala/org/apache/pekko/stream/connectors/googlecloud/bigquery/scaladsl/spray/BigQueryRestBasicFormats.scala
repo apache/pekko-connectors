@@ -36,8 +36,8 @@ trait BigQueryRestBasicFormats {
   implicit val SymbolJsonFormat: JsonFormat[Symbol] = DefaultJsonProtocol.SymbolJsonFormat
 
   implicit object BigQueryLongJsonFormat extends JsonFormat[Long] {
-    def write(x: Long) = JsNumber(x)
-    def read(value: JsValue) = value match {
+    def write(x: Long): JsNumber = JsNumber(x)
+    def read(value: JsValue): Long = value match {
       case JsNumber(x) if x.isValidLong       => x.longValue
       case BigQueryNumber(x) if x.isValidLong => x.longValue
       case x                                  => deserializationError("Expected Long as JsNumber or JsString, but got " + x)

@@ -26,7 +26,7 @@ import pekko.stream.connectors.ironmq.Message
  * @param message The fetched message.
  */
 @InternalApi
-private[ironmq] case class ReservedMessage(reservationId: Reservation.Id, message: Message) {
+private[ironmq] final case class ReservedMessage(reservationId: Reservation.Id, message: Message) {
   val messageId: Message.Id = message.messageId
   val messageBody: String = message.body
   val reservation: Reservation = Reservation(messageId, reservationId)
@@ -42,14 +42,14 @@ private[ironmq] case class ReservedMessage(reservationId: Reservation.Id, messag
  * @param reservationId The reservation id
  */
 @InternalApi
-private[ironmq] case class Reservation(messageId: Message.Id, reservationId: Reservation.Id)
+private[ironmq] final case class Reservation(messageId: Message.Id, reservationId: Reservation.Id)
 
 /**
  * Internal API.
  */
 @InternalApi
 private[ironmq] object Reservation {
-  case class Id(value: String) extends AnyVal {
+  final case class Id(value: String) extends AnyVal {
     override def toString: String = value
   }
 }

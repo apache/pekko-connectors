@@ -34,10 +34,9 @@ trait S3ClientIntegrationSpec
 
   implicit val system: ActorSystem
 
-  override protected def afterAll(): Unit = {
+  override protected def afterAll(): Unit =
     Http(system)
       .shutdownAllConnectionPools()
       .foreach(_ => TestKit.shutdownActorSystem(system))(system.dispatcher)
-  }
 
 }

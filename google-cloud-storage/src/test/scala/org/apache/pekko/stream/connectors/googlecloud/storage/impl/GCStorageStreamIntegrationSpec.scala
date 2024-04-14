@@ -134,9 +134,7 @@ class GCStorageStreamIntegrationSpec
             ContentTypes.`text/plain(UTF-8)`)
           .runWith(Sink.head)
         listing <- GCStorageStream.listBucket(bucket, Some(folderName)).runWith(Sink.seq)
-      } yield {
-        listing
-      }
+      } yield listing
 
       listing.futureValue should have size 2
     }
@@ -193,7 +191,7 @@ class GCStorageStreamIntegrationSpec
           .download(bucket, fileName)
           .runWith(Sink.head)
           .flatMap(
-            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
+            _.map(_.runWith(Sink.fold(ByteString.empty)(_ ++ _))).getOrElse(Future.successful(ByteString.empty)))
       } yield bs
       bs.futureValue shouldBe content
     }
@@ -218,7 +216,7 @@ class GCStorageStreamIntegrationSpec
           .download(bucket, fileName)
           .runWith(Sink.head)
           .flatMap(
-            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
+            _.map(_.runWith(Sink.fold(ByteString.empty)(_ ++ _))).getOrElse(Future.successful(ByteString.empty)))
       } yield res
       res.futureValue shouldBe ByteString.empty
     }

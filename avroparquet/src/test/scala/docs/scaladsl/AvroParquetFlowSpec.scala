@@ -71,7 +71,7 @@ class AvroParquetFlowSpec
       val n: Int = 2
       val file: String = genFinalFile.sample.get
       val documents: List[Document] = genDocuments(n).sample.get
-      val avroDocuments: List[Record] = documents.map(format.to(_))
+      val avroDocuments: List[Record] = documents.map(format.to)
       val writer: ParquetWriter[Record] = parquetWriter[Record](file, conf, schema)
 
       // when

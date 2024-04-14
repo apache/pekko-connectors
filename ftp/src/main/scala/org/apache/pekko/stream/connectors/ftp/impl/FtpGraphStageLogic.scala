@@ -41,9 +41,9 @@ private[ftp] abstract class FtpGraphStageLogic[T, FtpClient, S <: RemoteFileSett
     super.preStart()
     try {
       val tryConnect = graphStageFtpLike.connect(connectionSettings)
-      if (tryConnect.isSuccess) {
+      if (tryConnect.isSuccess)
         handler = tryConnect.toOption
-      } else
+      else
         tryConnect.failed.foreach {
           case NonFatal(t) => throw t
           case _           =>
@@ -57,9 +57,9 @@ private[ftp] abstract class FtpGraphStageLogic[T, FtpClient, S <: RemoteFileSett
   }
 
   override def postStop(): Unit = {
-    try {
+    try
       disconnect()
-    } catch {
+    catch {
       case e: IOException =>
         matFailure(e)
         // If we're failing, we might not be able to cleanly shut down the connection.

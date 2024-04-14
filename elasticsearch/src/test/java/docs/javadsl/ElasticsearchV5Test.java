@@ -422,10 +422,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
                     .withApiVersion(ApiVersion.V5),
                 TestDoc.class,
                 new ObjectMapper())
-            .map(
-                o -> {
-                  return o.source(); // These documents will only have property id, a and c (not
-                })
+            .map(ReadResult::source) // These documents will only have property id, a and c (not
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get();
@@ -435,10 +432,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     assertEquals(
         docs.size(),
         result.stream()
-            .filter(
-                d -> {
-                  return d.a != null && d.b == null;
-                })
+            .filter(d -> d.a != null && d.b == null)
             .collect(Collectors.toList())
             .size());
   }

@@ -21,6 +21,7 @@ import pekko.util.OptionConverters._
 import spray.json.{ JsonFormat, RootJsonFormat }
 
 import java.util
+import java.util.Optional
 import scala.collection.immutable.Seq
 
 /**
@@ -37,25 +38,25 @@ final case class Dataset private[bigquery] (datasetReference: DatasetReference,
     labels: Option[Map[String, String]],
     location: Option[String]) {
 
-  def getDatasetReference = datasetReference
-  def getFriendlyName = friendlyName.toJava
-  def getLabels = labels.map(_.asJava).toJava
-  def getLocation = location.toJava
+  def getDatasetReference: DatasetReference = datasetReference
+  def getFriendlyName: Optional[String] = friendlyName.toJava
+  def getLabels: Optional[util.Map[String, String]] = labels.map(_.asJava).toJava
+  def getLocation: Optional[String] = location.toJava
 
-  def withDatasetReference(datasetReference: DatasetReference) =
+  def withDatasetReference(datasetReference: DatasetReference): Dataset =
     copy(datasetReference = datasetReference)
 
-  def withFriendlyName(friendlyName: Option[String]) =
+  def withFriendlyName(friendlyName: Option[String]): Dataset =
     copy(friendlyName = friendlyName)
-  def withFriendlyName(friendlyName: util.Optional[String]) =
+  def withFriendlyName(friendlyName: util.Optional[String]): Dataset =
     copy(friendlyName = friendlyName.toScala)
 
-  def withLabels(labels: Option[Map[String, String]]) =
+  def withLabels(labels: Option[Map[String, String]]): Dataset =
     copy(labels = labels)
-  def withLabels(labels: util.Optional[util.Map[String, String]]) =
+  def withLabels(labels: util.Optional[util.Map[String, String]]): Dataset =
     copy(labels = labels.toScala.map(_.asScala.toMap))
 
-  def withLocation(location: util.Optional[String]) =
+  def withLocation(location: util.Optional[String]): Dataset =
     copy(location = location.toScala)
 }
 
@@ -74,7 +75,7 @@ object Dataset {
   def create(datasetReference: DatasetReference,
       friendlyName: util.Optional[String],
       labels: util.Optional[util.Map[String, String]],
-      location: util.Optional[String]) =
+      location: util.Optional[String]): Dataset =
     Dataset(datasetReference, friendlyName.toScala, labels.toScala.map(_.asScala.toMap), location.toScala)
 
   implicit val format: RootJsonFormat[Dataset] = jsonFormat4(apply)
@@ -89,17 +90,17 @@ object Dataset {
  */
 final case class DatasetReference private[bigquery] (datasetId: Option[String], projectId: Option[String]) {
 
-  def getDatasetId = datasetId.toJava
-  def getProjectId = projectId.toJava
+  def getDatasetId: Optional[String] = datasetId.toJava
+  def getProjectId: Optional[String] = projectId.toJava
 
-  def withDatasetId(datasetId: Option[String]) =
+  def withDatasetId(datasetId: Option[String]): DatasetReference =
     copy(datasetId = datasetId)
-  def withDatasetId(datasetId: util.Optional[String]) =
+  def withDatasetId(datasetId: util.Optional[String]): DatasetReference =
     copy(datasetId = datasetId.toScala)
 
-  def withProjectId(projectId: Option[String]) =
+  def withProjectId(projectId: Option[String]): DatasetReference =
     copy(projectId = projectId)
-  def withProjectId(projectId: util.Optional[String]) =
+  def withProjectId(projectId: util.Optional[String]): DatasetReference =
     copy(projectId = projectId.toScala)
 }
 
@@ -113,7 +114,7 @@ object DatasetReference {
    * @param projectId The ID of the project containing this dataset
    * @return a [[DatasetReference]]
    */
-  def create(datasetId: util.Optional[String], projectId: util.Optional[String]) =
+  def create(datasetId: util.Optional[String], projectId: util.Optional[String]): DatasetReference =
     DatasetReference(datasetId.toScala, projectId.toScala)
 
   implicit val format: JsonFormat[DatasetReference] = jsonFormat2(apply)
@@ -128,17 +129,17 @@ object DatasetReference {
  */
 final case class DatasetListResponse private[bigquery] (nextPageToken: Option[String], datasets: Option[Seq[Dataset]]) {
 
-  def getNextPageToken = nextPageToken.toJava
-  def getDatasets = datasets.map(_.asJava).toJava
+  def getNextPageToken: Optional[String] = nextPageToken.toJava
+  def getDatasets: Optional[util.List[Dataset]] = datasets.map(_.asJava).toJava
 
-  def withNextPageToken(nextPageToken: Option[String]) =
+  def withNextPageToken(nextPageToken: Option[String]): DatasetListResponse =
     copy(nextPageToken = nextPageToken)
-  def withNextPageToken(nextPageToken: util.Optional[String]) =
+  def withNextPageToken(nextPageToken: util.Optional[String]): DatasetListResponse =
     copy(nextPageToken = nextPageToken.toScala)
 
-  def withDatasets(datasets: Option[Seq[Dataset]]) =
+  def withDatasets(datasets: Option[Seq[Dataset]]): DatasetListResponse =
     copy(datasets = datasets)
-  def withDatasets(datasets: util.Optional[util.List[Dataset]]) =
+  def withDatasets(datasets: util.Optional[util.List[Dataset]]): DatasetListResponse =
     copy(datasets = datasets.toScala.map(_.asScala.toList))
 }
 
@@ -152,7 +153,7 @@ object DatasetListResponse {
    * @param datasets an array of the dataset resources in the project
    * @return a [[DatasetListResponse]]
    */
-  def create(nextPageToken: util.Optional[String], datasets: util.Optional[util.List[Dataset]]) =
+  def create(nextPageToken: util.Optional[String], datasets: util.Optional[util.List[Dataset]]): DatasetListResponse =
     DatasetListResponse(nextPageToken.toScala, datasets.toScala.map(_.asScala.toList))
 
   implicit val format: RootJsonFormat[DatasetListResponse] = jsonFormat2(apply)

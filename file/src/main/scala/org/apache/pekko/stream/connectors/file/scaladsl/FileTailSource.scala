@@ -64,7 +64,7 @@ object FileTailSource {
   def lines(path: Path,
       maxLineSize: Int,
       pollingInterval: FiniteDuration,
-      lf: String = System.getProperty("line.separator"),
+      lf: String = System.lineSeparator(),
       charset: Charset = StandardCharsets.UTF_8): Source[String, NotUsed] =
     apply(path, maxLineSize, 0, pollingInterval)
       .via(pekko.stream.scaladsl.Framing.delimiter(ByteString.fromString(lf, charset.name), maxLineSize,

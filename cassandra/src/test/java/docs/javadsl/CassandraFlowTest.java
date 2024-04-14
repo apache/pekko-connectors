@@ -188,7 +188,7 @@ public class CassandraFlowTest {
             .map(row -> new Person(row.getInt("id"), row.getString("name"), row.getString("city")))
             .runWith(Sink.seq(), system);
     List<Person> rows = await(select);
-    assertThat(new ArrayList<>(rows), hasItems(persons.stream().map(p -> p.first()).toArray()));
+    assertThat(new ArrayList<>(rows), hasItems(persons.stream().map(Pair::first).toArray()));
   }
 
   public static final class Person {

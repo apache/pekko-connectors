@@ -32,7 +32,7 @@ class EventBridgePublishMockSpec extends AnyFlatSpec with DefaultTestContext wit
 
   private def entryDetail(detail: String, eventBusName: Option[String] = None): PutEventsRequestEntry = {
     val entry = PutEventsRequestEntry.builder().detail(detail)
-    eventBusName.map(entry.eventBusName(_))
+    eventBusName.map(entry.eventBusName)
     entry.build()
   }
 
@@ -129,7 +129,7 @@ class EventBridgePublishMockSpec extends AnyFlatSpec with DefaultTestContext wit
   }
 
   it should "fail stage if upstream failure occurs" in {
-    case class MyCustomException(message: String) extends Exception(message)
+    final case class MyCustomException(message: String) extends Exception(message)
 
     val (probe, future) =
       TestSource.probe[Seq[PutEventsRequestEntry]].via(EventBridgePublisher.flowSeq()).toMat(Sink.seq)(Keep.both).run()

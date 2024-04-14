@@ -33,8 +33,8 @@ private[recordio] class RecordIOFramingStage(maxRecordLength: Int)
 
   import RecordIOFramingStage._
 
-  val in = Inlet[ByteString]("RecordIOFramingStage.in")
-  val out = Outlet[ByteString]("RecordIOFramingStage.out")
+  val in: Inlet[ByteString] = Inlet[ByteString]("RecordIOFramingStage.in")
+  val out: Outlet[ByteString] = Outlet[ByteString]("RecordIOFramingStage.out")
   override val shape: FlowShape[ByteString, ByteString] = FlowShape(in, out)
 
   override def initialAttributes: Attributes = name("recordIOFraming")
@@ -59,16 +59,16 @@ private[recordio] class RecordIOFramingStage(maxRecordLength: Int)
       override def onPull(): Unit = doParse()
 
       override def onUpstreamFinish(): Unit =
-        if (buffer.isEmpty) {
+        if (buffer.isEmpty)
           completeStage()
-        } else if (isAvailable(out)) {
+        else if (isAvailable(out))
           doParse()
-        } // else swallow the termination and wait for pull
+      // else swallow the termination and wait for pull
 
       private def tryPull(): Unit =
-        if (isClosed(in)) {
+        if (isClosed(in))
           failStage(new FramingException("Stream finished but there was a truncated final record in the buffer."))
-        } else pull(in)
+        else pull(in)
 
       @tailrec
       private def doParse(): Unit =

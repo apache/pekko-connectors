@@ -62,7 +62,7 @@ object Namespace {
   /**
    * Java API
    */
-  def create(uri: String, prefix: Optional[String]) =
+  def create(uri: String, prefix: Optional[String]): Namespace =
     Namespace(uri, prefix.toScala)
 
 }
@@ -84,13 +84,13 @@ object Attribute {
   /**
    * Java API
    */
-  def create(name: String, value: String, prefix: Optional[String], namespace: Optional[String]) =
+  def create(name: String, value: String, prefix: Optional[String], namespace: Optional[String]): Attribute =
     Attribute(name, value, prefix.toScala, namespace.toScala)
 
   /**
    * Java API
    */
-  def create(name: String, value: String) = Attribute(name, value)
+  def create(name: String, value: String): Attribute = Attribute(name, value)
 }
 
 final case class StartElement(localName: String,
@@ -183,7 +183,7 @@ object EndElement {
   /**
    * Java API
    */
-  def create(localName: String) =
+  def create(localName: String): EndElement =
     EndElement(localName)
 }
 
@@ -196,7 +196,7 @@ object Characters {
   /**
    * Java API
    */
-  def create(text: String) =
+  def create(text: String): Characters =
     Characters(text)
 }
 
@@ -216,7 +216,7 @@ object ProcessingInstruction {
   /**
    * Java API
    */
-  def create(target: Optional[String], data: Optional[String]) =
+  def create(target: Optional[String], data: Optional[String]): ProcessingInstruction =
     ProcessingInstruction(target.toScala, data.toScala)
 }
 
@@ -229,7 +229,7 @@ object Comment {
   /**
    * Java API
    */
-  def create(text: String) =
+  def create(text: String): Comment =
     Comment(text)
 }
 
@@ -242,6 +242,6 @@ object CData {
   /**
    * Java API
    */
-  def create(text: String) =
+  def create(text: String): CData =
     CData(text)
 }

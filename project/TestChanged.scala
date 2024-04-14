@@ -41,7 +41,7 @@ object TestChanged extends AutoPlugin {
 
   override lazy val projectSettings = Seq(
     testChanged := Def.taskDyn {
-      val skip = Def.setting { task(()) }
+      val skip = Def.setting(task(()))
       if (shouldBuild(name.value, changedDirectories.value)) Test / test
       else skip
     }.value)

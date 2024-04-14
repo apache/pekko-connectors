@@ -60,12 +60,11 @@ object CassandraFlow {
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: pekko.japi.Function2[T, PreparedStatement, BoundStatement])
-      : FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
+      : FlowWithContext[T, Ctx, T, Ctx, NotUsed] =
     scaladsl.CassandraFlow
       .withContext(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
         session.delegate)
       .asJava
-  }
 
   /**
    * Creates a flow that uses [[com.datastax.oss.driver.api.core.cql.BatchStatement]] and groups the
@@ -92,13 +91,12 @@ object CassandraFlow {
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: (T, PreparedStatement) => BoundStatement,
-      groupingKey: pekko.japi.Function[T, K]): Flow[T, T, NotUsed] = {
+      groupingKey: pekko.japi.Function[T, K]): Flow[T, T, NotUsed] =
     scaladsl.CassandraFlow
       .createBatch(writeSettings,
         cqlStatement,
         (t, preparedStatement) => statementBinder.apply(t, preparedStatement),
         t => groupingKey.apply(t))(session.delegate)
       .asJava
-  }
 
 }

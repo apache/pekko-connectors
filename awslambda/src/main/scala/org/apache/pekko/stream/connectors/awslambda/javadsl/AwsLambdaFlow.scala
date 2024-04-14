@@ -22,7 +22,7 @@ import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 object AwsLambdaFlow {
 
   /**
-   * Java API: creates a [[AwsLambdaFlowStage]] for a AWS Lambda function invocation using an [[LambdaAsyncClient]]
+   * Java API: creates a [[AwsLambdaFlow]] for a AWS Lambda function invocation using an [[LambdaAsyncClient]]
    */
   def create(awsLambdaClient: LambdaAsyncClient, parallelism: Int): Flow[InvokeRequest, InvokeResponse, NotUsed] =
     pekko.stream.connectors.awslambda.scaladsl.AwsLambdaFlow.apply(parallelism)(awsLambdaClient).asJava

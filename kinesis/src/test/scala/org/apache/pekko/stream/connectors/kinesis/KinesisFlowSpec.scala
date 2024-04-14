@@ -27,7 +27,6 @@ import pekko.util.ByteString
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.Answer
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
@@ -138,18 +137,16 @@ class KinesisFlowSpec extends AnyWordSpec with Matchers with KinesisMock with Lo
 
   trait WithPutRecordsSuccess { self: Settings =>
     val publishedRecord = PutRecordsResultEntry.builder().build()
-    when(amazonKinesisAsync.putRecords(any[PutRecordsRequest])).thenAnswer(new Answer[AnyRef] {
-      override def answer(invocation: InvocationOnMock) = {
-        val request = invocation
-          .getArgument[PutRecordsRequest](0)
-        val result = PutRecordsResponse
-          .builder()
-          .failedRecordCount(0)
-          .records(request.records.asScala.map(_ => publishedRecord).asJava)
-          .build()
-        CompletableFuture.completedFuture(result)
-      }
-    })
+    when(amazonKinesisAsync.putRecords(any[PutRecordsRequest])).thenAnswer { (invocation: InvocationOnMock) =>
+      val request = invocation
+        .getArgument[PutRecordsRequest](0)
+      val result = PutRecordsResponse
+        .builder()
+        .failedRecordCount(0)
+        .records(request.records.asScala.map(_ => publishedRecord).asJava)
+        .build()
+      CompletableFuture.completedFuture(result)
+    }
   }
 
   trait WithPutRecordsFailure { self: Settings =>

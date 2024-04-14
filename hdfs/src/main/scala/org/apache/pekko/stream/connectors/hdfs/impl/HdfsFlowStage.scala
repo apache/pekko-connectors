@@ -103,9 +103,8 @@ private[hdfs] final class HdfsFlowLogic[W, I, C](
     }
 
   private def tryPull(): Unit =
-    if (!isClosed(inlet) && !hasBeenPulled(inlet)) {
+    if (!isClosed(inlet) && !hasBeenPulled(inlet))
       pull(inlet)
-    }
 
   private def onPushProgram(input: HdfsWriteMessage[I, C]) =
     for {
@@ -167,7 +166,7 @@ private[hdfs] final class HdfsFlowLogic[W, I, C](
    */
   private def tryRotateOutput: FlowStep[W, I, (Int, Option[RotationMessage])] =
     FlowStep[W, I, (Int, Option[RotationMessage])] { state =>
-      if (state.rotationStrategy.should()) {
+      if (state.rotationStrategy.should())
         rotateOutput
           .run(state)
           .map {
@@ -175,9 +174,8 @@ private[hdfs] final class HdfsFlowLogic[W, I, C](
               (newState, (state.rotationCount, Some(message)))
           }
           .value
-      } else {
+      else
         (state, (state.rotationCount, None))
-      }
     }
 
   private def trySyncOutput: FlowStep[W, I, Boolean] =
@@ -186,9 +184,8 @@ private[hdfs] final class HdfsFlowLogic[W, I, C](
         state.writer.sync()
         val newSync = state.syncStrategy.reset()
         (state.copy(syncStrategy = newSync), true)
-      } else {
+      } else
         (state, false)
-      }
     }
 
   private def tryPush(messages: Seq[OutgoingMessage[C]]): FlowStep[W, I, Unit] =

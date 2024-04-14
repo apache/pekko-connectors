@@ -41,7 +41,6 @@ private[avroparquet] class AvroParquetFlow[T <: GenericRecord](writer: ParquetWr
         new InHandler {
 
           override def onUpstreamFinish(): Unit =
-            // super.onUpstreamFinish()
             completeStage()
 
           override def onUpstreamFailure(ex: Throwable): Unit = {

@@ -30,14 +30,13 @@ private[pekko] trait ObjectDecoder {
       using m: ValueOf[K],
       hDecoder: PdxDecoder[H],
       tDecoder: PdxDecoder[T]): PdxDecoder[FieldType[K, H] *: T] = PdxDecoder.instance {
-    case (reader, fieldName) => {
+    case (reader, fieldName) =>
       val headField = hDecoder.decode(reader, Symbol(m.value))
       val tailFields = tDecoder.decode(reader, fieldName)
       (headField, tailFields) match {
         case (Success(h), Success(t)) => Success(FieldType.label[K](h) *: t)
         case _                        => Failure(null)
       }
-    }
     case e => Failure(null)
   }
 

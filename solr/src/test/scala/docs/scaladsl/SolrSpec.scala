@@ -132,7 +132,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       import org.apache.solr.client.solrj.beans.Field
 
       import scala.annotation.meta.field
-      case class BookBean(@(Field @field) title: String)
+      final case class BookBean(@(Field @field) title: String)
       // #define-bean
 
       // #run-bean
@@ -270,21 +270,16 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
       var committedOffsets = List[CommittableOffset]()
 
-      case class CommittableOffset(offset: Int) {
-        def commitScaladsl(): Future[Done] = {
-          committedOffsets = committedOffsets :+ this
-          Future.successful(Done)
-        }
-      }
+      final case class CommittableOffset(offset: Int)
 
-      case class CommittableOffsetBatch(offsets: immutable.Seq[CommittableOffset]) {
+      final case class CommittableOffsetBatch(offsets: immutable.Seq[CommittableOffset]) {
         def commitScaladsl(): Future[Done] = {
           committedOffsets = committedOffsets ++ offsets
           Future.successful(Done)
         }
       }
 
-      case class CommittableMessage(book: Book, committableOffset: CommittableOffset)
+      final case class CommittableMessage(book: Book, committableOffset: CommittableOffset)
 
       val messagesFromKafka = List(
         CommittableMessage(Book("Book 1"), CommittableOffset(0)),
@@ -633,21 +628,14 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
       var committedOffsets = List[CommittableOffset]()
 
-      case class CommittableOffset(offset: Int) {
-        def commitScaladsl(): Future[Done] = {
-          committedOffsets = committedOffsets :+ this
-          Future.successful(Done)
-        }
-      }
+      final case class CommittableOffset(offset: Int)
 
-      case class CommittableOffsetBatch(offsets: immutable.Seq[CommittableOffset]) {
+      final case class CommittableOffsetBatch(offsets: immutable.Seq[CommittableOffset]) {
         def commitScaladsl(): Future[Done] = {
           committedOffsets = committedOffsets ++ offsets
           Future.successful(Done)
         }
       }
-
-      case class CommittableMessage(book: Book, committableOffset: CommittableOffset)
 
       val messagesFromKafka = List(
         CommittableOffset(0),

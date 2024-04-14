@@ -46,8 +46,8 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
       val queue = queueClient.getQueueReference(queueName)
       queue
     }
-  val queueFactory = () => queueOpt.get
-  def queue = queueFactory()
+  val queueFactory: () => CloudQueue = () => queueOpt.get
+  def queue: CloudQueue = queueFactory()
 
   override def withFixture(test: NoArgAsyncTest): FutureOutcome = {
     assume(queueOpt.isDefined, "Queue is not defined. Please set AZURE_CONNECTION_STRING")
@@ -71,7 +71,7 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
     message
   }
 
-  def assertCannotGetMessageFromQueue =
+  def assertCannotGetMessageFromQueue: Assertion =
     assert(queue.peekMessage() == null)
 
   "AzureQueueSource" should "be able to retrieve messages" in assertAllStagesStopped {

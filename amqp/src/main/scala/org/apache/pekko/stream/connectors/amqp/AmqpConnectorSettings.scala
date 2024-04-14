@@ -152,7 +152,7 @@ final class TemporaryQueueSourceSettings private (
 }
 
 object TemporaryQueueSourceSettings {
-  def apply(connectionProvider: AmqpConnectionProvider, exchange: String) =
+  def apply(connectionProvider: AmqpConnectionProvider, exchange: String): TemporaryQueueSourceSettings =
     new TemporaryQueueSourceSettings(connectionProvider, exchange)
 
   /**

@@ -28,7 +28,7 @@ final class ShardSettings private (
     val limit: Int) {
   require(
     limit >= 1 && limit <= 10000,
-    "Limit must be between 0 and 10000. See: http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html")
+    "Limit must be between 0 and 10000. See: https://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html")
   shardIteratorType match {
     case ShardIteratorType.AFTER_SEQUENCE_NUMBER | ShardIteratorType.AT_SEQUENCE_NUMBER =>
       require(
@@ -71,7 +71,7 @@ final class ShardSettings private (
     refreshInterval = refreshInterval,
     limit = limit)
 
-  override def toString =
+  override def toString: String =
     "ShardSettings(" +
     s"streamName=$streamName," +
     s"shardId=$shardId," +

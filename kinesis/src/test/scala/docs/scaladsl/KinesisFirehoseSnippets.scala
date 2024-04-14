@@ -64,9 +64,8 @@ object KinesisFirehoseSnippets {
   // #error-handling
   val flowWithErrors: Flow[Record, PutRecordBatchResponseEntry, NotUsed] = KinesisFirehoseFlow("streamName")
     .map { response =>
-      if (response.errorCode() != null) {
+      if (response.errorCode() != null)
         throw new RuntimeException(response.errorCode())
-      }
       response
     }
   // #error-handling

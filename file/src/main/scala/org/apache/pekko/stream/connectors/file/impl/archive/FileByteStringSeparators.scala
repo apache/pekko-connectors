@@ -42,12 +42,11 @@ import pekko.util.ByteString
 
   def getPathFromStartingByteString(b: ByteString): String = {
     val splitted = b.utf8String.split(separator)
-    if (splitted.length == 1) {
+    if (splitted.length == 1)
       ""
-    } else if (splitted.length == 2) {
+    else if (splitted.length == 2)
       splitted.tail.head
-    } else {
+    else
       splitted.tail.mkString(separator.toString)
-    }
   }
 }

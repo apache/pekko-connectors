@@ -47,7 +47,7 @@ private[bigquery] object BigQueryExt extends ExtensionId[BigQueryExt] with Exten
 
   def apply()(implicit system: ActorSystem): BigQueryExt = super.apply(system)
 
-  override def lookup = BigQueryExt
+  override def lookup: BigQueryExt.type = BigQueryExt
   override def createExtension(system: ExtendedActorSystem) = new BigQueryExt(system)
 
   /**

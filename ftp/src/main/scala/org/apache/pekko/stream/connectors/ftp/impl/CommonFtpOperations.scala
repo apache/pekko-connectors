@@ -86,13 +86,11 @@ private[ftp] trait CommonFtpOperations {
     if (os != null) os else throw new IOException(s"Could not write to $name")
   }
 
-  def move(fromPath: String, destinationPath: String, handler: Handler): Unit = {
+  def move(fromPath: String, destinationPath: String, handler: Handler): Unit =
     if (!handler.rename(fromPath, destinationPath)) throw new IOException(s"Could not move $fromPath")
-  }
 
-  def remove(path: String, handler: Handler): Unit = {
+  def remove(path: String, handler: Handler): Unit =
     if (!handler.deleteFile(path)) throw new IOException(s"Could not delete $path")
-  }
 
   def completePendingCommand(handler: Handler): Boolean =
     handler.completePendingCommand()
@@ -101,17 +99,15 @@ private[ftp] trait CommonFtpOperations {
     val updatedPath = CommonFtpOperations.concatPath(path, name)
     handler.makeDirectory(updatedPath)
 
-    if (handler.getReplyCode != 257) {
+    if (handler.getReplyCode != 257)
       throw new IOException(handler.getReplyString)
-    }
   }
 }
 
 private[ftp] object CommonFtpOperations {
   def concatPath(path: String, name: String): String =
-    if (path.endsWith("/")) {
+    if (path.endsWith("/"))
       path ++ name
-    } else {
+    else
       s"$path/$name"
-    }
 }

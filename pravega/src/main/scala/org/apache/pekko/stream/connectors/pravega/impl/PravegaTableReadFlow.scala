@@ -52,7 +52,7 @@ import scala.util.Success
   private var inFlight = 0
 
   @volatile
-  private var upstreamEnded = false;
+  private var upstreamEnded = false
 
   private val asyncMessageSendCallback: AsyncCallback[Try[TableEntry]] = getAsyncCallback { p =>
     p match {
@@ -60,7 +60,7 @@ import scala.util.Success
         log.error(exception, s"Failed to send message {}")
       case Success(kv) =>
         if (kv != null)
-          push(out, Some(tableSettings.valueSerializer.deserialize(kv.getValue())))
+          push(out, Some(tableSettings.valueSerializer.deserialize(kv.getValue)))
         else
           push(out, None)
 
@@ -69,7 +69,6 @@ import scala.util.Success
     if (inFlight == 0 && upstreamEnded) {
       log.info("Stage completed after upstream finish")
       completeStage()
-
     }
   }
 
@@ -116,9 +115,8 @@ import scala.util.Success
   setHandler(
     out,
     new OutHandler {
-      override def onPull(): Unit = {
+      override def onPull(): Unit =
         pull(in)
-      }
     })
 
   /**

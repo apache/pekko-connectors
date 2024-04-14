@@ -20,7 +20,7 @@ import com.typesafe.config.Config
 import java.util.Objects
 
 object GCSSettings {
-  val ConfigPath = "pekko.connectors.google.cloud-storage"
+  val ConfigPath: String = "pekko.connectors.google.cloud-storage"
 
   /**
    * Reads from the given config.

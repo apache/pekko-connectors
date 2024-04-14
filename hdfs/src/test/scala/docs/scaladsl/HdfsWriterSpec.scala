@@ -230,9 +230,9 @@ class HdfsWriterSpec
 
     "kafka-example - store data with passThrough" in {
       // #define-kafka-classes
-      case class Book(title: String)
-      case class KafkaOffset(offset: Int)
-      case class KafkaMessage(book: Book, offset: KafkaOffset)
+      final case class Book(title: String)
+      final case class KafkaOffset(offset: Int)
+      final case class KafkaMessage(book: Book, offset: KafkaOffset)
       // #define-kafka-classes
 
       // #kafka-example
@@ -519,7 +519,7 @@ class HdfsWriterSpec
       HdfsWritingSettings()
         .withOverwrite(true)
         .withNewLine(false)
-        .withLineSeparator(System.getProperty("line.separator"))
+        .withLineSeparator(System.lineSeparator())
         .withPathGenerator(pathGenerator)
     // #define-settings
     settings

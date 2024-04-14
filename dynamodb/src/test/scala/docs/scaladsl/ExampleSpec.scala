@@ -109,7 +109,7 @@ class ExampleSpec
     }
 
     "flow with context" in {
-      case class SomeContext()
+      final case class SomeContext()
 
       // #withContext
       val source: SourceWithContext[PutItemRequest, SomeContext, NotUsed] = // ???

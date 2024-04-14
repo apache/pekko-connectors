@@ -27,7 +27,7 @@ final class OrientDbWriteSettings private (
     new OrientDbWriteSettings(
       oDatabasePool = oDatabasePool)
 
-  override def toString =
+  override def toString: String =
     "OrientDBUpdateSettings(" +
     s"oDatabasePool=$oDatabasePool" +
     ")"

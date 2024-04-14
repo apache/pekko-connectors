@@ -42,15 +42,15 @@ import scala.util.Try
  */
 @InternalApi
 private[pubsub] object PubSubApi extends PubSubApi {
-  val DefaultPubSubGoogleApisHost = "pubsub.googleapis.com"
-  val DefaultPubSubGoogleApisPort = 443
+  private val DefaultPubSubGoogleApisHost = "pubsub.googleapis.com"
+  private val DefaultPubSubGoogleApisPort = 443
   val PubSubEmulatorHostVarName = "PUBSUB_EMULATOR_HOST"
-  val PubSubEmulatorPortVarName = "PUBSUB_EMULATOR_PORT"
+  private val PubSubEmulatorPortVarName = "PUBSUB_EMULATOR_PORT"
 
   val PubSubGoogleApisHost: String = PubSubEmulatorHost.getOrElse(DefaultPubSubGoogleApisHost)
   val PubSubGoogleApisPort: Int = PubSubEmulatorPort.getOrElse(DefaultPubSubGoogleApisPort)
 
-  override def isEmulated = PubSubEmulatorHost.nonEmpty
+  override def isEmulated: Boolean = PubSubEmulatorHost.nonEmpty
 
   private[pubsub] lazy val PubSubEmulatorHost: Option[String] = sys.props
     .get(PubSubEmulatorHostVarName)

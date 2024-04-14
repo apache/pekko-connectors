@@ -67,11 +67,10 @@ private[pushkit] class PushKitSender {
   private def parse(response: Future[HttpResponse])(implicit materializer: Materializer): Future[Response] = {
     implicit val executionContext: ExecutionContext = materializer.executionContext
     response.flatMap { rsp =>
-      if (rsp.status.isSuccess) {
+      if (rsp.status.isSuccess)
         Unmarshal(rsp.entity).to[PushKitResponse]
-      } else {
+      else
         Unmarshal(rsp.entity).to[ErrorResponse]
-      }
     }
   }
 }

@@ -57,8 +57,6 @@ public class DocSnippetSink {
     // #sink-example
 
     done.whenComplete(
-        (value, exception) -> {
-          system.terminate();
-        });
+        (value, exception) -> system.terminate());
   }
 }

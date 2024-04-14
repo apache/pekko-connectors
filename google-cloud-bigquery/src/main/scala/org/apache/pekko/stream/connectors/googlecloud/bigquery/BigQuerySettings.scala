@@ -34,7 +34,7 @@ object BigQuerySettings {
   /**
    * Java API: Reads from the given config.
    */
-  def create(c: Config) = apply(c)
+  def create(c: Config): BigQuerySettings = apply(c)
 
   /**
    * Scala API: Creates [[BigQuerySettings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.
@@ -56,14 +56,14 @@ object BigQuerySettings {
   /**
    * Java API
    */
-  def create(loadJobPerTableQuota: time.Duration) = BigQuerySettings(loadJobPerTableQuota.asScala)
+  def create(loadJobPerTableQuota: time.Duration): BigQuerySettings = BigQuerySettings(loadJobPerTableQuota.asScala)
 
 }
 
 final case class BigQuerySettings @InternalApi private (loadJobPerTableQuota: FiniteDuration) {
-  def getLoadJobPerTableQuota = loadJobPerTableQuota.asJava
-  def withLoadJobPerTableQuota(loadJobPerTableQuota: FiniteDuration) =
+  def getLoadJobPerTableQuota: time.Duration = loadJobPerTableQuota.asJava
+  def withLoadJobPerTableQuota(loadJobPerTableQuota: FiniteDuration): BigQuerySettings =
     copy(loadJobPerTableQuota = loadJobPerTableQuota)
-  def withLoadJobPerTableQuota(loadJobPerTableQuota: time.Duration) =
+  def withLoadJobPerTableQuota(loadJobPerTableQuota: time.Duration): BigQuerySettings =
     copy(loadJobPerTableQuota = loadJobPerTableQuota.asScala)
 }

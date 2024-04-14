@@ -53,7 +53,7 @@ final class IronMqSettings private (
     token = token,
     consumerSettings = consumerSettings)
 
-  override def toString =
+  override def toString: String =
     "IronMqSettings(" +
     s"endpoint=$endpoint," +
     s"projectId=$projectId," +
@@ -130,7 +130,7 @@ object IronMqSettings {
         pollTimeout = pollTimeout,
         reservationTimeout = reservationTimeout)
 
-    override def toString =
+    override def toString: String =
       "ConsumerSettings(" +
       s"bufferMinSize=$bufferMinSize," +
       s"bufferMaxSize=$bufferMaxSize," +

@@ -64,9 +64,8 @@ private[kinesis] class ShardProcessor(
       processRecordsInput.isAtShardEnd,
       processRecordsInput.millisBehindLatest)
 
-    if (batchData.isAtShardEnd) {
+    if (batchData.isAtShardEnd)
       lastRecordSemaphore.acquire()
-    }
 
     val numberOfRecords = processRecordsInput.records().size()
     processRecordsInput.records().asScala.zipWithIndex.foreach {
@@ -100,7 +99,7 @@ private[kinesis] class ShardProcessor(
     shutdown = Some(ShutdownReason.REQUESTED)
   }
 
-  final class InternalCommittableRecord(record: KinesisClientRecord, batchData: BatchData, lastRecord: Boolean)
+  private final class InternalCommittableRecord(record: KinesisClientRecord, batchData: BatchData, lastRecord: Boolean)
       extends CommittableRecord(record, batchData, shardData) {
     private def checkpoint(): Unit = {
       checkpointer.checkpoint(sequenceNumber, subSequenceNumber)

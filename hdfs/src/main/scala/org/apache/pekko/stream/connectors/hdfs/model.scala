@@ -48,7 +48,7 @@ final class HdfsWritingSettings private (
     lineSeparator = lineSeparator,
     pathGenerator = pathGenerator)
 
-  override def toString =
+  override def toString: String =
     "HdfsWritingSettings(" +
     s"overwrite=$overwrite," +
     s"newLine=$newLine," +
@@ -65,7 +65,7 @@ object HdfsWritingSettings {
   val default = new HdfsWritingSettings(
     overwrite = true,
     newLine = false,
-    lineSeparator = System.getProperty("line.separator"),
+    lineSeparator = System.lineSeparator(),
     pathGenerator = DefaultFilePathGenerator)
 
   /** Scala API */
@@ -128,10 +128,10 @@ final case class WrittenMessage[P](passThrough: P, inRotation: Int) extends Outg
 sealed case class FileUnit(byteCount: Long)
 
 object FileUnit {
-  val KB = FileUnit(Math.pow(2, 10).toLong)
-  val MB = FileUnit(Math.pow(2, 20).toLong)
-  val GB = FileUnit(Math.pow(2, 30).toLong)
-  val TB = FileUnit(Math.pow(2, 40).toLong)
+  val KB: FileUnit = FileUnit(Math.pow(2, 10).toLong)
+  val MB: FileUnit = FileUnit(Math.pow(2, 20).toLong)
+  val GB: FileUnit = FileUnit(Math.pow(2, 30).toLong)
+  val TB: FileUnit = FileUnit(Math.pow(2, 40).toLong)
 }
 
 sealed abstract class FilePathGenerator extends ((Long, Long) => Path) {

@@ -34,11 +34,11 @@ import scala.util.control.NonFatal
 
   private val in = Inlet[ByteString](Logging.simpleName(this) + ".in")
   private val out = Outlet[List[ByteString]](Logging.simpleName(this) + ".out")
-  override val shape = FlowShape(in, out)
+  override val shape: FlowShape[ByteString, List[ByteString]] = FlowShape(in, out)
 
   override protected def initialAttributes: Attributes = Attributes.name("CsvParsing")
 
-  override def createLogic(inheritedAttributes: Attributes) =
+  override def createLogic(inheritedAttributes: Attributes): GraphStageLogic with InHandler with OutHandler =
     new GraphStageLogic(shape) with InHandler with OutHandler {
       private[this] val buffer = new CsvParser(delimiter, quoteChar, escapeChar, maximumLineLength)
 
@@ -57,7 +57,7 @@ import scala.util.control.NonFatal
         completeStage()
       }
 
-      private def tryPollBuffer() =
+      private def tryPollBuffer(): Unit =
         try buffer.poll(requireLineEnd = true) match {
             case Some(csvLine) => push(out, csvLine)
             case _ =>
