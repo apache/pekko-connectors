@@ -159,9 +159,8 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
             case None => Future.successful(Done)
           }
         }(ExecutionContexts.global())
-    } else {
+    } else
       Future.successful(Done)
-    }
 
   override def toString: String = s"CouchbaseSession(${asyncBucket.name()})"
 

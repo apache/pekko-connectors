@@ -103,10 +103,9 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
           ExecutionContexts.parasitic)
       promise.completeWith(session)
       promise.future
-    } else {
+    } else
       // we lost cas (could be concurrent call for some other key though), retry
       startSession(key)
-    }
   }
 
 }

@@ -66,7 +66,7 @@ import scala.concurrent.{ ExecutionContext, Future }
  */
 private[cassandra] object PekkoDiscoverySessionProvider {
 
-  def connect(system: ActorSystem, config: Config)(implicit ec: ExecutionContext): Future[CqlSession] = {
+  def connect(system: ActorSystem, config: Config)(implicit ec: ExecutionContext): Future[CqlSession] =
     readNodes(config)(system, ec).flatMap { contactPoints =>
       val driverConfigWithContactPoints = ConfigFactory.parseString(s"""
         basic.contact-points = [${contactPoints.mkString("\"", "\", \"", "\"")}]
@@ -74,7 +74,6 @@ private[cassandra] object PekkoDiscoverySessionProvider {
       val driverConfigLoader = DriverConfigLoaderFromConfig.fromConfig(driverConfigWithContactPoints)
       CqlSession.builder().withConfigLoader(driverConfigLoader).buildAsync().asScala
     }
-  }
 
   def connect(system: ClassicActorSystemProvider, config: Config)(implicit ec: ExecutionContext): Future[CqlSession] =
     connect(system.classicSystem, config)
@@ -96,7 +95,7 @@ private[cassandra] object PekkoDiscoverySessionProvider {
   private def readNodes(
       serviceName: String,
       lookupTimeout: FiniteDuration)(
-      implicit system: ActorSystem, ec: ExecutionContext): Future[immutable.Seq[String]] = {
+      implicit system: ActorSystem, ec: ExecutionContext): Future[immutable.Seq[String]] =
     Discovery(system).discovery.lookup(serviceName, lookupTimeout).map { resolved =>
       resolved.addresses.map { target =>
         target.host + ":" + target.port.getOrElse {
@@ -105,6 +104,5 @@ private[cassandra] object PekkoDiscoverySessionProvider {
         }
       }
     }
-  }
 
 }

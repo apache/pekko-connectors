@@ -193,56 +193,49 @@ class CsvParsingSpec extends CsvSpec {
           .map(_.view.mapValues(_.utf8String).toIndexedSeq)
           .runWith(Sink.seq)
       val res = fut.futureValue
-      res(0) should contain allElementsOf (
-        Map(
-          "Year" -> "1997",
-          "Make" -> "Ford",
-          "Model" -> "E350",
-          "Description" -> "ac, abs, moon",
-          "Price" -> "3000.00"))
-      res(1) should contain allElementsOf (
-        Map(
-          "Year" -> "1999",
-          "Make" -> "Chevy",
-          "Model" -> "Venture \"Extended Edition\"",
-          "Description" -> "",
-          "Price" -> "4900.00"))
-      res(2) should contain allElementsOf (
-        Map(
-          "Year" -> "1996",
-          "Make" -> "Jeep",
-          "Model" -> "Grand Cherokee",
-          "Description" -> """MUST SELL!
+      res(0) should contain allElementsOf Map(
+        "Year" -> "1997",
+        "Make" -> "Ford",
+        "Model" -> "E350",
+        "Description" -> "ac, abs, moon",
+        "Price" -> "3000.00")
+      res(1) should contain allElementsOf Map(
+        "Year" -> "1999",
+        "Make" -> "Chevy",
+        "Model" -> "Venture \"Extended Edition\"",
+        "Description" -> "",
+        "Price" -> "4900.00")
+      res(2) should contain allElementsOf Map(
+        "Year" -> "1996",
+        "Make" -> "Jeep",
+        "Model" -> "Grand Cherokee",
+        "Description" -> """MUST SELL!
                             |air, moon roof, loaded""".stripMargin,
-          "Price" -> "4799.00"))
-      res(3) should contain allElementsOf (
-        Map(
-          "Year" -> "1999",
-          "Make" -> "Chevy",
-          "Model" -> "Venture \"Extended Edition, Very Large\"",
-          "Description" -> "",
-          "Price" -> "5000.00"))
-      res(4) should contain allElementsOf (
-        Map(
-          "Year" -> "",
-          "Make" -> "",
-          "Model" -> "Venture \"Extended Edition\"",
-          "Description" -> "",
-          "Price" -> "4900.00"))
-      res(5) should contain allElementsOf (
-        Map(
-          "Year" -> "1995",
-          "Make" -> "VW",
-          "Model" -> "Golf \"GTE\"",
-          "Description" -> "",
-          "Price" -> "5000.00"))
-      res(6) should contain allElementsOf (
-        Map(
-          "Year" -> "1996",
-          "Make" -> "VW",
-          "Model" -> "Golf GTE",
-          "Description" -> "",
-          "Price" -> "5000.00"))
+        "Price" -> "4799.00")
+      res(3) should contain allElementsOf Map(
+        "Year" -> "1999",
+        "Make" -> "Chevy",
+        "Model" -> "Venture \"Extended Edition, Very Large\"",
+        "Description" -> "",
+        "Price" -> "5000.00")
+      res(4) should contain allElementsOf Map(
+        "Year" -> "",
+        "Make" -> "",
+        "Model" -> "Venture \"Extended Edition\"",
+        "Description" -> "",
+        "Price" -> "4900.00")
+      res(5) should contain allElementsOf Map(
+        "Year" -> "1995",
+        "Make" -> "VW",
+        "Model" -> "Golf \"GTE\"",
+        "Description" -> "",
+        "Price" -> "5000.00")
+      res(6) should contain allElementsOf Map(
+        "Year" -> "1996",
+        "Make" -> "VW",
+        "Model" -> "Golf GTE",
+        "Description" -> "",
+        "Price" -> "5000.00")
     }
   }
 }

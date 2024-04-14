@@ -65,6 +65,6 @@ abstract class SourceSettingsBase[Version <: ApiVersionBase, S <: SourceSettings
       bufferSize: Int = bufferSize,
       includeDocumentVersion: Boolean = includeDocumentVersion,
       scrollDuration: FiniteDuration = scrollDuration,
-      apiVersion: Version = apiVersion): S;
+      apiVersion: Version = apiVersion): S
 
 }

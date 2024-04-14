@@ -54,15 +54,14 @@ class DefaultSessionProvider(system: ActorSystem, config: Config) extends CqlSes
    */
   private def usePekkoDiscovery(config: Config): Boolean = config.getString("service-discovery.name").nonEmpty
 
-  override def connect()(implicit ec: ExecutionContext): Future[CqlSession] = {
-    if (usePekkoDiscovery(config)) {
+  override def connect()(implicit ec: ExecutionContext): Future[CqlSession] =
+    if (usePekkoDiscovery(config))
       PekkoDiscoverySessionProvider.connect(system, config)
-    } else {
+    else {
       val driverConfig = CqlSessionProvider.driverConfig(system, config)
       val driverConfigLoader = DriverConfigLoaderFromConfig.fromConfig(driverConfig)
       CqlSession.builder().withConfigLoader(driverConfigLoader).buildAsync().asScala
     }
-  }
 }
 
 object CqlSessionProvider {

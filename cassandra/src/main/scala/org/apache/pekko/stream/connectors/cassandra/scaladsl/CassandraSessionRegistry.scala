@@ -83,9 +83,8 @@ final class CassandraSessionRegistry(system: ExtendedActorSystem) extends Extens
    * Note that the session must not be stopped manually, it is shut down when the actor system is shutdown,
    * if you need a more fine grained life cycle control, create the CassandraSession manually instead.
    */
-  def sessionFor(settings: CassandraSessionSettings): CassandraSession = {
+  def sessionFor(settings: CassandraSessionSettings): CassandraSession =
     sessionFor(settings, system.settings.config.getConfig(settings.configPath))
-  }
 
   /**
    * INTERNAL API: Possibility to initialize the `SessionProvider` with a custom `Config`

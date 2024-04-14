@@ -50,19 +50,17 @@ object ElasticsearchSource {
       objectMapper: ObjectMapper): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
-        {
-          implicit val system: ActorSystem = mat.system
-          implicit val http: HttpExt = Http()
-          implicit val ec: ExecutionContext = mat.executionContext
+        implicit val system: ActorSystem = mat.system
+        implicit val http: HttpExt = Http()
+        implicit val ec: ExecutionContext = mat.executionContext
 
-          Source
-            .fromGraph(
-              new impl.ElasticsearchSourceStage(
-                elasticsearchParams,
-                Map("query" -> query),
-                settings,
-                new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])))
-        }
+        Source
+          .fromGraph(
+            new impl.ElasticsearchSourceStage(
+              elasticsearchParams,
+              Map("query" -> query),
+              settings,
+              new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -82,18 +80,16 @@ object ElasticsearchSource {
       objectMapper: ObjectMapper): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
-        {
-          implicit val system: ActorSystem = mat.system
-          implicit val http: HttpExt = Http()
-          implicit val ec: ExecutionContext = mat.executionContext
+        implicit val system: ActorSystem = mat.system
+        implicit val http: HttpExt = Http()
+        implicit val ec: ExecutionContext = mat.executionContext
 
-          Source.fromGraph(
-            new impl.ElasticsearchSourceStage(
-              elasticsearchParams,
-              searchParams.asScala.toMap,
-              settings,
-              new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])))
-        }
+        Source.fromGraph(
+          new impl.ElasticsearchSourceStage(
+            elasticsearchParams,
+            searchParams.asScala.toMap,
+            settings,
+            new JacksonReader[java.util.Map[String, Object]](objectMapper, classOf[java.util.Map[String, Object]])))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -118,18 +114,16 @@ object ElasticsearchSource {
       objectMapper: ObjectMapper): Source[ReadResult[T], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
-        {
-          implicit val system: ActorSystem = mat.system
-          implicit val http: HttpExt = Http()
-          implicit val ec: ExecutionContext = mat.executionContext
+        implicit val system: ActorSystem = mat.system
+        implicit val http: HttpExt = Http()
+        implicit val ec: ExecutionContext = mat.executionContext
 
-          Source.fromGraph(
-            new impl.ElasticsearchSourceStage(
-              elasticsearchParams,
-              Map("query" -> query),
-              settings,
-              new JacksonReader[T](objectMapper, clazz)))
-        }
+        Source.fromGraph(
+          new impl.ElasticsearchSourceStage(
+            elasticsearchParams,
+            Map("query" -> query),
+            settings,
+            new JacksonReader[T](objectMapper, clazz)))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -150,18 +144,16 @@ object ElasticsearchSource {
       objectMapper: ObjectMapper): Source[ReadResult[T], NotUsed] =
     Source
       .fromMaterializer { (mat: Materializer, _: Attributes) =>
-        {
-          implicit val system: ActorSystem = mat.system
-          implicit val http: HttpExt = Http()
-          implicit val ec: ExecutionContext = mat.executionContext
+        implicit val system: ActorSystem = mat.system
+        implicit val http: HttpExt = Http()
+        implicit val ec: ExecutionContext = mat.executionContext
 
-          Source.fromGraph(
-            new impl.ElasticsearchSourceStage(
-              elasticsearchParams,
-              searchParams.asScala.toMap,
-              settings,
-              new JacksonReader[T](objectMapper, clazz)))
-        }
+        Source.fromGraph(
+          new impl.ElasticsearchSourceStage(
+            elasticsearchParams,
+            searchParams.asScala.toMap,
+            settings,
+            new JacksonReader[T](objectMapper, clazz)))
       }
       .mapMaterializedValue(_ => NotUsed)
 
@@ -171,9 +163,9 @@ object ElasticsearchSource {
 
       val jsonTree = mapper.readTree(json)
 
-      if (jsonTree.has("error")) {
+      if (jsonTree.has("error"))
         impl.ScrollResponse(Some(jsonTree.get("error").asText()), None)
-      } else {
+      else {
         val scrollId = Option(jsonTree.get("_scroll_id")).map(_.asText())
         val hits = jsonTree.get("hits").get("hits").asInstanceOf[ArrayNode]
         val messages = hits.elements().asScala.toList.map { element =>

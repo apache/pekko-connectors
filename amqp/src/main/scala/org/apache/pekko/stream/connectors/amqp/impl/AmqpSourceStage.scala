@@ -94,7 +94,6 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
               properties: BasicProperties,
               body: Array[Byte]): Unit = {
             val message = if (ackRequired) {
-
               new CommittableReadResult {
                 override val message: ReadResult = ReadResult(ByteString(body), envelope, properties)
 
@@ -155,21 +154,19 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
       }
 
       def handleDelivery(message: CommittableReadResult): Unit =
-        if (isAvailable(out)) {
+        if (isAvailable(out))
           pushMessage(message)
-        } else if (queue.size + 1 > bufferSize) {
+        else if (queue.size + 1 > bufferSize)
           onFailure(new RuntimeException(s"Reached maximum buffer size $bufferSize"))
-        } else {
+        else
           queue.enqueue(message)
-        }
 
       setHandler(
         out,
         new OutHandler {
           override def onPull(): Unit =
-            if (queue.nonEmpty) {
+            if (queue.nonEmpty)
               pushMessage(queue.dequeue())
-            }
 
           override def onDownstreamFinish(cause: Throwable): Unit =
             if (unackedMessages == 0) super.onDownstreamFinish(cause)

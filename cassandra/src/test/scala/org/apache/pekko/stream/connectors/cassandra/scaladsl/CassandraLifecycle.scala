@@ -40,19 +40,17 @@ trait CassandraLifecycleBase {
     session.executeWriteBatch(batch.build())
   }
 
-  def executeCql(session: CassandraSession, statements: immutable.Seq[String]): Future[Done] = {
+  def executeCql(session: CassandraSession, statements: immutable.Seq[String]): Future[Done] =
     execute(session, statements.map(stmt => SimpleStatement.newInstance(stmt)))
-  }
 
   private val keyspaceTimeout = java.time.Duration.ofSeconds(15)
 
-  def createKeyspace(session: CassandraSession, name: String): Future[Done] = {
+  def createKeyspace(session: CassandraSession, name: String): Future[Done] =
     session.executeWrite(
       new SimpleStatementBuilder(
         s"""CREATE KEYSPACE $name WITH replication = { 'class': 'SimpleStrategy', 'replication_factor': '1'};""").setTimeout(
         keyspaceTimeout)
         .build())
-  }
 
   def dropKeyspace(session: CassandraSession, name: String): Future[Done] =
     session.executeWrite(
@@ -112,9 +110,9 @@ trait CassandraLifecycle extends BeforeAndAfterAll with TestKitBase with Cassand
     // so needs to run before the actor system is shut down
     dropKeyspace(keyspaceName).futureValue(PatienceConfiguration.Timeout(15.seconds))
     shutdown(system, verifySystemShutdown = true)
-    try {
+    try
       Await.result(lifecycleSession.close(scala.concurrent.ExecutionContext.global), 20.seconds)
-    } catch {
+    catch {
       case NonFatal(e) =>
         e.printStackTrace(System.err)
     }

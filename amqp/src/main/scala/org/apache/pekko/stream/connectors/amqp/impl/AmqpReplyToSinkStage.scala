@@ -82,9 +82,8 @@ private[amqp] final class AmqpReplyToSinkStage(replyToSinkSettings: AmqpReplyToS
                   elem.immediate,
                   elem.properties.orNull,
                   elem.bytes.toArray)
-              } else if (settings.failIfReplyToMissing) {
+              } else if (settings.failIfReplyToMissing)
                 onFailure(new RuntimeException("Reply-to header was not set"))
-              }
 
               tryPull(in)
             }

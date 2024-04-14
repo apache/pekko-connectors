@@ -128,9 +128,8 @@ import scala.collection.mutable
     val line = maybeExtractLine(requireLineEnd)
     if (line.nonEmpty) {
       currentLineNo += 1
-      if (state == LineEnd || !requireLineEnd) {
+      if (state == LineEnd || !requireLineEnd)
         state = LineStart
-      }
       resetLine()
       columns.clear()
     }
@@ -192,7 +191,7 @@ import scala.collection.mutable
       s"wrong escaping at $currentLineNo:$lineLength, no character after escape")
 
   private[this] def checkForByteOrderMark(): Unit =
-    if (buffer.length >= 2) {
+    if (buffer.length >= 2)
       if (buffer.startsWith(ByteOrderMark.UTF_8)) {
         advance(3)
         fieldStart = 3
@@ -207,7 +206,6 @@ import scala.collection.mutable
           throw new UnsupportedCharsetException("UTF-32 BE")
         }
       }
-    }
 
   private[this] def parseLine(): Unit = {
     if (firstData) {

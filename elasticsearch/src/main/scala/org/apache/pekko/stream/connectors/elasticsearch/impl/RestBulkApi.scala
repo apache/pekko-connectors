@@ -60,20 +60,19 @@ private[impl] abstract class RestBulkApi[T, C] {
     val ret = new immutable.VectorBuilder[WriteResult[T, C]]
     val itemsIter = items.elements.iterator
     messages.foreach { message =>
-      if (message.operation == Nop) {
+      if (message.operation == Nop)
         // client just wants to pass-through:
         ret += new WriteResult(message, None)
-      } else {
+      else {
         if (itemsIter.hasNext) {
           // good message
           val command = message.operation.command
           val res = itemsIter.next().asJsObject.fields(command).asJsObject
           val error: Option[String] = res.fields.get("error").map(_.compactPrint)
           ret += new WriteResult(message, error)
-        } else {
+        } else
           // error?
           ret += new WriteResult(message, None)
-        }
       }
     }
     ret.result()

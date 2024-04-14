@@ -64,10 +64,9 @@ final private[couchbase] class CouchbaseClusterRegistry(system: ActorSystem) {
         }(system.dispatcher)
       }
       future
-    } else {
+    } else
       // we lost cas (could be concurrent call for some other settings though), retry
       createClusterClient(settings)
-    }
   }
 
 }

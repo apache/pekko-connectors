@@ -153,9 +153,8 @@ import scala.concurrent.Promise
         if (noAwaitingMessages && exitQueue.isEmpty) {
           streamCompletion.success(Done)
           super.onUpstreamFinish()
-        } else {
+        } else
           log.debug("Received upstream finish signal - stage will be closed when all buffered messages are processed")
-        }
 
       private def publish(message: WriteMessage): DeliveryTag = {
         val tag: DeliveryTag = channel.getNextPublishSeqNo
@@ -191,10 +190,9 @@ import scala.concurrent.Promise
 
   override protected def onTimer(timerKey: Any): Unit =
     timerKey match {
-      case tag: DeliveryTag => {
+      case tag: DeliveryTag =>
         log.debug("Received timeout for deliveryTag {}.", tag)
         onRejection(tag, multiple = false)
-      }
       case _ => ()
     }
 

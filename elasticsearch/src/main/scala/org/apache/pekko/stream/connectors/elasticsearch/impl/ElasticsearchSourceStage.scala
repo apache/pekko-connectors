@@ -74,9 +74,8 @@ private[elasticsearch] final class ElasticsearchSourceStage[T](
 }
 
 object ElasticsearchSourceStage {
-  def validate(indexName: String): Unit = {
+  def validate(indexName: String): Unit =
     require(indexName != null, "You must define an index name")
-  }
 }
 
 /**
@@ -102,43 +101,39 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
   private var pullIsWaitingForData = false
   private var dataReady: Option[ScrollResponse[T]] = None
 
-  def prepareUri(path: Path): Uri = {
+  def prepareUri(path: Path): Uri =
     Uri(settings.connection.baseUrl)
       .withPath(path)
-  }
 
   def sendScrollScanRequest(): Unit =
     try {
       waitingForElasticData = true
 
       scrollId match {
-        case None => {
+        case None =>
           log.debug("Doing initial search")
 
           // Add extra params to search
           val extraParams = Seq(
-            if (!searchParams.contains("size")) {
+            if (!searchParams.contains("size"))
               Some("size" -> settings.bufferSize.toString)
-            } else {
-              None
-            },
+            else
+              None,
             // Tell elastic to return the documents '_version'-property with the search-results
             // http://nocf-www.elastic.co/guide/en/elasticsearch/reference/current/search-request-version.html
             // https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html
-            if (!searchParams.contains("version") && settings.includeDocumentVersion) {
+            if (!searchParams.contains("version") && settings.includeDocumentVersion)
               Some("version" -> "true")
-            } else {
-              None
-            })
+            else
+              None)
 
           val baseMap = Map("scroll" -> settings.scroll)
 
           // only force sorting by _doc (meaning order is not known) if not specified in search params
-          val sortQueryParam = if (searchParams.contains("sort")) {
+          val sortQueryParam = if (searchParams.contains("sort"))
             None
-          } else {
+          else
             Some(("sort", "_doc"))
-          }
 
           val routingQueryParam = searchParams.get("routing").map(r => ("routing", r))
 
@@ -187,9 +182,8 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
             .recover {
               case cause: Throwable => failureHandler.invoke(cause)
             }
-        }
 
-        case Some(actualScrollId) => {
+        case Some(actualScrollId) =>
           log.debug("Fetching next scroll")
 
           val uri = prepareUri(Path("/_search/scroll"))
@@ -221,7 +215,6 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
             .recover {
               case cause: Throwable => failureHandler.invoke(cause)
             }
-        }
       }
     } catch {
       case ex: Exception => failureHandler.invoke(ex)
@@ -240,10 +233,9 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
     if (pullIsWaitingForData) {
       log.debug("Received data from elastic. Downstream has already called pull and is waiting for data")
       pullIsWaitingForData = false
-      if (handleScrollResponse(scrollResponse)) {
+      if (handleScrollResponse(scrollResponse))
         // we should go and get more data
         sendScrollScanRequest()
-      }
     } else {
       log.debug("Received data from elastic. Downstream have not yet asked for it")
       // This is a prefetch of data which we received before downstream has asked for it
@@ -284,10 +276,8 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
 
           dataReady = None
 
-          if (!waitingForElasticData) {
+          if (!waitingForElasticData)
             sendScrollScanRequest()
-          }
-
         }
       case None =>
         if (pullIsWaitingForData) throw new Exception("This should not happen: Downstream is pulling more than once")
@@ -296,9 +286,8 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
         if (!waitingForElasticData) {
           log.debug("Downstream is pulling data. We must go and get it")
           sendScrollScanRequest()
-        } else {
+        } else
           log.debug("Downstream is pulling data. Already waiting for data")
-        }
     }
 
   /**
@@ -317,12 +306,12 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
    * Complete the stage successfully, whether or not the clear call succeeds.
    * If the clear call fails, the scroll will eventually timeout.
    */
-  def clearScrollAsync(): Unit = {
+  def clearScrollAsync(): Unit =
     scrollId match {
       case None =>
         log.debug("Scroll Id is empty. Completing stage eagerly.")
         completeStage()
-      case Some(actualScrollId) => {
+      case Some(actualScrollId) =>
         // Clear the scroll
         val uri = prepareUri(Path(s"/_search/scroll/$actualScrollId"))
 
@@ -336,9 +325,9 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
             case HttpResponse(StatusCodes.OK, _, responseEntity, _) =>
               Unmarshal(responseEntity)
                 .to[String]
-                .map(json => {
+                .map { json =>
                   clearScrollAsyncHandler.invoke(Success(json))
-                })
+                }
             case response: HttpResponse =>
               Unmarshal(response.entity).to[String].map { body =>
                 clearScrollAsyncHandler
@@ -350,16 +339,12 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           .recover {
             case cause: Throwable => failureHandler.invoke(cause)
           }
-      }
     }
-  }
 
   private val clearScrollAsyncHandler = getAsyncCallback[Try[String]] { result =>
-    {
-      // Note: the scroll will expire, so there is no reason to consider a failed
-      // clear as a reason to fail the stream.
-      log.debug("Result of clearing the scroll: {}", result)
-      completeStage()
-    }
+    // Note: the scroll will expire, so there is no reason to consider a failed
+    // clear as a reason to fail the stream.
+    log.debug("Result of clearing the scroll: {}", result)
+    completeStage()
   }
 }
