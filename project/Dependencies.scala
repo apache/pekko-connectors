@@ -70,26 +70,18 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion))
 
-  private val testKitBase = Seq(
+  val testkit = Seq(
     libraryDependencies := Seq(
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
+      "org.slf4j" % "slf4j-api" % Slf4jVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11",
       "junit" % "junit" % "4.13.2"))
-
-  val testkit = testKitBase ++ Seq(
-    libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-api" % Slf4jVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackVersion))
-
-  val testkitLegacy = testKitBase ++ Seq(
-    libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
 
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
@@ -352,7 +344,10 @@ object Dependencies {
   val Kudu = Seq(
     libraryDependencies ++= Seq(
       "org.apache.kudu" % "kudu-client-tools" % KuduVersion,
-      "org.apache.kudu" % "kudu-client" % KuduVersion % Test))
+      "org.apache.kudu" % "kudu-client" % KuduVersion % Test),
+    dependencyOverrides ++= Seq(
+      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
 
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
@@ -450,7 +445,10 @@ object Dependencies {
       "org.apache.solr" % "solr-solrj" % SolrjVersion,
       ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
         "log4j-slf4j-impl"),
-      "org.slf4j" % "log4j-over-slf4j" % Slf4jLegacyVersion % Test))
+      "org.slf4j" % "log4j-over-slf4j" % Slf4jLegacyVersion % Test),
+    dependencyOverrides ++= Seq(
+      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(

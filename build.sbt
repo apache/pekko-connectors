@@ -272,7 +272,7 @@ lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming
 
 lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
 
-lazy val kudu = pekkoConnectorLegacyProject("kudu", "kudu", Dependencies.Kudu)
+lazy val kudu = pekkoConnectorProject("kudu", "kudu", Dependencies.Kudu)
 
 lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Dependencies.MongoDb)
 
@@ -322,7 +322,7 @@ lazy val eventbridge =
 lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
 
 // Solrj has some deprecated methods
-lazy val solr = pekkoConnectorLegacyProject("solr", "solr", Dependencies.Solr,
+lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr,
   fatalWarnings := false)
 
 lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
@@ -425,7 +425,6 @@ lazy val docs = project
     }.taskValue)
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
-lazy val testkitLegacy = internalProject("testkitLegacy", Dependencies.testkitLegacy)
 
 lazy val `doc-examples` = project
   .enablePlugins(AutomateHeaderPlugin)
@@ -462,33 +461,6 @@ def pekkoConnectorProject(projectId: String,
       Test / parallelExecution := false)
     .settings(additionalSettings: _*)
     .dependsOn(testkit % Test)
-}
-
-def pekkoConnectorLegacyProject(projectId: String,
-    moduleName: String,
-    additionalSettings: sbt.Def.SettingsDefinition*): Project = {
-  import com.typesafe.tools.mima.core._
-  Project(id = projectId, base = file(projectId))
-    .enablePlugins(AutomateHeaderPlugin, ReproducibleBuildsPlugin)
-    .disablePlugins(SitePlugin)
-    .settings(
-      name := s"pekko-connectors-$projectId",
-      licenses := List(License.Apache2),
-      AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
-      mimaPreviousArtifacts := {
-        if (moduleName == "slick") {
-          Set.empty
-        } else {
-          Set(organization.value %% name.value % mimaCompareVersion)
-        }
-      },
-      mimaBinaryIssueFilters ++= Seq(
-        ProblemFilters.exclude[Problem]("*.impl.*"),
-        // generated code
-        ProblemFilters.exclude[Problem]("com.google.*")),
-      Test / parallelExecution := false)
-    .settings(additionalSettings: _*)
-    .dependsOn(testkitLegacy % Test)
 }
 
 def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
