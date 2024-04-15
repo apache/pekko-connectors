@@ -70,31 +70,26 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion))
 
-  val testkit = Seq(
+  private val testKitBase = Seq(
     libraryDependencies := Seq(
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion,
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11",
       "junit" % "junit" % "4.13.2"))
 
-  val testkitLegacy = Seq(
-    libraryDependencies := Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
-      "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
-      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
-      "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
+  val testkit = testKitBase ++ Seq(
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-api" % Slf4jVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackVersion))
+
+  val testkitLegacy = testKitBase ++ Seq(
+    libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion,
-      "org.scalatest" %% "scalatest" % ScalaTestVersion,
-      "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
-      "com.novocode" % "junit-interface" % "0.11",
-      "junit" % "junit" % "4.13.2"))
+      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
 
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
