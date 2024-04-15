@@ -40,9 +40,11 @@ object Dependencies {
   val hoverflyVersion = "0.14.1"
   val scalaCheckVersion = "1.17.0"
 
+  // Legacy versions support Slf4J v1 for compatibility with older libs
   val Slf4jVersion = "2.0.13"
   val Slf4jLegacyVersion = "1.7.36"
   val LogbackVersion = "1.3.14"
+  val LogbackLegacyVersion = "1.2.13"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -74,8 +76,21 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
-      "org.slf4j" % "slf4j-api" % Slf4jVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackVersion,
+      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion,
+      "org.scalatest" %% "scalatest" % ScalaTestVersion,
+      "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
+      "com.novocode" % "junit-interface" % "0.11",
+      "junit" % "junit" % "4.13.2"))
+
+  val testkitLegacy = Seq(
+    libraryDependencies := Seq(
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
+      "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
+      "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
+      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
+      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion,
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.novocode" % "junit-interface" % "0.11",
@@ -440,7 +455,7 @@ object Dependencies {
       "org.apache.solr" % "solr-solrj" % SolrjVersion,
       ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
         "log4j-slf4j-impl"),
-      "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
+      "org.slf4j" % "log4j-over-slf4j" % Slf4jLegacyVersion % Test))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(
