@@ -41,6 +41,7 @@ object Dependencies {
   val scalaCheckVersion = "1.17.0"
 
   val Slf4jVersion = "2.0.13"
+  val Slf4jLegacyVersion = "1.7.36"
   val LogbackVersion = "1.3.14"
 
   /**
@@ -410,7 +411,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test,
+      "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
       "com.h2database" % "h2" % "2.2.224" % Test))
 
   val Eventbridge = Seq(
