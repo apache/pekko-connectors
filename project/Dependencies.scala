@@ -411,7 +411,7 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
   }
 
-  val SlickVersion = "3.5.0"
+  val SlickVersion = "3.5.1"
   val Slick = Seq(
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
