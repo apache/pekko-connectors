@@ -26,7 +26,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.3"
-  val AwsSdk2Version = "2.25.31"
+  val AwsSdk2Version = "2.25.33"
   val AwsSpiPekkoHttpVersion = "0.1.1"
   val NettyVersion = "4.1.109.Final"
   // Sync with plugins.sbt
