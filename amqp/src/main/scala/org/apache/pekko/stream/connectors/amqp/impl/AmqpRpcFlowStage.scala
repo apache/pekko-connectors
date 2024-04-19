@@ -105,7 +105,14 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
                 body: Array[Byte]): Unit =
               consumerCallback.invoke(
                 new CommittableReadResult {
-                  override val message = ReadResult(ByteString.fromArrayUnsafe(body), envelope, properties)
+                  override val message = {
+                    val byteString = if (settings.avoidArrayCopy) {
+                      ByteString.fromArrayUnsafe(body)
+                    } else {
+                      ByteString(body)
+                    }
+                    ReadResult(byteString, envelope, properties)
+                  }
 
                   override def ack(multiple: Boolean): Future[Done] = {
                     val promise = Promise[Done]()
