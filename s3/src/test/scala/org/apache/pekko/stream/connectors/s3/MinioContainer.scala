@@ -30,7 +30,7 @@ class MinioContainer(accessKey: String, secretKey: String, domain: String)
         "MINIO_DOMAIN" -> domain)) {
 
   def getHostAddress: String =
-    s"http://${container.getContainerIpAddress}:${container.getMappedPort(9000)}"
+    s"http://${container.getHost}:${container.getMappedPort(9000)}"
 
   def getVirtualHost: String =
     s"http://{bucket}.$domain:${container.getMappedPort(9000)}"
