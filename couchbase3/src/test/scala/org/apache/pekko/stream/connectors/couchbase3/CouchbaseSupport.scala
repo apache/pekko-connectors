@@ -10,7 +10,7 @@ import org.apache.pekko.actor.ActorSystem
 
 object CouchbaseSupport {
 
-  private val connectionString = "couchbase://localhost"
+  private val connectionString = "localhost"
   private val username = "Administrator"
   private val password = "password"
 
@@ -38,8 +38,8 @@ class SpecContext(bucketName: String) {
 
 trait CouchbaseSupport {
   implicit val actorSystem: ActorSystem = ActorSystem()
-  protected val querySpecContext = new SpecContext(CouchbaseSupport.queryBucket)
-  protected val specContext = new SpecContext(CouchbaseSupport.bucket)
+  protected val queryContext = new SpecContext(CouchbaseSupport.queryBucket)
+  protected val simpleContext = new SpecContext(CouchbaseSupport.bucket)
 
   val jsonId: String = "pekko-couchbase-json"
   val docId: String = "pekko-couchbase-doc"
