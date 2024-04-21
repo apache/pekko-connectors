@@ -20,6 +20,7 @@ package org.apache.pekko.stream.connectors.couchbase3.scaladsl
 import com.couchbase.client.java.{ AsyncCluster, AsyncCollection }
 import com.couchbase.client.java.analytics.{ AnalyticsOptions, AnalyticsResult }
 import com.couchbase.client.java.codec.TypeRef
+import com.couchbase.client.java.json.JsonObject
 import com.couchbase.client.java.kv._
 import com.couchbase.client.java.manager.query.{ GetAllQueryIndexesOptions, QueryIndex }
 import com.couchbase.client.java.query.{ QueryOptions, QueryResult }
@@ -28,21 +29,25 @@ import org.apache.pekko.stream.scaladsl.Source
 
 object CouchbaseSource {
 
-  def get(asyncCollection: AsyncCollection, id: String,
-      options: GetOptions = GetOptions.getOptions): Source[GetResult, NotUsed] =
+  def get(id: String, options: GetOptions = GetOptions.getOptions)(
+      implicit asyncCollection: AsyncCollection) =
+    Source.completionStage(asyncCollection.get(id, options))
+
+  def getJson(id: String, options: GetOptions = GetOptions.getOptions)(
+      implicit asyncCollection: AsyncCollection): Source[JsonObject, NotUsed] =
+    get(id, options).map(_.contentAsObject())
+
+  def getClass[T](id: String, target: Class[T], options: GetOptions = GetOptions.getOptions)(
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
+    Source.completionStage(asyncCollection.get(id, options)).map(_.contentAs(target))
+
+  def getType[T](id: String, target: TypeRef[T], options: GetOptions = GetOptions.getOptions)(
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     Source
-      .completionStage(asyncCollection.get(id, options))
+      .completionStage(asyncCollection.get(id, options)).map(_.contentAs(target))
 
-  def get[T](asyncCollection: AsyncCollection, id: String, target: Class[T],
-      options: GetOptions = GetOptions.getOptions): Source[T, NotUsed] =
-    get(asyncCollection, id, options).map(_.contentAs(target))
-
-  def get[T](asyncCollection: AsyncCollection, id: String, target: TypeRef[T],
-      options: GetOptions = GetOptions.getOptions): Source[T, NotUsed] =
-    get(asyncCollection, id, options).map(_.contentAs(target))
-
-  def getAllReplicas(asyncCollection: AsyncCollection, id: String,
-      options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions): Source[GetReplicaResult, NotUsed] =
+  def getAllReplicas(id: String, options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
+      implicit asyncCollection: AsyncCollection): Source[GetReplicaResult, NotUsed] =
     Source
       .completionStage(asyncCollection.getAllReplicas(id, options))
       .flatMapConcat { res =>
@@ -50,67 +55,72 @@ object CouchbaseSource {
           .flatMapConcat(Source.completionStage)
       }
 
-  def getAllReplicas[T](asyncCollection: AsyncCollection, id: String, target: Class[T],
-      options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions): Source[T, NotUsed] =
-    getAllReplicas(asyncCollection, id, options)
+  def getAllReplicasClass[T](id: String, target: Class[T],
+      options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
+    getAllReplicas(id, options)
       .map(_.contentAs(target))
 
-  def getAllReplicas[T](asyncCollection: AsyncCollection, id: String, target: TypeRef[T],
-      options: GetAllReplicasOptions =
-        GetAllReplicasOptions.getAllReplicasOptions): Source[T, NotUsed] =
-    getAllReplicas(asyncCollection, id, options)
+  def getAllReplicasType[T](id: String, target: TypeRef[T],
+      options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
+    getAllReplicas(id, options)
       .map(_.contentAs(target))
 
-  def scan(asyncCollection: AsyncCollection, scanType: ScanType,
-      options: ScanOptions = ScanOptions.scanOptions()): Source[ScanResult, NotUsed] =
+  def scan(scanType: ScanType, options: ScanOptions = ScanOptions.scanOptions())(
+      implicit asyncCollection: AsyncCollection): Source[ScanResult, NotUsed] =
     Source
       .completionStage(asyncCollection.scan(scanType, options))
       .flatMapConcat(res => Source.fromJavaStream(() => res.stream()))
 
-  def scan[T](asyncCollection: AsyncCollection, scanType: ScanType, target: Class[T],
-      options: ScanOptions = ScanOptions.scanOptions()): Source[T, NotUsed] =
-    scan(asyncCollection, scanType, options)
+  def scanClass[T](scanType: ScanType, target: Class[T],
+      options: ScanOptions = ScanOptions.scanOptions())(
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
+    scan(scanType, options)
       .map(_.contentAs(target))
 
-  def scan[T](asyncCollection: AsyncCollection, scanType: ScanType, target: TypeRef[T],
-      options: ScanOptions = ScanOptions.scanOptions()): Source[T, NotUsed] =
-    scan(asyncCollection, scanType, options)
+  def scanType[T](scanType: ScanType, target: TypeRef[T],
+      options: ScanOptions = ScanOptions.scanOptions())(
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
+    scan(scanType, options)
       .map(_.contentAs(target))
 
-  def query(cluster: AsyncCluster, statement: String,
-      options: QueryOptions): Source[QueryResult, NotUsed] = {
+  def query(statement: String,
+      options: QueryOptions = QueryOptions.queryOptions())(
+      implicit cluster: AsyncCluster): Source[QueryResult, NotUsed] = {
     Source
       .completionStage(cluster.query(statement, options))
   }
 
-  def query[T](cluster: AsyncCluster, statement: String, target: Class[T],
-      options: QueryOptions = QueryOptions.queryOptions()): Source[T, NotUsed] =
-    query(cluster, statement, options)
+  def queryClass[T](statement: String, target: Class[T], options: QueryOptions = QueryOptions.queryOptions())(
+      implicit cluster: AsyncCluster): Source[T, NotUsed] =
+    query(statement, options)
       .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
 
-  def query[T](cluster: AsyncCluster, statement: String, target: TypeRef[T],
-      options: QueryOptions = QueryOptions.queryOptions()): Source[T, NotUsed] =
-    query(cluster, statement, options)
+  def queryType[T](statement: String, target: TypeRef[T],
+      options: QueryOptions = QueryOptions.queryOptions())(
+      implicit cluster: AsyncCluster): Source[T, NotUsed] =
+    query(statement, options)
       .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
 
-  def analyticsQuery(
-      cluster: AsyncCluster, statement: String, options: AnalyticsOptions): Source[AnalyticsResult, NotUsed] =
+  def analyticsQuery(statement: String,
+      options: AnalyticsOptions = AnalyticsOptions.analyticsOptions())(
+      implicit cluster: AsyncCluster): Source[AnalyticsResult, NotUsed] =
     Source
       .completionStage(cluster.analyticsQuery(statement, options))
 
-  def analyticsQuery[T](cluster: AsyncCluster, statement: String, target: Class[T],
-      options: AnalyticsOptions = AnalyticsOptions.analyticsOptions()): Source[T, NotUsed] =
-    analyticsQuery(cluster, statement, options)
+  def analyticsQueryClass[T](statement: String, target: Class[T], options: AnalyticsOptions)(
+      implicit cluster: AsyncCluster): Source[T, NotUsed] =
+    analyticsQuery(statement, options)
       .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
 
-  def analyticsQuery[T](cluster: AsyncCluster, statement: String, target: TypeRef[T],
-      options: AnalyticsOptions = AnalyticsOptions.analyticsOptions()): Source[T, NotUsed] =
-    analyticsQuery(cluster, statement, options)
+  def analyticsQueryType[T](statement: String, target: TypeRef[T],
+      options: AnalyticsOptions)(implicit cluster: AsyncCluster): Source[T, NotUsed] =
+    analyticsQuery(statement, options)
       .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
 
-  def queryAllIndex(asyncCollection: AsyncCollection,
-      options: GetAllQueryIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions)
-      : Source[QueryIndex, NotUsed] =
+  def queryAllIndex(options: GetAllQueryIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions)(
+      implicit asyncCollection: AsyncCollection): Source[QueryIndex, NotUsed] =
     Source
       .completionStage(asyncCollection.queryIndexes().getAllIndexes(options))
       .flatMapConcat(list => Source.fromJavaStream(() => list.stream()))

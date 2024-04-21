@@ -26,40 +26,44 @@ import scala.concurrent.Future
 
 object CouchbaseSink {
 
-  def insert(asyncCollection: AsyncCollection,
-      insertOptions: InsertOptions = InsertOptions.insertOptions()): Sink[MutationDocument[Nothing], Future[Done]] = {
-    CouchbaseFlow.insert(asyncCollection, insertOptions).toMat(Sink.ignore)(Keep.right)
+  def insertDoc[T](insertOptions: InsertOptions = InsertOptions.insertOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] = {
+    CouchbaseFlow.insertDoc[T](insertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def insert[T](asyncCollection: AsyncCollection, applyId: T => String,
-      insertOptions: InsertOptions = InsertOptions.insertOptions()): Sink[T, Future[Done]] = {
-    CouchbaseFlow.insert(asyncCollection, applyId, insertOptions).toMat(Sink.ignore)(Keep.right)
+  def insert[T](applyId: T => String,
+      insertOptions: InsertOptions = InsertOptions.insertOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
+    CouchbaseFlow.insert[T](applyId, insertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def upsert(asyncCollection: AsyncCollection,
-      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions()): Sink[MutationDocument[Nothing], Future[Done]] = {
-    CouchbaseFlow.upsert(asyncCollection, upsertOptions).toMat(Sink.ignore)(Keep.right)
+  def upsertDoc[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] = {
+    CouchbaseFlow.upsertDoc[T](upsertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def upsert[T](asyncCollection: AsyncCollection, applyId: T => String,
-      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions()): Sink[T, Future[Done]] = {
-    CouchbaseFlow.upsert(asyncCollection, applyId, upsertOptions).toMat(Sink.ignore)(Keep.right)
+  def upsert[T](applyId: T => String,
+      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
+    CouchbaseFlow.upsert[T](applyId, upsertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def replace(asyncCollection: AsyncCollection,
-      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())
-      : Sink[MutationDocument[Nothing], Future[Done]] = {
-    CouchbaseFlow.replace(asyncCollection, replaceOptions).toMat(Sink.ignore)(Keep.right)
+  def replaceDoc[T](
+      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] = {
+    CouchbaseFlow.replaceDoc[T](replaceOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def replace[T](asyncCollection: AsyncCollection, applyId: T => String,
-      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions()): Sink[T, Future[Done]] = {
-    CouchbaseFlow.replace(asyncCollection, applyId, replaceOptions).toMat(Sink.ignore)(Keep.right)
+  def replace[T](applyId: T => String,
+      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
+    CouchbaseFlow.replace[T](applyId, replaceOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def remove(asyncCollection: AsyncCollection,
-      removeOptions: RemoveOptions = RemoveOptions.removeOptions()): Sink[String, Future[Done]] = {
-    CouchbaseFlow.remove(asyncCollection, removeOptions).toMat(Sink.ignore)(Keep.right)
+  def remove(
+      removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[String, Future[Done]] = {
+    CouchbaseFlow.remove(removeOptions).toMat(Sink.ignore)(Keep.right)
   }
 
 }
