@@ -346,7 +346,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.kudu" % "kudu-client-tools" % KuduVersion,
       "org.apache.kudu" % "kudu-client" % KuduVersion % Test,
-      "org.apache.logging.log4j" % "log4j-to-slf4j" % Log4jVersion % Test))
+      "org.apache.logging.log4j" % "log4j-to-slf4j" % Log4jVersion % Test,
+      "ch.qos.logback" % "logback-classic" % LogbackVersion % Test))
 
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
