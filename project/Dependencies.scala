@@ -45,6 +45,7 @@ object Dependencies {
   val Slf4jLegacyVersion = "1.7.36"
   val LogbackVersion = "1.3.14"
   val LogbackLegacyVersion = "1.2.13"
+  val Log4jVersion = "2.23.1"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -193,7 +194,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.23.1" % Test,
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % Log4jVersion % Test,
         "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
         "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
@@ -343,7 +344,8 @@ object Dependencies {
   val KuduVersion = "1.17.0"
   val Kudu = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.kudu" % "kudu-client" % KuduVersion))
+      "org.apache.kudu" % "kudu-client" % KuduVersion
+      "org.apache.logging.log4j" % "log4j-slf4j2-impl" % Log4jVersion % Test))
 
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
