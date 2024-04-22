@@ -231,32 +231,23 @@ services:
       done
       
       couchbase-cli cluster-init -c couchbase
-      --cluster-username Administrator --cluster-password password
+      --cluster-username Administrator
+      --cluster-password password
       --cluster-ramsize 300
       --cluster-index-ramsize 256
+      --cluster-fts-ramsize 256
+      --cluster-query-ramsize 256
       --services data,index,query,fts
       
       couchbase-cli bucket-create -c couchbase
       -u Administrator -p password
       --bucket pekko
       --bucket-type couchbase
-      --bucket-ramsize 100
-      --bucket-replica 1
-      --wait
-      
-      couchbase-cli bucket-create -c couchbase
-      -u Administrator -p password
-      --bucket pekkoquery
-      --bucket-type couchbase
-      --bucket-ramsize 100
+      --bucket-ramsize 160
       --bucket-replica 1
       --wait
       
       sleep 2 # just wait a tiny bit more after creating the bucket
-      
-      echo 'CREATE PRIMARY INDEX ON pekkoquery USING GSI;'
-      
-      cbq -c Administrator:password -e http://couchbase:8093
       "
 
 volumes:

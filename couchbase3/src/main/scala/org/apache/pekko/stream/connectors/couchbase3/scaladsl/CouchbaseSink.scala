@@ -18,10 +18,11 @@
 package org.apache.pekko.stream.connectors.couchbase3.scaladsl
 
 import com.couchbase.client.java.AsyncCollection
-import com.couchbase.client.java.kv.{ InsertOptions, RemoveOptions, ReplaceOptions, UpsertOptions }
+import com.couchbase.client.java.kv.{ ExistsOptions, InsertOptions, RemoveOptions, ReplaceOptions, UpsertOptions }
 import org.apache.pekko.stream.connectors.couchbase3.MutationDocument
 import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
 import org.apache.pekko.Done
+
 import scala.concurrent.Future
 
 object CouchbaseSink {
@@ -60,10 +61,14 @@ object CouchbaseSink {
     CouchbaseFlow.replace[T](applyId, replaceOptions).toMat(Sink.ignore)(Keep.right)
   }
 
-  def remove(
+  def remove[T](applyId: T => String,
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[String, Future[Done]] = {
-    CouchbaseFlow.remove(removeOptions).toMat(Sink.ignore)(Keep.right)
+      implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
+    CouchbaseFlow.remove(applyId, removeOptions).toMat(Sink.ignore)(Keep.right)
   }
+
+  def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+      implicit asyncCollection: AsyncCollection): Sink[T, Future[Boolean]] =
+    CouchbaseFlow.exists(applyId, existsOptions).toMat(Sink.head)(Keep.right)
 
 }

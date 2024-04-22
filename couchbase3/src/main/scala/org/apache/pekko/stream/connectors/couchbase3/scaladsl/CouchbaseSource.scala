@@ -17,13 +17,13 @@
 
 package org.apache.pekko.stream.connectors.couchbase3.scaladsl
 
-import com.couchbase.client.java.{ AsyncCluster, AsyncCollection }
-import com.couchbase.client.java.analytics.{ AnalyticsOptions, AnalyticsResult }
+import com.couchbase.client.java.{AsyncCollection, AsyncScope}
+import com.couchbase.client.java.analytics.{AnalyticsOptions, AnalyticsResult}
 import com.couchbase.client.java.codec.TypeRef
 import com.couchbase.client.java.json.JsonObject
 import com.couchbase.client.java.kv._
-import com.couchbase.client.java.manager.query.{ GetAllQueryIndexesOptions, QueryIndex }
-import com.couchbase.client.java.query.{ QueryOptions, QueryResult }
+import com.couchbase.client.java.manager.query.{GetAllQueryIndexesOptions, QueryIndex}
+import com.couchbase.client.java.query.{QueryOptions, QueryResult}
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.scaladsl.Source
 
@@ -37,14 +37,14 @@ object CouchbaseSource {
       implicit asyncCollection: AsyncCollection): Source[JsonObject, NotUsed] =
     get(id, options).map(_.contentAsObject())
 
-  def getClass[T](id: String, target: Class[T], options: GetOptions = GetOptions.getOptions)(
+  def getObject[T](id: String, target: Class[T], options: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
-    Source.completionStage(asyncCollection.get(id, options)).map(_.contentAs(target))
+    get(id, options).map(_.contentAs(target))
 
   def getType[T](id: String, target: TypeRef[T], options: GetOptions = GetOptions.getOptions)(
-      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
-    Source
-      .completionStage(asyncCollection.get(id, options)).map(_.contentAs(target))
+      implicit asyncCollection: AsyncCollection): Source[T, NotUsed] = {
+    get(id, options).map(_.contentAs(target))
+  }
 
   def getAllReplicas(id: String, options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
       implicit asyncCollection: AsyncCollection): Source[GetReplicaResult, NotUsed] =
@@ -55,7 +55,7 @@ object CouchbaseSource {
           .flatMapConcat(Source.completionStage)
       }
 
-  def getAllReplicasClass[T](id: String, target: Class[T],
+  def getAllReplicasObject[T](id: String, target: Class[T],
       options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     getAllReplicas(id, options)
@@ -73,7 +73,12 @@ object CouchbaseSource {
       .completionStage(asyncCollection.scan(scanType, options))
       .flatMapConcat(res => Source.fromJavaStream(() => res.stream()))
 
-  def scanClass[T](scanType: ScanType, target: Class[T],
+  def scanJson(scanType: ScanType, options: ScanOptions = ScanOptions.scanOptions())(
+      implicit asyncCollection: AsyncCollection): Source[JsonObject, NotUsed] =
+    scan(scanType, options)
+      .map(_.contentAsObject())
+
+  def scanObject[T](scanType: ScanType, target: Class[T],
       options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     scan(scanType, options)
@@ -85,39 +90,75 @@ object CouchbaseSource {
     scan(scanType, options)
       .map(_.contentAs(target))
 
-  def query(statement: String,
-      options: QueryOptions = QueryOptions.queryOptions())(
-      implicit cluster: AsyncCluster): Source[QueryResult, NotUsed] = {
+  /**
+   * N1QL query in a Scope.
+   *
+   * QueryResult contains List<Row>, every Row is a json like
+   * <pre>
+   *   {
+   *     "collectionName": Document
+   *   }
+   * </pre>
+   */
+  def query(statement: String, options: QueryOptions = QueryOptions.queryOptions())(
+      implicit scope: AsyncScope): Source[QueryResult, NotUsed] = {
     Source
-      .completionStage(cluster.query(statement, options))
+      .completionStage(scope.query(statement, options))
   }
 
-  def queryClass[T](statement: String, target: Class[T], options: QueryOptions = QueryOptions.queryOptions())(
-      implicit cluster: AsyncCluster): Source[T, NotUsed] =
-    query(statement, options)
-      .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
-
-  def queryType[T](statement: String, target: TypeRef[T],
+  /**
+   * N1QL query in a Scope.
+   * @param statement N1QL query sql
+   * @see
+   */
+  def queryJson(
+      statement: String,
       options: QueryOptions = QueryOptions.queryOptions())(
-      implicit cluster: AsyncCluster): Source[T, NotUsed] =
+      implicit scope: AsyncScope): Source[JsonObject, NotUsed] = {
     query(statement, options)
-      .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
+      .flatMapConcat { res =>
+        Source.fromJavaStream(() =>
+          res.rowsAsObject().stream.flatMap { json =>
+            json.getNames.stream().map(collection => json.getObject(collection))
+          })
+      }
+  }
 
+  /**
+   * Performs an Analytics query , QueryResult contains List<Row>
+   * <P>
+   * val rows: List[JsonObject] = QueryResult.rowsAsObject, every Row is a json with CollectionName key
+   * <pre>
+   *    {
+   *      "collectionName": Document
+   *    }
+   * </pre>
+   *
+   * @param statement Analytics query sql
+   * warning: couchbase-community not support analyticsQuery,we not test this api
+   */
   def analyticsQuery(statement: String,
       options: AnalyticsOptions = AnalyticsOptions.analyticsOptions())(
-      implicit cluster: AsyncCluster): Source[AnalyticsResult, NotUsed] =
+      implicit scope: AsyncScope): Source[AnalyticsResult, NotUsed] =
     Source
-      .completionStage(cluster.analyticsQuery(statement, options))
+      .completionStage(scope.analyticsQuery(statement, options))
 
-  def analyticsQueryClass[T](statement: String, target: Class[T], options: AnalyticsOptions)(
-      implicit cluster: AsyncCluster): Source[T, NotUsed] =
+  /**
+   * Performs an Analytics query and convert document row to jsonObject
+   * warning: different with analyticsQuery, jsonObject not has the collection Key
+   * warning: couchbase-community not support analyticsQuery,we not test this api
+   * @see [[org.apache.pekko.stream.connectors.couchbase3.scaladsl.CouchbaseSource#analyticsQuery]]
+   */
+  def analyticsQueryJson(statement: String,
+      options: AnalyticsOptions = AnalyticsOptions.analyticsOptions())(
+      implicit scope: AsyncScope): Source[JsonObject, NotUsed] =
     analyticsQuery(statement, options)
-      .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
-
-  def analyticsQueryType[T](statement: String, target: TypeRef[T],
-      options: AnalyticsOptions)(implicit cluster: AsyncCluster): Source[T, NotUsed] =
-    analyticsQuery(statement, options)
-      .flatMapConcat(res => Source.fromJavaStream(() => res.rowsAs(target).stream()))
+      .flatMapConcat { res =>
+        Source.fromJavaStream(() =>
+          res.rowsAsObject().stream().flatMap { json =>
+            json.getNames.stream().map(collection => json.getObject(collection))
+          })
+      }
 
   def queryAllIndex(options: GetAllQueryIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions)(
       implicit asyncCollection: AsyncCollection): Source[QueryIndex, NotUsed] =

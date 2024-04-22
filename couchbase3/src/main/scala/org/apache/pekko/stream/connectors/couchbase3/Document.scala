@@ -19,16 +19,29 @@ package org.apache.pekko.stream.connectors.couchbase3
 
 import com.couchbase.client.java.kv.MutationResult
 
-case class MutationDocument[T](id: String, content: T, result: Option[MutationResult] = Option.empty) {
+case class MutationDocument[T](id: String, doc: T, result: Option[MutationResult] = Option.empty) {
 
   def withResult(mutationResult: MutationResult) = {
     copy(result = Some(mutationResult))
   }
 }
 
-case class MutationBinaryDocument(id: String, content: Array[Byte], result: Option[MutationResult] = Option.empty) {
+case class MutationBinaryDocument(id: String, doc: Array[Byte], result: Option[MutationResult] = Option.empty) {
 
   def withResult(mutationResult: MutationResult) = {
     copy(result = Some(mutationResult))
   }
 }
+
+/**
+ * couchbase query result is "collectionName": Document
+ * <pre>
+ * {
+ *   "_default": {
+ *     "mockField":"mockValue"
+ *   }
+ * }
+ * </pre>
+ * we use QueryDocument to wrapper class document
+ */
+case class QueryDocument[T](collection: String, doc: T)

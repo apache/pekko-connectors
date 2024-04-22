@@ -21,10 +21,10 @@ import com.couchbase.client.java.AsyncCollection
 import com.couchbase.client.java.codec.TypeRef
 import com.couchbase.client.java.kv._
 import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.couchbase3.{MutationBinaryDocument, MutationDocument}
-import org.apache.pekko.stream.scaladsl.{Flow, Source}
+import org.apache.pekko.stream.connectors.couchbase3.{ MutationBinaryDocument, MutationDocument }
+import org.apache.pekko.stream.scaladsl.{ Flow, Source }
 
-import java.time.Duration
+import java.time.{ Duration, Instant }
 
 object CouchbaseFlow {
 
@@ -32,10 +32,10 @@ object CouchbaseFlow {
       implicit asyncCollection: AsyncCollection): Flow[String, GetResult, NotUsed] =
     Flow[String].flatMapConcat(CouchbaseSource.get(_, getOptions))
 
-  def getClass[T](target: Class[T], getOptions: GetOptions = GetOptions.getOptions)(
+  def getObject[T](target: Class[T], getOptions: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Flow[String, T, NotUsed] =
     Flow[String]
-      .flatMapConcat(CouchbaseSource.getClass(_, target, getOptions))
+      .flatMapConcat(CouchbaseSource.getObject(_, target, getOptions))
 
   def getType[T](target: TypeRef[T], getOptions: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Flow[String, T, NotUsed] =
@@ -47,11 +47,11 @@ object CouchbaseFlow {
     Flow[String]
       .flatMapConcat(CouchbaseSource.getAllReplicas(_, getOptions))
 
-  def getAllReplicasClass[T](target: Class[T],
+  def getAllReplicasObject[T](target: Class[T],
       getOptions: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
       implicit asyncCollection: AsyncCollection): Flow[String, T, NotUsed] =
     Flow[String]
-      .flatMapConcat(CouchbaseSource.getAllReplicasClass(_, target, getOptions))
+      .flatMapConcat(CouchbaseSource.getAllReplicasObject(_, target, getOptions))
 
   def getAllReplicasType[T](target: TypeRef[T],
       getOptions: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
@@ -73,7 +73,7 @@ object CouchbaseFlow {
       implicit asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
     Flow[MutationDocument[T]]
       .flatMapConcat { doc =>
-        Source.completionStage(asyncCollection.insert(doc.id, doc.content, insertOptions))
+        Source.completionStage(asyncCollection.insert(doc.id, doc.doc, insertOptions))
           .map(doc.withResult)
       }
 
@@ -90,7 +90,7 @@ object CouchbaseFlow {
       implicit asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
     Flow[MutationDocument[T]]
       .flatMapConcat { doc =>
-        Source.completionStage(asyncCollection.replace(doc.id, doc.content, replaceOptions))
+        Source.completionStage(asyncCollection.replace(doc.id, doc.doc, replaceOptions))
           .map(doc.withResult)
       }
 
@@ -108,77 +108,101 @@ object CouchbaseFlow {
       implicit asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
     Flow[MutationDocument[T]]
       .flatMapConcat { doc =>
-        Source.completionStage(asyncCollection.upsert(doc.id, doc.content, upsertOptions))
+        Source.completionStage(asyncCollection.upsert(doc.id, doc.doc, upsertOptions))
           .map(doc.withResult)
       }
 
-  def remove(removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[String, String, NotUsed] = {
-    Flow[String]
-      .flatMapConcat { id =>
+  def remove[T](
+      applyId: T => String,
+      removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    Flow[T]
+      .flatMapConcat { doc =>
         Source
-          .completionStage(asyncCollection.remove(id, removeOptions))
-          .map(_ => id)
+          .completionStage(asyncCollection.remove(applyId(doc), removeOptions))
+          .map(_ => doc)
       }
-  }
 
-  def exists(
+  def exists[T](
+      applyId: T => String,
       existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[String, Boolean, NotUsed] = {
-    Flow[String]
-      .flatMapConcat { id =>
-        Source.completionStage(asyncCollection.exists(id, existsOptions))
+      implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
+    Flow[T]
+      .flatMapConcat { doc =>
+        Source.completionStage(asyncCollection.exists(applyId(doc), existsOptions))
           .map(_.exists())
       }
-  }
+
+  def touch(expiry: Duration, options: TouchOptions = TouchOptions.touchOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[String, MutationResult, NotUsed] =
+    Flow[String]
+      .flatMapConcat { id =>
+        Source.completionStage(asyncCollection.touch(id, expiry, options))
+      }
+
+  def touchDuration[T](
+      applyId: T => String,
+      expiry: Duration,
+      touchOptions: TouchOptions = TouchOptions.touchOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    Flow[T]
+      .flatMapConcat { doc =>
+        Source.completionStage(asyncCollection.touch(applyId(doc), expiry, touchOptions))
+          .map(_ => doc)
+      }
+
+  def touchInstant[T](
+      applyId: T => String,
+      expiry: Instant,
+      touchOptions: TouchOptions = TouchOptions.touchOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    Flow[T]
+      .flatMapConcat { doc =>
+        Source.completionStage(asyncCollection.touch(applyId(doc), expiry, touchOptions))
+          .map(_ => doc)
+      }
 
   def mutateIn(specs: java.util.List[MutateInSpec], options: MutateInOptions = MutateInOptions.mutateInOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] = {
+      implicit asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
     Flow[String]
       .flatMapConcat { id =>
         Source.completionStage(asyncCollection.mutateIn(id, specs, options))
       }
-  }
-
-  def touch(expiry: Duration, touchOptions: TouchOptions = TouchOptions.touchOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[String, String, NotUsed] = {
+  def mutateInObject[T](specs: java.util.List[MutateInSpec],
+      options: MutateInOptions = MutateInOptions.mutateInOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
     Flow[String]
       .flatMapConcat { id =>
-        Source.completionStage(asyncCollection.touch(id, expiry, touchOptions))
-          .map(_ => id)
+        Source.completionStage(asyncCollection.mutateIn(id, specs, options))
       }
-  }
 
   def append(options: AppendOptions = AppendOptions.appendOptions())(
       implicit asyncCollection: AsyncCollection): Flow[MutationBinaryDocument, MutationResult, NotUsed] =
     Flow[MutationBinaryDocument]
       .flatMapConcat { doc =>
-        Source.completionStage(asyncCollection.binary().append(doc.id, doc.content, options))
+        Source.completionStage(asyncCollection.binary().append(doc.id, doc.doc, options))
       }
 
   def prepend(options: PrependOptions = PrependOptions.prependOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[MutationBinaryDocument, MutationResult, NotUsed] = {
+      implicit asyncCollection: AsyncCollection): Flow[MutationBinaryDocument, MutationResult, NotUsed] =
     Flow[MutationBinaryDocument]
       .flatMapConcat { doc =>
-        Source.completionStage(asyncCollection.binary().prepend(doc.id, doc.content, options))
+        Source.completionStage(asyncCollection.binary().prepend(doc.id, doc.doc, options))
 
       }
-  }
 
   def increment(options: IncrementOptions = IncrementOptions.incrementOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] = {
+      implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =
     Flow[String]
       .flatMapConcat { id =>
         Source.completionStage(asyncCollection.binary().increment(id, options))
       }
-  }
 
   def decrement(options: DecrementOptions)(
-      implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] = {
+      implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =
     Flow[String]
       .flatMapConcat { id =>
         Source.completionStage(asyncCollection.binary().decrement(id, options))
       }
-  }
 
 }
