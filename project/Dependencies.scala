@@ -418,9 +418,9 @@ object Dependencies {
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.3.0" % Test,
-      "com.github.tomakehurst" % "ock-jre8" % "2.35.2" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
+      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test)) ++
+    wireMockDependencies
 
   val SpringWeb = {
     val SpringVersion = "5.3.34"
