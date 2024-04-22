@@ -65,6 +65,39 @@ object Dependencies {
   val GoogleAuthVersion = "1.23.0"
   val JwtScalaVersion = "10.0.0"
 
+  // Releases https://github.com/FasterXML/jackson-databind/releases
+  // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
+  // This should align with the Jackson minor version used in Pekko 1.1.x
+  // https://github.com/apache/pekko/blob/main/project/Dependencies.scala
+  val JacksonVersion = "2.16.2"
+  val JacksonDatabindDependencies = Seq(
+    "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
+    "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
+
+  // wiremock has very outdated, CVE vulnerable dependencies
+  private val jettyVersion = "9.4.54.v20240208"
+  private val guavaVersion = "33.1.0-jre"
+  private val wireMockDependencies = Seq(
+    "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
+    "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-proxy" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-alpn-server" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-alpn-java-server" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-alpn-openjdk8-server" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-alpn-java-client" % jettyVersion % Test,
+    "org.eclipse.jetty" % "jetty-alpn-openjdk8-client" % jettyVersion % Test,
+    "org.eclipse.jetty.http2" % "http2-server" % jettyVersion % Test,
+    "com.google.guava" % "guava" % guavaVersion % Test,
+    "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion % Test,
+    "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion % Test,
+    "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
+    "commons-io" % "commons-io" % "2.16.1" % Test,
+    "commons-fileupload" % "commons-fileupload" % "1.5" % Test,
+    "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
+
   val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
     libraryDependencies ++= Seq(
@@ -87,15 +120,6 @@ object Dependencies {
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
     "org.scalatestplus" %% "mockito-4-11" % scalaTestMockitoVersion % Test)
-
-  // Releases https://github.com/FasterXML/jackson-databind/releases
-  // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
-  // This should align with the Jackson minor version used in Pekko 1.0.x
-  // https://github.com/apache/pekko/blob/main/project/Dependencies.scala
-  val JacksonDatabindVersion = "2.16.2"
-  val JacksonDatabindDependencies = Seq(
-    "com.fasterxml.jackson.core" % "jackson-core" % JacksonDatabindVersion,
-    "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion)
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
@@ -130,8 +154,8 @@ object Dependencies {
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
-      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion % Test,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonDatabindVersion % Test))
+      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
@@ -191,8 +215,8 @@ object Dependencies {
       Seq("geode-core", "geode-cq")
         .map("org.apache.geode" % _ % GeodeVersion) ++
       Seq(
-        "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
-        "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonVersion,
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
         "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.23.1" % Test,
         "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
         "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ JacksonDatabindDependencies ++
@@ -216,8 +240,8 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-jackson" % PekkoHttpVersion % Provided,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "io.spray" %% "spray-json" % "1.3.6",
-      "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonDatabindVersion,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion % Test,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion % Test,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val ArrowVersion = "16.0.0"
@@ -242,8 +266,8 @@ object Dependencies {
   val GooglePubSub = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
-      "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test) ++ Mockito)
+      "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion) ++
+    Mockito ++ wireMockDependencies)
 
   val GooglePubSubGrpc = Seq(
     // see Pekko gRPC version in plugins.sbt
@@ -394,9 +418,9 @@ object Dependencies {
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.3.0" % Test,
-      "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
+      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++
+    wireMockDependencies)
 
   val SpringWeb = {
     val SpringVersion = "5.3.34"
