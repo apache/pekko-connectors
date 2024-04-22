@@ -97,7 +97,7 @@ object Dependencies {
     "commons-io" % "commons-io" % "2.16.1" % Test,
     "commons-fileupload" % "commons-fileupload" % "1.5" % Test,
     "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
-  
+
   val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
     libraryDependencies ++= Seq(
@@ -267,7 +267,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion) ++
-      Mockito ++ wireMockDependencies)
+    Mockito ++ wireMockDependencies)
 
   val GooglePubSubGrpc = Seq(
     // see Pekko gRPC version in plugins.sbt
