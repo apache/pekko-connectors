@@ -31,6 +31,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import java.time.Duration
 import java.util.Collections
+import scala.collection.immutable.Seq
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.util.Random
@@ -55,8 +56,8 @@ class CouchbaseFlowSpec extends AnyWordSpec
   }
 
   "insert-get-remove document" in assertAllStagesStopped {
-    val data = Seq(document.copy(id = s"$docId-1"), document.copy(id = s"$docId-2"))
-    // insert get, because we add one,we need clear it
+    val data = Seq[Document](document.copy(id = s"$docId-1"), document.copy(id = s"$docId-2"))
+    // insert => get => remove, because we add one,we need clear it
     val insertFlow = CouchbaseFlow.insert[Document](_.id)
     val getFlow = CouchbaseFlow.getObject(classOf[Document])
     val removeFlow = CouchbaseFlow.remove[Document](_.id)
@@ -73,8 +74,8 @@ class CouchbaseFlowSpec extends AnyWordSpec
   "upsert-get document" in assertAllStagesStopped {
     val upsertDocument = document.copy(value = document.value + "-upsert")
     val upsertFlow = CouchbaseFlow.upsert[Document](_.id)
-    val getFlow = CouchbaseFlow.getObject(classOf[Document])
-    val upsertFuture = Source.single(upsertDocument)
+    val getFlow = CouchbaseFlow.getObject[Document](classOf[Document])
+    val upsertFuture = Source.single[Document](upsertDocument)
       .via(upsertFlow)
       .map(_.id)
       .via(getFlow)
