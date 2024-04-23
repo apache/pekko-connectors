@@ -13,8 +13,9 @@
 
 package org.apache.pekko.stream.connectors.kudu
 
+import org.apache.kudu.client.AsyncKuduClient.EncryptionPolicy
 import org.apache.pekko
-import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
+import pekko.actor.{ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider}
 import org.apache.kudu.client.KuduClient
 
 /**
@@ -23,9 +24,10 @@ import org.apache.kudu.client.KuduClient
 final class KuduClientExt private (sys: ExtendedActorSystem) extends Extension {
   val client = {
     val masterAddress = sys.settings.config.getString("pekko.connectors.kudu.master-address")
-    new KuduClient.KuduClientBuilder(masterAddress).build
+    new KuduClient.KuduClientBuilder(masterAddress)
+      .encryptionPolicy(EncryptionPolicy.OPTIONAL)
+      .build()
   }
-
   sys.registerOnTermination(client.shutdown())
 }
 
