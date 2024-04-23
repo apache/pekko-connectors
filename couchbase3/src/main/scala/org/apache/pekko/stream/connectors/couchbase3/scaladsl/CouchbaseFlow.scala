@@ -209,9 +209,7 @@ object CouchbaseFlow {
    * use MutationDocument to wrapper id, document and result(MutationResult)
    * @return
    */
-  def mutateInDoc[T](
-      specs: java.util.List[MutateInSpec],
-      options: MutateInOptions = MutateInOptions.mutateInOptions())(
+  def mutateInDoc[T](specs: java.util.List[MutateInSpec], options: MutateInOptions = MutateInOptions.mutateInOptions())(
       implicit asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
     Flow[MutationDocument[T]]
       .flatMapConcat { doc =>
@@ -224,9 +222,7 @@ object CouchbaseFlow {
    * @param applyId parse id function, which is the document id, id streams can use `exists[String](e => e)`
    * @see [[com.couchbase.client.java.AsyncCollection#exists]]
    */
-  def exists[T](
-      applyId: T => String,
-      existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+  def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
     Flow[T]
       .flatMapConcat { doc =>
@@ -249,9 +245,7 @@ object CouchbaseFlow {
    * Updates the expiry of the document with the given id with custom options.
    * @param applyId parse id function, which is the document id
    */
-  def touchDuration[T](
-      applyId: T => String,
-      expiry: Duration,
+  def touchDuration[T](applyId: T => String, expiry: Duration,
       touchOptions: TouchOptions = TouchOptions.touchOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     Flow[T]
@@ -264,9 +258,7 @@ object CouchbaseFlow {
    * Updates the expiry of the document with the given id with custom options.
    * @see [[com.couchbase.client.java.AsyncCollection#touch]]
    */
-  def touchInstant[T](
-      applyId: T => String,
-      expiry: Instant,
+  def touchInstant[T](applyId: T => String, expiry: Instant,
       touchOptions: TouchOptions = TouchOptions.touchOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     Flow[T]
@@ -313,7 +305,7 @@ object CouchbaseFlow {
    * Decrements the counter document by one or the number defined in the options.
    * @see [[com.couchbase.client.java.AsyncBinaryCollection#decrement]]
    */
-  def decrement(options: DecrementOptions)(
+  def decrement(options: DecrementOptions = DecrementOptions.decrementOptions())(
       implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =
     Flow[String]
       .flatMapConcat { id =>

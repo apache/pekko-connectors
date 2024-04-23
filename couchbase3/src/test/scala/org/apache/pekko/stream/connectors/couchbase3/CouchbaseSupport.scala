@@ -10,6 +10,8 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.stream.connectors.couchbase3.CouchbaseSupport.bucketName
 
+import scala.collection.mutable
+
 object CouchbaseSupport {
 
   private val connectionString = "localhost"
@@ -56,6 +58,8 @@ trait CouchbaseSupport {
   val idSet = Seq(jsonId, docId, typeId, binaryId)
   val dataSet = Set(jsonObject, document, typeDocument, binaryDocument)
 
+  val registerBeClear = mutable.Set[String]()
+
   def mockData(specContext: SpecContext): Unit = {
     idSet.zip(dataSet).foreach { e =>
       specContext.mock.insert(e._1, e._2)
@@ -66,6 +70,13 @@ trait CouchbaseSupport {
   def clearData(specContext: SpecContext): Unit = {
     idSet.foreach(specContext.mock.remove)
     simpleContext.mock.queryIndexes().dropPrimaryIndex()
+    for (elem <- registerBeClear) {
+      try {
+        specContext.mock.remove(elem)
+      } catch {
+        case _: Throwable => // nothing
+      }
+    }
   }
 }
 

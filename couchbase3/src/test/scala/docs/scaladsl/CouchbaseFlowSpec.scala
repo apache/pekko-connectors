@@ -1,6 +1,7 @@
 package docs.scaladsl
 
-import com.couchbase.client.java.kv.{ MutateInSpec, ReplaceOptions }
+import com.couchbase.client.java.kv.{ DecrementOptions, IncrementOptions, MutateInSpec, ReplaceOptions }
+import com.couchbase.client.java.AsyncCollection
 import org.apache.pekko.stream.connectors.couchbase3.{ CouchbaseSupport, Document }
 import org.apache.pekko.stream.connectors.couchbase3.scaladsl.{ CouchbaseFlow, CouchbaseSink, CouchbaseSource }
 import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
@@ -15,6 +16,7 @@ import java.time.Duration
 import java.util.Collections
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
+import scala.util.Random
 
 class CouchbaseFlowSpec extends AnyWordSpec
     with CouchbaseSupport
@@ -25,7 +27,7 @@ class CouchbaseFlowSpec extends AnyWordSpec
     with Inspectors
     with LogCapturing {
 
-  implicit val collection = simpleContext.collection
+  private implicit val collection: AsyncCollection = simpleContext.collection
 
   override protected def beforeAll(): Unit = {
     mockData(simpleContext)
@@ -118,6 +120,28 @@ class CouchbaseFlowSpec extends AnyWordSpec
     Await.result(mutateFuture, 10.seconds)
     val future = CouchbaseSource.getJson(jsonId).runWith(Sink.head)
     future.futureValue.getString("mutate") shouldBe "mutate"
+  }
+
+  "increment and decrement on Number document" in assertAllStagesStopped {
+    val id = Random.nextString(10)
+    registerBeClear.add(id)
+    val value: Long = 0
+    val increment = 10
+    val insertNum = Source.single(value).runWith(CouchbaseSink.insert[Long](_ => id))
+    Await.result(insertNum, 10.seconds)
+    val incrementFlow = CouchbaseFlow.increment(IncrementOptions.incrementOptions().delta(increment))
+    val incrementFuture = Source.single(id)
+      .via(incrementFlow)
+      .runWith(Sink.head)
+
+    incrementFuture.futureValue.content() shouldBe (value + increment)
+    val decrement: Long = 5
+    val decrementFlow = CouchbaseFlow.decrement(DecrementOptions.decrementOptions().delta(decrement))
+    val decrementFuture = Source.single(id)
+      .via(decrementFlow)
+      .runWith(Sink.head)
+
+    decrementFuture.futureValue.content() shouldBe (value + increment - decrement)
   }
 
 }
