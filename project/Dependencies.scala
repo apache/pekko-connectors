@@ -64,6 +64,7 @@ object Dependencies {
 
   val GoogleAuthVersion = "1.23.0"
   val JwtScalaVersion = "10.0.0"
+  val Log4jVersion = "2.23.1"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
@@ -364,14 +365,11 @@ object Dependencies {
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
 
-  val KuduVersion = "1.10.1"
+  val KuduVersion = "1.17.0"
   val Kudu = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.kudu" % "kudu-client-tools" % KuduVersion,
-      "org.apache.kudu" % "kudu-client" % KuduVersion % Test),
-    dependencyOverrides ++= Seq(
-      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
+      "org.apache.kudu" % "kudu-client" % KuduVersion,
+      "org.apache.logging.log4j" % "log4j-to-slf4j" % Log4jVersion % Test))
 
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
