@@ -25,8 +25,9 @@ final class KuduClientExt private (sys: ExtendedActorSystem) extends Extension {
   val client = {
     val masterAddress = sys.settings.config.getString("pekko.connectors.kudu.master-address")
     new KuduClient.KuduClientBuilder(masterAddress)
-      .encryptionPolicy(EncryptionPolicy.OPTIONAL)
-      .build()
+      .encryptionPolicy(EncryptionPolicy.valueOf(
+        sys.settings.config.getString("pekko.connectors.kudu.encryptionPolicy"))
+      ).build()
   }
   sys.registerOnTermination(client.shutdown())
 }
