@@ -164,8 +164,8 @@ object Dependencies {
       "com.couchbase.client" % "java-client" % Couchbase3Version,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
-      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonDatabindVersion % Test,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonDatabindVersion % Test))
+      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
