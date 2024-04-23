@@ -40,7 +40,7 @@ class CouchbaseSessionExamplesSpec
   override def beforeAll(): Unit = super.beforeAll()
   override def afterAll(): Unit = super.afterAll()
 
-  "a Couchbase session" should {
+  "a Couchbasesession" should {
     "be managed by the registry" in {
       // #registry
       import com.couchbase.client.java.env.{ CouchbaseEnvironment, DefaultCouchbaseEnvironment }

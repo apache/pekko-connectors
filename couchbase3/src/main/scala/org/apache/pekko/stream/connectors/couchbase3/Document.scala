@@ -32,16 +32,3 @@ case class MutationBinaryDocument(id: String, doc: Array[Byte], result: Option[M
     copy(result = Some(mutationResult))
   }
 }
-
-/**
- * couchbase query result is "collectionName": Document
- * <pre>
- * {
- *   "_default": {
- *     "mockField":"mockValue"
- *   }
- * }
- * </pre>
- * we use QueryDocument to wrapper class document
- */
-case class QueryDocument[T](collection: String, doc: T)
