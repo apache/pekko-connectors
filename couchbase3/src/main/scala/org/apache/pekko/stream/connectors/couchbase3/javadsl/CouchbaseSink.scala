@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package org.apache.pekko.stream.connectors.couchbase3.scaladsl
+package org.apache.pekko.stream.connectors.couchbase3.javadsl
 
 import com.couchbase.client.java.AsyncCollection
-import com.couchbase.client.java.kv.{ ExistsOptions, InsertOptions, RemoveOptions, ReplaceOptions, UpsertOptions }
+import com.couchbase.client.java.kv._
 import org.apache.pekko.stream.connectors.couchbase3.MutationDocument
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink }
 import org.apache.pekko.Done
+import org.apache.pekko.stream.connectors.couchbase3.scaladsl.{ CouchbaseSink => ScalaCouchbaseSink }
+import org.apache.pekko.stream.javadsl.Sink
 
 import scala.concurrent.Future
 
@@ -30,24 +31,24 @@ object CouchbaseSink {
   /**
    * reference to [[CouchbaseFlow.insertDoc]]
    */
-  def insertDoc[T](insertOptions: InsertOptions = InsertOptions.insertOptions())(
+  def insertDoc[T](insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] =
-    CouchbaseFlow.insertDoc[T](insertOptions).toMat(Sink.ignore)(Keep.right)
+    ScalaCouchbaseSink.insertDoc[T](insertOptions).asJava
 
   /**
    * reference to [[CouchbaseFlow.upsertDoc]]
    */
   def insert[T](applyId: T => String,
-      insertOptions: InsertOptions = InsertOptions.insertOptions())(
+      insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
-    CouchbaseFlow.insert[T](applyId, insertOptions).toMat(Sink.ignore)(Keep.right)
+    ScalaCouchbaseSink.insert[T](applyId, insertOptions).asJava
 
   /**
    * reference to [[CouchbaseFlow.upsertDoc]]
    */
   def upsertDoc[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] =
-    CouchbaseFlow.upsertDoc[T](upsertOptions).toMat(Sink.ignore)(Keep.right)
+    ScalaCouchbaseSink.upsertDoc[T](upsertOptions).asJava
 
   /**
    * reference to [[CouchbaseFlow.upsert]]
@@ -55,7 +56,7 @@ object CouchbaseSink {
   def upsert[T](applyId: T => String,
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
-    CouchbaseFlow.upsert[T](applyId, upsertOptions).toMat(Sink.ignore)(Keep.right)
+    ScalaCouchbaseSink.upsert[T](applyId, upsertOptions).asJava
 
   /**
    * reference to [[CouchbaseFlow.replaceDoc]]
@@ -63,15 +64,16 @@ object CouchbaseSink {
   def replaceDoc[T](
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] =
-    CouchbaseFlow.replaceDoc[T](replaceOptions).toMat(Sink.ignore)(Keep.right)
+    ScalaCouchbaseSink.replaceDoc[T](replaceOptions).asJava
 
   /**
    * reference to [[CouchbaseFlow.replace]]
    */
   def replace[T](applyId: T => String,
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
-    CouchbaseFlow.replace[T](applyId, replaceOptions).toMat(Sink.ignore)(Keep.right)
+      implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
+    ScalaCouchbaseSink.replace[T](applyId, replaceOptions).asJava
+  }
 
   /**
    * reference to [[CouchbaseFlow.remove]]
@@ -79,13 +81,13 @@ object CouchbaseSink {
   def remove[T](applyId: T => String,
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
-    CouchbaseFlow.remove(applyId, removeOptions).toMat(Sink.ignore)(Keep.right)
+    ScalaCouchbaseSink.remove[T](applyId, removeOptions).asJava
 
   /**
    * reference to [[CouchbaseFlow.exists]]
    */
   def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Boolean]] =
-    CouchbaseFlow.exists(applyId, existsOptions).toMat(Sink.head)(Keep.right)
+    ScalaCouchbaseSink.exists[T](applyId, existsOptions).asJava
 
 }
