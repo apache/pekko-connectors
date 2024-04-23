@@ -166,7 +166,7 @@ object CouchbaseSource {
     query(statement, options)
       .flatMapConcat { res =>
         Source.fromJavaStream(() =>
-          res.rowsAsObject().stream.flatMap[JsonObject] { json: JsonObject =>
+          res.rowsAsObject().stream.flatMap[JsonObject] { json =>
             json.getNames.stream().map(collection => json.getObject(collection))
           })
       }
@@ -204,7 +204,7 @@ object CouchbaseSource {
     analyticsQuery(statement, options)
       .flatMapConcat { res =>
         Source.fromJavaStream(() =>
-          res.rowsAsObject().stream().flatMap[JsonObject] { json: JsonObject =>
+          res.rowsAsObject().stream().flatMap[JsonObject] { json =>
             json.getNames.stream().map(collection => json.getObject(collection))
           })
       }
