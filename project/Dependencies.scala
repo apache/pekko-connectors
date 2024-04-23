@@ -417,7 +417,8 @@ object Dependencies {
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.3.0" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
+      "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++
+    wireMockDependencies)
 
   val SpringWeb = {
     val SpringVersion = "5.3.34"
