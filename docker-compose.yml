@@ -221,6 +221,7 @@ services:
     links:
       - "couchbase"
     entrypoint: ""
+    # when we drop couchbase2, we don't need to create bucket pekkoquery
     command: >
       bash -c 
       "echo 'waiting until couchbase is up'
@@ -242,6 +243,14 @@ services:
       couchbase-cli bucket-create -c couchbase
       -u Administrator -p password
       --bucket pekko
+      --bucket-type couchbase
+      --bucket-ramsize 160
+      --bucket-replica 1
+      --wait
+      
+      couchbase-cli bucket-create -c couchbase
+      -u Administrator -p password
+      --bucket pekkoquery
       --bucket-type couchbase
       --bucket-ramsize 160
       --bucket-replica 1

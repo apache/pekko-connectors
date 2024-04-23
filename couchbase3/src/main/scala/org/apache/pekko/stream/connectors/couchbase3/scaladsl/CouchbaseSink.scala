@@ -27,46 +27,70 @@ import scala.concurrent.Future
 
 object CouchbaseSink {
 
+  /**
+   * reference to [[CouchbaseFlow.insertDoc]]
+   */
   def insertDoc[T](insertOptions: InsertOptions = InsertOptions.insertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] = {
     CouchbaseFlow.insertDoc[T](insertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.upsertDoc]]
+   */
   def insert[T](applyId: T => String,
       insertOptions: InsertOptions = InsertOptions.insertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
     CouchbaseFlow.insert[T](applyId, insertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.upsertDoc]]
+   */
   def upsertDoc[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] = {
     CouchbaseFlow.upsertDoc[T](upsertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.upsert]]
+   */
   def upsert[T](applyId: T => String,
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
     CouchbaseFlow.upsert[T](applyId, upsertOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.replaceDoc]]
+   */
   def replaceDoc[T](
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] = {
     CouchbaseFlow.replaceDoc[T](replaceOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.replace]]
+   */
   def replace[T](applyId: T => String,
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
     CouchbaseFlow.replace[T](applyId, replaceOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.remove]]
+   */
   def remove[T](applyId: T => String,
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] = {
     CouchbaseFlow.remove(applyId, removeOptions).toMat(Sink.ignore)(Keep.right)
   }
 
+  /**
+   * reference to [[CouchbaseFlow.exists]]
+   */
   def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Boolean]] =
     CouchbaseFlow.exists(applyId, existsOptions).toMat(Sink.head)(Keep.right)

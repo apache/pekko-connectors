@@ -17,35 +17,55 @@
 
 package org.apache.pekko.stream.connectors.couchbase3.scaladsl
 
-import com.couchbase.client.java.{AsyncCollection, AsyncScope}
-import com.couchbase.client.java.analytics.{AnalyticsOptions, AnalyticsResult}
+import com.couchbase.client.java.{ AsyncCollection, AsyncScope }
+import com.couchbase.client.java.analytics.{ AnalyticsOptions, AnalyticsResult }
 import com.couchbase.client.java.codec.TypeRef
 import com.couchbase.client.java.json.JsonObject
 import com.couchbase.client.java.kv._
-import com.couchbase.client.java.manager.query.{GetAllQueryIndexesOptions, QueryIndex}
-import com.couchbase.client.java.query.{QueryOptions, QueryResult}
+import com.couchbase.client.java.manager.query.{ GetAllQueryIndexesOptions, QueryIndex }
+import com.couchbase.client.java.query.{ QueryOptions, QueryResult }
 import org.apache.pekko.NotUsed
 import org.apache.pekko.stream.scaladsl.Source
 
 object CouchbaseSource {
 
+  /**
+   * get a document by id from Couchbase collection
+   * @param id document id
+   * @param options reference to Couchbase options doc
+   */
   def get(id: String, options: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection) =
     Source.completionStage(asyncCollection.get(id, options))
 
+  /**
+   * reference to [[CouchbaseSource.get]] deserialize to Couchbase JsonObject
+   */
   def getJson(id: String, options: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Source[JsonObject, NotUsed] =
     get(id, options).map(_.contentAsObject())
 
+  /**
+   * reference to [[CouchbaseSource.get]],deserialize to class
+   * If you add DefaultScalaModule to jackson of couchbase, it could deserialize to scala class
+   */
   def getObject[T](id: String, target: Class[T], options: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     get(id, options).map(_.contentAs(target))
 
+  /**
+   * reference to [[CouchbaseSource.getObject]],deserialize to class with Generics
+   */
   def getType[T](id: String, target: TypeRef[T], options: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] = {
     get(id, options).map(_.contentAs(target))
   }
 
+  /**
+   * same to Get option, but reads from all replicas on the active node
+   * @param options reference to Couchbase options doc
+   * @see [[CouchbaseSource#get]]
+   */
   def getAllReplicas(id: String, options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
       implicit asyncCollection: AsyncCollection): Source[GetReplicaResult, NotUsed] =
     Source
@@ -55,35 +75,63 @@ object CouchbaseSource {
           .flatMapConcat(Source.completionStage)
       }
 
+  /**
+   * reference to [[CouchbaseSource.getAllReplicas]], deserialize to Couchbase JsonObject
+   */
+  def getAllReplicasJson(id: String, options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
+      implicit asyncCollection: AsyncCollection): Source[JsonObject, NotUsed] =
+    getAllReplicas(id, options)
+      .map(_.contentAsObject())
+
+  /**
+   * reference to [[CouchbaseSource.getAllReplicas]], deserialize to class
+   * If you add DefaultScalaModule to jackson of couchbase, it could deserialize to scala class
+   */
   def getAllReplicasObject[T](id: String, target: Class[T],
       options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     getAllReplicas(id, options)
       .map(_.contentAs(target))
 
+  /**
+   * reference to [[CouchbaseSource.getAllReplicasObject]], deserialize to class with Generics
+   */
   def getAllReplicasType[T](id: String, target: TypeRef[T],
       options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     getAllReplicas(id, options)
       .map(_.contentAs(target))
 
+  /**
+   * like Get[[CouchbaseSource.get]], batch get documents from collection by ScanType[[ScanType]]
+   */
   def scan(scanType: ScanType, options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[ScanResult, NotUsed] =
     Source
       .completionStage(asyncCollection.scan(scanType, options))
       .flatMapConcat(res => Source.fromJavaStream(() => res.stream()))
 
+  /**
+   * reference to [[CouchbaseSource.scan]], deserialize to Couchbase JsonObject
+   */
   def scanJson(scanType: ScanType, options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[JsonObject, NotUsed] =
     scan(scanType, options)
       .map(_.contentAsObject())
 
+  /**
+   * reference to [[CouchbaseSource.scan]], deserialize to class
+   * If you add DefaultScalaModule to jackson of couchbase, it could deserialize to scala class
+   */
   def scanObject[T](scanType: ScanType, target: Class[T],
       options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
     scan(scanType, options)
       .map(_.contentAs(target))
 
+  /**
+   * reference to [[CouchbaseSource.scan]], [[CouchbaseSource.scanObject]], deserialize to class with Generics
+   */
   def scanType[T](scanType: ScanType, target: TypeRef[T],
       options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
@@ -109,7 +157,7 @@ object CouchbaseSource {
   /**
    * N1QL query in a Scope.
    * @param statement N1QL query sql
-   * @see
+   * @see [[CouchbaseSource.query]]
    */
   def queryJson(
       statement: String,
@@ -118,7 +166,7 @@ object CouchbaseSource {
     query(statement, options)
       .flatMapConcat { res =>
         Source.fromJavaStream(() =>
-          res.rowsAsObject().stream.flatMap { json =>
+          res.rowsAsObject().stream.flatMap[JsonObject] { json: JsonObject =>
             json.getNames.stream().map(collection => json.getObject(collection))
           })
       }
@@ -144,10 +192,11 @@ object CouchbaseSource {
       .completionStage(scope.analyticsQuery(statement, options))
 
   /**
-   * Performs an Analytics query and convert document row to jsonObject
-   * warning: different with analyticsQuery, jsonObject not has the collection Key
    * warning: couchbase-community not support analyticsQuery,we not test this api
-   * @see [[org.apache.pekko.stream.connectors.couchbase3.scaladsl.CouchbaseSource#analyticsQuery]]
+   *
+   * Performs an Analytics query and convert document row to jsonObject <br>
+   * different with analyticsQuery, jsonObject not has the collection Key, but is Document directly<br>
+   * @see [[CouchbaseSource.analyticsQuery]]
    */
   def analyticsQueryJson(statement: String,
       options: AnalyticsOptions = AnalyticsOptions.analyticsOptions())(
@@ -155,11 +204,15 @@ object CouchbaseSource {
     analyticsQuery(statement, options)
       .flatMapConcat { res =>
         Source.fromJavaStream(() =>
-          res.rowsAsObject().stream().flatMap { json =>
+          res.rowsAsObject().stream().flatMap[JsonObject] { json: JsonObject =>
             json.getNames.stream().map(collection => json.getObject(collection))
           })
       }
 
+  /**
+   * Fetches all indexes from this collection with custom options.
+   * @see [[com.couchbase.client.java.manager.query.AsyncCollectionQueryIndexManager#getAllIndexes]]
+   */
   def queryAllIndex(options: GetAllQueryIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions)(
       implicit asyncCollection: AsyncCollection): Source[QueryIndex, NotUsed] =
     Source
