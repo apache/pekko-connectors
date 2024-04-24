@@ -464,7 +464,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
-        if (moduleName == "slick") {
+        if (moduleName == "slick" || moduleName == "couchbase3") {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)
