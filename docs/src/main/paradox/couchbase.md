@@ -41,7 +41,7 @@ Apache Pekko Connectors Couchbase offers both @ref:[Apache Pekko Streams APIs](#
 
 * @apidoc[CouchbaseSession] offers a direct API for one-off operations
 * @apidoc[CouchbaseSessionRegistry$] is an Apache Pekko extension to keep track and share `CouchbaseSession`s within an `ActorSystem`
-* @apidoc[org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseSource$], @apidoc[org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow$], and @apidoc[org.apache.pekko.stream.connectors.couchbase.scaladsl.CouchbaseSink$] offer factory methods to create Apache Pekko Stream operators
+* @apidoc[couchbase.*.CouchbaseSource$], @apidoc[couchbase.*.CouchbaseFlow$], and @apidoc[couchbase.*.CouchbaseSink$] offer factory methods to create Apache Pekko Stream operators
 
 ## Configuration
 
