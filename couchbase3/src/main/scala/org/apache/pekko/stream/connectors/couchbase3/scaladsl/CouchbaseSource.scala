@@ -174,16 +174,19 @@ object CouchbaseSource {
 
   /**
    * Performs an Analytics query , QueryResult contains List<Row>
-   * <P>
+   * <p>
    * val rows: List[JsonObject] = QueryResult.rowsAsObject, every Row is a json with CollectionName key
    * <pre>
    *    {
    *      "collectionName": Document
    *    }
    * </pre>
+   * </p>
+   * <p>
+   *  Warning: couchbase-community not support analyticsQuery, we not test this API
+   * </p>
    *
    * @param statement Analytics query sql
-   * warning: couchbase-community not support analyticsQuery,we not test this api
    */
   def analyticsQuery(statement: String,
       options: AnalyticsOptions = AnalyticsOptions.analyticsOptions())(
@@ -192,7 +195,9 @@ object CouchbaseSource {
       .completionStage(scope.analyticsQuery(statement, options))
 
   /**
-   * warning: couchbase-community not support analyticsQuery,we not test this api
+   * <p>
+   *  Warning: couchbase-community not support analyticsQuery, we not test this API
+   * </p>
    *
    * Performs an Analytics query and convert document row to jsonObject <br>
    * different with analyticsQuery, jsonObject not has the collection Key, but is Document directly<br>
