@@ -69,7 +69,7 @@ lazy val `pekko-connectors` = project
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
   .aggregate(userProjects: _*)
-  .aggregate(`doc-examples`)
+  .aggregate(`doc-examples`, billOfMaterials)
   .settings(
     name := "pekko-connectors-root",
     onLoadMessage :=
