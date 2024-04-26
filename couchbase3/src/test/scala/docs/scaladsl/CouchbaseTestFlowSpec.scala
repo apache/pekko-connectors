@@ -19,7 +19,7 @@ package docs.scaladsl
 
 import com.couchbase.client.java.kv.{ DecrementOptions, IncrementOptions, MutateInSpec, ReplaceOptions }
 import com.couchbase.client.java.AsyncCollection
-import org.apache.pekko.stream.connectors.couchbase3.{ CouchbaseSupport, Document }
+import org.apache.pekko.stream.connectors.couchbase3.{ CouchbaseTestSupport, Document }
 import org.apache.pekko.stream.connectors.couchbase3.scaladsl.{ CouchbaseFlow, CouchbaseSink, CouchbaseSource }
 import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
@@ -36,8 +36,8 @@ import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.util.Random
 
-class CouchbaseFlowSpec extends AnyWordSpec
-    with CouchbaseSupport
+class CouchbaseTestFlowSpec extends AnyWordSpec
+    with CouchbaseTestSupport
     with BeforeAndAfterAll
     with BeforeAndAfterEach
     with Matchers

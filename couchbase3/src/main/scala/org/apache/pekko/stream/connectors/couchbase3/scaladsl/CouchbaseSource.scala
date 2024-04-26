@@ -62,7 +62,7 @@ object CouchbaseSource {
   }
 
   /**
-   * same to Get option, but reads from all replicas on the active node
+   * similar to get(id, options) .Reads from replicas or the active node based on the options and returns the results as a list
    * @param options reference to Couchbase options doc
    * @see [[CouchbaseSource#get]]
    */

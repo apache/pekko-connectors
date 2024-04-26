@@ -20,7 +20,7 @@ package docs.scaladsl
 import com.couchbase.client.java.{ AsyncCollection, AsyncScope }
 import com.couchbase.client.java.codec.TypeRef
 import com.couchbase.client.java.kv.ScanType
-import org.apache.pekko.stream.connectors.couchbase3.{ CouchbaseSupport, Document, TypeDocument }
+import org.apache.pekko.stream.connectors.couchbase3.{ CouchbaseTestSupport, Document, TypeDocument }
 import org.apache.pekko.stream.connectors.couchbase3.scaladsl.CouchbaseSource
 import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.apache.pekko.stream.scaladsl.Sink
@@ -30,8 +30,8 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class CouchbaseSourceSpec extends AnyWordSpec
-    with CouchbaseSupport
+class CouchbaseTestSourceSpec extends AnyWordSpec
+    with CouchbaseTestSupport
     with BeforeAndAfterAll
     with BeforeAndAfterEach
     with Matchers

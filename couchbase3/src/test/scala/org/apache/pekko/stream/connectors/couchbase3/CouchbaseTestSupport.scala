@@ -25,11 +25,11 @@ import com.couchbase.client.java.json.JsonObject
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.couchbase3.CouchbaseSupport.bucketName
+import org.apache.pekko.stream.connectors.couchbase3.CouchbaseTestSupport.bucketName
 
 import scala.collection.mutable
 
-object CouchbaseSupport {
+object CouchbaseTestSupport {
 
   private val connectionString = "localhost"
   private val username = "Administrator"
@@ -47,16 +47,16 @@ object CouchbaseSupport {
 }
 
 class SpecContext(bucketName: String) {
-  import CouchbaseSupport._
+  import CouchbaseTestSupport._
   lazy val bucket: AsyncBucket = asyncCluster.bucket(bucketName)
   lazy val scope: AsyncScope = bucket.defaultScope()
   lazy val collection: AsyncCollection = bucket.defaultCollection()
   // used for mock and clear data
-  lazy val mock: Collection = CouchbaseSupport.cluster.bucket(bucketName).defaultCollection()
+  lazy val mock: Collection = CouchbaseTestSupport.cluster.bucket(bucketName).defaultCollection()
 
 }
 
-trait CouchbaseSupport {
+trait CouchbaseTestSupport {
   implicit val actorSystem: ActorSystem = ActorSystem()
   val simpleContext = new SpecContext(bucketName)
   val defaultScope = CollectionIdentifier.fromDefault(bucketName).scope().get()
