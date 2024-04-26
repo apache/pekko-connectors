@@ -184,6 +184,7 @@ object CouchbaseSource {
    * </p>
    * <p>
    *  Warning: couchbase-community not support analyticsQuery, we not test this API
+   *  https://www.couchbase.com/products/editions/server/
    * </p>
    *
    * @param statement Analytics query sql
