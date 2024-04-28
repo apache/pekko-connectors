@@ -61,7 +61,7 @@ object CouchbaseFlow {
     ScalaCouchbaseFlow.getType[T](target, options).asJava
 
   /**
-   * same to Get option, but reads from all replicas on the active node
+   * similar to [[CouchbaseFlow.get]], but reads from all replicas on the active node
    * @see [[CouchbaseFlow#get]]
    */
   def getAllReplicas(options: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(

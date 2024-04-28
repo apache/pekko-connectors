@@ -48,7 +48,6 @@ object CouchbaseSource {
 
   /**
    * reference to [[CouchbaseSource.get]],deserialize to class
-   * If you add DefaultScalaModule to jackson of couchbase, it could deserialize to scala class
    */
   def getObject[T](id: String, target: Class[T], options: GetOptions = GetOptions.getOptions)(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
@@ -63,7 +62,7 @@ object CouchbaseSource {
   }
 
   /**
-   * similar to get(id, options) .Reads from replicas or the active node based on the options and returns the results as a list
+   * similar to [[CouchbaseSource.get]] .Reads from replicas or the active node based on the options and returns the results as a list
    * @param options reference to Couchbase options doc
    * @see [[CouchbaseSource#get]]
    */
@@ -96,7 +95,7 @@ object CouchbaseSource {
     ScalaCoubaseSource.getAllReplicasType[T](id, target, options).asJava
 
   /**
-   * like Get[[CouchbaseSource.get]], batch get documents from collection by ScanType[[ScanType]]
+   * similar to Get[[CouchbaseSource.get]], batch get documents from collection by ScanType[[ScanType]]
    */
   def scan(scanType: ScanType, options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[ScanResult, NotUsed] =
@@ -124,17 +123,19 @@ object CouchbaseSource {
   def scanType[T](scanType: ScanType, target: TypeRef[T],
       options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[T, NotUsed] =
-    ScalaCoubaseSource.scanType[T](scanType, target).asJava
+    ScalaCoubaseSource.scanType[T](scanType, target, options).asJava
 
   /**
    * N1QL query in a Scope.
    *
    * QueryResult contains List<Row>, every Row is a json like
+   * <p>
    * <pre>
    *   {
    *     "collectionName": Document
    *   }
    * </pre>
+   * </p>
    */
   def query(statement: String, options: QueryOptions = QueryOptions.queryOptions())(
       implicit scope: AsyncScope): Source[QueryResult, NotUsed] =

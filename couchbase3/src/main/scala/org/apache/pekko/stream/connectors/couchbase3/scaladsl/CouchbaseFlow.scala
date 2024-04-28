@@ -80,7 +80,6 @@ object CouchbaseFlow {
 
   /**
    * reference to [[CouchbaseFlow.getAllReplicas]], deserialize to class
-   * If you add DefaultScalaModule to jackson of couchbase, it could deserialize to scala class
    */
   def getAllReplicasObject[T](target: Class[T],
       getOptions: GetAllReplicasOptions = GetAllReplicasOptions.getAllReplicasOptions)(
