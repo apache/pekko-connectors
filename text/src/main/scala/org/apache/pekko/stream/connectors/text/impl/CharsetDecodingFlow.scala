@@ -16,8 +16,8 @@ package org.apache.pekko.stream.connectors.text.impl
 import java.nio.charset.Charset
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.stream.stage.{GraphStage, GraphStageLogic}
-import pekko.stream.{Attributes, FlowShape, Inlet, Outlet}
+import pekko.stream.stage.{ GraphStage, GraphStageLogic }
+import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import pekko.util.ByteString
 
 /**
