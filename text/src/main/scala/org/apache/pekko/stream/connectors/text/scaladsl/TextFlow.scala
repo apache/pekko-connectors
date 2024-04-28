@@ -30,8 +30,7 @@ object TextFlow {
    * Decodes a stream of bytes into a stream of characters, using the supplied charset.
    */
   def decoding(incoming: Charset): Flow[ByteString, String, NotUsed] =
-    Flow[ByteString]
-      .via(new CharsetDecodingFlow(incoming))
+    Flow.fromGraph(new CharsetDecodingFlow(incoming))
 
   /**
    * Decodes a stream of bytes into a stream of characters, using the supplied charset.
@@ -44,7 +43,6 @@ object TextFlow {
    * Translates a stream of bytes from one character encoding into another.
    */
   def transcoding(incoming: Charset, outgoing: Charset): Flow[ByteString, ByteString, NotUsed] =
-    Flow[ByteString]
-      .via(new CharsetTranscodingFlow(incoming, outgoing))
+    Flow.fromGraph(new CharsetTranscodingFlow(incoming, outgoing))
 
 }
