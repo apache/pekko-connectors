@@ -17,7 +17,7 @@ import java.nio.charset.Charset
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.stream.connectors.text.scaladsl.{TextFlow => ScalaTextFlow}
+import pekko.stream.connectors.text.scaladsl.{ TextFlow => ScalaTextFlow }
 import pekko.stream.javadsl.Flow
 import pekko.util.ByteString
 
