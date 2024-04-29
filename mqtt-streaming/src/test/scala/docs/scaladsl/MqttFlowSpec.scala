@@ -48,7 +48,7 @@ class TypedMqttFlowSpec
 abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSystem) extends TestKit(system)
     with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
-  override def sourceActorSytem = Some(system.name)
+  override def sourceActorSystem = Some(system.name)
 
   private implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = 5.seconds, interval = 100.millis)
 
