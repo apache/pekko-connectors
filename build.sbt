@@ -22,6 +22,7 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   azureStorageQueue,
   cassandra,
   couchbase,
+  couchbase3,
   csv,
   dynamodb,
   elasticsearch,
@@ -139,6 +140,9 @@ lazy val cassandra =
 
 lazy val couchbase =
   pekkoConnectorProject("couchbase", "couchbase", Dependencies.Couchbase)
+
+lazy val couchbase3 =
+  pekkoConnectorProject("couchbase3", "couchbase3", Dependencies.Couchbase3)
 
 lazy val csv = pekkoConnectorProject("csv", "csv")
 
@@ -460,7 +464,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
-        if (moduleName == "slick") {
+        if (moduleName == "slick" || moduleName == "couchbase3") {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)

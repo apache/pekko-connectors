@@ -60,6 +60,7 @@ object Dependencies {
   val scalaTestMockitoVersion = "3.2.18.0" // https://github.com/scalatest/scalatest/issues/2311
 
   val CouchbaseVersion = "2.7.23"
+  val Couchbase3Version = "3.6.0"
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.23.0"
@@ -153,6 +154,14 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion,
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
+      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
+      "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
+
+  val Couchbase3 = Seq(
+    libraryDependencies ++= Seq(
+      "com.couchbase.client" % "java-client" % Couchbase3Version,
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
       "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,

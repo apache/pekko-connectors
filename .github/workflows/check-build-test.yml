@@ -83,6 +83,7 @@ jobs:
           - { connector: azure-storage-queue }
           - { connector: cassandra,                    pre_cmd: 'docker-compose up -d cassandra' }
           - { connector: couchbase,                    pre_cmd: 'docker-compose up -d couchbase_prep' }
+          - { connector: couchbase3,                   pre_cmd: 'docker-compose up -d couchbase_prep' }
           - { connector: csv }
           - { connector: dynamodb,                     pre_cmd: 'docker-compose up -d dynamodb' }
           - { connector: elasticsearch,                pre_cmd: 'docker-compose up -d elasticsearch6 elasticsearch7 opensearch1' }
