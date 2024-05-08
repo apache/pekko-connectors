@@ -18,6 +18,7 @@ ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,
   avroparquet,
+  awsSpiPekkoHttp,
   awslambda,
   azureStorageQueue,
   cassandra,
@@ -128,7 +129,9 @@ lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 lazy val avroparquet =
   pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
 
-lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
+lazy val awsSpiPekkoHttp = pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http", Dependencies.AwsSpiPekkoHttp)
+
+lazy val awslambda = pekkoConnectorProject("awslambda", "aws.api.pekko.http", Dependencies.AwsLambda)
 
 lazy val azureStorageQueue = pekkoConnectorProject(
   "azure-storage-queue",

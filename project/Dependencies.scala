@@ -57,7 +57,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = "3.2.18.0" // https://github.com/scalatest/scalatest/issues/2311
+  val scalaTestMockitoVersion = scalaTestScalaCheckVersion
 
   val CouchbaseVersion = "2.7.23"
   val Couchbase3Version = "3.6.0"
@@ -126,6 +126,25 @@ object Dependencies {
   val Amqp = Seq(
     libraryDependencies ++= Seq(
       "com.rabbitmq" % "amqp-client" % "5.21.0") ++ Mockito)
+
+  val AwsSpiPekkoHttp = Seq(
+    libraryDependencies ++= Seq(
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "software.amazon.awssdk" % "http-client-spi" % AwsSdk2Version,
+      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % Test).excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % Test).excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % Test).excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % Test).excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % Test).excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",
+      "org.scalatestplus" %% "junit-4-13" % scalaTestScalaCheckVersion % "it,test",
+      "ch.qos.logback" % "logback-classic" % LogbackVersion % "it,test"))
 
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
