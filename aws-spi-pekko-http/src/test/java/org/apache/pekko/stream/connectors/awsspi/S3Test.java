@@ -111,7 +111,7 @@ public class S3Test extends JUnitSuite {
             randomFile.toPath())
         .join();
 
-    ResponseBytes result =
+    ResponseBytes<?> result =
         client
             .getObject(
                 GetObjectRequest.builder().bucket("foo").key("my-file").build(),
@@ -135,7 +135,7 @@ public class S3Test extends JUnitSuite {
         .build();
   }
 
-  String randomString(int len) {
+  private String randomString(int len) {
     StringBuilder sb = new StringBuilder(len);
     for (int i = 0; i < len; i++) sb.append(AB.charAt(rnd.nextInt(AB.length())));
     return sb.toString();
