@@ -478,7 +478,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
-        if (moduleName == "slick" || moduleName == "couchbase3" || moduleName == "aws-spi-pekko-http") {
+        if (moduleName == "slick" || moduleName == "couchbase3" || moduleName == "aws.api.pekko.http") {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)
