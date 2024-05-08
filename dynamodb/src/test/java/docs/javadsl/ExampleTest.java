@@ -29,7 +29,7 @@ import org.apache.pekko.stream.javadsl.SourceWithContext;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.*;
 // #init-client
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import scala.util.Try;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;

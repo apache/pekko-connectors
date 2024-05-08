@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, Terminated }
 import pekko.http.scaladsl.Http
+import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.sqs.SqsSourceSettings
 import pekko.util.ccompat.JavaConverters._
 import org.scalatest.concurrent.ScalaFutures
@@ -27,7 +28,6 @@ import org.scalatest.{ BeforeAndAfterAll, Suite, Tag }
 
 import scala.concurrent.ExecutionContext
 //#init-client
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient

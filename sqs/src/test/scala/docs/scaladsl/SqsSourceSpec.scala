@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.KillSwitches
+import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.sqs._
 import pekko.stream.connectors.sqs.scaladsl.{ DefaultTestContext, SqsSource }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Sink }
 import pekko.util.ccompat.JavaConverters._
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

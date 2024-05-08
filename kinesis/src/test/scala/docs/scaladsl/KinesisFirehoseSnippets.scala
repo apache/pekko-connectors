@@ -24,7 +24,7 @@ import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchResponseEn
 object KinesisFirehoseSnippets {
 
   // #init-client
-  import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
+  import pekko.stream.connectors.awsspi.PekkoHttpClient
   import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 
   implicit val system: ActorSystem = ActorSystem()

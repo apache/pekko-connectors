@@ -14,9 +14,9 @@
 package docs.javadsl;
 
 import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import org.junit.Rule;
 import org.junit.Test;
 // #clientRetryConfig

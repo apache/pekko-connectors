@@ -1,1 +1,1 @@
-com.github.pjfanning.pekkohttpspi.PekkoHttpAsyncHttpService
+org.apache.pekko.stream.connectors.awsspi.PekkoHttpAsyncHttpService
