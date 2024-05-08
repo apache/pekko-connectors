@@ -42,7 +42,6 @@ trait TestBase {
         SystemPropertyCredentialsProvider.create,
         ProfileCredentialsProvider.builder
           .profileName(credentialProfileName)
-          .build
-      )
+          .build)
       .build
 }

@@ -55,9 +55,9 @@ class ITTestSQS extends AnyWordSpec with Matchers with TestBase {
   "Async SQS client" should {
 
     "publish a message to a queue" in withClient { implicit client =>
-      val queueName     = "aws-spi-test-" + Random.alphanumeric.take(10).filterNot(_.isUpper).mkString
+      val queueName = "aws-spi-test-" + Random.alphanumeric.take(10).filterNot(_.isUpper).mkString
       val queueResponse = client.createQueue(CreateQueueRequest.builder().queueName(queueName).build()).join()
-      val queueUrl      = queueResponse.queueUrl()
+      val queueUrl = queueResponse.queueUrl()
       client.sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody("123").build()).join()
       val receivedMessage =
         client.receiveMessage(ReceiveMessageRequest.builder().queueUrl(queueUrl).maxNumberOfMessages(1).build()).join()

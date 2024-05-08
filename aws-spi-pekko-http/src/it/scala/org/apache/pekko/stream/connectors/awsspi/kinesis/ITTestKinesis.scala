@@ -17,7 +17,8 @@
 
 package org.apache.pekko.stream.connectors.awsspi.kinesis
 
-import org.apache.pekko.stream.connectors.awsspi.{ PekkoHttpAsyncHttpService, TestBase }
+import org.apache.pekko
+import pekko.stream.connectors.awsspi.{ PekkoHttpAsyncHttpService, TestBase }
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.core.SdkBytes
@@ -51,7 +52,7 @@ class ITTestKinesis extends AnyWordSpec with Matchers with TestBase {
 
     "use a data stream: create + put + get + delete" in withClient { implicit client =>
       val streamName = "aws-spi-test-" + Random.alphanumeric.take(10).filterNot(_.isUpper).mkString
-      val data       = "123"
+      val data = "123"
 
       val createRequest = CreateStreamRequest
         .builder()
@@ -59,7 +60,7 @@ class ITTestKinesis extends AnyWordSpec with Matchers with TestBase {
         .shardCount(1)
         .build()
 
-      val _                     = client.createStream(createRequest).join()
+      val _ = client.createStream(createRequest).join()
       val describeStreamRequest = DescribeStreamRequest.builder().streamName(streamName).build()
 
       Thread.sleep(5000)
