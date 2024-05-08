@@ -50,7 +50,8 @@ public class S3Test extends JUnitSuite {
   private static SecureRandom rnd = new SecureRandom();
 
   @Rule
-  public GenericContainer s3mock =
+  @SuppressWarnings("rawtypes")
+  public GenericContainer<?> s3mock =
       new GenericContainer("adobe/s3mock:2.17.0").withExposedPorts(9090);
 
   @Test
