@@ -12,6 +12,13 @@ Apache License, Version 2.0 License.
 
 ---------------
 
+pekko-connectors-aws-spi-pekko-http is based on aws-spi-akka-http
+<https://github.com/matsluni/aws-spi-akka-http>.
+This code was released under an Apache 2.0 license and a Software Grant Agreement
+has been registered with the ASF secretary.
+
+---------------
+
 pekko-connectors-ftp contains code from Apache Commons Net
 <https://commons.apache.org/proper/commons-net/>.
 This code was released under an Apache 2.0 license.

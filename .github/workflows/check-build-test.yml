@@ -40,6 +40,9 @@ jobs:
       - name: "Code style, compile tests, MiMa. Run locally with: sbt \"javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues\""
         run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
 
+      - name: "Integration Test Compile"
+        run: sbt "+aws-spi-pekko-http/IntegrationTest/compile"
+
   documentation:
     name: ScalaDoc, Documentation with Paradox
     runs-on: ubuntu-20.04
