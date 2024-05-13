@@ -131,15 +131,15 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "http-client-spi" % AwsSdk2Version,
-      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % Test).excludeAll(
+      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % Test).excludeAll(
+      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % Test).excludeAll(
+      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % Test).excludeAll(
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % Test).excludeAll(
+      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",

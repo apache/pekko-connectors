@@ -41,7 +41,7 @@ jobs:
         run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
 
       - name: "Integration Test Compile"
-        run: sbt "+aws-spi-pekko-http/IntegrationTest/compile"
+        run: sbt "+IntegrationTest/compile"
 
   documentation:
     name: ScalaDoc, Documentation with Paradox
