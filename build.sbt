@@ -15,59 +15,62 @@ ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
+lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
+  amqp,
+  avroparquet,
+  awslambda,
+  azureStorageQueue,
+  cassandra,
+  couchbase,
+  couchbase3,
+  csv,
+  dynamodb,
+  elasticsearch,
+  eventbridge,
+  files,
+  ftp,
+  geode,
+  googleCommon,
+  googleCloudBigQuery,
+  googleCloudBigQueryStorage,
+  googleCloudPubSub,
+  googleCloudPubSubGrpc,
+  googleCloudStorage,
+  googleFcm,
+  hbase,
+  hdfs,
+  huaweiPushKit,
+  influxdb,
+  ironmq,
+  jms,
+  jsonStreaming,
+  kinesis,
+  kudu,
+  mongodb,
+  mqtt,
+  mqttStreaming,
+  orientdb,
+  pravega,
+  reference,
+  s3,
+  springWeb,
+  simpleCodecs,
+  slick,
+  sns,
+  solr,
+  sqs,
+  sse,
+  text,
+  udp,
+  unixdomainsocket,
+  xml)
+
 lazy val `pekko-connectors` = project
   .in(file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
-  .aggregate(
-    amqp,
-    avroparquet,
-    awslambda,
-    azureStorageQueue,
-    cassandra,
-    couchbase,
-    csv,
-    dynamodb,
-    elasticsearch,
-    eventbridge,
-    files,
-    ftp,
-    geode,
-    googleCommon,
-    googleCloudBigQuery,
-    googleCloudBigQueryStorage,
-    googleCloudPubSub,
-    googleCloudPubSubGrpc,
-    googleCloudStorage,
-    googleFcm,
-    hbase,
-    hdfs,
-    huaweiPushKit,
-    influxdb,
-    ironmq,
-    jms,
-    jsonStreaming,
-    kinesis,
-    kudu,
-    mongodb,
-    mqtt,
-    mqttStreaming,
-    orientdb,
-    pravega,
-    reference,
-    s3,
-    springWeb,
-    simpleCodecs,
-    slick,
-    sns,
-    solr,
-    sqs,
-    sse,
-    text,
-    udp,
-    unixdomainsocket,
-    xml)
-  .aggregate(`doc-examples`)
+  .aggregate(userProjects: _*)
+  .aggregate(`doc-examples`, billOfMaterials)
   .settings(
     name := "pekko-connectors-root",
     onLoadMessage :=
@@ -137,6 +140,9 @@ lazy val cassandra =
 
 lazy val couchbase =
   pekkoConnectorProject("couchbase", "couchbase", Dependencies.Couchbase)
+
+lazy val couchbase3 =
+  pekkoConnectorProject("couchbase3", "couchbase3", Dependencies.Couchbase3)
 
 lazy val csv = pekkoConnectorProject("csv", "csv")
 
@@ -434,6 +440,16 @@ lazy val `doc-examples` = project
     publish / skip := true,
     Dependencies.`Doc-examples`)
 
+lazy val billOfMaterials = Project("bill-of-materials", file("bill-of-materials"))
+  .enablePlugins(BillOfMaterialsPlugin)
+  .disablePlugins(MimaPlugin, SitePlugin)
+  .settings(
+    name := "pekko-connectors-bom",
+    licenses := List(License.Apache2),
+    libraryDependencies := Seq.empty,
+    bomIncludeProjects := userProjects,
+    description := s"${description.value} (depending on Scala ${CrossVersion.binaryScalaVersion(scalaVersion.value)})")
+
 val mimaCompareVersion = "1.0.2"
 
 def pekkoConnectorProject(projectId: String,
@@ -448,7 +464,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
-        if (moduleName == "slick") {
+        if (moduleName == "slick" || moduleName == "couchbase3") {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)

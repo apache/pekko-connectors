@@ -44,7 +44,7 @@ import org.slf4j.MDC
 trait LogCapturing extends BeforeAndAfterAll { self: TestSuite =>
 
   // Can be overridden to filter on sourceActorSystem
-  def sourceActorSytem: Option[String] = None
+  def sourceActorSystem: Option[String] = None
 
   // eager access of CapturingAppender to fail fast if misconfigured
   private val capturingAppender = CapturingAppender.get("")
@@ -64,18 +64,18 @@ trait LogCapturing extends BeforeAndAfterAll { self: TestSuite =>
   }
 
   abstract override def withFixture(test: NoArgTest): Outcome = {
-    sourceActorSytem.foreach(MDC.put("sourceActorSystem", _))
+    sourceActorSystem.foreach(MDC.put("sourceActorSystem", _))
     myLogger.info(s"Logging started for test [${self.getClass.getName}: ${test.name}]")
-    sourceActorSytem.foreach(_ => MDC.remove("sourceActorSystem"))
+    sourceActorSystem.foreach(_ => MDC.remove("sourceActorSystem"))
     val res = test()
-    sourceActorSytem.foreach(MDC.put("sourceActorSystem", _))
+    sourceActorSystem.foreach(MDC.put("sourceActorSystem", _))
     myLogger.info(s"Logging finished for test [${self.getClass.getName}: ${test.name}] that [$res]")
-    sourceActorSytem.foreach(_ => MDC.remove("sourceActorSystem"))
+    sourceActorSystem.foreach(_ => MDC.remove("sourceActorSystem"))
 
     if (!(res.isSucceeded || res.isPending)) {
       println(
         s"--> [${Console.BLUE}${self.getClass.getName}: ${test.name}${Console.RESET}] Start of log messages of test that [$res]")
-      capturingAppender.flush(sourceActorSytem)
+      capturingAppender.flush(sourceActorSystem)
       println(
         s"<-- [${Console.BLUE}${self.getClass.getName}: ${test.name}${Console.RESET}] End of log messages of test that [$res]")
     }
