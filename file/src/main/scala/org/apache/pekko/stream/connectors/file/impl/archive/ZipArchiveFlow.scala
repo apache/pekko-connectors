@@ -60,8 +60,7 @@ import pekko.util.{ ByteString, ByteStringBuilder }
           case b: ByteString if FileByteStringSeparators.isEndingByteString(b) =>
             zip.closeEntry()
           case b: ByteString =>
-            val array = b.toArray
-            zip.write(array, 0, array.length)
+            zip.write(b.toArrayUnsafe())
         }
         zip.flush()
         val result = builder.result()
