@@ -203,6 +203,10 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
 
             override def onPush(): Unit = {
               val elem = grab(in)
+              val bytes = if (settings.avoidArrayCopy)
+                elem.bytes.toArrayUnsafe()
+              else
+                elem.bytes.toArray
               val props = elem.properties.getOrElse(new BasicProperties()).builder.replyTo(queueName).build()
               channel.basicPublish(
                 exchange,
@@ -210,7 +214,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
                 elem.mandatory,
                 elem.immediate,
                 props,
-                elem.bytes.toArray)
+                bytes)
 
               val expectedResponses: Int = {
                 val headers = props.getHeaders

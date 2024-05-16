@@ -49,13 +49,17 @@ import scala.concurrent.{ Future, Promise }
         override def publish(message: WriteMessage, passThrough: T): Unit = {
           log.debug("Publishing message {}.", message)
 
+          val bytes = if (settings.avoidArrayCopy)
+            message.bytes.toArrayUnsafe()
+          else
+            message.bytes.toArray
           channel.basicPublish(
             settings.exchange.getOrElse(""),
             message.routingKey.orElse(settings.routingKey).getOrElse(""),
             message.mandatory,
             message.immediate,
             message.properties.orNull,
-            message.bytes.toArray)
+            bytes)
           push(out, (WriteResult.confirmed, passThrough))
         }
       }, streamCompletion.future)
