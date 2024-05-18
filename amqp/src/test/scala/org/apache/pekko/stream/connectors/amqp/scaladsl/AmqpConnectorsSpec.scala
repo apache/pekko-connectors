@@ -97,7 +97,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           2)
 
         val amqpSource = AmqpSource.atMostOnceSource(
-          NamedQueueSourceSettings(connectionProvider, queueName),
+          NamedQueueSourceSettings(connectionProvider, queueName)
+            .withAvoidArrayCopy(avoidArrayCopy),
           bufferSize = 1)
 
         val input = Vector("one", "two", "three", "four", "five")
@@ -197,7 +198,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
             val source = b.add(
               AmqpSource.atMostOnceSource(
                 NamedQueueSourceSettings(connectionProvider, queueName)
-                  .withDeclaration(queueDeclaration),
+                  .withDeclaration(queueDeclaration)
+                  .withAvoidArrayCopy(avoidArrayCopy),
                 bufferSize = 1))
             source.out ~> merge.in(n)
           }
@@ -216,7 +218,9 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
         val queueName = "amqp-conn-it-spec-simple-queue-2-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
         val amqpSource = AmqpSource.atMostOnceSource(
-          NamedQueueSourceSettings(connectionProvider, queueName).withDeclaration(queueDeclaration),
+          NamedQueueSourceSettings(connectionProvider, queueName)
+            .withDeclaration(queueDeclaration)
+            .withAvoidArrayCopy(avoidArrayCopy),
           bufferSize = 2)
 
         val amqpSink = AmqpSink.simple(
@@ -278,7 +282,9 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
             .withAvoidArrayCopy(avoidArrayCopy))
 
         val amqpSource = AmqpSource.committableSource(
-          NamedQueueSourceSettings(connectionSettings, queueName).withDeclaration(queueDeclaration),
+          NamedQueueSourceSettings(connectionSettings, queueName)
+            .withDeclaration(queueDeclaration)
+            .withAvoidArrayCopy(avoidArrayCopy),
           bufferSize = 10)
 
         val input = Vector("one", "two", "three", "four", "five")
@@ -308,7 +314,9 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
         Source(input).map(s => ByteString(s)).runWith(amqpSink).futureValue shouldEqual Done
 
         val amqpSource = AmqpSource.committableSource(
-          NamedQueueSourceSettings(connectionProvider, queueName).withDeclaration(queueDeclaration),
+          NamedQueueSourceSettings(connectionProvider, queueName)
+            .withDeclaration(queueDeclaration)
+            .withAvoidArrayCopy(avoidArrayCopy),
           bufferSize = 10)
 
         val result1 = amqpSource
@@ -359,7 +367,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
             .withAvoidArrayCopy(avoidArrayCopy))
 
         val amqpSource = AmqpSource.atMostOnceSource(
-          NamedQueueSourceSettings(connectionProvider, queueName),
+          NamedQueueSourceSettings(connectionProvider, queueName)
+            .withAvoidArrayCopy(avoidArrayCopy),
           bufferSize = 1)
         val sourceToSink = amqpSource
           .viaMat(KillSwitches.single)(Keep.right)
@@ -390,7 +399,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
-            .withDeclarations(immutable.Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration)),
+            .withDeclarations(immutable.Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
+            .withAvoidArrayCopy(avoidArrayCopy),
           bufferSize = 10)
 
         val input = Vector("one", "two", "three", "four", "five")
@@ -428,7 +438,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           .committableSource(
             NamedQueueSourceSettings(connectionProvider, queueName)
               .withAckRequired(false)
-              .withDeclaration(queueDeclaration),
+              .withDeclaration(queueDeclaration)
+              .withAvoidArrayCopy(avoidArrayCopy),
             bufferSize = 10)
 
         val input = Vector("one", "two", "three", "four", "five")

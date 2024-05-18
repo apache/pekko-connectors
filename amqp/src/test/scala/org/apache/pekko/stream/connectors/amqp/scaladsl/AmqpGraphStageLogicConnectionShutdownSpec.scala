@@ -29,14 +29,14 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
 import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, ShutdownListener }
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 
 /**
  * see [[https://github.com/akka/alpakka/issues/883]] and
