@@ -29,14 +29,15 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
 import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, ShutdownListener }
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 
 /**
  * see [[https://github.com/akka/alpakka/issues/883]] and
@@ -47,7 +48,8 @@ class AmqpGraphStageLogicConnectionShutdownSpec
     with Matchers
     with ScalaFutures
     with BeforeAndAfterEach
-    with LogCapturing {
+    with LogCapturing
+    with ScalaCheckDrivenPropertyChecks {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
   private implicit val executionContext: ExecutionContext = ExecutionContexts.parasitic
@@ -73,37 +75,40 @@ class AmqpGraphStageLogicConnectionShutdownSpec
   }
 
   "registers and unregisters a single connection shutdown hook per graph" in {
-    // actor system is within this test as it has to be shut down in order
-    // to verify graph stage termination
-    implicit val system: ActorSystem = ActorSystem(this.getClass.getSimpleName + System.currentTimeMillis())
+    forAll { (avoidArrayCopy: Boolean) =>
+      // actor system is within this test as it has to be shut down in order
+      // to verify graph stage termination
+      implicit val system: ActorSystem = ActorSystem(this.getClass.getSimpleName + System.currentTimeMillis())
 
-    val connectionFactory = new ConnectionFactory() {
-      override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection =
-        new AmqpProxyConnection(super.newConnection(es, ar, name)) with ShutdownListenerTracking
-    }
-    val connectionProvider =
-      AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672)
-    val reusableConnectionProvider = AmqpCachedConnectionProvider(provider = connectionProvider)
-
-    def queueName = "amqp-conn-prov-it-spec-simple-queue-" + System.currentTimeMillis()
-    val queueDeclaration = QueueDeclaration(queueName)
-
-    val amqpSink = AmqpSink.simple(
-      AmqpWriteSettings(reusableConnectionProvider)
-        .withRoutingKey(queueName)
-        .withDeclaration(queueDeclaration))
-
-    val input = Vector("one", "two", "three", "four")
-
-    Future
-      .traverse(input)(in => Source.single(ByteString(in)).runWith(amqpSink))
-      .recover {
-        case NonFatal(e) => system.terminate().flatMap(_ => Future.failed(e))
+      val connectionFactory = new ConnectionFactory() {
+        override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection =
+          new AmqpProxyConnection(super.newConnection(es, ar, name)) with ShutdownListenerTracking
       }
-      .flatMap(_ => system.terminate())
-      .futureValue
+      val connectionProvider =
+        AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672)
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(provider = connectionProvider)
 
-    shutdownsAdded.get() should equal(input.size)
-    shutdownsRemoved.get() should equal(input.size)
+      def queueName = "amqp-conn-prov-it-spec-simple-queue-" + System.currentTimeMillis()
+      val queueDeclaration = QueueDeclaration(queueName)
+
+      val amqpSink = AmqpSink.simple(
+        AmqpWriteSettings(reusableConnectionProvider)
+          .withRoutingKey(queueName)
+          .withDeclaration(queueDeclaration)
+          .withAvoidArrayCopy(avoidArrayCopy))
+
+      val input = Vector("one", "two", "three", "four")
+
+      Future
+        .traverse(input)(in => Source.single(ByteString(in)).runWith(amqpSink))
+        .recover {
+          case NonFatal(e) => system.terminate().flatMap(_ => Future.failed(e))
+        }
+        .flatMap(_ => system.terminate())
+        .futureValue
+
+      shutdownsAdded.get() should equal(input.size)
+      shutdownsRemoved.get() should equal(input.size)
+    }
   }
 }
