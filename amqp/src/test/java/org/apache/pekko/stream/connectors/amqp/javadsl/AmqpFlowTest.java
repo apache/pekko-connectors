@@ -19,10 +19,15 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import scala.collection.JavaConverters;
+
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
@@ -32,6 +37,7 @@ import org.apache.pekko.stream.connectors.amqp.AmqpWriteSettings;
 import org.apache.pekko.stream.connectors.amqp.QueueDeclaration;
 import org.apache.pekko.stream.connectors.amqp.WriteMessage;
 import org.apache.pekko.stream.connectors.amqp.WriteResult;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Keep;
@@ -39,10 +45,21 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.util.ByteString;
-import scala.collection.JavaConverters;
 
 /** Needs a local running AMQP server on the default port with no password. */
+@RunWith(Parameterized.class)
 public class AmqpFlowTest {
+
+  @Parameters
+  public static Iterable<? extends Object> data() {
+    return Arrays.asList(false, true);
+  }
+
+  /**
+   * This value is initialized with values from data() array
+   */
+  @Parameter
+  public boolean avoidArrayCopy;
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
@@ -53,13 +70,14 @@ public class AmqpFlowTest {
     system = ActorSystem.create();
   }
 
-  private static AmqpWriteSettings settings() {
+  private AmqpWriteSettings settings() {
     final String queueName = "amqp-flow-spec" + System.currentTimeMillis();
     final QueueDeclaration queueDeclaration = QueueDeclaration.create(queueName);
 
     return AmqpWriteSettings.create(AmqpLocalConnectionProvider.getInstance())
         .withRoutingKey(queueName)
         .withDeclaration(queueDeclaration)
+        .withAvoidArrayCopy(avoidArrayCopy)
         .withBufferSize(10)
         .withConfirmationTimeout(Duration.ofMillis(200));
   }
