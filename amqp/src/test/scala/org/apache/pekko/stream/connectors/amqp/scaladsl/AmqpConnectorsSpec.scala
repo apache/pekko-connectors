@@ -58,7 +58,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
         val input = Vector("one", "two", "three", "four", "five")
         val result = Source(input).map(s => ByteString(s)).runWith(amqpSink)
-        result.failed.futureValue shouldBe an[ConnectException]
+        result.failed.futureValue shouldBe a[ConnectException]
       }
     }
 
