@@ -106,7 +106,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
         rpcQueueF.futureValue
 
         val amqpSink = AmqpSink.replyTo(
-          AmqpReplyToSinkSettings(connectionProvider))
+          AmqpReplyToSinkSettings(connectionProvider)
+            .withAvoidArrayCopy(avoidArrayCopy))
 
         val sourceToSink = amqpSource
           .viaMat(KillSwitches.single)(Keep.right)
@@ -354,7 +355,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
         rpcQueueF.futureValue
 
         val amqpSink = AmqpSink.replyTo(
-          AmqpReplyToSinkSettings(connectionProvider))
+          AmqpReplyToSinkSettings(connectionProvider)
+            .withAvoidArrayCopy(avoidArrayCopy))
 
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName),
