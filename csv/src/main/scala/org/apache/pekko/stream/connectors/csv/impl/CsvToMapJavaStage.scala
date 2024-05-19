@@ -146,7 +146,7 @@ import pekko.util.ByteString
       customFieldValuePlaceholder,
       headerPlaceholder) {
 
-  override val fieldValuePlaceholder: ByteString = ByteString("")
+  override val fieldValuePlaceholder: ByteString = ByteString.empty
 
   override protected def transformElements(elements: ju.Collection[ByteString]): ju.Collection[ByteString] =
     elements

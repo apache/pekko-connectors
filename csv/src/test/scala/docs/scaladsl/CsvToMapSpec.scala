@@ -340,13 +340,13 @@ class CsvToMapSpec extends CsvSpec {
         Map("eins" -> ByteString("11"),
           "zwei" -> ByteString("12"),
           "drei" -> ByteString("13"),
-          "vier" -> ByteString(""),
-          "fünt" -> ByteString("")),
+          "vier" -> ByteString.empty,
+          "fünt" -> ByteString.empty),
         Map("eins" -> ByteString("21"),
           "zwei" -> ByteString("22"),
           "drei" -> ByteString("23"),
-          "vier" -> ByteString(""),
-          "fünt" -> ByteString(""))))
+          "vier" -> ByteString.empty,
+          "fünt" -> ByteString.empty)))
     // #header-line
   }
 
@@ -408,7 +408,7 @@ class CsvToMapSpec extends CsvSpec {
     result should be(
       Seq(
         Map("eins" -> ByteString("11"), "zwei" -> ByteString("12"), "MyCustomHeader0" -> ByteString("13")),
-        Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "MyCustomHeader0" -> ByteString(""))))
+        Map("eins" -> ByteString("21"), "zwei" -> ByteString("22"), "MyCustomHeader0" -> ByteString.empty)))
     // #header-line
   }
 
@@ -442,7 +442,7 @@ class CsvToMapSpec extends CsvSpec {
           "fünt" -> ByteString("missing")),
         Map("eins" -> ByteString("21"),
           "zwei" -> ByteString("22"),
-          "drei" -> ByteString(""),
+          "drei" -> ByteString.empty,
           "fünt" -> ByteString("missing"))))
     // #header-line
   }
