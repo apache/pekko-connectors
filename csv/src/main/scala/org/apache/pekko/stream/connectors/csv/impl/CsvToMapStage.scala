@@ -121,7 +121,7 @@ import scala.collection.immutable
       customFieldValuePlaceholder,
       headerPlaceholder) {
 
-  override val fieldValuePlaceholder: ByteString = ByteString("")
+  override val fieldValuePlaceholder: ByteString = ByteString.empty
 
   override protected def transformElements(elements: immutable.Seq[ByteString]): immutable.Seq[ByteString] = elements
 
