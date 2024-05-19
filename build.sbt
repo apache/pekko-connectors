@@ -134,7 +134,7 @@ lazy val awsSpiPekkoHttp =
     .configs(IntegrationTest)
     .settings(Defaults.itSettings)
 
-lazy val awslambda = pekkoConnectorProject("awslambda", "aws.api.pekko.http", Dependencies.AwsLambda)
+lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
   .dependsOn(awsSpiPekkoHttp)
 
 lazy val azureStorageQueue = pekkoConnectorProject(
