@@ -78,7 +78,7 @@ import pekko.annotation.InternalApi
           throw new BufferOverflowException()
         }
 
-        pathOut.write(elem.toArray)
+        pathOut.write(elem.toArrayUnsafe())
         pull(in)
       }
 

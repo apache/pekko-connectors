@@ -32,7 +32,7 @@ import pekko.stream.scaladsl.Source
       signAnonymousRequests: Boolean): Source[HttpRequest, NotUsed] =
     if (!signAnonymousRequests && key.anonymous) Source.single(request)
     else {
-      val hashedBody = request.entity.dataBytes.via(digest()).map(hash => encodeHex(hash.toArray))
+      val hashedBody = request.entity.dataBytes.via(digest()).map(hash => encodeHex(hash))
 
       hashedBody
         .map { hb =>
