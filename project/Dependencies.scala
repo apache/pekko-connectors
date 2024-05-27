@@ -347,6 +347,15 @@ object Dependencies {
       "org.mdedetrich" %% "pekko-stream-circe" % "1.0.0",
       "org.mdedetrich" %% "pekko-http-circe" % "1.0.0"))
 
+  val JakartaMs = Seq(
+    libraryDependencies ++= Seq(
+      "jakarta.jms" % "jakarta.jms-api" % "3.0.0" % Provided,
+      "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.3.5.1" % Test,
+      "org.apache.activemq" % "artemis-server" % "2.19.1" % Test,
+      "org.apache.activemq" % "artemis-jakarta-client" % "2.19.1" % Test,
+      "org.apache.activemq" % "artemis-junit" % "2.19.1" % Test,
+      "com.github.pjfanning" % "jakartamswrapper" % "0.1.0" % Test) ++ Mockito)
+
   val Jms = Seq(
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,

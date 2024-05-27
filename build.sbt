@@ -274,6 +274,8 @@ lazy val ironmq = pekkoConnectorProject(
 
 lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 
+lazy val jakarta = pekkoConnectorProject("jakartams", "jakartams", Dependencies.JakartaMs)
+
 lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
 
 lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
