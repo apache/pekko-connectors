@@ -24,6 +24,9 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6
 
+      - name: Setup Coursier
+        uses: coursier/setup-action@v1
+
       - name: sbt site
         run: sbt docs/makeSite
 
