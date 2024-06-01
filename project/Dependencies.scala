@@ -403,7 +403,7 @@ object Dependencies {
       "com.orientechnologies" % "orientdb-object" % "3.2.30"))
 
   val PravegaVersion = "0.13.0"
-  val PravegaVersionForDocs = s"v$PravegaVersion"
+  val PravegaVersionForDocs = "latest"
 
   val Pravega = {
     Seq(
