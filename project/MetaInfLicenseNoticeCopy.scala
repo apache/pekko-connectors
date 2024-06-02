@@ -31,6 +31,10 @@ object MetaInfLicenseNoticeCopy extends AutoPlugin {
     apacheSonatypeLicenseFile := baseDir.value / "legal" / "StandardLicense.txt",
     apacheSonatypeNoticeFile := baseDir.value / "legal" / "PekkoConnectorsNotice.txt")
 
+  lazy val ftpSettings = Seq(
+    apacheSonatypeLicenseFile := baseDir.value / "legal" / "FTPLicense.txt",
+    apacheSonatypeNoticeFile := baseDir.value / "legal" / "FTPNotice.txt")
+
   lazy val mqttStreamingSettings = Seq(
     apacheSonatypeLicenseFile := baseDir.value / "legal" / "MqttStreamingLicense.txt")
 

@@ -164,6 +164,7 @@ lazy val ftp = pekkoConnectorProject(
   "ftp",
   "ftp",
   Dependencies.Ftp,
+  MetaInfLicenseNoticeCopy.ftpSettings,
   Test / fork := true,
   // To avoid potential blocking in machines with low entropy (default is `/dev/random`)
   Test / javaOptions += "-Djava.security.egd=file:/dev/./urandom")
