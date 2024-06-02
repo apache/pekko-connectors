@@ -21,7 +21,7 @@ import pekko.stream.connectors.ftp.FtpCredentials
 import pekko.stream.connectors.ftp._
 
 import net.schmizz.sshj.SSHClient
-import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
+import org.apache.commons.net.ftp.{ FTPClient, FTPSClient, LegacyFtpsClient }
 
 /**
  * INTERNAL API

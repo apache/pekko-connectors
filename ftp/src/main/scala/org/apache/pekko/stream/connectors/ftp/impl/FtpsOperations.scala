@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.ftp.impl
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.{ FtpAuthenticationException, FtpsSettings }
-import org.apache.commons.net.ftp.{ FTP, FTPSClient }
+import org.apache.commons.net.ftp.{ FTP, FTPSClient, LegacyFtpsClient }
 
 import scala.util.Try
 
