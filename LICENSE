@@ -202,7 +202,8 @@
 
 ---------------
 
-pekko-connectors-ftp contains code copied from Apache Commons Net <https://github.com/apache/commons-net>.
+pekko-connectors-ftp contains code copied from Apache Commons Net
+<https://commons.apache.org/proper/commons-net/>.
 The original code was released under the Apache 2.0 license.
 
 ---------------
