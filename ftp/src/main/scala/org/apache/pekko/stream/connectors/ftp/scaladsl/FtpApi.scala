@@ -23,7 +23,7 @@ import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import net.schmizz.sshj.SSHClient
-import org.apache.commons.net.ftp.FTPClient
+import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
 import scala.concurrent.Future
 
@@ -274,7 +274,7 @@ object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
 
 }
 
-object Ftps extends FtpApi[FTPClient, FtpsSettings] with FtpsSourceParams {
+object Ftps extends FtpApi[FTPSClient, FtpsSettings] with FtpsSourceParams {
   def ls(host: String): Source[FtpFile, NotUsed] = ls(host, basePath = "")
 
   def ls(host: String, basePath: String): Source[FtpFile, NotUsed] = ls(basePath, defaultSettings(host))
