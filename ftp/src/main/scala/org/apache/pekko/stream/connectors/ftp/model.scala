@@ -54,7 +54,7 @@ abstract sealed class RemoteFileSettings {
 }
 
 /**
- * Common settings for FTP and FTPs.
+ * Common settings for FTP and FTPS.
  */
 @DoNotInherit
 abstract sealed class FtpFileSettings extends RemoteFileSettings {
@@ -166,7 +166,7 @@ object FtpSettings {
 }
 
 /**
- * FTPs settings
+ * FTPS settings
  *
  * @param host host
  * @param port port
@@ -267,11 +267,11 @@ final class FtpsSettings private (
 }
 
 /**
- * FTPs settings factory
+ * FTPS settings factory
  */
 object FtpsSettings {
 
-  /** Default FTPs port (2222) */
+  /** Default FTPS port (2222) */
   final val DefaultFtpsPort = 2222
 
   /** Scala API */

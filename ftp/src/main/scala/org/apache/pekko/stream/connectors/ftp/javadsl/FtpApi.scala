@@ -36,7 +36,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
    * By default, `anonymous` credentials will be used.
    *
-   * @param host FTP, FTPs or SFTP host
+   * @param host FTP, FTPS or SFTP host
    * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
   def ls(host: String): Source[FtpFile, NotUsed]
@@ -45,7 +45,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    * By default, `anonymous` credentials will be used.
    *
-   * @param host FTP, FTPs or SFTP host
+   * @param host FTP, FTPS or SFTP host
    * @param basePath Base path from which traverse the remote file server
    * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
    */
@@ -56,7 +56,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
   /**
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from the remote user `root` directory.
    *
-   * @param host FTP, FTPs or SFTP host
+   * @param host FTP, FTPS or SFTP host
    * @param username username
    * @param password password
    * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
@@ -69,7 +69,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
   /**
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s from a base path.
    *
-   * @param host FTP, FTPs or SFTP host
+   * @param host FTP, FTPS or SFTP host
    * @param username username
    * @param password password
    * @param basePath Base path from which traverse the remote file server
@@ -133,7 +133,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
   /**
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
-   * @param host FTP, FTPs or SFTP host
+   * @param host FTP, FTPS or SFTP host
    * @param path the file path
    * @return A [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] that materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[IOResult]]
    */
@@ -144,7 +144,7 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
   /**
    * Java API: creates a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]] from some file path.
    *
-   * @param host FTP, FTPs or SFTP host
+   * @param host FTP, FTPS or SFTP host
    * @param username username
    * @param password password
    * @param path the file path
