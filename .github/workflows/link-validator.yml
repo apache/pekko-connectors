@@ -15,11 +15,11 @@ jobs:
           fetch-tags: true
           fetch-depth: 0
 
-      - name: Setup Java 11
+      - name: Setup Java 8
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 11
+          java-version: 8
 
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6

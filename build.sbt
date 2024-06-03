@@ -370,15 +370,16 @@ lazy val docs = project
       "extref.github.base_url" -> s"https://github.com/apache/pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
-      "scaladoc.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
-      "javadoc.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
-      "javadoc.pekko.link_style" -> "direct",
+      "scaladoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
+      "javadoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
+      "javadoc.org.apache.pekko.link_style" -> "direct",
       "extref.pekko-http.base_url" -> s"https://pekko.apache.org/docs/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/%s",
-      "scaladoc.pekko.http.base_url" -> s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
-      "javadoc.pekko.http.base_url" -> s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "scaladoc.org.apache.pekko.http.base_url" -> s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "javadoc.org.apache.pekko.http.base_url" -> s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
       // Pekko gRPC
       "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
       "extref.pekko-grpc.base_url" -> s"https://pekko.apache.org/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
+      "scaladoc.org.apache.pekko.gprc.base_url" -> s"https://pekko.apache.org/api/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/",
       // Couchbase
       "couchbase.version" -> Dependencies.CouchbaseVersion,
       "extref.couchbase.base_url" -> s"https://docs.couchbase.com/java-sdk/${Dependencies.CouchbaseVersionForDocs}/%s",
