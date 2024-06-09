@@ -254,7 +254,7 @@ object Dependencies {
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion % Test,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
-  val ArrowVersion = "16.0.0"
+  val ArrowVersion = "16.1.0"
   val GoogleBigQueryStorage = Seq(
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
