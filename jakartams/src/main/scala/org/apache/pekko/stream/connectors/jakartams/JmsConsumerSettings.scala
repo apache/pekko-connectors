@@ -15,8 +15,8 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import com.typesafe.config.{ Config, ConfigValueType }
 import org.apache.pekko
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.util.JavaDurationConverters._
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.util.JavaDurationConverters._
 
 import scala.concurrent.duration.FiniteDuration
 

@@ -10,9 +10,9 @@
 package org.apache.pekko.stream.connectors.jakartams.impl
 
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Materializer
-import org.apache.pekko.stream.connectors.jakartams.Destination
+import pekko.annotation.InternalApi
+import pekko.stream.Materializer
+import pekko.stream.connectors.jakartams.Destination
 
 import scala.concurrent.duration.FiniteDuration
 

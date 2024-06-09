@@ -14,13 +14,12 @@
 package docs.scaladsl
 
 import jakarta.jms.TextMessage
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory
 import org.apache.pekko
-import org.apache.pekko.Done
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, RestartSource, Sink, Source }
+import pekko.Done
+import pekko.stream._
+import pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import pekko.stream.scaladsl.{ Flow, Keep, RestartSource, Sink, Source }
 import org.scalatest.Inspectors._
 import org.slf4j.LoggerFactory
 

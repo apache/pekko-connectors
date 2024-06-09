@@ -15,11 +15,11 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.connectors.jakartams.impl.JmsConnector.FlushAcknowledgementsTimerKey
-import org.apache.pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
-import org.apache.pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams.impl.JmsConnector.FlushAcknowledgementsTimerKey
+import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
+import pekko.stream.{ Attributes, Outlet, SourceShape }
 
 /**
  * Internal API.

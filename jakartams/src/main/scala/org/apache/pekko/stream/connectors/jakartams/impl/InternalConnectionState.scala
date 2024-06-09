@@ -15,8 +15,8 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
+import pekko.Done
+import pekko.annotation.InternalApi
 
 import scala.concurrent.Future
 import scala.util.Try

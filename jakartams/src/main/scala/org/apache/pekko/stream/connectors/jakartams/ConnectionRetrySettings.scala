@@ -14,9 +14,9 @@
 package org.apache.pekko.stream.connectors.jakartams
 
 import com.typesafe.config.Config
-import org.apache.pekko
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import org.apache.pekko.util.JavaDurationConverters._
+import org.apache.pekko;
+import pekko.actor.{ActorSystem, ClassicActorSystemProvider}
+import pekko.util.JavaDurationConverters._
 
 import scala.concurrent.duration._
 
@@ -33,28 +33,28 @@ final class ConnectionRetrySettings private (
     val maxRetries: Int) {
 
   /** Time allowed to establish and start a connection. */
-  def withConnectTimeout(value: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
-    copy(connectTimeout = value)
+  def withConnectTimeout(timeout: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
+    copy(connectTimeout = timeout)
 
   /** Java API: Time allowed to establish and start a connection. */
-  def withConnectTimeout(value: java.time.Duration): ConnectionRetrySettings = copy(connectTimeout = value.asScala)
+  def withConnectTimeout(timeout: java.time.Duration): ConnectionRetrySettings = copy(connectTimeout = timeout.asScala)
 
   /** Wait time before retrying the first time. */
-  def withInitialRetry(value: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
-    copy(initialRetry = value)
+  def withInitialRetry(timeout: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
+    copy(initialRetry = timeout)
 
   /** Java API: Wait time before retrying the first time. */
-  def withInitialRetry(value: java.time.Duration): ConnectionRetrySettings = copy(initialRetry = value.asScala)
+  def withInitialRetry(timeout: java.time.Duration): ConnectionRetrySettings = copy(initialRetry = timeout.asScala)
 
   /** Back-off factor for subsequent retries. */
-  def withBackoffFactor(value: Double): ConnectionRetrySettings = copy(backoffFactor = value)
+  def withBackoffFactor(factor: Double): ConnectionRetrySettings = copy(backoffFactor = factor)
 
   /** Maximum back-off time allowed, after which all retries will happen after this delay. */
-  def withMaxBackoff(value: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
-    copy(maxBackoff = value)
+  def withMaxBackoff(backoffTime: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
+    copy(maxBackoff = backoffTime)
 
   /** Java API: Maximum back-off time allowed, after which all retries will happen after this delay. */
-  def withMaxBackoff(value: java.time.Duration): ConnectionRetrySettings = copy(maxBackoff = value.asScala)
+  def withMaxBackoff(backoffTime: java.time.Duration): ConnectionRetrySettings = copy(maxBackoff = backoffTime.asScala)
 
   /** Maximum number of retries allowed. */
   def withMaxRetries(value: Int): ConnectionRetrySettings = copy(maxRetries = value)

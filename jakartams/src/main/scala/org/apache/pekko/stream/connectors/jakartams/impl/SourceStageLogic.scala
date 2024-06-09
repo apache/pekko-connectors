@@ -15,13 +15,13 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jakartams.impl.InternalConnectionState.JmsConnectorStopping
-import org.apache.pekko.stream.connectors.jakartams.{ Destination, JmsConsumerSettings }
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
-import org.apache.pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jakartams.impl.InternalConnectionState.JmsConnectorStopping
+import pekko.stream.connectors.jakartams.{ Destination, JmsConsumerSettings }
+import pekko.stream.scaladsl.Source
+import pekko.stream.stage.{ OutHandler, StageLogging, TimerGraphStageLogic }
+import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
+import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.collection.mutable

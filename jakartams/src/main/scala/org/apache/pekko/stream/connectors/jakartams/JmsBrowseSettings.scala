@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import com.typesafe.config.{ Config, ConfigValueType }
 import org.apache.pekko
-import org.apache.pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 
 /**
  * Settings for [[pekko.stream.connectors.jakartams.scaladsl.JmsConsumer.browse]] and [[pekko.stream.connectors.jakartams.javadsl.JmsConsumer.browse]].
