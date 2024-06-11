@@ -31,7 +31,7 @@ import software.amazon.awssdk.services.sqs.model.{
 
 import scala.util.Random
 
-class ITTestSQS extends AnyWordSpec with Matchers with TestBase {
+class SQSITTest extends AnyWordSpec with Matchers with TestBase {
 
   def withClient(testCode: SqsAsyncClient => Any): Any = {
 

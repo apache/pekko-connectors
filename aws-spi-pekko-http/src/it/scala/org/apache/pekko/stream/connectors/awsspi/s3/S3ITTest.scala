@@ -28,7 +28,7 @@ import software.amazon.awssdk.services.s3.model._
 
 import scala.util.Random
 
-class ITTestS3 extends AnyWordSpec with Matchers with TestBase {
+class S3ITTest extends AnyWordSpec with Matchers with TestBase {
 
   def withClient(checksumEnabled: Boolean = false)(testCode: S3AsyncClient => Any): Any = {
 

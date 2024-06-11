@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.kinesis.model._
 
 import scala.util.Random
 
-class ITTestKinesis extends AnyWordSpec with Matchers with TestBase {
+class KinesisITTest extends AnyWordSpec with Matchers with TestBase {
 
   def withClient(testCode: KinesisAsyncClient => Any): Any = {
 
