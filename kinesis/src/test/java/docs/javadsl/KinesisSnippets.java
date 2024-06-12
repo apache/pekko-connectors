@@ -15,6 +15,7 @@ package docs.javadsl;
 
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.kinesis.KinesisFlowSettings;
 import org.apache.pekko.stream.connectors.kinesis.ShardIterators;
 import org.apache.pekko.stream.connectors.kinesis.ShardSettings;
@@ -26,7 +27,6 @@ import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 // #init-client
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 // #init-client
 import software.amazon.awssdk.services.kinesis.model.PutRecordsRequestEntry;

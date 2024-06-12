@@ -15,9 +15,9 @@ package docs.scaladsl
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
+import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 // #awsRetryConfiguration

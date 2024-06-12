@@ -32,7 +32,7 @@ import pekko.testkit.TestKit
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 //#init-client
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
+import pekko.stream.connectors.awsspi.PekkoHttpClient
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient

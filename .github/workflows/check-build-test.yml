@@ -40,6 +40,9 @@ jobs:
       - name: "Code style, compile tests, MiMa. Run locally with: sbt \"javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues\""
         run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
 
+      - name: "Integration Test Compile"
+        run: sbt "+IntegrationTest/compile"
+
   documentation:
     name: ScalaDoc, Documentation with Paradox
     runs-on: ubuntu-20.04
@@ -78,6 +81,7 @@ jobs:
         include:
           - { connector: amqp,                         pre_cmd: 'docker-compose up -d amqp' }
           - { connector: avroparquet }
+          - { connector: aws-spi-pekko-http }
           - { connector: awslambda }
           - { connector: aws-event-bridge,             pre_cmd: 'docker-compose up -d amazoneventbridge' }
           - { connector: azure-storage-queue }

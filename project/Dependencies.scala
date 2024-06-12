@@ -57,7 +57,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = "3.2.18.0" // https://github.com/scalatest/scalatest/issues/2311
+  val scalaTestMockitoVersion = scalaTestScalaCheckVersion
 
   val CouchbaseVersion = "2.7.23"
   val Couchbase3Version = "3.6.0"
@@ -127,11 +127,28 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.rabbitmq" % "amqp-client" % "5.21.0") ++ Mockito)
 
+  val AwsSpiPekkoHttp = Seq(
+    libraryDependencies ++= Seq(
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "software.amazon.awssdk" % "http-client-spi" % AwsSdk2Version,
+      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",
+      "org.scalatestplus" %% "junit-4-13" % scalaTestScalaCheckVersion % "it,test",
+      "ch.qos.logback" % "logback-classic" % LogbackVersion % "it,test"))
+
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "lambda" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
@@ -177,8 +194,6 @@ object Dependencies {
 
   val DynamoDB = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -363,8 +378,6 @@ object Dependencies {
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(ExclusionRule(
-        organization = "org.apache.pekko"))) ++ Seq(
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
       "software.amazon.kinesis" % "amazon-kinesis-client" % "2.6.0").map(
@@ -452,8 +465,6 @@ object Dependencies {
 
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "eventbridge" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -461,8 +472,6 @@ object Dependencies {
 
   val Sns = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "sns" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -483,8 +492,6 @@ object Dependencies {
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),

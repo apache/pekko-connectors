@@ -17,10 +17,10 @@ import java.net.URI
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
+import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.dynamodb.scaladsl.DynamoDb
 import pekko.testkit.TestKit
 import pekko.util.ccompat.JavaConverters._
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region

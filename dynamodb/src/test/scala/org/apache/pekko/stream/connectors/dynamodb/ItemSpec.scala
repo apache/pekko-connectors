@@ -16,11 +16,11 @@ package org.apache.pekko.stream.connectors.dynamodb
 import java.net.URI
 import org.apache.pekko
 import pekko.actor.ActorSystem
+import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.dynamodb.scaladsl._
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
 import pekko.util.ccompat.JavaConverters._
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
