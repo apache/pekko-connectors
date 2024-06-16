@@ -61,7 +61,8 @@ object OrientDbFlow {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]): Flow[immutable.Seq[OrientDbWriteMessage[T, NotUsed]], immutable.Seq[OrientDbWriteMessage[T,
+      clazz: Class[T]): Flow[immutable.Seq[OrientDbWriteMessage[T, NotUsed]],
+    immutable.Seq[OrientDbWriteMessage[T,
       NotUsed]], NotUsed] =
     Flow
       .fromGraph(

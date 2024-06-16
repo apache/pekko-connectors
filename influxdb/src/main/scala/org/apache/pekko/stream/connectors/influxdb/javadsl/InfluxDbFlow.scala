@@ -41,7 +41,8 @@ object InfluxDbFlow {
 
   def typed[T](
       clazz: Class[T],
-      influxDB: InfluxDB): Flow[java.util.List[InfluxDbWriteMessage[T, NotUsed]], java.util.List[InfluxDbWriteResult[T,
+      influxDB: InfluxDB): Flow[java.util.List[InfluxDbWriteMessage[T, NotUsed]],
+    java.util.List[InfluxDbWriteResult[T,
       NotUsed]], NotUsed] =
     pekko.stream.scaladsl
       .Flow[java.util.List[InfluxDbWriteMessage[T, NotUsed]]]

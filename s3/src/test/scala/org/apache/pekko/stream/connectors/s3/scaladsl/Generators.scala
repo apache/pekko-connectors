@@ -28,14 +28,11 @@ object Generators {
   // bucketnames
 
   lazy val bucketLetterOrNumberCharGen: Gen[Char] = Gen.frequency(
-    (1, Gen.numChar),
-    (1, Gen.alphaLowerChar))
+    (1, Gen.numChar), (1, Gen.alphaLowerChar))
 
   def bucketAllCharGen(useVirtualDotHost: Boolean): Gen[Char] = {
     val base = List(
-      (10, Gen.alphaLowerChar),
-      (1, Gen.const('-')),
-      (1, Gen.numChar))
+      (10, Gen.alphaLowerChar), (1, Gen.const('-')), (1, Gen.numChar))
 
     val frequency = if (useVirtualDotHost) (1, Gen.const('.')) +: base else base
 
