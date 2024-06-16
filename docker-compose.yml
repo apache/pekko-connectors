@@ -127,11 +127,11 @@ services:
       - "1414:1414"
       - "9443:9443"
   ironauth:
-    image: iron/auth
+    image: iron/auth:release
     ports:
       - "8090:8090"
   ironmq:
-    image: iron/mq
+    image: iron/mq:release
     links:
       - "ironauth:ironauth"
     environment:
