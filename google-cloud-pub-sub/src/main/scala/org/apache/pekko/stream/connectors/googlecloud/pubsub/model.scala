@@ -189,7 +189,8 @@ final class PubSubMessage private (val data: Option[String],
 
   override def equals(other: Any): Boolean = other match {
     case that: PubSubMessage =>
-      data == that.data && attributes == that.attributes && messageId == that.messageId && publishTime == that.publishTime && orderingKey == that.orderingKey
+      data == that.data && attributes == that.attributes && messageId == that.messageId && publishTime == that
+        .publishTime && orderingKey == that.orderingKey
     case _ => false
   }
 

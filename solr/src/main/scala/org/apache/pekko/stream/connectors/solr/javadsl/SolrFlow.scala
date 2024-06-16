@@ -37,7 +37,8 @@ object SolrFlow {
   def documents(
       collection: String,
       settings: SolrUpdateSettings,
-      client: SolrClient): javadsl.Flow[java.util.List[WriteMessage[SolrInputDocument, NotUsed]], java.util.List[
+      client: SolrClient): javadsl.Flow[java.util.List[WriteMessage[SolrInputDocument, NotUsed]],
+    java.util.List[
       WriteResult[SolrInputDocument, NotUsed]], NotUsed] =
     Flow
       .fromFunction[java.util.List[WriteMessage[SolrInputDocument, NotUsed]],
@@ -97,10 +98,12 @@ object SolrFlow {
   def documentsWithPassThrough[PT](
       collection: String,
       settings: SolrUpdateSettings,
-      client: SolrClient): javadsl.Flow[java.util.List[WriteMessage[SolrInputDocument, PT]], java.util.List[WriteResult[
+      client: SolrClient): javadsl.Flow[java.util.List[WriteMessage[SolrInputDocument, PT]],
+    java.util.List[WriteResult[
       SolrInputDocument, PT]], NotUsed] =
     Flow
-      .fromFunction[java.util.List[WriteMessage[SolrInputDocument, PT]], immutable.Seq[WriteMessage[SolrInputDocument,
+      .fromFunction[java.util.List[WriteMessage[SolrInputDocument, PT]],
+        immutable.Seq[WriteMessage[SolrInputDocument,
           PT]]](
         _.asScala.toIndexedSeq)
       .via(

@@ -178,12 +178,8 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
       val messages = probe.expectNextN(input.size)
 
       val expectedResult = Seq(
-        (WriteResult.confirmed, input(0)),
-        (WriteResult.confirmed, input(1)),
-        (WriteResult.confirmed, input(2)),
-        (WriteResult.rejected, input(3)),
-        (WriteResult.rejected, input(4)),
-        (WriteResult.rejected, input(5)),
+        (WriteResult.confirmed, input(0)), (WriteResult.confirmed, input(1)), (WriteResult.confirmed, input(2)),
+        (WriteResult.rejected, input(3)), (WriteResult.rejected, input(4)), (WriteResult.rejected, input(5)),
         (WriteResult.rejected, input(6)))
 
       messages should contain theSameElementsInOrderAs expectedResult
@@ -264,12 +260,8 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
       val messages = probe.expectNextN(input.size)
 
       val expectedResult = Seq(
-        (WriteResult.confirmed, input(1)),
-        (WriteResult.confirmed, input(0)),
-        (WriteResult.confirmed, input(2)),
-        (WriteResult.rejected, input(6)),
-        (WriteResult.rejected, input(3)),
-        (WriteResult.rejected, input(4)),
+        (WriteResult.confirmed, input(1)), (WriteResult.confirmed, input(0)), (WriteResult.confirmed, input(2)),
+        (WriteResult.rejected, input(6)), (WriteResult.rejected, input(3)), (WriteResult.rejected, input(4)),
         (WriteResult.rejected, input(5)))
 
       messages should contain theSameElementsInOrderAs expectedResult

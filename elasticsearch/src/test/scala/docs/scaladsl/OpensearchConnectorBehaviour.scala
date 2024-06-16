@@ -358,9 +358,7 @@ trait OpensearchConnectorBehaviour {
 
       "store new documents using upsert method and partially update existing ones" in {
         val books = List(
-          ("00001", Book("Book 1")),
-          ("00002", Book("Book 2")),
-          ("00003", Book("Book 3")))
+          ("00001", Book("Book 1")), ("00002", Book("Book 2")), ("00003", Book("Book 3")))
 
         val indexName = "sink7"
         val createBooks = Source(books)
@@ -381,11 +379,9 @@ trait OpensearchConnectorBehaviour {
         val updatedBooks = List(
           ("00001",
             JsObject(
-              "rating" -> JsNumber(4))),
-          ("00002",
+              "rating" -> JsNumber(4))), ("00002",
             JsObject(
-              "rating" -> JsNumber(3))),
-          ("00003",
+              "rating" -> JsNumber(3))), ("00003",
             JsObject(
               "rating" -> JsNumber(3))))
 

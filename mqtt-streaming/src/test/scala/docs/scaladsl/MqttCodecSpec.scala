@@ -128,7 +128,8 @@ class MqttCodecSpec extends AnyWordSpec with Matchers with LogCapturing {
         Connect.Mqtt,
         Connect.v311,
         "some-client-id",
-        ConnectFlags.CleanSession | ConnectFlags.WillFlag | ConnectFlags.WillQoS | ConnectFlags.WillRetain | ConnectFlags.PasswordFlag | ConnectFlags.UsernameFlag,
+        ConnectFlags.CleanSession | ConnectFlags.WillFlag | ConnectFlags.WillQoS | ConnectFlags
+          .WillRetain | ConnectFlags.PasswordFlag | ConnectFlags.UsernameFlag,
         1.second,
         Some("some-will-topic"),
         Some("some-will-message"),
