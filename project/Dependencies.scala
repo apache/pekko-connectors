@@ -457,6 +457,12 @@ object Dependencies {
 
   val SlickVersion = "3.5.1"
   val Slick = Seq(
+    // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
+    // See: https://github.com/slick/slick/issues/2933
+    libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, _)) => Seq("org.scala-lang" % "scala-reflect" % scalaVersion.value)
+      case _            => Nil
+    }),
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
