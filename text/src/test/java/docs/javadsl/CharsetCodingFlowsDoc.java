@@ -13,9 +13,8 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.actor.ActorSystem;
-
 // #encoding
+import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.connectors.text.javadsl.TextFlow;
 import org.apache.pekko.stream.IOResult;
@@ -28,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 
 // #encoding
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -41,13 +39,13 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class CharsetCodingFlowsDoc {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
+
+  @Rule
+  public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final ActorSystem system = ActorSystem.create();
 
