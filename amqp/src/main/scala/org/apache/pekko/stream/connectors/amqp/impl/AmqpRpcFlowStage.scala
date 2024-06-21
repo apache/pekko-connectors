@@ -106,11 +106,10 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
               consumerCallback.invoke(
                 new CommittableReadResult {
                   override val message = {
-                    val byteString = if (settings.avoidArrayCopy) {
+                    val byteString = if (settings.avoidArrayCopy)
                       ByteString.fromArrayUnsafe(body)
-                    } else {
+                    else
                       ByteString(body)
-                    }
                     ReadResult(byteString, envelope, properties)
                   }
 

@@ -93,11 +93,10 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
               envelope: Envelope,
               properties: BasicProperties,
               body: Array[Byte]): Unit = {
-            val byteString = if (settings.avoidArrayCopy) {
+            val byteString = 
               ByteString.fromArrayUnsafe(body)
-            } else {
+            else
               ByteString(body)
-            }
 
             val message = if (ackRequired) {
 
