@@ -1,6 +1,6 @@
 # FTP
 
-The FTP connector provides Apache Pekko Stream sources to connect to FTP, FTPs and SFTP servers. Currently, two kinds of sources are provided:
+The FTP connector provides Apache Pekko Stream sources to connect to FTP, FTPS and SFTP servers. Currently, two kinds of sources are provided:
 
 * one for browsing or traversing the server recursively and,
 * another for retrieving files as a stream of bytes.
@@ -27,7 +27,7 @@ The table below shows direct dependencies of this module and the second tab show
 
 ## Configuring the connection settings
 
-In order to establish a connection with the remote server, you need to provide a specialized version of a @scaladoc[RemoteFileSettings](org.apache.pekko.stream.connectors.ftp.RemoteFileSettings) instance. It's specialized as it depends on the kind of server you're connecting to: FTP, FTPs or SFTP.
+In order to establish a connection with the remote server, you need to provide a specialized version of a @scaladoc[RemoteFileSettings](org.apache.pekko.stream.connectors.ftp.RemoteFileSettings) instance. It's specialized as it depends on the kind of server you're connecting to: FTP, FTPS or SFTP.
 
 Scala
 : @@snip [snip](/ftp/src/test/scala/docs/scaladsl/FtpExamplesSpec.scala) { #create-settings }
@@ -35,10 +35,10 @@ Scala
 Java
 : @@snip [snip](/ftp/src/test/java/docs/javadsl/FtpWritingTest.java) { #create-settings }
 
-The configuration above will create an anonymous connection with a remote FTP server in passive mode. For both FTPs and SFTP servers, you will need to provide the specialized versions of these settings: @scaladoc[FtpsSettings](org.apache.pekko.stream.connectors.ftp.FtpsSettings) or @scaladoc[SftpSettings](org.apache.pekko.stream.connectors.ftp.SftpSettings)
+The configuration above will create an anonymous connection with a remote FTP server in passive mode. For both FTPS and SFTP servers, you will need to provide the specialized versions of these settings: @scaladoc[FtpsSettings](org.apache.pekko.stream.connectors.ftp.FtpsSettings) or @scaladoc[SftpSettings](org.apache.pekko.stream.connectors.ftp.SftpSettings)
 respectively.
 
-The example demonstrates optional use of `configureConnection` option available on FTP and FTPs clients. Use it to configure any custom parameters the server may require, such as explicit or implicit data transfer encryption.
+The example demonstrates optional use of `configureConnection` option available on FTP and FTPS clients. Use it to configure any custom parameters the server may require, such as explicit or implicit data transfer encryption.
 
 For non-anonymous connection, please provide an instance of @scaladoc[NonAnonFtpCredentials](org.apache.pekko.stream.connectors.ftp.FtpCredentials$$NonAnonFtpCredentials) instead.
 
@@ -76,7 +76,7 @@ Java
 
 This source will emit @scaladoc[FtpFile](org.apache.pekko.stream.connectors.ftp.FtpFile) elements with no significant materialization.
 
-For both FTPs and SFTP servers, you will need to use the `FTPs` and `SFTP` API respectively.
+For both FTPS and SFTP servers, you will need to use the `FTPS` and `SFTP` API respectively.
 
 ## Retrieving files
 
@@ -90,7 +90,7 @@ Java
 
 This source will emit @scaladoc[ByteString](org.apache.pekko.util.ByteString) elements and materializes to @scaladoc[Future](scala.concurrent.Future) in Scala API and @javadoc[CompletionStage](java/util/concurrent/CompletionStage) in Java API of @scaladoc[IOResult](org.apache.pekko.stream.IOResult) when the stream finishes.
 
-For both FTPs and SFTP servers, you will need to use the `FTPs` and `SFTP` API respectively.
+For both FTPS and SFTP servers, you will need to use the `FTPS` and `SFTP` API respectively.
 
 ## Writing files
 
@@ -104,7 +104,7 @@ Java
 
 This sink will consume @scaladoc[ByteString](org.apache.pekko.util.ByteString) elements and materializes to @scaladoc[Future](scala.concurrent.Future) in Scala API and @javadoc[CompletionStage](java/util/concurrent/CompletionStage) in Java API of @scaladoc[IOResult](org.apache.pekko.stream.IOResult) when the stream finishes.
 
-For both FTPs and SFTP servers, you will need to use the `FTPs` and `SFTP` API respectively.
+For both FTPS and SFTP servers, you will need to use the `FTPS` and `SFTP` API respectively.
 
 ## Removing files
 

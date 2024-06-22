@@ -18,13 +18,13 @@ import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 // #init-system
 import org.apache.pekko.stream.connectors.aws.eventbridge.javadsl.EventBridgePublisher;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 
 // #init-client
 import java.net.URI;
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;

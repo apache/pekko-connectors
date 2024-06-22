@@ -28,7 +28,7 @@ object Examples {
 
   def initClient(): Unit = {
     // #init-client
-    import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
+    import pekko.stream.connectors.awsspi.PekkoHttpClient
     import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
     import software.amazon.awssdk.services.lambda.LambdaAsyncClient
 

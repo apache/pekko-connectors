@@ -20,7 +20,7 @@ import javax.net.ssl.TrustManager
 import java.nio.file.attribute.PosixFilePermission
 
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
-import org.apache.commons.net.ftp.FTPClient
+import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
 /**
  * FTP remote file descriptor.
@@ -54,7 +54,7 @@ abstract sealed class RemoteFileSettings {
 }
 
 /**
- * Common settings for FTP and FTPs.
+ * Common settings for FTP and FTPS.
  */
 @DoNotInherit
 abstract sealed class FtpFileSettings extends RemoteFileSettings {
@@ -166,7 +166,7 @@ object FtpSettings {
 }
 
 /**
- * FTPs settings
+ * FTPS settings
  *
  * @param host host
  * @param port port
@@ -188,7 +188,7 @@ final class FtpsSettings private (
     val useFtpsImplicit: Boolean,
     val autodetectUTF8: Boolean,
     val useUpdatedFtpsClient: Boolean,
-    val configureConnection: FTPClient => Unit,
+    val configureConnection: FTPSClient => Unit,
     val proxy: Option[Proxy],
     val keyManager: Option[KeyManager],
     val trustManager: Option[TrustManager]) extends FtpFileSettings {
@@ -213,7 +213,7 @@ final class FtpsSettings private (
    * Scala API:
    * Sets the configure connection callback.
    */
-  def withConfigureConnection(value: FTPClient => Unit): FtpsSettings =
+  def withConfigureConnection(value: FTPSClient => Unit): FtpsSettings =
     copy(configureConnection = value)
 
   /**
@@ -221,7 +221,7 @@ final class FtpsSettings private (
    * Sets the configure connection callback.
    */
   def withConfigureConnectionConsumer(
-      configureConnection: java.util.function.Consumer[FTPClient]): FtpsSettings =
+      configureConnection: java.util.function.Consumer[FTPSClient]): FtpsSettings =
     copy(configureConnection = configureConnection.accept)
 
   private def copy(
@@ -233,7 +233,7 @@ final class FtpsSettings private (
       useFtpsImplicit: Boolean = useFtpsImplicit,
       autodetectUTF8: Boolean = autodetectUTF8,
       useUpdatedFtpsClient: Boolean = useUpdatedFtpsClient,
-      configureConnection: FTPClient => Unit = configureConnection,
+      configureConnection: FTPSClient => Unit = configureConnection,
       proxy: Option[Proxy] = proxy,
       keyManager: Option[KeyManager] = keyManager,
       trustManager: Option[TrustManager] = trustManager): FtpsSettings = new FtpsSettings(
@@ -267,11 +267,11 @@ final class FtpsSettings private (
 }
 
 /**
- * FTPs settings factory
+ * FTPS settings factory
  */
 object FtpsSettings {
 
-  /** Default FTPs port (2222) */
+  /** Default FTPS port (2222) */
   final val DefaultFtpsPort = 2222
 
   /** Scala API */

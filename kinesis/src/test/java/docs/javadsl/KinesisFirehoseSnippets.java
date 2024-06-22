@@ -21,7 +21,7 @@ import org.apache.pekko.stream.connectors.kinesisfirehose.javadsl.KinesisFirehos
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 // #init-client
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient;
 // #init-client
 import software.amazon.awssdk.services.firehose.model.PutRecordBatchResponseEntry;

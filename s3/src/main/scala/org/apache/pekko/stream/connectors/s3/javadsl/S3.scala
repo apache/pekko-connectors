@@ -727,7 +727,8 @@ object S3 {
       bucket: String,
       delimiter: String,
       prefix: Optional[String],
-      s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListBucketResultContents], java.util.List[
+      s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListBucketResultContents],
+    java.util.List[
       ListBucketResultCommonPrefixes]], NotUsed] =
     S3Stream
       .listBucketAndCommonPrefixes(bucket, delimiter, prefix.toScala, s3Headers)
@@ -817,9 +818,9 @@ object S3 {
    */
   def listObjectVersions(
       bucket: String,
-      prefix: Optional[String])
-      : Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions], java.util.List[
-          DeleteMarkers]], NotUsed] =
+      prefix: Optional[String]): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions],
+    java.util.List[
+      DeleteMarkers]], NotUsed] =
     S3Stream
       .listObjectVersions(bucket, prefix.toScala, S3Headers.empty)
       .map {
@@ -839,7 +840,8 @@ object S3 {
   def listObjectVersions(
       bucket: String,
       prefix: Optional[String],
-      s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions], java.util.List[
+      s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions],
+    java.util.List[
       DeleteMarkers]], NotUsed] =
     S3Stream
       .listObjectVersions(bucket, prefix.toScala, s3Headers)
@@ -862,7 +864,8 @@ object S3 {
       bucket: String,
       delimiter: String,
       prefix: Optional[String],
-      s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions], java.util.List[
+      s3Headers: S3Headers): Source[pekko.japi.Pair[java.util.List[ListObjectVersionsResultVersions],
+    java.util.List[
       DeleteMarkers]], NotUsed] =
     S3Stream
       .listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix.toScala, s3Headers)

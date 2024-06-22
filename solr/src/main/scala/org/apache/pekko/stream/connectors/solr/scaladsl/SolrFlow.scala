@@ -34,7 +34,8 @@ object SolrFlow {
   def documents(
       collection: String,
       settings: SolrUpdateSettings)(
-      implicit client: SolrClient): Flow[immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]], immutable.Seq[
+      implicit client: SolrClient): Flow[immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]],
+    immutable.Seq[
       WriteResult[SolrInputDocument, NotUsed]], NotUsed] =
     Flow
       .fromGraph(

@@ -16,6 +16,7 @@ package docs.javadsl;
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.Http;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.sns.javadsl.SnsPublisher;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -24,7 +25,6 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 
 // #init-client
 import java.net.URI;
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;

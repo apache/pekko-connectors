@@ -29,7 +29,7 @@ import scala.concurrent.duration._
 object KinesisSnippets {
 
   // #init-client
-  import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
+  import pekko.stream.connectors.awsspi.PekkoHttpClient
   import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 
   implicit val system: ActorSystem = ActorSystem()

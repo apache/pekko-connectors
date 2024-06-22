@@ -60,7 +60,8 @@ object OrientDbFlow {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]): Flow[java.util.List[OrientDbWriteMessage[T, NotUsed]], java.util.List[OrientDbWriteMessage[T,
+      clazz: Class[T]): Flow[java.util.List[OrientDbWriteMessage[T, NotUsed]],
+    java.util.List[OrientDbWriteMessage[T,
       NotUsed]], NotUsed] =
     pekko.stream.scaladsl
       .Flow[java.util.List[OrientDbWriteMessage[T, NotUsed]]]

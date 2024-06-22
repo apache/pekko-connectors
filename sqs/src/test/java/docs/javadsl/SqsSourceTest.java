@@ -14,6 +14,7 @@
 package docs.javadsl;
 
 import org.apache.pekko.Done;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.sqs.MessageAttributeName;
 import org.apache.pekko.stream.connectors.sqs.MessageSystemAttributeName;
 import org.apache.pekko.stream.connectors.sqs.SqsPublishBatchSettings;
@@ -23,7 +24,6 @@ import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishSink;
 import org.apache.pekko.stream.connectors.sqs.javadsl.SqsSource;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import org.junit.Test;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;

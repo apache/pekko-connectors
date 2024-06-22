@@ -40,6 +40,9 @@ jobs:
       - name: "Code style, compile tests, MiMa. Run locally with: sbt \"javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues\""
         run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
 
+      - name: "Integration Test Compile"
+        run: sbt "+IntegrationTest/compile"
+
   documentation:
     name: ScalaDoc, Documentation with Paradox
     runs-on: ubuntu-20.04
@@ -78,6 +81,7 @@ jobs:
         include:
           - { connector: amqp,                         pre_cmd: 'docker-compose up -d amqp' }
           - { connector: avroparquet }
+          - { connector: aws-spi-pekko-http }
           - { connector: awslambda }
           - { connector: aws-event-bridge,             pre_cmd: 'docker-compose up -d amazoneventbridge' }
           - { connector: azure-storage-queue }
@@ -102,7 +106,8 @@ jobs:
           - { connector: hdfs,                         pre_cmd: 'file ${HOME}/.cache/coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_2.13/2.0.0/cats-kernel_2.13-2.0.0.jar' }
           - { connector: huawei-push-kit }
           - { connector: influxdb,                     pre_cmd: 'docker-compose up -d influxdb' }
-          - { connector: ironmq,                       pre_cmd: 'docker-compose up -d ironauth ironmq' }
+          # ironmq disabled while we resolve https://github.com/apache/pekko-connectors/issues/697
+          # - { connector: ironmq,                       pre_cmd: 'docker-compose up -d ironauth ironmq' }
           - { connector: jakartams,                    pre_cmd: 'docker-compose up -d ibmmq' }
           - { connector: jms,                          pre_cmd: 'docker-compose up -d ibmmq' }
           - { connector: json-streaming }

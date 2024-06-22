@@ -206,11 +206,7 @@ class LogRotatorSinkSpec
 
       val timeBaseCompletion = Source(
         immutable.Seq(
-          ("stream1", "test1"),
-          ("stream1", "test2"),
-          ("stream1", "test3"),
-          ("stream2", "test4"),
-          ("stream2", "test5"),
+          ("stream1", "test1"), ("stream1", "test2"), ("stream1", "test3"), ("stream2", "test4"), ("stream2", "test5"),
           ("stream2", "test6"))).runWith(timeBasedSink)
 
       timeBaseCompletion.futureValue shouldBe Done

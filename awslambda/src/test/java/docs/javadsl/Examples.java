@@ -22,7 +22,7 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 // #init-client
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient;

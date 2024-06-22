@@ -49,7 +49,8 @@ object KinesisSchedulerSource {
   def sharded(
       schedulerBuilder: ShardRecordProcessorFactory => Scheduler,
       settings: KinesisSchedulerSourceSettings)
-      : SubFlow[CommittableRecord, Future[Scheduler], Source[CommittableRecord, Future[Scheduler]]#Repr, RunnableGraph[
+      : SubFlow[CommittableRecord, Future[Scheduler], Source[CommittableRecord, Future[Scheduler]]#Repr,
+        RunnableGraph[
           Future[Scheduler]]] =
     apply(schedulerBuilder, settings)
       .groupBy(MAX_KINESIS_SHARDS, _.processorData.shardId)
