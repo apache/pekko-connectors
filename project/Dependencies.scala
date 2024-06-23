@@ -57,7 +57,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = scalaTestScalaCheckVersion
+  val scalaTestMockitoVersion = "3.2.18.0"
 
   val CouchbaseVersion = "2.7.23"
   val Couchbase3Version = "3.6.0"
