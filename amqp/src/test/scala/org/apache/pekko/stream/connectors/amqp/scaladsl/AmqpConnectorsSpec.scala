@@ -44,7 +44,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     val connectionProvider = AmqpLocalConnectionProvider
 
     "connection should fail to wrong broker" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val connectionProvider = AmqpDetailsConnectionProvider("localhost", 5673)
 
         val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
@@ -54,7 +54,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val input = Vector("one", "two", "three", "four", "five")
         val result = Source(input).map(s => ByteString(s)).runWith(amqpSink)
@@ -63,7 +63,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     }
 
     "connection should fail with wrong credentials" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val connectionProvider =
           AmqpDetailsConnectionProvider("invalid", 5673)
             .withHostsAndPorts(immutable.Seq("localhost" -> 5672))
@@ -76,7 +76,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val input = Vector("one", "two", "three", "four", "five")
         val result = Source(input).map(s => ByteString(s)).runWith(amqpSink)
@@ -85,7 +85,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     }
 
     "publish via RPC which expects 2 responses per message and then consume through a simple queue again in the same JVM" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-rpc-queue-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
 
@@ -93,12 +93,12 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           2)
 
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 1)
 
         val input = Vector("one", "two", "three", "four", "five")
@@ -108,7 +108,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
         val amqpSink = AmqpSink.replyTo(
           AmqpReplyToSinkSettings(connectionProvider)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val sourceToSink = amqpSource
           .viaMat(KillSwitches.single)(Keep.right)
@@ -178,14 +178,14 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     }
 
     "publish from one source and consume elements with multiple sinks" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-work-queues-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
         val amqpSink = AmqpSink.simple(
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val input = Vector("one", "two", "three", "four", "five")
         Source(input).map(s => ByteString(s)).runWith(amqpSink)
@@ -199,7 +199,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
               AmqpSource.atMostOnceSource(
                 NamedQueueSourceSettings(connectionProvider, queueName)
                   .withDeclaration(queueDeclaration)
-                  .withAvoidArrayCopy(avoidArrayCopy),
+                  .withReuseByteArray(reuseByteArray),
                 bufferSize = 1))
             source.out ~> merge.in(n)
           }
@@ -214,20 +214,20 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     }
 
     "not fail on a fast producer and a slow consumer" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-simple-queue-2-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 2)
 
         val amqpSink = AmqpSink.simple(
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val publisher = TestPublisher.probe[ByteString]()
         val subscriber = TestSubscriber.probe[ReadResult]()
@@ -269,7 +269,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     }
 
     "keep connection open if downstream closes and there are pending acks" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val connectionSettings = AmqpDetailsConnectionProvider("localhost", 5672)
 
         val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
@@ -279,12 +279,12 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionSettings)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val amqpSource = AmqpSource.committableSource(
           NamedQueueSourceSettings(connectionSettings, queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 10)
 
         val input = Vector("one", "two", "three", "four", "five")
@@ -301,7 +301,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     }
 
     "not republish message without autoAck(false) if nack is sent" in assertAllStagesStopped {
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
 
@@ -309,14 +309,14 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
         val input = Vector("one", "two", "three", "four", "five")
         Source(input).map(s => ByteString(s)).runWith(amqpSink).futureValue shouldEqual Done
 
         val amqpSource = AmqpSource.committableSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 10)
 
         val result1 = amqpSource
@@ -340,7 +340,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
     "publish via RPC and then consume through a simple queue again in the same JVM without autoAck" in assertAllStagesStopped {
 
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-rpc-queue-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
 
@@ -350,7 +350,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 10)
         val (rpcQueueF, probe) =
           Source(input)
@@ -364,11 +364,11 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
         val amqpSink = AmqpSink.replyTo(
           AmqpReplyToSinkSettings(connectionProvider)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 1)
         val sourceToSink = amqpSource
           .viaMat(KillSwitches.single)(Keep.right)
@@ -384,7 +384,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
     "set routing key per message and consume them in the same JVM" in assertAllStagesStopped {
       def getRoutingKey(s: String) = s"key.$s"
 
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val exchangeName = "amqp.topic." + System.currentTimeMillis()
         val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
         val exchangeDeclaration = ExchangeDeclaration(exchangeName, "topic")
@@ -395,12 +395,12 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withExchange(exchangeName)
             .withDeclarations(immutable.Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
             .withDeclarations(immutable.Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
-            .withAvoidArrayCopy(avoidArrayCopy),
+            .withReuseByteArray(reuseByteArray),
           bufferSize = 10)
 
         val input = Vector("one", "two", "three", "four", "five")
@@ -424,7 +424,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
       val connectionProvider =
         AmqpDetailsConnectionProvider("localhost", 5672)
 
-      forAll { (avoidArrayCopy: Boolean) =>
+      forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-fire-and-forget-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
 
@@ -432,14 +432,14 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
           AmqpWriteSettings(connectionProvider)
             .withRoutingKey(queueName)
             .withDeclaration(queueDeclaration)
-            .withAvoidArrayCopy(avoidArrayCopy))
+            .withReuseByteArray(reuseByteArray))
 
         val amqpSource = AmqpSource
           .committableSource(
             NamedQueueSourceSettings(connectionProvider, queueName)
               .withAckRequired(false)
               .withDeclaration(queueDeclaration)
-              .withAvoidArrayCopy(avoidArrayCopy),
+              .withReuseByteArray(reuseByteArray),
             bufferSize = 10)
 
         val input = Vector("one", "two", "three", "four", "five")

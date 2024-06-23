@@ -28,7 +28,7 @@ import scala.concurrent.duration._
 sealed trait AmqpConnectorSettings {
   def connectionProvider: AmqpConnectionProvider
   def declarations: immutable.Seq[Declaration]
-  def avoidArrayCopy: Boolean
+  def reuseByteArray: Boolean
 }
 
 sealed trait AmqpSourceSettings extends AmqpConnectorSettings
@@ -42,7 +42,7 @@ final class NamedQueueSourceSettings private (
     val ackRequired: Boolean = true,
     val consumerTag: String = "default",
     val arguments: Map[String, AnyRef] = Map.empty,
-    val avoidArrayCopy: Boolean = false) extends AmqpSourceSettings {
+    val reuseByteArray: Boolean = false) extends AmqpSourceSettings {
 
   def withDeclaration(declaration: Declaration): NamedQueueSourceSettings =
     copy(declarations = immutable.Seq(declaration))
@@ -81,8 +81,8 @@ final class NamedQueueSourceSettings private (
   def withArguments(arguments: java.util.Map[String, Object]): NamedQueueSourceSettings =
     copy(arguments = arguments.asScala.toMap)
 
-  def withAvoidArrayCopy(avoidArrayCopy: Boolean): NamedQueueSourceSettings =
-    copy(avoidArrayCopy = avoidArrayCopy)
+  def withReuseByteArray(reuseByteArray: Boolean): NamedQueueSourceSettings =
+    copy(reuseByteArray = reuseByteArray)
 
   private def copy(declarations: immutable.Seq[Declaration] = declarations,
       noLocal: Boolean = noLocal,
@@ -90,7 +90,7 @@ final class NamedQueueSourceSettings private (
       ackRequired: Boolean = ackRequired,
       consumerTag: String = consumerTag,
       arguments: Map[String, AnyRef] = arguments,
-      avoidArrayCopy: Boolean = avoidArrayCopy) =
+      reuseByteArray: Boolean = reuseByteArray) =
     new NamedQueueSourceSettings(
       connectionProvider,
       queue,
@@ -100,7 +100,7 @@ final class NamedQueueSourceSettings private (
       ackRequired = ackRequired,
       consumerTag = consumerTag,
       arguments = arguments,
-      avoidArrayCopy = avoidArrayCopy)
+      reuseByteArray = reuseByteArray)
 
   override def toString: String =
     "NamedQueueSourceSettings(" +
@@ -112,7 +112,7 @@ final class NamedQueueSourceSettings private (
     s"ackRequired=$ackRequired, " +
     s"consumerTag=$consumerTag, " +
     s"arguments=$arguments" +
-    s"avoidArrayCopy=$avoidArrayCopy" +
+    s"reuseByteArray=$reuseByteArray" +
     ")"
 }
 
@@ -132,7 +132,7 @@ final class TemporaryQueueSourceSettings private (
     val exchange: String,
     val declarations: immutable.Seq[Declaration] = Nil,
     val routingKey: Option[String] = None,
-    val avoidArrayCopy: Boolean = false) extends AmqpSourceSettings {
+    val reuseByteArray: Boolean = false) extends AmqpSourceSettings {
 
   def withDeclaration(declaration: Declaration): TemporaryQueueSourceSettings =
     copy(declarations = immutable.Seq(declaration))
@@ -148,14 +148,14 @@ final class TemporaryQueueSourceSettings private (
 
   def withRoutingKey(routingKey: String): TemporaryQueueSourceSettings = copy(routingKey = Some(routingKey))
 
-  def withAvoidArrayCopy(avoidArrayCopy: Boolean): TemporaryQueueSourceSettings =
-    copy(avoidArrayCopy = avoidArrayCopy)
+  def withReuseByteArray(reuseByteArray: Boolean): TemporaryQueueSourceSettings =
+    copy(reuseByteArray = reuseByteArray)
 
   private def copy(declarations: immutable.Seq[Declaration] = declarations,
       routingKey: Option[String] = routingKey,
-      avoidArrayCopy: Boolean = avoidArrayCopy) =
+      reuseByteArray: Boolean = reuseByteArray) =
     new TemporaryQueueSourceSettings(connectionProvider, exchange, declarations = declarations,
-      routingKey = routingKey, avoidArrayCopy = avoidArrayCopy)
+      routingKey = routingKey, reuseByteArray = reuseByteArray)
 
   override def toString: String =
     "TemporaryQueueSourceSettings(" +
@@ -163,7 +163,7 @@ final class TemporaryQueueSourceSettings private (
     s"exchange=$exchange, " +
     s"declarations=$declarations, " +
     s"routingKey=$routingKey" +
-    s"avoidArrayCopy=$avoidArrayCopy" +
+    s"reuseByteArray=$reuseByteArray" +
     ")"
 }
 
@@ -181,25 +181,25 @@ object TemporaryQueueSourceSettings {
 final class AmqpReplyToSinkSettings private (
     val connectionProvider: AmqpConnectionProvider,
     val failIfReplyToMissing: Boolean = true,
-    val avoidArrayCopy: Boolean = false) extends AmqpConnectorSettings {
+    val reuseByteArray: Boolean = false) extends AmqpConnectorSettings {
   override final val declarations = Nil
 
   def withFailIfReplyToMissing(failIfReplyToMissing: Boolean): AmqpReplyToSinkSettings =
     copy(failIfReplyToMissing = failIfReplyToMissing)
 
-  def withAvoidArrayCopy(avoidArrayCopy: Boolean): AmqpReplyToSinkSettings =
-    copy(avoidArrayCopy = avoidArrayCopy)
+  def withReuseByteArray(reuseByteArray: Boolean): AmqpReplyToSinkSettings =
+    copy(reuseByteArray = reuseByteArray)
 
   private def copy(connectionProvider: AmqpConnectionProvider = connectionProvider,
       failIfReplyToMissing: Boolean = failIfReplyToMissing,
-      avoidArrayCopy: Boolean = avoidArrayCopy) =
-    new AmqpReplyToSinkSettings(connectionProvider, failIfReplyToMissing, avoidArrayCopy)
+      reuseByteArray: Boolean = reuseByteArray) =
+    new AmqpReplyToSinkSettings(connectionProvider, failIfReplyToMissing, reuseByteArray)
 
   override def toString: String =
     "AmqpReplyToSinkSettings(" +
     s"connectionProvider=$connectionProvider, " +
     s"failIfReplyToMissing=$failIfReplyToMissing" +
-    s"avoidArrayCopy=$avoidArrayCopy" +
+    s"reuseByteArray=$reuseByteArray" +
     ")"
 }
 
@@ -221,7 +221,7 @@ final class AmqpWriteSettings private (
     val declarations: immutable.Seq[Declaration] = Nil,
     val bufferSize: Int = 10,
     val confirmationTimeout: FiniteDuration = 100.millis,
-    val avoidArrayCopy: Boolean = false) extends AmqpConnectorSettings {
+    val reuseByteArray: Boolean = false) extends AmqpConnectorSettings {
 
   def withExchange(exchange: String): AmqpWriteSettings =
     copy(exchange = Some(exchange))
@@ -235,8 +235,8 @@ final class AmqpWriteSettings private (
   def withDeclarations(declarations: immutable.Seq[Declaration]): AmqpWriteSettings =
     copy(declarations = declarations)
 
-  def withAvoidArrayCopy(avoidArrayCopy: Boolean): AmqpWriteSettings =
-    copy(avoidArrayCopy = avoidArrayCopy)
+  def withReuseByteArray(reuseByteArray: Boolean): AmqpWriteSettings =
+    copy(reuseByteArray = reuseByteArray)
 
   /**
    * Java API
@@ -262,9 +262,9 @@ final class AmqpWriteSettings private (
       declarations: immutable.Seq[Declaration] = declarations,
       bufferSize: Int = bufferSize,
       confirmationTimeout: FiniteDuration = confirmationTimeout,
-      avoidArrayCopy: Boolean = avoidArrayCopy) =
+      reuseByteArray: Boolean = reuseByteArray) =
     new AmqpWriteSettings(connectionProvider, exchange, routingKey, declarations, bufferSize,
-      confirmationTimeout, avoidArrayCopy)
+      confirmationTimeout, reuseByteArray)
 
   override def toString: String =
     "AmqpSinkSettings(" +
@@ -274,7 +274,7 @@ final class AmqpWriteSettings private (
     s"declarations=$declarations, " +
     s"bufferSize=$bufferSize, " +
     s"confirmationTimeout=$confirmationTimeout" +
-    s"avoidArrayCopy=$avoidArrayCopy" +
+    s"reuseByteArray=$reuseByteArray" +
     ")"
 }
 

@@ -93,7 +93,7 @@ private[amqp] final class AmqpSourceStage(settings: AmqpSourceSettings, bufferSi
               envelope: Envelope,
               properties: BasicProperties,
               body: Array[Byte]): Unit = {
-            val byteString = if (settings.avoidArrayCopy)
+            val byteString = if (settings.reuseByteArray)
               ByteString.fromArrayUnsafe(body)
             else
               ByteString(body)

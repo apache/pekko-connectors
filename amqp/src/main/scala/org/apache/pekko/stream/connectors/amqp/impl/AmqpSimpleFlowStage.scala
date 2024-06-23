@@ -49,7 +49,7 @@ import scala.concurrent.{ Future, Promise }
         override def publish(message: WriteMessage, passThrough: T): Unit = {
           log.debug("Publishing message {}.", message)
 
-          val bytes = if (settings.avoidArrayCopy)
+          val bytes = if (settings.reuseByteArray)
             message.bytes.toArrayUnsafe()
           else
             message.bytes.toArray

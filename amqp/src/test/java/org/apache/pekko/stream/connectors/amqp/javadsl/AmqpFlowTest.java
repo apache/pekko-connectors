@@ -59,7 +59,7 @@ public class AmqpFlowTest {
    * This value is initialized with values from data() array
    */
   @Parameter
-  public boolean avoidArrayCopy;
+  public boolean reuseByteArray;
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
@@ -77,7 +77,7 @@ public class AmqpFlowTest {
     return AmqpWriteSettings.create(AmqpLocalConnectionProvider.getInstance())
         .withRoutingKey(queueName)
         .withDeclaration(queueDeclaration)
-        .withAvoidArrayCopy(avoidArrayCopy)
+        .withReuseByteArray(reuseByteArray)
         .withBufferSize(10)
         .withConfirmationTimeout(Duration.ofMillis(200));
   }

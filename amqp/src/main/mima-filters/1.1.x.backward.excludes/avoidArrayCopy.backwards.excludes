@@ -15,8 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# added avoidArrayCopy setting
-ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.stream.connectors.amqp.AmqpConnectorSettings.avoidArrayCopy")
+# added reuseByteArray setting
+ProblemFilters.exclude[ReversedMissingMethodProblem]("org.apache.pekko.stream.connectors.amqp.AmqpConnectorSettings.reuseByteArray")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.amqp.AmqpReplyToSinkSettings.this")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.amqp.AmqpWriteSettings.this")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.amqp.NamedQueueSourceSettings.this")

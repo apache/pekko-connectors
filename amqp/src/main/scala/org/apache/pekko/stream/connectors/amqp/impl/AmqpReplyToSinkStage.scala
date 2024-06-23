@@ -75,7 +75,7 @@ private[amqp] final class AmqpReplyToSinkStage(replyToSinkSettings: AmqpReplyToS
               val replyTo = elem.properties.flatMap(properties => Option(properties.getReplyTo))
 
               if (replyTo.isDefined) {
-                val bytes = if (settings.avoidArrayCopy)
+                val bytes = if (settings.reuseByteArray)
                   elem.bytes.toArrayUnsafe()
                 else
                   elem.bytes.toArray

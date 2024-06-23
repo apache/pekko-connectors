@@ -164,7 +164,7 @@ import scala.concurrent.Promise
 
         log.debug("Publishing message {} with deliveryTag {}.", message, tag)
 
-        val bytes = if (settings.avoidArrayCopy)
+        val bytes = if (settings.reuseByteArray)
           message.bytes.toArrayUnsafe()
         else
           message.bytes.toArray

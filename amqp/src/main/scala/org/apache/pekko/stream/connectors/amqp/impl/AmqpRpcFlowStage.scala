@@ -106,7 +106,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
               consumerCallback.invoke(
                 new CommittableReadResult {
                   override val message = {
-                    val byteString = if (settings.avoidArrayCopy)
+                    val byteString = if (settings.reuseByteArray)
                       ByteString.fromArrayUnsafe(body)
                     else
                       ByteString(body)
@@ -202,7 +202,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
 
             override def onPush(): Unit = {
               val elem = grab(in)
-              val bytes = if (settings.avoidArrayCopy)
+              val bytes = if (settings.reuseByteArray)
                 elem.bytes.toArrayUnsafe()
               else
                 elem.bytes.toArray
