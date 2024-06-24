@@ -108,6 +108,7 @@ jobs:
           - { connector: influxdb,                     pre_cmd: 'docker-compose up -d influxdb' }
           # ironmq disabled while we resolve https://github.com/apache/pekko-connectors/issues/697
           # - { connector: ironmq,                       pre_cmd: 'docker-compose up -d ironauth ironmq' }
+          - { connector: jakartams,                    pre_cmd: 'docker-compose up -d ibmmq' }
           - { connector: jms,                          pre_cmd: 'docker-compose up -d ibmmq' }
           - { connector: json-streaming }
           - { connector: kinesis }
