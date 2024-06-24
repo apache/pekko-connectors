@@ -87,7 +87,7 @@ Java
 
 ## Error Retries and Exponential Backoff
 
-The AWS SDK 2 implements error retrying with exponential backoff which is configurable via the @javadoc[DynamoDbAsyncClient](software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient) configuration by using the @javadoc[RetryPolicy](software.amazon.awssdk.core.retry.RetryPolicy) in `overrideConfiguration`.
+The AWS SDK 2 implements error retrying with exponential backoff which is configurable via the @javadoc[DynamoDbAsyncClient](software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient) configuration by using the @javadoc[RetryStrategy](software.amazon.awssdk.retries.api.RetryStrategy) in `overrideConfiguration`.
 
 See @ref[AWS Retry configuration](aws-shared-configuration.md) for more details.
 
