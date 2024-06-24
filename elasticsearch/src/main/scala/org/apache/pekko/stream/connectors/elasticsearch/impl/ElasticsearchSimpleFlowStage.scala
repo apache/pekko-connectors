@@ -38,7 +38,8 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     settings: WriteSettingsBase[_, _],
     writer: MessageWriter[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStage[
-      FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]), immutable.Seq[WriteResult[T,
+      FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]),
+        immutable.Seq[WriteResult[T,
           C]]]] {
 
   private val in =

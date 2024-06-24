@@ -14,9 +14,9 @@
 package docs.javadsl;
 
 import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.github.pjfanning.pekkohttpspi.PekkoHttpClient;
 import org.junit.Rule;
 import org.junit.Test;
 // #clientRetryConfig
@@ -26,10 +26,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 // #awsRetryConfiguration
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-import software.amazon.awssdk.core.internal.retry.SdkDefaultRetrySetting;
-import software.amazon.awssdk.core.retry.RetryPolicy;
-import software.amazon.awssdk.core.retry.backoff.BackoffStrategy;
-import software.amazon.awssdk.core.retry.conditions.RetryCondition;
+import software.amazon.awssdk.retries.DefaultRetryStrategy;
 // #clientRetryConfig
 
 // #awsRetryConfiguration
@@ -50,15 +47,10 @@ public class RetryTest {
             // #awsRetryConfiguration
             .overrideConfiguration(
                 ClientOverrideConfiguration.builder()
-                    .retryPolicy(
-                        // This example shows the AWS SDK 2 `RetryPolicy.defaultRetryPolicy()`
-                        // See
-                        // https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/core/retry/RetryPolicy.html
-                        RetryPolicy.builder()
-                            .backoffStrategy(BackoffStrategy.defaultStrategy())
-                            .throttlingBackoffStrategy(BackoffStrategy.defaultThrottlingStrategy())
-                            .numRetries(SdkDefaultRetrySetting.defaultMaxAttempts())
-                            .retryCondition(RetryCondition.defaultRetryCondition())
+                    .retryStrategy(
+                        // See https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/retries/api/RetryStrategy.html
+                        DefaultRetryStrategy.legacyStrategyBuilder()
+                            .treatAsThrottling(e -> true)
                             .build())
                     .build())
             // #awsRetryConfiguration

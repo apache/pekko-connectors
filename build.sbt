@@ -18,6 +18,7 @@ ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,
   avroparquet,
+  awsSpiPekkoHttp,
   awslambda,
   azureStorageQueue,
   cassandra,
@@ -128,7 +129,13 @@ lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 lazy val avroparquet =
   pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
 
+lazy val awsSpiPekkoHttp =
+  pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http", Dependencies.AwsSpiPekkoHttp)
+    .configs(IntegrationTest)
+    .settings(Defaults.itSettings)
+
 lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
+  .dependsOn(awsSpiPekkoHttp)
 
 lazy val azureStorageQueue = pekkoConnectorProject(
   "azure-storage-queue",
@@ -151,6 +158,7 @@ lazy val csvBench = internalProject("csv-bench")
   .enablePlugins(JmhPlugin)
 
 lazy val dynamodb = pekkoConnectorProject("dynamodb", "aws.dynamodb", Dependencies.DynamoDB)
+  .dependsOn(awsSpiPekkoHttp)
 
 lazy val elasticsearch = pekkoConnectorProject(
   "elasticsearch",
@@ -164,6 +172,7 @@ lazy val ftp = pekkoConnectorProject(
   "ftp",
   "ftp",
   Dependencies.Ftp,
+  MetaInfLicenseNoticeCopy.ftpSettings,
   Test / fork := true,
   // To avoid potential blocking in machines with low entropy (default is `/dev/random`)
   Test / javaOptions += "-Djava.security.egd=file:/dev/./urandom")
@@ -277,6 +286,7 @@ lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
 
 lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
+  .dependsOn(awsSpiPekkoHttp)
 
 lazy val kudu = pekkoConnectorProject("kudu", "kudu", Dependencies.Kudu)
 
@@ -306,6 +316,7 @@ lazy val reference = internalProject("reference", Dependencies.Reference)
 
 lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3,
   MetaInfLicenseNoticeCopy.s3Settings)
+  .dependsOn(awsSpiPekkoHttp)
 
 lazy val pravega = pekkoConnectorProject(
   "pravega",
@@ -322,16 +333,19 @@ lazy val simpleCodecs = pekkoConnectorProject("simple-codecs", "simplecodecs")
 
 lazy val slick = pekkoConnectorProject("slick", "slick", Dependencies.Slick)
 
-lazy val eventbridge =
-  pekkoConnectorProject("aws-event-bridge", "aws.eventbridge", Dependencies.Eventbridge)
+lazy val eventbridge = pekkoConnectorProject("aws-event-bridge", "aws.eventbridge",
+  Dependencies.Eventbridge)
+  .dependsOn(awsSpiPekkoHttp)
 
 lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
+  .dependsOn(awsSpiPekkoHttp)
 
 // Solrj has some deprecated methods
 lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr,
   fatalWarnings := false)
 
 lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
+  .dependsOn(awsSpiPekkoHttp)
 
 lazy val sse = pekkoConnectorProject("sse", "sse", Dependencies.Sse)
 
@@ -369,15 +383,16 @@ lazy val docs = project
       "extref.github.base_url" -> s"https://github.com/apache/pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
       "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
-      "scaladoc.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
-      "javadoc.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
-      "javadoc.pekko.link_style" -> "direct",
+      "scaladoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
+      "javadoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
+      "javadoc.org.apache.pekko.link_style" -> "direct",
       "extref.pekko-http.base_url" -> s"https://pekko.apache.org/docs/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/%s",
-      "scaladoc.pekko.http.base_url" -> s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
-      "javadoc.pekko.http.base_url" -> s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "scaladoc.org.apache.pekko.http.base_url" -> s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "javadoc.org.apache.pekko.http.base_url" -> s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
       // Pekko gRPC
       "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
       "extref.pekko-grpc.base_url" -> s"https://pekko.apache.org/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
+      "scaladoc.org.apache.pekko.gprc.base_url" -> s"https://pekko.apache.org/api/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/",
       // Couchbase
       "couchbase.version" -> Dependencies.CouchbaseVersion,
       "extref.couchbase.base_url" -> s"https://docs.couchbase.com/java-sdk/${Dependencies.CouchbaseVersionForDocs}/%s",
@@ -464,7 +479,7 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
-        if (moduleName == "slick" || moduleName == "couchbase3") {
+        if (moduleName == "slick" || moduleName == "couchbase3" || moduleName == "aws.api.pekko.http") {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)
@@ -490,7 +505,8 @@ Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
   val log = sLog.value
   log.info(
-    s"Building Pekko Connectors $v against Pekko ${Dependencies.PekkoVersion} and Pekko HTTP ${Dependencies.PekkoHttpVersion} on Scala ${(googleCommon / scalaVersion).value}")
+    s"Building Pekko Connectors $v against Pekko ${Dependencies.PekkoVersion} and Pekko HTTP ${Dependencies
+        .PekkoHttpVersion} on Scala ${(googleCommon / scalaVersion).value}")
   if (dynverGitDescribeOutput.value.hasNoTags)
     log.error(
       s"Failed to derive version from git tags. Maybe run `git fetch --unshallow` or `git fetch upstream` on a fresh git clone from a fork? Derived version: $v")

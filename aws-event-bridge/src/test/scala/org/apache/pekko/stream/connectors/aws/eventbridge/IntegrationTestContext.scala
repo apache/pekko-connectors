@@ -55,7 +55,7 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
     // #init-client
     import java.net.URI
 
-    import com.github.pjfanning.pekkohttpspi.PekkoHttpClient
+    import pekko.stream.connectors.awsspi.PekkoHttpClient
     import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
     import software.amazon.awssdk.regions.Region
     import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient

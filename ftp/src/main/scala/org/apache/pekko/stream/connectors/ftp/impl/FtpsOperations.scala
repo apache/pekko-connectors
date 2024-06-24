@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.ftp.impl
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.{ FtpAuthenticationException, FtpsSettings }
-import org.apache.commons.net.ftp.{ FTP, FTPClient, FTPSClient }
+import org.apache.commons.net.ftp.{ FTP, FTPSClient, LegacyFtpsClient }
 
 import scala.util.Try
 
@@ -25,9 +25,9 @@ import scala.util.Try
  */
 @InternalApi
 private[ftp] trait FtpsOperations extends CommonFtpOperations {
-  self: FtpLike[FTPClient, FtpsSettings] =>
+  self: FtpLike[FTPSClient, FtpsSettings] =>
 
-  def connect(connectionSettings: FtpsSettings)(implicit ftpClient: FTPClient): Try[Handler] =
+  def connect(connectionSettings: FtpsSettings)(implicit ftpClient: FTPSClient): Try[Handler] =
     Try {
       connectionSettings.proxy.foreach(ftpClient.setProxy)
 
@@ -69,7 +69,7 @@ private[ftp] trait FtpsOperations extends CommonFtpOperations {
       ftpClient
     }
 
-  def disconnect(handler: Handler)(implicit ftpClient: FTPClient): Unit =
+  def disconnect(handler: Handler)(implicit ftpClient: FTPSClient): Unit =
     if (ftpClient.isConnected) {
       ftpClient.logout()
       ftpClient.disconnect()

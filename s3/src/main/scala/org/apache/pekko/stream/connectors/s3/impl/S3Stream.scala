@@ -315,7 +315,9 @@ import scala.util.{ Failure, Success, Try }
         implicit val materializer: Materializer = mat
         implicit val attributes: Attributes = attr
         Source
-          .unfoldAsync[ListBucketState, (immutable.Seq[ListBucketResultContents], immutable.Seq[
+          .unfoldAsync[ListBucketState,
+            (immutable.Seq[ListBucketResultContents],
+                immutable.Seq[
                   ListBucketResultCommonPrefixes])](
             Starting()) {
             case Finished()     => Future.successful(None)
@@ -390,7 +392,9 @@ import scala.util.{ Failure, Success, Try }
         implicit val materializer: Materializer = mat
         implicit val attributes: Attributes = attr
         Source
-          .unfoldAsync[ListMultipartUploadState, (immutable.Seq[ListMultipartUploadResultUploads], immutable.Seq[
+          .unfoldAsync[ListMultipartUploadState,
+            (immutable.Seq[ListMultipartUploadResultUploads],
+                immutable.Seq[
                   CommonPrefixes])](
             Starting()) {
             case Finished()     => Future.successful(None)
@@ -519,8 +523,11 @@ import scala.util.{ Failure, Success, Try }
         implicit val materializer: Materializer = mat
         implicit val attributes: Attributes = attr
         Source
-          .unfoldAsync[ListObjectVersionsState, (immutable.Seq[ListObjectVersionsResultVersions], immutable.Seq[
-                  DeleteMarkers], immutable.Seq[
+          .unfoldAsync[ListObjectVersionsState,
+            (immutable.Seq[ListObjectVersionsResultVersions],
+                immutable.Seq[
+                  DeleteMarkers],
+                immutable.Seq[
                   CommonPrefixes])](
             Starting()) {
             case Finished()     => Future.successful(None)
@@ -552,7 +559,9 @@ import scala.util.{ Failure, Success, Try }
         implicit val materializer: Materializer = mat
         implicit val attributes: Attributes = attr
         Source
-          .unfoldAsync[ListObjectVersionsState, (immutable.Seq[ListObjectVersionsResultVersions], immutable.Seq[
+          .unfoldAsync[ListObjectVersionsState,
+            (immutable.Seq[ListObjectVersionsResultVersions],
+                immutable.Seq[
                   DeleteMarkers])](
             Starting()) {
             case Finished()     => Future.successful(None)
@@ -1250,7 +1259,9 @@ import scala.util.{ Failure, Success, Try }
                 }
             }
 
-        val retriableFlow: Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C]), ((Try[HttpResponse], (
+        val retriableFlow: Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C]),
+          ((Try[HttpResponse],
+                  (
                       MultipartUpload, Int)), immutable.Iterable[C]), NotUsed] =
           Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C])]
             .map {
@@ -1277,7 +1288,8 @@ import scala.util.{ Failure, Success, Try }
           Flow[(ByteString, C)].orElse(
             Source.single((ByteString.empty, null.asInstanceOf[C])))
 
-        val source1: SubFlow[(Chunk, immutable.Iterable[C]), NotUsed, Flow[(ByteString, C), (ByteString, C),
+        val source1: SubFlow[(Chunk, immutable.Iterable[C]), NotUsed,
+          Flow[(ByteString, C), (ByteString, C),
             NotUsed]#Repr, Sink[(ByteString, C), NotUsed]] =
           SplitAfterSizeWithContext(chunkSize)(atLeastOneByteStringAndEmptyContext)
             .via(getChunk(chunkBufferSize))

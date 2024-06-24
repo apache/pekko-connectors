@@ -35,7 +35,8 @@ private[orientdb] class OrientDbFlowStage[T, C](
     className: String,
     settings: OrientDbWriteSettings,
     clazz: Option[Class[T]])
-    extends GraphStage[FlowShape[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T,
+    extends GraphStage[FlowShape[immutable.Seq[OrientDbWriteMessage[T, C]],
+      immutable.Seq[OrientDbWriteMessage[T,
         C]]]] {
 
   private val in = Inlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("in")

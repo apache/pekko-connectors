@@ -202,6 +202,12 @@
 
 ---------------
 
+pekko-connectors-ftp contains code copied from Apache Commons Net
+<https://commons.apache.org/proper/commons-net/>.
+The original code was released under the Apache 2.0 license.
+
+---------------
+
 pekko-connectors-google-common contains `org.apache.pekko.stream.connectors.google.jwt.JwtSprayJson.scala`
 which is copied from jwt-scala <https://github.com/jwt-scala/jwt-scala>.
 The original code was released under the Apache 2.0 license.

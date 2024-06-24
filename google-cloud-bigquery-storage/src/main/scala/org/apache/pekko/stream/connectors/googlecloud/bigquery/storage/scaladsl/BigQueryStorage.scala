@@ -75,7 +75,7 @@ object BigQueryStorage {
                       resp.arrowRecordBatch.get.serializedRecordBatch
                     else
                       resp.avroRows.get.serializedBinaryRows
-                  um(ByteString(bytes.toByteArray))
+                  um(ByteString.fromArrayUnsafe(bytes.toByteArray))
                 })
             }
           }

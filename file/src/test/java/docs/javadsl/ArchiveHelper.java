@@ -25,7 +25,8 @@ import java.util.zip.ZipInputStream;
 public class ArchiveHelper {
 
   public Map<String, ByteString> unzip(ByteString zipArchive) throws Exception {
-    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zipArchive.toArray()));
+    // toArrayUnsafe is ok here because we know that ZipInputStream will not mutate the array
+    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zipArchive.toArrayUnsafe()));
     ZipEntry entry;
     Map<String, ByteString> result = new HashMap<>();
     try {
@@ -40,7 +41,8 @@ public class ArchiveHelper {
         dest.flush();
         dest.close();
         zis.closeEntry();
-        result.putIfAbsent(entry.getName(), ByteString.fromArray(dest.toByteArray()));
+        // fromArrayUnsafe is ok here because we know the `dest` data is not mutated
+        result.putIfAbsent(entry.getName(), ByteString.fromArrayUnsafe(dest.toByteArray()));
       }
     } finally {
       zis.close();

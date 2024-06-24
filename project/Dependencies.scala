@@ -26,18 +26,18 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.3"
-  val AwsSdk2Version = "2.25.50"
+  val AwsSdk2Version = "2.26.7"
   val AwsSpiPekkoHttpVersion = "0.1.1"
-  val NettyVersion = "4.1.109.Final"
+  val NettyVersion = "4.1.111.Final"
   // Sync with plugins.sbt
-  val PekkoGrpcBinaryVersion = "1.0"
+  val PekkoGrpcBinaryVersion = "1.1"
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoHttpBinaryVersion = "1.0"
-  val ScalaTestVersion = "3.2.18"
-  val TestContainersScalaTestVersion = "0.41.0"
+  val ScalaTestVersion = "3.2.19"
+  val TestContainersScalaTestVersion = "0.41.4"
   val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.25.3"
-  val hoverflyVersion = "0.14.1"
+  val hoverflyVersion = "0.18.1"
   val scalaCheckVersion = "1.18.0"
 
   // Legacy versions support Slf4J v1 for compatibility with older libs
@@ -57,7 +57,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = "3.2.18.0" // https://github.com/scalatest/scalatest/issues/2311
+  val scalaTestMockitoVersion = "3.2.18.0"
 
   val CouchbaseVersion = "2.7.23"
   val Couchbase3Version = "3.6.0"
@@ -78,7 +78,7 @@ object Dependencies {
 
   // wiremock has very outdated, CVE vulnerable dependencies
   private val jettyVersion = "9.4.54.v20240208"
-  private val guavaVersion = "33.2.0-jre"
+  private val guavaVersion = "33.2.1-jre"
   private val wireMockDependencies = Seq(
     "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
     "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
@@ -128,11 +128,28 @@ object Dependencies {
       "com.rabbitmq" % "amqp-client" % "5.21.0",
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
+  val AwsSpiPekkoHttp = Seq(
+    libraryDependencies ++= Seq(
+      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
+      "software.amazon.awssdk" % "http-client-spi" % AwsSdk2Version,
+      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",
+      "org.scalatestplus" %% "junit-4-13" % scalaTestScalaCheckVersion % "it,test",
+      "ch.qos.logback" % "logback-classic" % LogbackVersion % "it,test"))
+
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "lambda" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
@@ -142,7 +159,7 @@ object Dependencies {
       "com.microsoft.azure" % "azure-storage" % "8.6.6"))
 
   val CassandraVersionInDocs = "4.0"
-  val CassandraDriverVersion = "4.18.0"
+  val CassandraDriverVersion = "4.18.1"
   val CassandraDriverVersionInDocs = "4.17"
 
   val Cassandra = Seq(
@@ -178,8 +195,6 @@ object Dependencies {
 
   val DynamoDB = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -201,19 +216,19 @@ object Dependencies {
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.13.1",
+      "org.apache.parquet" % "parquet-avro" % "1.14.1",
       "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % "3.3.6" % Test).exclude("log4j", "log4j"),
       ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.20.5" % Test,
+      "org.specs2" %% "specs2-core" % "4.20.7" % Test,
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
 
   val Ftp = Seq(
     libraryDependencies ++= Seq(
-      "commons-net" % "commons-net" % "3.10.0",
+      "commons-net" % "commons-net" % "3.11.1",
       "com.hierynomus" % "sshj" % "0.38.0",
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
@@ -234,7 +249,7 @@ object Dependencies {
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
        else Seq(
-         "com.chuusai" %% "shapeless" % "2.3.10"))
+         "com.chuusai" %% "shapeless" % "2.3.12"))
     })
 
   val GoogleCommon = Seq(
@@ -323,7 +338,7 @@ object Dependencies {
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
-      "org.typelevel" %% "cats-core" % "2.10.0",
+      "org.typelevel" %% "cats-core" % "2.12.0",
       ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
         "slf4j-log4j12"),
       ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
@@ -351,7 +366,7 @@ object Dependencies {
   val Jms = Seq(
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
-      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.3.5.1" % Test,
+      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.0.0" % Test,
       "org.apache.activemq" % "activemq-broker" % "5.16.7" % Test,
       "org.apache.activemq" % "activemq-client" % "5.16.7" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
@@ -364,8 +379,6 @@ object Dependencies {
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(ExclusionRule(
-        organization = "org.apache.pekko"))) ++ Seq(
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
       "software.amazon.kinesis" % "amazon-kinesis-client" % "2.6.0").map(
@@ -384,7 +397,7 @@ object Dependencies {
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "5.1.0"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "5.1.1"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
@@ -399,12 +412,12 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.29")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.31")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.29"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.31"))
 
   val PravegaVersion = "0.13.0"
-  val PravegaVersionForDocs = s"v$PravegaVersion"
+  val PravegaVersionForDocs = "latest"
 
   val Pravega = {
     Seq(
@@ -431,7 +444,7 @@ object Dependencies {
     wireMockDependencies)
 
   val SpringWeb = {
-    val SpringVersion = "5.3.34"
+    val SpringVersion = "5.3.37"
     val SpringBootVersion = "2.7.18"
     Seq(
       libraryDependencies ++= Seq(
@@ -445,6 +458,12 @@ object Dependencies {
 
   val SlickVersion = "3.5.1"
   val Slick = Seq(
+    // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
+    // See: https://github.com/slick/slick/issues/2933
+    libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, _)) => Seq("org.scala-lang" % "scala-reflect" % scalaVersion.value)
+      case _            => Nil
+    }),
     libraryDependencies ++= Seq(
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
@@ -453,8 +472,6 @@ object Dependencies {
 
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "eventbridge" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -462,8 +479,6 @@ object Dependencies {
 
   val Sns = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "sns" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -484,8 +499,6 @@ object Dependencies {
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(
-      ("com.github.pjfanning" %% "aws-spi-pekko-http" % AwsSpiPekkoHttpVersion).excludeAll(
-        ExclusionRule(organization = "org.apache.pekko")),
       ("software.amazon.awssdk" % "sqs" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -504,6 +517,6 @@ object Dependencies {
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
-      "com.fasterxml" % "aalto-xml" % "1.3.2"))
+      "com.fasterxml" % "aalto-xml" % "1.3.3"))
 
 }
