@@ -200,9 +200,9 @@ class AmqpConnectionProvidersSpec extends AmqpSpec {
       val connectionProvider = AmqpDetailsConnectionProvider("localhost", 5673)
       val reusableConnectionProvider = AmqpCachedConnectionProvider(connectionProvider).withAutomaticRelease(false)
       try reusableConnectionProvider.get
-      catch { case e: Throwable => e shouldBe an[ConnectException] }
+      catch { case e: Throwable => e shouldBe a[ConnectException] }
       try reusableConnectionProvider.get
-      catch { case e: Throwable => e shouldBe an[ConnectException] }
+      catch { case e: Throwable => e shouldBe a[ConnectException] }
     }
   }
 }

@@ -75,13 +75,17 @@ private[amqp] final class AmqpReplyToSinkStage(replyToSinkSettings: AmqpReplyToS
               val replyTo = elem.properties.flatMap(properties => Option(properties.getReplyTo))
 
               if (replyTo.isDefined) {
+                val bytes = if (settings.reuseByteArray)
+                  elem.bytes.toArrayUnsafe()
+                else
+                  elem.bytes.toArray
                 channel.basicPublish(
                   elem.routingKey.getOrElse(""),
                   replyTo.get,
                   elem.mandatory,
                   elem.immediate,
                   elem.properties.orNull,
-                  elem.bytes.toArray)
+                  bytes)
               } else if (settings.failIfReplyToMissing) {
                 onFailure(new RuntimeException("Reply-to header was not set"))
               }

@@ -164,13 +164,17 @@ import scala.concurrent.Promise
 
         log.debug("Publishing message {} with deliveryTag {}.", message, tag)
 
+        val bytes = if (settings.reuseByteArray)
+          message.bytes.toArrayUnsafe()
+        else
+          message.bytes.toArray
         channel.basicPublish(
           exchange,
           message.routingKey.getOrElse(routingKey),
           message.mandatory,
           message.immediate,
           message.properties.orNull,
-          message.bytes.toArray)
+          bytes)
 
         tag
       }

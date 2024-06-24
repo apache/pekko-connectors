@@ -105,7 +105,13 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
                 body: Array[Byte]): Unit =
               consumerCallback.invoke(
                 new CommittableReadResult {
-                  override val message = ReadResult(ByteString(body), envelope, properties)
+                  override val message = {
+                    val byteString = if (settings.reuseByteArray)
+                      ByteString.fromArrayUnsafe(body)
+                    else
+                      ByteString(body)
+                    ReadResult(byteString, envelope, properties)
+                  }
 
                   override def ack(multiple: Boolean): Future[Done] = {
                     val promise = Promise[Done]()
@@ -196,6 +202,10 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
 
             override def onPush(): Unit = {
               val elem = grab(in)
+              val bytes = if (settings.reuseByteArray)
+                elem.bytes.toArrayUnsafe()
+              else
+                elem.bytes.toArray
               val props = elem.properties.getOrElse(new BasicProperties()).builder.replyTo(queueName).build()
               channel.basicPublish(
                 exchange,
@@ -203,7 +213,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
                 elem.mandatory,
                 elem.immediate,
                 props,
-                elem.bytes.toArray)
+                bytes)
 
               val expectedResponses: Int = {
                 val headers = props.getHeaders
