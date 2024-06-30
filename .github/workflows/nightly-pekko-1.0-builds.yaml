@@ -1,4 +1,4 @@
-name: Nightly Pekko 1.1 Builds
+name: Nightly Pekko 1.0 Builds
 
 on:
   schedule:
@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        JDK: [ 8, 11, 17 ]
+        JDK: [ 8, 11, 17, 21 ]
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
@@ -39,5 +39,5 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6
 
-      - name: "compile, including  tests. Run locally with: sbt -Dpekko.build.pekko.version=main +Test/compile"
-        run: sbt -Dpekko.build.pekko.version=main -Dpekko.build.pekko.http.version=main +Test/compile
+      - name: "compile, including  tests. Run locally with: sbt -Dpekko.build.pekko.version=1.0.x -Dpekko.build.pekko.http.version=1.0.x +Test/compile"
+        run: sbt -Dpekko.build.pekko.version=1.0.x -Dpekko.build.pekko.http.version=1.0.x +Test/compile
