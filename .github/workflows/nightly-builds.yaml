@@ -8,6 +8,35 @@ on:
 permissions: {}
 
 jobs:
+  test-compile:
+    name: Compile
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        JDK: [ 8, 11, 17, 21 ]
+    env:
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Setup Java ${{ matrix.JDK }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.JDK }}
+
+      - name: Cache Coursier cache
+        uses: coursier/cache-action@v6
+
+      - name: "compile, including  tests. Run locally with: sbt +Test/compile"
+        run: sbt +Test/compile
+
   integration-tests:
     name: Pekko Connectors Integration tests
     runs-on: ubuntu-20.04
