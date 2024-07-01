@@ -154,7 +154,14 @@ lazy val elasticsearch = pekkoConnectorProject(
   Dependencies.Elasticsearch)
 
 // The name 'file' is taken by `sbt.file`, hence 'files'
-lazy val files = pekkoConnectorProject("file", "file", Dependencies.File)
+lazy val files = pekkoConnectorProject(
+  "file",
+  "file",
+  Dependencies.File,
+  // For `SensitivityWatchEventModifier.HIGH`
+  // https://github.com/apache/pekko-connectors/issues/296
+  javacOptions -= "-Werror"
+)
 
 lazy val ftp = pekkoConnectorProject(
   "ftp",
