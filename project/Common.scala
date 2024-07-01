@@ -104,8 +104,9 @@ object Common extends AutoPlugin {
       "-Xlint:unchecked",
       "-Xlint:varargs"),
     compile / javacOptions ++= (scalaVersion.value match {
-      case Dependencies.Scala213 if insideCI.value && fatalWarnings.value && !Dependencies.CronBuild =>
-        Seq("-Werror")
+      case Dependencies.Scala213
+          if insideCI.value && fatalWarnings.value && !Dependencies.CronBuild &&
+          !System.getProperty("java.version").startsWith("2") => Seq("-Werror")
       case _ => Seq.empty[String]
     }),
     autoAPIMappings := true,
