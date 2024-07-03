@@ -43,6 +43,7 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   huaweiPushKit,
   influxdb,
   ironmq,
+  jakartams,
   jms,
   jsonStreaming,
   kinesis,
