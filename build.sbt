@@ -475,8 +475,8 @@ lazy val billOfMaterials = Project("bill-of-materials", file("bill-of-materials"
     bomIncludeProjects := userProjects,
     description := s"${description.value} (depending on Scala ${CrossVersion.binaryScalaVersion(scalaVersion.value)})")
 
-private val mimaCompareVersion = "1.0.2"
-private val noMimaChecks = Set("slick", "couchbase3", "jakartams", "aws.api.pekko.http")
+val mimaCompareVersion = "1.0.2"
+val noMimaChecks = Set("slick", "couchbase3", "jakartams", "aws.api.pekko.http")
 
 def pekkoConnectorProject(projectId: String,
     moduleName: String,
