@@ -14,13 +14,13 @@
 package org.apache.pekko.stream.connectors.jakartams.javadsl
 
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.jakartams.{ scaladsl, JmsEnvelope, JmsMessage, JmsProducerSettings }
-import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.util.FutureConverters._
-import org.apache.pekko.util.ccompat.JavaConverters._
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.stream.connectors.jakartams.{ scaladsl, JmsEnvelope, JmsMessage, JmsProducerSettings }
+import pekko.stream.javadsl.Source
+import pekko.stream.scaladsl.{ Flow, Keep }
+import pekko.util.ByteString
+import pekko.util.FutureConverters._
+import pekko.util.ccompat.JavaConverters._
+import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 

@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import com.github.pjfanning.jakartamswrapper.WrappedConnectionFactory
 import jakarta.jms.{ JMSException, Message, TextMessage }
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Keep, Sink, Source }
+import org.apache.pekko
+import pekko.stream._
+import pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsProducer }
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import org.mockito.ArgumentMatchers.{ any, anyInt, anyLong }
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock

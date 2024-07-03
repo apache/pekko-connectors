@@ -15,12 +15,13 @@ package docs.scaladsl
 
 import jakarta.jms.{ JMSException, TextMessage }
 import org.apache.activemq.artemis.api.jms.ActiveMQJMSConstants
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.{ KillSwitches, ThrottleMode }
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.{ KillSwitches, ThrottleMode }
 import org.scalatest.Inspectors._
 import org.scalatest.time.Span.convertSpanToDuration
 

@@ -15,10 +15,10 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.util.ccompat.JavaConverters._
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jakartams._
+import pekko.util.ByteString
+import pekko.util.ccompat.JavaConverters._
 
 import scala.annotation.tailrec
 

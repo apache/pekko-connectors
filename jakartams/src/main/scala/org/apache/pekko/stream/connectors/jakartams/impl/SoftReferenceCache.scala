@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.jakartams.impl
 
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
+import pekko.annotation.InternalApi
 
 import scala.collection.mutable
 import scala.ref.SoftReference

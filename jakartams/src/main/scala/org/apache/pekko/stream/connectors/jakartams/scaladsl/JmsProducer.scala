@@ -14,11 +14,11 @@
 package org.apache.pekko.stream.connectors.jakartams.scaladsl
 
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.connectors.jakartams.impl.{ JmsProducerMatValue, JmsProducerStage }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams.impl.{ JmsProducerMatValue, JmsProducerStage }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.util.ByteString
+import pekko.{ Done, NotUsed }
 
 import scala.concurrent.Future
 

@@ -15,10 +15,10 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.stage._
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.jakartams._
+import pekko.stream.stage._
 
 import java.util.concurrent.Semaphore
 

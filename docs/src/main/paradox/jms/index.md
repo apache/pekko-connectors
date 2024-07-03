@@ -10,6 +10,8 @@ The Java Message Service (JMS) API is a Java message-oriented middleware API for
 
 The Apache Pekko Connectors JMS connector provides Apache Pekko Stream sources and sinks to connect to JMS providers.
 
+In v1.1.0, there is also a Jakarta MS connector that provides the equivalent support for [Jakarta Messaging](https://jakarta.ee/learn/docs/jakartaee-tutorial/current/messaging/jms-concepts/jms-concepts.html).
+
 @@project-info{ projectId="jms" }
 
 ## Artifacts

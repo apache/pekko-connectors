@@ -14,10 +14,10 @@
 package org.apache.pekko.stream.connectors.jakartams.impl
 
 import org.apache.pekko
-import org.apache.pekko.NotUsed
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.KillSwitch
-import org.apache.pekko.stream.scaladsl.Source
+import pekko.NotUsed
+import pekko.annotation.InternalApi
+import pekko.stream.KillSwitch
+import pekko.stream.scaladsl.Source
 
 /**
  * Internal API.
