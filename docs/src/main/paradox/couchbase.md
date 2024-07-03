@@ -14,6 +14,7 @@ Apache Pekko Connectors Couchbase allows you to read and write to Couchbase. You
 
 The Couchbase connector supports all document formats which are supported by the SDK. All those formats use the @java[`Document<T>`]@scala[`Document[T]`] interface and this is the level of abstraction that this connector is using.
 
+In v1.1.0, there is also a Couchbase3 connector that provides the equivalent support using the Couchbase Client v3. This conector continues to use the Couchbase Client v2.
 
 @@project-info{ projectId="couchbase" }
 
