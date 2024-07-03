@@ -14,7 +14,8 @@
 package org.apache.pekko.stream.connectors.jakartams
 
 import jakarta.jms
-import org.apache.pekko.annotation.DoNotInherit
+import org.apache.pekko
+import pekko.annotation.DoNotInherit
 
 /**
  * Shared settings for all JMS stages.

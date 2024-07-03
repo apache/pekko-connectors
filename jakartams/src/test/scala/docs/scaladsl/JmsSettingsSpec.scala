@@ -15,7 +15,7 @@ package docs.scaladsl
 
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.activemq.artemis.junit.EmbeddedActiveMQResource
-import org.apache.pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams._
 import org.scalatest.OptionValues
 
 import scala.concurrent.duration._

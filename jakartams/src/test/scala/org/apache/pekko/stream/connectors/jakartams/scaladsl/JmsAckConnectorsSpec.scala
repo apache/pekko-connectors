@@ -15,11 +15,11 @@ package org.apache.pekko.stream.connectors.jakartams.scaladsl
 
 import jakarta.jms.{ JMSException, TextMessage }
 import org.apache.pekko
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.stream.testkit.scaladsl.TestSink
-import org.apache.pekko.stream.{ KillSwitches, ThrottleMode }
+import pekko.Done
+import pekko.stream.connectors.jakartams._
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.testkit.scaladsl.TestSink
+import pekko.stream.{ KillSwitches, ThrottleMode }
 import org.scalatest.Inspectors._
 import org.scalatest.time.Span.convertSpanToDuration
 

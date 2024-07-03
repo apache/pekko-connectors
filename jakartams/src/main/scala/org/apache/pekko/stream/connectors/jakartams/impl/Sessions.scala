@@ -15,9 +15,9 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jakartams.{ Destination, DurableTopic }
-import org.apache.pekko.util.OptionVal
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jakartams.{ Destination, DurableTopic }
+import pekko.util.OptionVal
 
 import java.util.concurrent.ArrayBlockingQueue
 import scala.annotation.tailrec

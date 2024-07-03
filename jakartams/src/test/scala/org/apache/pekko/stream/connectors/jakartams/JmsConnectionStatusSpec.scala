@@ -15,15 +15,15 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import com.github.pjfanning.jakartamswrapper.WrappedConnectionFactory
 import jakarta.jms._
-import org.apache.pekko.stream.OverflowStrategy
-import org.apache.pekko.stream.connectors.jakartams.scaladsl.JmsConnectorState._
-import org.apache.pekko.stream.connectors.jakartams.scaladsl.{
+import pekko.stream.OverflowStrategy
+import pekko.stream.connectors.jakartams.scaladsl.JmsConnectorState._
+import pekko.stream.connectors.jakartams.scaladsl.{
   JmsConnectorState,
   JmsConsumer,
   JmsProducer,
   JmsProducerStatus
 }
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock

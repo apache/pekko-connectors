@@ -12,11 +12,11 @@ The JMS message model supports several types of message bodies in (see @javadoc[
 
 ## Receiving messages
 
-@apidoc[JmsConsumer$] offers factory methods to consume JMS messages in a number of ways.
+@apidoc[.jms.*.JmsConsumer$] offers factory methods to consume JMS messages in a number of ways.
 
 This examples shows how to listen to a JMS queue and emit @javadoc[javax.jms.Message](javax.jms.Message) elements into the stream.
 
-The materialized value @apidoc[JmsConsumerControl] is used to shut down the consumer (it is a @apidoc[KillSwitch]) and offers the possibility to inspect the connectivity state of the consumer. 
+The materialized value @apidoc[.jms.*.JmsConsumerControl] is used to shut down the consumer (it is a @apidoc[KillSwitch]) and offers the possibility to inspect the connectivity state of the consumer. 
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsConnectorsSpec.scala) { #jms-source }
@@ -38,7 +38,7 @@ Java
 
 The created @javadoc[ConnectionFactory](javax.jms.ConnectionFactory) is then used for the creation of the different JMS sources.
 
-The @apidoc[JmsConsumerSettings$] factories allow for passing the actor system to read from the default `pekko.connectors.jms.consumer` section, or you may pass a `Config` instance which is resolved to a section of the same structure. 
+The @apidoc[.jms.*.JmsConsumerSettings$] factories allow for passing the actor system to read from the default `pekko.connectors.jms.consumer` section, or you may pass a `Config` instance which is resolved to a section of the same structure. 
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsSettingsSpec.scala) { #consumer-settings }
@@ -198,8 +198,8 @@ Java
 
 ## Request / Reply
 
-The request / reply pattern can be implemented by streaming a @apidoc[JmsConsumer$]
-to a @apidoc[JmsProducer$],
+The request / reply pattern can be implemented by streaming a @apidoc[.jms.*.JmsConsumer$]
+to a @apidoc[.jms.*.JmsProducer$],
 with a stage in between that extracts the `ReplyTo` and `CorrelationID` from the original message and adds them to the response.
 
 Scala

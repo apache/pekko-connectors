@@ -15,16 +15,16 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.dispatch.ExecutionContexts
-import org.apache.pekko.pattern.after
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.connectors.jakartams.impl.InternalConnectionState._
-import org.apache.pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, SourceQueueWithComplete }
-import org.apache.pekko.stream.stage.{ AsyncCallback, StageLogging, TimerGraphStageLogic }
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, OverflowStrategy }
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.actor.ActorSystem
+import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
+import pekko.pattern.after
+import pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams.impl.InternalConnectionState._
+import pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.stream.stage.{ AsyncCallback, StageLogging, TimerGraphStageLogic }
+import pekko.stream.{ ActorAttributes, Attributes, OverflowStrategy }
+import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.atomic.AtomicReference
 import scala.concurrent.{ ExecutionContext, Future, Promise }

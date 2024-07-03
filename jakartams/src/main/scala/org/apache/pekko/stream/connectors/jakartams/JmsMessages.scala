@@ -15,11 +15,11 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.NotUsed
-import org.apache.pekko.stream.connectors.jakartams.impl.JmsMessageReader._
-import org.apache.pekko.util.ByteString
-import org.apache.pekko.util.OptionConverters._
-import org.apache.pekko.util.ccompat.JavaConverters._
+import pekko.NotUsed
+import pekko.stream.connectors.jakartams.impl.JmsMessageReader._
+import pekko.util.ByteString
+import pekko.util.OptionConverters._
+import pekko.util.ccompat.JavaConverters._
 
 /**
  * Base interface for messages handled by JmsProducers. Sub-classes support pass-through or use [[pekko.NotUsed]] as type for pass-through.

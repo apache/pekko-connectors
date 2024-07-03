@@ -15,11 +15,11 @@ package docs.scaladsl
 
 import jakarta.jms._
 import org.apache.activemq.artemis.jms.client.{ ActiveMQConnectionFactory, ActiveMQQueue, ActiveMQSession }
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.jakartams._
-import org.apache.pekko.stream.connectors.jakartams.scaladsl._
-import org.apache.pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.stream._
+import pekko.stream.connectors.jakartams._
+import pekko.stream.connectors.jakartams.scaladsl._
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.{ Done, NotUsed }
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock

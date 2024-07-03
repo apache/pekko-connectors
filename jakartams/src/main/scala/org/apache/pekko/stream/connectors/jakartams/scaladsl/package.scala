@@ -14,10 +14,10 @@
 package org.apache.pekko.stream.connectors.jakartams
 
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jakartams.impl.InternalConnectionState
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.{ Done, NotUsed }
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jakartams.impl.InternalConnectionState
+import pekko.stream.scaladsl.Source
+import pekko.{ Done, NotUsed }
 
 import scala.util.{ Failure, Success }
 

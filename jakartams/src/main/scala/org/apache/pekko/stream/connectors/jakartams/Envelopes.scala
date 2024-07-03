@@ -14,7 +14,8 @@
 package org.apache.pekko.stream.connectors.jakartams
 
 import jakarta.jms
-import org.apache.pekko.stream.connectors.jakartams.impl.{ JmsAckSession, JmsSession }
+import org.apache.pekko
+import pekko.stream.connectors.jakartams.impl.{ JmsAckSession, JmsSession }
 
 import java.util.concurrent.atomic.AtomicBoolean
 import scala.concurrent.{ Future, Promise }

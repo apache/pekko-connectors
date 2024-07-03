@@ -14,7 +14,8 @@
 package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms.{ Destination => JmsDestination, _ }
-import org.apache.pekko.stream.connectors.jakartams.{ Destination, _ }
+import org.apache.pekko
+import pekko.stream.connectors.jakartams.{ Destination, _ }
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt, anyString }
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar

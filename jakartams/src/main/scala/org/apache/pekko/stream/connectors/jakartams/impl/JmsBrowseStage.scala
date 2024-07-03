@@ -15,10 +15,10 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 
 import jakarta.jms
 import org.apache.pekko
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.jakartams.{ Destination, JmsBrowseSettings }
-import org.apache.pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
-import org.apache.pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.jakartams.{ Destination, JmsBrowseSettings }
+import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
+import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 
 /**
  * Internal API.
