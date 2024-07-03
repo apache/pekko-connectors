@@ -29,7 +29,7 @@ import scala.concurrent.{ Await, TimeoutException }
 private[jakartams] final class JmsTxSourceStage(settings: JmsConsumerSettings, destination: Destination)
     extends GraphStageWithMaterializedValue[SourceShape[TxEnvelope], JmsConsumerMatValue] {
 
-  private val out = Outlet[TxEnvelope]("JmsSource.out")
+  private val out = Outlet[TxEnvelope]("JakartaMsSource.out")
 
   override def shape: SourceShape[TxEnvelope] = SourceShape[TxEnvelope](out)
 
