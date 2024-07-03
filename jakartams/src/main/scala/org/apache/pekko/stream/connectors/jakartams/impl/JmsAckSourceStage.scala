@@ -28,7 +28,7 @@ import pekko.stream.{ Attributes, Outlet, SourceShape }
 private[jakartams] final class JmsAckSourceStage(settings: JmsConsumerSettings, destination: Destination)
     extends GraphStageWithMaterializedValue[SourceShape[AckEnvelope], JmsConsumerMatValue] {
 
-  private val out = Outlet[AckEnvelope]("JmsSource.out")
+  private val out = Outlet[AckEnvelope]("JakartaMsSource.out")
 
   override def shape: SourceShape[AckEnvelope] = SourceShape[AckEnvelope](out)
 
