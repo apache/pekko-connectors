@@ -18,12 +18,7 @@ import jakarta.jms._
 import org.apache.pekko
 import pekko.stream.OverflowStrategy
 import pekko.stream.connectors.jakartams.scaladsl.JmsConnectorState._
-import pekko.stream.connectors.jakartams.scaladsl.{
-  JmsConnectorState,
-  JmsConsumer,
-  JmsProducer,
-  JmsProducerStatus
-}
+import pekko.stream.connectors.jakartams.scaladsl.{ JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
 import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt }
 import org.mockito.Mockito._
