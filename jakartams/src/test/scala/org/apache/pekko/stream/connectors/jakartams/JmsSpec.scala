@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import jakarta.jms._
 import org.apache.activemq.artemis.junit.EmbeddedActiveMQResource
+import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit

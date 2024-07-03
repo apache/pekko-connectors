@@ -15,6 +15,7 @@ package docs.scaladsl
 
 import jakarta.jms.{ JMSException, TextMessage }
 import org.apache.activemq.artemis.api.jms.ActiveMQJMSConstants
+import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.jakartams._
 import pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }

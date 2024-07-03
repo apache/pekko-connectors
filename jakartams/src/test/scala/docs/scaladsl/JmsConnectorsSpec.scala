@@ -15,6 +15,7 @@ package docs.scaladsl
 
 import jakarta.jms._
 import org.apache.activemq.artemis.jms.client.{ ActiveMQConnectionFactory, ActiveMQQueue, ActiveMQSession }
+import org.apache.pekko
 import pekko.stream._
 import pekko.stream.connectors.jakartams._
 import pekko.stream.connectors.jakartams.scaladsl._

@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.jakartams
 
 import com.github.pjfanning.jakartamswrapper.WrappedConnectionFactory
 import jakarta.jms._
+import org.apache.pekko
 import pekko.stream.OverflowStrategy
 import pekko.stream.connectors.jakartams.scaladsl.JmsConnectorState._
 import pekko.stream.connectors.jakartams.scaladsl.{
