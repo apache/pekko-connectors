@@ -1132,7 +1132,6 @@ class JmsConnectorsSpec extends JmsSpec {
   }
 
   "publish and subscribe with a durable subscription" in withServer() { server =>
-    import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory
     val producerConnectionFactory = server.createConnectionFactory
     // #create-connection-factory-with-client-id
     val consumerConnectionFactory = server.createConnectionFactory
