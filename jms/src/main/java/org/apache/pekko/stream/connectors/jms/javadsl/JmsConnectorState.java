@@ -14,7 +14,11 @@
 package org.apache.pekko.stream.connectors.jms.javadsl;
 
 public enum JmsConnectorState {
-
-    Disconnected, Connecting, Connected, Completing, Completed, Failing, Failed
-
+  Disconnected,
+  Connecting,
+  Connected,
+  Completing,
+  Completed,
+  Failing,
+  Failed
 }
