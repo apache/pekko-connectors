@@ -173,7 +173,7 @@ lazy val files = pekkoConnectorProject(
   Dependencies.File,
   // For `SensitivityWatchEventModifier.HIGH`
   // https://github.com/apache/pekko-connectors/issues/296
-  javacOptions -= "-Werror"
+  compile / javacOptions -= "-Werror"
 )
 
 lazy val ftp = pekkoConnectorProject(
