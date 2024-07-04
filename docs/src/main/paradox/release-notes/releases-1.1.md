@@ -15,6 +15,10 @@ The most notable issues are with:
 
 With OrientDB Connector, it appears that the latest orientdb client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking the Pekko Connectors 1.0.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
 
+### Fixes
+
+* Close JMS sessions when exceptions happen ([PR485](https://github.com/apache/pekko-connectors/pull/485)).
+
 ### Additions
 * Scala 3 is now support for the Slick Connector.
 * New connector `couchbase3` that uses Couchbase Client v3. The pre-existing `couchbase` connector still uses the older v2 Client.
@@ -35,5 +39,5 @@ With OrientDB Connector, it appears that the latest orientdb client only works w
 Most dependencies have been upgraded to the latest available version that still supports Java 8 as of release time.
 Exceptions include:
 * HBase (see Known Issues above)
-* Solr
+* Solr Client was upgraded to v8 (v9 does not support Java 8).
 * Spring - we have pinned our dependency to v5 due to Java 8 support. Similarly, Spring Boot is pinned to v2. We expect that you can use newer versions of Spring if you use newer versions of Java Runtime. If you go this route, please test that it works ok before going to production.
