@@ -476,7 +476,7 @@ lazy val billOfMaterials = Project("bill-of-materials", file("bill-of-materials"
     description := s"${description.value} (depending on Scala ${CrossVersion.binaryScalaVersion(scalaVersion.value)})")
 
 val mimaCompareVersion = "1.0.2"
-val noMimaChecks = Set("slick", "couchbase3", "jakartams", "aws.api.pekko.http")
+val noMimaChecks = Set("couchbase3", "jakartams", "aws.api.pekko.http")
 
 def pekkoConnectorProject(projectId: String,
     moduleName: String,
@@ -490,7 +490,8 @@ def pekkoConnectorProject(projectId: String,
       licenses := List(License.Apache2),
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
-        if (noMimaChecks.contains(moduleName)) {
+        if (noMimaChecks.contains(moduleName) ||
+          (moduleName == "slick" && scalaVersion.value.startsWith("3"))) {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)
