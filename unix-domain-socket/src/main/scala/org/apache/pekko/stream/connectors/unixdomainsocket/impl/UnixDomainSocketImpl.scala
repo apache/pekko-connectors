@@ -271,20 +271,22 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
     }
   }
 
-  private def connectKey(remoteAddress: JnrUnixSocketAddress,
-      connectionFinished: Promise[Done],
+  private def connectKey(connectionFinished: Promise[Done],
       cancellable: Option[Cancellable],
-      sendReceiveContext: SendReceiveContext)(sel: Selector, key: SelectionKey): Unit = {
+      sendReceiveContext: SendReceiveContext,
+      log: LoggingAdapter)(sel: Selector, key: SelectionKey): Unit = {
 
     val connectingChannel = key.channel().asInstanceOf[UnixSocketChannel]
     cancellable.foreach(_.cancel())
     try {
       connectingChannel.register(sel, SelectionKey.OP_READ, sendReceiveContext)
       val finishExpected = connectingChannel.finishConnect()
+      log.debug(s"Unix domain socket connection succeeded, finish $finishExpected")
       require(finishExpected, "Internal error - our call to connection finish wasn't expected.")
       connectionFinished.trySuccess(Done)
     } catch {
       case NonFatal(e) =>
+        log.debug("Unix domain socket connection failed")
         connectionFinished.tryFailure(e)
         key.cancel()
     }
@@ -481,11 +483,18 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
         }
       val (context, connectionFlow) = sendReceiveStructures(sel, receiveBufferSize, sendBufferSize, halfClose)
       val ra = new JnrUnixSocketAddress(remoteAddress.path.toFile)
+      val log = system.log
       val registeredKey =
         channel
-          .register(sel, SelectionKey.OP_CONNECT, connectKey(ra, connectionFinished, cancellable, context) _)
+          .register(sel, SelectionKey.OP_CONNECT, connectKey(connectionFinished, cancellable, context, log) _)
       val connection = Try(channel.connect(ra))
-      connection.failed.foreach(e => connectionFinished.tryFailure(e))
+      connection.failed.foreach { e =>
+        if (connectionFinished.tryFailure(e)) {
+          log.debug("Unix domain socket channel connect failed")
+        } else {
+          log.debug("Unix domain socket channel connect failed, but connectionFinished had already completed")
+        }
+      }
 
       Future.successful(
         connectionFlow
