@@ -102,6 +102,7 @@ public class MqttFlowTest {
       throws InterruptedException, ExecutionException, TimeoutException {
     String clientId = "source-spec/flow";
     String topic = "source-spec/topic1";
+    ByteString uniqueSessionId = ByteString.fromString("establishClientBidirectionalConnectionAndSubscribeToATopic-session");
 
     // #create-streaming-flow
     MqttSessionSettings settings = MqttSessionSettings.create();
@@ -111,7 +112,7 @@ public class MqttFlowTest {
         Tcp.get(system).outgoingConnection("localhost", 1883);
 
     Flow<Command<Object>, DecodeErrorOrEvent<Object>, NotUsed> mqttFlow =
-        Mqtt.clientSessionFlow(session, ByteString.fromString("1")).join(connection);
+        Mqtt.clientSessionFlow(session, uniqueSessionId).join(connection);
     // #create-streaming-flow
 
     // #run-streaming-flow
@@ -159,6 +160,7 @@ public class MqttFlowTest {
       throws InterruptedException, ExecutionException, TimeoutException {
     String clientId = "flow-spec/flow";
     String topic = "source-spec/topic1";
+    ByteString uniqueSessionId = ByteString.fromString("establishServerBidirectionalConnectionAndSubscribeToATopic-connection");
     String host = "localhost";
     int port = 9884;
 
@@ -251,7 +253,7 @@ public class MqttFlowTest {
     MqttClientSession clientSession = new ActorMqttClientSession(settings, system);
 
     Flow<Command<Object>, DecodeErrorOrEvent<Object>, NotUsed> mqttFlow =
-        Mqtt.clientSessionFlow(clientSession, ByteString.fromString("1")).join(connection);
+        Mqtt.clientSessionFlow(clientSession, uniqueSessionId).join(connection);
 
     Pair<SourceQueueWithComplete<Command<Object>>, CompletionStage<Publish>> run =
         Source.<Command<Object>>queue(3, OverflowStrategy.fail())
