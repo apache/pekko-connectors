@@ -10,6 +10,7 @@ As with all milestone releases, this release is not recommended for production u
 Some connectors are not currently tested due to problems with running the tests. Please get in touch if you use these connectors, especially if you have time to help with fixing the issues.
 
 The most notable issues are with:
+
 * HBase ([#61](https://github.com/apache/pekko-connectors/issues/61))
 * IronMQ ([#697](https://github.com/apache/pekko-connectors/issues/697))
 
@@ -38,6 +39,7 @@ With OrientDB Connector, it appears that the latest orientdb client only works w
 
 Most dependencies have been upgraded to the latest available version that still supports Java 8 as of release time.
 Exceptions include:
+
 * HBase (see Known Issues above)
 * Solr Client was upgraded to v8 (v9 does not support Java 8).
 * Spring - we have pinned our dependency to v5 due to Java 8 support. Similarly, Spring Boot is pinned to v2. We expect that you can use newer versions of Spring if you use newer versions of Java Runtime. If you go this route, please test that it works ok before going to production.
