@@ -53,7 +53,7 @@ private[pekko] object LabelledGeneric {
 
   inline def apply[A](using l: LabelledGeneric[A]): LabelledGeneric.Aux[A, l.Repr] = l
 
-  inline given productInst[A <: Product](
+  transparent inline given productInst[A <: Product](
       using m: Mirror.ProductOf[A])
       : LabelledGeneric.Aux[A, ZipWith[m.MirroredElemLabels, m.MirroredElemTypes, FieldType]] =
     new LabelledGeneric[A] {
