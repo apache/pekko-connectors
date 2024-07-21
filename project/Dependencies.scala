@@ -480,7 +480,7 @@ object Dependencies {
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
-      "com.h2database" % "h2" % "2.3.230" % Test))
+      "com.h2database" % "h2" % "2.2.224" % Test))
 
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
