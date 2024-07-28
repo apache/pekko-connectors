@@ -35,7 +35,7 @@ object Dependencies {
   val ScalaTestVersion = "3.2.19"
   val TestContainersScalaTestVersion = "0.41.4"
   val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
-  val protobufJavaVersion = "3.25.3"
+  val protobufJavaVersion = "3.25.4"
   val hoverflyVersion = "0.19.0"
   val scalaCheckVersion = "1.18.0"
 
