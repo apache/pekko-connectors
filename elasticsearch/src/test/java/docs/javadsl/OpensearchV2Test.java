@@ -33,14 +33,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-public class ElasticsearchV5Test extends ElasticsearchTestBase {
+public class OpensearchV2Test extends ElasticsearchTestBase {
   @BeforeClass
   public static void setup() throws IOException {
     setupBase();
 
-    prepareIndex(9201, ApiVersion.V5);
+    prepareIndex(9204, OpensearchApiVersion.V1);
   }
 
   @AfterClass
@@ -52,23 +51,23 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
   public void typedStream() throws Exception {
     // Copy source/book to sink2/book through JsObject stream
     // #run-typed
-    ElasticsearchSourceSettings sourceSettings =
-        ElasticsearchSourceSettings.create(connectionSettings).withApiVersion(ApiVersion.V5);
-    ElasticsearchWriteSettings sinkSettings =
-        ElasticsearchWriteSettings.create(connectionSettings).withApiVersion(ApiVersion.V5);
+    OpensearchSourceSettings sourceSettings =
+        OpensearchSourceSettings.create(connectionSettings).withApiVersion(OpensearchApiVersion.V1);
+    OpensearchWriteSettings sinkSettings =
+        OpensearchWriteSettings.create(connectionSettings).withApiVersion(OpensearchApiVersion.V1);
 
-    Source<ReadResult<ElasticsearchTestBase.Book>, NotUsed> source =
+    Source<ReadResult<Book>, NotUsed> source =
         ElasticsearchSource.typed(
-            constructElasticsearchParams("source", "_doc", ApiVersion.V5),
+            constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
             "{\"match_all\": {}}",
             sourceSettings,
-            ElasticsearchTestBase.Book.class);
+            Book.class);
     CompletionStage<Done> f1 =
         source
             .map(m -> WriteMessage.createIndexMessage(m.id(), m.source()))
             .runWith(
                 ElasticsearchSink.create(
-                    constructElasticsearchParams("sink2", "_doc", ApiVersion.V5),
+                    constructElasticsearchParams("sink2", "_doc", OpensearchApiVersion.V1),
                     sinkSettings,
                     new ObjectMapper()),
                 system);
@@ -81,12 +80,12 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // Assert docs in sink2/book
     CompletionStage<List<String>> f2 =
         ElasticsearchSource.typed(
-                constructElasticsearchParams("sink2", "_doc", ApiVersion.V5),
+                constructElasticsearchParams("sink2", "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5)
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1)
                     .withBufferSize(5),
-                ElasticsearchTestBase.Book.class)
+                Book.class)
             .map(m -> m.source().title)
             .runWith(Sink.seq(), system);
 
@@ -110,14 +109,14 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
   public void jsObjectStream() throws Exception {
     // Copy source/book to sink1/book through JsObject stream
     // #run-jsobject
-    ElasticsearchSourceSettings sourceSettings =
-        ElasticsearchSourceSettings.create(connectionSettings).withApiVersion(ApiVersion.V5);
-    ElasticsearchWriteSettings sinkSettings =
-        ElasticsearchWriteSettings.create(connectionSettings).withApiVersion(ApiVersion.V5);
+    OpensearchSourceSettings sourceSettings =
+        OpensearchSourceSettings.create(connectionSettings).withApiVersion(OpensearchApiVersion.V1);
+    OpensearchWriteSettings sinkSettings =
+        OpensearchWriteSettings.create(connectionSettings).withApiVersion(OpensearchApiVersion.V1);
 
     Source<ReadResult<Map<String, Object>>, NotUsed> source =
         ElasticsearchSource.create(
-            constructElasticsearchParams("source", "_doc", ApiVersion.V5),
+            constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
             "{\"match_all\": {}}",
             sourceSettings);
     CompletionStage<Done> f1 =
@@ -125,7 +124,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
             .map(m -> WriteMessage.createIndexMessage(m.id(), m.source()))
             .runWith(
                 ElasticsearchSink.create(
-                    constructElasticsearchParams("sink1", "_doc", ApiVersion.V5),
+                    constructElasticsearchParams("sink1", "_doc", OpensearchApiVersion.V1),
                     sinkSettings,
                     new ObjectMapper()),
                 system);
@@ -138,10 +137,10 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // Assert docs in sink1/_doc
     CompletionStage<List<String>> f2 =
         ElasticsearchSource.create(
-                constructElasticsearchParams("sink1", "_doc", ApiVersion.V5),
+                constructElasticsearchParams("sink1", "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5)
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1)
                     .withBufferSize(5))
             .map(m -> (String) m.source().get("title"))
             .runWith(Sink.seq(), system);
@@ -168,18 +167,18 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // #run-flow
     CompletionStage<List<WriteResult<Book, NotUsed>>> f1 =
         ElasticsearchSource.typed(
-                constructElasticsearchParams("source", "_doc", ApiVersion.V5),
+                constructElasticsearchParams("source", "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5)
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1)
                     .withBufferSize(5),
                 Book.class)
             .map(m -> WriteMessage.createIndexMessage(m.id(), m.source()))
             .via(
                 ElasticsearchFlow.create(
-                    constructElasticsearchParams("sink3", "_doc", ApiVersion.V5),
-                    ElasticsearchWriteSettings.create(connectionSettings)
-                        .withApiVersion(ApiVersion.V5)
+                    constructElasticsearchParams("sink3", "_doc", OpensearchApiVersion.V1),
+                    OpensearchWriteSettings.create(connectionSettings)
+                        .withApiVersion(OpensearchApiVersion.V1)
                         .withBufferSize(5),
                     new ObjectMapper()))
             .runWith(Sink.seq(), system);
@@ -189,16 +188,16 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     flushAndRefresh("sink3");
 
     for (WriteResult<Book, NotUsed> aResult1 : result1) {
-      assertTrue(aResult1.success());
+      assertEquals(true, aResult1.success());
     }
 
     // Assert docs in sink3/book
     CompletionStage<List<String>> f2 =
         ElasticsearchSource.typed(
-                constructElasticsearchParams("sink3", "_doc", ApiVersion.V5),
+                constructElasticsearchParams("sink3", "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5)
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1)
                     .withConnection(connectionSettings)
                     .withBufferSize(5),
                 Book.class)
@@ -224,8 +223,8 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
   @Test
   public void stringFlow() throws Exception {
     // Copy source/book to sink3/book through JsObject stream
-    // #string
     String indexName = "sink3-0";
+    // #string
     CompletionStage<List<WriteResult<String, NotUsed>>> write =
         Source.from(
                 Arrays.asList(
@@ -235,9 +234,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
                         "3", "{\"title\": \"Die unendliche Geschichte\"}")))
             .via(
                 ElasticsearchFlow.create(
-                    constructElasticsearchParams(indexName, "_doc", ApiVersion.V5),
-                    ElasticsearchWriteSettings.create(connectionSettings)
-                        .withApiVersion(ApiVersion.V5)
+                    constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
+                    OpensearchWriteSettings.create(connectionSettings)
+                        .withApiVersion(OpensearchApiVersion.V1)
                         .withBufferSize(5),
                     StringMessageWriter.getInstance()))
             .runWith(Sink.seq(), system);
@@ -247,15 +246,15 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     flushAndRefresh(indexName);
 
     for (WriteResult<String, NotUsed> aResult1 : result1) {
-      assertTrue(aResult1.success());
+      assertEquals(true, aResult1.success());
     }
 
     CompletionStage<List<String>> f2 =
         ElasticsearchSource.typed(
-                constructElasticsearchParams(indexName, "_doc", ApiVersion.V5),
+                constructElasticsearchParams(indexName, "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5)
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1)
                     .withBufferSize(5),
                 Book.class)
             .map(m -> m.source().title)
@@ -284,8 +283,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     Source.from(requests)
         .via(
             ElasticsearchFlow.create(
-                constructElasticsearchParams("sink8", "_doc", ApiVersion.V5),
-                ElasticsearchWriteSettings.create(connectionSettings).withApiVersion(ApiVersion.V5),
+                constructElasticsearchParams("sink8", "_doc", OpensearchApiVersion.V1),
+                OpensearchWriteSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1),
                 new ObjectMapper()))
         .runWith(Sink.seq(), system)
         .toCompletableFuture()
@@ -297,10 +297,10 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // Assert docs in sink8/book
     CompletionStage<List<String>> f2 =
         ElasticsearchSource.typed(
-                constructElasticsearchParams("sink8", "_doc", ApiVersion.V5),
+                constructElasticsearchParams("sink8", "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5),
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1),
                 Book.class)
             .map(m -> m.source().title)
             .runWith(Sink.seq(), system);
@@ -327,7 +327,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
 
     final KafkaCommitter kafkaCommitter = new KafkaCommitter();
 
-    CompletionStage<Done> kafkaToEs =
+    CompletionStage<Done> kafkaToOs =
         Source.from(messagesFromKafka) // Assume we get this from Kafka
             .map(
                 kafkaMessage -> {
@@ -340,9 +340,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
                 })
             .via( // write to elastic
                 ElasticsearchFlow.createWithPassThrough(
-                    constructElasticsearchParams("sink6", "_doc", ApiVersion.V5),
-                    ElasticsearchWriteSettings.create(connectionSettings)
-                        .withApiVersion(ApiVersion.V5)
+                    constructElasticsearchParams("sink6", "_doc", OpensearchApiVersion.V1),
+                    OpensearchWriteSettings.create(connectionSettings)
+                        .withApiVersion(OpensearchApiVersion.V1)
                         .withBufferSize(5),
                     new ObjectMapper()))
             .map(
@@ -355,7 +355,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
                 })
             .runWith(Sink.ignore(), system);
     // #kafka-example
-    kafkaToEs.toCompletableFuture().get(5, TimeUnit.SECONDS); // Wait for it to complete
+    kafkaToOs.toCompletableFuture().get(5, TimeUnit.SECONDS); // Wait for it to complete
     flushAndRefresh("sink6");
 
     // Make sure all messages was committed to kafka
@@ -364,10 +364,10 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // Assert that all docs were written to elastic
     List<String> result2 =
         ElasticsearchSource.typed(
-                constructElasticsearchParams("sink6", "_doc", ApiVersion.V5),
+                constructElasticsearchParams("sink6", "_doc", OpensearchApiVersion.V1),
                 "{\"match_all\": {}}",
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5),
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1),
                 Book.class)
             .map(m -> m.source().title)
             .runWith(Sink.seq(), system) // Run it
@@ -396,9 +396,9 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
         .map((TestDoc d) -> WriteMessage.createIndexMessage(d.id, d))
         .via(
             ElasticsearchFlow.create(
-                constructElasticsearchParams(indexName, typeName, ApiVersion.V5),
-                ElasticsearchWriteSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5)
+                constructElasticsearchParams(indexName, typeName, OpensearchApiVersion.V1),
+                OpensearchWriteSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1)
                     .withBufferSize(5),
                 new ObjectMapper()))
         .runWith(Sink.seq(), system)
@@ -416,10 +416,10 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
 
     List<TestDoc> result =
         ElasticsearchSource.<TestDoc>typed(
-                constructElasticsearchParams(indexName, typeName, ApiVersion.V5),
+                constructElasticsearchParams(indexName, typeName, OpensearchApiVersion.V1),
                 searchParams, // <-- Using searchParams
-                ElasticsearchSourceSettings.create(connectionSettings)
-                    .withApiVersion(ApiVersion.V5),
+                OpensearchSourceSettings.create(connectionSettings)
+                    .withApiVersion(OpensearchApiVersion.V1),
                 TestDoc.class,
                 new ObjectMapper())
             .map(
