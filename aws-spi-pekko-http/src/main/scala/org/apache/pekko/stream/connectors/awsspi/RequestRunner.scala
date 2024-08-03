@@ -21,7 +21,6 @@ import java.util.concurrent.CompletableFuture
 import java.util.Collections
 
 import org.apache.pekko
-import pekko.actor.ActorSystem
 import pekko.http.scaladsl.model.{ ContentTypes, HttpResponse }
 import pekko.http.scaladsl.model.headers.{ `Content-Length`, `Content-Type` }
 import pekko.stream.Materializer
@@ -33,7 +32,7 @@ import software.amazon.awssdk.http.async.SdkAsyncHttpResponseHandler
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class RequestRunner()(implicit sys: ActorSystem, ec: ExecutionContext, mat: Materializer) {
+class RequestRunner()(implicit ec: ExecutionContext, mat: Materializer) {
 
   val logger = LoggerFactory.getLogger(this.getClass)
 

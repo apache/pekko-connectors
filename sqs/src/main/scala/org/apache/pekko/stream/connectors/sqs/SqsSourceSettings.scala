@@ -168,7 +168,7 @@ object SqsSourceSettings {
 }
 
 /**
- * Message attribure names described at
+ * Message attribute names described at
  * https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_ReceiveMessage.html#API_ReceiveMessage_RequestParameters
  */
 final class MessageAttributeName private (val name: String) {
