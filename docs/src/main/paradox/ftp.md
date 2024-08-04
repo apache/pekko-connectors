@@ -159,7 +159,7 @@ Java
 The code in this guide is part of runnable tests of this project. You are welcome to browse the code, edit and run it in sbt.
 
     ```
-    docker-compose up -d ftp sftp
+    docker compose up -d ftp sftp
     sbt
     > ftp/test
     ```
