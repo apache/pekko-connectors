@@ -93,6 +93,7 @@ object SqsPublishFlow {
               .messageAttributes(r.messageAttributes())
               .messageGroupId(r.messageGroupId())
               .messageDeduplicationId(r.messageDeduplicationId())
+              .delaySeconds(r.delaySeconds())
               .build()
         }
 
