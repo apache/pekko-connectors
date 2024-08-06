@@ -181,9 +181,9 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   it should "publish batch of SendMessageRequests without individual delays and pull them" taggedAs Integration in {
     new IntegrationFixture {
       // #batch-send-request
-      val messages = for (i <- 0 until 10)
-        yield
-          SendMessageRequest
+      val messages =
+        for (i <- 0 until 10)
+          yield SendMessageRequest
             .builder()
             .messageBody(s"Message - $i")
             .delaySeconds(0)
@@ -203,9 +203,9 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
   it should "publish batch of SendMessageRequests with individual delays and pull them" taggedAs Integration in {
     new IntegrationFixture {
       val messageDelaySeconds = 5
-      val messages = for (i <- 0 until 10)
-        yield
-          SendMessageRequest
+      val messages =
+        for (i <- 0 until 10)
+          yield SendMessageRequest
             .builder()
             .messageBody(s"Message - $i")
             .delaySeconds(messageDelaySeconds) // SQS queue should process messages after 5 seconds
