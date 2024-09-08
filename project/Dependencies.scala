@@ -16,7 +16,7 @@ object Dependencies {
   val CronBuild = sys.env.get("GITHUB_EVENT_NAME").contains("schedule")
 
   val Scala213 = "2.13.14" // update even in link-validator.conf
-  val Scala212 = "2.12.19"
+  val Scala212 = "2.12.20"
   val Scala3 = "3.3.3"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
@@ -26,7 +26,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.3"
-  val AwsSdk2Version = "2.27.17"
+  val AwsSdk2Version = "2.27.21"
   val NettyVersion = "4.1.113.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -62,7 +62,7 @@ object Dependencies {
   val Couchbase3Version = "3.6.0"
   val CouchbaseVersionForDocs = "2.7"
 
-  val GoogleAuthVersion = "1.24.1"
+  val GoogleAuthVersion = "1.25.0"
   val JwtScalaVersion = "10.0.1"
   val Log4jVersion = "2.23.1"
 
@@ -76,7 +76,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
 
   // wiremock has very outdated, CVE vulnerable dependencies
-  private val jettyVersion = "9.4.55.v20240627"
+  private val jettyVersion = "9.4.56.v20240826"
   private val guavaVersion = "33.3.0-jre"
   private val wireMockDependencies = Seq(
     "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
@@ -367,7 +367,7 @@ object Dependencies {
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.0.0" % Provided,
-        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.4.0.0" % Test,
+        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.4.0.5" % Test,
         "org.apache.activemq" % "artemis-server" % artemisVersion % Test,
         "org.apache.activemq" % "artemis-jakarta-client" % artemisVersion % Test,
         "org.apache.activemq" % "artemis-junit" % artemisVersion % Test,
@@ -377,7 +377,7 @@ object Dependencies {
   val Jms = Seq(
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
-      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.0.0" % Test,
+      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.0.5" % Test,
       "org.apache.activemq" % "activemq-broker" % "5.16.7" % Test,
       "org.apache.activemq" % "activemq-client" % "5.16.7" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
@@ -408,7 +408,7 @@ object Dependencies {
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "5.1.3"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "5.1.4"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
