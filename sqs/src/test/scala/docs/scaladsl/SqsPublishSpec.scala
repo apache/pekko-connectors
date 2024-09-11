@@ -33,6 +33,7 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
 
   abstract class IntegrationFixture(fifo: Boolean = false) {
     val queueUrl: String = if (fifo) randomFifoQueueUrl() else randomQueueUrl()
+    val messageReceiveMinimumTimeout: Int = 2
     implicit val awsSqsClient: SqsAsyncClient = sqsClient
 
     def receiveMessage(): Message =
@@ -43,18 +44,20 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
         .asScala
         .head
 
-    def receiveMessages(maxNumberOfMessages: Int): Seq[Message] = {
+    def receiveMessages(maxNumberOfMessages: Int, waitTimeSeconds: Int = 0): Seq[Message] = {
       // see https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/sqs/model/ReceiveMessageRequest.html
       require(maxNumberOfMessages > 0 && maxNumberOfMessages <= 10, "maxNumberOfMessages must be in 1 to 10")
 
+      val timeoutSeconds = messageReceiveMinimumTimeout + waitTimeSeconds
       val request =
         ReceiveMessageRequest
           .builder()
           .queueUrl(queueUrl)
           .maxNumberOfMessages(maxNumberOfMessages)
+          .waitTimeSeconds(waitTimeSeconds)
           .build()
 
-      awsSqsClient.receiveMessage(request).get(2, TimeUnit.SECONDS).messages().asScala.toSeq
+      awsSqsClient.receiveMessage(request).get(timeoutSeconds, TimeUnit.SECONDS).messages().asScala.toSeq
     }
   }
 
@@ -175,10 +178,16 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
     }
   }
 
-  it should "publish batch of SendMessageRequests and pull them" taggedAs Integration in {
+  it should "publish batch of SendMessageRequests without individual delays and pull them" taggedAs Integration in {
     new IntegrationFixture {
       // #batch-send-request
-      val messages = for (i <- 0 until 10) yield SendMessageRequest.builder().messageBody(s"Message - $i").build()
+      val messages =
+        for (i <- 0 until 10)
+          yield SendMessageRequest
+            .builder()
+            .messageBody(s"Message - $i")
+            .delaySeconds(0)
+            .build()
 
       val future = Source
         .single(messages)
@@ -188,6 +197,28 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
       future.futureValue shouldBe Done
 
       receiveMessages(10) should have size 10
+    }
+  }
+
+  it should "publish batch of SendMessageRequests with individual delays and pull them" taggedAs Integration in {
+    new IntegrationFixture {
+      val messageDelaySeconds = 5
+      val messages =
+        for (i <- 0 until 10)
+          yield SendMessageRequest
+            .builder()
+            .messageBody(s"Message - $i")
+            .delaySeconds(messageDelaySeconds) // SQS queue should process messages after 5 seconds
+            .build()
+
+      val future = Source
+        .single(messages)
+        .runWith(SqsPublishSink.batchedMessageSink(queueUrl))
+
+      future.futureValue shouldBe Done
+
+      receiveMessages(10) should have size 0 // delay hasn't elapsed
+      receiveMessages(10, messageDelaySeconds + 5) should have size 10 // delay has elapsed
     }
   }
 
