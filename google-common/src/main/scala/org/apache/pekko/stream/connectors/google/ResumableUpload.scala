@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.google
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
+import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.model.HttpMethods.{ POST, PUT }
 import pekko.http.scaladsl.model.StatusCodes.{ Created, OK, PermanentRedirect }
 import pekko.http.scaladsl.model._
@@ -93,10 +94,16 @@ private[connectors] object ResumableUpload {
     import implicits._
 
     implicit val um: FromResponseUnmarshaller[Uri] =
-      Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
-        response.discardEntityBytes().future.map { _ =>
-          response.header[Location].fold(throw InvalidResponseException(ErrorInfo("No Location header")))(_.uri)
-        }
+      Unmarshaller.withMaterializer { _ => implicit mat => (response: HttpResponse) =>
+        if (response.status.isSuccess())
+          response.discardEntityBytes().future.map { _ =>
+            response.header[Location].fold(throw InvalidResponseException(ErrorInfo("No Location header")))(_.uri)
+          }(ExecutionContexts.parasitic)
+        else
+          Unmarshal(response.entity).to[String].flatMap { errorString =>
+            Future.failed(InvalidResponseException(
+              ErrorInfo(s"Resumable upload failed with status: ${response.status}", s"body: $errorString")))
+          }(ExecutionContexts.parasitic)
       }.withDefaultRetry
 
     GoogleHttp(mat.system).singleAuthenticatedRequest[Uri](request)
