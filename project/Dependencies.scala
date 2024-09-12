@@ -25,10 +25,10 @@ object Dependencies {
 
   val InfluxDBJavaVersion = "2.15"
 
-  val AvroVersion = "1.11.3"
+  val AvroVersion = "1.11.4"
   val AwsSdk2Version = "2.17.113"
-  val AwsSpiPekkoHttpVersion = "0.1.0"
-  val NettyVersion = "4.1.104.Final"
+  val AwsSpiPekkoHttpVersion = "0.1.1"
+  val NettyVersion = "4.1.113.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = PekkoHttpDependency.version
@@ -175,7 +175,7 @@ object Dependencies {
       ("org.apache.hadoop" % "hadoop-common" % "3.2.1" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.20.0" % Test,
+      "org.specs2" %% "specs2-core" % "4.20.8" % Test,
       "org.slf4j" % "log4j-over-slf4j" % log4jOverSlf4jVersion % Test))
 
   val Ftp = Seq(
@@ -184,7 +184,7 @@ object Dependencies {
       "com.hierynomus" % "sshj" % "0.38.0",
       "ch.qos.logback" % "logback-classic" % LogbackForSlf4j2Version % Test) ++ Mockito)
 
-  val GeodeVersion = "1.15.0"
+  val GeodeVersion = "1.15.1"
   val GeodeVersionForDocs = "115"
 
   val Geode = Seq(
@@ -224,7 +224,7 @@ object Dependencies {
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
       "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "1.22.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
-      "org.apache.arrow" % "arrow-vector" % "4.0.0" % "provided",
+      "org.apache.arrow" % "arrow-vector" % "4.0.1" % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
@@ -344,7 +344,7 @@ object Dependencies {
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.0"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "4.4.2"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
@@ -455,8 +455,8 @@ object Dependencies {
 
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
-      "com.github.jnr" % "jffi" % "1.3.1", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.38.5"))
+      "com.github.jnr" % "jffi" % "1.3.13", // classifier "complete", // Is the classifier needed anymore?
+      "com.github.jnr" % "jnr-unixsocket" % "0.38.22"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
