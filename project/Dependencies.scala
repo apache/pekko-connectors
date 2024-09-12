@@ -26,7 +26,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.15"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.17.113"
+  val AwsSdk2Version = "2.17.295"
   val AwsSpiPekkoHttpVersion = "0.1.1"
   val NettyVersion = "4.1.113.Final"
   // Sync with plugins.sbt
@@ -194,7 +194,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonDatabindVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonDatabindVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.1" % Test) ++ JacksonDatabindDependencies ++
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.17.2" % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
        else Seq(
@@ -321,7 +321,7 @@ object Dependencies {
 
   val JsonStreaming = Seq(
     libraryDependencies ++= Seq(
-      "com.github.jsurfer" % "jsurfer-jackson" % "1.6.0") ++ JacksonDatabindDependencies)
+      "com.github.jsurfer" % "jsurfer-jackson" % "1.6.5") ++ JacksonDatabindDependencies)
 
   val Kinesis = Seq(
     libraryDependencies ++= Seq(
@@ -330,7 +330,7 @@ object Dependencies {
         organization = "org.apache.pekko"))) ++ Seq(
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.0").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "2.4.8").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
@@ -390,8 +390,8 @@ object Dependencies {
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test))
 
   val SpringWeb = {
-    val SpringVersion = "5.1.17.RELEASE"
-    val SpringBootVersion = "2.1.16.RELEASE"
+    val SpringVersion = "5.1.20.RELEASE"
+    val SpringBootVersion = "2.1.18.RELEASE"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
