@@ -2,6 +2,16 @@
 
 The versioning strategy is described in @ref:[Apache Pekko Connectors' versioning scheme](../other-docs/versioning.md).
 
+## 1.0.3
+
+### Dependency Upgrades
+
+* [pekko-http-circe](https://github.com/mdedetrich/pekko-streams-circe) 1.1.0 upgraded due to [pekko-streams-circe#93](https://github.com/mdedetrich/pekko-streams-circe/pull/93)
+* [aws-spi-pekko-http](https://github.com/pjfanning/aws-spi-pekko-http/) 0.1.1 upgraded due to [aws-spi-pekko-http#20](https://github.com/pjfanning/aws-spi-pekko-http/pull/20)
+* Pekko 1.0.3 and Pekko HTTP 1.0.1
+* Scala 2.12.20 and Scala 2.13.14
+* Minor bumps in some other libs ([PR798](https://github.com/apache/pekko-connectors/pull/798))
+
 ## 1.0.2
 
 ### Bug Fixes
