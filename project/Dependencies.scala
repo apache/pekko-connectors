@@ -32,6 +32,7 @@ object Dependencies {
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = PekkoHttpDependency.version
+  val PekkoStreamsCirceVersion = "1.1.0"
   val PekkoHttpBinaryVersion = "1.0"
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
@@ -304,8 +305,8 @@ object Dependencies {
   val IronMq = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.mdedetrich" %% "pekko-stream-circe" % "1.0.0",
-      "org.mdedetrich" %% "pekko-http-circe" % "1.0.0"))
+      "org.mdedetrich" %% "pekko-stream-circe" % PekkoStreamsCirceVersion,
+      "org.mdedetrich" %% "pekko-http-circe" % PekkoStreamsCirceVersion))
 
   val Jms = Seq(
     libraryDependencies ++= Seq(
