@@ -102,7 +102,7 @@ private[connectors] object ResumableUpload {
         else
           Unmarshal(response.entity).to[String].flatMap { errorString =>
             Future.failed(InvalidResponseException(
-              ErrorInfo(s"Resumable upload failed with status: ${response.status}", s"body: $errorString")))
+              ErrorInfo(s"Resumable upload failed with status ${response.status}", errorString)))
           }(ExecutionContexts.parasitic)
       }.withDefaultRetry
 
