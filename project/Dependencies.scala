@@ -32,7 +32,7 @@ object Dependencies {
   val PekkoGrpcBinaryVersion = "1.1"
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoStreamsCirceVersion = "1.1.0"
-  val PekkoHttpBinaryVersion = "1.0"
+  val PekkoHttpBinaryVersion = PekkoHttpVersion.take(3)
   val ScalaTestVersion = "3.2.19"
   val TestContainersScalaTestVersion = "0.41.4"
   val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
