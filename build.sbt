@@ -392,7 +392,7 @@ lazy val docs = project
       "hadoop.version" -> Dependencies.HadoopVersion,
       "extref.github.base_url" -> s"https://github.com/apache/pekko-connectors/tree/${if (isSnapshot.value) "main"
         else "v" + version.value}/%s",
-      "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/current/%s",
+      "extref.pekko.base_url" -> s"https://pekko.apache.org/docs/pekko/${Dependencies.PekkoBinaryVersion}/%s",
       "scaladoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
       "javadoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
       "javadoc.org.apache.pekko.link_style" -> "direct",
