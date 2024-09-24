@@ -21,7 +21,7 @@ object Dependencies {
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
   val PekkoVersion = PekkoCoreDependency.version
-  val PekkoBinaryVersion = PekkoVersion.take(3)
+  val PekkoBinaryVersion = PekkoCoreDependency.default.link
 
   val InfluxDBJavaVersion = "2.15"
 
@@ -33,7 +33,7 @@ object Dependencies {
   val PekkoGrpcBinaryVersion = "1.0"
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoStreamsCirceVersion = "1.1.0"
-  val PekkoHttpBinaryVersion = "1.0"
+  val PekkoHttpBinaryVersion = PekkoHttpDependency.default.link
   val ScalaTestVersion = "3.2.14"
   val TestContainersScalaTestVersion = "0.40.14"
   val mockitoVersion = "4.2.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
