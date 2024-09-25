@@ -108,8 +108,10 @@ class PekkoHttpClient(
     }
   }
 
-  override def close(): Unit =
+  override def close(): Unit = {
+    http2connectionFlows.values().iterator().forEachRemaining(_.complete())
     shutdownHandle()
+  }
 
   override def clientName(): String = "pekko-http"
 }
