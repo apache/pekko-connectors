@@ -21,7 +21,7 @@ import com.typesafe.config.ConfigFactory
 
 import java.util.Collections
 import org.apache.pekko
-import org.apache.pekko.http.scaladsl.settings.{ClientConnectionSettings, ConnectionPoolSettings}
+import org.apache.pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 import pekko.http.scaladsl.model.headers.`Content-Type`
 import pekko.http.scaladsl.model.MediaTypes
 import org.scalatest.OptionValues
@@ -87,13 +87,13 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
         .asInstanceOf[PekkoHttpClient]
 
       pekkoClient.connectionSettings.connectionSettings.connectingTimeout shouldBe
-        SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).toScala
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).toScala
       pekkoClient.connectionSettings.connectionSettings.idleTimeout shouldBe
-        SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).toScala
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).toScala
       pekkoClient.connectionSettings.maxConnections shouldBe
-        SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue()
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue()
       infiniteToZero(pekkoClient.connectionSettings.maxConnectionLifetime) shouldBe
-        SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE)
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE)
     }
 
     "withConnectionPoolSettingsBuilder().build() should use passed connectionPoolSettings builder" in {
@@ -134,6 +134,6 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
 
   private def infiniteToZero(duration: scala.concurrent.duration.Duration): java.time.Duration = duration match {
     case _: scala.concurrent.duration.Duration.Infinite => java.time.Duration.ZERO
-    case duration: FiniteDuration => duration.toJava
+    case duration: FiniteDuration                       => duration.toJava
   }
 }
