@@ -60,10 +60,11 @@ class PekkoHttpClient(
   lazy val runner = new RequestRunner()
 
   override def execute(request: AsyncExecuteRequest): CompletableFuture[Void] = {
-    val pekkoHttpRequest = toPekkoRequest(request.request(), request.requestContentPublisher())
     runner.run(
-      () =>
-        Http().singleRequest(pekkoHttpRequest, settings = connectionSettings, connectionContext = connectionContext),
+      () => {
+        val pekkoHttpRequest = toPekkoRequest(request.request(), request.requestContentPublisher())
+        Http().singleRequest(pekkoHttpRequest, settings = connectionSettings, connectionContext = connectionContext)
+      },
       request.responseHandler())
   }
 
