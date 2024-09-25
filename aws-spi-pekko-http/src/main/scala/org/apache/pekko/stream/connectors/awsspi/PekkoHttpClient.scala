@@ -153,9 +153,6 @@ object PekkoHttpClient {
     else throw new RuntimeException(s"Could not parse custom content type '$contentTypeStr'.")
   }
 
-  // based on NettyNioAsyncHttpClient and ApacheHttpClient
-  // https://github.com/search?q=repo%3Aaws%2Faws-sdk-java-v2+SdkHttpConfigurationOption+path%3A%2F%5Ehttp-clients%5C%2Fnetty-nio-client%5C%2Fsrc%5C%2Fmain%2F&type=code
-  // https://github.com/search?q=repo%3Aaws%2Faws-sdk-java-v2+SdkHttpConfigurationOption+path%3A%2F%5Ehttp-clients%5C%2Fapache-client%5C%2Fsrc%5C%2Fmain%2F&type=code
   private[awsspi] def buildConnectionPoolSettings(
       base: ConnectionPoolSettings, attributeMap: AttributeMap): ConnectionPoolSettings = {
     def zeroToInfinite(duration: java.time.Duration): scala.concurrent.duration.Duration =
