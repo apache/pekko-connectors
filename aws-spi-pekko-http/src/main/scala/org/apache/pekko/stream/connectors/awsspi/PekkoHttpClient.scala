@@ -196,7 +196,7 @@ object PekkoHttpClient {
       )
 
       val connectionContext =
-        if (resolvedOptions.get(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES))
+        if (resolvedOptions.get(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES).booleanValue())
           ConnectionContext.httpsClient(createInsecureSslEngine _)
         else ConnectionContext.httpsClient(SSLContext.getDefault)
 
