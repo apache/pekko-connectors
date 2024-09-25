@@ -48,16 +48,18 @@ class RequestRunnerSpec extends AnyWordSpec with Matchers with OptionValues {
     handler.responseHeaders.headers().get("Content-Length").get(0) shouldBe "2"
   }
 
-  class MyHeaderHandler() extends SdkAsyncHttpResponseHandler {
+  private class MyHeaderHandler() extends SdkAsyncHttpResponseHandler {
     private val headers = new AtomicReference[SdkHttpResponse](null)
     def responseHeaders = headers.get()
     override def onHeaders(headers: SdkHttpResponse): Unit = this.headers.set(headers)
-    override def onStream(stream: Publisher[ByteBuffer]): Unit = stream.subscribe(new Subscriber[ByteBuffer] {
-      override def onSubscribe(s: Subscription): Unit = s.request(1000)
-      override def onNext(t: ByteBuffer): Unit = ()
-      override def onError(t: Throwable): Unit = ()
-      override def onComplete(): Unit = ()
-    })
+    override def onStream(stream: Publisher[ByteBuffer]): Unit = stream.subscribe(new MySubscriber)
     override def onError(error: Throwable): Unit = ()
+  }
+
+  private class MySubscriber() extends Subscriber[ByteBuffer] {
+    override def onSubscribe(s: Subscription): Unit = s.request(1000)
+    override def onNext(t: ByteBuffer): Unit = ()
+    override def onError(t: Throwable): Unit = ()
+    override def onComplete(): Unit = ()
   }
 }
