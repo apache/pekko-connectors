@@ -17,13 +17,13 @@
 
 package org.apache.pekko.stream.connectors.awsspi
 
+import java.util.Collections
 import com.typesafe.config.ConfigFactory
 
-import java.util.Collections
 import org.apache.pekko
-import org.apache.pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 import pekko.http.scaladsl.model.headers.`Content-Type`
 import pekko.http.scaladsl.model.MediaTypes
+import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
