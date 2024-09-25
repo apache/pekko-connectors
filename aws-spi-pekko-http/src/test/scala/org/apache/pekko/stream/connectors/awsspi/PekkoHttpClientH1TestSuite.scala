@@ -29,7 +29,6 @@ class PekkoHttpClientH1TestSuite extends SdkAsyncHttpClientH1TestSuite {
   }
 
   // Failed tests
-  override def naughtyHeaderCharactersDoNotGetToServer(): Unit = ()
   override def connectionReceiveServerErrorStatusShouldNotReuseConnection(): Unit = ()
 
 }
