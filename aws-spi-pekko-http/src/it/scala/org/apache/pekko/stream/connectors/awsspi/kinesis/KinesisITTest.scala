@@ -31,24 +31,36 @@ class KinesisITTest extends AnyWordSpec with Matchers with TestBase {
 
   def withClient(testCode: KinesisAsyncClient => Any): Any = {
 
-    val pekkoClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory().build()
+    // TODO use pekkoClientBuilder instead of httpClient in other withClient methods
+    val pekkoClientBuilder = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
 
     val client = KinesisAsyncClient
       .builder()
       .credentialsProvider(credentialProviderChain)
       .region(defaultRegion)
-      .httpClient(pekkoClient)
+      .httpClientBuilder(pekkoClientBuilder)
       .build()
 
     try
       testCode(client)
     finally { // clean up
-      pekkoClient.close()
       client.close()
     }
   }
 
   "Kinesis async client" should {
+
+    "list streams" in withClient { implicit client =>
+      val result = client.listStreams().join()
+      result.streamNames() should not be null
+    }
+    "list streams in parallel" in withClient { implicit client =>
+      // if the number of requests is changed from 5 to 6, then the test will be stuck for 60s and then complete correctly
+      val x = for (_ <- 1 to 5) yield {
+        client.listStreams()
+      }
+      x.foreach(_.join().streamNames() should not be null)
+    }
 
     "use a data stream: create + put + get + delete" in withClient { implicit client =>
       val streamName = "aws-spi-test-" + Random.alphanumeric.take(10).filterNot(_.isUpper).mkString
