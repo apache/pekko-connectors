@@ -21,7 +21,6 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpAsyncHttpService;
 import org.junit.Rule;
 import org.junit.Test;
-import org.scalatestplus.junit.JUnitSuite;
 import org.testcontainers.containers.GenericContainer;
 import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -44,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
-public class S3Test extends JUnitSuite {
+public class S3Test {
 
   private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   private static SecureRandom rnd = new SecureRandom();

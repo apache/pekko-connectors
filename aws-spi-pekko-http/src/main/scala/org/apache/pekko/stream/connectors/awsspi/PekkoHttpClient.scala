@@ -21,7 +21,7 @@ import java.util.concurrent.{ CompletableFuture, TimeUnit }
 
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.http.scaladsl.Http
+import pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import pekko.http.scaladsl.model.MediaType.Compressible
@@ -39,11 +39,18 @@ import software.amazon.awssdk.http.async._
 import software.amazon.awssdk.http.{ SdkHttpConfigurationOption, SdkHttpRequest }
 import software.amazon.awssdk.utils.AttributeMap
 
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl._
 import scala.collection.immutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, ExecutionContext }
 
-class PekkoHttpClient(shutdownHandle: () => Unit, private[awsspi] val connectionSettings: ConnectionPoolSettings)(
+class PekkoHttpClient(
+    shutdownHandle: () => Unit,
+    private[awsspi] val connectionSettings: ConnectionPoolSettings,
+    private[awsspi] val connectionContext: HttpsConnectionContext
+)(
     implicit
     actorSystem: ActorSystem,
     ec: ExecutionContext,
@@ -55,7 +62,8 @@ class PekkoHttpClient(shutdownHandle: () => Unit, private[awsspi] val connection
   override def execute(request: AsyncExecuteRequest): CompletableFuture[Void] = {
     val pekkoHttpRequest = toPekkoRequest(request.request(), request.requestContentPublisher())
     runner.run(
-      () => Http().singleRequest(pekkoHttpRequest, settings = connectionSettings),
+      () =>
+        Http().singleRequest(pekkoHttpRequest, settings = connectionSettings, connectionContext = connectionContext),
       request.responseHandler())
   }
 
@@ -185,6 +193,12 @@ object PekkoHttpClient {
         connectionPoolSettings.getOrElse(ConnectionPoolSettings(as)),
         resolvedOptions
       )
+
+      val connectionContext =
+        if (resolvedOptions.get(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES))
+          ConnectionContext.httpsClient(createInsecureSslEngine _)
+        else ConnectionContext.httpsClient(SSLContext.getDefault)
+
       val shutdownhandleF = () => {
         if (actorSystem.isEmpty) {
           Await.result(Http().shutdownAllConnectionPools().flatMap(_ => as.terminate()),
@@ -192,7 +206,7 @@ object PekkoHttpClient {
         }
         ()
       }
-      new PekkoHttpClient(shutdownhandleF, cps)(as, ec, mat)
+      new PekkoHttpClient(shutdownhandleF, cps, connectionContext)(as, ec, mat)
     }
     def withActorSystem(actorSystem: ActorSystem): PekkoHttpClientBuilder = copy(actorSystem = Some(actorSystem))
     def withActorSystem(actorSystem: ClassicActorSystemProvider): PekkoHttpClientBuilder =
@@ -223,4 +237,34 @@ object PekkoHttpClient {
     "application/x-www-form-urlencoded; charset-UTF-8" -> formUrlEncoded,
     "application/x-www-form-urlencoded" -> formUrlEncoded,
     "application/xml" -> applicationXml)
+
+  private def createInsecureSslEngine(host: String, port: Int): SSLEngine = {
+    val engine = createTrustfulSslContext().createSSLEngine(host, port)
+    engine.setUseClientMode(true)
+
+    // WARNING: this creates an SSL Engine without enabling endpoint identification/verification procedures
+    // Disabling host name verification is a very bad idea, please don't unless you have a very good reason to.
+    // When in doubt, use the `ConnectionContext.httpsClient` that takes an `SSLContext` instead, or enable with:
+    // engine.setSSLParameters({
+    //   val params = engine.getSSLParameters
+    //   params.setEndpointIdentificationAlgorithm("https")
+    //   params
+    // })
+
+    engine
+  }
+
+  private def createTrustfulSslContext(): SSLContext = {
+    object NoCheckX509TrustManager extends X509TrustManager {
+      override def checkClientTrusted(chain: Array[X509Certificate], authType: String) = ()
+
+      override def checkServerTrusted(chain: Array[X509Certificate], authType: String) = ()
+
+      override def getAcceptedIssuers = Array[X509Certificate]()
+    }
+
+    val context = SSLContext.getInstance("TLS")
+    context.init(Array[KeyManager](), Array(NoCheckX509TrustManager), new SecureRandom())
+    context
+  }
 }
