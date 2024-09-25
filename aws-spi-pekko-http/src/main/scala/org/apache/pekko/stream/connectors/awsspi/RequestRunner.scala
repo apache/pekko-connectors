@@ -34,7 +34,8 @@ import scala.concurrent.{ ExecutionContext, Future }
 class RequestRunner()(implicit ec: ExecutionContext, mat: Materializer) {
 
   def run(runRequest: () => Future[HttpResponse], handler: SdkAsyncHttpResponseHandler): CompletableFuture[Void] = {
-    val result = Future.delegate(runRequest()).flatMap { response =>
+    // Future.unit.flatMap(expr) is a scala 2.12 equivalent of Future.delegate(expr)
+    val result = Future.unit.flatMap(_ => runRequest()).flatMap { response =>
       handler.onHeaders(toSdkHttpFullResponse(response))
 
       val (complete, publisher) = response.entity.dataBytes
