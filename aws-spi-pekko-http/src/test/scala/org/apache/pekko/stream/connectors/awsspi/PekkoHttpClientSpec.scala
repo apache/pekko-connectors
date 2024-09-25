@@ -24,6 +24,7 @@ import org.apache.pekko
 import pekko.http.scaladsl.model.headers.`Content-Type`
 import pekko.http.scaladsl.model.MediaTypes
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
+import pekko.util.JavaDurationConverters._
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -31,7 +32,6 @@ import software.amazon.awssdk.http.SdkHttpConfigurationOption
 import software.amazon.awssdk.utils.AttributeMap
 
 import scala.concurrent.duration._
-import scala.jdk.DurationConverters._
 
 class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
 
@@ -64,10 +64,10 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
 
     "withConnectionPoolSettingsBuilderFromAttributeMap().buildWithDefaults() should propagate configuration options" in {
       val attributeMap = AttributeMap.builder()
-        .put(SdkHttpConfigurationOption.CONNECTION_TIMEOUT, 1.second.toJava)
-        .put(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT, 2.second.toJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_TIMEOUT, 1.second.asJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT, 2.second.asJava)
         .put(SdkHttpConfigurationOption.MAX_CONNECTIONS, Integer.valueOf(3))
-        .put(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE, 4.second.toJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE, 4.second.asJava)
         .build()
       val pekkoClient: PekkoHttpClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
         .withConnectionPoolSettingsBuilderFromAttributeMap()
@@ -87,9 +87,9 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
         .asInstanceOf[PekkoHttpClient]
 
       pekkoClient.connectionSettings.connectionSettings.connectingTimeout shouldBe
-      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).toScala
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).asScala
       pekkoClient.connectionSettings.connectionSettings.idleTimeout shouldBe
-      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).toScala
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).asScala
       pekkoClient.connectionSettings.maxConnections shouldBe
       SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue()
       infiniteToZero(pekkoClient.connectionSettings.maxConnectionLifetime) shouldBe
@@ -134,6 +134,6 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
 
   private def infiniteToZero(duration: scala.concurrent.duration.Duration): java.time.Duration = duration match {
     case _: scala.concurrent.duration.Duration.Infinite => java.time.Duration.ZERO
-    case duration: FiniteDuration                       => duration.toJava
+    case duration: FiniteDuration                       => duration.asJava
   }
 }
