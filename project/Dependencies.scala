@@ -10,6 +10,7 @@
 import sbt._
 import Common.isScala3
 import Keys._
+import com.github.sbt.junit.jupiter.sbt.Import.JupiterKeys
 
 object Dependencies {
 
@@ -142,9 +143,11 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       ("software.amazon.awssdk" % "s3" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
+      ("software.amazon.awssdk" % "http-client-tests" % AwsSdk2Version % "it,test").excludeAll(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
+      "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",
-      "org.scalatestplus" %% "junit-4-13" % scalaTestScalaCheckVersion % "it,test",
       "ch.qos.logback" % "logback-classic" % LogbackVersion % "it,test"))
 
   val AwsLambda = Seq(
