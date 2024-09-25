@@ -26,7 +26,6 @@ import pekko.http.scaladsl.model.headers.{ `Content-Length`, `Content-Type` }
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Keep, Sink }
 import pekko.util.FutureConverters
-import org.slf4j.LoggerFactory
 import software.amazon.awssdk.http.SdkHttpFullResponse
 import software.amazon.awssdk.http.async.SdkAsyncHttpResponseHandler
 
@@ -34,10 +33,9 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 class RequestRunner()(implicit ec: ExecutionContext, mat: Materializer) {
 
-  val logger = LoggerFactory.getLogger(this.getClass)
-
   def run(runRequest: () => Future[HttpResponse], handler: SdkAsyncHttpResponseHandler): CompletableFuture[Void] = {
-    val result = runRequest().flatMap { response =>
+    // Future.unit.flatMap(expr) is a scala 2.12 equivalent of Future.delegate(expr)
+    val result = Future.unit.flatMap(_ => runRequest()).flatMap { response =>
       handler.onHeaders(toSdkHttpFullResponse(response))
 
       val (complete, publisher) = response.entity.dataBytes

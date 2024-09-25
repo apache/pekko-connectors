@@ -18,10 +18,9 @@
 package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
-
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.http.scaladsl.Http
+import pekko.http.scaladsl._
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import pekko.http.scaladsl.model.MediaType.Compressible
@@ -29,43 +28,97 @@ import pekko.http.scaladsl.model.RequestEntityAcceptance.Expected
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers.{ `Content-Length`, `Content-Type` }
 import pekko.http.scaladsl.settings.ConnectionPoolSettings
-import pekko.stream.scaladsl.Source
-import pekko.stream.{ Materializer, SystemMaterializer }
+import pekko.stream.scaladsl._
+import pekko.stream.{ Materializer, OverflowStrategy, SystemMaterializer }
 import pekko.util.ByteString
-import pekko.util.OptionConverters
+import pekko.util.OptionConverters._
+import pekko.util.JavaDurationConverters._
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.http.async._
-import software.amazon.awssdk.http.SdkHttpRequest
+import software.amazon.awssdk.http.{ Protocol, SdkHttpConfigurationOption, SdkHttpRequest }
 import software.amazon.awssdk.utils.AttributeMap
 
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl._
 import scala.collection.immutable
 import scala.concurrent.duration.Duration
-import scala.concurrent.{ Await, ExecutionContext }
+import scala.concurrent.{ Await, ExecutionContext, Future, Promise }
 
-class PekkoHttpClient(shutdownHandle: () => Unit, connectionSettings: ConnectionPoolSettings)(implicit
+class PekkoHttpClient(
+    shutdownHandle: () => Unit,
+    protocol: HttpProtocol,
+    private[awsspi] val connectionSettings: ConnectionPoolSettings,
+    private[awsspi] val connectionContext: HttpsConnectionContext
+)(
+    implicit
     actorSystem: ActorSystem,
     ec: ExecutionContext,
     mat: Materializer) extends SdkAsyncHttpClient {
   import PekkoHttpClient._
 
-  lazy val runner = new RequestRunner()
+  private lazy val runner = new RequestRunner()
+  private lazy val http2connectionFlows =
+    new java.util.concurrent.ConcurrentHashMap[Uri, SourceQueueWithComplete[HttpRequest]]()
 
   override def execute(request: AsyncExecuteRequest): CompletableFuture[Void] = {
-    val pekkoHttpRequest = toPekkoRequest(request.request(), request.requestContentPublisher())
-    runner.run(
-      () => Http().singleRequest(pekkoHttpRequest, settings = connectionSettings),
-      request.responseHandler())
+
+    logger.debug(s"Executing with protocol: $protocol")
+
+    if (protocol == HttpProtocols.`HTTP/2.0`) {
+      val useTls = request.request().protocol() == "https"
+      val akkaHttpRequest = toPekkoRequest(/*protocol, */ request.request(), request.requestContentPublisher())
+      val uri = akkaHttpRequest.effectiveUri(securedConnection = useTls)
+      val queue = http2connectionFlows.computeIfAbsent(uri,
+        _ => {
+          val baseConnection = Http()
+            .connectionTo(request.request().host())
+            .toPort(request.request().port())
+            .withCustomHttpsConnectionContext(connectionContext)
+          val http2client = request.request().protocol() match {
+            case "http"  => baseConnection.managedPersistentHttp2WithPriorKnowledge()
+            case "https" => baseConnection.managedPersistentHttp2()
+            case _       => throw new IllegalArgumentException("Unsupported protocol")
+          }
+          Source
+            .queue[HttpRequest](4242, OverflowStrategy.fail)
+            .via(http2client)
+            .to(Sink.foreach { res =>
+              res.attribute(ResponsePromise.Key).get.promise.trySuccess(res)
+            })
+            .run()
+        })
+
+      val dispatch: HttpRequest => Future[HttpResponse] = req => {
+        val p = Promise[HttpResponse]()
+        queue.offer(req.addAttribute(ResponsePromise.Key, ResponsePromise(p))).flatMap(_ => p.future)
+      }
+
+      runner.run(
+        () => dispatch(akkaHttpRequest),
+        request.responseHandler()
+      )
+    } else {
+      runner.run(
+        () => {
+          val pekkoHttpRequest = toPekkoRequest(request.request(), request.requestContentPublisher())
+          Http().singleRequest(pekkoHttpRequest, settings = connectionSettings, connectionContext = connectionContext)
+        },
+        request.responseHandler())
+    }
   }
 
-  override def close(): Unit =
+  override def close(): Unit = {
+    http2connectionFlows.values().iterator().forEachRemaining(_.complete())
     shutdownHandle()
+  }
 
   override def clientName(): String = "pekko-http"
 }
 
 object PekkoHttpClient {
 
-  val logger = LoggerFactory.getLogger(this.getClass)
+  private val logger = LoggerFactory.getLogger(this.getClass)
 
   private[awsspi] def toPekkoRequest(request: SdkHttpRequest,
       contentPublisher: SdkHttpContentPublisher): HttpRequest = {
@@ -84,8 +137,7 @@ object PekkoHttpClient {
       contentType: ContentType,
       contentPublisher: SdkHttpContentPublisher): RequestEntity =
     method.requestEntityAcceptance match {
-      case Expected =>
-        OptionConverters.toScala(contentPublisher.contentLength()) match {
+      case Expected => contentPublisher.contentLength().toScala match {
           case Some(length) =>
             HttpEntity(contentType, length, Source.fromPublisher(contentPublisher).map(ByteString(_)))
           case None => HttpEntity(contentType, Source.fromPublisher(contentPublisher).map(ByteString(_)))
@@ -151,18 +203,49 @@ object PekkoHttpClient {
     else throw new RuntimeException(s"Could not parse custom content type '$contentTypeStr'.")
   }
 
+  private[awsspi] def buildConnectionPoolSettings(
+      base: ConnectionPoolSettings, attributeMap: AttributeMap): ConnectionPoolSettings = {
+    def zeroToInfinite(duration: java.time.Duration): scala.concurrent.duration.Duration =
+      if (duration.isZero) scala.concurrent.duration.Duration.Inf
+      else duration.asScala
+
+    base
+      .withUpdatedConnectionSettings(s =>
+        s.withConnectingTimeout(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).asScala)
+          .withIdleTimeout(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).asScala))
+      .withMaxConnections(attributeMap.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue())
+      .withMaxConnectionLifetime(zeroToInfinite(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE)))
+  }
+
   def builder() = PekkoHttpClientBuilder()
 
   case class PekkoHttpClientBuilder(private val actorSystem: Option[ActorSystem] = None,
       private val executionContext: Option[ExecutionContext] = None,
-      private val connectionPoolSettings: Option[ConnectionPoolSettings] = None)
+      private val connectionPoolSettings: Option[ConnectionPoolSettings] = None,
+      private val connectionPoolSettingsBuilder: (ConnectionPoolSettings, AttributeMap) => ConnectionPoolSettings =
+        (c, _) => c)
       extends SdkAsyncHttpClient.Builder[PekkoHttpClientBuilder] {
-    def buildWithDefaults(attributeMap: AttributeMap): SdkAsyncHttpClient = {
+    def buildWithDefaults(serviceDefaults: AttributeMap): SdkAsyncHttpClient = {
       implicit val as = actorSystem.getOrElse(ActorSystem("aws-pekko-http"))
       implicit val ec = executionContext.getOrElse(as.dispatcher)
       val mat: Materializer = SystemMaterializer(as).materializer
 
-      val cps = connectionPoolSettings.getOrElse(ConnectionPoolSettings(as))
+      println("serviceDefaults: " + serviceDefaults)
+
+      val resolvedOptions = serviceDefaults.merge(SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS);
+
+      val protocol = toProtocol(resolvedOptions.get(SdkHttpConfigurationOption.PROTOCOL))
+
+      val cps = connectionPoolSettingsBuilder(
+        connectionPoolSettings.getOrElse(ConnectionPoolSettings(as)),
+        resolvedOptions
+      )
+
+      val connectionContext =
+        if (resolvedOptions.get(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES).booleanValue())
+          ConnectionContext.httpsClient(createInsecureSslEngine _)
+        else ConnectionContext.httpsClient(SSLContext.getDefault)
+
       val shutdownhandleF = () => {
         if (actorSystem.isEmpty) {
           Await.result(Http().shutdownAllConnectionPools().flatMap(_ => as.terminate()),
@@ -170,8 +253,9 @@ object PekkoHttpClient {
         }
         ()
       }
-      new PekkoHttpClient(shutdownhandleF, cps)(as, ec, mat)
+      new PekkoHttpClient(shutdownhandleF, protocol, cps, connectionContext)(as, ec, mat)
     }
+
     def withActorSystem(actorSystem: ActorSystem): PekkoHttpClientBuilder = copy(actorSystem = Some(actorSystem))
     def withActorSystem(actorSystem: ClassicActorSystemProvider): PekkoHttpClientBuilder =
       copy(actorSystem = Some(actorSystem.classicSystem))
@@ -179,6 +263,12 @@ object PekkoHttpClient {
       copy(executionContext = Some(executionContext))
     def withConnectionPoolSettings(connectionPoolSettings: ConnectionPoolSettings): PekkoHttpClientBuilder =
       copy(connectionPoolSettings = Some(connectionPoolSettings))
+    def withConnectionPoolSettingsBuilder(
+        connectionPoolSettingsBuilder: (ConnectionPoolSettings, AttributeMap) => ConnectionPoolSettings
+    ): PekkoHttpClientBuilder =
+      copy(connectionPoolSettingsBuilder = connectionPoolSettingsBuilder)
+    def withConnectionPoolSettingsBuilderFromAttributeMap(): PekkoHttpClientBuilder =
+      copy(connectionPoolSettingsBuilder = buildConnectionPoolSettings)
   }
 
   lazy val xAmzJson = ContentType(MediaType.customBinary("application", "x-amz-json-1.0", Compressible))
@@ -195,4 +285,40 @@ object PekkoHttpClient {
     "application/x-www-form-urlencoded; charset-UTF-8" -> formUrlEncoded,
     "application/x-www-form-urlencoded" -> formUrlEncoded,
     "application/xml" -> applicationXml)
+
+  private def toProtocol(protocol: Protocol): HttpProtocol = protocol match {
+    case Protocol.HTTP2   => HttpProtocols.`HTTP/2.0`
+    case Protocol.HTTP1_1 => HttpProtocols.`HTTP/1.1`
+    case _                => throw new IllegalArgumentException(s"Unsupported protocol: $protocol")
+  }
+
+  private def createInsecureSslEngine(host: String, port: Int): SSLEngine = {
+    val engine = createTrustfulSslContext().createSSLEngine(host, port)
+    engine.setUseClientMode(true)
+
+    // WARNING: this creates an SSL Engine without enabling endpoint identification/verification procedures
+    // Disabling host name verification is a very bad idea, please don't unless you have a very good reason to.
+    // When in doubt, use the `ConnectionContext.httpsClient` that takes an `SSLContext` instead, or enable with:
+    // engine.setSSLParameters({
+    //   val params = engine.getSSLParameters
+    //   params.setEndpointIdentificationAlgorithm("https")
+    //   params
+    // })
+
+    engine
+  }
+
+  private def createTrustfulSslContext(): SSLContext = {
+    object NoCheckX509TrustManager extends X509TrustManager {
+      override def checkClientTrusted(chain: Array[X509Certificate], authType: String) = ()
+
+      override def checkServerTrusted(chain: Array[X509Certificate], authType: String) = ()
+
+      override def getAcceptedIssuers = Array[X509Certificate]()
+    }
+
+    val context = SSLContext.getInstance("TLS")
+    context.init(Array[KeyManager](), Array(NoCheckX509TrustManager), new SecureRandom())
+    context
+  }
 }
