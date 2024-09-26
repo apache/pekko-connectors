@@ -60,7 +60,7 @@ jobs:
       - name: AWS connectors Integration tests
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run:  |-
           sbt \
           -Dpekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableListAllMyBucketsTests=false \
