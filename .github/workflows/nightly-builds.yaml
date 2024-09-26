@@ -57,14 +57,12 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@v6
 
-      - name: AWS connectors Integration tests
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      - name: S3 Integration tests
         run:  |-
           sbt \
+          -Dpekko.connectors.s3.aws.credentials.provider=static \
+          -Dpekko.connectors.s3.aws.credentials.access-key-id=${{ secrets.AWS_ACCESS_KEY }} \
+          -Dpekko.connectors.s3.aws.credentials.secret-access-key=${{ secrets.AWS_SECRET_KEY }} \
           -Dpekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableListAllMyBucketsTests=false \
           -Dpekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec.enableMFATests=false \
           + "s3/Test/runMain org.scalatest.tools.Runner -o -s org.apache.pekko.stream.connectors.s3.scaladsl.AWSS3IntegrationSpec"
-          sbt \
-          + "aws-spi-pekko-http/it:test"
