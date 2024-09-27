@@ -15,7 +15,7 @@
         <appender-ref ref="STDOUT" />
     </root>
 
-    <logger name="io.netty" level="trace" additivity="false">
+    <logger name="io.netty" level="info" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
     <logger name="com.typesafe" level="error" additivity="false">
