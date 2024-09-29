@@ -27,7 +27,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.28.6"
+  val AwsSdk2Version = "2.28.11"
   val NettyVersion = "4.1.113.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -412,7 +412,7 @@ object Dependencies {
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "5.1.4"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "5.2.0"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
@@ -499,7 +499,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion) ++ Mockito)
 
-  val SolrjVersion = "8.11.3"
+  val SolrjVersion = "8.11.4"
   val SolrVersionForDocs = "8_11"
 
   val Solr = Seq(
