@@ -79,7 +79,7 @@ object Dependencies {
 
   // wiremock has very outdated, CVE vulnerable dependencies
   private val jettyVersion = "9.4.56.v20240826"
-  private val guavaVersion = "33.3.0-jre"
+  private val guavaVersion = "33.3.1-jre"
   private val wireMockDependencies = Seq(
     "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
     "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
