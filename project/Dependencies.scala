@@ -471,7 +471,7 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
   }
 
-  val SlickVersion = "3.5.1"
+  val SlickVersion = "3.5.2"
   val Slick = Seq(
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
     // See: https://github.com/slick/slick/issues/2933
