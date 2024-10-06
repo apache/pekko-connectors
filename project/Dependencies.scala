@@ -27,7 +27,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.28.11"
+  val AwsSdk2Version = "2.28.16"
   val NettyVersion = "4.1.114.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -219,7 +219,7 @@ object Dependencies {
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.14.2",
+      "org.apache.parquet" % "parquet-avro" % "1.14.3",
       "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % "3.3.6" % Test).exclude("log4j", "log4j"),
       ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
