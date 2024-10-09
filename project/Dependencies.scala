@@ -124,7 +124,6 @@ object Dependencies {
 
   val AwsSpiPekkoHttp = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "http-client-spi" % AwsSdk2Version,
       ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % "it,test").excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
@@ -160,23 +159,18 @@ object Dependencies {
   val Cassandra = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
       "org.apache.cassandra" % "java-driver-core" % CassandraDriverVersion,
-      "io.netty" % "netty-handler" % NettyVersion,
-      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided))
+      "io.netty" % "netty-handler" % NettyVersion))
 
   val Couchbase = Seq(
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % CouchbaseVersion,
       "io.reactivex" % "rxjava-reactive-streams" % "1.2.1",
-      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
       "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
 
   val Couchbase3 = Seq(
     libraryDependencies ++= Seq(
       "com.couchbase.client" % "java-client" % Couchbase3Version,
-      "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
       "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
 
@@ -526,5 +520,5 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.fasterxml" % "aalto-xml" % "1.3.3"))
 
-  case class PekkoLibDependency(name: String, scope: String, version: PekkoDependency)    
+  case class PekkoLibDependency(name: String, scope: String, version: PekkoDependency)
 }

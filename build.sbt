@@ -132,7 +132,9 @@ lazy val avroparquet =
   pekkoConnectorProject("avroparquet", "avroparquet", Seq.empty, Dependencies.AvroParquet)
 
 lazy val awsSpiPekkoHttp =
-  pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http", Seq.empty, Dependencies.AwsSpiPekkoHttp)
+  pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http",
+    Seq(PekkoLibDependency("pekko-http", "", PekkoHttpDependency)),
+    Dependencies.AwsSpiPekkoHttp)
     .configs(IntegrationTest)
     .settings(Defaults.itSettings)
 
@@ -147,14 +149,23 @@ lazy val azureStorageQueue = pekkoConnectorProject(
   Seq.empty,
   Dependencies.AzureStorageQueue)
 
-lazy val cassandra =
-  pekkoConnectorProject("cassandra", "cassandra", Seq.empty, Dependencies.Cassandra)
+lazy val cassandra = pekkoConnectorProject("cassandra", "cassandra",
+  Seq(PekkoLibDependency("pekko-discovery", "provided", PekkoCoreDependency)),
+  Dependencies.Cassandra)
 
-lazy val couchbase =
-  pekkoConnectorProject("couchbase", "couchbase", Seq.empty, Dependencies.Couchbase)
+lazy val couchbase = pekkoConnectorProject("couchbase", "couchbase",
+  Seq(
+    PekkoLibDependency("pekko-discovery", "provided", PekkoCoreDependency),
+    PekkoLibDependency("pekko-http", "test", PekkoHttpDependency)
+  ),
+  Dependencies.Couchbase)
 
-lazy val couchbase3 =
-  pekkoConnectorProject("couchbase3", "couchbase3", Seq.empty, Dependencies.Couchbase3)
+lazy val couchbase3 = pekkoConnectorProject("couchbase3", "couchbase3",
+  Seq(
+    PekkoLibDependency("pekko-discovery", "provided", PekkoCoreDependency),
+    PekkoLibDependency("pekko-http", "test", PekkoHttpDependency)
+  ),
+  Dependencies.Couchbase3)
 
 lazy val csv = pekkoConnectorProject("csv", "csv", Seq.empty)
 
@@ -309,7 +320,8 @@ lazy val jms = pekkoConnectorProject("jms", "jms", Seq.empty, Dependencies.Jms)
 
 lazy val jakartams = pekkoConnectorProject("jakartams", "jakartams", Seq.empty, Dependencies.JakartaMs)
 
-lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Seq.empty, Dependencies.JsonStreaming)
+lazy val jsonStreaming =
+  pekkoConnectorProject("json-streaming", "json.streaming", Seq.empty, Dependencies.JsonStreaming)
 
 lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Seq.empty, Dependencies.Kinesis)
   .dependsOn(awsSpiPekkoHttp)
@@ -476,8 +488,8 @@ lazy val docs = project
 
 lazy val testkit = internalProject("testkit",
   Seq(
-   PekkoLibDependency("pekko-stream-testkit", "", PekkoCoreDependency),
-   PekkoLibDependency("pekko-slf4j", "", PekkoCoreDependency)
+    PekkoLibDependency("pekko-stream-testkit", "", PekkoCoreDependency),
+    PekkoLibDependency("pekko-slf4j", "", PekkoCoreDependency)
   ),
   Dependencies.testkit)
 
@@ -527,26 +539,26 @@ def pekkoConnectorProject(projectId: String,
         // generated code
         ProblemFilters.exclude[Problem]("com.google.*")),
       Test / parallelExecution := false)
-    .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)  
+    .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)
     .dependsOn(testkit % Test)
   pekkoLibDependencies.foreach { dep =>
     project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default)
   }
-  project    
+  project
     .settings(additionalSettings: _*)
 }
 
 def internalProject(projectId: String, pekkoLibDependencies: Seq[PekkoLibDependency],
-  additionalSettings: sbt.Def.SettingsDefinition*): Project = {
+    additionalSettings: sbt.Def.SettingsDefinition*): Project = {
   val project = Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin)
     .disablePlugins(SitePlugin, MimaPlugin)
     .settings(name := s"pekko-connectors-$projectId", publish / skip := true)
-    .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)  
+    .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)
   pekkoLibDependencies.foreach { dep =>
     project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default)
   }
-  project  
+  project
     .settings(additionalSettings: _*)
 }
 
