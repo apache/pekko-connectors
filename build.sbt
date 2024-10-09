@@ -540,12 +540,9 @@ def pekkoConnectorProject(projectId: String,
         ProblemFilters.exclude[Problem]("com.google.*")),
       Test / parallelExecution := false)
     .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)
-    .dependsOn(testkit % Test)
-  pekkoLibDependencies.foreach { dep =>
-    project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default)
-  }
-  project
+  addPekkoDependencies(project, pekkoLibDependencies)
     .settings(additionalSettings: _*)
+    .dependsOn(testkit % Test)
 }
 
 def internalProject(projectId: String, pekkoLibDependencies: Seq[PekkoLibDependency],
@@ -555,11 +552,21 @@ def internalProject(projectId: String, pekkoLibDependencies: Seq[PekkoLibDepende
     .disablePlugins(SitePlugin, MimaPlugin)
     .settings(name := s"pekko-connectors-$projectId", publish / skip := true)
     .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)
-  pekkoLibDependencies.foreach { dep =>
-    project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default)
-  }
-  project
+  addPekkoDependencies(project, pekkoLibDependencies)
     .settings(additionalSettings: _*)
+}
+
+@scala.annotation.tailrec
+def addPekkoDependencies(project: Project, pekkoLibDependencies: Seq[PekkoLibDependency]): Project = {
+  if (pekkoLibDependencies.isEmpty) {
+    project
+  } else {
+    val dep = pekkoLibDependencies.head
+    addPekkoDependencies(
+      project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default),
+      pekkoLibDependencies.tail
+    )
+  }
 }
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>
