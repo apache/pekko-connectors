@@ -158,7 +158,7 @@ lazy val couchbase3 =
 
 lazy val csv = pekkoConnectorProject("csv", "csv", Seq.empty)
 
-lazy val csvBench = internalProject("csv-bench")
+lazy val csvBench = internalProject("csv-bench", Seq.empty)
   .dependsOn(csv)
   .enablePlugins(JmhPlugin)
 
@@ -324,7 +324,7 @@ lazy val mqttStreaming =
   pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Seq.empty, Dependencies.MqttStreaming,
     MetaInfLicenseNoticeCopy.mqttStreamingSettings)
 
-lazy val mqttStreamingBench = internalProject("mqtt-streaming-bench")
+lazy val mqttStreamingBench = internalProject("mqtt-streaming-bench", Seq.empty)
   .enablePlugins(JmhPlugin)
   .dependsOn(mqtt, mqttStreaming)
 
@@ -338,7 +338,7 @@ lazy val orientdb =
     // note: orientdb client needs to be refactored to move off deprecated calls
     fatalWarnings := false)
 
-lazy val reference = internalProject("reference", Dependencies.Reference)
+lazy val reference = internalProject("reference", Seq.empty, Dependencies.Reference)
   .dependsOn(testkit % Test)
 
 lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Seq.empty, Dependencies.S3,
@@ -474,7 +474,12 @@ lazy val docs = project
       }
     }.taskValue)
 
-lazy val testkit = internalProject("testkit", Dependencies.testkit)
+lazy val testkit = internalProject("testkit",
+  Seq(
+   PekkoLibDependency("pekko-stream-testkit", "", PekkoCoreDependency),
+   PekkoLibDependency("pekko-slf4j", "", PekkoCoreDependency)
+  ),
+  Dependencies.testkit)
 
 lazy val `doc-examples` = project
   .enablePlugins(AutomateHeaderPlugin)
@@ -531,13 +536,19 @@ def pekkoConnectorProject(projectId: String,
     .settings(additionalSettings: _*)
 }
 
-def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
-  Project(id = projectId, base = file(projectId))
+def internalProject(projectId: String, pekkoLibDependencies: Seq[PekkoLibDependency],
+  additionalSettings: sbt.Def.SettingsDefinition*): Project = {
+  val project = Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin)
     .disablePlugins(SitePlugin, MimaPlugin)
     .settings(name := s"pekko-connectors-$projectId", publish / skip := true)
     .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)  
+  pekkoLibDependencies.foreach { dep =>
+    project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default)
+  }
+  project  
     .settings(additionalSettings: _*)
+}
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>
   val v = version.value
