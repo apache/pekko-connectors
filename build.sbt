@@ -7,11 +7,12 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
+import com.github.pjfanning.pekkobuild._
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
+import Dependencies.PekkoLibDependency
 
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
@@ -125,51 +126,56 @@ lazy val `pekko-connectors` = project
 addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll; +headerCreateAll")
 addCommandAlias("checkCodeStyle", ";+headerCheckAll; scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
 
-lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
+lazy val amqp = pekkoConnectorProject("amqp", "amqp", Seq.empty, Dependencies.Amqp)
 
 lazy val avroparquet =
-  pekkoConnectorProject("avroparquet", "avroparquet", Dependencies.AvroParquet)
+  pekkoConnectorProject("avroparquet", "avroparquet", Seq.empty, Dependencies.AvroParquet)
 
 lazy val awsSpiPekkoHttp =
-  pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http", Dependencies.AwsSpiPekkoHttp)
+  pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http", Seq.empty, Dependencies.AwsSpiPekkoHttp)
     .configs(IntegrationTest)
     .settings(Defaults.itSettings)
 
-lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
+lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda",
+  Seq(PekkoLibDependency("pekko-http", "", PekkoHttpDependency)),
+  Dependencies.AwsLambda)
   .dependsOn(awsSpiPekkoHttp)
 
 lazy val azureStorageQueue = pekkoConnectorProject(
   "azure-storage-queue",
   "azure.storagequeue",
+  Seq.empty,
   Dependencies.AzureStorageQueue)
 
 lazy val cassandra =
-  pekkoConnectorProject("cassandra", "cassandra", Dependencies.Cassandra)
+  pekkoConnectorProject("cassandra", "cassandra", Seq.empty, Dependencies.Cassandra)
 
 lazy val couchbase =
-  pekkoConnectorProject("couchbase", "couchbase", Dependencies.Couchbase)
+  pekkoConnectorProject("couchbase", "couchbase", Seq.empty, Dependencies.Couchbase)
 
 lazy val couchbase3 =
-  pekkoConnectorProject("couchbase3", "couchbase3", Dependencies.Couchbase3)
+  pekkoConnectorProject("couchbase3", "couchbase3", Seq.empty, Dependencies.Couchbase3)
 
-lazy val csv = pekkoConnectorProject("csv", "csv")
+lazy val csv = pekkoConnectorProject("csv", "csv", Seq.empty)
 
 lazy val csvBench = internalProject("csv-bench")
   .dependsOn(csv)
   .enablePlugins(JmhPlugin)
 
-lazy val dynamodb = pekkoConnectorProject("dynamodb", "aws.dynamodb", Dependencies.DynamoDB)
+lazy val dynamodb = pekkoConnectorProject("dynamodb", "aws.dynamodb", Seq.empty, Dependencies.DynamoDB)
   .dependsOn(awsSpiPekkoHttp)
 
 lazy val elasticsearch = pekkoConnectorProject(
   "elasticsearch",
   "elasticsearch",
+  Seq.empty,
   Dependencies.Elasticsearch)
 
 // The name 'file' is taken by `sbt.file`, hence 'files'
 lazy val files = pekkoConnectorProject(
   "file",
   "file",
+  Seq.empty,
   Dependencies.File,
   // For `SensitivityWatchEventModifier.HIGH`
   // https://github.com/apache/pekko-connectors/issues/296
@@ -179,6 +185,7 @@ lazy val files = pekkoConnectorProject(
 lazy val ftp = pekkoConnectorProject(
   "ftp",
   "ftp",
+  Seq.empty,
   Dependencies.Ftp,
   MetaInfLicenseNoticeCopy.ftpSettings,
   Test / fork := true,
@@ -189,6 +196,7 @@ lazy val geode =
   pekkoConnectorProject(
     "geode",
     "geode",
+    Seq.empty,
     Dependencies.Geode,
     Test / fork := true,
     Test / scalacOptions ++= {
@@ -206,6 +214,7 @@ lazy val geode =
 lazy val googleCommon = pekkoConnectorProject(
   "google-common",
   "google.common",
+  Seq.empty,
   Dependencies.GoogleCommon,
   MetaInfLicenseNoticeCopy.googleCommonSettings,
   Test / fork := true)
@@ -213,6 +222,7 @@ lazy val googleCommon = pekkoConnectorProject(
 lazy val googleCloudBigQuery = pekkoConnectorProject(
   "google-cloud-bigquery",
   "google.cloud.bigquery",
+  Seq.empty,
   Dependencies.GoogleBigQuery,
   Test / fork := true,
   Compile / scalacOptions += "-Wconf:src=src_managed/.+:s").dependsOn(googleCommon).enablePlugins(
@@ -221,6 +231,7 @@ lazy val googleCloudBigQuery = pekkoConnectorProject(
 lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   "google-cloud-bigquery-storage",
   "google.cloud.bigquery.storage",
+  Seq.empty,
   Dependencies.GoogleBigQueryStorage,
   pekkoGrpcCodeGeneratorSettings ~= { _.filterNot(_ == "flat_package") },
   pekkoGrpcCodeGeneratorSettings += "server_power_apis",
@@ -237,6 +248,7 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
 lazy val googleCloudPubSub = pekkoConnectorProject(
   "google-cloud-pub-sub",
   "google.cloud.pubsub",
+  Seq.empty,
   Dependencies.GooglePubSub,
   Test / fork := true,
   // See docker-compose.yml gcloud-pubsub-emulator_prep
@@ -246,6 +258,7 @@ lazy val googleCloudPubSub = pekkoConnectorProject(
 lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   "google-cloud-pub-sub-grpc",
   "google.cloud.pubsub.grpc",
+  Seq.empty,
   Dependencies.GooglePubSubGrpc,
   pekkoGrpcCodeGeneratorSettings ~= { _.filterNot(_ == "flat_package") },
   pekkoGrpcGeneratedSources := Seq(PekkoGrpc.Client),
@@ -261,23 +274,25 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
 lazy val googleCloudStorage = pekkoConnectorProject(
   "google-cloud-storage",
   "google.cloud.storage",
+  Seq.empty,
   Test / fork := true,
   Dependencies.GoogleStorage).dependsOn(googleCommon)
 
 lazy val googleFcm =
-  pekkoConnectorProject("google-fcm", "google.firebase.fcm", Dependencies.GoogleFcm, Test / fork := true)
+  pekkoConnectorProject("google-fcm", "google.firebase.fcm", Seq.empty, Dependencies.GoogleFcm, Test / fork := true)
     .dependsOn(googleCommon)
 
-lazy val hbase = pekkoConnectorProject("hbase", "hbase", Dependencies.HBase, Test / fork := true)
+lazy val hbase = pekkoConnectorProject("hbase", "hbase", Seq.empty, Dependencies.HBase, Test / fork := true)
 
-lazy val hdfs = pekkoConnectorProject("hdfs", "hdfs", Dependencies.Hdfs)
+lazy val hdfs = pekkoConnectorProject("hdfs", "hdfs", Seq.empty, Dependencies.Hdfs)
 
 lazy val huaweiPushKit =
-  pekkoConnectorProject("huawei-push-kit", "huawei.pushkit", Dependencies.HuaweiPushKit)
+  pekkoConnectorProject("huawei-push-kit", "huawei.pushkit", Seq.empty, Dependencies.HuaweiPushKit)
 
 lazy val influxdb = pekkoConnectorProject(
   "influxdb",
   "influxdb",
+  Seq.empty,
   Dependencies.InfluxDB,
   Compile / scalacOptions ++= Seq(
     // JDK 11: method isAccessible in class AccessibleObject is deprecated
@@ -286,26 +301,27 @@ lazy val influxdb = pekkoConnectorProject(
 lazy val ironmq = pekkoConnectorProject(
   "ironmq",
   "ironmq",
+  Seq.empty,
   Dependencies.IronMq,
   Test / fork := true)
 
-lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
+lazy val jms = pekkoConnectorProject("jms", "jms", Seq.empty, Dependencies.Jms)
 
-lazy val jakartams = pekkoConnectorProject("jakartams", "jakartams", Dependencies.JakartaMs)
+lazy val jakartams = pekkoConnectorProject("jakartams", "jakartams", Seq.empty, Dependencies.JakartaMs)
 
-lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Dependencies.JsonStreaming)
+lazy val jsonStreaming = pekkoConnectorProject("json-streaming", "json.streaming", Seq.empty, Dependencies.JsonStreaming)
 
-lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Dependencies.Kinesis)
+lazy val kinesis = pekkoConnectorProject("kinesis", "aws.kinesis", Seq.empty, Dependencies.Kinesis)
   .dependsOn(awsSpiPekkoHttp)
 
-lazy val kudu = pekkoConnectorProject("kudu", "kudu", Dependencies.Kudu)
+lazy val kudu = pekkoConnectorProject("kudu", "kudu", Seq.empty, Dependencies.Kudu)
 
-lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Dependencies.MongoDb)
+lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Seq.empty, Dependencies.MongoDb)
 
-lazy val mqtt = pekkoConnectorProject("mqtt", "mqtt", Dependencies.Mqtt)
+lazy val mqtt = pekkoConnectorProject("mqtt", "mqtt", Seq.empty, Dependencies.Mqtt)
 
 lazy val mqttStreaming =
-  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming,
+  pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Seq.empty, Dependencies.MqttStreaming,
     MetaInfLicenseNoticeCopy.mqttStreamingSettings)
 
 lazy val mqttStreamingBench = internalProject("mqtt-streaming-bench")
@@ -316,6 +332,7 @@ lazy val orientdb =
   pekkoConnectorProject(
     "orientdb",
     "orientdb",
+    Seq.empty,
     Dependencies.OrientDB,
     Test / fork := true,
     // note: orientdb client needs to be refactored to move off deprecated calls
@@ -324,49 +341,51 @@ lazy val orientdb =
 lazy val reference = internalProject("reference", Dependencies.Reference)
   .dependsOn(testkit % Test)
 
-lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Dependencies.S3,
+lazy val s3 = pekkoConnectorProject("s3", "aws.s3", Seq.empty, Dependencies.S3,
   MetaInfLicenseNoticeCopy.s3Settings)
   .dependsOn(awsSpiPekkoHttp)
 
 lazy val pravega = pekkoConnectorProject(
   "pravega",
   "pravega",
+  Seq.empty,
   Dependencies.Pravega,
   Test / fork := true)
 
 lazy val springWeb = pekkoConnectorProject(
   "spring-web",
   "spring.web",
+  Seq.empty,
   Dependencies.SpringWeb)
 
-lazy val simpleCodecs = pekkoConnectorProject("simple-codecs", "simplecodecs")
+lazy val simpleCodecs = pekkoConnectorProject("simple-codecs", "simplecodecs", Seq.empty)
 
-lazy val slick = pekkoConnectorProject("slick", "slick", Dependencies.Slick)
+lazy val slick = pekkoConnectorProject("slick", "slick", Seq.empty, Dependencies.Slick)
 
 lazy val eventbridge = pekkoConnectorProject("aws-event-bridge", "aws.eventbridge",
-  Dependencies.Eventbridge)
+  Seq.empty, Dependencies.Eventbridge)
   .dependsOn(awsSpiPekkoHttp)
 
-lazy val sns = pekkoConnectorProject("sns", "aws.sns", Dependencies.Sns)
+lazy val sns = pekkoConnectorProject("sns", "aws.sns", Seq.empty, Dependencies.Sns)
   .dependsOn(awsSpiPekkoHttp)
 
 // Solrj has some deprecated methods
-lazy val solr = pekkoConnectorProject("solr", "solr", Dependencies.Solr,
+lazy val solr = pekkoConnectorProject("solr", "solr", Seq.empty, Dependencies.Solr,
   fatalWarnings := false)
 
-lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Dependencies.Sqs)
+lazy val sqs = pekkoConnectorProject("sqs", "aws.sqs", Seq.empty, Dependencies.Sqs)
   .dependsOn(awsSpiPekkoHttp)
 
-lazy val sse = pekkoConnectorProject("sse", "sse", Dependencies.Sse)
+lazy val sse = pekkoConnectorProject("sse", "sse", Seq.empty, Dependencies.Sse)
 
-lazy val text = pekkoConnectorProject("text", "text")
+lazy val text = pekkoConnectorProject("text", "text", Seq.empty)
 
-lazy val udp = pekkoConnectorProject("udp", "udp")
+lazy val udp = pekkoConnectorProject("udp", "udp", Seq.empty)
 
 lazy val unixdomainsocket =
-  pekkoConnectorProject("unix-domain-socket", "unixdomainsocket", Dependencies.UnixDomainSocket)
+  pekkoConnectorProject("unix-domain-socket", "unixdomainsocket", Seq.empty, Dependencies.UnixDomainSocket)
 
-lazy val xml = pekkoConnectorProject("xml", "xml", Dependencies.Xml)
+lazy val xml = pekkoConnectorProject("xml", "xml", Seq.empty, Dependencies.Xml)
 
 lazy val docs = project
   .enablePlugins(PekkoParadoxPlugin, ParadoxPlugin, ParadoxSitePlugin, PreprocessPlugin)
@@ -480,9 +499,10 @@ val noMimaChecks = Set("couchbase3", "jakartams", "aws.api.pekko.http")
 
 def pekkoConnectorProject(projectId: String,
     moduleName: String,
+    pekkoLibDependencies: Seq[PekkoLibDependency],
     additionalSettings: sbt.Def.SettingsDefinition*): Project = {
   import com.typesafe.tools.mima.core._
-  Project(id = projectId, base = file(projectId))
+  val project = Project(id = projectId, base = file(projectId))
     .enablePlugins(AutomateHeaderPlugin, ReproducibleBuildsPlugin)
     .disablePlugins(SitePlugin)
     .settings(
@@ -502,8 +522,13 @@ def pekkoConnectorProject(projectId: String,
         // generated code
         ProblemFilters.exclude[Problem]("com.google.*")),
       Test / parallelExecution := false)
-    .settings(additionalSettings: _*)
+    .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)  
     .dependsOn(testkit % Test)
+  pekkoLibDependencies.foreach { dep =>
+    project.addPekkoModuleDependency(dep.name, dep.scope, dep.version.default)
+  }
+  project    
+    .settings(additionalSettings: _*)
 }
 
 def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefinition*): Project =
@@ -511,6 +536,7 @@ def internalProject(projectId: String, additionalSettings: sbt.Def.SettingsDefin
     .enablePlugins(AutomateHeaderPlugin)
     .disablePlugins(SitePlugin, MimaPlugin)
     .settings(name := s"pekko-connectors-$projectId", publish / skip := true)
+    .addPekkoModuleDependency("pekko-stream", "", PekkoCoreDependency.default)  
     .settings(additionalSettings: _*)
 
 Global / onLoad := (Global / onLoad).value.andThen { s =>

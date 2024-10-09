@@ -10,6 +10,7 @@
 import sbt._
 import Common.isScala3
 import Keys._
+import com.github.pjfanning.pekkobuild.PekkoDependency
 import com.github.sbt.junit.jupiter.sbt.Import.JupiterKeys
 
 object Dependencies {
@@ -101,11 +102,6 @@ object Dependencies {
     "commons-fileupload" % "commons-fileupload" % "1.5" % Test,
     "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
 
-  val CommonSettings = Seq(
-    // These libraries are added to all modules via the `Common` AutoPlugin
-    libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-stream" % PekkoVersion))
-
   val testkit = Seq(
     libraryDependencies := Seq(
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
@@ -152,7 +148,6 @@ object Dependencies {
 
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       ("software.amazon.awssdk" % "lambda" % AwsSdk2Version).excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Mockito)
@@ -534,4 +529,5 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "com.fasterxml" % "aalto-xml" % "1.3.3"))
 
+  case class PekkoLibDependency(name: String, scope: String, version: PekkoDependency)    
 }
