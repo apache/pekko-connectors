@@ -13,7 +13,7 @@ The most notable issues are with:
 * HBase ([#61](https://github.com/apache/pekko-connectors/issues/61))
 * IronMQ ([#697](https://github.com/apache/pekko-connectors/issues/697))
 
-With OrientDB Connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking the Pekko Connectors 1.0.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
+With OrientDB Connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking with Pekko Connectors 1.0.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
 
 ### Fixes
 
