@@ -7,8 +7,6 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
-resolvers += Resolver.ApacheMavenStagingRepo
-
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.7")
 addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.0.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.32")
