@@ -8,7 +8,7 @@ jobs:
     # runs on main repo only
     if: github.repository == 'apache/pekko-connectors'
     name: Publish
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
@@ -24,6 +24,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 8
+
+      - name: Install sbt
+        uses: sbt/setup-sbt@v1
 
       - name: Build Documentation
         run: |-
