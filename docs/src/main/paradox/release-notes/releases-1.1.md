@@ -21,7 +21,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 * SQS: delaySeconds parameter is not populated in SendMessageBatchRequestEntry ([#759](https://github.com/apache/pekko-connectors/issues/759)). (not in v1.1.0-M1)
 
 ### Additions
-* Scala 3 is now support for the Slick Connector.
+* Scala 3 is now supported for the Slick Connector.
 * New connector `couchbase3` that uses Couchbase Client v3. The pre-existing `couchbase` connector still uses the older v2 Client.
 * New connector `jakartams` which is the [Jakarta Messaging](https://jakarta.ee/learn/docs/jakartaee-tutorial/current/messaging/jms-concepts/jms-concepts.html) equivalent of the JMS connector.
 * `aws-spi-pekko-http` is now part of Apache Pekko, as opposed to being an externally maintained lib.
