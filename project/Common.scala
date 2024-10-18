@@ -49,7 +49,7 @@ object Common extends AutoPlugin {
     "com.google.api:com.google.cloud:com.google.iam:com.google.logging:" +
     "com.google.longrunning:com.google.protobuf:com.google.rpc:com.google.type"
 
-  override lazy val projectSettings = Dependencies.CommonSettings ++ Seq(
+  override lazy val projectSettings = Seq(
     projectInfoVersion := (if (isSnapshot.value) "snapshot" else version.value),
     crossVersion := CrossVersion.binary,
     crossScalaVersions := Dependencies.ScalaVersions,
