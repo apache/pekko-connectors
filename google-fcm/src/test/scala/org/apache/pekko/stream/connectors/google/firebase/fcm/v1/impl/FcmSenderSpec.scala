@@ -83,6 +83,7 @@ class FcmSenderSpec
       val request: HttpRequest = captor.getValue
       Unmarshal(request.entity).to[FcmSend].futureValue shouldBe FcmSend(false, FcmNotification.empty)
       request.uri.toString should startWith("https://fcm.googleapis.com/v1/projects/projectId/messages:send")
+      request.headers.exists(_.is("connection")) shouldBe true
     }
 
     "parse the success response correctly" in {
