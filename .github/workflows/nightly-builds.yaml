@@ -11,6 +11,7 @@ jobs:
   test-compile:
     name: Compile
     runs-on: ubuntu-22.04
+    if: github.repository == 'apache/pekko-connectors'
     strategy:
       fail-fast: false
       matrix:
