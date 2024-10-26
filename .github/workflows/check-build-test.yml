@@ -18,6 +18,7 @@ jobs:
   style-compile-mima:
     name: Compile, Code Style, Binary Compatibility
     runs-on: ubuntu-22.04
+    if: github.repository == 'apache/pekko-connectors'
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
@@ -49,6 +50,7 @@ jobs:
   documentation:
     name: ScalaDoc, Documentation with Paradox
     runs-on: ubuntu-22.04
+    if: github.repository == 'apache/pekko-connectors'
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
@@ -80,6 +82,7 @@ jobs:
 
   connectors:
     runs-on: ubuntu-22.04
+    if: github.repository == 'apache/pekko-connectors'
 
     strategy:
       fail-fast: false
