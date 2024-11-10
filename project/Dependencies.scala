@@ -403,7 +403,7 @@ object Dependencies {
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
 
-  val KuduVersion = "1.17.0"
+  val KuduVersion = "1.17.1"
   val Kudu = Seq(
     libraryDependencies ++= Seq(
       "org.apache.kudu" % "kudu-client" % KuduVersion,
