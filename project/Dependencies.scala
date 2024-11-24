@@ -97,7 +97,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
-    "commons-io" % "commons-io" % "2.17.0" % Test,
+    "commons-io" % "commons-io" % "2.18.0" % Test,
     "commons-fileupload" % "commons-fileupload" % "1.5" % Test,
     "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
 
