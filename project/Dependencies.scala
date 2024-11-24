@@ -126,7 +126,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.22.0",
+      "com.rabbitmq" % "amqp-client" % "5.23.0",
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
   val AwsSpiPekkoHttp = Seq(
