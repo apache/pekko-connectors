@@ -12,7 +12,7 @@ Apache Pekko Connectors publishes
 
 * regular releases to [Maven Central](https://search.maven.org/search?q=g:org.pekko%20pekko-connectors-)
 * milestone and release candidates (of major versions) to Maven Central
-* @ref:[snapshots](snapshots.md) to [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/org/pekko/)
+* @ref:[snapshots](snapshots.md) to [repository.apache.org](https://repository.apache.org/content/groups/snapshots/org/apache/pekko/)
 
 ### Compatibility
 
