@@ -402,7 +402,7 @@ lazy val docs = project
       // Pekko gRPC
       "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
       "extref.pekko-grpc.base_url" -> s"https://pekko.apache.org/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
-      "scaladoc.org.apache.pekko.gprc.base_url" -> s"https://pekko.apache.org/api/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/",
+      "scaladoc.org.apache.pekko.gprc.base_url" -> s"https://pekko.apache.org/api/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/org/apache/pekko/gprc",
       // Couchbase
       "couchbase.version" -> Dependencies.CouchbaseVersion,
       "extref.couchbase.base_url" -> s"https://docs.couchbase.com/java-sdk/${Dependencies.CouchbaseVersionForDocs}/%s",
