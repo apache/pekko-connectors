@@ -246,7 +246,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.24.2" % Test,
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.24.3" % Test,
         "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
         "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
