@@ -78,7 +78,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
 
   // wiremock has very outdated, CVE vulnerable dependencies
-  private val jettyVersion = "9.4.56.v20240826"
+  private val jettyVersion = "9.4.57.v20241219"
   private val guavaVersion = "33.4.0-jre"
   private val wireMockDependencies = Seq(
     "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
