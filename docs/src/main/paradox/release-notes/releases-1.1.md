@@ -15,6 +15,11 @@ The most notable issues are with:
 
 With OrientDB Connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking with Pekko Connectors 1.0.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
 
+### Potentially Breaking Change
+
+* Remove duplicate scopes value in reference.conf ([PR314](https://github.com/apache/pekko-connectors/pull/314)).
+    * this could break applications that were loading the scope from the `service-account.scopes`
+
 ### Fixes
 
 * Close JMS sessions when exceptions happen ([PR485](https://github.com/apache/pekko-connectors/pull/485)).
@@ -28,7 +33,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 * aws-spi-pekko-http: Allow using SdkHttpConfigurationOption over default pekko-http connection settings ([PR827](https://github.com/apache/pekko-connectors/pull/827)). (not in v1.1.0-M1)
 * New pekko-connectors-bom ([PR633](https://github.com/apache/pekko-connectors/pull/633)).
 
-### Changes
+### Other Changes
 * New config for FTP Connector that allows you to choose whether to use the legacy or latest code for FTPS proxies (`useUpdatedFtpsClient`) ([PR171](https://github.com/apache/pekko-connectors/pull/171)).
 * Kinesis: use stage materializer with IODispatcher instead of injected EC ([PR226](https://github.com/apache/pekko-connectors/pull/226)).
 * Add support for FTPS implicit mode ([PR311](https://github.com/apache/pekko-connectors/pull/311)).
