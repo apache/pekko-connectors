@@ -31,6 +31,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 * New connector `jakartams` which is the [Jakarta Messaging](https://jakarta.ee/learn/docs/jakartaee-tutorial/current/messaging/jms-concepts/jms-concepts.html) equivalent of the JMS connector.
 * `aws-spi-pekko-http` is now part of Apache Pekko, as opposed to being an externally maintained lib.
 * aws-spi-pekko-http: Allow using SdkHttpConfigurationOption over default pekko-http connection settings ([PR827](https://github.com/apache/pekko-connectors/pull/827)). (not in v1.1.0-M1)
+* SQS - Add delaySeconds to SQS batch publishing ([PR760](https://github.com/apache/pekko-connectors/pull/760)). (not in v1.1.0-M1)
 * New pekko-connectors-bom ([PR633](https://github.com/apache/pekko-connectors/pull/633)).
 
 ### Other Changes
@@ -40,13 +41,18 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 * Google Common: Use scope config for compute-engine auth ([PR313](https://github.com/apache/pekko-connectors/pull/313)).
 * Google Common: Remove duplicate scopes value in reference.conf ([PR314](https://github.com/apache/pekko-connectors/pull/314)).
 * New config for AMQP Connector that allows you to improve performance by reusing byte arrays ([PR592](https://github.com/apache/pekko-connectors/pull/592)).
-* Google Common: Improve error message in case of response failure ([PR799](https://github.com/apache/pekko-connectors/pull/799)). (not in v1.1.0-M1)
+* Google Common: Improve error message in case of response failure ([PR799](https://github.com/apache/pekko-connectors/pull/799), [PR802](https://github.com/apache/pekko-connectors/pull/802)). (not in v1.1.0-M1)
+* Allow using SdkHttpConfigurationOption over default pekko-http connection settings ([PR827](https://github.com/apache/pekko-connectors/pull/827)). (not in v1.1.0-M1)
 
 ### Dependency Upgrades
 
-Most dependencies have been upgraded to the latest available version that still supports Java 8 as of release time (October 2024).
+Most dependencies have been upgraded to the latest available version that still supports Java 8 as of release time (January 2025).
 Exceptions include:
 
 * HBase (see Known Issues above)
 * Solr Client was upgraded to v8 (v9 does not support Java 8).
 * Spring - we have pinned our dependency to v5 due to Java 8 support. Similarly, Spring Boot is pinned to v2. We expect that you can use newer versions of Spring if you use newer versions of Java Runtime. If you go this route, please test that it works ok before going to production.
+
+Notable upgrades include:
+
+* [pekko-http-circe](https://github.com/mdedetrich/pekko-streams-circe) 1.1.0 upgraded due to [pekko-streams-circe#93](https://github.com/mdedetrich/pekko-streams-circe/pull/93)
