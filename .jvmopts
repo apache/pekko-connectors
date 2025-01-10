@@ -1,4 +1,4 @@
 -Dfile.encoding=UTF8
--Xms1g
--Xmx3g
+-Xms3g
+-Xmx6g
 -Xss6M
