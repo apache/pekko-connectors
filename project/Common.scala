@@ -88,6 +88,13 @@ object Common extends AutoPlugin {
       }
     },
     Compile / doc / scalacOptions -= "-Werror",
+    compile / javacOptions ++= {
+      if (JdkOptions.isJdk8) {
+        Seq.empty
+      } else {
+        Seq("--release", "8")
+      }
+    },
     compile / javacOptions ++= Seq(
       "-Xlint:cast",
       "-Xlint:deprecation",
