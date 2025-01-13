@@ -65,9 +65,11 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   unixdomainsocket,
   xml) ++ {
   if (JdkOptions.isJdk11orHigher)
-    Seq(avroparquet, googleCloudBigQueryStorage)
+    List[ProjectReference](
+      avroparquet,
+      googleCloudBigQueryStorage)
   else
-    Seq.empty
+    Nil
 }
 
 lazy val `pekko-connectors` = project
