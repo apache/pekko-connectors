@@ -125,9 +125,9 @@ jobs:
           - { connector: pravega, java_version: 8, pre_cmd: 'docker compose up -d pravega'}
           - { connector: reference, java_version: 8 }
           - { connector: s3, java_version: 8 }
-          - { connector: spring-web, java_version: 8 }
+          - { connector: spring-web, java_version: 17 }
           - { connector: simple-codecs, java_version: 8 }
-          - { connector: slick, java_version: 8 }
+          - { connector: slick, java_version: 11 }
           - { connector: sns, java_version: 8, pre_cmd: 'docker compose up -d amazonsns' }
           - { connector: solr, java_version: 8 }
           - { connector: sqs, java_version: 8, pre_cmd: 'docker compose up -d elasticmq' }

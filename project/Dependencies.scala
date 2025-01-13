@@ -471,7 +471,7 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
   }
 
-  val SlickVersion = "3.5.1"
+  val SlickVersion = "3.5.2"
   val Slick = Seq(
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
     // See: https://github.com/slick/slick/issues/2933
@@ -483,7 +483,7 @@ object Dependencies {
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
-      "com.h2database" % "h2" % "2.2.224" % Test))
+      "com.h2database" % "h2" % "2.3.232" % Test))
 
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(

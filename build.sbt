@@ -53,9 +53,7 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   pravega,
   reference,
   s3,
-  springWeb,
   simpleCodecs,
-  slick,
   sns,
   solr,
   sqs,
@@ -67,7 +65,13 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   if (JdkOptions.isJdk11orHigher)
     List[ProjectReference](
       avroparquet,
-      googleCloudBigQueryStorage)
+      googleCloudBigQueryStorage,
+      slick)
+  else
+    Nil
+} ++ {
+  if (JdkOptions.isJdk17orHigher)
+    List[ProjectReference](springWeb)
   else
     Nil
 }
