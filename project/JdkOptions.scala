@@ -11,8 +11,6 @@
  * Copyright (C) 2009-2022 Lightbend Inc. <https://www.lightbend.com>
  */
 
-import java.io.File
-
 import sbt._
 import sbt.librarymanagement.SemanticSelector
 import sbt.librarymanagement.VersionNumber
