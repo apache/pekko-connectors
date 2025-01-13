@@ -370,7 +370,7 @@ object Dependencies {
     val artemisVersion = "2.19.1"
     Seq(
       libraryDependencies ++= Seq(
-        "jakarta.jms" % "jakarta.jms-api" % "3.0.0" % Provided,
+        "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
         "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.4.1.1" % Test,
         "org.apache.activemq" % "artemis-server" % artemisVersion % Test,
         "org.apache.activemq" % "artemis-jakarta-client" % artemisVersion % Test,

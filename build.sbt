@@ -41,7 +41,6 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   huaweiPushKit,
   influxdb,
   ironmq,
-  jakartams,
   jms,
   jsonStreaming,
   kinesis,
@@ -66,6 +65,7 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
     List[ProjectReference](
       avroparquet,
       googleCloudBigQueryStorage,
+      jakartams,
       slick)
   else
     Nil

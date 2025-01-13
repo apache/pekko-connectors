@@ -113,7 +113,7 @@ jobs:
           - { connector: influxdb, java_version: 8, pre_cmd: 'docker compose up -d influxdb' }
           # ironmq disabled while we resolve https://github.com/apache/pekko-connectors/issues/697
           # - { connector: ironmq, java_version: 8, pre_cmd: 'docker compose up -d ironauth ironmq' }
-          - { connector: jakartams, java_version: 8, pre_cmd: 'docker compose up -d ibmmq' }
+          - { connector: jakartams, java_version: 11, pre_cmd: 'docker compose up -d ibmmq' }
           - { connector: jms, java_version: 8, pre_cmd: 'docker compose up -d ibmmq' }
           - { connector: json-streaming, java_version: 8 }
           - { connector: kinesis, java_version: 8 }
