@@ -17,7 +17,6 @@ ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,
-  avroparquet,
   awsSpiPekkoHttp,
   awslambda,
   azureStorageQueue,
@@ -33,7 +32,6 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   geode,
   googleCommon,
   googleCloudBigQuery,
-  googleCloudBigQueryStorage,
   googleCloudPubSub,
   googleCloudPubSubGrpc,
   googleCloudStorage,
@@ -65,7 +63,12 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   text,
   udp,
   unixdomainsocket,
-  xml)
+  xml) ++ {
+  if (JdkOptions.isJdk11orHigher)
+    Seq(avroparquet, googleCloudBigQueryStorage)
+  else
+    Seq.empty
+}
 
 lazy val `pekko-connectors` = project
   .in(file("."))

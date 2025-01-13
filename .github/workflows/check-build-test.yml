@@ -84,58 +84,58 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { connector: amqp,                         pre_cmd: 'docker compose up -d amqp' }
-          - { connector: avroparquet }
-          - { connector: aws-spi-pekko-http }
-          - { connector: awslambda }
-          - { connector: aws-event-bridge,             pre_cmd: 'docker compose up -d amazoneventbridge' }
-          - { connector: azure-storage-queue }
-          - { connector: cassandra,                    pre_cmd: 'docker compose up -d cassandra' }
-          - { connector: couchbase,                    pre_cmd: 'docker compose up -d couchbase_prep' }
-          - { connector: couchbase3,                   pre_cmd: 'docker compose up -d couchbase_prep' }
-          - { connector: csv }
-          - { connector: dynamodb,                     pre_cmd: 'docker compose up -d dynamodb' }
-          - { connector: elasticsearch,                pre_cmd: 'docker compose up -d elasticsearch6 elasticsearch7 opensearch1' }
-          - { connector: file }
-          - { connector: ftp,                          pre_cmd: './scripts/ftp-servers.sh' }
-          - { connector: geode,                        pre_cmd: 'docker compose up -d geode' }
-          - { connector: google-cloud-bigquery }
-          - { connector: google-cloud-bigquery-storage }
-          - { connector: google-cloud-pub-sub,         pre_cmd: 'docker compose up -d gcloud-pubsub-emulator_prep' }
-          - { connector: google-cloud-pub-sub-grpc,    pre_cmd: 'docker compose up -d gcloud-pubsub-emulator_prep' }
-          - { connector: google-cloud-storage }
-          - { connector: google-common }
-          - { connector: google-fcm }
+          - { connector: amqp, java_version: 8, pre_cmd: 'docker compose up -d amqp' }
+          - { connector: avroparquet, java_version: 11 }
+          - { connector: aws-spi-pekko-http, java_version: 8 }
+          - { connector: awslambda, java_version: 8 }
+          - { connector: aws-event-bridge, java_version: 8, pre_cmd: 'docker compose up -d amazoneventbridge' }
+          - { connector: azure-storage-queue, java_version: 8 }
+          - { connector: cassandra, java_version: 8, pre_cmd: 'docker compose up -d cassandra' }
+          - { connector: couchbase, java_version: 8, pre_cmd: 'docker compose up -d couchbase_prep' }
+          - { connector: couchbase3, java_version: 8, pre_cmd: 'docker compose up -d couchbase_prep' }
+          - { connector: csv, java_version: 8 }
+          - { connector: dynamodb, java_version: 8, pre_cmd: 'docker compose up -d dynamodb' }
+          - { connector: elasticsearch, java_version: 8, pre_cmd: 'docker compose up -d elasticsearch6 elasticsearch7 opensearch1' }
+          - { connector: file, java_version: 8 }
+          - { connector: ftp, java_version: 8, pre_cmd: './scripts/ftp-servers.sh' }
+          - { connector: geode, java_version: 8, pre_cmd: 'docker compose up -d geode' }
+          - { connector: google-cloud-bigquery, java_version: 8 }
+          - { connector: google-cloud-bigquery-storage, java_version: 11 }
+          - { connector: google-cloud-pub-sub, java_version: 8, pre_cmd: 'docker compose up -d gcloud-pubsub-emulator_prep' }
+          - { connector: google-cloud-pub-sub-grpc, java_version: 8, pre_cmd: 'docker compose up -d gcloud-pubsub-emulator_prep' }
+          - { connector: google-cloud-storage, java_version: 8 }
+          - { connector: google-common, java_version: 8 }
+          - { connector: google-fcm, java_version: 8 }
           # hbase disabled until we resolve why new docker image fails our build: https://github.com/akka/alpakka/issues/2185
-          # - { connector: hbase,                        pre_cmd: 'docker compose up -d hbase' }
-          - { connector: hdfs,                         pre_cmd: 'file ${HOME}/.cache/coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_2.13/2.0.0/cats-kernel_2.13-2.0.0.jar' }
-          - { connector: huawei-push-kit }
-          - { connector: influxdb,                     pre_cmd: 'docker compose up -d influxdb' }
+          # - { connector: hbase, java_version: 8, pre_cmd: 'docker compose up -d hbase' }
+          - { connector: hdfs, java_version: 8, pre_cmd: 'file ${HOME}/.cache/coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_2.13/2.0.0/cats-kernel_2.13-2.0.0.jar' }
+          - { connector: huawei-push-kit, java_version: 8 }
+          - { connector: influxdb, java_version: 8, pre_cmd: 'docker compose up -d influxdb' }
           # ironmq disabled while we resolve https://github.com/apache/pekko-connectors/issues/697
-          # - { connector: ironmq,                       pre_cmd: 'docker compose up -d ironauth ironmq' }
-          - { connector: jakartams,                    pre_cmd: 'docker compose up -d ibmmq' }
-          - { connector: jms,                          pre_cmd: 'docker compose up -d ibmmq' }
-          - { connector: json-streaming }
-          - { connector: kinesis }
-          - { connector: kudu,                         pre_cmd: 'docker compose up -d kudu-master kudu-tserver' }
-          - { connector: mongodb,                      pre_cmd: 'docker compose up -d mongo' }
-          - { connector: mqtt,                         pre_cmd: 'docker compose up -d mqtt' }
-          - { connector: mqtt-streaming,               pre_cmd: 'docker compose up -d mqtt' }
-          - { connector: orientdb,                     pre_cmd: 'docker compose up -d orientdb' }
-          - { connector: pravega,                      pre_cmd: 'docker compose up -d pravega'}
-          - { connector: reference }
-          - { connector: s3 }
-          - { connector: spring-web }
-          - { connector: simple-codecs }
-          - { connector: slick }
-          - { connector: sns,                          pre_cmd: 'docker compose up -d amazonsns' }
-          - { connector: solr }
-          - { connector: sqs,                          pre_cmd: 'docker compose up -d elasticmq' }
-          - { connector: sse }
-          - { connector: text }
-          - { connector: udp }
-          - { connector: unix-domain-socket }
-          - { connector: xml }
+          # - { connector: ironmq, java_version: 8, pre_cmd: 'docker compose up -d ironauth ironmq' }
+          - { connector: jakartams, java_version: 8, pre_cmd: 'docker compose up -d ibmmq' }
+          - { connector: jms, java_version: 8, pre_cmd: 'docker compose up -d ibmmq' }
+          - { connector: json-streaming, java_version: 8 }
+          - { connector: kinesis, java_version: 8 }
+          - { connector: kudu, java_version: 8, pre_cmd: 'docker compose up -d kudu-master kudu-tserver' }
+          - { connector: mongodb, java_version: 8, pre_cmd: 'docker compose up -d mongo' }
+          - { connector: mqtt, java_version: 8, pre_cmd: 'docker compose up -d mqtt' }
+          - { connector: mqtt-streaming, java_version: 8, pre_cmd: 'docker compose up -d mqtt' }
+          - { connector: orientdb, java_version: 8, pre_cmd: 'docker compose up -d orientdb' }
+          - { connector: pravega, java_version: 8, pre_cmd: 'docker compose up -d pravega'}
+          - { connector: reference, java_version: 8 }
+          - { connector: s3, java_version: 8 }
+          - { connector: spring-web, java_version: 8 }
+          - { connector: simple-codecs, java_version: 8 }
+          - { connector: slick, java_version: 8 }
+          - { connector: sns, java_version: 8, pre_cmd: 'docker compose up -d amazonsns' }
+          - { connector: solr, java_version: 8 }
+          - { connector: sqs, java_version: 8, pre_cmd: 'docker compose up -d elasticmq' }
+          - { connector: sse, java_version: 8 }
+          - { connector: text, java_version: 8 }
+          - { connector: udp, java_version: 8 }
+          - { connector: unix-domain-socket, java_version: 8 }
+          - { connector: xml, java_version: 8 }
 
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -151,7 +151,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 8
+          java-version: ${{ matrix.java_version }}
 
       - name: Install sbt
         uses: sbt/setup-sbt@v1
