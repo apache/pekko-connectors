@@ -36,12 +36,12 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import scala.util.{ Failure, Success }
 
-class SlickWithTryResultSpec    extends AnyWordSpec
-  with ScalaFutures
-  with BeforeAndAfterEach
-  with BeforeAndAfterAll
-  with Matchers
-  with LogCapturing {
+class SlickWithTryResultSpec extends AnyWordSpec
+    with ScalaFutures
+    with BeforeAndAfterEach
+    with BeforeAndAfterAll
+    with Matchers
+    with LogCapturing {
   // #init-mat
   implicit val system: ActorSystem = ActorSystem()
   // #init-mat
@@ -115,7 +115,7 @@ class SlickWithTryResultSpec    extends AnyWordSpec
       }
     }
   }
-  
+
   "SlickWithTryResult.flowTry(..)" must {
     "insert 40 records into a table (no parallelism)" in {
       val inserted = Source(users)
@@ -144,7 +144,8 @@ class SlickWithTryResultSpec    extends AnyWordSpec
       val inserted = Source(users)
         .grouped(10)
         .via(
-          SlickWithTryResult.flowTry(parallelism = 4, (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
+          SlickWithTryResult.flowTry(parallelism = 4,
+            (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
         .runWith(Sink.seq)
         .futureValue
 
@@ -181,7 +182,8 @@ class SlickWithTryResultSpec    extends AnyWordSpec
       val inserted = Source(users)
         .grouped(10)
         .via(
-          SlickWithTryResult.flowTry(parallelism = 4, (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
+          SlickWithTryResult.flowTry(parallelism = 4,
+            (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
         .runWith(Sink.seq)
         .futureValue
 
@@ -250,7 +252,7 @@ class SlickWithTryResultSpec    extends AnyWordSpec
         .runWith(Sink.last)
         .futureValue
 
-      inserted mustBe a [Failure[_]]
+      inserted mustBe a[Failure[_]]
 
       getAllUsersFromDb.futureValue mustBe Set(users.head)
     }
@@ -323,7 +325,8 @@ class SlickWithTryResultSpec    extends AnyWordSpec
       val inserted = Source(users)
         .grouped(10)
         .runWith(
-          SlickWithTryResult.sinkTry(parallelism = 4, (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
+          SlickWithTryResult.sinkTry(parallelism = 4,
+            (group: Seq[User]) => group.map(insertUser).reduceLeft(_.andThen(_))))
         .futureValue
 
       inserted mustBe Success(1)
@@ -335,7 +338,7 @@ class SlickWithTryResultSpec    extends AnyWordSpec
         .runWith(SlickWithTryResult.sinkTry(insertUser))
         .futureValue
 
-      inserted mustBe a [Failure[_]]
+      inserted mustBe a[Failure[_]]
       getAllUsersFromDb.futureValue mustBe Set(users.head)
     }
 
@@ -347,7 +350,7 @@ class SlickWithTryResultSpec    extends AnyWordSpec
         .futureValue
 
       records.length mustBe 41
-      inserted mustBe a [Failure[_]]
+      inserted mustBe a[Failure[_]]
       getAllUsersFromDb.futureValue mustBe users
     }
 

@@ -18,7 +18,7 @@
 package org.apache.pekko.stream.connectors.slick.scaladsl
 
 import scala.concurrent.Future
-import scala.util.{ Success, Try }
+import scala.util.Try
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.scaladsl.Flow
