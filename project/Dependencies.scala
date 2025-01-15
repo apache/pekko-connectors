@@ -26,7 +26,7 @@ object Dependencies {
 
   val InfluxDBJavaVersion = "2.23"
 
-  val AvroVersion = "1.11.4"
+  val AvroVersion = "1.12.0"
   val AwsSdk2Version = "2.29.50"
   val NettyVersion = "4.1.116.Final"
   // Sync with plugins.sbt
@@ -370,7 +370,7 @@ object Dependencies {
     val artemisVersion = "2.19.1"
     Seq(
       libraryDependencies ++= Seq(
-        "jakarta.jms" % "jakarta.jms-api" % "3.0.0" % Provided,
+        "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
         "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.4.1.1" % Test,
         "org.apache.activemq" % "artemis-server" % artemisVersion % Test,
         "org.apache.activemq" % "artemis-jakarta-client" % artemisVersion % Test,
@@ -459,8 +459,8 @@ object Dependencies {
     wireMockDependencies)
 
   val SpringWeb = {
-    val SpringVersion = "5.3.39"
-    val SpringBootVersion = "2.7.18"
+    val SpringVersion = "6.2.1"
+    val SpringBootVersion = "3.4.1"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
@@ -471,7 +471,7 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
   }
 
-  val SlickVersion = "3.5.1"
+  val SlickVersion = "3.5.2"
   val Slick = Seq(
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
     // See: https://github.com/slick/slick/issues/2933
@@ -483,7 +483,7 @@ object Dependencies {
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
-      "com.h2database" % "h2" % "2.2.224" % Test))
+      "com.h2database" % "h2" % "2.3.232" % Test))
 
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
