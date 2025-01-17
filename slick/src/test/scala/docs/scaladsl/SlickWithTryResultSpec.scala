@@ -340,7 +340,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
     }
 
     "produce `Failure[_]` when inserting duplicate record (parallelism = 4)" in {
-      val records = users.toSeq :+ users.head
+      val records = scala.collection.immutable.Seq.empty ++ users :+ users.head
 
       val inserted = Source(records)
         .runWith(SlickWithTryResult.sinkTry(parallelism = 4, insertUser))
