@@ -121,7 +121,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
         .futureValue
 
       inserted must have size users.size
-      inserted.toSet mustBe Set(1)
+      inserted.toSet mustBe Set(Success(1))
 
       getAllUsersFromDb.futureValue mustBe users
     }
