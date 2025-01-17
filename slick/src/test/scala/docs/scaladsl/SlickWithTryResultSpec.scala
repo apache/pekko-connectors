@@ -31,7 +31,6 @@ import slick.jdbc.GetResult
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
-
 import scala.util.{ Failure, Success }
 
 class SlickWithTryResultSpec extends AnyWordSpec
