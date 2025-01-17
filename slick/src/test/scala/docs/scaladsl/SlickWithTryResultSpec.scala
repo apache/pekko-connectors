@@ -20,15 +20,17 @@ import pekko.stream.connectors.slick.scaladsl.{ Slick, SlickSession, SlickWithTr
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl._
 import pekko.testkit.TestKit
+
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+
 import slick.dbio.DBIOAction
 import slick.jdbc.GetResult
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
 
 import scala.util.{ Failure, Success }
 
@@ -60,7 +62,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
   implicit val getUserResult: GetResult[User] = GetResult(r => User(r.nextInt(), r.nextString()))
 
   val users = (1 to 40).map(i => User(i, s"Name$i")).toSet
-  val duplicateUser = Seq(users.head, users.head)
+  val duplicateUser = scala.collection.immutable.Seq(users.head, users.head)
 
   val createTable =
     sqlu"""CREATE TABLE PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS(ID INTEGER PRIMARY KEY, NAME VARCHAR(50))"""
