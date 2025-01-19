@@ -492,9 +492,10 @@ import scala.util.{ Either, Failure, Success }
           registrantsByPacketId.get(packetId) match {
             case Some(registration: Registration[A]) =>
               registration.registrant ! event
-              main(registrantsByPacketId
+              main(
+                registrantsByPacketId
                   .updated(packetId,
-                  registration.copy(failureReplies = failureReply +: registration.failureReplies)),
+                    registration.copy(failureReplies = failureReply +: registration.failureReplies)),
                 nextPacketId,
                 pendingRegistrations)
             case None =>

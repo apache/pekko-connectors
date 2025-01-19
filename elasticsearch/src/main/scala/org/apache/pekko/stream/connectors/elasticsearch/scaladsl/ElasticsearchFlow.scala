@@ -181,7 +181,8 @@ object ElasticsearchFlow {
 
   @InternalApi
   private def amendWithIndexFlow[T, C]: Flow[immutable.Seq[WriteMessage[T, C]],
-    (immutable.Seq[WriteMessage[T,
+    (
+        immutable.Seq[WriteMessage[T,
           (Int,
               C)]], immutable.Seq[WriteResult[T, (Int, C)]]), NotUsed] = {
     Flow[immutable.Seq[WriteMessage[T, C]]].map { messages =>

@@ -51,7 +51,7 @@ class GeodeFlowSpec extends GeodeBaseSpec {
 
         val fut = source.via(flow).runWith(Sink.ignore)
         // #flow
-        Await.ready(fut, 10 seconds)
+        Await.ready(fut, 10.seconds)
 
         geode.close()
       }
@@ -61,7 +61,7 @@ class GeodeFlowSpec extends GeodeBaseSpec {
         val source = buildPersonsSource(1 to 20)
         val flow: Flow[Person, Person, NotUsed] = geode.flow(personsRegionSettings, PersonPdxSerializer)
         val fut = source.via(flow).runWith(Sink.ignore)
-        Await.ready(fut, 10 seconds)
+        Await.ready(fut, 10.seconds)
         geode.close()
       }
     }

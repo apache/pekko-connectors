@@ -1260,7 +1260,8 @@ import scala.util.{ Failure, Success, Try }
             }
 
         val retriableFlow: Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C]),
-          ((Try[HttpResponse],
+          (
+              (Try[HttpResponse],
                   (
                       MultipartUpload, Int)), immutable.Iterable[C]), NotUsed] =
           Flow[((Chunk, (MultipartUpload, Int)), immutable.Iterable[C])]

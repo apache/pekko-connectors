@@ -53,7 +53,7 @@ private[impl] trait HBaseCapabilities { this: StageLogging =>
    * @return
    */
   def connect(conf: Configuration, timeout: Int = 10) =
-    Await.result(Future(ConnectionFactory.createConnection(conf)), timeout seconds)
+    Await.result(Future(ConnectionFactory.createConnection(conf)), timeout.seconds)
 
   private[impl] def getOrCreateTable(tableName: TableName, columnFamilies: Seq[String])(
       implicit connection: Connection): Try[Table] = twr(connection.getAdmin) { admin =>

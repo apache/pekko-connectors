@@ -89,7 +89,8 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       pekkoClient.connectionSettings.connectionSettings.connectingTimeout shouldBe
       SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).asScala
       pekkoClient.connectionSettings.connectionSettings.idleTimeout shouldBe
-      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).asScala
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(
+        SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).asScala
       pekkoClient.connectionSettings.maxConnections shouldBe
       SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue()
       infiniteToZero(pekkoClient.connectionSettings.maxConnectionLifetime) shouldBe
