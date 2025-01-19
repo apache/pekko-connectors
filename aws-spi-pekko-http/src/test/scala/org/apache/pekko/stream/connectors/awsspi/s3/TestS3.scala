@@ -43,7 +43,7 @@ class TestS3 extends BaseAwsClientTest[S3AsyncClient] {
 
     "upload and download a file to a bucket" in withClient { implicit client =>
       val bucketName = createBucket()
-      val fileContent = 0 to 1000 mkString
+      val fileContent = (0 to 1000).mkString
 
       client
         .putObject(PutObjectRequest.builder().bucket(bucketName).key("my-file").contentType("text/plain").build(),
@@ -73,7 +73,8 @@ class TestS3 extends BaseAwsClientTest[S3AsyncClient] {
         .join()
 
       val p1 = client
-        .uploadPart(UploadPartRequest
+        .uploadPart(
+          UploadPartRequest
             .builder()
             .bucket(bucketName)
             .key("bar")
@@ -83,7 +84,8 @@ class TestS3 extends BaseAwsClientTest[S3AsyncClient] {
           randomFile.toPath)
         .join
       val p2 = client
-        .uploadPart(UploadPartRequest
+        .uploadPart(
+          UploadPartRequest
             .builder()
             .bucket(bucketName)
             .key("bar")
@@ -184,5 +186,5 @@ class TestS3 extends BaseAwsClientTest[S3AsyncClient] {
   override lazy val container: GenericContainer = new GenericContainer(
     dockerImage = "adobe/s3mock:2.17.0",
     exposedPorts = Seq(exposedServicePort),
-    waitStrategy = Some(TimeoutWaitStrategy(10 seconds)))
+    waitStrategy = Some(TimeoutWaitStrategy(10.seconds)))
 }

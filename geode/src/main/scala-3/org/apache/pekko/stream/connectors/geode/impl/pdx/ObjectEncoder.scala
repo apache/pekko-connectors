@@ -25,7 +25,8 @@ private[pekko] trait ObjectEncoder {
   given emptyTupleEncoder: PdxEncoder[EmptyTuple] =
     PdxEncoder.instance[EmptyTuple] { case _ => true }
 
-  given tupleEncoder[K <: String, H, T <: Tuple](using
+  given tupleEncoder[K <: String, H, T <: Tuple](
+      using
       m: ValueOf[K],
       hEncoder: PdxEncoder[H],
       tEncoder: PdxEncoder[T]): PdxEncoder[FieldType[K, H] *: T] =

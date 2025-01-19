@@ -190,8 +190,7 @@ private final class SolrFlowLogic[T, C](
       }
     }
 
-    val response = if (messages.nonEmpty) send(messages).fold(0) { _.getStatus }
-    else 0
+    val response = if (messages.nonEmpty) send(messages).fold(0) { _.getStatus } else 0
 
     log.debug("Handle the response with {}", response)
     val results = messages.map(m =>

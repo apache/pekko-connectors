@@ -38,21 +38,21 @@ class GeodeFiniteSourceSpec extends GeodeBaseSpec {
             .query[Person](s"select * from /persons order by id")
             .runWith(Sink.foreach(e => log.debug(s"$e")))
         // #query
-        Await.ready(source, 10 seconds)
+        Await.ready(source, 10.seconds)
 
         val animals =
           geode
             .query[Animal](s"select * from /animals order by id")
             .runWith(Sink.foreach(e => log.debug(s"$e")))
 
-        Await.ready(animals, 10 seconds)
+        Await.ready(animals, 10.seconds)
 
         val complexes =
           geode
             .query[Complex](s"select * from /complexes order by id")
             .runWith(Sink.foreach(e => log.debug(s"$e")))
 
-        Await.ready(complexes, 10 seconds)
+        Await.ready(complexes, 10.seconds)
 
         geode.close()
       }

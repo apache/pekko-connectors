@@ -58,9 +58,9 @@ class GeodeContinuousSourceSpec extends GeodeBaseSpec {
           .via(flow) // geode flow
           .runWith(Sink.ignore)
 
-        Await.result(f, 10 seconds)
+        Await.result(f, 10.seconds)
 
-        Await.result(source, 5 seconds)
+        Await.result(source, 5.seconds)
         geode.close()
       }
     }

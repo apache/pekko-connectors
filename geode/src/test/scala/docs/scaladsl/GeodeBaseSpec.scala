@@ -56,5 +56,5 @@ class GeodeBaseSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll wit
     Source(range).map(i => Complex(UUID.randomUUID(), List(1, 2, 3), List(new Date()), Set(UUID.randomUUID())))
 
   override protected def afterAll(): Unit =
-    Await.result(system.terminate(), 10 seconds)
+    Await.result(system.terminate(), 10.seconds)
 }
