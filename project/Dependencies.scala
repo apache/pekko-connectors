@@ -16,7 +16,7 @@ object Dependencies {
 
   val CronBuild = sys.env.get("GITHUB_EVENT_NAME").contains("schedule")
 
-  val Scala213 = "2.13.15" // update even in link-validator.conf
+  val Scala213 = "2.13.16" // update even in link-validator.conf
   val Scala212 = "2.12.20"
   val Scala3 = "3.3.4"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
@@ -27,7 +27,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.29.50"
+  val AwsSdk2Version = "2.29.52"
   val NettyVersion = "4.1.117.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -427,9 +427,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.36")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.37")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.36"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.37"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"
