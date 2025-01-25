@@ -16,7 +16,7 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.slick.scaladsl.{ Slick, SlickSession, SlickWithTryResult }
+import pekko.stream.connectors.slick.scaladsl.{ SlickSession, SlickWithTryResult }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl._
 import pekko.testkit.TestKit
@@ -72,7 +72,8 @@ class SlickWithTryResultSpec extends AnyWordSpec
   def insertUser(user: User): DBIO[Int] =
     sqlu"INSERT INTO PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS VALUES(${user.id}, ${user.name})"
 
-  def getAllUsersFromDb: Future[Set[User]] = Slick.source(selectAllUsers).runWith(Sink.seq).map(_.toSet)
+  def getAllUsersFromDb: Future[Set[User]] =
+    Source.fromPublisher(session.db.stream(selectAllUsers)).runWith(Sink.seq).map(_.toSet)
   def populate(): Unit = {
     val actions = users.map(insertUser)
 
@@ -91,26 +92,6 @@ class SlickWithTryResultSpec extends AnyWordSpec
     // #close-session
 
     TestKit.shutdownActorSystem(system)
-  }
-
-  "SlickSession.forDbAndProfile" must {
-    "create a slick session able to talk to the db" in {
-      // #init-session-from-db-and-profile
-      val db = Database.forConfig("slick-h2.db")
-      val profile = slick.jdbc.H2Profile
-      val slickSessionCreatedForDbAndProfile: SlickSession = SlickSession.forDbAndProfile(db, profile)
-      // #init-session-from-db-and-profile
-      try {
-        val q = sql"select true".as[Boolean]
-        val result = Slick
-          .source(q)(slickSessionCreatedForDbAndProfile)
-          .runWith(Sink.head)
-          .futureValue
-        assert(result === true)
-      } finally {
-        slickSessionCreatedForDbAndProfile.close()
-      }
-    }
   }
 
   "SlickWithTryResult.flowTry(..)" must {
