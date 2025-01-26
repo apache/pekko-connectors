@@ -28,9 +28,4 @@ class PekkoHttpClientH1TestSuite extends SdkAsyncHttpClientH1TestSuite {
       AttributeMap.builder().put(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES, Boolean.box(true)).build());
   }
 
-  // Failed tests
-  // The logic to not reuse connections on server error status is not implemented in PekkoHttpClient, and
-  // it seems that it is being reverted in https://github.com/aws/aws-sdk-java-v2/pull/5607
-  override def connectionReceiveServerErrorStatusShouldNotReuseConnection(): Unit = ()
-
 }
