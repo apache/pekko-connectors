@@ -121,6 +121,7 @@ public class S3Test {
     assertEquals(fileContent, result.asUtf8String());
   }
 
+  @SuppressWarnings("deprecation")
   private S3AsyncClient getAsyncClient(SdkAsyncHttpClient pekkoClient) throws URISyntaxException {
     return S3AsyncClient.builder()
         .serviceConfiguration(
