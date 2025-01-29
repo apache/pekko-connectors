@@ -90,6 +90,7 @@ jobs:
 
     strategy:
       fail-fast: false
+      max-parallel: 10
       matrix:
         include:
           - { connector: amqp,                         pre_cmd: 'docker compose up -d amqp' }
