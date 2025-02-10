@@ -27,7 +27,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.30.11"
+  val AwsSdk2Version = "2.30.16"
   val NettyVersion = "4.1.117.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -65,7 +65,7 @@ object Dependencies {
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.32.1"
-  val JwtScalaVersion = "10.0.1"
+  val JwtScalaVersion = "10.0.4"
   val Log4jVersion = "2.23.1"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
@@ -126,7 +126,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.24.0",
+      "com.rabbitmq" % "amqp-client" % "5.25.0",
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
   val AwsSpiPekkoHttp = Seq(
