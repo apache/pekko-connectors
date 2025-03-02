@@ -27,7 +27,7 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.30.26"
+  val AwsSdk2Version = "2.30.31"
   val NettyVersion = "4.1.119.Final"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -42,7 +42,7 @@ object Dependencies {
   val scalaCheckVersion = "1.18.1"
 
   // Legacy versions support Slf4J v1 for compatibility with older libs
-  val Slf4jVersion = "2.0.16"
+  val Slf4jVersion = "2.0.17"
   val Slf4jLegacyVersion = "1.7.36"
   val LogbackVersion = "1.3.15"
   val LogbackLegacyVersion = "1.2.13"
@@ -371,7 +371,7 @@ object Dependencies {
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.0.0" % Provided,
-        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.4.1.1" % Test,
+        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "9.4.2.0" % Test,
         "org.apache.activemq" % "artemis-server" % artemisVersion % Test,
         "org.apache.activemq" % "artemis-jakarta-client" % artemisVersion % Test,
         "org.apache.activemq" % "artemis-junit" % artemisVersion % Test,
@@ -381,7 +381,7 @@ object Dependencies {
   val Jms = Seq(
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
-      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.1.1" % Test,
+      "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.2.0" % Test,
       "org.apache.activemq" % "activemq-broker" % "5.16.7" % Test,
       "org.apache.activemq" % "activemq-client" % "5.16.7" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
