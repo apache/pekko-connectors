@@ -252,7 +252,7 @@ object Dependencies {
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
        else Seq(
-         "com.chuusai" %% "shapeless" % "2.3.12"))
+         "com.chuusai" %% "shapeless" % "2.3.13"))
     })
 
   val GoogleCommon = Seq(
