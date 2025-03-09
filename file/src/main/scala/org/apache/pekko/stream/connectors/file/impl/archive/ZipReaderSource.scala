@@ -40,9 +40,9 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
 
       def seek() = {
         while ({
-          entry = zis.getNextEntry()
-          entry != null && entry.getName != n.name
-        }) {
+            entry = zis.getNextEntry()
+            entry != null && entry.getName != n.name
+          }) {
           zis.closeEntry()
         }
       }
