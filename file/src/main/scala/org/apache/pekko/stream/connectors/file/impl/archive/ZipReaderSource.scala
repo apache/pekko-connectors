@@ -90,7 +90,7 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
           override def onPull(): Unit = {
             val e = zis.getNextEntry
             if (e != null) {
-              val n = ZipArchiveMetadata(e.getName)
+              val n = new ZipArchiveMetadata(e.getName)(e.getSize(), e.getLastModifiedTime().toInstant())
               zis.closeEntry()
               push(out, n -> Source.fromGraph(new ZipEntrySource(n, f, chunkSize, fileCharset)))
             } else {

@@ -25,11 +25,16 @@ object ArchiveMetadata {
   def create(filePath: String): ArchiveMetadata = new ArchiveMetadata(filePath)
 }
 
-final case class ZipArchiveMetadata(name: String) {
+final case class ZipArchiveMetadata(name: String)(val size: Long, val lastModification: Instant) {
   def getName() = name
 }
 object ZipArchiveMetadata {
-  def create(name: String): ZipArchiveMetadata = ZipArchiveMetadata(name)
+  @deprecated("Use the variant with 3 arguments instead.", since = "pekko-connectors-file:1.1.0")
+  def apply(name: String): ZipArchiveMetadata = new ZipArchiveMetadata(name)(0, Instant.EPOCH)
+  @deprecated("Use the variant with 3 arguments instead.", since = "pekko-connectors-file:1.1.0")
+  def create(name: String): ZipArchiveMetadata = new ZipArchiveMetadata(name)(0, Instant.EPOCH)
+  def create(name: String, size: Long, lastModification: Instant): ZipArchiveMetadata =
+    new ZipArchiveMetadata(name)(size, lastModification)
 }
 
 final class TarArchiveMetadata private (
