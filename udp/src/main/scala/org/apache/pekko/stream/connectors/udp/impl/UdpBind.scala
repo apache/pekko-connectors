@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.udp.impl
 import java.net.InetSocketAddress
 
 import org.apache.pekko
-import pekko.actor.{ ActorRef, ActorSystem }
+import pekko.actor.{ ActorRef, ActorSystem, Terminated }
 import pekko.annotation.InternalApi
 import pekko.io.{ IO, Udp }
 import pekko.io.Inet.SocketOption
@@ -42,7 +42,7 @@ import scala.concurrent.{ Future, Promise }
   private var listener: ActorRef = _
 
   override def preStart(): Unit = {
-    implicit val sender = getStageActor(processIncoming).ref
+    implicit val sender: ActorRef = getStageActor(processIncoming).ref
     IO(Udp) ! Udp.Bind(sender, localAddress, options)
   }
 
@@ -53,6 +53,7 @@ import scala.concurrent.{ Future, Promise }
     case (sender, Udp.Bound(boundAddress)) =>
       boundPromise.success(boundAddress)
       listener = sender
+      stageActor.watch(listener)
       pull(in)
     case (_, Udp.CommandFailed(cmd: Udp.Bind)) =>
       val ex = new IllegalArgumentException(s"Unable to bind to [${cmd.localAddress}]")
@@ -62,10 +63,13 @@ import scala.concurrent.{ Future, Promise }
       if (isAvailable(out)) {
         push(out, Datagram(data, sender))
       }
+    case (_, Terminated(_)) =>
+      listener = null
+      failStage(new IllegalStateException("UDP listener terminated unexpectedly"))
     case _ =>
   }
 
-  private def unbindListener() =
+  private def unbindListener(): Unit =
     if (listener != null) {
       listener ! Udp.Unbind
     }
@@ -73,7 +77,7 @@ import scala.concurrent.{ Future, Promise }
   setHandler(
     in,
     new InHandler {
-      override def onPush() = {
+      override def onPush(): Unit = {
         val msg = grab(in)
         listener ! Udp.Send(msg.data, msg.remote)
         pull(in)
@@ -96,7 +100,7 @@ import scala.concurrent.{ Future, Promise }
   val out: Outlet[Datagram] = Outlet("UdpBindFlow.in")
 
   val shape: FlowShape[Datagram, Datagram] = FlowShape.of(in, out)
-  override def createLogicAndMaterializedValue(inheritedAttributes: Attributes) = {
+  override def createLogicAndMaterializedValue(inheritedAttributes: Attributes): (UdpBindLogic, Future[InetSocketAddress]) = {
     val boundPromise = Promise[InetSocketAddress]()
     (new UdpBindLogic(localAddress, options, boundPromise)(shape), boundPromise.future)
   }
