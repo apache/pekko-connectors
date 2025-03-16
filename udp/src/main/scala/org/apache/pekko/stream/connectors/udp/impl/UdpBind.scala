@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.udp.impl
 import java.net.InetSocketAddress
 
 import org.apache.pekko
-import pekko.actor.{ ActorRef, ActorSystem }
+import pekko.actor.{ ActorRef, ActorSystem, Terminated }
 import pekko.annotation.InternalApi
 import pekko.io.{ IO, Udp }
 import pekko.io.Inet.SocketOption
@@ -53,6 +53,7 @@ import scala.concurrent.{ Future, Promise }
     case (sender, Udp.Bound(boundAddress)) =>
       boundPromise.success(boundAddress)
       listener = sender
+      stageActor.watch(listener)
       pull(in)
     case (_, Udp.CommandFailed(cmd: Udp.Bind)) =>
       val ex = new IllegalArgumentException(s"Unable to bind to [${cmd.localAddress}]")
@@ -62,6 +63,9 @@ import scala.concurrent.{ Future, Promise }
       if (isAvailable(out)) {
         push(out, Datagram(data, sender))
       }
+    case (_, Terminated(_)) =>
+      listener = null
+      failStage(new IllegalStateException("UDP listener terminated unexpectedly"))
     case _ =>
   }
 
