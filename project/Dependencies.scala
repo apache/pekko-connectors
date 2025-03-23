@@ -225,7 +225,7 @@ object Dependencies {
       ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.20.9" % Test,
+      "org.specs2" %% "specs2-core" % "4.21.0" % Test,
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
 
