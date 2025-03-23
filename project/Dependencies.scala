@@ -382,8 +382,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
       "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.2.0" % Test,
-      "org.apache.activemq" % "activemq-broker" % "5.16.7" % Test,
-      "org.apache.activemq" % "activemq-client" % "5.16.7" % Test,
+      "org.apache.activemq" % "activemq-broker" % "5.16.8" % Test,
+      "org.apache.activemq" % "activemq-client" % "5.16.8" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
       "com.github.pjfanning" % "jmswrapper" % "0.1.0" % Test) ++ Mockito)
 
