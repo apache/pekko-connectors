@@ -24,6 +24,7 @@ import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import pekko.stream.connectors.udp.Datagram
 import pekko.stream.stage._
 
+import java.io.IOException
 import scala.collection.immutable.Iterable
 import scala.concurrent.{ Future, Promise }
 
@@ -65,7 +66,7 @@ import scala.concurrent.{ Future, Promise }
       }
     case (_, Terminated(_)) =>
       listener = null
-      failStage(new IllegalStateException("UDP listener terminated unexpectedly"))
+      failStage(new IOException("UDP listener terminated unexpectedly"))
     case _ =>
   }
 
