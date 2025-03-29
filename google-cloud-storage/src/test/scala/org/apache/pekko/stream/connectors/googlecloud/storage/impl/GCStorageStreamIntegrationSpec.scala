@@ -33,19 +33,7 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import scala.annotation.nowarn
 import scala.concurrent.Future
 
-/**
- * USAGE
- * - Create a google cloud service account
- * - Make sure it has these roles:
- *    storage object creator
- *    storage object viewer
- *    storage object admin
- *    storage admin (to run the create/delete bucket test)
- * - modify test/resources/application.conf
- * - create a `pekko-connectors` bucket for testing
- * - create a rewrite `pekko-connectors-rewrite` bucket for testing
- */
-class GCStorageStreamIntegrationSpec
+trait GCStorageStreamIntegrationSpec
     extends AnyWordSpec
     with WithMaterializerGlobal
     with BeforeAndAfter
@@ -61,13 +49,13 @@ class GCStorageStreamIntegrationSpec
   def testFileName(file: String): String = folderName + file
 
   @nowarn("msg=deprecated")
-  def settings: GCStorageSettings = GCStorageSettings()
+  def settings: GCStorageSettings
 
-  def bucket = "connectors"
-  def rewriteBucket = "pekko-connectors-rewrite"
-  def projectId = settings.projectId
-  def clientEmail = settings.clientEmail
-  def privateKey = settings.privateKey
+  def bucket: String
+  def rewriteBucket: String
+  def projectId: String
+  def clientEmail: String
+  def privateKey: String
 
   before {
     folderName = classOf[GCStorageStreamIntegrationSpec].getSimpleName + UUID.randomUUID().toString + "/"
@@ -79,7 +67,7 @@ class GCStorageStreamIntegrationSpec
 
   "GCStorageStream" should {
 
-    "be able to create and delete a bucket" ignore {
+    "be able to create and delete a bucket" in {
       val randomBucketName = s"pekko-connectors_${UUID.randomUUID().toString}"
 
       val res = for {
@@ -95,7 +83,7 @@ class GCStorageStreamIntegrationSpec
       afterDelete shouldBe None
     }
 
-    "be able to get bucket info" ignore {
+    "be able to get bucket info" in {
       // the bucket is no longer empty
       val bucketInfo = GCStorageStream
         .getBucketSource(bucket)
@@ -103,7 +91,7 @@ class GCStorageStreamIntegrationSpec
       bucketInfo.futureValue.map(_.kind) shouldBe Some("storage#bucket")
     }
 
-    "be able to list an empty bucket" ignore {
+    "be able to list an empty bucket" in {
       // the bucket is no longer empty
       val objects = GCStorageStream
         .listBucket(bucket, None)
@@ -111,7 +99,7 @@ class GCStorageStreamIntegrationSpec
       objects.futureValue shouldBe empty
     }
 
-    "get an empty list when listing a non existing folder" ignore {
+    "get an empty list when listing a non existing folder" in {
       val objects = GCStorageStream
         .listBucket(bucket, Some("non-existent"))
         .runWith(Sink.seq)
@@ -119,7 +107,7 @@ class GCStorageStreamIntegrationSpec
       objects.futureValue shouldBe empty
     }
 
-    "be able to list an existing folder" ignore {
+    "be able to list an existing folder" in {
       val listing = for {
         _ <- GCStorageStream
           .putObject(bucket,
@@ -141,7 +129,7 @@ class GCStorageStreamIntegrationSpec
       listing.futureValue should have size 2
     }
 
-    "get metadata of an existing file" ignore {
+    "get metadata of an existing file" in {
       val content = ByteString("metadata file")
 
       val option = for {
@@ -157,12 +145,12 @@ class GCStorageStreamIntegrationSpec
       so.contentType shouldBe ContentTypes.`text/plain(UTF-8)`
     }
 
-    "get none when asking metadata of non-existing file" ignore {
+    "get none when asking metadata of non-existing file" in {
       val option = GCStorageStream.getObject(bucket, testFileName("metadata-file")).runWith(Sink.head)
       option.futureValue shouldBe None
     }
 
-    "be able to upload a file" ignore {
+    "be able to upload a file" in {
       val fileName = testFileName("test-file")
       val res = for {
         so <- GCStorageStream
@@ -182,7 +170,7 @@ class GCStorageStreamIntegrationSpec
       listing should have size 1
     }
 
-    "be able to download an existing file" ignore {
+    "be able to download an existing file" in {
       val fileName = testFileName("test-file")
       val content = ByteString(Random.alphanumeric.take(50000).map(c => c.toByte).toArray)
       val bs = for {
@@ -198,7 +186,7 @@ class GCStorageStreamIntegrationSpec
       bs.futureValue shouldBe content
     }
 
-    "get a None when downloading a non extisting file" ignore {
+    "get a None when downloading a non extisting file" in {
       val fileName = testFileName("non-existing-file")
       val download = GCStorageStream
         .download(bucket, fileName)
@@ -208,7 +196,7 @@ class GCStorageStreamIntegrationSpec
       download shouldBe None
     }
 
-    "get a single empty ByteString when downloading a non existing file" ignore {
+    "get a single empty ByteString when downloading a non existing file" in {
       val fileName = testFileName("non-existing-file")
       val res = for {
         _ <- GCStorageStream
@@ -223,7 +211,7 @@ class GCStorageStreamIntegrationSpec
       res.futureValue shouldBe ByteString.empty
     }
 
-    "delete an existing file" ignore {
+    "delete an existing file" in {
       val result = for {
         _ <- GCStorageStream
           .putObject(bucket,
@@ -236,13 +224,13 @@ class GCStorageStreamIntegrationSpec
       result.futureValue shouldBe true
     }
 
-    "delete an unexisting file should not give an error" ignore {
+    "delete an unexisting file should not give an error" in {
       val result =
         GCStorageStream.deleteObjectSource(bucket, testFileName("non-existing-file-to-delete")).runWith(Sink.head)
       result.futureValue shouldBe false
     }
 
-    "provide a sink to stream data to gcs" ignore {
+    "provide a sink to stream data to gcs" in {
       val fileName = testFileName("big-streaming-file")
       val meta = Map("meta-key-1" -> "value-1")
 
@@ -262,7 +250,7 @@ class GCStorageStreamIntegrationSpec
       so.metadata shouldBe Some(meta)
     }
 
-    "rewrite file from source to destination path" ignore {
+    "rewrite file from source to destination path" in {
       val fileName = "big-streaming-file"
 
       val sink =
