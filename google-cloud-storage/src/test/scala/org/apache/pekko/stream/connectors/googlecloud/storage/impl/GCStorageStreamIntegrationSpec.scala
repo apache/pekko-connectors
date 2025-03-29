@@ -27,10 +27,9 @@ import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.Random
-import pekko.stream.connectors.googlecloud.storage.GCStorageSettings
+import pekko.stream.connectors.google.GoogleSettings
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 
-import scala.annotation.nowarn
 import scala.concurrent.Future
 
 trait GCStorageStreamIntegrationSpec
@@ -48,14 +47,11 @@ trait GCStorageStreamIntegrationSpec
 
   def testFileName(file: String): String = folderName + file
 
-  @nowarn("msg=deprecated")
-  def settings: GCStorageSettings
+  def settings: GoogleSettings
 
   def bucket: String
   def rewriteBucket: String
   def projectId: String
-  def clientEmail: String
-  def privateKey: String
 
   before {
     folderName = classOf[GCStorageStreamIntegrationSpec].getSimpleName + UUID.randomUUID().toString + "/"
