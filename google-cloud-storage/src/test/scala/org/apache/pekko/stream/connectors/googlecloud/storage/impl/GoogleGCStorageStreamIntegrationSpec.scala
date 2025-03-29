@@ -17,7 +17,7 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
-import org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettings
+import org.apache.pekko.stream.connectors.google.GoogleSettings
 import org.scalatest.DoNotDiscover
 
 import scala.annotation.nowarn
@@ -44,12 +44,9 @@ import scala.annotation.nowarn
  */
 @DoNotDiscover
 class GoogleGCStorageStreamIntegrationSpec extends GCStorageStreamIntegrationSpec {
-  @nowarn("msg=deprecated")
-  def settings: GCStorageSettings = GCStorageSettings()
+  def settings: GoogleSettings = GoogleSettings()
 
   override def bucket = "connectors"
   override def rewriteBucket = "pekko-connectors-rewrite"
   override def projectId = settings.projectId
-  override def clientEmail = settings.clientEmail
-  override def privateKey = settings.privateKey
 }
