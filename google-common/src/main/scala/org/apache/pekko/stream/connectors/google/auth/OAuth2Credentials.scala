@@ -34,7 +34,8 @@ private[auth] object OAuth2Credentials {
 }
 
 @InternalApi
-private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit mat: Materializer) extends Credentials {
+private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit mat: Materializer) extends Credentials
+    with RetrievableCredentials {
 
   private val tokenStream = stream.run()
 
