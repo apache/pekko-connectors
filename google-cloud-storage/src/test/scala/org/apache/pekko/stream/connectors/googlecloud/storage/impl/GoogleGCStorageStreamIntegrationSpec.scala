@@ -18,6 +18,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 
 import org.apache.pekko.stream.connectors.google.GoogleSettings
+import org.apache.pekko.stream.connectors.googlecloud.storage.GCSSettings
 import org.scalatest.DoNotDiscover
 
 import scala.annotation.nowarn
@@ -44,7 +45,8 @@ import scala.annotation.nowarn
  */
 @DoNotDiscover
 class GoogleGCStorageStreamIntegrationSpec extends GCStorageStreamIntegrationSpec {
-  def settings: GoogleSettings = GoogleSettings()
+  override def settings: GoogleSettings = GoogleSettings()
+  override def gcsSettings: GCSSettings = GCSSettings()
 
   override def bucket = "connectors"
   override def rewriteBucket = "pekko-connectors-rewrite"
