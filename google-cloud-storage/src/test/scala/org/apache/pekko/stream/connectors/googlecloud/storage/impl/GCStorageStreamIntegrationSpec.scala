@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 import java.util.UUID
 import org.apache.pekko
 import pekko.http.scaladsl.model.ContentTypes
-import pekko.stream.connectors.googlecloud.storage.WithMaterializerGlobal
+import pekko.stream.connectors.googlecloud.storage.{ GCSAttributes, GCSSettings, WithMaterializerGlobal }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ByteString
 import org.scalatest.BeforeAndAfter
@@ -27,7 +27,7 @@ import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.Random
-import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 
 import scala.concurrent.Future
@@ -48,6 +48,7 @@ trait GCStorageStreamIntegrationSpec
   def testFileName(file: String): String = folderName + file
 
   def settings: GoogleSettings
+  def gcsSettings: GCSSettings
 
   def bucket: String
   def rewriteBucket: String
@@ -58,8 +59,12 @@ trait GCStorageStreamIntegrationSpec
   }
 
   after {
-    Await.result(GCStorageStream.deleteObjectsByPrefixSource(bucket, Some(folderName)).runWith(Sink.seq), 10.seconds)
+    Await.result(GCStorageStream.deleteObjectsByPrefixSource(bucket, Some(folderName))
+        .withAttributes(finalAttributes)
+        .runWith(Sink.seq), 10.seconds)
   }
+
+  lazy val finalAttributes = GoogleAttributes.settings(settings) and GCSAttributes.settings(gcsSettings)
 
   "GCStorageStream" should {
 
@@ -67,10 +72,18 @@ trait GCStorageStreamIntegrationSpec
       val randomBucketName = s"pekko-connectors_${UUID.randomUUID().toString}"
 
       val res = for {
-        bucket <- GCStorageStream.createBucketSource(randomBucketName, "europe-west1").runWith(Sink.head)
-        afterCreate <- GCStorageStream.getBucketSource(bucket.name).runWith(Sink.head)
-        _ <- GCStorageStream.deleteBucketSource(bucket.name).runWith(Sink.head)
-        afterDelete <- GCStorageStream.getBucketSource(bucket.name).runWith(Sink.head)
+        bucket <- GCStorageStream.createBucketSource(randomBucketName, "europe-west1")
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
+        afterCreate <- GCStorageStream.getBucketSource(bucket.name)
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
+        _ <- GCStorageStream.deleteBucketSource(bucket.name)
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
+        afterDelete <- GCStorageStream.getBucketSource(bucket.name)
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
       } yield (bucket, afterCreate, afterDelete)
 
       val (bucket, afterCreate, afterDelete) = res.futureValue
@@ -83,6 +96,7 @@ trait GCStorageStreamIntegrationSpec
       // the bucket is no longer empty
       val bucketInfo = GCStorageStream
         .getBucketSource(bucket)
+        .withAttributes(finalAttributes)
         .runWith(Sink.head)
       bucketInfo.futureValue.map(_.kind) shouldBe Some("storage#bucket")
     }
@@ -91,6 +105,7 @@ trait GCStorageStreamIntegrationSpec
       // the bucket is no longer empty
       val objects = GCStorageStream
         .listBucket(bucket, None)
+        .withAttributes(finalAttributes)
         .runWith(Sink.seq)
       objects.futureValue shouldBe empty
     }
@@ -98,6 +113,7 @@ trait GCStorageStreamIntegrationSpec
     "get an empty list when listing a non existing folder" in {
       val objects = GCStorageStream
         .listBucket(bucket, Some("non-existent"))
+        .withAttributes(finalAttributes)
         .runWith(Sink.seq)
 
       objects.futureValue shouldBe empty
@@ -110,14 +126,18 @@ trait GCStorageStreamIntegrationSpec
             testFileName("testa.txt"),
             Source.single(ByteString("testa")),
             ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
         _ <- GCStorageStream
           .putObject(bucket,
             testFileName("testb.txt"),
             Source.single(ByteString("testa")),
             ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
-        listing <- GCStorageStream.listBucket(bucket, Some(folderName)).runWith(Sink.seq)
+        listing <- GCStorageStream.listBucket(bucket, Some(folderName))
+          .withAttributes(finalAttributes)
+          .runWith(Sink.seq)
       } yield {
         listing
       }
@@ -131,8 +151,11 @@ trait GCStorageStreamIntegrationSpec
       val option = for {
         _ <- GCStorageStream
           .putObject(bucket, testFileName("metadata-file"), Source.single(content), ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
-        option <- GCStorageStream.getObject(bucket, testFileName("metadata-file")).runWith(Sink.head)
+        option <- GCStorageStream.getObject(bucket, testFileName("metadata-file"))
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
       } yield option
 
       val so = option.futureValue.get
@@ -142,7 +165,9 @@ trait GCStorageStreamIntegrationSpec
     }
 
     "get none when asking metadata of non-existing file" in {
-      val option = GCStorageStream.getObject(bucket, testFileName("metadata-file")).runWith(Sink.head)
+      val option = GCStorageStream.getObject(bucket, testFileName("metadata-file"))
+        .withAttributes(finalAttributes)
+        .runWith(Sink.head)
       option.futureValue shouldBe None
     }
 
@@ -155,8 +180,11 @@ trait GCStorageStreamIntegrationSpec
             fileName,
             Source.single(ByteString(Random.alphanumeric.take(50000).map(c => c.toByte).toArray)),
             ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
-        listing <- GCStorageStream.listBucket(bucket, Some(folderName)).runWith(Sink.seq)
+        listing <- GCStorageStream.listBucket(bucket, Some(folderName))
+          .withAttributes(finalAttributes)
+          .runWith(Sink.seq)
       } yield (so, listing)
 
       val (so, listing) = res.futureValue
@@ -172,9 +200,11 @@ trait GCStorageStreamIntegrationSpec
       val bs = for {
         _ <- GCStorageStream
           .putObject(bucket, fileName, Source.single(content), ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
         bs <- GCStorageStream
           .download(bucket, fileName)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
           .flatMap(
             _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
@@ -186,6 +216,7 @@ trait GCStorageStreamIntegrationSpec
       val fileName = testFileName("non-existing-file")
       val download = GCStorageStream
         .download(bucket, fileName)
+        .withAttributes(finalAttributes)
         .runWith(Sink.head)
         .futureValue
 
@@ -197,9 +228,11 @@ trait GCStorageStreamIntegrationSpec
       val res = for {
         _ <- GCStorageStream
           .putObject(bucket, fileName, Source.single(ByteString.empty), ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
         res <- GCStorageStream
           .download(bucket, fileName)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
           .flatMap(
             _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
@@ -214,15 +247,20 @@ trait GCStorageStreamIntegrationSpec
             testFileName("fileToDelete"),
             Source.single(ByteString("File content")),
             ContentTypes.`text/plain(UTF-8)`)
+          .withAttributes(finalAttributes)
           .runWith(Sink.head)
-        result <- GCStorageStream.deleteObjectSource(bucket, testFileName("fileToDelete")).runWith(Sink.head)
+        result <- GCStorageStream.deleteObjectSource(bucket, testFileName("fileToDelete"))
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
       } yield result
       result.futureValue shouldBe true
     }
 
     "delete an unexisting file should not give an error" in {
       val result =
-        GCStorageStream.deleteObjectSource(bucket, testFileName("non-existing-file-to-delete")).runWith(Sink.head)
+        GCStorageStream.deleteObjectSource(bucket, testFileName("non-existing-file-to-delete"))
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
       result.futureValue shouldBe false
     }
 
@@ -238,6 +276,7 @@ trait GCStorageStreamIntegrationSpec
           Iterator.fill[ByteString](10) {
             ByteString(Random.alphanumeric.take(1234567).map(c => c.toByte).toArray)
           })
+        .withAttributes(finalAttributes)
         .runWith(sink)
 
       val so = res.futureValue
@@ -257,19 +296,28 @@ trait GCStorageStreamIntegrationSpec
           Iterator.fill[ByteString](10) {
             ByteString(Random.alphanumeric.take(1234567).map(c => c.toByte).toArray)
           })
+        .withAttributes(finalAttributes)
         .runWith(sink)
 
       val res = for {
         _ <- uploadResult
-        res <- GCStorageStream.rewrite(bucket, fileName, rewriteBucket, fileName).run()
+        res <- GCStorageStream.rewrite(bucket, fileName, rewriteBucket, fileName)
+          .withAttributes(finalAttributes)
+          .run()
       } yield res
 
       res.futureValue.name shouldBe fileName
       res.futureValue.bucket shouldBe rewriteBucket
-      GCStorageStream.getObject(rewriteBucket, fileName).runWith(Sink.head).futureValue.isDefined shouldBe true
+      GCStorageStream.getObject(rewriteBucket, fileName)
+        .withAttributes(finalAttributes)
+        .runWith(Sink.head).futureValue.isDefined shouldBe true
 
-      GCStorageStream.deleteObjectSource(bucket, fileName).runWith(Sink.head).futureValue
-      GCStorageStream.deleteObjectSource(rewriteBucket, fileName).runWith(Sink.head).futureValue
+      GCStorageStream.deleteObjectSource(bucket, fileName)
+        .withAttributes(finalAttributes)
+        .runWith(Sink.head).futureValue
+      GCStorageStream.deleteObjectSource(rewriteBucket, fileName)
+        .withAttributes(finalAttributes)
+        .runWith(Sink.head).futureValue
     }
   }
 }
