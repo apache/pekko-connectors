@@ -27,18 +27,12 @@ import scala.concurrent.{ ExecutionContext, Future }
 @InternalApi
 private[connectors] object NoCredentials {
 
-  def apply(c: Config): NoCredentials = NoCredentials(c.getString("project-id"), c.getString("token"))
+  def apply(c: Config): NoCredentials = NoCredentials(c.getString("project-id"))
 
 }
 
 @InternalApi
-private[connectors] final case class NoCredentials(projectId: String, token: String) extends Credentials {
-
-  private val futureToken = Future.successful(OAuth2BearerToken(token))
-
-  override def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[OAuth2BearerToken] =
-    futureToken
-
+private[connectors] final case class NoCredentials(projectId: String) extends Credentials {
   override def asGoogle(implicit ec: ExecutionContext, settings: RequestSettings): GoogleCredentials =
     new GoogleCredentials {
       override def getAuthenticationType: String = "<none>"

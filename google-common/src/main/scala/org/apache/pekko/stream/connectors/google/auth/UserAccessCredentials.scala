@@ -69,7 +69,7 @@ private final class UserAccessCredentials(clientId: String,
     clientSecret: String,
     refreshToken: String,
     projectId: String)(
-    implicit mat: Materializer) extends OAuth2Credentials(projectId) {
+    implicit mat: Materializer) extends OAuth2Credentials(projectId) with RetrievableCredentials {
 
   override protected def getAccessToken()(implicit mat: Materializer,
       settings: RequestSettings,
