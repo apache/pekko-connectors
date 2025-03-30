@@ -52,7 +52,8 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
   /**
    * Sends a single [[HttpRequest]] and returns the raw [[HttpResponse]].
    */
-  def singleRawRequest(request: HttpRequest)(implicit settings: RequestSettings): Future[HttpResponse] = {
+  def singleRawRequest(request: HttpRequest)(implicit settings: RequestSettings, googleSettings: GoogleSettings)
+      : Future[HttpResponse] = {
     val requestWithStandardParams = addStandardQuery(request)
     settings.forwardProxy.fold(http.singleRequest(requestWithStandardParams)) { proxy =>
       http.singleRequest(requestWithStandardParams, proxy.connectionContext, proxy.poolSettings)
@@ -65,6 +66,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
    */
   def singleRequest[T](request: HttpRequest)(
       implicit settings: RequestSettings,
+      googleSettings: GoogleSettings,
       um: FromResponseUnmarshaller[T]): Future[T] = Retry(settings.retrySettings) {
     singleRawRequest(request).flatMap(Unmarshal(_).to[T])(ExecutionContexts.parasitic)
   }
