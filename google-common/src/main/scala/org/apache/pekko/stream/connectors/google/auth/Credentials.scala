@@ -96,6 +96,11 @@ object Credentials {
 
 }
 
+@DoNotInherit
+private[google] trait RetrievableCredentials {
+  private[google] def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[HttpCredentials]
+}
+
 /**
  * Credentials for accessing Google APIs
  */
@@ -103,8 +108,6 @@ object Credentials {
 abstract class Credentials private[auth] () {
 
   private[google] def projectId: String
-
-  private[google] def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[HttpCredentials]
 
   /**
    * Wraps these credentials as a [[com.google.auth.Credentials]] for interop with Google's Java client libraries.

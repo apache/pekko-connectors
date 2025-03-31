@@ -63,7 +63,7 @@ private final class ServiceAccountCredentials(projectId: String,
     clientEmail: String,
     privateKey: String,
     scopes: Set[String])(implicit mat: Materializer)
-    extends OAuth2Credentials(projectId) {
+    extends OAuth2Credentials(projectId) with RetrievableCredentials {
 
   override protected def getAccessToken()(implicit mat: Materializer,
       settings: RequestSettings,
