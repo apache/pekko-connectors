@@ -101,7 +101,8 @@ import scala.concurrent.{ Future, Promise }
   val out: Outlet[Datagram] = Outlet("UdpBindFlow.in")
 
   val shape: FlowShape[Datagram, Datagram] = FlowShape.of(in, out)
-  override def createLogicAndMaterializedValue(inheritedAttributes: Attributes): (UdpBindLogic, Future[InetSocketAddress]) = {
+  override def createLogicAndMaterializedValue(
+      inheritedAttributes: Attributes): (UdpBindLogic, Future[InetSocketAddress]) = {
     val boundPromise = Promise[InetSocketAddress]()
     (new UdpBindLogic(localAddress, options, boundPromise)(shape), boundPromise.future)
   }
