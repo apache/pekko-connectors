@@ -455,7 +455,7 @@ object StorageObject {
     bucket,
     generation,
     contentType.asInstanceOf[ContentType],
-    contentType.asInstanceOf[Option[ContentType]],
+    Option(contentType).map(_.asInstanceOf[ContentType]),
     size,
     etag,
     md5Hash,
