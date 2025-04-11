@@ -6,6 +6,8 @@ MQTT stands for MQ Telemetry Transport. It is a publish/subscribe, extremely sim
 
 Further information on [mqtt.org](https://mqtt.org/).
 
+> Note: This connector supports only version 5.0 of the MQTT protocol; for versions 3.1 and 3.1.1, see @ref[mqtt](mqtt.md).
+
 @@@
 
 @@@ note { title="Streaming Differences" }
