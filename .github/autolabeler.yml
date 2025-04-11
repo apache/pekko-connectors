@@ -37,6 +37,7 @@ dependency-change: "/project/Dependencies.scala"
 'p:kudu': ["/kudu"]
 'p:mongodb': ["/mongodb"]
 'p:mqtt': ["/mqtt"]
+'p:mqttv5': ["/mqttv5"]
 'p:mqtt-streaming': ["/mqtt-streaming", "/mqtt-streaming-bench"]
 'p:orientdb': ["/orientdb"]
 'p:pravega': ["/pravega"]
