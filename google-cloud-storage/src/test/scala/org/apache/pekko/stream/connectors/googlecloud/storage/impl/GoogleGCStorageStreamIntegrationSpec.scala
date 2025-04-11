@@ -48,7 +48,7 @@ class GoogleGCStorageStreamIntegrationSpec extends GCStorageStreamIntegrationSpe
   override def settings: GoogleSettings = GoogleSettings()
   override def gcsSettings: GCSSettings = GCSSettings()
 
-  override def bucket = "connectors"
+  override def bucket = "pekko-connectors"
   override def rewriteBucket = "pekko-connectors-rewrite"
   override def projectId = settings.projectId
 }
