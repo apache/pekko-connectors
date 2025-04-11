@@ -45,6 +45,7 @@ The [Apache Pekko Connectors project](https://pekko.apache.org/docs/pekko-connec
 * [JMS](jms/index.md)
 * [MongoDB](mongodb.md)
 * [MQTT](mqtt.md)
+* [MQTTv5](mqttv5.md)
 * [MQTT Streaming](mqtt-streaming.md)
 * [Opensearch](opensearch.md)
 * [OrientDB](orientdb.md)
