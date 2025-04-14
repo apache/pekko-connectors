@@ -27,8 +27,8 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
-  val AwsSdk2Version = "2.31.16"
   val NettyVersion = "4.2.0.Final"
+  val AwsSdk2Version = "2.31.21"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
   val PekkoHttpVersion = PekkoHttpDependency.version
@@ -79,7 +79,7 @@ object Dependencies {
 
   // wiremock has very outdated, CVE vulnerable dependencies
   private val jettyVersion = "9.4.57.v20241219"
-  private val guavaVersion = "33.4.6-jre"
+  private val guavaVersion = "33.4.7-jre"
   private val wireMockDependencies = Seq(
     "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
     "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
@@ -97,7 +97,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
-    "commons-io" % "commons-io" % "2.18.0" % Test,
+    "commons-io" % "commons-io" % "2.19.0" % Test,
     "commons-fileupload" % "commons-fileupload" % "1.5" % Test,
     "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
 
