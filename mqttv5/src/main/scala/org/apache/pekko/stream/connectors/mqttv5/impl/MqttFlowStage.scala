@@ -146,7 +146,8 @@ abstract class MqttFlowStageLogic[I](
           /* userContext */ null,
           /* callback */ new MqttActionListener {
             def onSuccess(token: IMqttToken): Unit = {
-              token.getReasonCodes.toList.filter(_ >= MqttReturnCode.RETURN_CODE_UNSPECIFIED_ERROR).distinct match {
+              Option(token.getReasonCodes).toList.flatMap(_.toList).filter(
+                _ >= MqttReturnCode.RETURN_CODE_UNSPECIFIED_ERROR).distinct match {
                 case Nil =>
                   onSubscribe.invoke(Success(token))
 
@@ -287,7 +288,7 @@ abstract class MqttFlowStageLogic[I](
               "Authentication for client [{}] completed successfully with [codes={},reason={}]",
               connectionSettings.clientId,
               reasonCode,
-              properties.getReasonString
+              Option(properties).flatMap(props => Option(props.getReasonString)).orNull
             )
 
           case AuthSettings.Enhanced(_, _, authPacketHandler) if reasonCode == 0x18 =>
@@ -296,7 +297,7 @@ abstract class MqttFlowStageLogic[I](
               "Authentication for client [{}] continuing with [codes={},reason={}]",
               connectionSettings.clientId,
               reasonCode,
-              properties.getReasonString
+              Option(properties).flatMap(props => Option(props.getReasonString)).orNull
             )
 
             val (responseCode, responseProperties) = authPacketHandler(reasonCode, properties)
@@ -318,16 +319,16 @@ abstract class MqttFlowStageLogic[I](
                     log.debug(
                       "Authentication call for client [{}] completed with [codes={},reason={}]",
                       connectionSettings.clientId,
-                      token.getReasonCodes.distinct.sorted.mkString(";"),
-                      token.getResponseProperties.getReasonString
+                      Option(token.getReasonCodes).toList.flatMap(_.toList).distinct.sorted.mkString(";"),
+                      Option(token.getResponseProperties).flatMap(props => Option(props.getReasonString)).orNull
                     )
 
                   override def onFailure(token: IMqttToken, ex: Throwable): Unit =
                     log.debug(
                       "Authentication call for client [{}] failed with [codes={},reason={}]: [{}]",
                       connectionSettings.clientId,
-                      token.getReasonCodes.distinct.sorted.mkString(";"),
-                      token.getResponseProperties.getReasonString,
+                      Option(token.getReasonCodes).toList.flatMap(_.toList).distinct.sorted.mkString(";"),
+                      Option(token.getResponseProperties).flatMap(props => Option(props.getReasonString)).orNull,
                       s"${ex.getClass.getSimpleName} - ${ex.getMessage}"
                     )
                 }
@@ -343,7 +344,7 @@ abstract class MqttFlowStageLogic[I](
               connectionSettings.clientId,
               other.getClass.getSimpleName.replaceAll("[^a-zA-Z0-9]", "").toLowerCase,
               reasonCode,
-              properties.getReasonString
+              Option(properties).flatMap(props => Option(props.getReasonString)).orNull
             )
         }
       }
@@ -409,7 +410,8 @@ abstract class MqttFlowStageLogic[I](
       msg,
       /* callback */ new MqttActionListener {
         def onSuccess(token: IMqttToken): Unit = {
-          token.getReasonCodes.toList.filter(_ >= MqttReturnCode.RETURN_CODE_UNSPECIFIED_ERROR).distinct match {
+          Option(token.getReasonCodes).toList.flatMap(_.toList).filter(
+            _ >= MqttReturnCode.RETURN_CODE_UNSPECIFIED_ERROR).distinct match {
             case Nil =>
               onPublished.invoke(Success(token))
 
