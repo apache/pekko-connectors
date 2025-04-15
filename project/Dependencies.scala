@@ -418,6 +418,10 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.eclipse.paho" % "org.eclipse.paho.client.mqttv3" % "1.2.5"))
 
+  val MqttV5 = Seq(
+    libraryDependencies ++= Seq(
+      "org.eclipse.paho" % "org.eclipse.paho.mqttv5.client" % "1.2.5"))
+
   val MqttStreaming = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion,
