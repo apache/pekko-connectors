@@ -58,7 +58,6 @@ class PaginatedRequestSpec
           service("example.com")
             .get("/")
             .queryParam("prettyPrint", "false")
-            .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(success("{}", "application/json"))))
 
       val result = PaginatedRequest[JsValue](HttpRequest(GET, "https://example.com")).runWith(Sink.head)
@@ -74,13 +73,11 @@ class PaginatedRequestSpec
           service("example.com")
             .get("/")
             .queryParam("prettyPrint", "false")
-            .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(
               success("""{ "pageToken": "nextPage" }""", "application/json"))
             .get("/")
             .queryParam("pageToken", "nextPage")
             .queryParam("prettyPrint", "false")
-            .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(success("{}", "application/json"))))
 
       val result = PaginatedRequest[JsValue](HttpRequest(GET, "https://example.com")).runWith(Sink.seq)
@@ -96,13 +93,11 @@ class PaginatedRequestSpec
           service("example.com")
             .get("/")
             .queryParam("prettyPrint", "false")
-            .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(
               success("""{ "pageToken": "===" }""", "application/json"))
             .get("/")
             .queryParam("pageToken", "===")
             .queryParam("prettyPrint", "false")
-            .header("Authorization", "Bearer yyyy.c.an-access-token")
             .willReturn(success("{}", "application/json"))))
 
       val result = PaginatedRequest[JsValue](HttpRequest(GET, "https://example.com")).runWith(Sink.seq)
