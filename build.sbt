@@ -50,6 +50,7 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   kudu,
   mongodb,
   mqtt,
+  mqttv5,
   mqttStreaming,
   orientdb,
   pravega,
@@ -304,6 +305,8 @@ lazy val mongodb = pekkoConnectorProject("mongodb", "mongodb", Dependencies.Mong
 
 lazy val mqtt = pekkoConnectorProject("mqtt", "mqtt", Dependencies.Mqtt)
 
+lazy val mqttv5 = pekkoConnectorProject("mqttv5", "mqttv5", Dependencies.MqttV5)
+
 lazy val mqttStreaming =
   pekkoConnectorProject("mqtt-streaming", "mqttStreaming", Dependencies.MqttStreaming,
     MetaInfLicenseNoticeCopy.mqttStreamingSettings)
@@ -436,6 +439,7 @@ lazy val docs = project
       "scaladoc.spray.json.base_url" -> s"https://javadoc.io/doc/io.spray/spray-json_${scalaBinaryVersion.value}/latest/",
       // Eclipse Paho client for MQTT
       "javadoc.org.eclipse.paho.client.mqttv3.base_url" -> "https://www.eclipse.org/paho/files/javadoc/",
+      "javadoc.org.eclipse.paho.mqttv5.client.base_url" -> "https://www.eclipse.org/paho/files/javadoc/",
       "javadoc.org.bson.codecs.configuration.base_url" -> "https://mongodb.github.io/mongo-java-driver/3.7/javadoc/",
       "scaladoc.scala.base_url" -> s"https://www.scala-lang.org/api/${scalaBinaryVersion.value}.x/",
       "scaladoc.org.apache.pekko.stream.connectors.base_url" -> s"/${(Preprocess / siteSubdirName).value}/",
@@ -476,7 +480,7 @@ lazy val billOfMaterials = Project("bill-of-materials", file("bill-of-materials"
     description := s"${description.value} (depending on Scala ${CrossVersion.binaryScalaVersion(scalaVersion.value)})")
 
 val mimaCompareVersion = "1.0.2"
-val noMimaChecks = Set("couchbase3", "jakartams", "aws.api.pekko.http")
+val noMimaChecks = Set("couchbase3", "jakartams", "aws.api.pekko.http", "mqttv5")
 
 def pekkoConnectorProject(projectId: String,
     moduleName: String,

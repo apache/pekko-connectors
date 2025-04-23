@@ -17,7 +17,34 @@ topic flow-test/topic-ack
 topic typed-flow-spec/topic1
 topic untyped-flow-spec/topic1
 
+topic v5/source-spec/topic1
+topic v5/source-spec/topic2
+topic v5/coffee/level
+topic v5/source-spec/will
+topic v5/source-spec/manualacks
+topic v5/source-spec/pendingacks
+topic v5/sink-spec/topic1
+topic v5/sink-spec/topic2
+topic v5/sink-spec/topic3
+topic v5/sink-spec/topic4
+topic v5/source-test/topic1
+topic v5/source-test/topic2
+topic v5/source-test/will
+topic v5/source-test/manualacks
+topic v5/source-test/pendingacks
+topic v5/flow-spec/topic-ack
+topic v5/flow-test/topic-ack
+topic v5/typed-flow-spec/topic1
+topic v5/untyped-flow-spec/topic1
+
 user username1
 topic source-spec/secure-topic1
 topic source-spec/secure-topic2
 topic sink-spec/secure-topic1
+
+topic v5/source-spec/secure-topic1
+topic v5/source-spec/secure-topic2
+topic v5/source-spec/secure-topic3
+topic v5/sink-spec/secure-topic1
+topic v5/sink-spec/secure-topic2
+topic v5/sink-spec/secure-topic3
