@@ -25,7 +25,7 @@ import io.specto.hoverfly.junit.core.{ Hoverfly, HoverflyConfig, HoverflyMode, S
 import io.specto.hoverfly.junit.dsl.HoverflyDsl.{ response, service }
 import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.equalsToJson
 import spray.json.DefaultJsonProtocol.{ mapFormat, StringJsonFormat }
-import spray.json.enrichAny
+import spray.json.{ enrichAny, JsObject }
 
 import scala.annotation.nowarn
 import scala.util.Random
@@ -639,7 +639,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
     dsl(
       metadata
         .fold(noMeta) { m =>
-          noMeta.body(equalsToJson(m.toJson.toString))
+          noMeta.body(equalsToJson(JsObject(("metadata", m.toJson)).toString))
         }
         .willReturn(
           response()
