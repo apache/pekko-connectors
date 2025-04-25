@@ -28,6 +28,10 @@ jobs:
     if: github.repository == 'apache/pekko-connectors'
     name: Publish
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: [ 'main', '1.0.x', '1.1.x' ]
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
@@ -36,6 +40,7 @@ jobs:
         with:
           fetch-tags: true
           fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || matrix.branch }}
 
       - name: Setup Java 8
         uses: actions/setup-java@v4
