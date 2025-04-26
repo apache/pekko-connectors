@@ -154,7 +154,8 @@ import scala.concurrent.{ ExecutionContext, Future }
           .withQuery(("uploadType" -> "resumable") +: ("name" -> objectName) +: Query.Empty)
         val headers = List(`X-Upload-Content-Type`(contentType))
         val entity =
-          metadata.fold(HttpEntity.Empty)(m => HttpEntity(ContentTypes.`application/json`, m.toJson.toString))
+          metadata.fold(HttpEntity.Empty)(m =>
+            HttpEntity(ContentTypes.`application/json`, JsObject(("metadata", m.toJson)).toString))
         val request = HttpRequest(POST, uri, headers, entity)
 
         implicit val um: Unmarshaller[HttpResponse, StorageObject] = Unmarshaller.withMaterializer {

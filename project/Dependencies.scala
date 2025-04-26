@@ -27,8 +27,9 @@ object Dependencies {
   val InfluxDBJavaVersion = "2.23"
 
   val AvroVersion = "1.11.4"
+
+  val AwsSdk2Version = "2.31.25"
   val NettyVersion = "4.2.0.Final"
-  val AwsSdk2Version = "2.31.21"
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
   val PekkoHttpVersion = PekkoHttpDependency.version
@@ -79,7 +80,7 @@ object Dependencies {
 
   // wiremock has very outdated, CVE vulnerable dependencies
   private val jettyVersion = "9.4.57.v20241219"
-  private val guavaVersion = "33.4.7-jre"
+  private val guavaVersion = "33.4.8-jre"
   private val wireMockDependencies = Seq(
     "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
     "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
@@ -418,6 +419,10 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.eclipse.paho" % "org.eclipse.paho.client.mqttv3" % "1.2.5"))
 
+  val MqttV5 = Seq(
+    libraryDependencies ++= Seq(
+      "org.eclipse.paho" % "org.eclipse.paho.mqttv5.client" % "1.2.5"))
+
   val MqttStreaming = Seq(
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-actor-typed" % PekkoVersion,
@@ -427,9 +432,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.38")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.39")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.38"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.39"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"

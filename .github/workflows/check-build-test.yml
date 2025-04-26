@@ -14,6 +14,7 @@ on:
     branches:
       - main
       - 1.0.x
+      - 1.1.x
     tags-ignore:
       - v*
 
@@ -129,6 +130,7 @@ jobs:
           - { connector: kudu,                         pre_cmd: 'docker compose up -d kudu-master kudu-tserver' }
           - { connector: mongodb,                      pre_cmd: 'docker compose up -d mongo' }
           - { connector: mqtt,                         pre_cmd: 'docker compose up -d mqtt' }
+          - { connector: mqttv5,                       pre_cmd: 'docker compose up -d mqtt' }
           - { connector: mqtt-streaming,               pre_cmd: 'docker compose up -d mqtt' }
           - { connector: orientdb,                     pre_cmd: 'docker compose up -d orientdb' }
           - { connector: pravega,                      pre_cmd: 'docker compose up -d pravega'}
