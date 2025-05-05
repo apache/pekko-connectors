@@ -45,14 +45,33 @@ private[google] final case class Last[+T](value: T) extends MaybeLast[T] {
 @InternalApi
 private[google] object AnnotateLast {
 
+  private final def accumulateState[T](maybePreviousElement: Option[T], elem: T) =
+    maybePreviousElement match {
+      case Some(previousElem) => (Some(elem), Some(NotLast(previousElem)))
+      case None               => (Some(elem), None)
+    }
+
   def apply[T]: Flow[T, MaybeLast[T], NotUsed] =
     Flow[T]
-      .statefulMap(() => Option.empty[T])((maybePreviousElement, elem) => {
-          maybePreviousElement match {
-            case Some(previousElem) => (Some(elem), Some(NotLast(previousElem)))
-            case None               => (Some(elem), None)
-          }
-        }, _.map(elem => Some(Last(elem))))
+      .statefulMap(() => Option.empty[T])(
+        accumulateState,
+        _.map(elem => Some(Last(elem)))
+      ).collect {
+        case Some(elem) => elem
+      }
+
+  def apply[T](zero: T): Flow[T, MaybeLast[T], NotUsed] =
+    Flow[T]
+      .statefulMap(() => Option.empty[T])(
+        accumulateState,
+        {
+          case Some(elem) =>
+            Some(Some(Last(elem)))
+          case None =>
+            // This case gets hit on an empty stream, we insert a special sentinel value which can
+            // be detected later.
+            Some(Some(Last(zero)))
+        })
       .collect {
         case Some(elem) => elem
       }
