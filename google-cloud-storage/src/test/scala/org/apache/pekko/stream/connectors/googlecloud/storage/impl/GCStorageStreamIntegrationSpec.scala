@@ -226,7 +226,7 @@ trait GCStorageStreamIntegrationSpec
     "get a single empty ByteString when downloading a non existing file" in {
       val fileName = testFileName("non-existing-file")
       val res = for {
-        _ <- GCStorageStream
+        storageObject <- GCStorageStream
           .putObject(bucket, fileName, Source.single(ByteString.empty), ContentTypes.`text/plain(UTF-8)`)
           .withAttributes(finalAttributes)
           .runWith(Sink.head)
@@ -236,8 +236,30 @@ trait GCStorageStreamIntegrationSpec
           .runWith(Sink.head)
           .flatMap(
             _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
-      } yield res
-      res.futureValue shouldBe ByteString.empty
+      } yield (storageObject, res)
+      val (storageObjet, bytes) = res.futureValue
+      bytes shouldBe ByteString.empty
+      storageObjet.size shouldBe 0
+      storageObjet.md5Hash shouldBe "1B2M2Y8AsgTpgAmY7PhCfg=="
+    }
+
+    "get a single empty ByteString using resumableUpload when downloading a non existing file" in {
+      val fileName = testFileName("non-existing-file")
+      val res = for {
+        storageObject <- Source.single(ByteString.empty)
+          .withAttributes(finalAttributes)
+          .runWith(GCStorageStream.resumableUpload(bucket, fileName, ContentTypes.`text/plain(UTF-8)`))
+        res <- GCStorageStream
+          .download(bucket, fileName)
+          .withAttributes(finalAttributes)
+          .runWith(Sink.head)
+          .flatMap(
+            _.map(_.runWith(Sink.fold(ByteString.empty) { _ ++ _ })).getOrElse(Future.successful(ByteString.empty)))
+      } yield (storageObject, res)
+      val (storageObjet, bytes) = res.futureValue
+      bytes shouldBe ByteString.empty
+      storageObjet.size shouldBe 0
+      storageObjet.md5Hash shouldBe "1B2M2Y8AsgTpgAmY7PhCfg=="
     }
 
     "delete an existing file" in {
