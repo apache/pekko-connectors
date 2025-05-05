@@ -17,11 +17,12 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
+import pekko.http.scaladsl.model.ContentRange.Unsatisfiable
 import pekko.http.scaladsl.model.HttpMethods.{ POST, PUT }
 import pekko.http.scaladsl.model.StatusCodes.{ Created, OK, PermanentRedirect }
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers.ByteRange.Slice
-import pekko.http.scaladsl.model.headers.{ `Content-Range`, Location, Range, RawHeader }
+import pekko.http.scaladsl.model.headers.{ `Content-Range`, Location, Range, RangeUnits, RawHeader }
 import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal, Unmarshaller }
 import pekko.stream.Materializer
 import pekko.stream.connectors.google.http.GoogleHttp
@@ -65,7 +66,7 @@ private[connectors] object ResumableUpload {
           .statefulMap(() => 0L)((cumulativeLength, bytes) =>
               (cumulativeLength + bytes.length, Chunk(bytes, cumulativeLength)),
             _ => None)
-          .via(AnnotateLast[Chunk])
+          .via(AnnotateLast[Chunk](Chunk(ByteString.empty, 0)))
           .map(chunk => Future.successful(Right(chunk)))
 
         val upload = Flow
@@ -136,8 +137,13 @@ private[connectors] object ResumableUpload {
       Flow[T].map(t => Success(Some(t))),
       Flow[MaybeLast[Chunk]].map {
         case maybeLast @ MaybeLast(Chunk(bytes, position)) =>
-          val totalLength = if (maybeLast.isLast) Some(position + bytes.length) else None
-          val header = `Content-Range`(ContentRange(position, position + bytes.length - 1, totalLength))
+          val header = if (bytes.isEmpty && position == 0) {
+            // This branch gets hit when detecting a special sentinel value that gets inserted in the case of an empty
+            // ByteString upload.
+            `Content-Range`(RangeUnits.Bytes, Unsatisfiable(0))
+          } else
+            `Content-Range`(ContentRange(position, position + bytes.length - 1,
+              if (maybeLast.isLast) Some(position + bytes.length) else None))
           request.addHeader(header).withEntity(bytes)
       }.via(pool)).map(_.merge).mapMaterializedValue(_ => NotUsed)
   }
