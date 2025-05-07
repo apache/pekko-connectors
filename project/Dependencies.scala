@@ -66,7 +66,7 @@ object Dependencies {
 
   val GoogleAuthVersion = "1.33.1"
   val JwtScalaVersion = "10.0.4"
-  val Log4jVersion = "2.23.1"
+  val Log4jVersion = "2.24.3"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
