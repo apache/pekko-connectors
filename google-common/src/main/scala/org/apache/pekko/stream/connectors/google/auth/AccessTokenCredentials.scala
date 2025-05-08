@@ -25,19 +25,25 @@ import java.util
 import scala.concurrent.{ ExecutionContext, Future }
 
 @InternalApi
-private[connectors] object NoCredentials {
-
-  def apply(c: Config): NoCredentials = NoCredentials(c.getString("project-id"))
-
+private[auth] object AccessTokenCredentials {
+  def apply(c: Config): AccessTokenCredentials = AccessTokenCredentials(c.getString("project-id"), c.getString("token"))
 }
 
 @InternalApi
-private[connectors] final case class NoCredentials(projectId: String) extends Credentials {
+private[auth] final case class AccessTokenCredentials(projectId: String, accessToken: String) extends Credentials
+    with RetrievableCredentials {
+
+  private val futureToken = Future.successful(OAuth2BearerToken(accessToken))
+
+  override def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[OAuth2BearerToken] =
+    futureToken
+
   override def asGoogle(implicit ec: ExecutionContext, settings: RequestSettings): GoogleCredentials =
     new GoogleCredentials {
-      override def getAuthenticationType: String = "<none>"
-      override def getRequestMetadata(uri: URI): util.Map[String, util.List[String]] = util.Collections.emptyMap()
-      override def hasRequestMetadata: Boolean = false
+      override def getAuthenticationType: String = "OAuth2"
+      override def getRequestMetadata(uri: URI): util.Map[String, util.List[String]] =
+        util.Collections.singletonMap("Authorization", util.Collections.singletonList(accessToken))
+      override def hasRequestMetadata: Boolean = true
       override def hasRequestMetadataOnly: Boolean = true
       override def refresh(): Unit = ()
     }
