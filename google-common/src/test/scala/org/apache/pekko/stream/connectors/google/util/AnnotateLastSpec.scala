@@ -50,6 +50,18 @@ class AnnotateLastSpec
       val probe = Source.empty[Nothing].via(AnnotateLast[Nothing]).runWith(TestSink.probe)
       probe.expectSubscriptionAndComplete()
     }
+
+    "return zero value when stream is empty using zero apply" in {
+      val probe = Source.empty[Null].via(AnnotateLast[Null](null)).runWith(TestSink.probe)
+      probe.requestNext(Last(null))
+      probe.expectComplete()
+    }
+
+    "don't return zero value if stream is non empty using zero apply" in {
+      val probe = Source.single(1).via(AnnotateLast[Int](0)).runWith(TestSink.probe)
+      probe.requestNext(Last(1))
+      probe.expectComplete()
+    }
   }
 
 }
