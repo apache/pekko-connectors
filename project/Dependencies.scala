@@ -18,7 +18,7 @@ object Dependencies {
 
   val Scala213 = "2.13.16" // update even in link-validator.conf
   val Scala212 = "2.12.20"
-  val Scala3 = "3.3.5"
+  val Scala3 = "3.3.6"
   val ScalaVersions = Seq(Scala213, Scala212, Scala3)
 
   val PekkoVersion = PekkoCoreDependency.version
@@ -28,8 +28,10 @@ object Dependencies {
 
   val AvroVersion = "1.11.4"
 
-  val AwsSdk2Version = "2.31.35"
+  val AwsSdk2Version = "2.31.40"
+  
   val NettyVersion = "4.2.1.Final"
+
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
   val PekkoHttpVersion = PekkoHttpDependency.version
@@ -279,7 +281,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.13.0" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.13.1" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
@@ -303,7 +305,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.139.1" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.139.3" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
@@ -397,7 +399,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.0.2").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.0.3").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
@@ -413,7 +415,7 @@ object Dependencies {
   val MongoDb = Seq(
     crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "5.4.0"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "5.5.0"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
