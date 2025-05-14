@@ -18,8 +18,9 @@ import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Scheduler 
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.Http.HostConnectionPool
-import pekko.http.scaladsl.model.headers.Authorization
+import pekko.http.scaladsl.model.headers.{ Authorization, Connection }
 import pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
+import pekko.http.scaladsl.settings.ConnectionPoolSettings
 import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal }
 import pekko.http.scaladsl.{ Http, HttpExt }
 import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, RequestSettings, RetrySettings }
@@ -27,6 +28,7 @@ import pekko.stream.connectors.google.util.Retry
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
 
 import scala.concurrent.{ ExecutionContextExecutor, Future }
+import scala.concurrent.duration.Duration
 import scala.util.{ Failure, Success, Try }
 
 @InternalApi
@@ -48,15 +50,24 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
   private implicit def system: ExtendedActorSystem = http.system
   private implicit def ec: ExecutionContextExecutor = system.dispatcher
   private implicit def scheduler: Scheduler = system.scheduler
+  private def defaultConnectionPoolSettingsWithInfKeepAlive =
+    ConnectionPoolSettings(system).withKeepAliveTimeout(Duration.Inf)
+
+  private def setKeepAlive(request: HttpRequest): HttpRequest =
+    if (request.headers.exists { header => header.is("connection") || header.is("keep-alive") }) {
+      request.removeHeader("connection").removeHeader("keep-alive").addHeader(Connection("Keep-Alive"))
+    } else request.addHeader(Connection("Keep-Alive"))
 
   /**
    * Sends a single [[HttpRequest]] and returns the raw [[HttpResponse]].
    */
   def singleRawRequest(request: HttpRequest)(implicit settings: RequestSettings, googleSettings: GoogleSettings)
       : Future[HttpResponse] = {
-    val requestWithStandardParams = addStandardQuery(request)
-    settings.forwardProxy.fold(http.singleRequest(requestWithStandardParams)) { proxy =>
-      http.singleRequest(requestWithStandardParams, proxy.connectionContext, proxy.poolSettings)
+    val requestWithStandardParams = addStandardQuery(setKeepAlive(request))
+    settings.forwardProxy.fold(http.singleRequest(requestWithStandardParams, http.defaultClientHttpsContext,
+      defaultConnectionPoolSettingsWithInfKeepAlive)) { proxy =>
+      http.singleRequest(requestWithStandardParams, proxy.connectionContext,
+        proxy.poolSettings.withKeepAliveTimeout(Duration.Inf))
     }
   }
 
@@ -123,7 +134,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
           else
             FlowWithContext[HttpRequest, Ctx]
 
-        val requestFlow = settings.requestSettings.forwardProxy match {
+        val requestFlow = (settings.requestSettings.forwardProxy match {
           case None if !https =>
             http.cachedHostConnectionPool[Ctx](host, p)
           case Some(proxy) if !https =>
@@ -133,6 +144,8 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
           case Some(proxy) if https =>
             http.cachedHostConnectionPoolHttps[Ctx](host, p, proxy.connectionContext, proxy.poolSettings)
           case _ => throw new RuntimeException(s"illegal proxy settings with https=$https")
+        }).contramap[(HttpRequest, Ctx)] { case (request, context) =>
+          (setKeepAlive(request), context)
         }
 
         val unmarshalFlow = Flow[(Try[HttpResponse], Ctx)].mapAsyncUnordered(parallelism) {
