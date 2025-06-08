@@ -101,7 +101,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
     "commons-io" % "commons-io" % "2.19.0" % Test,
-    "commons-fileupload" % "commons-fileupload" % "1.5" % Test,
+    "commons-fileupload" % "commons-fileupload" % "1.6.0" % Test,
     "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
 
   val CommonSettings = Seq(
