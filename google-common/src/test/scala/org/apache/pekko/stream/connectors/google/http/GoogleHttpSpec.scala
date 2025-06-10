@@ -25,13 +25,13 @@ import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers.{ Authorization, OAuth2BearerToken }
 import pekko.http.scaladsl.settings.ConnectionPoolSettings
 import pekko.http.scaladsl.{ HttpExt, HttpsConnectionContext }
-import pekko.stream.connectors.google.auth.{ Credentials, GoogleOAuth2Exception }
+import pekko.stream.connectors.google.auth.{ Credentials, GoogleOAuth2Exception, RetrievableCredentials }
 import pekko.stream.connectors.google.implicits._
 import pekko.stream.connectors.google.{ GoogleHttpException, GoogleSettings, RequestSettings }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import pekko.testkit.TestKit
 import org.mockito.ArgumentMatchers.{ any, anyInt, argThat }
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{ when, withSettings }
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -160,7 +160,8 @@ class GoogleHttpSpec
 
       final class AnotherException extends RuntimeException
 
-      val credentials = mock[Credentials]
+      val credentials =
+        mock[Credentials with RetrievableCredentials](withSettings().extraInterfaces(classOf[RetrievableCredentials]))
       when(credentials.get()(any[ExecutionContext], any[RequestSettings])).thenReturn(
         Future.failed(GoogleOAuth2Exception(ErrorInfo())),
         Future.failed(new AnotherException))
