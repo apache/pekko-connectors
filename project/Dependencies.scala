@@ -136,22 +136,22 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "http-client-spi" % AwsSdk2Version,
-      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % "it,test").excludeAll(
+      ("software.amazon.awssdk" % "dynamodb" % AwsSdk2Version % Test).excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % "it,test").excludeAll(
+      ("software.amazon.awssdk" % "kinesis" % AwsSdk2Version % Test).excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % "it,test").excludeAll(
+      ("software.amazon.awssdk" % "sns" % AwsSdk2Version % Test).excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % "it,test").excludeAll(
+      ("software.amazon.awssdk" % "sqs" % AwsSdk2Version % Test).excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % "it,test").excludeAll(
+      ("software.amazon.awssdk" % "s3" % AwsSdk2Version % Test).excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
-      ("software.amazon.awssdk" % "http-client-tests" % AwsSdk2Version % "it,test").excludeAll(
+      ("software.amazon.awssdk" % "http-client-tests" % AwsSdk2Version % Test).excludeAll(
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
       "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
-      "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",
-      "ch.qos.logback" % "logback-classic" % LogbackVersion % "it,test"))
+      "org.scalatest" %% "scalatest" % ScalaTestVersion % Test,
+      "ch.qos.logback" % "logback-classic" % LogbackVersion % Test))
 
   val AwsLambda = Seq(
     libraryDependencies ++= Seq(

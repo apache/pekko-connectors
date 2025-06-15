@@ -133,8 +133,10 @@ lazy val avroparquet =
 
 lazy val awsSpiPekkoHttp =
   pekkoConnectorProject("aws-spi-pekko-http", "aws.api.pekko.http", Dependencies.AwsSpiPekkoHttp)
-    .configs(IntegrationTest)
-    .settings(Defaults.itSettings)
+
+lazy val awsSpiPekkoHttpIntTests =
+  pekkoConnectorProject("aws-spi-pekko-http-int-tests", "aws.api.pekko.http.int.tests", Dependencies.AwsSpiPekkoHttp)
+    .dependsOn(awsSpiPekkoHttp)
 
 lazy val awslambda = pekkoConnectorProject("awslambda", "aws.lambda", Dependencies.AwsLambda)
   .dependsOn(awsSpiPekkoHttp)
