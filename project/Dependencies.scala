@@ -119,7 +119,7 @@ object Dependencies {
       "ch.qos.logback" % "logback-classic" % LogbackVersion,
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
-      "com.novocode" % "junit-interface" % "0.11",
+      "com.github.sbt" % "junit-interface" % "0.13.3",
       "junit" % "junit" % "4.13.2"))
 
   val Mockito = Seq(
