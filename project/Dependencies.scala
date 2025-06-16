@@ -150,6 +150,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
       "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+      "org.junit.vintage" % "junit-vintage-engine" % JupiterKeys.junitVintageVersion.value % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % "it,test",
       "ch.qos.logback" % "logback-classic" % LogbackVersion % "it,test"))
 
