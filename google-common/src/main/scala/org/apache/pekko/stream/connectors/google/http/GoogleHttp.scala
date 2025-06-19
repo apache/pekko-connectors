@@ -23,6 +23,7 @@ import pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
 import pekko.http.scaladsl.unmarshalling.{ FromResponseUnmarshaller, Unmarshal }
 import pekko.http.scaladsl.{ Http, HttpExt }
 import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings, RequestSettings, RetrySettings }
+import pekko.stream.connectors.google.auth.RetrievableCredentials
 import pekko.stream.connectors.google.util.Retry
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
 
@@ -166,10 +167,15 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
 
   private def addAuth(request: HttpRequest)(implicit settings: GoogleSettings): Future[HttpRequest] = {
     implicit val requestSettings: RequestSettings = settings.requestSettings
-    settings.credentials
-      .get()
-      .map { token =>
-        request.addHeader(Authorization(token))
-      }(ExecutionContexts.parasitic)
+    settings.credentials match {
+      case retrievable: RetrievableCredentials =>
+        retrievable
+          .get()
+          .map { token =>
+            request.addHeader(Authorization(token))
+          }(ExecutionContexts.parasitic)
+      case _ =>
+        Future.successful(request)
+    }
   }
 }
