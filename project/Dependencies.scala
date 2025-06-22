@@ -67,9 +67,9 @@ object Dependencies {
   val Couchbase3Version = "3.6.0"
   val CouchbaseVersionForDocs = "2.7"
 
-  val GoogleAuthVersion = "1.37.0"
+  val GoogleAuthVersion = "1.37.1"
   val JwtScalaVersion = "11.0.0"
-  val Log4jVersion = "2.24.3"
+  val Log4jVersion = "2.25.0"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
@@ -250,7 +250,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.24.3" % Test,
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.25.0" % Test,
         "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
         "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
@@ -435,9 +435,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.40")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.41")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.40"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.41"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"
