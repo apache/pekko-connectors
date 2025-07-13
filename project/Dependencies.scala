@@ -215,7 +215,7 @@ object Dependencies {
 
   val File = Seq(
     libraryDependencies ++= Seq(
-      "com.google.jimfs" % "jimfs" % "1.3.0" % Test))
+      "com.google.jimfs" % "jimfs" % "1.3.1" % Test))
 
   val avro4sVersion: Def.Initialize[String] = Def.setting {
     if (Common.isScala3.value) "5.0.9" else "4.1.1"
@@ -461,7 +461,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-xml" % PekkoHttpVersion,
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
-      "com.google.jimfs" % "jimfs" % "1.3.0" % Test,
+      "com.google.jimfs" % "jimfs" % "1.3.1" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++
     wireMockDependencies)
