@@ -411,6 +411,7 @@ object Dependencies {
   val Kudu = Seq(
     libraryDependencies ++= Seq(
       "org.apache.kudu" % "kudu-client" % KuduVersion,
+      "com.stumbleupon" % "async" % "1.4.1",
       "org.apache.logging.log4j" % "log4j-to-slf4j" % Log4jVersion % Test))
 
   val MongoDb = Seq(
