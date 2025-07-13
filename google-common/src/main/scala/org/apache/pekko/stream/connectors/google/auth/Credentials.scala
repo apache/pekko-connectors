@@ -56,17 +56,26 @@ object Credentials {
                 creds
               } catch {
                 case NonFatal(ex3) =>
-                  log.warning("Unable to find Application Default Credentials for Google APIs")
-                  log.warning("Service account: {}", ex1.getMessage)
-                  log.warning("Compute Engine: {}", ex2.getMessage)
-                  log.warning("User access: {}", ex3.getMessage)
-                  parseNone(c) // TODO Once credentials are guaranteed to be managed centrally we can throw an error instead
+                  try {
+                    val creds = parseAccessToken(c)
+                    log.info("Using access token credentials")
+                    creds
+                  } catch {
+                    case NonFatal(ex4) =>
+                      log.warning("Unable to find Application Default Credentials for Google APIs")
+                      log.warning("Service account: {}", ex1.getMessage)
+                      log.warning("Compute Engine: {}", ex2.getMessage)
+                      log.warning("User access: {}", ex3.getMessage)
+                      log.warning("Access token: {}", ex4.getMessage)
+                      parseNone(c) // TODO Once credentials are guaranteed to be managed centrally we can throw an error instead
+                  }
               }
           }
       }
     case "service-account" => parseServiceAccount(c)
     case "compute-engine"  => parseComputeEngine(c)
     case "user-access"     => parseUserAccess(c)
+    case "access-token"    => parseAccessToken(c)
     case "none"            => parseNone(c)
   }
 
@@ -83,6 +92,8 @@ object Credentials {
   private def parseUserAccess(c: Config)(implicit system: ClassicActorSystemProvider) =
     UserAccessCredentials(c.getConfig("user-access"))
 
+  private def parseAccessToken(c: Config) = AccessTokenCredentials(c.getConfig("access-token"))
+
   private def parseNone(c: Config) = NoCredentials(c.getConfig("none"))
 
   private var _cache: Map[Any, Credentials] = ListMap.empty
@@ -96,6 +107,11 @@ object Credentials {
 
 }
 
+@DoNotInherit
+private[google] trait RetrievableCredentials {
+  private[google] def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[HttpCredentials]
+}
+
 /**
  * Credentials for accessing Google APIs
  */
@@ -103,8 +119,6 @@ object Credentials {
 abstract class Credentials private[auth] () {
 
   private[google] def projectId: String
-
-  private[google] def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[HttpCredentials]
 
   /**
    * Wraps these credentials as a [[com.google.auth.Credentials]] for interop with Google's Java client libraries.

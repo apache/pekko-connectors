@@ -16,15 +16,11 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.impl
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
-import pekko.http.scaladsl.{ ConnectionContext, Http }
 import pekko.stream.connectors.googlecloud.pubsub._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
-import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.{ aResponse, urlEqualTo }
-import com.github.tomakehurst.wiremock.common.ConsoleNotifier
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
@@ -34,7 +30,7 @@ import org.scalatest.matchers.should.Matchers
 import java.security.cert.X509Certificate
 import java.time.Instant
 import java.util.Base64
-import javax.net.ssl.{ SSLContext, SSLEngine, X509TrustManager }
+import javax.net.ssl.X509TrustManager
 import scala.collection.immutable.Seq
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -51,7 +47,8 @@ class NoopTrustManager extends X509TrustManager {
   }
 }
 
-class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures with Matchers with LogCapturing {
+class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures with Matchers with LogCapturing
+    with PubSubMockSpec {
 
   implicit val system: ActorSystem = ActorSystem(
     "PubSubApiSpec",
@@ -62,40 +59,6 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
   implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 5.seconds, interval = 100.millis)
-
-  def createInsecureSslEngine(host: String, port: Int): SSLEngine = {
-    val sslContext: SSLContext = SSLContext.getInstance("TLS")
-    sslContext.init(null, Array(new NoopTrustManager()), null)
-
-    val engine = sslContext.createSSLEngine(host, port)
-    engine.setUseClientMode(true)
-
-    engine
-  }
-
-  Http().setDefaultClientHttpsContext(ConnectionContext.httpsClient(createInsecureSslEngine _))
-
-  val wiremockServer = new WireMockServer(
-    wireMockConfig().dynamicPort().dynamicHttpsPort().notifier(new ConsoleNotifier(false)))
-  wiremockServer.start()
-
-  val mock = new WireMock("localhost", wiremockServer.port())
-
-  private object TestHttpApi extends PubSubApi {
-    val isEmulated = false
-    val PubSubGoogleApisHost = "localhost"
-    val PubSubGoogleApisPort = wiremockServer.httpsPort()
-  }
-
-  private object TestEmulatorHttpApi extends PubSubApi {
-    override val isEmulated = true
-    val PubSubGoogleApisHost = "localhost"
-    val PubSubGoogleApisPort = wiremockServer.port()
-  }
-
-  val config = PubSubConfig()
-
-  val accessToken = "TESTTOKEN"
 
   it should "publish" in {
 
@@ -109,12 +72,11 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
       """{"messages":[{"data":"SGVsbG8gR29vZ2xlIQ==","attributes":{"row_id":"7"}}]}"""
     val publishResponse = """{"messageIds":["1"]}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(s"/v1/projects/${TestCredentials.projectId}/topics/topic1:publish?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(expectedPublishRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(
           aResponse()
             .withStatus(200)
@@ -140,12 +102,11 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
       """{"messages":[{"data":"SGVsbG8gR29vZ2xlIQ==","attributes":{"row_id":"7"},"orderingKey":"my-ordering-key"}]}"""
     val publishResponse = """{"messageIds":["1"]}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(s"/v1/projects/${TestCredentials.projectId}/topics/topic1:publish?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(expectedPublishRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(
           aResponse()
             .withStatus(200)
@@ -175,12 +136,11 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
       """{"messages":[{"data":"SGVsbG8gR29vZ2xlIQ=="}]}"""
     val publishResponse = """{"messageIds":["1"]}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(s"/v1/projects/${TestCredentials.projectId}/topics/topic1:publish?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(expectedPublishRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(
           aResponse()
             .withStatus(200)
@@ -203,7 +163,7 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
       """{"messages":[{"data":"SGVsbG8gR29vZ2xlIQ=="}]}"""
     val publishResponse = """{"messageIds":["1"]}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(s"/v1/projects/${TestCredentials.projectId}/topics/topic1:publish?prettyPrint=false"))
@@ -236,13 +196,12 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
     val pullRequest = """{"returnImmediately":true,"maxMessages":1000}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
             s"/v1/projects/${TestCredentials.projectId}/subscriptions/sub1:pull?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(pullRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(aResponse().withStatus(200).withBody(pullResponse).withHeader("Content-Type", "application/json")))
 
     val flow = TestHttpApi.pull("sub1", true, 1000)
@@ -266,13 +225,12 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
     val pullRequest = """{"returnImmediately":true,"maxMessages":1000}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
             s"/v1/projects/${TestCredentials.projectId}/subscriptions/sub1:pull?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(pullRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(aResponse().withStatus(200).withBody(pullResponse).withHeader("Content-Type", "application/json")))
 
     val flow = TestHttpApi.pull("sub1", true, 1000)
@@ -295,7 +253,7 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
     val pullRequest = """{"returnImmediately":true,"maxMessages":1000}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
@@ -317,13 +275,12 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
     val pullRequest = """{"returnImmediately":true,"maxMessages":1000}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
             s"/v1/projects/${TestCredentials.projectId}/subscriptions/sub1:pull?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(pullRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(aResponse().withStatus(200).withBody(pullResponse).withHeader("Content-Type", "application/json")))
 
     val flow = TestHttpApi.pull("sub1", true, 1000)
@@ -339,13 +296,12 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
     val pullRequest = """{"returnImmediately":true,"maxMessages":1000}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
             s"/v1/projects/${TestCredentials.projectId}/subscriptions/sub1:pull?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(pullRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(aResponse().withStatus(418).withBody(pullResponse).withHeader("Content-Type", "application/json")))
 
     val flow = TestHttpApi.pull("sub1", true, 1000)
@@ -358,13 +314,12 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
   it should "acknowledge" in {
     val ackRequest = """{"ackIds":["ack1"]}"""
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
             s"/v1/projects/${TestCredentials.projectId}/subscriptions/sub1:acknowledge?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(ackRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(aResponse().withStatus(200)))
 
     val acknowledgeRequest = AcknowledgeRequest("ack1")
@@ -378,13 +333,12 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
 
   it should "fail acknowledge when result code is not success" in {
     val ackRequest = """{"ackIds":["ack1"]}"""
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(
             s"/v1/projects/${TestCredentials.projectId}/subscriptions/sub1:acknowledge?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(ackRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(aResponse().withStatus(401)))
 
     val acknowledgeRequest = AcknowledgeRequest("ack1")
@@ -406,12 +360,11 @@ class PubSubApiSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures
     val expectedPublishRequest =
       """{"messages":[{"data":"SGVsbG8gR29vZ2xlIQ==","attributes":{"row_id":"7"}}]}"""
 
-    mock.register(
+    wireMock.register(
       WireMock
         .post(
           urlEqualTo(s"/v1/projects/${TestCredentials.projectId}/topics/topic1:publish?prettyPrint=false"))
         .withRequestBody(WireMock.equalToJson(expectedPublishRequest))
-        .withHeader("Authorization", WireMock.equalTo("Bearer " + accessToken))
         .willReturn(
           aResponse()
             .withStatus(404)
