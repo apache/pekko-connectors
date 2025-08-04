@@ -17,7 +17,7 @@ import org.apache.pekko.Done;
 // #prepared
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.Function2;
+import org.apache.pekko.japi.function.Function2;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraFlow;

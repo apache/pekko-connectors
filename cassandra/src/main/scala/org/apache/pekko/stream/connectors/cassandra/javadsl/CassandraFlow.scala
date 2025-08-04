@@ -38,7 +38,7 @@ object CassandraFlow {
   def create[T](session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: pekko.japi.Function2[T, PreparedStatement, BoundStatement]): Flow[T, T, NotUsed] =
+      statementBinder: pekko.japi.function.Function2[T, PreparedStatement, BoundStatement]): Flow[T, T, NotUsed] =
     scaladsl.CassandraFlow
       .create(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
         session.delegate)
@@ -59,7 +59,7 @@ object CassandraFlow {
       session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: pekko.japi.Function2[T, PreparedStatement, BoundStatement])
+      statementBinder: pekko.japi.function.Function2[T, PreparedStatement, BoundStatement])
       : FlowWithContext[T, Ctx, T, Ctx, NotUsed] = {
     scaladsl.CassandraFlow
       .withContext(writeSettings, cqlStatement, (t, preparedStatement) => statementBinder.apply(t, preparedStatement))(
@@ -92,7 +92,7 @@ object CassandraFlow {
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
       statementBinder: (T, PreparedStatement) => BoundStatement,
-      groupingKey: pekko.japi.Function[T, K]): Flow[T, T, NotUsed] = {
+      groupingKey: pekko.japi.function.Function[T, K]): Flow[T, T, NotUsed] = {
     scaladsl.CassandraFlow
       .createBatch(writeSettings,
         cqlStatement,
