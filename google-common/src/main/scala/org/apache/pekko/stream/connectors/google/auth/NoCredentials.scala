@@ -15,14 +15,13 @@ package org.apache.pekko.stream.connectors.google.auth
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.http.scaladsl.model.headers.OAuth2BearerToken
 import pekko.stream.connectors.google.RequestSettings
 import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 
 import java.net.URI
 import java.util
-import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.ExecutionContext
 
 @InternalApi
 private[connectors] object NoCredentials {
