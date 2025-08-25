@@ -21,8 +21,6 @@ import org.apache.pekko.stream.connectors.google.GoogleSettings
 import org.apache.pekko.stream.connectors.googlecloud.storage.GCSSettings
 import org.scalatest.DoNotDiscover
 
-import scala.annotation.nowarn
-
 /**
  * USAGE
  * - Create a google cloud service account
