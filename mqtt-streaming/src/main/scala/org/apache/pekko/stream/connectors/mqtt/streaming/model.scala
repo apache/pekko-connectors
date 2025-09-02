@@ -708,7 +708,7 @@ object MqttCodec {
       v.topicFilters.foreach {
         case (topicFilter, topicFilterFlags) =>
           topicFilter.encode(packetBsb)
-          packetBsb.putByte(topicFilterFlags.underlying.toByte >> 1)
+          packetBsb.putByte((topicFilterFlags.underlying >> 1).toByte)
       }
       // Fixed header
       (v: ControlPacket).encode(bsb, packetBsb.length)
