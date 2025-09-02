@@ -66,7 +66,6 @@ object ControlPacketFlags {
   val ReservedPubRel = ControlPacketFlags(1 << 1)
   val ReservedSubscribe = ControlPacketFlags(1 << 1)
   val ReservedUnsubscribe = ControlPacketFlags(1 << 1)
-  val ReservedUnsubAck = ControlPacketFlags(1 << 1)
   val DUP = ControlPacketFlags(1 << 3)
   val QoSAtMostOnceDelivery = ControlPacketFlags(0)
   val QoSAtLeastOnceDelivery = ControlPacketFlags(1 << 1)
@@ -712,7 +711,7 @@ object MqttCodec {
       v.topicFilters.foreach {
         case (topicFilter, topicFilterFlags) =>
           topicFilter.encode(packetBsb)
-          packetBsb.putByte(topicFilterFlags.underlying.toByte)
+          packetBsb.putByte(topicFilterFlags.underlying.toByte >> 1)
       }
       // Fixed header
       (v: ControlPacket).encode(bsb, packetBsb.length)
@@ -819,7 +818,7 @@ object MqttCodec {
                 v.decodeSubAck(l)
               case (ControlPacketType.UNSUBSCRIBE, ControlPacketFlags.ReservedUnsubscribe) =>
                 v.decodeUnsubscribe(l)
-              case (ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedUnsubAck) =>
+              case (ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedGeneral) =>
                 v.decodeUnsubAck()
               case (ControlPacketType.PINGREQ, ControlPacketFlags.ReservedGeneral) =>
                 Right(PingReq)
