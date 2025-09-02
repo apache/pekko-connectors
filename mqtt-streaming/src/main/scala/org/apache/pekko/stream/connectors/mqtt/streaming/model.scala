@@ -452,7 +452,7 @@ final case class Unsubscribe @InternalApi private[streaming] (packetId: PacketId
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class UnsubAck(packetId: PacketId)
-    extends ControlPacket(ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedUnsubAck)
+    extends ControlPacket(ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedGeneral)
 
 /**
  * 3.12 PINGREQ – PING request
