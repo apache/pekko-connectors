@@ -534,6 +534,7 @@ def pekkoConnectorProject(projectId: String,
       },
       mimaBinaryIssueFilters ++= Seq(
         ProblemFilters.exclude[Problem]("*.impl.*"),
+        ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.mqtt.streaming.ControlPacketFlags.ReservedUnsubAck"),
         // generated code
         ProblemFilters.exclude[Problem]("com.google.*")),
       Test / parallelExecution := false)

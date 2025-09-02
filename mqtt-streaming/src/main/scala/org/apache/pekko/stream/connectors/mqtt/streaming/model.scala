@@ -974,7 +974,7 @@ object MqttCodec {
             : Vector[(Either[DecodeError, String], ControlPacketFlags)] =
           if (remainingLen > 0) {
             val packetLenAtTopicFilter = v.len
-            val topicFilter = (v.decodeString(), ControlPacketFlags(v.getByte & 0xFF))
+            val topicFilter = (v.decodeString(), ControlPacketFlags((v.getByte & 0xFF) << 1))
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
           } else {
             topicFilters
