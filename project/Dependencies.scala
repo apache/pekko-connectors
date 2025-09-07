@@ -67,7 +67,7 @@ object Dependencies {
   val Couchbase3Version = "3.6.0"
   val CouchbaseVersionForDocs = "2.7"
 
-  val GoogleAuthVersion = "1.38.0"
+  val GoogleAuthVersion = "1.39.0"
   val JwtScalaVersion = "11.0.2"
   val Log4jVersion = "2.25.1"
 
