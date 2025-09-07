@@ -59,7 +59,7 @@ object Dependencies {
   private def scalaTestPlusScalaCheckVersion(version: String) =
     version.split('.').take(2).mkString("-")
 
-  val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
+  val scalaTestScalaCheckArtifact = "scalacheck-1-18"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
   val scalaTestMockitoVersion = "3.2.18.0"
 
