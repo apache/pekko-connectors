@@ -63,6 +63,7 @@ object Common extends AutoPlugin {
       "-Xlint",
       "-Ywarn-dead-code",
       "-Wconf:cat=unused-nowarn:s",
+      "-Wconf:msg=Prefer the Scala annotation over Java's `@Deprecated`:s",
       "-release:8"),
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
