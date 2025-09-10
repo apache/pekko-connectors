@@ -19,7 +19,6 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.ApiMayChange
-import pekko.stream.Materializer
 import pekko.stream.connectors.dynamodb.{ scaladsl, DynamoDbOp, DynamoDbPaginatedOp }
 import pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
 import software.amazon.awssdk.core.async.SdkPublisher
@@ -78,17 +77,6 @@ object DynamoDb {
       client: DynamoDbAsyncClient,
       operation: DynamoDbPaginatedOp[In, Out, _]): Flow[In, Out, NotUsed] =
     scaladsl.DynamoDb.flowPaginated()(client, operation).asJava
-
-  /**
-   * Create a CompletionStage that will be completed with a response to a given request.
-   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
-   */
-  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
-  def single[In <: DynamoDbRequest, Out <: DynamoDbResponse](client: DynamoDbAsyncClient,
-      operation: DynamoDbOp[In, Out],
-      request: In,
-      mat: Materializer): CompletionStage[Out] =
-    single(client, operation, request, mat.system)
 
   /**
    * Create a CompletionStage that will be completed with a response to a given request.

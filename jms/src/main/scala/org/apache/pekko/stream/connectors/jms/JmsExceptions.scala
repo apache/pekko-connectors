@@ -30,22 +30,10 @@ case class UnsupportedMessagePropertyType(propertyName: String, propertyValue: A
       "Only primitive types and String are supported as property values.")
     with NonRetriableJmsException
 
-@deprecated("Not used anywhere", "Alpakka 3.0.4")
-case class NullMessageProperty(propertyName: String, message: JmsEnvelope[_])
-    extends Exception(
-      s"null value was given for Jms property '$propertyName'.")
-    with NonRetriableJmsException
-
 case class UnsupportedMapMessageEntryType(entryName: String, entryValue: Any, message: JmsMapMessagePassThrough[_])
     extends Exception(
       s"Jms MapMessage entry '$entryName' has unknown type '${entryValue.getClass.getName}'. " +
       "Only primitive types, String, and Byte array are supported as entry values.")
-    with NonRetriableJmsException
-
-@deprecated("Not used anywhere", "Alpakka 3.0.4")
-case class NullMapMessageEntry(entryName: String, message: JmsMapMessagePassThrough[_])
-    extends Exception(
-      s"null value was given for Jms MapMessage entry '$entryName'.")
     with NonRetriableJmsException
 
 case class UnsupportedMessageType(message: jms.Message)

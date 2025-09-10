@@ -26,16 +26,6 @@ public class PekkoStreamsRegistrar {
 
   private final ActorSystem system;
 
-  /**
-   * deprecated, use {@link #PekkoStreamsRegistrar(ClassicActorSystemProvider)}.
-   *
-   * @deprecated pass in the actor system instead of the materializer, since 3.0.0
-   */
-  @Deprecated
-  public PekkoStreamsRegistrar(Materializer materializer) {
-    this(materializer.system());
-  }
-
   public PekkoStreamsRegistrar(ClassicActorSystemProvider system) {
     this.system = system.classicSystem();
   }

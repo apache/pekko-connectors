@@ -43,26 +43,6 @@ object GCStorage {
    * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/get
    *
    * @param bucketName the name of the bucket to look up
-   * @param materializer materializer to run with
-   * @param attributes attributes to run request with
-   * @return a `CompletionStage` containing `Bucket` if it exists
-   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
-   */
-  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
-  def getBucket(bucketName: String,
-      materializer: Materializer,
-      attributes: Attributes): CompletionStage[Optional[Bucket]] =
-    GCStorageStream
-      .getBucket(bucketName)(materializer, attributes)
-      .map(_.toJava)(materializer.executionContext)
-      .asJava
-
-  /**
-   * Gets information on a bucket
-   *
-   * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/get
-   *
-   * @param bucketName the name of the bucket to look up
    * @param system actor system to run with
    * @param attributes attributes to run request with
    * @return a `CompletionStage` containing `Bucket` if it exists
@@ -92,23 +72,6 @@ object GCStorage {
    * @param bucketName the name of the bucket
    * @param location the region to put the bucket in
    * @return a `CompletionStage` of `Bucket` with created bucket
-   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
-   */
-  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
-  def createBucket(bucketName: String,
-      location: String,
-      materializer: Materializer,
-      attributes: Attributes): CompletionStage[Bucket] =
-    GCStorageStream.createBucket(bucketName, location)(materializer, attributes).asJava
-
-  /**
-   * Creates a new bucket
-   *
-   * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
-   *
-   * @param bucketName the name of the bucket
-   * @param location the region to put the bucket in
-   * @return a `CompletionStage` of `Bucket` with created bucket
    */
   def createBucket(bucketName: String,
       location: String,
@@ -127,19 +90,6 @@ object GCStorage {
    */
   def createBucketSource(bucketName: String, location: String): Source[Bucket, NotUsed] =
     GCStorageStream.createBucketSource(bucketName, location).asJava
-
-  /**
-   * Deletes bucket
-   *
-   * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/delete
-   *
-   * @param bucketName the name of the bucket
-   * @return a `CompletionStage` of `Done` on successful deletion
-   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
-   */
-  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
-  def deleteBucket(bucketName: String, materializer: Materializer, attributes: Attributes): CompletionStage[Done] =
-    GCStorageStream.deleteBucket(bucketName)(materializer, attributes).asJava
 
   /**
    * Deletes bucket

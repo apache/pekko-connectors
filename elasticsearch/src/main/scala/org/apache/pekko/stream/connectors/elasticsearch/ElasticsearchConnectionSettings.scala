@@ -17,9 +17,7 @@ import org.apache.pekko
 import pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
-import pekko.japi.Util
 import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
 
 import javax.net.ssl.SSLContext
 
@@ -55,28 +53,6 @@ final class ElasticsearchConnectionSettings private (
       .toList
 
     copy(headers = scalaHeaders)
-  }
-
-  /** Scala API */
-  @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "Alpakka 3.1.0")
-  @Deprecated
-  def withConnectionContext(connectionContext: HttpsConnectionContext): ElasticsearchConnectionSettings =
-    copy(connectionContext = Option(connectionContext))
-
-  /** Java API */
-  @deprecated("prefer ElasticsearchConnectionSettings.withSSLContext", "Alpakka 3.1.0")
-  @Deprecated
-  def withConnectionContext(
-      connectionContext: pekko.http.javadsl.HttpsConnectionContext): ElasticsearchConnectionSettings = {
-    val scalaContext = new HttpsConnectionContext(
-      connectionContext.getSslContext,
-      None,
-      connectionContext.getEnabledCipherSuites.toScala.map(Util.immutableSeq(_)),
-      connectionContext.getEnabledProtocols.toScala.map(Util.immutableSeq(_)),
-      connectionContext.getClientAuth.toScala,
-      connectionContext.getSslParameters.toScala)
-
-    copy(connectionContext = Option(scalaContext))
   }
 
   def withSSLContext(
