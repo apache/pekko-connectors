@@ -25,8 +25,7 @@ import java.util.zip.ZipInputStream;
 public class ArchiveHelper {
 
   public Map<String, ByteString> unzip(ByteString zipArchive) throws Exception {
-    // toArrayUnsafe is ok here because we know that ZipInputStream will not mutate the array
-    ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(zipArchive.toArrayUnsafe()));
+    ZipInputStream zis = new ZipInputStream(zipArchive.asInputStream());
     ZipEntry entry;
     Map<String, ByteString> result = new HashMap<>();
     try {
