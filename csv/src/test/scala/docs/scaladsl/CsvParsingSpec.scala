@@ -21,6 +21,7 @@ import pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 import pekko.stream.scaladsl.{ FileIO, Flow, Keep, Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
+import pekko.util.ccompat._
 import pekko.util.ByteString
 
 import scala.collection.immutable.Seq
