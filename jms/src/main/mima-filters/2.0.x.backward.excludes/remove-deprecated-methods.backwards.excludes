@@ -18,3 +18,5 @@
 # remove deprecated methods
 ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.jms.NullMapMessageEntry")
 ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.jms.NullMapMessageEntry$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.jms.NullMessageProperty")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.jms.NullMessageProperty$")
