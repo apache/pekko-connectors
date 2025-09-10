@@ -236,7 +236,8 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
   compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation"),
-  Test / javacOptions ++= Seq("--add-opens=java.base/java.nio=ALL-UNNAMED")
+  Test / fork := true,
+  Test / javaOptions ++= Seq("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED")
 ).dependsOn(googleCommon)
   .enablePlugins(PekkoGrpcPlugin)
 
@@ -470,7 +471,7 @@ lazy val `doc-examples` = project
   .enablePlugins(AutomateHeaderPlugin)
   .disablePlugins(MimaPlugin, SitePlugin)
   .settings(
-    name := s"pekko-connectors-doc-examples",
+    name := "pekko-connectors-doc-examples",
     publish / skip := true,
     Dependencies.`Doc-examples`)
 
