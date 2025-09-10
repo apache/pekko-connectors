@@ -218,8 +218,9 @@ lazy val googleCloudBigQuery = pekkoConnectorProject(
   "google.cloud.bigquery",
   Dependencies.GoogleBigQuery,
   Test / fork := true,
-  Compile / scalacOptions += "-Wconf:src=src_managed/.+:s").dependsOn(googleCommon).enablePlugins(
-  spray.boilerplate.BoilerplatePlugin)
+  Compile / scalacOptions += "-Wconf:src=src_managed/.+:s")
+  .dependsOn(googleCommon)
+  .enablePlugins(spray.boilerplate.BoilerplatePlugin)
 
 lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   "google-cloud-bigquery-storage",
@@ -234,8 +235,10 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
-  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")).dependsOn(
-  googleCommon).enablePlugins(PekkoGrpcPlugin)
+  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation"),
+  Test / javacOptions ++= Seq("--add-opens=java.base/java.nio=ALL-UNNAMED")
+).dependsOn(googleCommon)
+  .enablePlugins(PekkoGrpcPlugin)
 
 lazy val googleCloudPubSub = pekkoConnectorProject(
   "google-cloud-pub-sub",
@@ -243,8 +246,8 @@ lazy val googleCloudPubSub = pekkoConnectorProject(
   Dependencies.GooglePubSub,
   Test / fork := true,
   // See docker-compose.yml gcloud-pubsub-emulator_prep
-  Test / envVars := Map("PUBSUB_EMULATOR_HOST" -> "localhost", "PUBSUB_EMULATOR_PORT" -> "8538")).dependsOn(
-  googleCommon)
+  Test / envVars := Map("PUBSUB_EMULATOR_HOST" -> "localhost", "PUBSUB_EMULATOR_PORT" -> "8538"))
+  .dependsOn(googleCommon)
 
 lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   "google-cloud-pub-sub-grpc",
