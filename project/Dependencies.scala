@@ -370,7 +370,7 @@ object Dependencies {
       "org.mdedetrich" %% "pekko-http-circe" % PekkoStreamsCirceVersion))
 
   val JakartaMs = {
-    val artemisVersion = "2.19.1"
+    val artemisVersion = "2.42.0"
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.0.0" % Provided,
