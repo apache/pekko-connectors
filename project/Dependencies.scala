@@ -84,7 +84,7 @@ object Dependencies {
   private val jettyVersion = "9.4.58.v20250814"
   private val guavaVersion = "33.4.8-jre"
   private val wireMockDependencies = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8" % "2.35.2" % Test,
+    "com.github.tomakehurst" % "wiremock-jre8" % "3.0.1" % Test,
     "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
     "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % Test,
     "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % Test,
