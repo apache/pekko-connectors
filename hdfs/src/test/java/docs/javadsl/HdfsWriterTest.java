@@ -37,7 +37,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.DefaultCodec;
 import org.junit.*;
 
-import docs.javadsl.HdfsWriterTest.Book;
 import scala.concurrent.duration.Duration;
 
 import java.io.IOException;
