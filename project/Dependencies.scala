@@ -81,7 +81,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
 
   private val wireMockDependencies = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8" % "3.0.1" % Test)
+    "org.wiremock" % "wiremock" % "3.13.1" % Test)
 
   val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
@@ -442,6 +442,7 @@ object Dependencies {
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.3.1" % Test,
+      "org.apache.commons" % "commons-lang3" % "3.18.0" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++
     wireMockDependencies)
@@ -454,10 +455,10 @@ object Dependencies {
         "org.springframework" % "spring-core" % SpringVersion,
         "org.springframework" % "spring-context" % SpringVersion,
         "org.springframework.boot" % "spring-boot-autoconfigure" % SpringBootVersion, // TODO should this be provided?
-        "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test,
         "org.springframework.boot" % "spring-boot-configuration-processor" % SpringBootVersion % Optional,
         // for examples
-        "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
+        "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test,
+        "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test))
   }
 
   val SlickVersion = "3.5.1"
