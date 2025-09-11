@@ -81,7 +81,7 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
 
   private val wireMockDependencies = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8" % "3.0.1" % Test)
+    "org.wiremock" % "wiremock" % "3.13.1" % Test)
 
   val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
