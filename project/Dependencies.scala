@@ -61,7 +61,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = "scalacheck-1-18"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = "3.2.18.0"
+  val scalaTestMockitoVersion = s"$ScalaTestVersion.0"
 
   val CouchbaseVersion = "2.7.23"
   val Couchbase3Version = "3.6.0"
@@ -124,7 +124,7 @@ object Dependencies {
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
-    "org.scalatestplus" %% "mockito-4-11" % scalaTestMockitoVersion % Test)
+    "org.scalatestplus" %% "mockito-5-12" % scalaTestMockitoVersion % Test)
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
@@ -526,7 +526,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.mockito" % "mockito-inline" % mockitoVersion % Test) ++ Mockito)
+      "org.mockito" % "mockito" % MockitoVersion % Test) ++ Mockito)
 
   val Sse = Seq(
     libraryDependencies ++= Seq(
