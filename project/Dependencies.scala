@@ -457,7 +457,7 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-autoconfigure" % SpringBootVersion, // TODO should this be provided?
         "org.springframework.boot" % "spring-boot-configuration-processor" % SpringBootVersion % Optional,
         // for examples
-        "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test,        "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test,
+        "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test,
         "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test))
   }
 
