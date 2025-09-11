@@ -15,7 +15,6 @@ package docs.javadsl;
 
 import org.apache.pekko.util.ByteString;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;

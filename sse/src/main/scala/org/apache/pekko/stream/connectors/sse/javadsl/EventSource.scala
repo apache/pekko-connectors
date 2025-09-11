@@ -18,7 +18,6 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.http.javadsl.model.{ HttpRequest, HttpResponse, Uri }
 import pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
-import pekko.stream.Materializer
 import pekko.stream.javadsl.Source
 import pekko.http.javadsl.model.sse.ServerSentEvent
 import pekko.util.FutureConverters
@@ -93,29 +92,6 @@ object EventSource {
           uri.asScala,
           send(_).asScala.map(_.asInstanceOf[SHttpResponse])(system.classicSystem.dispatcher),
           lastEventId.toScala)(system)
-        .map(v => v: ServerSentEvent)
-    eventSource.asJava
-  }
-
-  /**
-   * @param uri URI with absolute path, e.g. "http://myserver/events
-   * @param send function to send a HTTP request
-   * @param lastEventId initial value for Last-Evend-ID header, optional
-   * @param mat `Materializer`
-   * @return continuous source of server-sent events
-   * @deprecated pass in the actor system instead of the materializer, since Alpakka 3.0.0
-   */
-  @deprecated("pass in the actor system instead of the materializer", "Alpakka 3.0.0")
-  def create(uri: Uri,
-      send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
-      lastEventId: Optional[String],
-      mat: Materializer): Source[ServerSentEvent, NotUsed] = {
-    val eventSource =
-      scaladsl
-        .EventSource(
-          uri.asScala,
-          send(_).asScala.map(_.asInstanceOf[SHttpResponse])(mat.executionContext),
-          lastEventId.toScala)(mat.system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
   }

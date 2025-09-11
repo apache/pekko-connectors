@@ -54,69 +54,6 @@ object PubSubConfig {
 
   def create(pullReturnImmediately: Boolean, pullMaxMessagesPerInternalBatch: Int): PubSubConfig =
     apply(pullReturnImmediately, pullMaxMessagesPerInternalBatch)
-
-  /**
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
-  @Deprecated
-  def apply(projectId: String, clientEmail: String, privateKey: String)(
-      implicit actorSystem: ActorSystem): PubSubConfig =
-    new PubSubConfig(
-      projectId = projectId,
-      pullReturnImmediately = true,
-      pullMaxMessagesPerInternalBatch = 1000,
-      Some(
-        GoogleSettings().copy(
-          projectId = projectId,
-          credentials =
-            ServiceAccountCredentials(projectId, clientEmail, privateKey,
-              Set("https://www.googleapis.com/auth/pubsub")))))
-
-  /**
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
-  @Deprecated
-  def apply(projectId: String,
-      clientEmail: String,
-      privateKey: String,
-      pullReturnImmediately: Boolean,
-      pullMaxMessagesPerInternalBatch: Int)(
-      implicit actorSystem: ActorSystem): PubSubConfig =
-    new PubSubConfig(
-      projectId = projectId,
-      pullReturnImmediately = pullReturnImmediately,
-      pullMaxMessagesPerInternalBatch = pullMaxMessagesPerInternalBatch,
-      Some(
-        GoogleSettings().copy(
-          projectId = projectId,
-          credentials =
-            ServiceAccountCredentials(projectId, clientEmail, privateKey,
-              Set("https://www.googleapis.com/auth/pubsub")))))
-
-  /**
-   * Java API
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
-  @Deprecated
-  def create(projectId: String, clientEmail: String, privateKey: String, actorSystem: ActorSystem): PubSubConfig =
-    apply(projectId, clientEmail, privateKey)(actorSystem)
-
-  /**
-   * Java API
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] to manage credentials
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings to manage credentials", "Alpakka 3.0.0")
-  @Deprecated
-  def create(projectId: String,
-      clientEmail: String,
-      privateKey: String,
-      actorSystem: ActorSystem,
-      pullReturnImmediately: Boolean,
-      pullMaxMessagesPerInternalBatch: Int): PubSubConfig =
-    apply(projectId, clientEmail, privateKey, pullReturnImmediately, pullMaxMessagesPerInternalBatch)(actorSystem)
 }
 
 final class PublishMessage private (val data: String,
