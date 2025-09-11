@@ -468,12 +468,13 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "6.2.11"
-    val SpringBootVersion = "2.7.18"
+    val SpringBootVersion = "3.5.5"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
         "org.springframework" % "spring-context" % SpringVersion,
         "org.springframework.boot" % "spring-boot-autoconfigure" % SpringBootVersion, // TODO should this be provided?
+        "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test,
         "org.springframework.boot" % "spring-boot-configuration-processor" % SpringBootVersion % Optional,
         // for examples
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test))
