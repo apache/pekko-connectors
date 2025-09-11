@@ -39,7 +39,7 @@ object Dependencies {
   val PekkoHttpBinaryVersion = PekkoHttpDependency.default.link
   val ScalaTestVersion = "3.2.19"
   val TestContainersScalaTestVersion = "0.43.0"
-  val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
+  val mockitoVersion = "5.19.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.25.8"
   val hoverflyVersion = "0.20.2"
   val scalaCheckVersion = "1.19.0"
@@ -61,7 +61,7 @@ object Dependencies {
 
   val scalaTestScalaCheckArtifact = "scalacheck-1-18"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
-  val scalaTestMockitoVersion = "3.2.18.0"
+  val scalaTestMockitoVersion = s"$ScalaTestVersion.0"
 
   val CouchbaseVersion = "2.7.23"
   val Couchbase3Version = "3.6.0"
@@ -124,7 +124,7 @@ object Dependencies {
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
-    "org.scalatestplus" %% "mockito-4-11" % scalaTestMockitoVersion % Test)
+    "org.scalatestplus" %% "mockito-5-12" % scalaTestMockitoVersion % Test)
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
@@ -527,7 +527,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.mockito" % "mockito-inline" % mockitoVersion % Test) ++ Mockito)
+      "org.mockito" % "mockito-core" % mockitoVersion % Test) ++ Mockito)
 
   val Sse = Seq(
     libraryDependencies ++= Seq(
