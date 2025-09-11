@@ -80,28 +80,8 @@ object Dependencies {
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
 
-  // wiremock has very outdated, CVE vulnerable dependencies
-  private val jettyVersion = "9.4.58.v20250814"
-  private val guavaVersion = "33.4.8-jre"
   private val wireMockDependencies = Seq(
-    "com.github.tomakehurst" % "wiremock-jre8" % "3.0.1" % Test,
-    "org.eclipse.jetty" % "jetty-server" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-proxy" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-alpn-server" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-alpn-java-server" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-alpn-openjdk8-server" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-alpn-java-client" % jettyVersion % Test,
-    "org.eclipse.jetty" % "jetty-alpn-openjdk8-client" % jettyVersion % Test,
-    "org.eclipse.jetty.http2" % "http2-server" % jettyVersion % Test,
-    "com.google.guava" % "guava" % guavaVersion % Test,
-    "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion % Test,
-    "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
-    "commons-io" % "commons-io" % "2.20.0" % Test,
-    "commons-fileupload" % "commons-fileupload" % "1.6.0" % Test,
-    "com.jayway.jsonpath" % "json-path" % "2.9.0" % Test)
+    "com.github.tomakehurst" % "wiremock-jre8" % "3.0.1" % Test)
 
   val CommonSettings = Seq(
     // These libraries are added to all modules via the `Common` AutoPlugin
