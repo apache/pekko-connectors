@@ -36,6 +36,8 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.DefaultCodec;
 import org.junit.*;
+
+import docs.javadsl.HdfsWriterTest.Book;
 import scala.concurrent.duration.Duration;
 
 import java.io.IOException;
@@ -258,7 +260,7 @@ public class HdfsWriterTest {
             .via(flow)
             .map(
                 message -> {
-                  if (message instanceof WrittenMessage writtenMessage) {
+                  if (message instanceof WrittenMessage<KafkaOffset> writtenMessage) {
                     kafkaCommitter.commit(writtenMessage.passThrough());
                     return message;
                   } else {
