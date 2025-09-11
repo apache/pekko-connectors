@@ -458,7 +458,7 @@ object Dependencies {
         "org.springframework.boot" % "spring-boot-configuration-processor" % SpringBootVersion % Optional,
         // for examples
         "org.springframework.boot" % "spring-boot-starter-web" % SpringBootVersion % Test,
-        "javax.annotation" % "javax.annotation-api" % "1.3.2" % Test))
+        "jakarta.annotation" % "jakarta.annotation-api" % "3.0.0" % Test))
   }
 
   val SlickVersion = "3.5.1"
