@@ -526,7 +526,7 @@ object Dependencies {
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client")),
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
-      "org.mockito" % "mockito" % MockitoVersion % Test) ++ Mockito)
+      "org.mockito" % "mockito-core" % mockitoVersion % Test) ++ Mockito)
 
   val Sse = Seq(
     libraryDependencies ++= Seq(
