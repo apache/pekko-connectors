@@ -77,11 +77,11 @@ public class TestUtils {
       } else if (column.equals("uptimesecs")) {
         builder.addField(column, ((Double) value).longValue());
       } else {
-        if (value instanceof Long) builder.addField(column, (Long) value);
-        else if (value instanceof Double) builder.addField(column, (Double) value);
-        else if (value instanceof Number) builder.addField(column, (Number) value);
-        else if (value instanceof String) builder.addField(column, (String) value);
-        else if (value instanceof Boolean) builder.addField(column, (Boolean) value);
+        if (value instanceof Long longValue) builder.addField(column, longValue);
+        else if (value instanceof Double doubleValue) builder.addField(column, doubleValue);
+        else if (value instanceof Number numberValue) builder.addField(column, numberValue);
+        else if (value instanceof String stringValue) builder.addField(column, stringValue);
+        else if (value instanceof Boolean booleanValue) builder.addField(column, booleanValue);
       }
     }
 

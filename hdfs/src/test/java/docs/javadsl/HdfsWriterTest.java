@@ -258,8 +258,8 @@ public class HdfsWriterTest {
             .via(flow)
             .map(
                 message -> {
-                  if (message instanceof WrittenMessage) {
-                    kafkaCommitter.commit(((WrittenMessage<KafkaOffset>) message).passThrough());
+                  if (message instanceof WrittenMessage writtenMessage) {
+                    kafkaCommitter.commit(writtenMessage.passThrough());
                     return message;
                   } else {
                     return message;

@@ -75,8 +75,8 @@ final class DummyJavaTests implements java.io.Serializable {
       return true;
     }
 
-    if (o instanceof DummyJavaTests) {
-      return ((DummyJavaTests) o).value.equals(this.value);
+    if (o instanceof DummyJavaTests dummy) {
+      return dummy.value.equals(this.value);
     }
     return false;
   }
@@ -322,8 +322,7 @@ public class JmsConnectorsTest {
                   .take(expectedMessages)
                   .map(
                       msg -> {
-                        if (msg instanceof TextMessage) {
-                          TextMessage t = (TextMessage) msg;
+                        if (msg instanceof TextMessage t) {
                           return t.getText();
                         } else
                           throw new RuntimeException("unexpected message type " + msg.getClass());
