@@ -19,7 +19,7 @@ To keep up with the latest releases check out [Pekko Connectors releases](https:
 
 ## Building From Source
 
-The build commands in the [pekko](https://github.com/apache/pekko?tab=readme-ov-file#building-from-source) repo are also useful here. Java 17 should work well for building from source with the main branch. Pekko 1.x is best built with Java 8. If you build with newer versions of Java, ou will need to specify a number of `--add-opens` settings.
+The build commands in the [pekko](https://github.com/apache/pekko?tab=readme-ov-file#building-from-source) repo are also useful here. Java 17 should work well for building from source with the main branch. Pekko 1.x is best built with Java 8. If you build with newer versions of Java, you will need to specify a number of `--add-opens` settings.
 
 This repo contains shell scripts. These scripts are designed to help with the testing of Apache Pekko Connectors. Please avoid running the scripts without checking if you need to and try to understand what the script does first.
 
