@@ -47,7 +47,7 @@ object Dependencies {
   // Legacy versions support Slf4J v1 for compatibility with older libs
   val Slf4jVersion = "2.0.17"
   val Slf4jLegacyVersion = "1.7.36"
-  val LogbackVersion = "1.3.15"
+  val LogbackVersion = "1.5.18"
   val LogbackLegacyVersion = "1.2.13"
 
   /**
