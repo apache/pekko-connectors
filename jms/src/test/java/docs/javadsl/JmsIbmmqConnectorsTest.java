@@ -124,8 +124,7 @@ public class JmsIbmmqConnectorsTest {
             .map(
                 envelope -> {
                   envelope.commit();
-                  if (envelope.message() instanceof TextMessage) {
-                    TextMessage message = (TextMessage) envelope.message();
+                  if (envelope.message() instanceof TextMessage message) {
                     return message.getText();
                   } else {
                     throw new RuntimeException(

@@ -123,8 +123,8 @@ public class MqttFlowTest {
                 new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
                   @Override
                   public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
-                    if (x.getEvent().isPresent() && x.getEvent().get().event() instanceof Publish)
-                      return (Publish) x.getEvent().get().event();
+                    if (x.getEvent().isPresent() && x.getEvent().get().event() instanceof Publish publish)
+                      return publish;
                     else throw noMatch();
                   }
                 })
@@ -224,8 +224,7 @@ public class MqttFlowTest {
                                     new SubAck(subscribe.packetId(), flags),
                                     Optional.of(subscribed),
                                     Optional.empty()));
-                          } else if (cp instanceof Publish) {
-                            Publish publish = (Publish) cp;
+                          } else if (cp instanceof Publish publish) {
                             if ((publish.flags() & ControlPacketFlags.RETAIN()) != 0) {
                               int packetId = publish.packetId().get().underlying();
                               queue.offer(new Command<>(new PubAck(packetId)));
@@ -265,8 +264,8 @@ public class MqttFlowTest {
                 new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
                   @Override
                   public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
-                    if (x.getEvent().isPresent() && x.getEvent().get().event() instanceof Publish)
-                      return (Publish) x.getEvent().get().event();
+                    if (x.getEvent().isPresent() && x.getEvent().get().event() instanceof Publish publish)
+                      return publish;
                     else throw noMatch();
                   }
                 })

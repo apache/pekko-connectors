@@ -72,9 +72,7 @@ public final class LegacyFtpsClient extends FTPSClient {
     protected Socket _openDataConnection_(final String command, final String arg) throws IOException {
         final Socket socket = _openFTPDataConnection_(command, arg);
         _prepareDataSocket_(socket);
-        if (socket instanceof SSLSocket) {
-            final SSLSocket sslSocket = (SSLSocket) socket;
-
+        if (socket instanceof SSLSocket sslSocket) {
             sslSocket.setUseClientMode(isClientMode());
             sslSocket.setEnableSessionCreation(isCreation());
 
