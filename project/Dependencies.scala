@@ -75,7 +75,7 @@ object Dependencies {
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
   // This should align with the Jackson minor version used in Pekko 1.1.x
   // https://github.com/apache/pekko/blob/main/project/Dependencies.scala
-  val JacksonVersion = "2.19.2"
+  val JacksonVersion = "2.20.0"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
@@ -98,7 +98,6 @@ object Dependencies {
     "org.eclipse.jetty.http2" % "http2-server" % jettyVersion % Test,
     "com.google.guava" % "guava" % guavaVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion % Test,
-    "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion % Test,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
     "commons-io" % "commons-io" % "2.20.0" % Test,
     "commons-fileupload" % "commons-fileupload" % "1.6.0" % Test,
@@ -273,7 +272,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-jackson" % PekkoHttpVersion % Provided,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "io.spray" %% "spray-json" % "1.3.6",
-      "com.fasterxml.jackson.core" % "jackson-annotations" % JacksonVersion,
+      "com.fasterxml.jackson.core" % "jackson-annotations" % "2.20",
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion % Test,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
