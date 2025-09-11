@@ -41,7 +41,7 @@ object Dependencies {
   val TestContainersScalaTestVersion = "0.43.0"
   val mockitoVersion = "4.11.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.25.8"
-  val hoverflyVersion = "0.19.1"
+  val hoverflyVersion = "0.20.2"
   val scalaCheckVersion = "1.19.0"
 
   // Legacy versions support Slf4J v1 for compatibility with older libs
