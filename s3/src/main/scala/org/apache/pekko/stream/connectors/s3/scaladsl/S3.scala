@@ -195,45 +195,6 @@ object S3 {
     S3Stream.putObject(S3Location(bucket, key), contentType, data, contentLength, s3Headers)
 
   /**
-   * Downloads a S3 Object
-   *
-   * @param bucket the s3 bucket name
-   * @param key the s3 object key
-   * @param range [optional] the [[pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
-   * @param sse [optional] the server side encryption used on upload
-   * @return The source will emit an empty [[scala.Option Option]] if an object can not be found.
-   *         Otherwise [[scala.Option Option]] will contain a tuple of object's data and metadata.
-   */
-  @deprecated("Use S3.getObject instead", "4.0.0")
-  def download(
-      bucket: String,
-      key: String,
-      range: Option[ByteRange] = None,
-      versionId: Option[String] = None,
-      sse: Option[ServerSideEncryption] = None)
-      : Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] =
-    download(bucket, key, range, versionId, S3Headers.empty.withOptionalServerSideEncryption(sse))
-
-  /**
-   * Downloads a S3 Object
-   *
-   * @param bucket the s3 bucket name
-   * @param key the s3 object key
-   * @param range [optional] the [[pekko.http.scaladsl.model.headers.ByteRange ByteRange]] you want to download
-   * @param s3Headers any headers you want to add
-   * @return The source will emit an empty [[scala.Option Option]] if an object can not be found.
-   *         Otherwise [[scala.Option Option]] will contain a tuple of object's data and metadata.
-   */
-  @deprecated("Use S3.getObject instead", "4.0.0")
-  def download(
-      bucket: String,
-      key: String,
-      range: Option[ByteRange],
-      versionId: Option[String],
-      s3Headers: S3Headers): Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] =
-    S3Stream.download(S3Location(bucket, key), range, versionId, s3Headers)
-
-  /**
    * Gets a S3 Object
    *
    * @param bucket the s3 bucket name
