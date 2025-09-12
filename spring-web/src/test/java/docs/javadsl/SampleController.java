@@ -14,7 +14,7 @@
 package docs.javadsl;
 
 // #use
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
