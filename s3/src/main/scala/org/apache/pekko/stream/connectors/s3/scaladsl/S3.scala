@@ -204,7 +204,7 @@ object S3 {
    * @return The source will emit an empty [[scala.Option Option]] if an object can not be found.
    *         Otherwise [[scala.Option Option]] will contain a tuple of object's data and metadata.
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
@@ -224,7 +224,7 @@ object S3 {
    * @return The source will emit an empty [[scala.Option Option]] if an object can not be found.
    *         Otherwise [[scala.Option Option]] will contain a tuple of object's data and metadata.
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
