@@ -348,7 +348,7 @@ object S3 {
    * @param key the s3 object key
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(bucket: String,
       key: String): Source[Optional[JPair[Source[ByteString, NotUsed], ObjectMetadata]], NotUsed] =
     toJava(S3Stream.download(S3Location(bucket, key), None, None, S3Headers.empty))
@@ -361,7 +361,7 @@ object S3 {
    * @param sse the server side encryption to use
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
@@ -376,7 +376,7 @@ object S3 {
    * @param range the [[pekko.http.javadsl.model.headers.ByteRange ByteRange]] you want to download
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(bucket: String,
       key: String,
       range: ByteRange): Source[Optional[JPair[Source[ByteString, NotUsed], ObjectMetadata]], NotUsed] = {
@@ -393,7 +393,7 @@ object S3 {
    * @param sse the server side encryption to use
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
@@ -411,7 +411,7 @@ object S3 {
    * @param sse the server side encryption to use
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
@@ -428,7 +428,7 @@ object S3 {
    * @param s3Headers any headers you want to add
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
@@ -445,7 +445,7 @@ object S3 {
    * @param s3Headers any headers you want to add
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
@@ -466,7 +466,7 @@ object S3 {
    * @param s3Headers any headers you want to add
    * @return A [[pekko.japi.Pair]] with a [[pekko.stream.javadsl.Source Source]] of [[pekko.util.ByteString ByteString]], and a [[pekko.stream.javadsl.Source Source]] containing the [[ObjectMetadata]]
    */
-  @deprecated("Use S3.getObject instead", "4.0.0")
+  @deprecated("Use S3.getObject instead", "Alpakka 4.0.0")
   def download(
       bucket: String,
       key: String,
