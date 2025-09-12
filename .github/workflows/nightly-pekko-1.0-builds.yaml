@@ -15,18 +15,16 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Nightly Pekko 1.0 Builds
+name: Nightly Pekko 1.0 Builds (on 1.2.x branch)
 
 on:
-  schedule:
-    - cron: "0 3 * * *"
   workflow_dispatch:
 
 permissions: {}
 
 concurrency:
   # Only run once for latest commit per ref and cancel other (previous) runs.
-  group: pekko-1.1-${{ github.ref }}
+  group: pekko-1.0-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -43,13 +41,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-tags: true
           fetch-depth: 0
+          ref: 1.2.x
 
       - name: Setup Java ${{ matrix.JDK }}
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: ${{ matrix.JDK }}
