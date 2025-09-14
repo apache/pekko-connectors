@@ -24,7 +24,6 @@ import pekko.stream.connectors.sqs._
 import pekko.stream.connectors.sqs.scaladsl.{ DefaultTestContext, SqsSource }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Sink }
-import pekko.util.ccompat.JavaConverters._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -43,6 +42,7 @@ import software.amazon.awssdk.services.sqs.model.{
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with DefaultTestContext with LogCapturing {
 

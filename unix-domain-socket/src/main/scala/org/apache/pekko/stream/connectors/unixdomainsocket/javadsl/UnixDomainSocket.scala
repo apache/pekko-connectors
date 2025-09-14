@@ -116,7 +116,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
 
 final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Extension {
   import UnixDomainSocket._
-  import pekko.dispatch.ExecutionContexts.parasitic
+  import scala.concurrent.ExecutionContext.parasitic
 
   private lazy val delegate: scaladsl.UnixDomainSocket = scaladsl.UnixDomainSocket.apply(system)
 

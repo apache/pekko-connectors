@@ -17,7 +17,6 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.dispatch.ExecutionContexts
-import pekko.dispatch.ExecutionContexts.parasitic
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pekko.http.scaladsl.marshalling.Marshal
 import pekko.http.scaladsl.model.HttpMethods.{ DELETE, POST }
@@ -39,6 +38,7 @@ import spray.json._
 
 import scala.annotation.nowarn
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.concurrent.ExecutionContext.parasitic
 
 @InternalApi private[storage] object GCStorageStream {
 

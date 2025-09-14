@@ -20,7 +20,6 @@ import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
 import pekko.stream.connectors.googlecloud.bigquery.storage.ProtobufConverters._
 import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage }
 import pekko.stream.javadsl.Source
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import pekko.util.FutureConverters._
 import com.google.cloud.bigquery.storage.v1.DataFormat
@@ -29,6 +28,8 @@ import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 
 import java.util.concurrent.CompletionStage
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Google BigQuery Storage Api Pekko Stream operator factory.

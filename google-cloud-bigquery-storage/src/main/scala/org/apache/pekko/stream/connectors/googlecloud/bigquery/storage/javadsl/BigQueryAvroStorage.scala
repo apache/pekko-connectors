@@ -17,12 +17,13 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.googlecloud.bigquery.storage.{ scaladsl => scstorage, BigQueryRecord }
 import pekko.stream.javadsl.Source
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.FutureConverters._
 import com.google.cloud.bigquery.storage.v1.avro.{ AvroRows, AvroSchema }
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession.TableReadOptions
 
 import java.util.concurrent.CompletionStage
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Google BigQuery Storage Api Pekko Stream operator factory using Avro Format.

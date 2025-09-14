@@ -13,10 +13,6 @@
 
 package docs.scaladsl
 
-import org.influxdb.{ InfluxDB, InfluxDBFactory }
-import org.influxdb.dto.{ Point, Query, QueryResult }
-import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
-import org.scalatest.concurrent.ScalaFutures
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
@@ -25,13 +21,18 @@ import pekko.stream.connectors.influxdb.{ InfluxDbReadSettings, InfluxDbWriteMes
 import pekko.stream.connectors.influxdb.scaladsl.{ InfluxDbSink, InfluxDbSource }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit
-import pekko.util.ccompat.JavaConverters._
 import pekko.stream.scaladsl.Sink
+import org.influxdb.{ InfluxDB, InfluxDBFactory }
+import org.influxdb.dto.{ Point, Query, QueryResult }
+import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach }
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 import docs.javadsl.TestUtils._
 import docs.javadsl.TestConstants.{ INFLUXDB_URL, PASSWORD, USERNAME }
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
+
+import scala.jdk.CollectionConverters._
 
 class InfluxDbSpec
     extends AnyWordSpec

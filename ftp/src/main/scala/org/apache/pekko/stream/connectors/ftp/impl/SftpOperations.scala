@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.sftp.{ OpenMode, RemoteResourceInfo, SFTPClient }
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier
@@ -31,6 +30,7 @@ import net.schmizz.sshj.xfer.FilePermission
 import org.apache.commons.net.DefaultSocketFactory
 
 import scala.collection.immutable
+import scala.jdk.CollectionConverters._
 import scala.util.{ Failure, Try }
 
 /**

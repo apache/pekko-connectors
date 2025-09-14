@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.kinesisfirehose.scaladsl
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts.parasitic
 import pekko.stream.ThrottleMode
 import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
 import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
@@ -26,6 +25,7 @@ import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchRequest, P
 
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.parasitic
 import scala.jdk.CollectionConverters._
 
 object KinesisFirehoseFlow {

@@ -18,15 +18,16 @@ import java.time.Instant
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
-import org.influxdb.annotation.{ Column, Measurement }
-import org.influxdb.dto.QueryResult
-
 import java.util.concurrent.TimeUnit
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
 import org.influxdb.InfluxDBMapperException
+import org.influxdb.annotation.{ Column, Measurement }
 import org.influxdb.dto.Point
+import org.influxdb.dto.QueryResult
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Internal API.
