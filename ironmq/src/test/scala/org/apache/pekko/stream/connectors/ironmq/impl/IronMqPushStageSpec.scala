@@ -22,7 +22,7 @@ import scala.concurrent.ExecutionContext
 
 class IronMqPushStageSpec extends IronMqSpec {
 
-  implicit val ec: ExecutionContext = ExecutionContext.global()
+  import ExecutionContext.Implicits.global
 
   "IronMqPushMessageStage" should {
     "push messages to the queue" in assertAllStagesStopped {

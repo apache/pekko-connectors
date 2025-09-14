@@ -17,7 +17,6 @@ import java.util.{ Optional, OptionalInt }
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.util.ccompat._
 import pekko.util.ByteString
 
 import scala.collection.immutable

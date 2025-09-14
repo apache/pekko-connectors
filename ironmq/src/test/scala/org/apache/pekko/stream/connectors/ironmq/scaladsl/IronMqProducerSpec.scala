@@ -23,11 +23,11 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 class IronMqProducerSpec extends IronMqSpec {
 
+  import ExecutionContext.Implicits.global
   import IronMqProducer._
 
   val messages: Source[PushMessage, NotUsed] =
     Source.fromIterator(() => Iterator.from(0)).map(i => PushMessage(s"test-$i"))
-  implicit val ec: ExecutionContext = ExecutionContext.global()
 
   "producerSink" should {
     "publish messages on IronMq" in assertAllStagesStopped {

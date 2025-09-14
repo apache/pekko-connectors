@@ -154,10 +154,10 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
         .flatMap { _ =>
           cluster match {
             case Some(cluster) =>
-              singleObservableToFuture(cluster.disconnect(), "close").map(_ => Done)(ExecutionContext.global())
+              singleObservableToFuture(cluster.disconnect(), "close").map(_ => Done)(ExecutionContext.global)
             case None => Future.successful(Done)
           }
-        }(ExecutionContext.global())
+        }(ExecutionContext.global)
     } else {
       Future.successful(Done)
     }
