@@ -15,12 +15,11 @@ package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.cassandra.CassandraWriteSettings
 import pekko.stream.scaladsl.{ Flow, FlowWithContext }
 import com.datastax.oss.driver.api.core.cql.{ BatchStatement, BoundStatement, PreparedStatement }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 
 /**
@@ -50,7 +49,7 @@ object CassandraFlow {
           Flow[T].mapAsync(writeSettings.parallelism) { element =>
             session
               .executeWrite(statementBinder(element, preparedStatement))
-              .map(_ => element)(ExecutionContexts.parasitic)
+              .map(_ => element)(ExecutionContext.parasitic)
           }
         }(session.ec)
       }
@@ -82,7 +81,7 @@ object CassandraFlow {
               case tuple @ (element, _) =>
                 session
                   .executeWrite(statementBinder(element, preparedStatement))
-                  .map(_ => tuple)(ExecutionContexts.parasitic)
+                  .map(_ => tuple)(ExecutionContext.parasitic)
             }
           }(session.ec)
         }
@@ -126,7 +125,7 @@ object CassandraFlow {
             .mapAsyncUnordered(writeSettings.parallelism) { list =>
               val boundStatements = list.map(t => statementBinder(t, preparedStatement))
               val batchStatement = BatchStatement.newInstance(writeSettings.batchType).addAll(boundStatements.asJava)
-              session.executeWriteBatch(batchStatement).map(_ => list)(ExecutionContexts.parasitic)
+              session.executeWriteBatch(batchStatement).map(_ => list)(ExecutionContext.parasitic)
             }
             .mapConcat(_.toList)
         }(session.ec)

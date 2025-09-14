@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
 import pekko.stream.scaladsl.{ Sink, Source }
 import com.typesafe.config.{ Config, ConfigFactory }
@@ -26,7 +25,7 @@ import scala.concurrent.ExecutionContext
 
 class IronMqConsumerSpec extends IronMqSpec with ParallelTestExecution {
 
-  implicit val ec: ExecutionContext = ExecutionContexts.global()
+  implicit val ec: ExecutionContext = ExecutionContext.global()
 
   val messages: Source[PushMessage, NotUsed] =
     Source.fromIterator(() => Iterator.from(0)).map(i => PushMessage(s"test-$i"))

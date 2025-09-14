@@ -18,7 +18,6 @@ import java.time.{ Instant, ZoneOffset, ZonedDateTime }
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.Http.OutgoingConnection
 import pekko.http.scaladsl.model.StatusCodes.{ NoContent, NotFound, OK }
 import pekko.http.scaladsl.model.headers._
@@ -36,7 +35,7 @@ import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 
 import scala.collection.immutable
-import scala.concurrent.{ Future, Promise }
+import scala.concurrent.{ ExecutionContext,Future, Promise }
 import scala.util.{ Failure, Success, Try }
 
 /** Internal Api */
@@ -231,7 +230,7 @@ import scala.util.{ Failure, Success, Try }
           }
           .mapMaterializedValue(_ => objectMetadataMat.future)
       }
-      .mapMaterializedValue(_.flatMap(identity)(ExecutionContexts.parasitic))
+      .mapMaterializedValue(_.flatMap(identity)(ExecutionContext.parasitic))
   }
 
   /**
@@ -342,7 +341,7 @@ import scala.util.{ Failure, Success, Try }
               // agnostic
               HttpRequests.listBuckets(s3Headers.headers), Some(Region.US_EAST_1)).map { (res: ListBucketsResult) =>
               res.buckets
-            }(ExecutionContexts.parasitic)
+            }(ExecutionContext.parasitic)
           }
           .flatMapConcat(results => Source(results))
       }
@@ -590,7 +589,7 @@ import scala.util.{ Failure, Success, Try }
                 }
               }
             case HttpResponse(NotFound, _, entity, _) =>
-              Source.future(entity.discardBytes().future().map(_ => None)(ExecutionContexts.parasitic))
+              Source.future(entity.discardBytes().future().map(_ => None)(ExecutionContext.parasitic))
             case response: HttpResponse =>
               Source.future {
                 unmarshalError(response.status, response.entity)
@@ -615,7 +614,7 @@ import scala.util.{ Failure, Success, Try }
         issueRequest(s3Location, HttpMethods.DELETE, versionId = versionId, s3Headers = headers)(mat, attr)
           .flatMapConcat {
             case HttpResponse(NoContent, _, entity, _) =>
-              Source.future(entity.discardBytes().future().map(_ => Done)(ExecutionContexts.parasitic))
+              Source.future(entity.discardBytes().future().map(_ => Done)(ExecutionContext.parasitic))
             case response: HttpResponse =>
               Source.future {
                 unmarshalError(response.status, response.entity)
@@ -732,7 +731,7 @@ import scala.util.{ Failure, Success, Try }
         val maybeRegionPayload = region match {
           case Region.US_EAST_1 => None
           case region =>
-            Some(HttpRequests.createBucketRegionPayload(region)(ExecutionContexts.parasitic))
+            Some(HttpRequests.createBucketRegionPayload(region)(ExecutionContext.parasitic))
         }
 
         s3ManagementRequest[Done](
@@ -801,7 +800,7 @@ import scala.util.{ Failure, Success, Try }
       httpRequest = bucketVersioningRequest(bucket, bucketVersioning.mfaDelete, headers),
       headers.headersFor(PutBucketVersioning),
       process = processS3LifecycleResponse,
-      httpEntity = Some(putBucketVersioningPayload(bucketVersioning)(ExecutionContexts.parasitic)))
+      httpEntity = Some(putBucketVersioningPayload(bucketVersioning)(ExecutionContext.parasitic)))
 
   def putBucketVersioning(bucket: String, bucketVersioning: BucketVersioning, headers: S3Headers)(
       implicit mat: Materializer,
@@ -818,7 +817,7 @@ import scala.util.{ Failure, Success, Try }
       process = { (response: HttpResponse, mat: Materializer) =>
         response match {
           case HttpResponse(status, _, entity, _) if status.isSuccess() =>
-            Unmarshal(entity).to[BucketVersioningResult](implicitly, ExecutionContexts.parasitic, mat)
+            Unmarshal(entity).to[BucketVersioningResult](implicitly, ExecutionContext.parasitic, mat)
           case response: HttpResponse =>
             unmarshalError(response.status, response.entity)(mat)
         }
@@ -1325,7 +1324,7 @@ import scala.util.{ Failure, Success, Try }
             case ((response, (upload, index)), allContext) =>
               handleChunkResponse(response, upload, index, conf.multipartUploadSettings.retrySettings).map { result =>
                 (result, allContext)
-              }(ExecutionContexts.parasitic)
+              }(ExecutionContext.parasitic)
           }
           .alsoTo(chunkUploadSink)
           .map { case (result, _) => result }
@@ -1415,7 +1414,7 @@ import scala.util.{ Failure, Success, Try }
           }
           .mapMaterializedValue(_.map(r => MultipartUploadResult(r.location, r.bucket, r.key, r.eTag, r.versionId)))
       }
-      .mapMaterializedValue(_.flatMap(identity)(ExecutionContexts.parasitic))
+      .mapMaterializedValue(_.flatMap(identity)(ExecutionContext.parasitic))
 
   private def signAndGetAs[T](
       request: HttpRequest,

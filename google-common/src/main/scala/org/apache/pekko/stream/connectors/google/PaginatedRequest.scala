@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.google
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.model.HttpMethods.GET
 import pekko.http.scaladsl.model.HttpRequest
 import pekko.http.scaladsl.model.Uri.Query
@@ -26,7 +25,7 @@ import pekko.stream.connectors.google.scaladsl.Paginated
 import pekko.stream.scaladsl.Source
 import pekko.{ Done, NotUsed }
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 @InternalApi
 private[connectors] object PaginatedRequest {
@@ -68,7 +67,7 @@ private[connectors] object PaginatedRequest {
                   .pageToken(out)
                   .fold[Either[Done, Option[String]]](Left(Done))(pageToken => Right(Some(pageToken)))
                 Some((nextPageToken, out))
-              }(ExecutionContexts.parasitic)
+              }(ExecutionContext.parasitic)
         }
       }
       .mapMaterializedValue(_ => NotUsed)

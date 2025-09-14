@@ -15,16 +15,17 @@ package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.ironmq._
 import pekko.stream.connectors.ironmq.impl.IronMqPullStage
 import pekko.stream.scaladsl._
+
+import scala.concurrent.ExecutionContext
 
 object IronMqConsumer {
 
   def atMostOnceSource(queueName: String, settings: IronMqSettings): Source[Message, NotUsed] =
     Source.fromGraph(new IronMqPullStage(queueName, settings)).mapAsync(1) { cm =>
-      cm.commit().map(_ => cm.message)(ExecutionContexts.parasitic)
+      cm.commit().map(_ => cm.message)(ExecutionContext.parasitic)
     }
 
   def atLeastOnceSource[K, V](queueName: String, settings: IronMqSettings): Source[CommittableMessage, NotUsed] =

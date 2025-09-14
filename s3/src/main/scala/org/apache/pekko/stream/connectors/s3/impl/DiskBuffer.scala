@@ -16,11 +16,12 @@ package org.apache.pekko.stream.connectors.s3.impl
 import java.io.{ File, FileOutputStream }
 import java.nio.BufferOverflowException
 import java.nio.file.Files
+import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
+import pekko.annotation.InternalApi
 import pekko.stream.ActorAttributes
 import pekko.stream.Attributes
 import pekko.stream.FlowShape
@@ -32,9 +33,8 @@ import pekko.stream.stage.GraphStageLogic
 import pekko.stream.stage.InHandler
 import pekko.stream.stage.OutHandler
 import pekko.util.ByteString
-import java.nio.file.Path
 
-import pekko.annotation.InternalApi
+import scala.concurrent.ExecutionContext
 
 /**
  * Internal Api
@@ -102,7 +102,7 @@ import pekko.annotation.InternalApi
             f.onComplete { _ =>
               path.delete()
 
-            }(ExecutionContexts.parasitic)
+            }(ExecutionContext.parasitic)
           NotUsed
         }
         emit(out, DiskChunk(src, length), () => completeStage())

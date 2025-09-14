@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import pekko.http.scaladsl.marshalling.Marshal
 import pekko.http.scaladsl.model.HttpMethods.{ DELETE, POST }
@@ -94,7 +93,7 @@ private[scaladsl] trait BigQueryTables { this: BigQueryRest =>
       settings: GoogleSettings): Future[Table] = {
     import BigQueryException._
     import SprayJsonSupport._
-    implicit val ec: ExecutionContext = ExecutionContexts.parasitic
+    implicit val ec: ExecutionContext = ExecutionContext.parasitic
     val projectId = table.tableReference.projectId.getOrElse(settings.projectId)
     val datasetId = table.tableReference.datasetId
     val uri = BigQueryEndpoints.tables(projectId, datasetId)

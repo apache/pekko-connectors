@@ -17,14 +17,13 @@ import java.util.concurrent.CompletionStage
 import java.util.concurrent.atomic.AtomicReference
 import org.apache.pekko
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.couchbase.impl.CouchbaseClusterRegistry
 import pekko.stream.connectors.couchbase.javadsl.{ CouchbaseSession => JCouchbaseSession }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseSession
 import pekko.util.FutureConverters._
 
 import scala.annotation.tailrec
-import scala.concurrent.{ Future, Promise }
+import scala.concurrent.{ ExecutionContext, Future, Promise }
 
 /**
  * This Couchbase session registry makes it possible to share Couchbase sessions between multiple use sites
@@ -87,7 +86,7 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
    */
   def getSessionFor(settings: CouchbaseSessionSettings, bucketName: String): CompletionStage[JCouchbaseSession] =
     sessionFor(settings, bucketName)
-      .map(_.asJava)(ExecutionContexts.parasitic)
+      .map(_.asJava)(ExecutionContext.parasitic)
       .asJava
 
   @tailrec
@@ -100,7 +99,7 @@ final class CouchbaseSessionRegistry(system: ExtendedActorSystem) extends Extens
       val session = clusterRegistry
         .clusterFor(key.settings)
         .flatMap(cluster => CouchbaseSession(cluster, key.bucketName)(blockingDispatcher))(
-          ExecutionContexts.parasitic)
+          ExecutionContext.parasitic)
       promise.completeWith(session)
       promise.future
     } else {

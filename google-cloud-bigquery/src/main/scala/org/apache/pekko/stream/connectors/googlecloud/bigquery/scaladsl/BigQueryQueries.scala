@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import pekko.http.scaladsl.marshalling.Marshal
 import pekko.http.scaladsl.model.HttpMethods.POST
@@ -72,7 +71,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
         import BigQueryException._
         import SprayJsonSupport._
         implicit val system: ActorSystem = mat.system
-        implicit val ec: ExecutionContext = ExecutionContexts.parasitic
+        implicit val ec: ExecutionContext = ExecutionContext.parasitic
         implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
 
         Source.lazyFutureSource { () =>

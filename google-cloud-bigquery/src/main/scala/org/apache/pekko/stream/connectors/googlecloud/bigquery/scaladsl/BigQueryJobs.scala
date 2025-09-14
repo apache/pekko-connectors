@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ClassicActorSystemProvider
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import pekko.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
 import pekko.http.scaladsl.model.ContentTypes.`application/octet-stream`
@@ -169,7 +168,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
       .fromMaterializer { (mat, attr) =>
         import BigQueryException._
         implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
-        implicit val ec: ExecutionContext = ExecutionContexts.parasitic
+        implicit val ec: ExecutionContext = ExecutionContext.parasitic
         val uri = BigQueryMediaEndpoints.jobs(settings.projectId).withQuery(Query("uploadType" -> "resumable"))
         Sink
           .lazyFutureSink { () =>
@@ -178,7 +177,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
               .map { entity =>
                 val request = HttpRequest(POST, uri, List(`X-Upload-Content-Type`(`application/octet-stream`)), entity)
                 resumableUpload[Job](request)
-              }(ExecutionContexts.parasitic)
+              }(ExecutionContext.parasitic)
           }
           .mapMaterializedValue(_.flatten)
       }

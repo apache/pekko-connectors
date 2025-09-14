@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.storage.impl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pekko.http.scaladsl.marshalling.Marshal
 import pekko.http.scaladsl.model.HttpMethods.{ DELETE, POST }
@@ -219,7 +218,7 @@ import scala.concurrent.ExecutionContext.parasitic
           _.resource match {
             case Some(resource) => Future.successful(resource)
             case None           => Future.failed(new RuntimeException("Storage object is missing"))
-          })(ExecutionContexts.parasitic))
+          })(ExecutionContext.parasitic))
   }
 
   private def makeRequestSource[T: FromResponseUnmarshaller](request: HttpRequest): Source[T, NotUsed] =
@@ -232,7 +231,7 @@ import scala.concurrent.ExecutionContext.parasitic
         Source.lazyFuture { () =>
           request.flatMap { request =>
             GoogleHttp()(mat.system).singleAuthenticatedRequest[T](request)
-          }(ExecutionContexts.parasitic)
+          }(ExecutionContext.parasitic)
         }
       }
       .mapMaterializedValue(_ => NotUsed)

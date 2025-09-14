@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.impl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.Http.HostConnectionPool
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pekko.http.scaladsl.marshalling.Marshal
@@ -34,7 +33,7 @@ import spray.json._
 
 import java.time.Instant
 import scala.collection.immutable
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.Try
 
 /**
@@ -250,7 +249,7 @@ private[pubsub] trait PubSubApi {
                 .to[RequestEntity]
                 .map { entity =>
                   HttpRequest(POST, url, entity = entity)
-                }(ExecutionContexts.parasitic)
+                }(ExecutionContext.parasitic)
             }
             .via(pool[PublishResponse, T](parallelism, host))
             .map(_.get)

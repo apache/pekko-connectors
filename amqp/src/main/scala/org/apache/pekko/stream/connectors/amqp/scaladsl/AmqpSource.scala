@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import org.apache.pekko
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.amqp.impl
 import pekko.stream.connectors.amqp.{ AmqpSourceSettings, ReadResult }
 import pekko.stream.scaladsl.Source
@@ -23,7 +22,7 @@ import pekko.stream.scaladsl.Source
 import scala.concurrent.ExecutionContext
 
 object AmqpSource {
-  private implicit val executionContext: ExecutionContext = ExecutionContexts.parasitic
+  private implicit val executionContext: ExecutionContext = ExecutionContext.parasitic
 
   /**
    * Scala API: Convenience for "at-most once delivery" semantics. Each message is acked to RabbitMQ
