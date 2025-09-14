@@ -35,7 +35,7 @@ import pekko.{ Done, NotUsed }
 import software.amazon.awssdk.regions.Region
 
 import scala.collection.immutable
-import scala.concurrent.{ ExecutionContext,Future, Promise }
+import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.util.{ Failure, Success, Try }
 
 /** Internal Api */
