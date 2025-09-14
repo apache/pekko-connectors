@@ -20,11 +20,11 @@ import pekko.http.scaladsl.{ Http, HttpExt }
 import pekko.stream.connectors.elasticsearch.{ impl, _ }
 import pekko.stream.javadsl.Source
 import pekko.stream.{ Attributes, Materializer }
-import pekko.util.ccompat.JavaConverters._
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.{ ArrayNode, NumericNode }
 
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 
 /**
  * Java API to create Elasticsearch sources.

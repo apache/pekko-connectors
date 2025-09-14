@@ -24,7 +24,6 @@ import pekko.stream.scaladsl.{ FileIO, Sink, Source }
 import pekko.testkit.TestKit
 import pekko.util.ByteString
 import pekko.NotUsed
-import pekko.util.ccompat.JavaConverters._
 import docs.javadsl.ArchiveHelper
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
@@ -32,6 +31,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.CollectionConverters._
 
 class ArchiveSpec
     extends TestKit(ActorSystem("ArchiveSpec"))

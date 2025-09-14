@@ -73,7 +73,7 @@ class CharsetCodingFlowsSpec
       import java.nio.charset.StandardCharsets
 
       import pekko.stream.scaladsl.FileIO
-      import pekko.util.ccompat.JavaConverters._
+      import scala.jdk.CollectionConverters._
 
       // #encoding
       val targetFile = Paths.get("target/outdata.txt")

@@ -20,19 +20,18 @@ import pekko.stream.connectors.mongodb.scaladsl.MongoSource
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
-import pekko.util.ccompat.JavaConverters._
 import com.mongodb.reactivestreams.client.MongoClients
 import org.bson.Document
 import org.scalatest._
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.concurrent.ScalaFutures
 
+import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 import scala.concurrent._
 import scala.concurrent.duration._
-import org.scalatest.matchers.must.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-
-import scala.annotation.nowarn
+import scala.jdk.CollectionConverters._
 
 class MongoSourceSpec
     extends AnyWordSpec

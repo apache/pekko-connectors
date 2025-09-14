@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.s3.scaladsl
 
 import org.apache.pekko
-import org.scalacheck.Gen
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.Http
 import pekko.http.scaladsl.model.{ ContentTypes, StatusCodes }
@@ -25,9 +24,9 @@ import pekko.stream.connectors.s3._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.testkit.{ TestKit, TestKitBase }
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
+import org.scalacheck.Gen
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike
@@ -43,6 +42,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.jdk.CollectionConverters._
 
 trait S3IntegrationSpec
     extends AnyFlatSpecLike

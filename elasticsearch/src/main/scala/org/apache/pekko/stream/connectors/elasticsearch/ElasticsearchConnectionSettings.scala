@@ -17,9 +17,10 @@ import org.apache.pekko
 import pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
-import pekko.util.ccompat.JavaConverters._
 
 import javax.net.ssl.SSLContext
+
+import scala.jdk.CollectionConverters._
 
 final class ElasticsearchConnectionSettings private (
     val baseUrl: String,

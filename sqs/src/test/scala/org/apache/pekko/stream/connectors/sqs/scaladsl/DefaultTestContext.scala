@@ -21,12 +21,12 @@ import pekko.actor.{ ActorSystem, Terminated }
 import pekko.http.scaladsl.Http
 import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.sqs.SqsSourceSettings
-import pekko.util.ccompat.JavaConverters._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{ BeforeAndAfterAll, Suite, Tag }
 
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 //#init-client
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region

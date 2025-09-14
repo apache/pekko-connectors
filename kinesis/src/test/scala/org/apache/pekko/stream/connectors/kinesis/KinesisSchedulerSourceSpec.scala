@@ -28,7 +28,6 @@ import pekko.stream.connectors.testkit.scaladsl.Repeated
 import pekko.stream.scaladsl.Keep
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
-import pekko.util.ccompat.JavaConverters._
 import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
@@ -50,6 +49,7 @@ import software.amazon.kinesis.retrieval.kpl.ExtendedSequenceNumber
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
 class KinesisSchedulerSourceSpec

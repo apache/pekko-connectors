@@ -18,11 +18,11 @@ import java.util.Properties
 
 import scala.collection.immutable
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 import org.apache.pekko
-import org.apache.pekko.japi.Pair
-import org.apache.pekko.util.JavaDurationConverters._
-import org.apache.pekko.util.ccompat.JavaConverters._
+import pekko.japi.Pair
+import pekko.util.JavaDurationConverters._
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties

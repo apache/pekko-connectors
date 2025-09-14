@@ -21,15 +21,15 @@ import pekko.stream.connectors.azure.storagequeue.scaladsl._
 import pekko.stream.scaladsl._
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.testkit._
-import pekko.util.ccompat.JavaConverters._
 import com.microsoft.azure.storage._
 import com.microsoft.azure.storage.queue._
 import org.scalatest._
+import org.scalatest.flatspec.AsyncFlatSpecLike
 
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.Properties
-import org.scalatest.flatspec.AsyncFlatSpecLike
+import scala.jdk.CollectionConverters._
 
 // These tests are all live since the Azure Storage Emulator
 // does not run on Linux/Docker yet

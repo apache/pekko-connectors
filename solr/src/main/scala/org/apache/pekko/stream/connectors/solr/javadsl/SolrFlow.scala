@@ -20,11 +20,11 @@ import pekko.NotUsed
 import pekko.stream.connectors.solr.{ scaladsl, SolrUpdateSettings, WriteMessage, WriteResult }
 import pekko.stream.javadsl
 import pekko.stream.scaladsl.Flow
-import pekko.util.ccompat.JavaConverters._
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
 
 import scala.collection.immutable
+import scala.jdk.CollectionConverters._
 
 /**
  * Java API

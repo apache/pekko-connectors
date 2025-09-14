@@ -23,8 +23,9 @@ import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.stream.connectors.udp.Datagram
 import pekko.stream.javadsl.{ Flow, Sink }
 import pekko.stream.connectors.udp.scaladsl
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.FutureConverters._
+
+import scala.jdk.CollectionConverters._
 
 object Udp {
   import java.lang.{ Iterable => JIterable }

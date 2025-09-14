@@ -21,7 +21,8 @@ import pekko.http.scaladsl.model.HttpHeader
 import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, StorageClass }
 import pekko.stream.connectors.s3.impl.S3Request
-import pekko.util.ccompat.JavaConverters._
+
+import scala.jdk.CollectionConverters._
 
 import scala.collection.immutable.Seq
 

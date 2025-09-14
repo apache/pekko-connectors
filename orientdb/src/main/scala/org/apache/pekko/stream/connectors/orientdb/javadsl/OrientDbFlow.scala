@@ -17,8 +17,9 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.orientdb._
 import pekko.stream.javadsl.Flow
-import pekko.util.ccompat.JavaConverters._
 import com.orientechnologies.orient.core.record.impl.ODocument
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Java API.
