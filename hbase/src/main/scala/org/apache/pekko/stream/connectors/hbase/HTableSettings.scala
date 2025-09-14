@@ -23,7 +23,6 @@ import scala.jdk.CollectionConverters._
 import org.apache.pekko
 import pekko.util.FunctionConverters._
 
-
 final class HTableSettings[T] private (val conf: Configuration,
     val tableName: TableName,
     val columnFamilies: immutable.Seq[String],

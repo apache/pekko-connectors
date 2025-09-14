@@ -114,7 +114,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
       if (sourceOut != null) {
         sourceOut.complete()
       }
-      implicit val executionContext: ExecutionContext = pekko.dispatch.ExecutionContexts.parasitic
+      implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.parasitic
       promise.completeWith(Future.sequence(sinkCompletions).map(_ => Done))
     }
 
