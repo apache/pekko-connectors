@@ -254,7 +254,7 @@ final class AmqpWriteSettings private (
    * Java API
    */
   def withConfirmationTimeout(confirmationTimeout: java.time.Duration): AmqpWriteSettings =
-    copy(confirmationTimeout = confirmationTimeout.asScala)
+    copy(confirmationTimeout = confirmationTimeout.toScala)
 
   private def copy(connectionProvider: AmqpConnectionProvider = connectionProvider,
       exchange: Option[String] = exchange,
