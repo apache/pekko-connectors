@@ -18,9 +18,10 @@ import javax.jms
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.jms.impl.JmsMessageReader._
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
-import pekko.util.OptionConverters._
+
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Base interface for messages handled by JmsProducers. Sub-classes support pass-through or use [[pekko.NotUsed]] as type for pass-through.

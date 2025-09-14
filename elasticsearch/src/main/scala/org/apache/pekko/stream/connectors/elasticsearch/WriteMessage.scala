@@ -16,8 +16,9 @@ package org.apache.pekko.stream.connectors.elasticsearch
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
+
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * INTERNAL API

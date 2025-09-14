@@ -15,7 +15,8 @@ package org.apache.pekko.stream.connectors.elasticsearch
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.util.OptionConverters._
+
+import scala.jdk.OptionConverters._
 
 /**
  * Stream element type emitted by Elasticsearch sources.

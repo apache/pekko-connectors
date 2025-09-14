@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.reference
 
 import org.apache.pekko.util.FunctionConverters._
-import org.apache.pekko.util.OptionConverters._
 
 // rename Java imports if the name clashes with the Scala name
 import java.time.{ Duration => JavaDuration }
@@ -22,6 +21,7 @@ import java.util.Optional
 import java.util.function.Predicate
 
 import scala.concurrent.duration._
+import scala.jdk.OptionConverters._
 
 /**
  * Settings class constructor is private and not exposed as API.

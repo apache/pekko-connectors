@@ -20,7 +20,7 @@ import pekko.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Ur
 import pekko.http.scaladsl.model.headers._
 import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
 import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
+import scala.jdk.OptionConverters._
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq

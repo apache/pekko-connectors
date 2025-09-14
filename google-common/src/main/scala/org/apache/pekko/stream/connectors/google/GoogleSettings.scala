@@ -26,12 +26,12 @@ import pekko.stream.connectors.google.auth.Credentials
 import pekko.stream.connectors.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
 import pekko.stream.connectors.google.implicits._
 import pekko.util.JavaDurationConverters._
-import pekko.util.OptionConverters._
 import com.typesafe.config.Config
 
 import java.time
 import java.util.Optional
 import scala.concurrent.duration._
+import scala.jdk.OptionConverters._
 
 object GoogleSettings {
   val ConfigPath = "pekko.connectors.google"

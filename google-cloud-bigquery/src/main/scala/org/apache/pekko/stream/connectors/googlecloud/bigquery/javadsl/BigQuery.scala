@@ -38,15 +38,16 @@ import pekko.stream.javadsl.{ Flow, Sink, Source }
 import pekko.stream.{ scaladsl => ss }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.FutureConverters._
-import pekko.util.OptionConverters._
 
 import java.time.Duration
 import java.util.concurrent.CompletionStage
 import java.{ lang, util }
+
 import scala.annotation.nowarn
 import scala.concurrent.duration.{ FiniteDuration, MILLISECONDS }
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Java API to interface with BigQuery.

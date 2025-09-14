@@ -15,8 +15,6 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.model
 
 import org.apache.pekko
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
-import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonProperty }
 import spray.json.{ JsonFormat, RootJsonFormat }
 
@@ -24,6 +22,8 @@ import java.util
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Job model

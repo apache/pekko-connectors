@@ -19,7 +19,7 @@ import java.util.Optional
 import org.apache.pekko
 import pekko.http.scaladsl.model.ContentType
 import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Represents an object within Google Cloud Storage.

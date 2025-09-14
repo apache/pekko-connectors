@@ -21,7 +21,7 @@ import pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
 import pekko.stream.javadsl.Source
 import pekko.http.javadsl.model.sse.ServerSentEvent
 import pekko.util.FutureConverters
-import pekko.util.OptionConverters
+import scala.jdk.OptionConverters
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 import java.util.function.{ Function => JFunction }

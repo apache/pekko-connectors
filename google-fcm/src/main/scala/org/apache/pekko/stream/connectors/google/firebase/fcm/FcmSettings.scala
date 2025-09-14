@@ -17,10 +17,10 @@ import org.apache.pekko
 import pekko.actor.ClassicActorSystemProvider
 import pekko.http.scaladsl.model.headers.BasicHttpCredentials
 import pekko.stream.connectors.google.{ ForwardProxy => CommonForwardProxy }
-import pekko.util.OptionConverters._
 
 import java.util.Objects
 import scala.annotation.nowarn
+import scala.jdk.OptionConverters._
 
 @nowarn("msg=deprecated")
 final class FcmSettings private (

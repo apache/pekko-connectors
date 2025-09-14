@@ -16,8 +16,9 @@ package org.apache.pekko.stream.connectors.xml
 import java.util.Optional
 
 import org.apache.pekko
-import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
+
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * XML parsing events emitted by the parser flow. These roughly correspond to Java XMLEvent types.

@@ -22,7 +22,6 @@ import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.http.scaladsl.model.Uri
 import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
-import pekko.util.OptionConverters._
 import com.typesafe.config.Config
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.auth.credentials._
@@ -30,6 +29,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers._
 
 import scala.concurrent.duration._
+import scala.jdk.OptionConverters._
 import scala.util.Try
 
 final class Proxy private (
