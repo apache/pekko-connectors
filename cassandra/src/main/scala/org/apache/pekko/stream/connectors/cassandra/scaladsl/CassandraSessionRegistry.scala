@@ -118,8 +118,8 @@ final class CassandraSessionRegistry(system: ExtendedActorSystem) extends Extens
    * @param executionContext when used after actor system termination, a different execution context must be provided
    */
   private def close(executionContext: ExecutionContext) = {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    val closing = sessions.values().asScala.map(_.close(ec))
+    implicit val ec: ExecutionContext = executionContext
+    val closing = sessions.values().asScala.map(_.close(executionContext))
     Future.sequence(closing)
   }
 
