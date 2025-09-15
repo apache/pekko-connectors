@@ -59,7 +59,7 @@ final case class QueryRequest private[bigquery] (query: String,
   def getQuery = query
   def getMaxResults = maxResults.toJavaPrimitive
   def getDefaultDataset = defaultDataset.toJava
-  def getTimeout = timeout.map(_.asJava).toJava
+  def getTimeout = timeout.map(_.toJava).toJava
   def getDryRun = dryRun.map(lang.Boolean.valueOf).toJava
   def getUseLegacySql = useLegacySql.map(lang.Boolean.valueOf).toJava
   def getRequestId = requestId.toJava
