@@ -19,7 +19,8 @@ import org.apache.pekko
 import pekko.stream.connectors.amqp._
 import pekko.stream.javadsl.Flow
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 object AmqpRpcFlow {
 

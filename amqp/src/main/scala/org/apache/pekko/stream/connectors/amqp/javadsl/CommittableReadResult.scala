@@ -19,7 +19,8 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.amqp.ReadResult
 import pekko.stream.connectors.amqp.scaladsl
-import pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 final class CommittableReadResult(cm: scaladsl.CommittableReadResult) {
   val message: ReadResult = cm.message

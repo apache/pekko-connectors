@@ -16,23 +16,22 @@ package org.apache.pekko.stream.connectors.pravega.javadsl;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.annotation.ApiMayChange;
-import org.apache.pekko.stream.connectors.pravega.PravegaEvent;
 
-import org.apache.pekko.stream.connectors.pravega.WriterSettings;
-import org.apache.pekko.stream.connectors.pravega.PravegaReaderGroupManager;
 import org.apache.pekko.stream.connectors.pravega.*;
+import org.apache.pekko.stream.connectors.pravega.impl.PravegaFlow;
+import org.apache.pekko.stream.connectors.pravega.impl.PravegaSource;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.util.FutureConverters;
 
 import io.pravega.client.ClientConfig;
 import io.pravega.client.stream.ReaderGroup;
+
 import java.util.concurrent.CompletionStage;
 
-import org.apache.pekko.stream.connectors.pravega.impl.PravegaFlow;
-import org.apache.pekko.stream.connectors.pravega.impl.PravegaSource;
+import scala.jdk.javaapi.FutureConverters;
+
 
 @ApiMayChange
 public class Pravega {

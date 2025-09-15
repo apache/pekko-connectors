@@ -19,7 +19,7 @@ import pekko.stream.ThrottleMode
 import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings
 import pekko.stream.connectors.kinesisfirehose.KinesisFirehoseErrors.FailurePublishingRecords
 import pekko.stream.scaladsl.Flow
-import pekko.util.FutureConverters._
+import scala.jdk.FutureConverters._
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient
 import software.amazon.awssdk.services.firehose.model.{ PutRecordBatchRequest, PutRecordBatchResponseEntry, Record }
 

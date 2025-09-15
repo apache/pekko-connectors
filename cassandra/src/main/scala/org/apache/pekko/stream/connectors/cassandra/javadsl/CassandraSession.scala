@@ -21,6 +21,7 @@ import java.util.function.{ Function => JFunction }
 import scala.annotation.varargs
 import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 import scala.jdk.OptionConverters._
 
 import org.apache.pekko
@@ -32,7 +33,6 @@ import pekko.event.LoggingAdapter
 import pekko.stream.connectors.cassandra.CassandraServerMetaData
 import pekko.stream.connectors.cassandra.{ scaladsl, CqlSessionProvider }
 import pekko.stream.javadsl.Source
-import pekko.util.FutureConverters._
 
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql.BatchStatement

@@ -17,11 +17,11 @@ import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
 import pekko.Done
-import pekko.util.FunctionConverters._
-import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 
 import scala.concurrent.Future
+import scala.jdk.FunctionConverters._
+import scala.jdk.FutureConverters._
 
 class CassandraSessionSettings private (val configPath: String,
     _metricsCategory: Option[String] = None,

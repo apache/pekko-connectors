@@ -22,7 +22,8 @@ import pekko.stream.connectors.ironmq._
 import pekko.stream.javadsl.{ Flow, Sink }
 import pekko.stream.scaladsl.{ Flow => ScalaFlow, Keep }
 import pekko.stream.connectors.ironmq.scaladsl.{ IronMqProducer => ScalaIronMqProducer }
-import pekko.util.FutureConverters
+
+import scala.jdk.FutureConverters
 
 object IronMqProducer {
 

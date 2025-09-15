@@ -18,13 +18,13 @@ import pekko.ConfigurationException
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.discovery.Discovery
 import pekko.util.JavaDurationConverters._
-import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
 import scala.collection.immutable
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.FutureConverters._
 
 /**
  * [[https://pekko.apache.org/docs/pekko/current/discovery/index.html Pekko Discovery]]

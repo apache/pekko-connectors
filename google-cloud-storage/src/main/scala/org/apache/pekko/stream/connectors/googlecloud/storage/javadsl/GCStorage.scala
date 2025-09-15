@@ -25,10 +25,10 @@ import pekko.stream.connectors.googlecloud.storage.{ Bucket, StorageObject }
 import pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
 import pekko.stream.{ Attributes, Materializer }
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
 import pekko.{ Done, NotUsed }
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 import scala.jdk.OptionConverters._
 
 /**

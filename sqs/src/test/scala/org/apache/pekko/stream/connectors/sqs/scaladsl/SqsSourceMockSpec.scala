@@ -19,7 +19,6 @@ import org.apache.pekko
 import pekko.stream.connectors.sqs.SqsSourceSettings
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.testkit.scaladsl.TestSink
-import pekko.util.FutureConverters._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.{ atMost => atMostTimes, _ }
 import org.mockito.invocation.InvocationOnMock
@@ -32,6 +31,7 @@ import software.amazon.awssdk.services.sqs.model.{ Message, ReceiveMessageReques
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.jdk.FutureConverters._
 
 class SqsSourceMockSpec extends AnyFlatSpec with Matchers with DefaultTestContext with LogCapturing {
 

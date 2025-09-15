@@ -13,29 +13,27 @@
 
 package org.apache.pekko.stream.connectors.pravega.impl
 
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.CompletableFuture
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.event.Logging
+import pekko.stream.connectors.pravega.TableWriterSettings
 import pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
-import pekko.util.FutureConverters._
 
-import scala.util.control.NonFatal
-import scala.concurrent.ExecutionContext.Implicits.global
-import pekko.stream.connectors.pravega.TableWriterSettings
-
-import scala.util.{ Failure, Success, Try }
-import io.pravega.client.tables.KeyValueTable
 import io.pravega.client.KeyValueTableFactory
+import io.pravega.client.tables.KeyValueTable
 import io.pravega.client.tables.KeyValueTableClientConfiguration
+import io.pravega.client.tables.Put
+import io.pravega.client.tables.TableKey
 import io.pravega.client.tables.Version
 
-import java.util.concurrent.atomic.AtomicInteger
-
-import io.pravega.client.tables.Put
-
-import io.pravega.client.tables.TableKey
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.jdk.FutureConverters._
+import scala.util.{ Failure, Success, Try }
+import scala.util.control.NonFatal
 
 @InternalApi private final class PravegaTableWriteFlowStageLogic[KVPair, K, V](
     val shape: FlowShape[KVPair, KVPair],

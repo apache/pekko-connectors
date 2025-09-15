@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.dynamodb
 
 import java.util.concurrent.CompletableFuture
 
-import org.apache.pekko.util.FutureConverters._
 import org.reactivestreams.Publisher
 import software.amazon.awssdk.core.async.SdkPublisher
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
@@ -28,6 +27,7 @@ import software.amazon.awssdk.services.dynamodb.paginators.{
 }
 
 import scala.concurrent.Future
+import scala.jdk.FutureConverters._
 
 /**
  * Representation on an AWS dynamodb sdk operation.

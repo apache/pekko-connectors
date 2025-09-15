@@ -20,7 +20,6 @@ import pekko.event.LoggingAdapter
 import pekko.stream.connectors.cassandra.{ CassandraMetricsRegistry, CassandraServerMetaData, CqlSessionProvider }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.{ Materializer, SystemMaterializer }
-import pekko.util.FutureConverters._
 import pekko.util.OptionVal
 import pekko.{ Done, NotUsed }
 import com.datastax.oss.driver.api.core.CqlSession
@@ -29,6 +28,7 @@ import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException
 
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.FutureConverters._
 import scala.util.control.NonFatal
 
 /**

@@ -13,14 +13,13 @@
 
 package org.apache.pekko.stream.connectors.reference
 
-import org.apache.pekko.util.FunctionConverters._
-
 // rename Java imports if the name clashes with the Scala name
 import java.time.{ Duration => JavaDuration }
 import java.util.Optional
 import java.util.function.Predicate
 
 import scala.concurrent.duration._
+import scala.jdk.FunctionConverters._
 import scala.jdk.OptionConverters._
 
 /**

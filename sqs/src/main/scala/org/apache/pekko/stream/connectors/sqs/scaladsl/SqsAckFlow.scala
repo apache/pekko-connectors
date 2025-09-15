@@ -24,7 +24,6 @@ import pekko.stream.connectors.sqs.SqsAckResult._
 import pekko.stream.connectors.sqs.SqsAckResultEntry._
 import pekko.stream.connectors.sqs._
 import pekko.stream.scaladsl.{ Flow, GraphDSL, Merge, Partition }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
@@ -32,6 +31,7 @@ import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.parasitic
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Scala API to create acknowledging SQS flows.

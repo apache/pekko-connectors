@@ -27,7 +27,6 @@ import pekko.stream.connectors.cassandra.scaladsl.CassandraSpecBase
 import pekko.stream.javadsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.TestSink
-import pekko.util.FutureConverters._
 
 import com.datastax.oss.driver.api.core.cql.Row
 
@@ -35,6 +34,7 @@ import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 import scala.jdk.OptionConverters._
 
 final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("CassandraSessionSpec")) {

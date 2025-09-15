@@ -45,7 +45,7 @@ Apache Pekko Connectors, same as Apache Pekko, aims to keep 100% feature parity 
 
 1. If the underlying Scala code requires an `ExecutionContext`, make the Java API take an `Executor` and use `ExecutionContext.fromExecutor(executor)` for conversion.
 
-1. Make use of `org.apache.pekko.util` conversions (eg. `org.apache.pekko.util.FutureConverters` to translate Futures to `CompletionStage`s).
+1. Make use of Scala JDK conversions (eg. `scala.jdk.javaapi.FutureConverters` to translate Futures to `CompletionStage`s).
 
 
 ### Overview of Scala types and their Java counterparts

@@ -17,11 +17,11 @@ import org.apache.pekko
 import pekko.stream.connectors.sns.SnsPublishSettings
 import pekko.stream.scaladsl.{ Flow, Keep, Sink }
 import pekko.{ Done, NotUsed }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.{ PublishRequest, PublishResponse }
 
 import scala.concurrent.Future
+import scala.jdk.FutureConverters._
 
 /**
  * Scala API

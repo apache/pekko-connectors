@@ -20,11 +20,11 @@ import pekko.Done
 import pekko.stream.connectors.sqs._
 import pekko.stream.javadsl.Sink
 import pekko.stream.scaladsl.{ Flow, Keep }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Java API to create SQS Sinks.

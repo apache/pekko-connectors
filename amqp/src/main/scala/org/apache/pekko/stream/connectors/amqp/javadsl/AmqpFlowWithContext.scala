@@ -18,7 +18,8 @@ import java.util.concurrent.CompletionStage
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.amqp._
-import pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 object AmqpFlowWithContext {
 

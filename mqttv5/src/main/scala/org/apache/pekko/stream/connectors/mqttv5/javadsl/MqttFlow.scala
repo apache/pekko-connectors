@@ -18,7 +18,8 @@ import java.util.concurrent.CompletionStage
 import org.apache.pekko.Done
 import org.apache.pekko.stream.connectors.mqttv5._
 import org.apache.pekko.stream.javadsl.Flow
-import org.apache.pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 /**
  * Java API

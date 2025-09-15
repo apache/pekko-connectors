@@ -20,7 +20,8 @@ import pekko.Done
 import pekko.japi.Pair
 import pekko.stream.connectors.amqp._
 import pekko.stream.scaladsl.Keep
-import pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 object AmqpFlow {
 

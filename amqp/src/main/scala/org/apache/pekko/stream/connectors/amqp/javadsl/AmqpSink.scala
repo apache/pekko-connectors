@@ -19,7 +19,8 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.amqp._
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 object AmqpSink {
 

@@ -14,7 +14,8 @@
 package org.apache.pekko.stream.connectors.kudu
 
 import org.apache.kudu.client.PartialRow
-import org.apache.pekko.util.FunctionConverters._
+
+import scala.jdk.FunctionConverters._
 
 final class KuduTableSettings[T] private (val tableName: String,
     val schema: org.apache.kudu.Schema,

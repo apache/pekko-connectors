@@ -21,7 +21,8 @@ import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
 import org.apache.pekko.stream.connectors.mqttv5.MqttSubscriptions
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl
 import org.apache.pekko.stream.javadsl.Source
-import org.apache.pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 /**
  * Java API

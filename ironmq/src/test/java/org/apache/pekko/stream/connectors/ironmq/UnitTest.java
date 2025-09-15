@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.apache.pekko.util.FutureConverters.*;
+import static scala.jdk.javaapi.FutureConverters.*;
 import static scala.collection.JavaConverters.*;
 
 public abstract class UnitTest {

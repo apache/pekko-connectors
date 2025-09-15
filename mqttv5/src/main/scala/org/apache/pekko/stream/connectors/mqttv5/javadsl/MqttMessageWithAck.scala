@@ -19,7 +19,8 @@ import org.apache.pekko.Done
 import org.apache.pekko.annotation.InternalApi
 import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl
-import org.apache.pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 /**
  * Java API

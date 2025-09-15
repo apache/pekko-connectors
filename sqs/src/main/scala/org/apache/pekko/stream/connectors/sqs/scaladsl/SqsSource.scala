@@ -19,11 +19,11 @@ import pekko.stream._
 import pekko.stream.connectors.sqs.SqsSourceSettings
 import pekko.stream.connectors.sqs.impl.BalancingMapAsync
 import pekko.stream.scaladsl.{ Flow, Source }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Scala API to create SQS sources.

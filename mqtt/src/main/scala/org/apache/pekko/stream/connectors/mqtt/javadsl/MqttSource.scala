@@ -19,7 +19,8 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.mqtt._
 import pekko.stream.javadsl.Source
-import pekko.util.FutureConverters._
+
+import scala.jdk.FutureConverters._
 
 /**
  * Java API

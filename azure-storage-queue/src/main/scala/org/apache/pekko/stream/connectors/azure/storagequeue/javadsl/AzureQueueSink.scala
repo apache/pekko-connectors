@@ -36,7 +36,7 @@ object AzureQueueSink {
    */
   private[javadsl] def fromFunction[T](f: T => Unit): Sink[T, CompletionStage[Done]] = {
     import pekko.stream.connectors.azure.storagequeue.scaladsl.{ AzureQueueSink => AzureQueueSinkScalaDSL }
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     AzureQueueSinkScalaDSL.fromFunction(f).mapMaterializedValue(_.asJava).asJava
   }
 }

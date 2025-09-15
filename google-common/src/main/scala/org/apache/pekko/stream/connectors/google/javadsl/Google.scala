@@ -23,10 +23,10 @@ import pekko.stream.connectors.google.GoogleSettings
 import pekko.stream.connectors.google.scaladsl.{ Google => ScalaGoogle }
 import pekko.stream.javadsl.{ Sink, Source }
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
 
 import java.util.concurrent.CompletionStage
 import scala.language.implicitConversions
+import scala.jdk.FutureConverters._
 
 /**
  * Java API: Provides methods to interface with Google APIs

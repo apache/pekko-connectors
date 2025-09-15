@@ -18,12 +18,12 @@ import pekko.stream.connectors.jakartams.{ scaladsl, JmsEnvelope, JmsMessage, Jm
 import pekko.stream.javadsl.Source
 import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
 import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Factory methods to create JMS producers.
