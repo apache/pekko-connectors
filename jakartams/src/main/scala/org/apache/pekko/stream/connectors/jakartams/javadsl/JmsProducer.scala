@@ -19,10 +19,11 @@ import pekko.stream.javadsl.Source
 import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ByteString
 import pekko.util.FutureConverters._
-import pekko.util.ccompat.JavaConverters._
 import pekko.{ Done, NotUsed }
 
 import java.util.concurrent.CompletionStage
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Factory methods to create JMS producers.

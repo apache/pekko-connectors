@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.google.javadsl
 
 import org.apache.pekko
 import pekko.stream.connectors.google.scaladsl
-import pekko.util.OptionConverters._
+import scala.jdk.OptionConverters._
 
 import java.util
 

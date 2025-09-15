@@ -17,12 +17,11 @@ import java.util.{ Optional, OptionalInt }
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.util.ccompat._
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
-import pekko.util.OptionConverters._
 
 import scala.collection.immutable
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 import scala.util.{ Success, Try }
 
 /**

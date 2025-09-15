@@ -23,13 +23,13 @@ import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.japi.{ Pair => PekkoPair }
 import pekko.stream.connectors.mqtt.streaming.Connect.ProtocolLevel
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
-import pekko.util.OptionConverters._
 
 import scala.annotation.tailrec
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Promise }
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * 2.2.1 MQTT Control Packet type

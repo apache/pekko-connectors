@@ -20,7 +20,6 @@ import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.dynamodb.scaladsl._
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
-import pekko.util.ccompat.JavaConverters._
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
@@ -31,6 +30,7 @@ import software.amazon.awssdk.services.dynamodb.model.TableStatus
 
 import scala.annotation.nowarn
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 
 class ItemSpec extends TestKit(ActorSystem("ItemSpec")) with AsyncWordSpecLike with Matchers with BeforeAndAfterAll {
 

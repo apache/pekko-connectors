@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e
 
 import org.apache.pekko
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonInclude, JsonProperty, JsonPropertyOrder }
@@ -23,6 +22,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 
 import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
+
+import scala.jdk.CollectionConverters._
 
 @JsonPropertyOrder(alphabetic = true)
 case class A(integer: Int, long: Long, float: Float, double: Double, string: String, boolean: Boolean, record: B) {

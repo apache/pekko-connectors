@@ -303,7 +303,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
   it should "support multipart upload complete requests via configured `endpointUrl`" in {
     implicit val settings: S3Settings =
       getSettings(s3Region = Region.EU_WEST_1).withEndpointUrl("http://localhost:8080")
-    implicit val executionContext: ExecutionContext = ExecutionContext.global
+    import ExecutionContext.Implicits.global
 
     val req =
       HttpRequests.completeMultipartUploadRequest(multipartUpload, (1, "part") :: Nil, Nil).futureValue

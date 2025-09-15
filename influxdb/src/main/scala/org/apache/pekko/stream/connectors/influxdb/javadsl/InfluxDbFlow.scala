@@ -20,8 +20,9 @@ import pekko.stream.connectors.influxdb.{ InfluxDbWriteMessage, InfluxDbWriteRes
 import org.influxdb.InfluxDB
 import pekko.stream.javadsl.Flow
 import pekko.stream.connectors.influxdb.scaladsl
-import pekko.util.ccompat.JavaConverters._
 import org.influxdb.dto.Point
+
+import scala.jdk.CollectionConverters._
 
 /**
  * API may change.

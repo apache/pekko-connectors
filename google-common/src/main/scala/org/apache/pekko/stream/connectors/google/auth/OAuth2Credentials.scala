@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.google.auth
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.model.headers.OAuth2BearerToken
 import pekko.stream.connectors.google.RequestSettings
 import pekko.stream.connectors.google.auth.OAuth2Credentials.{ ForceRefresh, TokenRequest }
@@ -72,9 +71,9 @@ private[auth] abstract class OAuth2Credentials(val projectId: String)(implicit m
                 .andThen {
                   case response =>
                     promise.complete(response.map(t => OAuth2BearerToken(t.token)))
-                }(ExecutionContexts.parasitic)
-                .map(Some(_))(ExecutionContexts.parasitic)
-                .recover { case _ => None }(ExecutionContexts.parasitic)
+                }(ExecutionContext.parasitic)
+                .map(Some(_))(ExecutionContext.parasitic)
+                .recover { case _ => None }(ExecutionContext.parasitic)
             case (_, ForceRefresh) =>
               Future.successful(None)
           }

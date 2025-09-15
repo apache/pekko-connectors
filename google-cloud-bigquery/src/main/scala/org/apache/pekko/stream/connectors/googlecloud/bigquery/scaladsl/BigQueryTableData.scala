@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.NotUsed
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import pekko.http.scaladsl.marshalling.{ Marshal, ToEntityMarshaller }
 import pekko.http.scaladsl.model.HttpMethods.POST
@@ -36,8 +35,9 @@ import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQuer
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 
 import java.util.{ SplittableRandom, UUID }
+
 import scala.collection.immutable.Seq
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
 
@@ -129,7 +129,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
         import BigQueryException._
         import SprayJsonSupport._
         implicit val system: ActorSystem = mat.system
-        implicit val ec = ExecutionContexts.parasitic
+        implicit val ec = ExecutionContext.parasitic
         implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)
 
         val uri = BigQueryEndpoints.tableDataInsertAll(settings.projectId, datasetId, tableId)

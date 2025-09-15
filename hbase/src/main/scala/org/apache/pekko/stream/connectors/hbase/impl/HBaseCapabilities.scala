@@ -22,9 +22,8 @@ import org.apache.hadoop.conf.Configuration
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ Await, Future }
-import scala.util.{ Failure, Success, Try }
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{ Failure, Success, Try }
 
 import scala.language.postfixOps
 

@@ -15,11 +15,11 @@ package org.apache.pekko.stream.connectors.amqp
 
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
-import pekko.util.JavaDurationConverters._
 
 import scala.collection.immutable
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
+import scala.jdk.DurationConverters._
 
 /**
  * Internal API
@@ -254,7 +254,7 @@ final class AmqpWriteSettings private (
    * Java API
    */
   def withConfirmationTimeout(confirmationTimeout: java.time.Duration): AmqpWriteSettings =
-    copy(confirmationTimeout = confirmationTimeout.asScala)
+    copy(confirmationTimeout = confirmationTimeout.toScala)
 
   private def copy(connectionProvider: AmqpConnectionProvider = connectionProvider,
       exchange: Option[String] = exchange,

@@ -26,7 +26,6 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ FileIO, Flow, Sink, Source }
 import pekko.testkit.TestKit
 import pekko.util.ByteString
-import pekko.util.ccompat.JavaConverters._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
@@ -35,6 +34,7 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import scala.annotation.nowarn
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.CollectionConverters._
 
 class TarArchiveSpec
     extends TestKit(ActorSystem("TarArchiveSpec"))

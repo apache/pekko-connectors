@@ -17,7 +17,6 @@ import jakarta.jms
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.pattern.after
 import pekko.stream.connectors.jakartams._
 import pekko.stream.connectors.jakartams.impl.InternalConnectionState._
@@ -254,7 +253,7 @@ private[jakartams] trait JmsConnector[S <: JmsSession] {
 
   protected def initSessionAsync(attempt: Int = 0, backoffMaxed: Boolean = false): Unit = {
     val allSessions = openSessions(attempt, backoffMaxed)
-    allSessions.failed.foreach(connectionFailedCB.invoke)(ExecutionContexts.parasitic)
+    allSessions.failed.foreach(connectionFailedCB.invoke)(ExecutionContext.parasitic)
     // wait for all sessions to successfully initialize before invoking the onSession callback.
     // reduces flakiness (start, consume, then crash) at the cost of increased latency of startup.
     allSessions.foreach(_.foreach(onSession.invoke))
@@ -336,7 +335,7 @@ private[jakartams] trait JmsConnector[S <: JmsSession] {
         for (_ <- 0 until jmsSettings.sessionCount)
           yield Future(createSession(connection, destination.create))
       Future.sequence(sessionFutures)
-    }(ExecutionContexts.parasitic)
+    }(ExecutionContext.parasitic)
   }
 
   private def openConnection(attempt: Int, backoffMaxed: Boolean): Future[jms.Connection] = {
@@ -397,7 +396,7 @@ private[jakartams] trait JmsConnector[S <: JmsSession] {
         }
     }
 
-    Future.firstCompletedOf(Iterator(connectionFuture, timeoutFuture))(ExecutionContexts.parasitic)
+    Future.firstCompletedOf(Iterator(connectionFuture, timeoutFuture))(ExecutionContext.parasitic)
   }
 }
 

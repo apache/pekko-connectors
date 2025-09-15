@@ -16,9 +16,9 @@ package org.apache.pekko.stream.connectors.couchbase.javadsl
 import java.time.Duration
 import java.util.Optional
 import java.util.concurrent.{ CompletionStage, Executor }
+
 import org.apache.pekko
 import pekko.annotation.DoNotInherit
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.connectors.couchbase.impl.CouchbaseSessionJavaAdapter
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
@@ -50,7 +50,7 @@ object CouchbaseSession {
     ScalaDslCouchbaseSession
       .apply(settings, bucketName)(executionContext(executor))
       .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
-        ExecutionContexts.parasitic)
+        ExecutionContext.parasitic)
       .asJava
 
   /**
@@ -60,7 +60,7 @@ object CouchbaseSession {
   def create(client: AsyncCluster, bucketName: String, executor: Executor): CompletionStage[CouchbaseSession] =
     ScalaDslCouchbaseSession(client, bucketName)(executionContext(executor))
       .map(new CouchbaseSessionJavaAdapter(_): CouchbaseSession)(
-        ExecutionContexts.parasitic)
+        ExecutionContext.parasitic)
       .asJava
 
   /**

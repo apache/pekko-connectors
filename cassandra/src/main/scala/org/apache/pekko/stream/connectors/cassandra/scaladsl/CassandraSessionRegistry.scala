@@ -17,13 +17,14 @@ import java.util.concurrent.ConcurrentHashMap
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.jdk.CollectionConverters._
+
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import pekko.annotation.InternalStableApi
 import pekko.event.Logging
 import pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CqlSessionProvider }
-import pekko.util.ccompat.JavaConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.Config
 
@@ -116,9 +117,8 @@ final class CassandraSessionRegistry(system: ExtendedActorSystem) extends Extens
    * Closes all registered Cassandra sessions.
    * @param executionContext when used after actor system termination, a different execution context must be provided
    */
-  private def close(executionContext: ExecutionContext) = {
-    implicit val ec: ExecutionContext = executionContext
-    val closing = sessions.values().asScala.map(_.close(ec))
+  private def close(implicit executionContext: ExecutionContext) = {
+    val closing = sessions.values().asScala.map(_.close(executionContext))
     Future.sequence(closing)
   }
 

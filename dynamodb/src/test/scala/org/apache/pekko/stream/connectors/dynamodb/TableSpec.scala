@@ -20,7 +20,6 @@ import pekko.actor.ActorSystem
 import pekko.stream.connectors.awsspi.PekkoHttpClient
 import pekko.stream.connectors.dynamodb.scaladsl.DynamoDb
 import pekko.testkit.TestKit
-import pekko.util.ccompat.JavaConverters._
 import org.scalatest.BeforeAndAfterAll
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.regions.Region
@@ -30,6 +29,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AsyncWordSpecLike
 
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters._
 
 class TableSpec extends TestKit(ActorSystem("TableSpec")) with AsyncWordSpecLike with Matchers with BeforeAndAfterAll {
 

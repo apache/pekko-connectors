@@ -17,8 +17,9 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.ApiMayChange
 import pekko.stream.connectors.elasticsearch.{ scaladsl, _ }
-import pekko.util.ccompat.JavaConverters._
 import com.fasterxml.jackson.databind.ObjectMapper
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Java API to create Elasticsearch flows.

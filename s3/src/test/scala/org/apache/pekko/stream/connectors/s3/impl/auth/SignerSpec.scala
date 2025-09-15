@@ -22,7 +22,6 @@ import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
-import pekko.util.OptionConverters._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.OptionValues._
 import org.scalatest.concurrent.ScalaFutures
@@ -31,6 +30,8 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{ Millis, Seconds, Span }
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
+
+import scala.jdk.OptionConverters._
 
 class SignerSpec(_system: ActorSystem)
     extends TestKit(_system)

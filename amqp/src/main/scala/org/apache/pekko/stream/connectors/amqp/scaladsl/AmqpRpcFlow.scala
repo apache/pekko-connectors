@@ -14,12 +14,11 @@
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import org.apache.pekko
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.amqp._
 import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ByteString
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 object AmqpRpcFlow {
 
@@ -49,7 +48,7 @@ object AmqpRpcFlow {
       repliesPerMessage: Int = 1): Flow[WriteMessage, ReadResult, Future[String]] =
     committableFlow(settings, bufferSize, repliesPerMessage)
       .mapAsync(1) { cm =>
-        cm.ack().map(_ => cm.message)(ExecutionContexts.parasitic)
+        cm.ack().map(_ => cm.message)(ExecutionContext.parasitic)
       }
 
   /**

@@ -13,12 +13,11 @@
 
 package org.apache.pekko.stream.connectors.azure.storagequeue
 
-import org.apache.pekko.util.OptionConverters._
-
 import java.time.{ Duration => JavaDuration }
 import java.util.Optional
 
 import scala.concurrent.duration.{ Duration, FiniteDuration }
+import scala.jdk.OptionConverters._
 
 /**
  * Settings for AzureQueueSource

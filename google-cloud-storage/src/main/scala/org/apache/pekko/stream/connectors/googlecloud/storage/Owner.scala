@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
 import java.util.Optional
-import org.apache.pekko.util.OptionConverters._
+import scala.jdk.OptionConverters._
 
 final class Owner private (entity: String, entityId: Option[String]) {
   def withEntity(entity: String): Owner = copy(entity = entity)

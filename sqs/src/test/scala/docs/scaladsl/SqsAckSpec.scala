@@ -23,7 +23,6 @@ import pekko.stream.connectors.sqs.SqsAckResult._
 import pekko.stream.connectors.sqs.SqsAckResultEntry._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.util.ccompat.JavaConverters._
 import org.mockito.{ Answers, Mockito }
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{ times, verify, when, withSettings }
@@ -34,6 +33,7 @@ import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with LogCapturing {
 

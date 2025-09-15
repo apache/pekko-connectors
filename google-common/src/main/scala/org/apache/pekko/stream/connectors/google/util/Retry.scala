@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.google.util
 import org.apache.pekko
 import pekko.actor.Scheduler
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.pattern
 import pekko.stream.connectors.google.RetrySettings
 import pekko.stream.scaladsl.{ Flow, RetryFlow }
@@ -59,14 +58,14 @@ object Retry {
     import settings._
     val futureBuilder = () =>
       future
-        .map(Success(_))(ExecutionContexts.parasitic)
+        .map(Success(_))(ExecutionContext.parasitic)
         .recover {
           case Retry(ex) => throw ex
           case ex        => Failure(ex)
-        }(ExecutionContexts.parasitic)
+        }(ExecutionContext.parasitic)
     pattern
       .retry(futureBuilder, maxRetries, minBackoff, maxBackoff, randomFactor)
-      .flatMap(Future.fromTry)(ExecutionContexts.parasitic)
+      .flatMap(Future.fromTry)(ExecutionContext.parasitic)
   }
 
   def flow[In, Out, Mat](retrySettings: RetrySettings)(flow: Flow[In, Out, Mat]): Flow[In, Out, Mat] =

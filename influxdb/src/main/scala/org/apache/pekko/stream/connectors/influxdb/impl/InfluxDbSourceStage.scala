@@ -18,9 +18,10 @@ import pekko.annotation.InternalApi
 import pekko.stream.connectors.influxdb.InfluxDbReadSettings
 import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
-import pekko.util.ccompat.JavaConverters._
 import org.influxdb.{ InfluxDB, InfluxDBException }
 import org.influxdb.dto.{ Query, QueryResult }
+
+import scala.jdk.CollectionConverters._
 
 /**
  * INTERNAL API

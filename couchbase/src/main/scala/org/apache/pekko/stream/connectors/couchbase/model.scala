@@ -18,7 +18,6 @@ import java.util.concurrent.{ CompletionStage, TimeUnit }
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.FutureConverters._
 import com.couchbase.client.java.document.Document
 import com.couchbase.client.java.env.CouchbaseEnvironment
@@ -28,6 +27,7 @@ import com.typesafe.config.Config
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 /**
  * Configure Couchbase writes.

@@ -17,12 +17,13 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.xml
 import pekko.stream.connectors.xml.ParseEvent
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import com.fasterxml.aalto.AsyncXMLInputFactory
 import org.w3c.dom.Element
 
 import java.util.function.Consumer
+
+import scala.jdk.CollectionConverters._
 
 object XmlParsing {
 

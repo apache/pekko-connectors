@@ -21,16 +21,16 @@ import pekko.stream.connectors.kudu.scaladsl.KuduTable
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.testkit.TestKit
-import pekko.util.ccompat.JavaConverters._
 import org.apache.kudu.client.{ CreateTableOptions, KuduClient, PartialRow }
 import org.apache.kudu.{ ColumnSchema, Schema, Type }
-import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
+import scala.jdk.CollectionConverters._
 
 class KuduTableSpec
     extends TestKit(ActorSystem())

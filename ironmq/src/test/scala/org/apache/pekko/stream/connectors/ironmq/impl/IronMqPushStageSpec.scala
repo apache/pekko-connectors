@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.ironmq.impl
 
 import org.apache.pekko
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
 import pekko.stream.scaladsl._
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
@@ -23,7 +22,7 @@ import scala.concurrent.ExecutionContext
 
 class IronMqPushStageSpec extends IronMqSpec {
 
-  implicit val ec: ExecutionContext = ExecutionContexts.global()
+  import ExecutionContext.Implicits.global
 
   "IronMqPushMessageStage" should {
     "push messages to the queue" in assertAllStagesStopped {

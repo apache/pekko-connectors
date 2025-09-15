@@ -51,7 +51,7 @@ class CharsetCodingFlowsDoc
       import org.apache.pekko
       import pekko.stream.connectors.text.scaladsl.TextFlow
       import pekko.stream.scaladsl.FileIO
-      import pekko.util.ccompat.JavaConverters._
+      import scala.jdk.CollectionConverters._
 
       // #encoding
       val targetFile = Paths.get("target/outdata.txt")

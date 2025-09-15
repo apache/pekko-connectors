@@ -16,11 +16,10 @@ package org.apache.pekko.stream.connectors.reference.testkit
 import org.apache.pekko
 import pekko.annotation.ApiMayChange
 import pekko.stream.connectors.reference.{ ReferenceReadResult, ReferenceWriteMessage, ReferenceWriteResult }
-import pekko.util.ccompat._
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 
 import scala.collection.immutable
+import scala.jdk.CollectionConverters._
 import scala.util.{ Failure, Success, Try }
 
 @ApiMayChange

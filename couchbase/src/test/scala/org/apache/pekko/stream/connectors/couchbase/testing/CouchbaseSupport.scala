@@ -19,7 +19,6 @@ import pekko.actor.ActorSystem
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseFlow, CouchbaseSession }
 import pekko.stream.connectors.couchbase.{ CouchbaseSessionSettings, CouchbaseWriteSettings }
 import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.util.ccompat.JavaConverters._
 import com.couchbase.client.deps.io.netty.buffer.Unpooled
 import com.couchbase.client.deps.io.netty.util.CharsetUtil
 import com.couchbase.client.java.ReplicateTo
@@ -33,6 +32,7 @@ import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }
+import scala.jdk.CollectionConverters._
 
 case class TestObject(id: String, value: String)
 

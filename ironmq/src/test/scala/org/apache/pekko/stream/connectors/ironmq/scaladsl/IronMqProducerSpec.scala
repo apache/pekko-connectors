@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.ironmq.scaladsl
 
 import org.apache.pekko
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.ironmq.{ IronMqSettings, IronMqSpec, PushMessage }
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.{ Done, NotUsed }
@@ -24,11 +23,11 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 class IronMqProducerSpec extends IronMqSpec {
 
+  import ExecutionContext.Implicits.global
   import IronMqProducer._
 
   val messages: Source[PushMessage, NotUsed] =
     Source.fromIterator(() => Iterator.from(0)).map(i => PushMessage(s"test-$i"))
-  implicit val ec: ExecutionContext = ExecutionContexts.global()
 
   "producerSink" should {
     "publish messages on IronMq" in assertAllStagesStopped {

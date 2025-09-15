@@ -19,12 +19,12 @@ import org.apache.pekko
 import pekko.http.scaladsl.model.{ DateTime, HttpHeader, IllegalUriException, Uri }
 import pekko.http.scaladsl.model.headers._
 import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
-import pekko.util.ccompat.JavaConverters._
-import pekko.util.OptionConverters._
+import scala.jdk.OptionConverters._
 
 import scala.annotation.nowarn
 import scala.collection.immutable.Seq
 import scala.collection.immutable
+import scala.jdk.CollectionConverters._
 
 final class MFA private (val serialNumber: String, val tokenCode: String) {
 

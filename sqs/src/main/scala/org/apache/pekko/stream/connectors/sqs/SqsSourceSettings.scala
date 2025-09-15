@@ -16,10 +16,10 @@ package org.apache.pekko.stream.connectors.sqs
 import java.time.temporal.ChronoUnit
 
 import software.amazon.awssdk.services.sqs.model
-import org.apache.pekko.util.ccompat.JavaConverters._
 
 import scala.collection.immutable
 import scala.concurrent.duration.FiniteDuration
+import scala.jdk.CollectionConverters._
 
 final class SqsSourceSettings private (
     val waitTimeSeconds: Int,

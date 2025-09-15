@@ -15,9 +15,9 @@ package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.atomic.AtomicInteger
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.amqp.{
   AmqpCachedConnectionProvider,
   AmqpConnectionFactoryConnectionProvider,
@@ -50,7 +50,7 @@ class AmqpGraphStageLogicConnectionShutdownSpec
     with LogCapturing {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
-  private implicit val executionContext: ExecutionContext = ExecutionContexts.parasitic
+  private implicit val executionContext: ExecutionContext = ExecutionContext.parasitic
 
   val shutdownsAdded = new AtomicInteger()
   val shutdownsRemoved = new AtomicInteger()

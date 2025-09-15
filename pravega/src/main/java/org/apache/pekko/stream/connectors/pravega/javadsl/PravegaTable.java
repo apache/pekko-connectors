@@ -27,16 +27,16 @@ import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.FutureConverters;
 
+import io.pravega.client.tables.TableKey;
+
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.nio.ByteBuffer;
 
-import io.pravega.client.tables.TableKey;
-
-import org.apache.pekko.util.OptionConverters;
-
 import scala.Option;
+import scala.jdk.javaapi.OptionConverters;
+
 
 @ApiMayChange
 public class PravegaTable {

@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.google
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.model.ContentRange.Unsatisfiable
 import pekko.http.scaladsl.model.HttpMethods.{ POST, PUT }
 import pekko.http.scaladsl.model.StatusCodes.{ Created, OK, PermanentRedirect }
@@ -30,7 +29,7 @@ import pekko.stream.connectors.google.util.{ AnnotateLast, EitherFlow, MaybeLast
 import pekko.stream.scaladsl.{ Flow, Keep, RetryFlow, Sink }
 import pekko.util.ByteString
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.NoStackTrace
 import scala.util.{ Failure, Success, Try }
 
@@ -103,12 +102,12 @@ private[connectors] object ResumableUpload {
         if (response.status.isSuccess())
           response.discardEntityBytes().future.map { _ =>
             response.header[Location].fold(throw InvalidResponseException(ErrorInfo("No Location header")))(_.uri)
-          }(ExecutionContexts.parasitic)
+          }(ExecutionContext.parasitic)
         else
           Unmarshal(response.entity).to[String].flatMap { errorString =>
             Future.failed(InvalidResponseException(
               ErrorInfo(s"Resumable upload failed with status ${response.status}", errorString)))
-          }(ExecutionContexts.parasitic)
+          }(ExecutionContext.parasitic)
       }.withDefaultRetry
 
     GoogleHttp(mat.system).singleAuthenticatedRequest[Uri](request)

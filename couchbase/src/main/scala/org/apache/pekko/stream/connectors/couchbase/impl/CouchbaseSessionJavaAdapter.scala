@@ -16,16 +16,16 @@ package org.apache.pekko.stream.connectors.couchbase.impl
 import java.time.Duration
 import java.util.Optional
 import java.util.concurrent.CompletionStage
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.stream.connectors.couchbase.CouchbaseWriteSettings
 import pekko.stream.connectors.couchbase.javadsl
 import pekko.stream.connectors.couchbase.scaladsl
 import pekko.stream.javadsl.Source
 import pekko.{ Done, NotUsed }
 import pekko.util.FutureConverters._
-import pekko.util.OptionConverters._
+
 import com.couchbase.client.java.AsyncBucket
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }
@@ -33,7 +33,8 @@ import com.couchbase.client.java.query.util.IndexInfo
 import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 
 import scala.concurrent.duration.FiniteDuration
-import scala.concurrent.{ duration, Future }
+import scala.concurrent.{ duration, ExecutionContext, Future }
+import scala.jdk.OptionConverters._
 
 /**
  * INTERNAL API
@@ -124,7 +125,7 @@ private[couchbase] final class CouchbaseSessionJavaAdapter(delegate: scaladsl.Co
     delegate.createIndex(indexName, ignoreIfExist, fields).asJava
 
   private def futureOptToJava[T](future: Future[Option[T]]): CompletionStage[Optional[T]] =
-    future.map(_.toJava)(ExecutionContexts.parasitic).asJava
+    future.map(_.toJava)(ExecutionContext.parasitic).asJava
 
   def listIndexes(): Source[IndexInfo, NotUsed] =
     delegate.listIndexes().asJava

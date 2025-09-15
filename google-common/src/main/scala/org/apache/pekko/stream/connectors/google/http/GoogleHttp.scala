@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.google.http
 import org.apache.pekko
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Scheduler }
 import pekko.annotation.InternalApi
-import pekko.dispatch.ExecutionContexts
 import pekko.http.scaladsl.Http.HostConnectionPool
 import pekko.http.scaladsl.model.headers.Authorization
 import pekko.http.scaladsl.model.{ HttpRequest, HttpResponse }
@@ -27,7 +26,7 @@ import pekko.stream.connectors.google.auth.RetrievableCredentials
 import pekko.stream.connectors.google.util.Retry
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, RetryFlow }
 
-import scala.concurrent.{ ExecutionContextExecutor, Future }
+import scala.concurrent.{ ExecutionContext, ExecutionContextExecutor, Future }
 import scala.util.{ Failure, Success, Try }
 
 @InternalApi
@@ -69,7 +68,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
       implicit settings: RequestSettings,
       googleSettings: GoogleSettings,
       um: FromResponseUnmarshaller[T]): Future[T] = Retry(settings.retrySettings) {
-    singleRawRequest(request).flatMap(Unmarshal(_).to[T])(ExecutionContexts.parasitic)
+    singleRawRequest(request).flatMap(Unmarshal(_).to[T])(ExecutionContext.parasitic)
   }
 
   /**
@@ -80,7 +79,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
       implicit settings: GoogleSettings,
       um: FromResponseUnmarshaller[T]): Future[T] = Retry(settings.requestSettings.retrySettings) {
     implicit val requestSettings: RequestSettings = settings.requestSettings
-    addAuth(request).flatMap(singleRequest(_))(ExecutionContexts.parasitic)
+    addAuth(request).flatMap(singleRequest(_))(ExecutionContext.parasitic)
   }
 
   /**
@@ -140,8 +139,8 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
           case (res, ctx) =>
             Future
               .fromTry(res)
-              .flatMap(Unmarshal(_).to[T])(ExecutionContexts.parasitic)
-              .transform(Success(_))(ExecutionContexts.parasitic)
+              .flatMap(Unmarshal(_).to[T])(ExecutionContext.parasitic)
+              .transform(Success(_))(ExecutionContext.parasitic)
               .zip(Future.successful(ctx))
         }
 
@@ -173,7 +172,7 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
           .get()
           .map { token =>
             request.addHeader(Authorization(token))
-          }(ExecutionContexts.parasitic)
+          }(ExecutionContext.parasitic)
       case _ =>
         Future.successful(request)
     }

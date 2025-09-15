@@ -18,6 +18,9 @@
 package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl._
 
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
@@ -32,19 +35,16 @@ import pekko.http.scaladsl.settings.ConnectionPoolSettings
 import pekko.stream.scaladsl.Source
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.ByteString
-import pekko.util.OptionConverters._
 import pekko.util.JavaDurationConverters._
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.http.async._
 import software.amazon.awssdk.http.{ SdkHttpConfigurationOption, SdkHttpRequest }
 import software.amazon.awssdk.utils.AttributeMap
 
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
-import javax.net.ssl._
 import scala.collection.immutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, ExecutionContext }
+import scala.jdk.OptionConverters._
 
 class PekkoHttpClient(
     shutdownHandle: () => Unit,

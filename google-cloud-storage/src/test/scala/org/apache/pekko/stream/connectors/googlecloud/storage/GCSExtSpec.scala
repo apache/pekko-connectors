@@ -16,10 +16,11 @@ package org.apache.pekko.stream.connectors.googlecloud.storage
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import pekko.util.ccompat.JavaConverters._
 import com.typesafe.config.ConfigFactory
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+
+import scala.jdk.CollectionConverters._
 
 class GCSExtSpec extends AnyFlatSpec with Matchers with LogCapturing {
   "GCSExt" should "reuse application config from actor system" in {

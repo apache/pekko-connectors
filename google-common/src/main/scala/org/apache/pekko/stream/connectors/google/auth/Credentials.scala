@@ -20,13 +20,14 @@ import pekko.event.Logging
 import pekko.http.scaladsl.model.headers.HttpCredentials
 import pekko.stream.connectors.google.RequestSettings
 import pekko.util.JavaDurationConverters._
-import pekko.util.ccompat.JavaConverters._
 import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 
 import java.util.concurrent.Executor
+
 import scala.collection.immutable.ListMap
 import scala.concurrent.{ Await, ExecutionContext, Future }
+import scala.jdk.CollectionConverters._
 import scala.util.control.NonFatal
 
 object Credentials {

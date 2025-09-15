@@ -13,8 +13,8 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-import org.apache.pekko.util.ccompat.JavaConverters._
 import scala.collection.immutable.Seq
+import scala.jdk.CollectionConverters._
 
 final class FailedUpload private (
     val reasons: Seq[Throwable]) extends Exception(reasons.map(_.getMessage).mkString(", ")) {

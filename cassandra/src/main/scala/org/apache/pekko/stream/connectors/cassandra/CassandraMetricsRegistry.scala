@@ -16,8 +16,9 @@ package org.apache.pekko.stream.connectors.cassandra
 import org.apache.pekko
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import pekko.annotation.InternalApi
-import pekko.util.ccompat.JavaConverters._
 import com.codahale.metrics.MetricRegistry
+
+import scala.jdk.CollectionConverters._
 
 /**
  * Retrieves Cassandra metrics registry for an actor system

@@ -19,11 +19,12 @@ import pekko.stream.connectors.googlecloud.pubsub.scaladsl.{ GooglePubSub => GPu
 import pekko.stream.connectors.googlecloud.pubsub.{ AcknowledgeRequest, PubSubConfig, PublishRequest, ReceivedMessage }
 import pekko.stream.javadsl.{ Flow, FlowWithContext, Sink, Source }
 import pekko.{ Done, NotUsed }
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.FutureConverters._
 
 import java.util.concurrent.CompletionStage
+
 import scala.concurrent.Future
+import scala.jdk.CollectionConverters._
 
 /**
  * Java DSL for Google Pub/Sub

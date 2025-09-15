@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.dynamodb.scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ClassicActorSystemProvider
-import pekko.dispatch.ExecutionContexts
 
 import scala.annotation.implicitNotFound
 import pekko.stream.connectors.dynamodb.{ DynamoDbOp, DynamoDbPaginatedOp }
@@ -24,7 +23,7 @@ import pekko.stream.scaladsl.{ Flow, FlowWithContext, Sink, Source }
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model._
 
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -60,8 +59,8 @@ object DynamoDb {
           case (in, ctx) =>
             operation
               .execute(in)
-              .map[(Try[Out], Ctx)](res => (Success(res), ctx))(ExecutionContexts.parasitic)
-              .recover { case t => (Failure(t), ctx) }(ExecutionContexts.parasitic)
+              .map[(Try[Out], Ctx)](res => (Success(res), ctx))(ExecutionContext.parasitic)
+              .recover { case t => (Failure(t), ctx) }(ExecutionContext.parasitic)
         })
 
   /**

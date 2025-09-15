@@ -17,7 +17,6 @@ import org.apache.pekko
 import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
 import pekko.stream.Materializer
 import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import pekko.util.ccompat.JavaConverters._
 import pekko.util.ByteString
 import com.google.cloud.bigquery.storage.v1.arrow.ArrowSchema
 import org.apache.arrow.memory.RootAllocator
@@ -29,6 +28,7 @@ import org.apache.arrow.vector.util.ByteArrayReadableSeekableByteChannel
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.CollectionConverters._
 
 class ArrowByteStringDecoder(val schema: ArrowSchema) extends FromByteStringUnmarshaller[List[BigQueryRecord]] {
 

@@ -114,7 +114,7 @@ class SoftReferenceCacheSpec extends AnyWordSpec with Matchers {
                 }
                 state.counter = count
                 state
-              }.foreach(enqueue)(org.apache.pekko.dispatch.ExecutionContexts.parasitic)
+              }.foreach(enqueue)(scala.concurrent.ExecutionContext.parasitic)
             }
           }
         }

@@ -24,10 +24,10 @@ import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension,
 import pekko.stream.javadsl.{ Flow, Source }
 import pekko.stream.Materializer
 import pekko.util.ByteString
-import pekko.util.OptionConverters._
 import pekko.util.FutureConverters._
 
 import scala.concurrent.duration.Duration
+import scala.jdk.OptionConverters._
 
 object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdProvider {
 
@@ -116,7 +116,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
 
 final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Extension {
   import UnixDomainSocket._
-  import pekko.dispatch.ExecutionContexts.parasitic
+  import scala.concurrent.ExecutionContext.parasitic
 
   private lazy val delegate: scaladsl.UnixDomainSocket = scaladsl.UnixDomainSocket.apply(system)
 

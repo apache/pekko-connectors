@@ -20,10 +20,11 @@ import pekko.annotation.InternalApi
 import pekko.stream.connectors.orientdb.{ OrientDbReadResult, OrientDbSourceSettings }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
-import pekko.util.ccompat.JavaConverters._
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
+
+import scala.jdk.CollectionConverters._
 
 /**
  * INTERNAL API
