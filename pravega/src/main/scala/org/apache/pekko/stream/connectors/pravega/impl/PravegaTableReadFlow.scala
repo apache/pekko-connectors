@@ -29,7 +29,7 @@ import io.pravega.client.tables.TableEntry
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.jdk.FutureConverters._
-import scala.util.{ Success, Failure, Try }
+import scala.util.{ Failure, Success, Try }
 import scala.util.control.NonFatal
 
 @InternalApi private final class PravegaTableReadFlowStageLogic[K, V](
