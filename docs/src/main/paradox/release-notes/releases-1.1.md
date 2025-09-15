@@ -26,6 +26,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 * SQS: delaySeconds parameter is not populated in SendMessageBatchRequestEntry ([#759](https://github.com/apache/pekko-connectors/issues/759)). (not in v1.1.0-M1)
 
 ### Additions
+
 * Scala 3 is now supported for the Slick Connector.
 * New connector `couchbase3` that uses Couchbase Client v3. The pre-existing `couchbase` connector still uses the older v2 Client.
 * New connector `jakartams` which is the [Jakarta Messaging](https://jakarta.ee/learn/docs/jakartaee-tutorial/current/messaging/jms-concepts/jms-concepts.html) equivalent of the JMS connector.
@@ -35,6 +36,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 * New pekko-connectors-bom ([PR633](https://github.com/apache/pekko-connectors/pull/633)).
 
 ### Other Changes
+
 * New config for FTP Connector that allows you to choose whether to use the legacy or latest code for FTPS proxies (`useUpdatedFtpsClient`) ([PR171](https://github.com/apache/pekko-connectors/pull/171)).
 * Kinesis: use stage materializer with IODispatcher instead of injected EC ([PR226](https://github.com/apache/pekko-connectors/pull/226)).
 * Add support for FTPS implicit mode ([PR311](https://github.com/apache/pekko-connectors/pull/311)).
