@@ -37,14 +37,14 @@ final class ConnectionRetrySettings private (
     copy(connectTimeout = timeout)
 
   /** Java API: Time allowed to establish and start a connection. */
-  def withConnectTimeout(timeout: java.time.Duration): ConnectionRetrySettings = copy(connectTimeout = timeout.asScala)
+  def withConnectTimeout(timeout: java.time.Duration): ConnectionRetrySettings = copy(connectTimeout = timeout.toScala)
 
   /** Wait time before retrying the first time. */
   def withInitialRetry(timeout: scala.concurrent.duration.FiniteDuration): ConnectionRetrySettings =
     copy(initialRetry = timeout)
 
   /** Java API: Wait time before retrying the first time. */
-  def withInitialRetry(timeout: java.time.Duration): ConnectionRetrySettings = copy(initialRetry = timeout.asScala)
+  def withInitialRetry(timeout: java.time.Duration): ConnectionRetrySettings = copy(initialRetry = timeout.toScala)
 
   /** Back-off factor for subsequent retries. */
   def withBackoffFactor(factor: Double): ConnectionRetrySettings = copy(backoffFactor = factor)
@@ -54,7 +54,7 @@ final class ConnectionRetrySettings private (
     copy(maxBackoff = backoffTime)
 
   /** Java API: Maximum back-off time allowed, after which all retries will happen after this delay. */
-  def withMaxBackoff(backoffTime: java.time.Duration): ConnectionRetrySettings = copy(maxBackoff = backoffTime.asScala)
+  def withMaxBackoff(backoffTime: java.time.Duration): ConnectionRetrySettings = copy(maxBackoff = backoffTime.toScala)
 
   /** Maximum number of retries allowed. */
   def withMaxRetries(value: Int): ConnectionRetrySettings = copy(maxRetries = value)

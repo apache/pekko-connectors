@@ -23,6 +23,7 @@ import com.typesafe.config.{ Config, ConfigFactory }
 import scala.collection.immutable
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.DurationConverters._
 import scala.jdk.FutureConverters._
 
 /**

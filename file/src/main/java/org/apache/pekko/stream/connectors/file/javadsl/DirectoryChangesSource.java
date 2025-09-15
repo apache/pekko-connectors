@@ -41,7 +41,7 @@ public final class DirectoryChangesSource {
     return Source.fromGraph(
         new org.apache.pekko.stream.connectors.file.impl.DirectoryChangesSource<>(
             directoryPath,
-            DurationConverters.asFiniteDuration(pollInterval),
+            DurationConverters.toScala(pollInterval),
             maxBufferSize,
             Pair::apply));
   }

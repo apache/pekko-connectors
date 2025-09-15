@@ -57,7 +57,7 @@ public final class FileTailSource {
             path,
             maxChunkSize,
             startingPosition,
-            DurationConverters.asFiniteDuration(pollingInterval)));
+            DurationConverters.toScala(pollingInterval)));
   }
 
   /**

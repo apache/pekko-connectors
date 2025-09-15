@@ -84,7 +84,7 @@ final class JmsConsumerSettings private (
   def withAckTimeout(value: scala.concurrent.duration.Duration): JmsConsumerSettings = copy(ackTimeout = value)
 
   /** Java API: Timeout for acknowledge. (Used by TX consumers.) */
-  def withAckTimeout(value: java.time.Duration): JmsConsumerSettings = copy(ackTimeout = value.asScala)
+  def withAckTimeout(value: java.time.Duration): JmsConsumerSettings = copy(ackTimeout = value.toScala)
 
   /** Max interval before sending queued acknowledges back to the broker. (Used by AckSources.) */
   def withMaxAckInterval(value: scala.concurrent.duration.FiniteDuration): JmsConsumerSettings =
@@ -92,7 +92,7 @@ final class JmsConsumerSettings private (
 
   /** Java API: Max interval before sending queued acknowledges back to the broker. (Used by AckSources.) */
   def withMaxAckInterval(value: java.time.Duration): JmsConsumerSettings =
-    copy(maxAckInterval = Option(value.asScala))
+    copy(maxAckInterval = Option(value.toScala))
 
   /** Max number of acks queued by AckSource before they are sent to broker. (Unless MaxAckInterval is specified) */
   def withMaxPendingAcks(value: Int): JmsConsumerSettings = copy(maxPendingAcks = value)
@@ -109,7 +109,7 @@ final class JmsConsumerSettings private (
 
   /** Java API: Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: java.time.Duration): JmsConsumerSettings =
-    copy(connectionStatusSubscriptionTimeout = value.asScala)
+    copy(connectionStatusSubscriptionTimeout = value.toScala)
 
   private def copy(
       connectionFactory: jakarta.jms.ConnectionFactory = connectionFactory,

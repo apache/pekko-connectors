@@ -64,10 +64,10 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
 
     "withConnectionPoolSettingsBuilderFromAttributeMap().buildWithDefaults() should propagate configuration options" in {
       val attributeMap = AttributeMap.builder()
-        .put(SdkHttpConfigurationOption.CONNECTION_TIMEOUT, 1.second.asJava)
-        .put(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT, 2.second.asJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_TIMEOUT, 1.second.toJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT, 2.second.toJava)
         .put(SdkHttpConfigurationOption.MAX_CONNECTIONS, Integer.valueOf(3))
-        .put(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE, 4.second.asJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE, 4.second.toJava)
         .build()
       val pekkoClient: PekkoHttpClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
         .withConnectionPoolSettingsBuilderFromAttributeMap()
@@ -134,7 +134,7 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
   }
 
   private def infiniteToZero(duration: scala.concurrent.duration.Duration): java.time.Duration = duration match {
-    case _: scala.concurrent.duration.Duration.Infinite => java.time.Duration.ZERO
-    case duration: FiniteDuration                       => duration.asJava
+    case duration: FiniteDuration => duration.toJava
+    case _                        => java.time.Duration.ZERO
   }
 }
