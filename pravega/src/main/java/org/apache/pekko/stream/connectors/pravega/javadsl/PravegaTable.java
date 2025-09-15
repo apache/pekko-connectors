@@ -25,7 +25,6 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.scala.jdk.FutureConverters;
 
 import io.pravega.client.tables.TableKey;
 
@@ -35,8 +34,8 @@ import java.util.function.Function;
 import java.nio.ByteBuffer;
 
 import scala.Option;
+import scala.jdk.javaapi.FutureConverters;
 import scala.jdk.javaapi.OptionConverters;
-
 
 @ApiMayChange
 public class PravegaTable {

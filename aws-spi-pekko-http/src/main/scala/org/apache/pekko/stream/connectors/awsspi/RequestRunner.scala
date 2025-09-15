@@ -28,7 +28,7 @@ import pekko.stream.scaladsl.{ Keep, Sink }
 import software.amazon.awssdk.http.SdkHttpFullResponse
 import software.amazon.awssdk.http.async.SdkAsyncHttpResponseHandler
 
-import scala.jdk.FutureConverters
+import scala.jdk.javaapi.FutureConverters
 
 import scala.concurrent.{ ExecutionContext, Future }
 

@@ -18,13 +18,14 @@ import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.pekko.stream.connectors.geode.GeodeSettings;
 import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeContinuousSourceStage;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.scala.jdk.FutureConverters;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqQuery;
 import org.apache.geode.cache.query.QueryService;
 
 import java.util.concurrent.CompletionStage;
+
+import scala.jdk.javaapi.FutureConverters;
 
 /** Java API: Geode client with server event subscription. Can build continuous sources. */
 public class GeodeWithPoolSubscription extends Geode {
