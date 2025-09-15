@@ -19,10 +19,10 @@ import java.util.Properties
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
+import scala.jdk.DurationConverters._
 
 import org.apache.pekko
 import pekko.japi.Pair
-import pekko.util.JavaDurationConverters._
 import org.eclipse.paho.mqttv5.client.MqttClientPersistence
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties
@@ -331,7 +331,7 @@ final class MqttConnectionSettings private (
 
   /** Java API */
   def withCleanStart(enabled: Boolean, sessionExpiration: java.time.Duration): MqttConnectionSettings =
-    copy(cleanStart = CleanStartSettings(enabled, Option(sessionExpiration).map(_.asScala)))
+    copy(cleanStart = CleanStartSettings(enabled, Option(sessionExpiration).map(_.toScala)))
 
   def withWill(value: MqttMessage): MqttConnectionSettings =
     copy(will = Option(value))
@@ -345,7 +345,7 @@ final class MqttConnectionSettings private (
 
   /** Java API */
   def withKeepAliveInterval(value: java.time.Duration): MqttConnectionSettings =
-    withKeepAliveInterval(value.asScala)
+    withKeepAliveInterval(value.toScala)
 
   /** Scala API */
   def withConnectionTimeout(value: FiniteDuration): MqttConnectionSettings =
@@ -353,7 +353,7 @@ final class MqttConnectionSettings private (
 
   /** Java API */
   def withConnectionTimeout(value: java.time.Duration): MqttConnectionSettings =
-    withConnectionTimeout(value.asScala)
+    withConnectionTimeout(value.toScala)
 
   /** Scala API */
   def withDisconnectQuiesceTimeout(value: FiniteDuration): MqttConnectionSettings =
@@ -361,7 +361,7 @@ final class MqttConnectionSettings private (
 
   /** Java API */
   def withDisconnectQuiesceTimeout(value: java.time.Duration): MqttConnectionSettings =
-    withDisconnectQuiesceTimeout(value.asScala)
+    withDisconnectQuiesceTimeout(value.toScala)
 
   /** Scala API */
   def withDisconnectTimeout(value: FiniteDuration): MqttConnectionSettings =
@@ -369,7 +369,7 @@ final class MqttConnectionSettings private (
 
   /** Java API */
   def withDisconnectTimeout(value: java.time.Duration): MqttConnectionSettings =
-    withDisconnectTimeout(value.asScala)
+    withDisconnectTimeout(value.toScala)
 
   def withServerUri(value: String): MqttConnectionSettings =
     copy(serverUris = Array(value))

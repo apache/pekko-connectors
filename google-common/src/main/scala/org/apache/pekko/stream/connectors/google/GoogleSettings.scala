@@ -25,7 +25,7 @@ import pekko.http.{ javadsl => jh }
 import pekko.stream.connectors.google.auth.Credentials
 import pekko.stream.connectors.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
 import pekko.stream.connectors.google.implicits._
-import pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 import com.typesafe.config.Config
 
 import java.time
@@ -186,8 +186,8 @@ object RetrySettings {
   def apply(config: Config): RetrySettings = {
     RetrySettings(
       config.getInt("max-retries"),
-      config.getDuration("min-backoff").asScala,
-      config.getDuration("max-backoff").asScala,
+      config.getDuration("min-backoff").toScala,
+      config.getDuration("max-backoff").toScala,
       config.getDouble("random-factor"))
   }
 

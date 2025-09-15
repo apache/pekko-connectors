@@ -16,9 +16,9 @@ package org.apache.pekko.stream.connectors.jakartams
 import com.typesafe.config.Config
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.util.JavaDurationConverters._
 
 import scala.concurrent.duration._
+import scala.jdk.DurationConverters._
 
 /**
  * When a connection to a broker cannot be established and errors out, or is timing out being established or
@@ -97,10 +97,10 @@ object ConnectionRetrySettings {
    * Reads from the given config.
    */
   def apply(c: Config): ConnectionRetrySettings = {
-    val connectTimeout = c.getDuration("connect-timeout").asScala
-    val initialRetry = c.getDuration("initial-retry").asScala
+    val connectTimeout = c.getDuration("connect-timeout").toScala
+    val initialRetry = c.getDuration("initial-retry").toScala
     val backoffFactor = c.getDouble("backoff-factor")
-    val maxBackoff = c.getDuration("max-backoff").asScala
+    val maxBackoff = c.getDuration("max-backoff").toScala
     val maxRetries = if (c.getString("max-retries") == "infinite") infiniteRetries else c.getInt("max-retries")
     new ConnectionRetrySettings(
       connectTimeout,

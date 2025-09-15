@@ -14,13 +14,13 @@
 package org.apache.pekko.stream.connectors.mqtt
 
 import org.apache.pekko
-import pekko.util.JavaDurationConverters._
 import org.eclipse.paho.client.mqttv3.{ MqttClientPersistence, MqttConnectOptions }
 
 import scala.collection.immutable
 import scala.collection.immutable.Map
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
+import scala.jdk.DurationConverters._
 
 /**
  * Quality of Service constants as defined in
@@ -192,7 +192,7 @@ final class MqttConnectionSettings private (val broker: String,
   /** Java API */
   def withKeepAliveInterval(value: java.time.Duration): MqttConnectionSettings =
     withKeepAliveInterval(
-      value.asScala)
+      value.toScala)
 
   /** Scala API */
   def withConnectionTimeout(value: FiniteDuration): MqttConnectionSettings =
@@ -201,7 +201,7 @@ final class MqttConnectionSettings private (val broker: String,
   /** Java API */
   def withConnectionTimeout(value: java.time.Duration): MqttConnectionSettings =
     withConnectionTimeout(
-      value.asScala)
+      value.toScala)
 
   /** Scala API */
   def withDisconnectQuiesceTimeout(value: FiniteDuration): MqttConnectionSettings =
@@ -210,7 +210,7 @@ final class MqttConnectionSettings private (val broker: String,
   /** Java API */
   def withDisconnectQuiesceTimeout(value: java.time.Duration): MqttConnectionSettings =
     withDisconnectQuiesceTimeout(
-      value.asScala)
+      value.toScala)
 
   /** Scala API */
   def withDisconnectTimeout(value: FiniteDuration): MqttConnectionSettings =
@@ -219,7 +219,7 @@ final class MqttConnectionSettings private (val broker: String,
   /** Java API */
   def withDisconnectTimeout(value: java.time.Duration): MqttConnectionSettings =
     withDisconnectTimeout(
-      value.asScala)
+      value.toScala)
   def withMaxInFlight(value: Int): MqttConnectionSettings = copy(maxInFlight = value)
   def withMqttVersion(value: Int): MqttConnectionSettings = copy(mqttVersion = value)
 

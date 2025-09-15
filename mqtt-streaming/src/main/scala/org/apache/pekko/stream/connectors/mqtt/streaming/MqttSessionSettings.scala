@@ -58,7 +58,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
   require(maxPacketSize >= 0 && maxPacketSize <= (1 << 28),
     s"maxPacketSize of $maxPacketSize must be positive and less than ${1 << 28}")
 
-  import org.apache.pekko.util.JavaDurationConverters._
+  import scala.jdk.DurationConverters._
 
   /**
    * Just for clients - the number of commands that can be buffered while connected to a server. Defaults
@@ -100,7 +100,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * 5 minutes.
    */
   def withReceiveConnectTimeout(receiveConnectTimeout: Duration): MqttSessionSettings =
-    copy(receiveConnectTimeout = receiveConnectTimeout.asScala)
+    copy(receiveConnectTimeout = receiveConnectTimeout.toScala)
 
   /**
    * For clients, the amount of time to wait for a server to ack a connection. For servers, the amount of time
@@ -116,7 +116,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * to wait before receiving an ack command locally in reply to a connect event. Defaults to 30 seconds.
    */
   def withReceiveConnAckTimeout(receiveConnAckTimeout: Duration): MqttSessionSettings =
-    copy(receiveConnAckTimeout = receiveConnAckTimeout.asScala)
+    copy(receiveConnAckTimeout = receiveConnAckTimeout.toScala)
 
   /**
    * For producers of PUBLISH, the amount of time to wait to ack/receive a QoS 1/2 publish before retrying with
@@ -132,7 +132,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * the DUP flag set. Defaults to 0 seconds, which means republishing only occurs on reconnect.
    */
   def withProducerPubAckRecTimeout(producerPubAckRecTimeout: Duration): MqttSessionSettings =
-    copy(producerPubAckRecTimeout = producerPubAckRecTimeout.asScala)
+    copy(producerPubAckRecTimeout = producerPubAckRecTimeout.toScala)
 
   /**
    * For producers of PUBLISH, the amount of time to wait for a server to complete a QoS 2 publish before retrying
@@ -148,7 +148,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * with another PUBREL. Defaults to 0 seconds, which means republishing only occurs on reconnect.
    */
   def withProducerPubCompTimeout(producerPubCompTimeout: Duration): MqttSessionSettings =
-    copy(producerPubCompTimeout = producerPubCompTimeout.asScala)
+    copy(producerPubCompTimeout = producerPubCompTimeout.toScala)
 
   /**
    * For consumers of PUBLISH, the amount of time to wait before receiving an ack/receive command locally in reply
@@ -164,7 +164,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * to a QoS 1/2 publish event before failing. Defaults to 30 seconds.
    */
   def withConsumerPubAckRecTimeout(consumerPubAckRecTimeout: Duration): MqttSessionSettings =
-    copy(consumerPubAckRecTimeout = consumerPubAckRecTimeout.asScala)
+    copy(consumerPubAckRecTimeout = consumerPubAckRecTimeout.toScala)
 
   /**
    * For consumers of PUBLISH, the amount of time to wait before receiving a complete command locally in reply to a
@@ -180,7 +180,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * QoS 2 publish event before failing. Defaults to 30 seconds.
    */
   def withConsumerPubCompTimeout(consumerPubCompTimeout: Duration): MqttSessionSettings =
-    copy(consumerPubCompTimeout = consumerPubCompTimeout.asScala)
+    copy(consumerPubCompTimeout = consumerPubCompTimeout.toScala)
 
   /**
    * For consumers of PUBLISH, the amount of time to wait for a server to release a QoS 2 publish before failing.
@@ -196,7 +196,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * Defaults to 30 seconds.
    */
   def withConsumerPubRelTimeout(consumerPubRelTimeout: Duration): MqttSessionSettings =
-    copy(consumerPubRelTimeout = consumerPubRelTimeout.asScala)
+    copy(consumerPubRelTimeout = consumerPubRelTimeout.toScala)
 
   /**
    * For clients, the amount of time to wait for a server to ack a subscribe. For servers, the amount of time
@@ -212,7 +212,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * to wait before receiving an ack command locally in reply to a subscribe event. Defaults to 30 seconds.
    */
   def withReceiveSubAckTimeout(receiveSubAckTimeout: Duration): MqttSessionSettings =
-    copy(receiveSubAckTimeout = receiveSubAckTimeout.asScala)
+    copy(receiveSubAckTimeout = receiveSubAckTimeout.toScala)
 
   /**
    * For clients, the amount of time to wait for a server to ack a unsubscribe. For servers, the amount of time
@@ -228,7 +228,7 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
    * to wait before receiving an ack command locally in reply to a unsubscribe event. Defaults to 30 seconds.
    */
   def withReceiveUnsubAckTimeout(receiveUnsubAckTimeout: Duration): MqttSessionSettings =
-    copy(receiveUnsubAckTimeout = receiveUnsubAckTimeout.asScala)
+    copy(receiveUnsubAckTimeout = receiveUnsubAckTimeout.toScala)
 
   /**
    * The maximum number of client termination event observers permitted. Defaults to 100 which should be

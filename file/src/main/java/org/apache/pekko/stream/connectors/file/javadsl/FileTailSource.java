@@ -17,11 +17,12 @@ import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.javadsl.Framing;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-import org.apache.pekko.util.JavaDurationConverters;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+
+import scala.jdk.javaapi.DurationConverters;
 
 /**
  * Java API
@@ -56,7 +57,7 @@ public final class FileTailSource {
             path,
             maxChunkSize,
             startingPosition,
-            JavaDurationConverters.asFiniteDuration(pollingInterval)));
+            DurationConverters.asFiniteDuration(pollingInterval)));
   }
 
   /**

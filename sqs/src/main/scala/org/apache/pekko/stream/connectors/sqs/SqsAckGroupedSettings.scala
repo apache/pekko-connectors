@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.sqs
 
 import scala.concurrent.duration._
-import org.apache.pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 
 final class SqsAckGroupedSettings private (val maxBatchSize: Int,
     val maxBatchWait: scala.concurrent.duration.FiniteDuration,
@@ -77,6 +77,6 @@ object SqsAckGroupedSettings {
       maxBatchWait: java.time.Duration,
       concurrentRequests: Int): SqsAckGroupedSettings = new SqsAckGroupedSettings(
     maxBatchSize,
-    maxBatchWait.asScala,
+    maxBatchWait.toScala,
     concurrentRequests)
 }

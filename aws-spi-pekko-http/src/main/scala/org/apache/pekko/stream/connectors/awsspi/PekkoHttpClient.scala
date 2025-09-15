@@ -35,7 +35,6 @@ import pekko.http.scaladsl.settings.ConnectionPoolSettings
 import pekko.stream.scaladsl.Source
 import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.ByteString
-import pekko.util.JavaDurationConverters._
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.http.async._
 import software.amazon.awssdk.http.{ SdkHttpConfigurationOption, SdkHttpRequest }
@@ -44,6 +43,7 @@ import software.amazon.awssdk.utils.AttributeMap
 import scala.collection.immutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, ExecutionContext }
+import scala.jdk.DurationConverters._
 import scala.jdk.OptionConverters._
 
 class PekkoHttpClient(
@@ -165,12 +165,12 @@ object PekkoHttpClient {
       base: ConnectionPoolSettings, attributeMap: AttributeMap): ConnectionPoolSettings = {
     def zeroToInfinite(duration: java.time.Duration): scala.concurrent.duration.Duration =
       if (duration.isZero) scala.concurrent.duration.Duration.Inf
-      else duration.asScala
+      else duration.toScala
 
     base
       .withUpdatedConnectionSettings(s =>
-        s.withConnectingTimeout(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).asScala)
-          .withIdleTimeout(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).asScala))
+        s.withConnectingTimeout(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).toScala)
+          .withIdleTimeout(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).toScala))
       .withMaxConnections(attributeMap.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue())
       .withMaxConnectionLifetime(zeroToInfinite(attributeMap.get(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE)))
   }

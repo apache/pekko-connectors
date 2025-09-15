@@ -14,10 +14,10 @@
 package org.apache.pekko.stream.connectors.elasticsearch
 
 import org.apache.pekko
-import pekko.util.JavaDurationConverters._
 import java.util.concurrent.TimeUnit
 
 import scala.concurrent.duration.FiniteDuration
+import scala.jdk.DurationConverters._
 
 /**
  * Configure Elastiscsearch/OpenSearch sources.
@@ -34,7 +34,7 @@ abstract class SourceSettingsBase[Version <: ApiVersionBase, S <: SourceSettings
 
   def withScrollDuration(value: FiniteDuration): S = copy(scrollDuration = value)
 
-  def withScrollDuration(value: java.time.Duration): S = copy(scrollDuration = value.asScala)
+  def withScrollDuration(value: java.time.Duration): S = copy(scrollDuration = value.toScala)
 
   /**
    * If includeDocumentVersion is true, '_version' is returned with the search-results

@@ -13,10 +13,10 @@
 
 package org.apache.pekko.stream.connectors.cassandra
 
-import org.apache.pekko.util.JavaDurationConverters._
 import com.datastax.oss.driver.api.core.cql.BatchType
 
 import scala.concurrent.duration.{ FiniteDuration, _ }
+import scala.jdk.DurationConverters._
 
 class CassandraWriteSettings private (val parallelism: Int,
     val maxBatchSize: Int,
@@ -46,7 +46,7 @@ class CassandraWriteSettings private (val parallelism: Int,
    * Java API: Batch grouping time for `CassandraFlow.createUnloggedBatch`.
    */
   def withMaxBatchWait(maxBatchWait: java.time.Duration): CassandraWriteSettings =
-    copy(maxBatchWait = maxBatchWait.asScala)
+    copy(maxBatchWait = maxBatchWait.toScala)
 
   def withBatchType(value: BatchType): CassandraWriteSettings =
     copy(batchType = value)

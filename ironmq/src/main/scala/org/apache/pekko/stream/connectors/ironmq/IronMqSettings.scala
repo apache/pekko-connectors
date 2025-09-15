@@ -20,7 +20,7 @@ import pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings
 import com.typesafe.config.Config
 
 import scala.concurrent.duration.FiniteDuration
-import pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 
 /**
  * IronMQ settings. To a detailed documentation please refer to the reference.conf.
@@ -144,9 +144,9 @@ object IronMqSettings {
     def apply(config: Config): ConsumerSettings = {
       val bufferMinSize: Int = config.getInt("buffer-min-size")
       val bufferMaxSize: Int = config.getInt("buffer-max-size")
-      val fetchInterval: FiniteDuration = config.getDuration("fetch-interval").asScala
-      val pollTimeout: FiniteDuration = config.getDuration("poll-timeout").asScala
-      val reservationTimeout: FiniteDuration = config.getDuration("reservation-timeout").asScala
+      val fetchInterval: FiniteDuration = config.getDuration("fetch-interval").toScala
+      val pollTimeout: FiniteDuration = config.getDuration("poll-timeout").toScala
+      val reservationTimeout: FiniteDuration = config.getDuration("reservation-timeout").toScala
       new ConsumerSettings(bufferMinSize, bufferMaxSize, fetchInterval, pollTimeout, reservationTimeout)
     }
   }

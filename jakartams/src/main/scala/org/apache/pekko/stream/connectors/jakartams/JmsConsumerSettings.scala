@@ -16,9 +16,9 @@ package org.apache.pekko.stream.connectors.jakartams
 import com.typesafe.config.{ Config, ConfigValueType }
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.util.JavaDurationConverters._
 
 import scala.concurrent.duration.FiniteDuration
+import scala.jdk.DurationConverters._
 
 /**
  * Settings for [[pekko.stream.connectors.jakartams.scaladsl.JmsConsumer]] and [[pekko.stream.connectors.jakartams.javadsl.JmsConsumer]].
@@ -184,12 +184,12 @@ object JmsConsumerSettings {
     val bufferSize = c.getInt("buffer-size")
     val selector = getStringOption("selector")
     val acknowledgeMode = getOption("acknowledge-mode", c => AcknowledgeMode.from(c.getString("acknowledge-mode")))
-    val ackTimeout = c.getDuration("ack-timeout").asScala
-    val maxAckIntervalDuration = getOption("max-ack-interval", config => config.getDuration("max-ack-interval").asScala)
+    val ackTimeout = c.getDuration("ack-timeout").toScala
+    val maxAckIntervalDuration = getOption("max-ack-interval", config => config.getDuration("max-ack-interval").toScala)
     val maxAckInterval = maxAckIntervalDuration.map(duration => FiniteDuration(duration.length, duration.unit))
     val maxPendingAcks = c.getInt("max-pending-acks")
     val failStreamOnAckTimeout = c.getBoolean("fail-stream-on-ack-timeout")
-    val connectionStatusSubscriptionTimeout = c.getDuration("connection-status-subscription-timeout").asScala
+    val connectionStatusSubscriptionTimeout = c.getDuration("connection-status-subscription-timeout").toScala
     new JmsConsumerSettings(
       connectionFactory,
       connectionRetrySettings,

@@ -24,7 +24,6 @@ import org.apache.pekko
 import pekko.http.scaladsl.model.headers.`Content-Type`
 import pekko.http.scaladsl.model.MediaTypes
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
-import pekko.util.JavaDurationConverters._
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -32,6 +31,7 @@ import software.amazon.awssdk.http.SdkHttpConfigurationOption
 import software.amazon.awssdk.utils.AttributeMap
 
 import scala.concurrent.duration._
+import scala.jdk.DurationConverters._
 
 class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
 
@@ -87,7 +87,7 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
         .asInstanceOf[PekkoHttpClient]
 
       pekkoClient.connectionSettings.connectionSettings.connectingTimeout shouldBe
-      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).asScala
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).toScala
       pekkoClient.connectionSettings.connectionSettings.idleTimeout shouldBe
       SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(
         SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT).asScala

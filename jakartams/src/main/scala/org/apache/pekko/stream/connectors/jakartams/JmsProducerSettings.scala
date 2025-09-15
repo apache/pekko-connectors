@@ -16,9 +16,9 @@ package org.apache.pekko.stream.connectors.jakartams
 import com.typesafe.config.{ Config, ConfigValueType }
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.util.JavaDurationConverters._
 
 import scala.concurrent.duration.FiniteDuration
+import scala.jdk.DurationConverters._
 
 /**
  * Settings for [[pekko.stream.connectors.jakartams.scaladsl.JmsProducer]] and [[pekko.stream.connectors.jakartams.javadsl.JmsProducer]].
@@ -136,8 +136,8 @@ object JmsProducerSettings {
     val sendRetrySettings = SendRetrySettings(c.getConfig("send-retry"))
     val credentials = getOption("credentials", c => Credentials(c.getConfig("credentials")))
     val sessionCount = c.getInt("session-count")
-    val timeToLive = getOption("time-to-live", _.getDuration("time-to-live").asScala)
-    val connectionStatusSubscriptionTimeout = c.getDuration("connection-status-subscription-timeout").asScala
+    val timeToLive = getOption("time-to-live", _.getDuration("time-to-live").toScala)
+    val connectionStatusSubscriptionTimeout = c.getDuration("connection-status-subscription-timeout").toScala
     new JmsProducerSettings(
       connectionFactory,
       connectionRetrySettings,

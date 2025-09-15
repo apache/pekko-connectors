@@ -25,7 +25,6 @@ import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
 
-import scala.jdk.DurationConverters._
 import scala.jdk.FunctionConverters._
 import scala.jdk.FutureConverters._
 
