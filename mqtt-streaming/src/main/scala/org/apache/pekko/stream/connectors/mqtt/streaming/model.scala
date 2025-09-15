@@ -493,7 +493,7 @@ object MqttCodec {
   /**
    * Not enough bytes in the byte iterator
    */
-  final case object BufferUnderflow extends DecodeError
+  case object BufferUnderflow extends DecodeError
 
   /**
    * Cannot determine the type/flags combination of the control packet
@@ -516,7 +516,7 @@ object MqttCodec {
   /**
    * Bit 0 of the connect flag was set - which it should not be as it is reserved.
    */
-  final case object ConnectFlagReservedSet extends DecodeError
+  case object ConnectFlagReservedSet extends DecodeError
 
   /**
    * Something is wrong with the connect message

@@ -85,7 +85,7 @@ import scala.util.{ Either, Failure, Success }
 
   sealed abstract class Event
   final case class AcquiredPacketId(packetId: PacketId) extends Event
-  final case object UnacquiredPacketId extends Event
+  case object UnacquiredPacketId extends Event
   case object ReceivePubAckRecTimeout extends Event
   final case class PubAckReceivedFromRemote(local: Promise[ForwardPubAck]) extends Event
   final case class PubRecReceivedFromRemote(local: Promise[ForwardPubRec]) extends Event
@@ -268,8 +268,8 @@ import scala.util.{ Either, Failure, Success }
       extends Data(publish, clientId, packetId, packetRouter, settings)
 
   sealed abstract class Event
-  final case object RegisteredPacketId extends Event
-  final case object UnobtainablePacketId extends Event
+  case object RegisteredPacketId extends Event
+  case object UnobtainablePacketId extends Event
   final case class PubAckReceivedLocally(remote: Promise[ForwardPubAck.type]) extends Event
   final case class PubRecReceivedLocally(remote: Promise[ForwardPubRec.type]) extends Event
   case object ReceivePubAckRecTimeout extends Event
@@ -540,7 +540,7 @@ import scala.util.{ Either, Failure, Success }
   // Replies
 
   sealed abstract class Reply
-  final case object Registered extends Reply
+  case object Registered extends Reply
 
   /*
    * Construct with the starting state
