@@ -45,3 +45,4 @@ Notable upgrades include:
 
 * Netty 4.2.5
 * Jackson 2.19.2
+* Protobuf-Java 3.25.8
