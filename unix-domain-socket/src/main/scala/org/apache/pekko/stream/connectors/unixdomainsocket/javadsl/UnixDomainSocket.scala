@@ -24,7 +24,7 @@ import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension,
 import pekko.stream.javadsl.{ Flow, Source }
 import pekko.stream.Materializer
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
+import scala.jdk.FutureConverters._
 
 import scala.concurrent.duration.Duration
 import scala.jdk.OptionConverters._

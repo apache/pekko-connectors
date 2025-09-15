@@ -19,7 +19,7 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.kinesis.{ scaladsl, CommittableRecord, _ }
 import pekko.stream.javadsl.{ Flow, Sink, Source, SubSource }
-import pekko.util.FutureConverters._
+import scala.jdk.FutureConverters._
 import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 import software.amazon.kinesis.retrieval.KinesisClientRecord

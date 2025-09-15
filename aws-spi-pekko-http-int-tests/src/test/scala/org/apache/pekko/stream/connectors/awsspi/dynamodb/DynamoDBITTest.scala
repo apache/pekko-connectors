@@ -19,13 +19,14 @@ package org.apache.pekko.stream.connectors.awsspi.dynamodb
 
 import org.apache.pekko
 import pekko.stream.connectors.awsspi.{ PekkoHttpAsyncHttpService, TestBase }
-import pekko.util.FutureConverters
 import org.scalatest.concurrent.{ Eventually, Futures, IntegrationPatience }
 import org.scalatest.concurrent.ScalaFutures._
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model._
+
+import scala.jdk.FutureConverters
 
 class DynamoDBITTest
     extends AnyWordSpec

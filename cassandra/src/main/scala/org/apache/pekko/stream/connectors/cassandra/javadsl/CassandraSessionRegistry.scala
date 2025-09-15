@@ -19,8 +19,9 @@ import org.apache.pekko
 import pekko.Done
 import pekko.actor.ClassicActorSystemProvider
 import pekko.stream.connectors.cassandra.{ scaladsl, CassandraSessionSettings }
-import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
+
+import scala.jdk.FutureConverters._
 
 /**
  * This Cassandra session registry makes it possible to share Cassandra sessions between multiple use sites

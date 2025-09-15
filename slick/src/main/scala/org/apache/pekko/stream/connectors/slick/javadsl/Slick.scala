@@ -25,12 +25,12 @@ import pekko.NotUsed
 import pekko.japi.function.Function2
 import pekko.stream.connectors.slick.scaladsl.{ Slick => ScalaSlick }
 import pekko.stream.javadsl._
-import pekko.util.FunctionConverters._
-import pekko.util.FutureConverters._
 import slick.dbio.DBIO
 import slick.jdbc.{ GetResult, SQLActionBuilder, SetParameter, SimpleJdbcAction }
 
 import scala.concurrent.ExecutionContext
+import scala.jdk.FunctionConverters._
+import scala.jdk.FutureConverters._
 
 object Slick {
 

@@ -22,8 +22,8 @@ import pekko.stream.connectors.ironmq.scaladsl.{
   CommittableMessage => ScalaCommittableMessage
 }
 
-import pekko.util.FutureConverters
 import scala.concurrent.Future
+import scala.jdk.FutureConverters
 
 /**
  * This implicit classes allow to convert the Committable and CommittableMessage between scaladsl and javadsl.

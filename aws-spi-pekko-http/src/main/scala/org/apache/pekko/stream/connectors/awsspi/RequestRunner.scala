@@ -25,9 +25,10 @@ import pekko.http.scaladsl.model.{ ContentTypes, HttpResponse }
 import pekko.http.scaladsl.model.headers.{ `Content-Length`, `Content-Type` }
 import pekko.stream.Materializer
 import pekko.stream.scaladsl.{ Keep, Sink }
-import pekko.util.FutureConverters
 import software.amazon.awssdk.http.SdkHttpFullResponse
 import software.amazon.awssdk.http.async.SdkAsyncHttpResponseHandler
+
+import scala.jdk.FutureConverters
 
 import scala.concurrent.{ ExecutionContext, Future }
 

@@ -24,7 +24,6 @@ import pekko.stream.connectors.couchbase.javadsl
 import pekko.stream.connectors.couchbase.scaladsl
 import pekko.stream.javadsl.Source
 import pekko.{ Done, NotUsed }
-import pekko.util.FutureConverters._
 
 import com.couchbase.client.java.AsyncBucket
 import com.couchbase.client.java.document.json.JsonObject
@@ -34,6 +33,7 @@ import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ duration, ExecutionContext, Future }
+import scala.jdk.FutureConverters._
 import scala.jdk.OptionConverters._
 
 /**

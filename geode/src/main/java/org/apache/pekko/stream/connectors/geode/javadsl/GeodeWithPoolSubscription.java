@@ -18,7 +18,7 @@ import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.pekko.stream.connectors.geode.GeodeSettings;
 import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeContinuousSourceStage;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.util.FutureConverters;
+import org.apache.scala.jdk.FutureConverters;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqQuery;

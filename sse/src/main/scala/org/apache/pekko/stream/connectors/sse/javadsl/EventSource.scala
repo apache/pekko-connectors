@@ -14,19 +14,20 @@
 package org.apache.pekko.stream.connectors.sse
 package javadsl
 
-import org.apache.pekko
-import pekko.NotUsed
-import pekko.http.javadsl.model.{ HttpRequest, HttpResponse, Uri }
-import pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
-import pekko.stream.javadsl.Source
-import pekko.http.javadsl.model.sse.ServerSentEvent
-import pekko.util.FutureConverters
-import scala.jdk.OptionConverters
 import java.util.Optional
 import java.util.concurrent.CompletionStage
 import java.util.function.{ Function => JFunction }
 
+import org.apache.pekko
+import pekko.NotUsed
 import pekko.actor.ClassicActorSystemProvider
+import pekko.http.javadsl.model.{ HttpRequest, HttpResponse, Uri }
+import pekko.http.javadsl.model.sse.ServerSentEvent
+import pekko.http.scaladsl.model.{ HttpResponse => SHttpResponse }
+import pekko.stream.javadsl.Source
+
+import scala.jdk.FutureConverters
+import scala.jdk.OptionConverters
 
 /**
  * This stream processing stage establishes a continuous source of server-sent events from the given URI.

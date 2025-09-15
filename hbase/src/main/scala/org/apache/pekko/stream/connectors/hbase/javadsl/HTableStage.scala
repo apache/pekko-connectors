@@ -20,7 +20,7 @@ import pekko.stream.connectors.hbase.HTableSettings
 import pekko.stream.connectors.hbase.impl.{ HBaseFlowStage, HBaseSourceStage }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
-import pekko.util.FutureConverters._
+import scala.jdk.FutureConverters._
 import org.apache.hadoop.hbase.client.{ Result, Scan }
 
 object HTableStage {

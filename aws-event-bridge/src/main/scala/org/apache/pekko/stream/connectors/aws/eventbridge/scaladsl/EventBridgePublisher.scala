@@ -17,11 +17,11 @@ import org.apache.pekko
 import pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings
 import pekko.stream.scaladsl.{ Flow, Keep, Sink }
 import pekko.{ Done, NotUsed }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient
 import software.amazon.awssdk.services.eventbridge.model._
 
 import scala.concurrent.Future
+import scala.jdk.FutureConverters._
 
 /**
  * Scala API

@@ -20,7 +20,7 @@ import pekko.stream.connectors.jms.{ scaladsl, JmsEnvelope, JmsMessage, JmsProdu
 import pekko.stream.javadsl.Source
 import pekko.stream.scaladsl.{ Flow, Keep }
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
+import scala.jdk.FutureConverters._
 import pekko.{ Done, NotUsed }
 
 import scala.jdk.CollectionConverters._

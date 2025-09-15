@@ -21,10 +21,11 @@ import pekko.japi.Pair
 import pekko.stream.connectors.hdfs.scaladsl.{ HdfsSource => ScalaHdfsSource }
 import pekko.stream.{ javadsl, IOResult }
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
 import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.io.Writable
 import org.apache.hadoop.io.compress.CompressionCodec
+
+import scala.jdk.FutureConverters._
 
 object HdfsSource {
 

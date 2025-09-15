@@ -13,21 +13,22 @@
 
 package org.apache.pekko.stream.connectors.ftp.javadsl
 
-import org.apache.pekko
-import pekko.actor.ClassicActorSystemProvider
 import java.util.concurrent.CompletionStage
 import java.util.function._
 
+import org.apache.pekko
+import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.DoNotInherit
 import pekko.stream.connectors.ftp._
 import pekko.stream.connectors.ftp.impl._
 import pekko.stream.javadsl.{ Sink, Source }
 import pekko.stream.{ IOResult, Materializer }
 import pekko.util.ByteString
-import pekko.util.FunctionConverters._
 import pekko.{ Done, NotUsed }
 import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
+
+import scala.jdk.FunctionConverters._
 
 @DoNotInherit
 sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory[FtpClient, S] =>
@@ -317,7 +318,7 @@ object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
       connectionSettings: S,
       chunkSize: Int,
       offset: Long): Source[ByteString, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Source
       .fromGraph(createIOSource(path, connectionSettings, chunkSize, offset))
       .mapMaterializedValue(func(_.asJava))
@@ -339,7 +340,7 @@ object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
   }
 
   def toPath(path: String, connectionSettings: S, append: Boolean): Sink[ByteString, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink.fromGraph(createIOSink(path, connectionSettings, append)).mapMaterializedValue(func(_.asJava))
   }
 
@@ -348,15 +349,14 @@ object Ftp extends FtpApi[FTPClient, FtpSettings] with FtpSourceParams {
 
   def move(destinationPath: Function[FtpFile, String],
       connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]] = {
-    import pekko.util.FunctionConverters._
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink
       .fromGraph(createMoveSink(destinationPath.asScala, connectionSettings))
       .mapMaterializedValue[CompletionStage[IOResult]](func(_.asJava))
   }
 
   def remove(connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink.fromGraph(createRemoveSink(connectionSettings)).mapMaterializedValue(func(_.asJava))
   }
 
@@ -411,7 +411,7 @@ object Ftps extends FtpApi[FTPSClient, FtpsSettings] with FtpsSourceParams {
       connectionSettings: S,
       chunkSize: Int,
       offset: Long): Source[ByteString, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Source
       .fromGraph(createIOSource(path, connectionSettings, chunkSize, offset))
       .mapMaterializedValue(func(_.asJava))
@@ -433,7 +433,7 @@ object Ftps extends FtpApi[FTPSClient, FtpsSettings] with FtpsSourceParams {
   }
 
   def toPath(path: String, connectionSettings: S, append: Boolean): Sink[ByteString, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink.fromGraph(createIOSink(path, connectionSettings, append)).mapMaterializedValue(func(_.asJava))
   }
 
@@ -442,15 +442,14 @@ object Ftps extends FtpApi[FTPSClient, FtpsSettings] with FtpsSourceParams {
 
   def move(destinationPath: Function[FtpFile, String],
       connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]] = {
-    import pekko.util.FunctionConverters._
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink
       .fromGraph(createMoveSink(destinationPath.asScala, connectionSettings))
       .mapMaterializedValue(func(_.asJava))
   }
 
   def remove(connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink.fromGraph(createRemoveSink(connectionSettings)).mapMaterializedValue(func(_.asJava))
   }
 
@@ -506,7 +505,7 @@ class SftpApi extends FtpApi[SSHClient, SftpSettings] with SftpSourceParams {
       connectionSettings: S,
       chunkSize: Int,
       offset: Long): Source[ByteString, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Source
       .fromGraph(createIOSource(path, connectionSettings, chunkSize, offset))
       .mapMaterializedValue(func(_.asJava))
@@ -528,7 +527,7 @@ class SftpApi extends FtpApi[SSHClient, SftpSettings] with SftpSourceParams {
   }
 
   def toPath(path: String, connectionSettings: S, append: Boolean): Sink[ByteString, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink.fromGraph(createIOSink(path, connectionSettings, append)).mapMaterializedValue(func(_.asJava))
   }
 
@@ -537,15 +536,14 @@ class SftpApi extends FtpApi[SSHClient, SftpSettings] with SftpSourceParams {
 
   def move(destinationPath: Function[FtpFile, String],
       connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]] = {
-    import pekko.util.FunctionConverters._
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink
       .fromGraph(createMoveSink(destinationPath.asScala, connectionSettings))
       .mapMaterializedValue(func(_.asJava))
   }
 
   def remove(connectionSettings: S): Sink[FtpFile, CompletionStage[IOResult]] = {
-    import pekko.util.FutureConverters._
+    import scala.jdk.FutureConverters._
     Sink.fromGraph(createRemoveSink(connectionSettings)).mapMaterializedValue(func(_.asJava))
   }
 

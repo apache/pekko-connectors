@@ -31,10 +31,10 @@ import pekko.stream.connectors.s3.impl._
 import pekko.stream.javadsl.{ RunnableGraph, Sink, Source }
 import pekko.stream.scaladsl.SourceToCompletionStage
 import pekko.util.ByteString
-import pekko.util.FutureConverters._
 
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Java API

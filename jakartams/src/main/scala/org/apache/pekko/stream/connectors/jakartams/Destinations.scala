@@ -14,8 +14,8 @@
 package org.apache.pekko.stream.connectors.jakartams
 
 import jakarta.jms
-import org.apache.pekko
-import pekko.util.FunctionConverters._
+
+import scala.jdk.FunctionConverters._
 
 /**
  * A destination to send to/receive from.

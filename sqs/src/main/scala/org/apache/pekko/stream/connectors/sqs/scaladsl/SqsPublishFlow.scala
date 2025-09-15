@@ -20,12 +20,12 @@ import pekko.NotUsed
 import pekko.annotation.ApiMayChange
 import pekko.stream.connectors.sqs._
 import pekko.stream.scaladsl.{ Flow, Source }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
 import scala.concurrent.ExecutionContext.parasitic
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Scala API to create publishing SQS flows.

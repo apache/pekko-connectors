@@ -26,7 +26,7 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.util.FutureConverters;
+import org.apache.scala.jdk.FutureConverters;
 import org.apache.geode.cache.client.ClientCacheFactory;
 
 import java.util.concurrent.CompletionStage;

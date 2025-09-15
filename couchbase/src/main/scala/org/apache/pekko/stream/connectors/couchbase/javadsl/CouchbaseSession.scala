@@ -24,7 +24,6 @@ import pekko.stream.connectors.couchbase.impl.CouchbaseSessionJavaAdapter
 import pekko.stream.connectors.couchbase.scaladsl.{ CouchbaseSession => ScalaDslCouchbaseSession }
 import pekko.stream.javadsl.Source
 import pekko.{ Done, NotUsed }
-import pekko.util.FutureConverters._
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
@@ -32,6 +31,7 @@ import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, Bucket }
 
 import scala.concurrent.ExecutionContext
+import scala.jdk.FutureConverters._
 
 /**
  * Java API: Gives access to Couchbase.

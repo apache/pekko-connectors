@@ -15,12 +15,12 @@ package org.apache.pekko.stream.connectors.cassandra
 
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider, ExtendedActorSystem }
-import pekko.util.FutureConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.FutureConverters._
 import scala.util.Failure
 
 /**

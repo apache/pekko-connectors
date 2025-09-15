@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.dynamodb
 
 import java.util.concurrent.CompletableFuture
 
-import org.apache.pekko.util.FutureConverters._
+import org.apache.scala.jdk.FutureConverters._
 import org.reactivestreams.Publisher
 import software.amazon.awssdk.core.async.SdkPublisher
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient

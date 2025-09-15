@@ -25,7 +25,7 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.util.FutureConverters;
+import org.apache.scala.jdk.FutureConverters;
 
 import io.pravega.client.tables.TableKey;
 

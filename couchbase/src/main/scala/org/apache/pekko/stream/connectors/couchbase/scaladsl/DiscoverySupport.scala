@@ -19,14 +19,15 @@ import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.annotation.InternalApi
 import pekko.discovery.Discovery
 import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
-import pekko.util.JavaDurationConverters._
-import pekko.util.FunctionConverters._
-import pekko.util.FutureConverters._
 import com.typesafe.config.Config
 
 import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
+
+import scala.jdk.DurationConverters._
+import scala.jdk.FunctionConverters._
+import scala.jdk.FutureConverters._
 
 /**
  * Utility to delegate Couchbase node address lookup to [[https://pekko.apache.org/docs/pekko/current/discovery/index.html Pekko Discovery]].
@@ -52,7 +53,7 @@ sealed class DiscoverySupport private {
   private def readNodes(config: Config)(implicit system: ClassicActorSystemProvider): Future[immutable.Seq[String]] =
     if (config.hasPath("service")) {
       val serviceName = config.getString("service.name")
-      val lookupTimeout = config.getDuration("service.lookup-timeout").asScala
+      val lookupTimeout = config.getDuration("service.lookup-timeout").toScala
       readNodes(serviceName, lookupTimeout)
     } else throw new IllegalArgumentException(s"config $config does not contain `service` section")
 

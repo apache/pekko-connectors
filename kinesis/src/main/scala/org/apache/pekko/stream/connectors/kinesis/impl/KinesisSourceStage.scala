@@ -20,13 +20,13 @@ import pekko.stream.connectors.kinesis.{ KinesisErrors => Errors, ShardSettings 
 import pekko.stream.stage.GraphStageLogic.StageActor
 import pekko.stream.stage._
 import pekko.stream.{ Attributes, Outlet, SourceShape }
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model._
 
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.parasitic
 import scala.jdk.CollectionConverters._
+import scala.jdk.FutureConverters._
 import scala.util.{ Failure, Success, Try }
 
 /**

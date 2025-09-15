@@ -18,22 +18,19 @@ import java.util.concurrent.CompletableFuture
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.event.Logging
+import pekko.stream.connectors.pravega.TableSettings
 import pekko.stream.stage.{ AsyncCallback, GraphStage, GraphStageLogic, InHandler, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 
-import scala.util.control.NonFatal
-import scala.concurrent.ExecutionContext.Implicits.global
-import pekko.stream.connectors.pravega.TableSettings
-import pekko.util.FutureConverters._
-
-import scala.util.{ Failure, Try }
-import io.pravega.client.tables.KeyValueTable
 import io.pravega.client.KeyValueTableFactory
-
+import io.pravega.client.tables.KeyValueTable
 import io.pravega.client.tables.KeyValueTableClientConfiguration
-
 import io.pravega.client.tables.TableEntry
-import scala.util.Success
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.jdk.FutureConverters._
+import scala.util.{ Success, Failure, Try }
+import scala.util.control.NonFatal
 
 @InternalApi private final class PravegaTableReadFlowStageLogic[K, V](
     val shape: FlowShape[K, Option[V]],

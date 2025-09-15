@@ -17,9 +17,9 @@ import org.apache.pekko
 import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.mqtt.MqttMessage
-import pekko.util.FutureConverters._
 
 import scala.concurrent.Future
+import scala.jdk.FutureConverters._
 
 /**
  * Scala API

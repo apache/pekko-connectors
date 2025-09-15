@@ -19,8 +19,9 @@ import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.sqs.{ MessageAction, SqsAckGroupedSettings, SqsAckSettings }
 import pekko.stream.javadsl.Sink
-import pekko.util.FutureConverters._
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
+
+import scala.jdk.FutureConverters._
 
 /**
  * Java API to create acknowledging sinks.
