@@ -26,7 +26,7 @@ import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model._
 
-import scala.jdk.FutureConverters
+import scala.jdk.javaapi.FutureConverters
 
 class DynamoDBITTest
     extends AnyWordSpec
