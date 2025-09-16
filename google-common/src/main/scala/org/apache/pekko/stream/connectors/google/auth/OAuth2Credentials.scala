@@ -29,7 +29,7 @@ import scala.concurrent.{ ExecutionContext, Future, Promise }
 private[auth] object OAuth2Credentials {
   sealed abstract class Command
   final case class TokenRequest(promise: Promise[OAuth2BearerToken], settings: RequestSettings) extends Command
-  final case object ForceRefresh extends Command
+  case object ForceRefresh extends Command
 }
 
 @InternalApi

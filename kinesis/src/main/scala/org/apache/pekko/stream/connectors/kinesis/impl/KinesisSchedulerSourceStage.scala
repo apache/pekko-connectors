@@ -37,8 +37,8 @@ private[kinesis] object KinesisSchedulerSourceStage {
 
   sealed trait Command
   final case class NewRecord(cr: CommittableRecord) extends Command
-  final case object Pump extends Command
-  final case object Complete extends Command
+  case object Pump extends Command
+  case object Complete extends Command
   final case class SchedulerShutdown(result: Try[_]) extends Command
 
 }

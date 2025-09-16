@@ -43,9 +43,9 @@ private[kinesis] object KinesisSourceStage {
 
   private[kinesis] final case class GetRecordsFailure(ex: Throwable)
 
-  private[kinesis] final case object Pump
+  private[kinesis] case object Pump
 
-  private[kinesis] final case object GetRecords
+  private[kinesis] case object GetRecords
 
 }
 

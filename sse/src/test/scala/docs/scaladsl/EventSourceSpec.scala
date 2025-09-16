@@ -46,10 +46,10 @@ import org.scalatest.wordspec.AsyncWordSpec
 
 object EventSourceSpec {
 
-  final object Server {
+  object Server {
 
-    private final case object Bind
-    private final case object Unbind
+    private case object Bind
+    private case object Unbind
 
     private def route(size: Int, setEventId: Boolean): Route = {
       import Directives._

@@ -629,7 +629,7 @@ import scala.util.{ Either, Failure, Success }
 
   sealed abstract class Event
   final case class AcquiredPacketId(packetId: PacketId) extends Event
-  final case object UnobtainablePacketId extends Event
+  case object UnobtainablePacketId extends Event
   final case class SubAckReceivedFromRemote(local: Promise[ForwardSubAck]) extends Event
   case object ReceiveSubAckTimeout extends Event
 
@@ -712,7 +712,7 @@ import scala.util.{ Either, Failure, Success }
 
   sealed abstract class Event
   final case class AcquiredPacketId(packetId: PacketId) extends Event
-  final case object UnobtainablePacketId extends Event
+  case object UnobtainablePacketId extends Event
   final case class UnsubAckReceivedFromRemote(local: Promise[ForwardUnsubAck]) extends Event
   case object ReceiveUnsubAckTimeout extends Event
 

@@ -45,7 +45,7 @@ object MessageAction {
     override def hashCode(): Int = java.util.Objects.hash(message)
   }
 
-  final object Delete {
+  object Delete {
     def apply(message: Message): Delete = new Delete(message)
   }
 
@@ -63,7 +63,7 @@ object MessageAction {
     override def hashCode(): Int = java.util.Objects.hash(message)
   }
 
-  final object Ignore {
+  object Ignore {
     def apply(message: Message): Ignore = new Ignore(message)
   }
 

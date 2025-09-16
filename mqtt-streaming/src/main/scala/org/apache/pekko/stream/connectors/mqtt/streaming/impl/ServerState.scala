@@ -811,8 +811,8 @@ import scala.util.{ Failure, Success }
       extends Data(clientId, packetId, subscribed, packetRouter, settings)
 
   sealed abstract class Event
-  final case object RegisteredPacketId extends Event
-  final case object UnobtainablePacketId extends Event
+  case object RegisteredPacketId extends Event
+  case object UnobtainablePacketId extends Event
   final case class SubAckReceivedLocally(remote: Promise[ForwardSubAck.type]) extends Event
   case object ReceiveSubAckTimeout extends Event
 
@@ -905,8 +905,8 @@ import scala.util.{ Failure, Success }
       extends Data(clientId, packetId, unsubscribed, packetRouter, settings)
 
   sealed abstract class Event
-  final case object RegisteredPacketId extends Event
-  final case object UnobtainablePacketId extends Event
+  case object RegisteredPacketId extends Event
+  case object UnobtainablePacketId extends Event
   final case class UnsubAckReceivedLocally(remote: Promise[ForwardUnsubAck.type]) extends Event
   case object ReceiveUnsubAckTimeout extends Event
 
