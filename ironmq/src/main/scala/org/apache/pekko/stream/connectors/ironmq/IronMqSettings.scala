@@ -20,7 +20,7 @@ import pekko.stream.connectors.ironmq.IronMqSettings.ConsumerSettings
 import com.typesafe.config.Config
 
 import scala.concurrent.duration.FiniteDuration
-import pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 
 /**
  * IronMQ settings. To a detailed documentation please refer to the reference.conf.
@@ -84,7 +84,7 @@ object IronMqSettings {
       copy(fetchInterval = value)
 
     /** Java API: The interval of time between each poll loop. */
-    def withFetchInterval(value: java.time.Duration): ConsumerSettings = copy(fetchInterval = value.asScala)
+    def withFetchInterval(value: java.time.Duration): ConsumerSettings = copy(fetchInterval = value.toScala)
 
     /**
      * Scala API:
@@ -98,7 +98,7 @@ object IronMqSettings {
      * The amount of time the consumer will wait for the messages to be available on the queue. The IronMQ time unit is
      * the second so any other value is approximated to the second.
      */
-    def withPollTimeout(value: java.time.Duration): ConsumerSettings = copy(pollTimeout = value.asScala)
+    def withPollTimeout(value: java.time.Duration): ConsumerSettings = copy(pollTimeout = value.toScala)
 
     /**
      * Scala API:
@@ -115,7 +115,7 @@ object IronMqSettings {
      * process the message otherwise the same message will be processed multiple times. Again the IronMq time unit is
      * the second.
      */
-    def withReservationTimeout(value: java.time.Duration): ConsumerSettings = copy(reservationTimeout = value.asScala)
+    def withReservationTimeout(value: java.time.Duration): ConsumerSettings = copy(reservationTimeout = value.toScala)
 
     private def copy(
         bufferMinSize: Int = bufferMinSize,
@@ -144,9 +144,9 @@ object IronMqSettings {
     def apply(config: Config): ConsumerSettings = {
       val bufferMinSize: Int = config.getInt("buffer-min-size")
       val bufferMaxSize: Int = config.getInt("buffer-max-size")
-      val fetchInterval: FiniteDuration = config.getDuration("fetch-interval").asScala
-      val pollTimeout: FiniteDuration = config.getDuration("poll-timeout").asScala
-      val reservationTimeout: FiniteDuration = config.getDuration("reservation-timeout").asScala
+      val fetchInterval: FiniteDuration = config.getDuration("fetch-interval").toScala
+      val pollTimeout: FiniteDuration = config.getDuration("poll-timeout").toScala
+      val reservationTimeout: FiniteDuration = config.getDuration("reservation-timeout").toScala
       new ConsumerSettings(bufferMinSize, bufferMaxSize, fetchInterval, pollTimeout, reservationTimeout)
     }
   }

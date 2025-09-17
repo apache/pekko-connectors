@@ -28,7 +28,6 @@ import software.amazon.awssdk.services.s3.{ S3AsyncClient, S3Configuration }
 import software.amazon.awssdk.services.s3.model._
 
 import scala.concurrent.duration._
-import scala.language.postfixOps
 import scala.util.Random
 
 class TestS3 extends BaseAwsClientTest[S3AsyncClient] {

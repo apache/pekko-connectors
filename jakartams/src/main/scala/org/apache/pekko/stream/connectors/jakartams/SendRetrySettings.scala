@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.jakartams
 import com.typesafe.config.Config
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 
 import scala.concurrent.duration._
 
@@ -33,7 +33,7 @@ final class SendRetrySettings private (val initialRetry: scala.concurrent.durati
   def withInitialRetry(value: scala.concurrent.duration.FiniteDuration): SendRetrySettings = copy(initialRetry = value)
 
   /** Java API: Wait time before retrying the first time. */
-  def withInitialRetry(value: java.time.Duration): SendRetrySettings = copy(initialRetry = value.asScala)
+  def withInitialRetry(value: java.time.Duration): SendRetrySettings = copy(initialRetry = value.toScala)
 
   /** Back-off factor for subsequent retries */
   def withBackoffFactor(value: Double): SendRetrySettings = copy(backoffFactor = value)
@@ -42,7 +42,7 @@ final class SendRetrySettings private (val initialRetry: scala.concurrent.durati
   def withMaxBackoff(value: scala.concurrent.duration.FiniteDuration): SendRetrySettings = copy(maxBackoff = value)
 
   /** Java API: Maximum back-off time allowed, after which all retries will happen after this delay. */
-  def withMaxBackoff(value: java.time.Duration): SendRetrySettings = copy(maxBackoff = value.asScala)
+  def withMaxBackoff(value: java.time.Duration): SendRetrySettings = copy(maxBackoff = value.toScala)
 
   /** Maximum number of retries allowed. */
   def withMaxRetries(value: Int): SendRetrySettings = copy(maxRetries = value)
@@ -82,9 +82,9 @@ object SendRetrySettings {
    * Reads from the given config.
    */
   def apply(c: Config): SendRetrySettings = {
-    val initialRetry = c.getDuration("initial-retry").asScala
+    val initialRetry = c.getDuration("initial-retry").toScala
     val backoffFactor = c.getDouble("backoff-factor")
-    val maxBackoff = c.getDuration("max-backoff").asScala
+    val maxBackoff = c.getDuration("max-backoff").toScala
     val maxRetries = if (c.getString("max-retries") == "infinite") infiniteRetries else c.getInt("max-retries")
     new SendRetrySettings(
       initialRetry,

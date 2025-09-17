@@ -17,13 +17,13 @@ import org.apache.pekko
 import pekko.ConfigurationException
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.discovery.Discovery
-import pekko.util.JavaDurationConverters._
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
 import scala.collection.immutable
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ ExecutionContext, Future }
+import scala.jdk.DurationConverters._
 import scala.jdk.FutureConverters._
 
 /**
@@ -86,7 +86,7 @@ private[cassandra] object PekkoDiscoverySessionProvider {
       ec: ExecutionContext): Future[immutable.Seq[String]] = {
     val serviceConfig = config.getConfig("service-discovery")
     val serviceName = serviceConfig.getString("name")
-    val lookupTimeout = serviceConfig.getDuration("lookup-timeout").asScala
+    val lookupTimeout = serviceConfig.getDuration("lookup-timeout").toScala
     readNodes(serviceName, lookupTimeout)
   }
 

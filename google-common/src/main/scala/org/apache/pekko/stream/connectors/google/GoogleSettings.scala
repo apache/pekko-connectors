@@ -25,7 +25,7 @@ import pekko.http.{ javadsl => jh }
 import pekko.stream.connectors.google.auth.Credentials
 import pekko.stream.connectors.google.http.{ ForwardProxyHttpsContext, ForwardProxyPoolSettings }
 import pekko.stream.connectors.google.implicits._
-import pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 import com.typesafe.config.Config
 
 import java.time
@@ -186,8 +186,8 @@ object RetrySettings {
   def apply(config: Config): RetrySettings = {
     RetrySettings(
       config.getInt("max-retries"),
-      config.getDuration("min-backoff").asScala,
-      config.getDuration("max-backoff").asScala,
+      config.getDuration("min-backoff").toScala,
+      config.getDuration("max-backoff").toScala,
       config.getDouble("random-factor"))
   }
 
@@ -196,8 +196,8 @@ object RetrySettings {
   def create(maxRetries: Int, minBackoff: time.Duration, maxBackoff: time.Duration, randomFactor: Double) =
     apply(
       maxRetries,
-      minBackoff.asScala,
-      maxBackoff.asScala,
+      minBackoff.toScala,
+      maxBackoff.toScala,
       randomFactor)
 }
 
@@ -206,8 +206,8 @@ final case class RetrySettings @InternalApi private (maxRetries: Int,
     maxBackoff: FiniteDuration,
     randomFactor: Double) {
   def getMaxRetries = maxRetries
-  def getMinBackoff = minBackoff.asJava
-  def getMaxBackoff = maxBackoff.asJava
+  def getMinBackoff = minBackoff.toJava
+  def getMaxBackoff = maxBackoff.toJava
   def getRandomFactor = randomFactor
 
   def withMaxRetries(maxRetries: Int) =
@@ -215,11 +215,11 @@ final case class RetrySettings @InternalApi private (maxRetries: Int,
   def withMinBackoff(minBackoff: FiniteDuration) =
     copy(minBackoff = minBackoff)
   def withMinBackoff(minBackoff: time.Duration) =
-    copy(minBackoff = minBackoff.asScala)
+    copy(minBackoff = minBackoff.toScala)
   def withMaxBackoff(maxBackoff: FiniteDuration) =
     copy(maxBackoff = maxBackoff)
   def withMaxBackoff(maxBackoff: time.Duration) =
-    copy(maxBackoff = maxBackoff.asScala)
+    copy(maxBackoff = maxBackoff.toScala)
   def withRandomFactor(randomFactor: Double) =
     copy(randomFactor = randomFactor)
 }

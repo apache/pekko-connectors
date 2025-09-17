@@ -17,7 +17,7 @@ import org.apache.pekko
 import pekko.stream.connectors.google.scaladsl.Paginated
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRestJsonProtocol._
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.spray.BigQueryRootJsonReader
-import pekko.util.JavaDurationConverters._
+import scala.jdk.DurationConverters._
 import com.fasterxml.jackson.annotation.{ JsonCreator, JsonIgnoreProperties, JsonProperty }
 import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader }
 
@@ -59,7 +59,7 @@ final case class QueryRequest private[bigquery] (query: String,
   def getQuery = query
   def getMaxResults = maxResults.toJavaPrimitive
   def getDefaultDataset = defaultDataset.toJava
-  def getTimeout = timeout.map(_.asJava).toJava
+  def getTimeout = timeout.map(_.toJava).toJava
   def getDryRun = dryRun.map(lang.Boolean.valueOf).toJava
   def getUseLegacySql = useLegacySql.map(lang.Boolean.valueOf).toJava
   def getRequestId = requestId.toJava
@@ -83,7 +83,7 @@ final case class QueryRequest private[bigquery] (query: String,
   def withTimeout(timeout: Option[FiniteDuration]) =
     copy(timeout = timeout)
   def withTimeout(timeout: util.Optional[Duration]) =
-    copy(timeout = timeout.toScala.map(_.asScala))
+    copy(timeout = timeout.toScala.map(_.toScala))
 
   def withDryRun(dryRun: Option[Boolean]) =
     copy(dryRun = dryRun)
@@ -151,7 +151,7 @@ object QueryRequest {
       query,
       maxResults.toScala,
       defaultDataset.toScala,
-      timeout.toScala.map(_.asScala),
+      timeout.toScala.map(_.toScala),
       dryRun.toScala.map(_.booleanValue),
       useLegacySql.toScala.map(_.booleanValue),
       None,

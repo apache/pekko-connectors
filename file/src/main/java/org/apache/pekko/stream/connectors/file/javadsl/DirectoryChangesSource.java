@@ -17,9 +17,10 @@ import org.apache.pekko.NotUsed;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.file.DirectoryChange;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.util.JavaDurationConverters;
 
 import java.nio.file.Path;
+
+import scala.jdk.javaapi.DurationConverters;
 
 /**
  * Watches a file system directory and streams change events from it.
@@ -40,7 +41,7 @@ public final class DirectoryChangesSource {
     return Source.fromGraph(
         new org.apache.pekko.stream.connectors.file.impl.DirectoryChangesSource<>(
             directoryPath,
-            JavaDurationConverters.asFiniteDuration(pollInterval),
+            DurationConverters.toScala(pollInterval),
             maxBufferSize,
             Pair::apply));
   }

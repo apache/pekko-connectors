@@ -19,7 +19,6 @@ import pekko.annotation.DoNotInherit
 import pekko.event.Logging
 import pekko.http.scaladsl.model.headers.HttpCredentials
 import pekko.stream.connectors.google.RequestSettings
-import pekko.util.JavaDurationConverters._
 import com.google.auth.{ Credentials => GoogleCredentials }
 import com.typesafe.config.Config
 
@@ -28,6 +27,7 @@ import java.util.concurrent.Executor
 import scala.collection.immutable.ListMap
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
+import scala.jdk.DurationConverters._
 import scala.util.control.NonFatal
 
 object Credentials {
@@ -87,7 +87,7 @@ object Credentials {
 
   private def parseComputeEngine(c: Config)(implicit system: ClassicActorSystemProvider) = {
     val scopes = c.getStringList("scopes").asScala.toSet
-    Await.result(ComputeEngineCredentials(scopes), c.getDuration("compute-engine.timeout").asScala)
+    Await.result(ComputeEngineCredentials(scopes), c.getDuration("compute-engine.timeout").toScala)
   }
 
   private def parseUserAccess(c: Config)(implicit system: ClassicActorSystemProvider) =

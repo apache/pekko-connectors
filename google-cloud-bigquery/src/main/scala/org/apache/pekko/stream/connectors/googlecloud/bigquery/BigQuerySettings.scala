@@ -16,11 +16,11 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery
 import org.apache.pekko
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.InternalApi
-import pekko.util.JavaDurationConverters._
 import com.typesafe.config.Config
 
 import java.time
 import scala.concurrent.duration._
+import scala.jdk.DurationConverters._
 
 object BigQuerySettings {
   val ConfigPath = "pekko.connectors.google.bigquery"
@@ -29,7 +29,7 @@ object BigQuerySettings {
    * Reads from the given config.
    */
   def apply(c: Config): BigQuerySettings =
-    BigQuerySettings(c.getDuration("load-job-per-table-quota").asScala)
+    BigQuerySettings(c.getDuration("load-job-per-table-quota").toScala)
 
   /**
    * Java API: Reads from the given config.
@@ -56,14 +56,14 @@ object BigQuerySettings {
   /**
    * Java API
    */
-  def create(loadJobPerTableQuota: time.Duration) = BigQuerySettings(loadJobPerTableQuota.asScala)
+  def create(loadJobPerTableQuota: time.Duration) = BigQuerySettings(loadJobPerTableQuota.toScala)
 
 }
 
 final case class BigQuerySettings @InternalApi private (loadJobPerTableQuota: FiniteDuration) {
-  def getLoadJobPerTableQuota = loadJobPerTableQuota.asJava
+  def getLoadJobPerTableQuota = loadJobPerTableQuota.toJava
   def withLoadJobPerTableQuota(loadJobPerTableQuota: FiniteDuration) =
     copy(loadJobPerTableQuota = loadJobPerTableQuota)
   def withLoadJobPerTableQuota(loadJobPerTableQuota: time.Duration) =
-    copy(loadJobPerTableQuota = loadJobPerTableQuota.asScala)
+    copy(loadJobPerTableQuota = loadJobPerTableQuota.toScala)
 }
