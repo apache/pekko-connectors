@@ -100,7 +100,7 @@ object EventSource {
     import EventStreamUnmarshalling.fromEventsStream
     implicit val actorSystem: ActorSystem = system.classicSystem
     import actorSystem.dispatcher
-    val log = Logging(actorSystem, "EventSource")
+    val log = Logging(actorSystem, getClass)
 
     val continuousEvents = {
       def getEventSource(lastEventId: Option[String]) = {
