@@ -113,11 +113,12 @@ object EventSource {
           .flatMap(Unmarshal(_).to[EventSource])
           .fallbackTo(Future.successful(noEvents))
       }
-      def recover(eventSource: EventSource) = eventSource.recoverWithRetries(1, { 
-        case e =>
-          log.error(e, "SSE Connector is retrying failed stream for: {} ", uri)
-          noEvents
-      })
+      def recover(eventSource: EventSource) = eventSource.recoverWithRetries(1,
+        {
+          case e =>
+            log.error(e, "SSE Connector is retrying failed stream for: {} ", uri)
+            noEvents
+        })
       def delimit(eventSource: EventSource) = eventSource.concat(singleDelimiter)
       Flow[Option[String]]
         .mapAsync(1)(getEventSource)
