@@ -17,6 +17,7 @@ package scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.event.Logging
 import pekko.http.scaladsl.client.RequestBuilding.Get
 import pekko.http.scaladsl.coding.Coders
 import pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
@@ -99,6 +100,7 @@ object EventSource {
     import EventStreamUnmarshalling.fromEventsStream
     implicit val actorSystem: ActorSystem = system.classicSystem
     import actorSystem.dispatcher
+    val log = Logging(actorSystem, getClass)
 
     val continuousEvents = {
       def getEventSource(lastEventId: Option[String]) = {
@@ -111,7 +113,12 @@ object EventSource {
           .flatMap(Unmarshal(_).to[EventSource])
           .fallbackTo(Future.successful(noEvents))
       }
-      def recover(eventSource: EventSource) = eventSource.recoverWithRetries(1, { case _ => noEvents })
+      def recover(eventSource: EventSource) = eventSource.recoverWithRetries(1,
+        {
+          case e =>
+            log.warning(e, "SSE Connector is retrying failed stream for: {}", uri)
+            noEvents
+        })
       def delimit(eventSource: EventSource) = eventSource.concat(singleDelimiter)
       Flow[Option[String]]
         .mapAsync(1)(getEventSource)
