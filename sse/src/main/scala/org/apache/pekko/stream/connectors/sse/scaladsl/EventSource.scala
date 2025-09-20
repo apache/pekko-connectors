@@ -17,7 +17,7 @@ package scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.event.Logging
+import pekko.event.{ LogSource, Logging }
 import pekko.http.scaladsl.client.RequestBuilding.Get
 import pekko.http.scaladsl.coding.Coders
 import pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
@@ -38,6 +38,16 @@ import scala.concurrent.duration.{ Duration, FiniteDuration }
  *
  * A single source of server-sent events is obtained from the URI. Once completed, either normally or by failure, a next
  * one is obtained thereby sending a Last-Event-ID header if available. This continues in an endless cycle.
+ *
+ * This endless cycle means that if the connection is interrupted, reconnection attempts will continue forever. This can
+ * be problematic if, for example, the connection fails due to an oversized line or event being received from the
+ * server. By default, an oversized SSE line or event will cause pekko-http to fail the stream. If the stream fails,
+ * this connector will establish a new connection and attempt to continue processing using Last-Event-ID. Reconsuming
+ * the oversized payload will fail the stream again, causing an infinite retry loop. This infinite loop can look like
+ * the connector getting stuck at the same point in the stream. Since the opinionated design of this connector is to
+ * retry forever, the connection error will be logged but only at the INFO level. You can use optional pekko-http
+ * configuration settings to define alternate handling of oversized SSE lines and events instead of failing the stream.
+ * See: `pekko.http.sse.oversized-line-handling` and `oversized-event-handling`.
  *
  * The shape of this processing stage is a source of server-sent events; to take effect it must be connected and run.
  * Progress (including termination) is controlled by the connected flow or sink, e.g. a retry delay can be implemented
@@ -100,7 +110,7 @@ object EventSource {
     import EventStreamUnmarshalling.fromEventsStream
     implicit val actorSystem: ActorSystem = system.classicSystem
     import actorSystem.dispatcher
-    val log = Logging(actorSystem, getClass)
+    val log = Logging(actorSystem, this.getClass)
 
     val continuousEvents = {
       def getEventSource(lastEventId: Option[String]) = {
@@ -116,7 +126,9 @@ object EventSource {
       def recover(eventSource: EventSource) = eventSource.recoverWithRetries(1,
         {
           case e =>
-            log.warning(e, "SSE Connector is retrying failed stream for: {}", uri)
+            log.info(
+              "SSE Connector is retrying failed stream for: {} Error was: {} with message: {}",
+              uri, e.getClass.getName, e.getMessage)
             noEvents
         })
       def delimit(eventSource: EventSource) = eventSource.concat(singleDelimiter)
