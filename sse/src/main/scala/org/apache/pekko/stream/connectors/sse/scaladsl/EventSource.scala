@@ -116,7 +116,7 @@ object EventSource {
       def recover(eventSource: EventSource) = eventSource.recoverWithRetries(1,
         {
           case e =>
-            log.warning(e, "SSE Connector is retrying failed stream for: {} ", uri)
+            log.warning(e, "SSE Connector is retrying failed stream for: {}", uri)
             noEvents
         })
       def delimit(eventSource: EventSource) = eventSource.concat(singleDelimiter)
