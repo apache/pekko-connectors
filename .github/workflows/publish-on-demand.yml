@@ -19,8 +19,6 @@ name: Publish On Demand (1.x)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "22 0 * * *"
 
 jobs:
   publish:
