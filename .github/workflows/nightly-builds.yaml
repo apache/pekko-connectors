@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        JDK: [ 8, 11, 17, 21 ]
+        JDK: [ 17, 21 ]
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
 
