@@ -17,7 +17,7 @@ package scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.event.{ LogSource, Logging }
+import pekko.event.Logging
 import pekko.http.scaladsl.client.RequestBuilding.Get
 import pekko.http.scaladsl.coding.Coders
 import pekko.http.scaladsl.model.MediaTypes.`text/event-stream`
