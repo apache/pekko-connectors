@@ -110,7 +110,7 @@ object EventSource {
     import EventStreamUnmarshalling.fromEventsStream
     implicit val actorSystem: ActorSystem = system.classicSystem
     import actorSystem.dispatcher
-    val log = Logging(actorSystem, this.getClass)
+    val log = Logging(actorSystem, "org.apache.pekko.stream.connectors.sse.EventSource")
 
     val continuousEvents = {
       def getEventSource(lastEventId: Option[String]) = {
