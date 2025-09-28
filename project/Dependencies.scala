@@ -68,7 +68,7 @@ object Dependencies {
 
   val GoogleAuthVersion = "1.39.1"
   val JwtScalaVersion = "11.0.3"
-  val Log4jVersion = "2.25.1"
+  val Log4jVersion = "2.25.2"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
@@ -228,7 +228,7 @@ object Dependencies {
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonVersion,
         "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.25.1" % Test,
+        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.25.2" % Test,
         "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
         "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
