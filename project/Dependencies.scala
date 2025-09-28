@@ -460,7 +460,7 @@ object Dependencies {
         "jakarta.annotation" % "jakarta.annotation-api" % "3.0.0" % Test))
   }
 
-  val SlickVersion = "3.5.2"
+  val SlickVersion = "3.6.1"
   val Slick = Seq(
     // Transitive dependency `scala-reflect` to avoid `NoClassDefFoundError`.
     // See: https://github.com/slick/slick/issues/2933
