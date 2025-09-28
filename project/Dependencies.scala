@@ -89,7 +89,6 @@ object Dependencies {
 
   val testkit = Seq(
     libraryDependencies := Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.10.0",
       "org.apache.pekko" %% "pekko-stream" % PekkoVersion,
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion,
       "org.apache.pekko" %% "pekko-slf4j" % PekkoVersion,
