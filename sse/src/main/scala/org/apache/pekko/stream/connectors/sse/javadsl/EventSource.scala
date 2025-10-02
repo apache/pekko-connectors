@@ -91,7 +91,7 @@ object EventSource {
       scaladsl
         .EventSource(
           uri.asScala,
-          send(_).asScala.map(_.asInstanceOf[SHttpResponse])(system.classicSystem.dispatcher),
+          send(_).asScala.asInstanceOf[Future[SHttpResponse]],
           lastEventId.toScala)(system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
