@@ -28,6 +28,7 @@ import pekko.stream.javadsl.Source
 
 import scala.jdk.FutureConverters
 import scala.jdk.OptionConverters
+import scala.concurrent.Future
 
 /**
  * This stream processing stage establishes a continuous source of server-sent events from the given URI.
@@ -91,7 +92,7 @@ object EventSource {
       scaladsl
         .EventSource(
           uri.asScala,
-          send(_).asScala.map(_.asInstanceOf[SHttpResponse])(system.classicSystem.dispatcher),
+          send(_).asScala.asInstanceOf[Future[SHttpResponse]],
           lastEventId.toScala)(system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava

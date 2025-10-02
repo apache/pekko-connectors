@@ -49,9 +49,9 @@ import scala.jdk.CollectionConverters._
 
     private final def unknownField(field: com.google.protobuf.UnknownFieldSet.Field): UnknownFieldSet.Field = {
       UnknownFieldSet.Field(
-        varint = field.getVarintList.asScala.map(_.asInstanceOf[Long]).toSeq,
-        fixed64 = field.getFixed64List.asScala.map(_.asInstanceOf[Long]).toSeq,
-        fixed32 = field.getFixed32List.asScala.map(_.asInstanceOf[Int]).toSeq,
+        varint = field.getVarintList.asScala.toSeq.asInstanceOf[Seq[Long]],
+        fixed64 = field.getFixed64List.asScala.toSeq.asInstanceOf[Seq[Long]],
+        fixed32 = field.getFixed32List.asScala.toSeq.asInstanceOf[Seq[Int]],
         lengthDelimited = field.getLengthDelimitedList.asScala.toSeq)
     }
 
