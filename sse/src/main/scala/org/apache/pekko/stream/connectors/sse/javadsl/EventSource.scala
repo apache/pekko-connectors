@@ -28,6 +28,7 @@ import pekko.stream.javadsl.Source
 
 import scala.jdk.FutureConverters
 import scala.jdk.OptionConverters
+import scala.concurrent.Future
 
 /**
  * This stream processing stage establishes a continuous source of server-sent events from the given URI.
