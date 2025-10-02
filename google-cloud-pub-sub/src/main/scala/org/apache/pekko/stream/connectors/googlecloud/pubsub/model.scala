@@ -15,14 +15,11 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub
 
 import java.time.Instant
 import org.apache.pekko
-import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.google.GoogleSettings
-import pekko.stream.connectors.google.auth.ServiceAccountCredentials
 
 import scala.annotation.nowarn
 import scala.collection.immutable
-
 import scala.jdk.CollectionConverters._
 
 /**
