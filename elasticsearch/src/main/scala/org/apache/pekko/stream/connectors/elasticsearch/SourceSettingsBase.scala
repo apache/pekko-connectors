@@ -13,7 +13,6 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch
 
-import org.apache.pekko
 import java.util.concurrent.TimeUnit
 
 import scala.concurrent.duration.FiniteDuration

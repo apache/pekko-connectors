@@ -15,8 +15,6 @@ package org.apache.pekko.stream.connectors.xml
 
 import java.util.Optional
 
-import org.apache.pekko
-
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 
