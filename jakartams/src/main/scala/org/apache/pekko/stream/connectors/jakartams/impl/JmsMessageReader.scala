@@ -40,7 +40,7 @@ private[jakartams] object JmsMessageReader {
       else {
         val len = message.readBytes(buff)
         val d = buff.take(len)
-        read(data ++ ByteString(d))
+        read(data ++ ByteString.fromArrayUnsafe(d))
       }
     read(ByteString.empty)
   }
