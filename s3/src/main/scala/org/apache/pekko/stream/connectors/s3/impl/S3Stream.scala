@@ -1506,7 +1506,7 @@ import scala.util.{ Failure, Success, Try }
     val requestInfo: Source[(MultipartUpload, Int), NotUsed] =
       initiateUpload(location, contentType, s3Headers.headersFor(InitiateMultipartUpload))
 
-    val headers = s3Headers.headersFor(CopyPart)
+    val headers = s3Headers.serverSideEncryption.map(_.headersFor(CopyPart)).getOrElse(Nil)
 
     Source
       .fromMaterializer { (mat, attr) =>
