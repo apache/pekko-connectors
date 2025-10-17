@@ -268,10 +268,10 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
           .withCustomHeaders(
             Map(
               requestPayerHeader -> requestPayerHeaderValue,
-              storgeClassHeader -> storageClassHeaderValue,
-              )
+              storgeClassHeader -> storageClassHeaderValue
             )
-        )
+          )
+      )
         .run()
 
     result.futureValue shouldBe MultipartUploadResult(targetUrl, targetBucket, targetBucketKey, etag, None)
@@ -296,7 +296,7 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
         .withHeader(sseCSourceKeyHeader, new EqualToPattern(sseCSourceKeyHeaderValue))
         .withHeader(requestPayerHeader, new EqualToPattern(requestPayerHeaderValue))
         .withoutHeader(storgeClassHeader)
-      )
+    )
 
     // SSE headers only
     mock.verifyThat(

@@ -31,6 +31,8 @@ import software.amazon.awssdk.regions.providers._
 import scala.concurrent.duration._
 import scala.jdk.OptionConverters._
 import scala.util.Try
+import org.apache.pekko.stream.connectors.s3.impl.S3Request
+import scala.jdk.CollectionConverters._
 
 final class Proxy private (
     val host: String,
@@ -359,7 +361,9 @@ final class S3Settings private (
     val validateObjectKey: Boolean,
     val retrySettings: RetrySettings,
     val multipartUploadSettings: MultipartUploadSettings,
-    val signAnonymousRequests: Boolean) {
+    val signAnonymousRequests: Boolean,
+    val additionalAllowedHeaders: Map[String, Set[String]]
+) {
 
   /** Java API */
   def getBufferType: BufferType = bufferType
@@ -420,6 +424,12 @@ final class S3Settings private (
   def withSignAnonymousRequests(value: Boolean): S3Settings =
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
 
+  private[s3] val concereteAdditionalAllowedHeaders: Map[S3Request, Set[String]] = {
+    additionalAllowedHeaders.flatMap {
+      case (header, value) => S3Request.fromString(header).map((_, value))
+    }
+  }
+
   private def copy(
       bufferType: BufferType = bufferType,
       credentialsProvider: AwsCredentialsProvider = credentialsProvider,
@@ -431,7 +441,9 @@ final class S3Settings private (
       validateObjectKey: Boolean = validateObjectKey,
       retrySettings: RetrySettings = retrySettings,
       multipartUploadSettings: MultipartUploadSettings = multipartUploadSettings,
-      signAnonymousRequests: Boolean = signAnonymousRequests): S3Settings = new S3Settings(
+      signAnonymousRequests: Boolean = signAnonymousRequests,
+      additionalAllowedHeaders: Map[String, Set[String]] = additionalAllowedHeaders
+  ): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
@@ -442,7 +454,9 @@ final class S3Settings private (
     validateObjectKey,
     retrySettings,
     multipartUploadSettings,
-    signAnonymousRequests)
+    signAnonymousRequests,
+    additionalAllowedHeaders
+  )
 
   override def toString: String =
     "S3Settings(" +
@@ -471,6 +485,7 @@ final class S3Settings private (
       Objects.equals(this.retrySettings, that.retrySettings) &&
       Objects.equals(this.multipartUploadSettings, multipartUploadSettings) &&
       this.signAnonymousRequests == that.signAnonymousRequests
+      this.additionalAllowedHeaders == that.additionalAllowedHeaders
     case _ => false
   }
 
@@ -628,6 +643,20 @@ object S3Settings {
 
     val signAnonymousRequests = c.getBoolean("sign-anonymous-requests")
 
+    val additionalAllowedHeadersConfig = c.getConfig("additional-allowed-headers")
+
+    val additionalAllowedHeaders: Map[String, Set[String]] =
+      S3Request.allRequests.map {
+        requestType =>
+          val requestTypeString = requestType.toString()
+          val value = if (additionalAllowedHeadersConfig.hasPath(requestTypeString)) {
+            additionalAllowedHeadersConfig.getStringList(requestTypeString).asScala.toSet
+          } else {
+            Set.empty[String]
+          }
+          (requestType.toString(), value)
+      }.toMap
+
     new S3Settings(
       bufferType,
       credentialsProvider,
@@ -639,7 +668,9 @@ object S3Settings {
       validateObjectKey,
       retrySettings,
       multipartUploadSettings,
-      signAnonymousRequests)
+      signAnonymousRequests,
+      additionalAllowedHeaders
+    )
   }
 
   /**
@@ -652,7 +683,9 @@ object S3Settings {
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
-      listBucketApiVersion: ApiVersion): S3Settings = new S3Settings(
+      listBucketApiVersion: ApiVersion,
+      additionalAllowedHeaders: Map[String, Set[String]]
+  ): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
@@ -663,18 +696,23 @@ object S3Settings {
     validateObjectKey = true,
     RetrySettings.default,
     MultipartUploadSettings(RetrySettings.default),
-    signAnonymousRequests = true)
+    signAnonymousRequests = true,
+    additionalAllowedHeaders = additionalAllowedHeaders
+  )
 
   /** Java API */
   def create(
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
-      listBucketApiVersion: ApiVersion): S3Settings = apply(
+      listBucketApiVersion: ApiVersion,
+      additionalAllowedHeaders: Map[String, Set[String]]): S3Settings = apply(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
-    listBucketApiVersion)
+    listBucketApiVersion,
+    additionalAllowedHeaders
+  )
 
   /**
    * Scala API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.
