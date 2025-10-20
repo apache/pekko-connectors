@@ -679,6 +679,20 @@ object S3Settings {
   def create(c: Config): S3Settings = apply(c)
 
   /** Scala API */
+
+  def apply(
+      bufferType: BufferType,
+      credentialsProvider: AwsCredentialsProvider,
+      s3RegionProvider: AwsRegionProvider,
+      listBucketApiVersion: ApiVersion): S3Settings =
+    apply(
+      bufferType,
+      credentialsProvider,
+      s3RegionProvider,
+      listBucketApiVersion,
+      additionalAllowedHeaders = Map.empty[String, Set[String]] // default value
+    )
+
   def apply(
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
@@ -701,6 +715,14 @@ object S3Settings {
   )
 
   /** Java API */
+
+  def create(
+      bufferType: BufferType,
+      credentialsProvider: AwsCredentialsProvider,
+      s3RegionProvider: AwsRegionProvider,
+      listBucketApiVersion: ApiVersion): S3Settings =
+    create(bufferType, credentialsProvider, s3RegionProvider, listBucketApiVersion, Map.empty)
+
   def create(
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
