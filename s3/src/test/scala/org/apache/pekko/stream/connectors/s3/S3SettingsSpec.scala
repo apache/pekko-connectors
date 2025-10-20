@@ -41,6 +41,21 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
           |}
           |multipart-upload.retry-settings = $${retry-settings}
           |sign-anonymous-requests = true
+          |additional-allowed-headers {
+          |    GetObject = []
+          |    HeadObject = []
+          |    PutObject = []
+          |    InitiateMultipartUpload = []
+          |    UploadPart = []
+          |    CopyPart = []
+          |    DeleteObject = []
+          |    ListBucket = []
+          |    MakeBucket = []
+          |    DeleteBucket = []
+          |    CheckBucket = []
+          |    PutBucketVersioning = []
+          |    GetBucketVersioning = []
+          |}
           |$more
         """.stripMargin)
         .resolve)
