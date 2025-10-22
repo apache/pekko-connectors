@@ -33,7 +33,6 @@ import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers.{ `Content-Length`, `Content-Type` }
 import pekko.http.scaladsl.settings.ConnectionPoolSettings
 import pekko.stream.scaladsl.Source
-import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.ByteString
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.http.async._
@@ -53,8 +52,7 @@ class PekkoHttpClient(
 )(
     implicit
     actorSystem: ActorSystem,
-    ec: ExecutionContext,
-    mat: Materializer) extends SdkAsyncHttpClient {
+    ec: ExecutionContext) extends SdkAsyncHttpClient {
   import PekkoHttpClient._
 
   lazy val runner = new RequestRunner()
@@ -186,7 +184,6 @@ object PekkoHttpClient {
     def buildWithDefaults(serviceDefaults: AttributeMap): SdkAsyncHttpClient = {
       implicit val as = actorSystem.getOrElse(ActorSystem("aws-pekko-http"))
       implicit val ec = executionContext.getOrElse(as.dispatcher)
-      val mat: Materializer = SystemMaterializer(as).materializer
 
       val resolvedOptions = serviceDefaults.merge(SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS);
 
@@ -207,7 +204,7 @@ object PekkoHttpClient {
         }
         ()
       }
-      new PekkoHttpClient(shutdownhandleF, cps, connectionContext)(as, ec, mat)
+      new PekkoHttpClient(shutdownhandleF, cps, connectionContext)(as, ec)
     }
     def withActorSystem(actorSystem: ActorSystem): PekkoHttpClientBuilder = copy(actorSystem = Some(actorSystem))
     def withActorSystem(actorSystem: ClassicActorSystemProvider): PekkoHttpClientBuilder =
