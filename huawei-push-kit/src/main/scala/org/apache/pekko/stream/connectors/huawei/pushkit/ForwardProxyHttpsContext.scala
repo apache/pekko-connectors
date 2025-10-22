@@ -46,7 +46,7 @@ private[pushkit] object ForwardProxyHttpsContext {
     val certificate = x509Certificate(trustPem)
     val sslContext = SSLContext.getInstance(SSL)
 
-    val alias = certificate.getIssuerDN.getName
+    val alias = certificate.getIssuerX500Principal.getName
     val trustStore = KeyStore.getInstance(KeyStore.getDefaultType)
     trustStore.load(null, null)
     trustStore.setCertificateEntry(alias, certificate)
