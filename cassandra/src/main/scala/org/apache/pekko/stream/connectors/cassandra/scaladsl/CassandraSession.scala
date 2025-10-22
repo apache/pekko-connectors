@@ -14,12 +14,11 @@
 package org.apache.pekko.stream.connectors.cassandra.scaladsl
 
 import org.apache.pekko
-import pekko.actor.NoSerializationVerificationNeeded
+import pekko.actor.{ ActorSystem, NoSerializationVerificationNeeded }
 import pekko.annotation.InternalApi
 import pekko.event.LoggingAdapter
 import pekko.stream.connectors.cassandra.{ CassandraMetricsRegistry, CassandraServerMetaData, CqlSessionProvider }
 import pekko.stream.scaladsl.{ Sink, Source }
-import pekko.stream.{ Materializer, SystemMaterializer }
 import pekko.util.OptionVal
 import pekko.{ Done, NotUsed }
 import com.datastax.oss.driver.api.core.CqlSession
@@ -43,7 +42,7 @@ import scala.util.control.NonFatal
  *
  * All methods are non-blocking.
  */
-final class CassandraSession(system: pekko.actor.ActorSystem,
+final class CassandraSession(system: ActorSystem,
     sessionProvider: CqlSessionProvider,
     executionContext: ExecutionContext,
     log: LoggingAdapter,
@@ -53,7 +52,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
     extends NoSerializationVerificationNeeded {
 
   implicit private[pekko] val ec: ExecutionContext = executionContext
-  private lazy implicit val materializer: Materializer = SystemMaterializer(system).materializer
+  private implicit val sys: ActorSystem = system
 
   log.debug("Starting CassandraSession [{}]", metricsCategory)
 

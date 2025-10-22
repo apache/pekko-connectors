@@ -24,6 +24,7 @@ import pekko.stream.connectors.cassandra.CassandraSessionSettings
 import pekko.stream.connectors.cassandra.javadsl
 import pekko.stream.connectors.cassandra.scaladsl
 import pekko.stream.connectors.cassandra.scaladsl.CassandraSpecBase
+import pekko.stream.SystemMaterializer
 import pekko.stream.javadsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.TestSink
@@ -100,6 +101,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
         } yield Done
       }.futureValue mustBe Done
       val sink: Sink[Row, CompletionStage[util.List[Row]]] = Sink.seq
+      val materializer = SystemMaterializer(system).materializer
       val rows = session.select(s"SELECT * FROM $table").runWith(sink, materializer).asScala.futureValue
       rows.asScala.map(_.getInt("id")) must contain theSameElementsAs data
     }
