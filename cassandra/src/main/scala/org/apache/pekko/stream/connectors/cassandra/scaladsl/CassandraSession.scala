@@ -272,7 +272,6 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
   def selectAll(stmt: Statement[_]): Future[immutable.Seq[Row]] = {
     select(stmt)
       .runWith(Sink.seq)
-      .map(_.toVector) // Sink.seq returns Seq, not immutable.Seq (compilation issue in Eclipse)
   }
 
   /**
