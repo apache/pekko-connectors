@@ -11,8 +11,8 @@ import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCh
 
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 
+ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
