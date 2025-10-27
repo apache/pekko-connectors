@@ -535,12 +535,12 @@ object S3Settings {
         c.getString("access-style") match {
           case "virtual" => VirtualHostAccessStyle
           case "path"    => PathAccessStyle
-          case other =>
+          case other     =>
             throw new IllegalArgumentException(s"'access-style' must be 'virtual' or 'path'. Got: [$other]")
         }
       case Some("true") | Some("force") => PathAccessStyle
       case Some("false")                => VirtualHostAccessStyle
-      case Some(other) =>
+      case Some(other)                  =>
         throw new IllegalArgumentException(
           s"'path-style-access' must be 'false', 'true' or 'force'. Got: [$other]. Prefer using access-style instead.")
     }

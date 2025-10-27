@@ -387,12 +387,12 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
           connection
         } catch {
           case e: ConcurrentModificationException => throw e
-          case e: Throwable =>
+          case e: Throwable                       =>
             state.compareAndSet(Connecting, Empty)
             throw e
         }
       } else getRecursive(amqpConnectionProvider)
-    case Connecting => getRecursive(amqpConnectionProvider)
+    case Connecting                         => getRecursive(amqpConnectionProvider)
     case c @ Connected(connection, clients) =>
       if (state.compareAndSet(c, Connected(connection, clients + 1))) connection
       else getRecursive(amqpConnectionProvider)
@@ -404,8 +404,8 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
   @tailrec
   private def releaseRecursive(amqpConnectionProvider: AmqpConnectionProvider, connection: Connection): Unit =
     state.get match {
-      case Empty      => throw new IllegalStateException("There is no connection to release.")
-      case Connecting => releaseRecursive(amqpConnectionProvider, connection)
+      case Empty                                    => throw new IllegalStateException("There is no connection to release.")
+      case Connecting                               => releaseRecursive(amqpConnectionProvider, connection)
       case c @ Connected(cachedConnection, clients) =>
         if (cachedConnection != connection)
           throw new IllegalArgumentException("Can't release a connection that's not owned by this provider")

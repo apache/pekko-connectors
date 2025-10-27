@@ -47,7 +47,7 @@ private[impl] final class RestBulkApiV7[T, C](indexName: String,
             "index" -> JsObject(sharedFields ++ fields: _*)
           case Create          => "create" -> JsObject(sharedFields ++ optionalString("_id", message.id): _*)
           case Update | Upsert => "update" -> JsObject(sharedFields :+ ("_id" -> JsString(message.id.get)): _*)
-          case Delete =>
+          case Delete          =>
             val fields =
               ("_id" -> JsString(message.id.get)) +: Seq(
                 optionalNumber("version", message.version),

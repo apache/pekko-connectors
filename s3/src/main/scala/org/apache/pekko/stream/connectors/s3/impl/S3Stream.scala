@@ -730,7 +730,7 @@ import scala.util.{ Failure, Success, Try }
         // see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html
         val maybeRegionPayload = region match {
           case Region.US_EAST_1 => None
-          case region =>
+          case region           =>
             Some(HttpRequests.createBucketRegionPayload(region)(ExecutionContext.parasitic))
         }
 

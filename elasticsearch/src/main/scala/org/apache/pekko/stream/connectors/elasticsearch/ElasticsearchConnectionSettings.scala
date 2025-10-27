@@ -47,7 +47,7 @@ final class ElasticsearchConnectionSettings private (
       .map(x => {
         HttpHeader.parse(x.name(), x.value()) match {
           case ParsingResult.Ok(header, _) => header
-          case ParsingResult.Error(error) =>
+          case ParsingResult.Error(error)  =>
             throw new Exception(s"Unable to convert java HttpHeader to scala HttpHeader: ${error.summary}")
         }
       })
