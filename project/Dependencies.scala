@@ -143,7 +143,7 @@ object Dependencies {
       "com.microsoft.azure" % "azure-storage" % "8.6.6"))
 
   val CassandraVersionInDocs = "4.0"
-  val CassandraDriverVersion = "4.19.0"
+  val CassandraDriverVersion = "4.19.1"
   val CassandraDriverVersionInDocs = "4.17"
 
   val Cassandra = Seq(
