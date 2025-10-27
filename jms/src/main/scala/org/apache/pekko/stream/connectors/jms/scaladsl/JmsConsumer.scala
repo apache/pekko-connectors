@@ -32,7 +32,7 @@ object JmsConsumer {
    * control instance to shut down the consumer.
    */
   def apply(settings: JmsConsumerSettings): Source[javax.jms.Message, JmsConsumerControl] = settings.destination match {
-    case None => throw new IllegalArgumentException(noConsumerDestination(settings))
+    case None              => throw new IllegalArgumentException(noConsumerDestination(settings))
     case Some(destination) =>
       Source.fromGraph(new JmsConsumerStage(settings, destination)).mapMaterializedValue(toConsumerControl)
   }
@@ -84,7 +84,7 @@ object JmsConsumer {
    * It requires explicit acknowledgements on the envelopes. The acknowledgements must be called on the envelope and not on the message inside.
    */
   def ackSource(settings: JmsConsumerSettings): Source[AckEnvelope, JmsConsumerControl] = settings.destination match {
-    case None => throw new IllegalArgumentException(noConsumerDestination(settings))
+    case None              => throw new IllegalArgumentException(noConsumerDestination(settings))
     case Some(destination) =>
       Source.fromGraph(new JmsAckSourceStage(settings, destination)).mapMaterializedValue(toConsumerControl)
   }
@@ -95,7 +95,7 @@ object JmsConsumer {
    * It requires explicit committing or rollback on the envelopes.
    */
   def txSource(settings: JmsConsumerSettings): Source[TxEnvelope, JmsConsumerControl] = settings.destination match {
-    case None => throw new IllegalArgumentException(noConsumerDestination(settings))
+    case None              => throw new IllegalArgumentException(noConsumerDestination(settings))
     case Some(destination) =>
       Source.fromGraph(new JmsTxSourceStage(settings, destination)).mapMaterializedValue(toConsumerControl)
   }

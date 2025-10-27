@@ -32,7 +32,7 @@ private final class SoftReferenceCache[K, V <: AnyRef] {
       case Some(ref) =>
         ref.get match {
           case Some(value) => value
-          case None =>
+          case None        =>
             purgeCache() // facing a garbage collected soft reference, purge other entries.
             update(key, default)
         }

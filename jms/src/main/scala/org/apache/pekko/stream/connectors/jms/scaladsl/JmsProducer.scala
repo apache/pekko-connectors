@@ -33,7 +33,7 @@ object JmsProducer {
    */
   def flow[T <: JmsMessage](settings: JmsProducerSettings): Flow[T, T, JmsProducerStatus] =
     settings.destination match {
-      case None => throw new IllegalArgumentException(noProducerDestination(settings))
+      case None              => throw new IllegalArgumentException(noProducerDestination(settings))
       case Some(destination) =>
         Flow[T]
           .viaMat(Flow.fromGraph(new JmsProducerStage[T, NotUsed](settings, destination)))(Keep.right)
@@ -47,7 +47,7 @@ object JmsProducer {
   def flexiFlow[PassThrough](
       settings: JmsProducerSettings): Flow[JmsEnvelope[PassThrough], JmsEnvelope[PassThrough], JmsProducerStatus] =
     settings.destination match {
-      case None => throw new IllegalArgumentException(noProducerDestination(settings))
+      case None              => throw new IllegalArgumentException(noProducerDestination(settings))
       case Some(destination) =>
         Flow
           .fromGraph(new JmsProducerStage[JmsEnvelope[PassThrough], PassThrough](settings, destination))

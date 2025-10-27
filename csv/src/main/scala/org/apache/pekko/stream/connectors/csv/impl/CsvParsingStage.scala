@@ -60,7 +60,7 @@ import scala.util.control.NonFatal
       private def tryPollBuffer() =
         try buffer.poll(requireLineEnd = true) match {
             case Some(csvLine) => push(out, csvLine)
-            case _ =>
+            case _             =>
               if (isClosed(in)) {
                 emitRemaining()
                 completeStage()

@@ -57,7 +57,7 @@ private[ironmq] final class IronMqClient(settings: IronMqSettings)(implicit acto
       case "https" =>
         http.cachedHostConnectionPoolHttps[NotUsed](endpoint.authority.host.address(), endpoint.authority.port)
       case "http" => http.cachedHostConnectionPool[NotUsed](endpoint.authority.host.address(), endpoint.authority.port)
-      case other =>
+      case other  =>
         throw new IllegalArgumentException(s"Endpoint $endpoint contains an invalid HTTP/HTTPS scheme $other")
     }
   }

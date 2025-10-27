@@ -98,7 +98,7 @@ import javax.xml.stream.XMLOutputFactory
           case ProcessingInstruction(None, Some(data)) =>
             output.writeProcessingInstruction(None.orNull, data)
           case ProcessingInstruction(None, None) =>
-          case Comment(text) =>
+          case Comment(text)                     =>
             output.writeComment(text)
 
           case CData(text) =>

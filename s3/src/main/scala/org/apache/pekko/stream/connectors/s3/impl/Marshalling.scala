@@ -35,7 +35,7 @@ import scala.xml.NodeSeq
   implicit val bucketVersioningUnmarshaller: FromEntityUnmarshaller[BucketVersioningResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val status = (x \ "Status").headOption.map(_.text match {
           case "Enabled"   => BucketVersioningStatus.Enabled
           case "Suspended" => BucketVersioningStatus.Suspended
@@ -48,7 +48,7 @@ import scala.xml.NodeSeq
   implicit val multipartUploadUnmarshaller: FromEntityUnmarshaller[MultipartUpload] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         MultipartUpload((x \ "Bucket").text, (x \ "Key").text, (x \ "UploadId").text)
     }
   }
@@ -57,7 +57,7 @@ import scala.xml.NodeSeq
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`),
       MediaTypes.`text/event-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         CompleteMultipartUploadResult(
           Try(Uri((x \ "Location").text))
             .getOrElse(Uri((x \ "Location").text.split("/").map(s => URLEncoder.encode(s, "utf-8")).mkString("/"))),
@@ -73,7 +73,7 @@ import scala.xml.NodeSeq
   implicit val listBucketResultUnmarshaller: FromEntityUnmarshaller[ListBucketResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val truncated = (x \ isTruncated).text == "true"
         val continuation = if (truncated) {
           Some(x \ apiV2ContinuationToken)
@@ -104,7 +104,7 @@ import scala.xml.NodeSeq
   implicit val copyPartResultUnmarshaller: FromEntityUnmarshaller[CopyPartResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`, ContentTypes.`application/octet-stream`).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val lastModified = Instant.parse((x \ "LastModified").text)
         val eTag = (x \ "ETag").text
         CopyPartResult(lastModified, Utils.removeQuotes(eTag))
@@ -114,7 +114,7 @@ import scala.xml.NodeSeq
   implicit val listBucketsResultUnmarshaller: FromEntityUnmarshaller[ListBucketsResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val bucketsRoot = (x \\ "Buckets").headOption
           .map { br =>
             (br \\ "Bucket").map { u =>
@@ -134,7 +134,7 @@ import scala.xml.NodeSeq
   implicit val listMultipartUploadsResultUnmarshaller: FromEntityUnmarshaller[ListMultipartUploadsResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val bucket = (x \ "Bucket").text
         val keyMarker = (x \ "KeyMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
         val uploadIdMarker = (x \ "UploadIdMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
@@ -185,7 +185,7 @@ import scala.xml.NodeSeq
   implicit val listPartsResultUnmarshaller: FromEntityUnmarshaller[ListPartsResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val bucket = (x \ "Bucket").text
         val key = (x \ "Key").text
         val uploadId = (x \ "UploadId").text
@@ -238,7 +238,7 @@ import scala.xml.NodeSeq
   implicit val listObjectVersionsResultUnmarshaller: FromEntityUnmarshaller[ListObjectVersionsResult] = {
     nodeSeqUnmarshaller(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`)).map {
       case NodeSeq.Empty => throw Unmarshaller.NoContentException
-      case x =>
+      case x             =>
         val bucket = (x \ "Bucket").text
         val name = (x \ "Name").text
         val prefix =

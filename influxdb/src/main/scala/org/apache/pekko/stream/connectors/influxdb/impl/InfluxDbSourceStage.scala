@@ -65,7 +65,7 @@ private[influxdb] final class InfluxDbSourceLogic[T](clazz: Class[T],
   }
   override def onPull(): Unit =
     this.dataRetrieved match {
-      case None => completeStage()
+      case None              => completeStage()
       case Some(queryResult) => {
         for (result <- queryResult.getResults.asScala) {
           if (result.hasError) {
@@ -112,7 +112,7 @@ private[influxdb] final class InfluxDbSourceRawLogic(query: Query,
 
   override def onPull(): Unit =
     dataRetrieved match {
-      case None => completeStage()
+      case None              => completeStage()
       case Some(queryResult) => {
         emit(outlet, queryResult)
         dataRetrieved = None
