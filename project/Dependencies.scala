@@ -25,7 +25,7 @@ object Dependencies {
 
   val InfluxDBJavaVersion = "2.23"
 
-  val AvroVersion = "1.11.5"
+  val AvroVersion = "1.12.1"
 
   val AwsSdk2Version = "2.35.11"
 
