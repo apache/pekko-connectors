@@ -162,7 +162,7 @@ private[connectors] object ResumableUpload {
     implicit val um: FromResponseUnmarshaller[Either[T, Long]] =
       Unmarshaller.withMaterializer { implicit ec => implicit mat => (response: HttpResponse) =>
         response.status match {
-          case OK | Created => Unmarshal(response).to[T].map(Left(_))
+          case OK | Created      => Unmarshal(response).to[T].map(Left(_))
           case PermanentRedirect =>
             response.discardEntityBytes().future.map { _ =>
               Right(
@@ -183,7 +183,7 @@ private[connectors] object ResumableUpload {
         GoogleHttp(mat.system)
           .singleAuthenticatedRequest[Either[T, Long]](request.addHeader(statusRequestHeader))
           .map {
-            case Left(result) if maybeLast.isLast => Left(result)
+            case Left(result) if maybeLast.isLast              => Left(result)
             case Right(newPosition) if newPosition >= position =>
               Right(maybeLast.map { _ =>
                 Chunk(bytes.drop(Math.toIntExact(newPosition - position)), newPosition)

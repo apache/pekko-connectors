@@ -92,7 +92,7 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
           failStage(error)
 
         case (_, Pump) =>
-        case (_, msg) =>
+        case (_, msg)  =>
           throw new IllegalArgumentException(s"unexpected message $msg in state `ready`")
       }
 
@@ -119,7 +119,7 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
           failStage(error)
 
         case (_, Pump) =>
-        case (_, msg) =>
+        case (_, msg)  =>
           throw new IllegalArgumentException(s"unexpected message $msg in state `ready`")
       }
 
@@ -140,7 +140,7 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
 
       override protected def onTimer(timerKey: Any): Unit = timerKey match {
         case GetRecords => requestRecords()
-        case other =>
+        case other      =>
           log.warning("unexpected timer [{}]", other)
       }
 

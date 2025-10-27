@@ -119,7 +119,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
               newConnectionOp(sel, key)
             }
             key.attachment match {
-              case null =>
+              case null                                   =>
               case sendReceiveContext: SendReceiveContext =>
                 sendReceiveContext.send match {
                   case SendRequested(buffer, sent) if keySelectable && key.isWritable =>
@@ -149,7 +149,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                     }
                   case _: SendRequested =>
                     key.interestOps(key.interestOps() | SelectionKey.OP_WRITE)
-                  case _: SendAvailable =>
+                  case _: SendAvailable                                                         =>
                   case ShutdownRequested if key.isValid && !sendReceiveContext.isOutputShutdown =>
                     try {
                       if (sendReceiveContext.isInputShutdown) {
@@ -167,7 +167,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                       case _: IOException =>
                     }
                   case ShutdownRequested =>
-                  case CloseRequested =>
+                  case CloseRequested    =>
                     log.debug("Write-side is shutting down unconditionally")
                     key.cancel()
                     try {
@@ -217,7 +217,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                         case _: IOException =>
                       }
                     }
-                  case _: ReceiveAvailable =>
+                  case _: ReceiveAvailable                                                                        =>
                   case PendingReceiveAck(receiveQueue, receiveBuffer, pendingResult) if pendingResult.isCompleted =>
                     pendingResult.value.get match {
                       case Success(QueueOfferResult.Enqueued) =>
@@ -234,7 +234,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                   case _: PendingReceiveAck =>
                 }
               case _: ((Selector, SelectionKey) => Unit) @unchecked =>
-              case other =>
+              case other                                            =>
                 log.warning("unexpected receive: [{}]", other)
             }
           }

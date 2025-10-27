@@ -25,9 +25,9 @@ object Dependencies {
 
   val InfluxDBJavaVersion = "2.23"
 
-  val AvroVersion = "1.11.5"
+  val AvroVersion = "1.12.1"
 
-  val AwsSdk2Version = "2.35.10"
+  val AwsSdk2Version = "2.35.11"
 
   val NettyVersion = "4.2.7.Final"
 
@@ -143,7 +143,7 @@ object Dependencies {
       "com.microsoft.azure" % "azure-storage" % "8.6.6"))
 
   val CassandraVersionInDocs = "4.0"
-  val CassandraDriverVersion = "4.19.0"
+  val CassandraDriverVersion = "4.19.1"
   val CassandraDriverVersionInDocs = "4.17"
 
   val Cassandra = Seq(
@@ -206,7 +206,7 @@ object Dependencies {
       ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
-      "org.specs2" %% "specs2-core" % "4.22.0" % Test,
+      "org.specs2" %% "specs2-core" % "4.23.0" % Test,
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
 
@@ -259,7 +259,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.17.2" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.17.3" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
@@ -283,7 +283,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.142.0" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.143.0" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
@@ -413,9 +413,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.44")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.45")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.44"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.45"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"
@@ -447,7 +447,7 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "6.2.12"
-    val SpringBootVersion = "3.5.6"
+    val SpringBootVersion = "3.5.7"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
@@ -516,7 +516,7 @@ object Dependencies {
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.3.14", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.38.23"))
+      "com.github.jnr" % "jnr-unixsocket" % "0.38.24"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(

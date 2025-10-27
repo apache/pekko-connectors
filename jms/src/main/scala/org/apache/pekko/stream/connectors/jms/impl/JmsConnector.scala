@@ -82,7 +82,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     val update: InternalConnectionState => InternalConnectionState = {
       case JmsConnectorStopping(completion) => JmsConnectorStopped(completion)
       case stopped: JmsConnectorStopped     => stopped
-      case current =>
+      case current                          =>
         JmsConnectorStopped(
           Failure(new IllegalStateException(s"Completing stage stop in unexpected state ${current.getClass}")))
     }
@@ -137,7 +137,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     case _ =>
       connectionState match {
         case _: JmsConnectorStopping | _: JmsConnectorStopped => logStoppingException(ex)
-        case _ =>
+        case _                                                =>
           log.error(ex, "{} connection failed for destination[{}]", attributes.nameLifted.mkString, destination.name)
           publishAndFailStage(ex)
       }
@@ -151,7 +151,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
       case JmsConnectorConnected(_) | JmsConnectorDisconnected =>
         maybeReconnect(ex, 0, backoffMaxed = false)
       case _: JmsConnectorStopping | _: JmsConnectorStopped => logStoppingException(ex)
-      case other =>
+      case other                                            =>
         log.warning("received [{}] in connectionState={}", ex, connectionState)
     }
   }

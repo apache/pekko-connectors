@@ -282,7 +282,7 @@ private[jms] object JmsProducerStage {
     def supervisionDirectiveFor(decider: Supervision.Decider, ex: Throwable): Supervision.Directive =
       cachedSupervisionDirective match {
         case OptionVal.Some(d) => d
-        case OptionVal.None =>
+        case OptionVal.None    =>
           val d = decider(ex)
           cachedSupervisionDirective = OptionVal.Some(d)
           d

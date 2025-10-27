@@ -48,7 +48,7 @@ private[impl] final class RestBulkApiV5[T, C](indexName: String,
               optionalString("version_type", versionType),
               optionalString("_id", message.id)).flatten
             "index" -> JsObject(sharedFields ++ fields: _*)
-          case Create => "create" -> JsObject(sharedFields ++ optionalString("_id", message.id): _*)
+          case Create          => "create" -> JsObject(sharedFields ++ optionalString("_id", message.id): _*)
           case Update | Upsert =>
             val fields =
               ("_id" -> JsString(message.id.get)) +: Seq(

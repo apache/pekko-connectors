@@ -40,9 +40,9 @@ object KinesisSource {
     require(shardSettings.nonEmpty, "shard settings need to be specified")
     val create: ShardSettings => Source[Record, NotUsed] = basic(_, amazonKinesisAsync)
     shardSettings match {
-      case Nil                    => Source.failed(NoShardsError)
-      case first :: Nil           => create(first)
-      case first :: second :: Nil => Source.combine(create(first), create(second))(Merge(_))
+      case Nil                     => Source.failed(NoShardsError)
+      case first :: Nil            => create(first)
+      case first :: second :: Nil  => Source.combine(create(first), create(second))(Merge(_))
       case first :: second :: rest =>
         Source.combine(create(first), create(second), rest.map(create(_)): _*)(Merge(_))
     }

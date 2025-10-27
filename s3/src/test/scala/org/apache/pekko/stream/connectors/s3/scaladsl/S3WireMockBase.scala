@@ -351,7 +351,7 @@ abstract class S3WireMockBase(_system: ActorSystem, val _wireMockServer: WireMoc
   def mockMultipartUploadInitiationWithTransientError(expectedBody: String, faultOrStatus: Either[Fault, Int]): Unit = {
     val scenarioName = "UploadWithTransientErrors"
     val responseBuilder = faultOrStatus match {
-      case Left(fault) => aResponse().withFault(fault)
+      case Left(fault)   => aResponse().withFault(fault)
       case Right(status) =>
         aResponse()
           .withStatus(status)

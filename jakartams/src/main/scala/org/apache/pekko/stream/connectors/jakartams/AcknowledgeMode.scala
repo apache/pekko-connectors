@@ -42,7 +42,7 @@ object AcknowledgeMode {
     case "client"        => ClientAcknowledge
     case "duplicates-ok" => DupsOkAcknowledge
     case "session"       => SessionTransacted
-    case other =>
+    case other           =>
       try {
         val mode = other.toInt
         new AcknowledgeMode(mode)

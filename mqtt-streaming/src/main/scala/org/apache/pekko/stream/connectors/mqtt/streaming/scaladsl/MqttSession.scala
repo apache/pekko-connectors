@@ -199,7 +199,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
               case (_, terminated) =>
                 terminated.onComplete {
                   case Failure(_: WatchedActorTerminatedException) =>
-                  case _ =>
+                  case _                                           =>
                     clientConnector ! ClientConnector.ConnectionLost(connectionId)
                 }
                 NotUsed
@@ -213,8 +213,8 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
                   clientConnector ! ClientConnector.ConnectReceivedLocally(connectionId, cp, carry, reply)
                   Source.futureSource(
                     reply.future.map(_.map {
-                      case ClientConnector.ForwardConnect => cp.encode(ByteString.newBuilder).result()
-                      case ClientConnector.ForwardPingReq => pingReqBytes
+                      case ClientConnector.ForwardConnect                    => cp.encode(ByteString.newBuilder).result()
+                      case ClientConnector.ForwardPingReq                    => pingReqBytes
                       case ClientConnector.ForwardPublish(publish, packetId) =>
                         publish.encode(ByteString.newBuilder, packetId).result()
                       case ClientConnector.ForwardPubRel(packetId) =>
@@ -307,7 +307,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
         case (_, terminated) =>
           terminated.onComplete {
             case Failure(_: WatchedActorTerminatedException) =>
-            case _ =>
+            case _                                           =>
               clientConnector ! ClientConnector.ConnectionLost(connectionId)
           }
           NotUsed
@@ -535,7 +535,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
               case (_, terminated) =>
                 terminated.onComplete {
                   case Failure(_: WatchedActorTerminatedException) =>
-                  case _ =>
+                  case _                                           =>
                     serverConnector ! ServerConnector.ConnectionLost(connectionId)
                 }
                 NotUsed
@@ -660,7 +660,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
         case (_, terminated) =>
           terminated.onComplete {
             case Failure(_: WatchedActorTerminatedException) =>
-            case _ =>
+            case _                                           =>
               serverConnector ! ServerConnector.ConnectionLost(connectionId)
           }
           NotUsed
