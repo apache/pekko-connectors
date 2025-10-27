@@ -515,7 +515,7 @@ object Dependencies {
 
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
-      "com.github.jnr" % "jffi" % "1.3.13", // classifier "complete", // Is the classifier needed anymore?
+      "com.github.jnr" % "jffi" % "1.3.14", // classifier "complete", // Is the classifier needed anymore?
       "com.github.jnr" % "jnr-unixsocket" % "0.38.23"))
 
   val Xml = Seq(
