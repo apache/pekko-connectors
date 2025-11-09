@@ -23,7 +23,7 @@ object Dependencies {
   val PekkoVersion = PekkoCoreDependency.version
   val PekkoBinaryVersion = PekkoCoreDependency.default.link
 
-  val InfluxDBJavaVersion = "2.23"
+  val InfluxDBJavaVersion = "2.25"
 
   val AvroVersion = "1.12.1"
 
