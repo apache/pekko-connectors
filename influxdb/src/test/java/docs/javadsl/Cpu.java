@@ -15,10 +15,12 @@ package docs.javadsl;
 
 import java.time.Instant;
 import org.influxdb.annotation.Column;
+import org.influxdb.annotation.TimeColumn;
 
 public class Cpu {
 
   @Column(name = "time")
+  @TimeColumn
   private Instant time;
 
   @Column(name = "hostname", tag = true)
