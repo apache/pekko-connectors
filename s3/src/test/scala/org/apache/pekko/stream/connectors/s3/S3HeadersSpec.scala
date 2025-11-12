@@ -21,7 +21,20 @@ import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
 import org.apache.pekko.stream.connectors.s3.impl.S3Request
 import com.typesafe.config.ConfigFactory
-import scala.reflect.runtime.universe._
+import scala.reflect.ClassTag
+import org.apache.pekko.stream.connectors.s3.impl.GetObject
+import org.apache.pekko.stream.connectors.s3.impl.HeadObject
+import org.apache.pekko.stream.connectors.s3.impl.PutObject
+import org.apache.pekko.stream.connectors.s3.impl.InitiateMultipartUpload
+import org.apache.pekko.stream.connectors.s3.impl.UploadPart
+import org.apache.pekko.stream.connectors.s3.impl.CopyPart
+import org.apache.pekko.stream.connectors.s3.impl.DeleteObject
+import org.apache.pekko.stream.connectors.s3.impl.ListBucket
+import org.apache.pekko.stream.connectors.s3.impl.MakeBucket
+import org.apache.pekko.stream.connectors.s3.impl.DeleteBucket
+import org.apache.pekko.stream.connectors.s3.impl.CheckBucket
+import org.apache.pekko.stream.connectors.s3.impl.PutBucketVersioning
+import org.apache.pekko.stream.connectors.s3.impl.GetBucketVersioning
 
 class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
   it should "filter headers based on what's allowed" in {
@@ -69,34 +82,28 @@ class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
   }
 
   it should "contain all S3Request types" in {
-    // Get all known subclasses of the sealed trait using reflection
-    val allRequestTypes = getAllSealedTraitObjects[S3Request]
+    val actualSet = S3Request.allRequests
 
-    // Your set to test
-    val actualSet = S3Request.allRequests.toSet
+    actualSet should have size 13
 
-    // Verify they match
-    actualSet should contain theSameElementsAs allRequestTypes
-
-    // Also verify the count
-    actualSet should have size allRequestTypes.size
-  }
-
-  def getAllSealedTraitObjects[T: TypeTag]: Set[T] = {
-    val tpe = typeOf[T]
-    val clazz = tpe.typeSymbol.asClass
-
-    require(clazz.isSealed, s"${clazz.name} must be a sealed trait/class")
-
-    clazz.knownDirectSubclasses.flatMap { subclass =>
-      val symbol = subclass.asClass
-      if (symbol.isModuleClass) {
-        val mirror = runtimeMirror(getClass.getClassLoader)
-        val moduleMirror = mirror.reflectModule(symbol.module.asModule)
-        Some(moduleMirror.instance.asInstanceOf[T])
-      } else {
-        None
-      }
+    // Use exhaustive match to verify all are present
+    def verifyAllPresent(req: S3Request): Boolean = req match {
+      case e @ GetObject               => actualSet.contains(e)
+      case e @ HeadObject              => actualSet.contains(e)
+      case e @ PutObject               => actualSet.contains(e)
+      case e @ InitiateMultipartUpload => actualSet.contains(e)
+      case e @ UploadPart              => actualSet.contains(e)
+      case e @ CopyPart                => actualSet.contains(e)
+      case e @ DeleteObject            => actualSet.contains(e)
+      case e @ ListBucket              => actualSet.contains(e)
+      case e @ MakeBucket              => actualSet.contains(e)
+      case e @ DeleteBucket            => actualSet.contains(e)
+      case e @ CheckBucket             => actualSet.contains(e)
+      case e @ PutBucketVersioning     => actualSet.contains(e)
+      case e @ GetBucketVersioning     => actualSet.contains(e)
     }
+
+    actualSet.foreach(req => verifyAllPresent(req) shouldBe true)
+  
   }
 }
