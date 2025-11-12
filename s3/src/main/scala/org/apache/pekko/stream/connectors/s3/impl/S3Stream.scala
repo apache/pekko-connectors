@@ -739,7 +739,7 @@ import scala.util.{ Failure, Success, Try }
         s3ManagementRequest[Done](
           bucket = bucket,
           method = HttpMethods.PUT,
-          httpRequest = bucketManagementRequest(bucket),
+          httpRequest = bucketManagementRequest(bucket, headers, MakeBucket),
           process = processS3LifecycleResponse,
           httpEntity = maybeRegionPayload)
       }
@@ -753,7 +753,7 @@ import scala.util.{ Failure, Success, Try }
     s3ManagementRequest[Done](
       bucket = bucket,
       method = HttpMethods.DELETE,
-      httpRequest = bucketManagementRequest(bucket),
+      httpRequest = bucketManagementRequest(bucket, headers, DeleteBucket),
       process = processS3LifecycleResponse
     )
 
@@ -764,7 +764,7 @@ import scala.util.{ Failure, Success, Try }
     s3ManagementRequest[BucketAccess](
       bucket = bucketName,
       method = HttpMethods.HEAD,
-      httpRequest = bucketManagementRequest(bucketName),
+      httpRequest = bucketManagementRequest(bucketName, headers, CheckBucket),
       process = processCheckIfExistsResponse)
 
   def checkIfBucketExists(bucket: String, headers: S3Headers)(implicit mat: Materializer,
@@ -786,17 +786,18 @@ import scala.util.{ Failure, Success, Try }
       attr: Attributes): Future[Done] =
     deleteUploadSource(bucket, key, uploadId, headers).withAttributes(attr).runWith(Sink.ignore)
 
-  private def bucketVersioningRequest(bucket: String, mfaStatus: Option[MFAStatus], headers: S3Headers)(
+  private def bucketVersioningRequest(bucket: String, mfaStatus: Option[MFAStatus], headers: S3Headers,
+      s3Request: S3Request)(
       method: HttpMethod,
       conf: S3Settings): HttpRequest =
-    HttpRequests.bucketVersioningRequest(bucket, mfaStatus, method, headers.headers)(conf)
+    HttpRequests.bucketVersioningRequest(bucket, mfaStatus, method, headers.headersFor(s3Request)(conf))(conf)
 
   def putBucketVersioningSource(
       bucket: String, bucketVersioning: BucketVersioning, headers: S3Headers): Source[Done, NotUsed] =
     s3ManagementRequest[Done](
       bucket = bucket,
       method = HttpMethods.PUT,
-      httpRequest = bucketVersioningRequest(bucket, bucketVersioning.mfaDelete, headers),
+      httpRequest = bucketVersioningRequest(bucket, bucketVersioning.mfaDelete, headers, PutBucketVersioning),
       process = processS3LifecycleResponse,
       httpEntity = Some(putBucketVersioningPayload(bucketVersioning)(ExecutionContext.parasitic)))
 
@@ -810,7 +811,7 @@ import scala.util.{ Failure, Success, Try }
     s3ManagementRequest[BucketVersioningResult](
       bucket = bucket,
       method = HttpMethods.GET,
-      httpRequest = bucketVersioningRequest(bucket, None, headers),
+      httpRequest = bucketVersioningRequest(bucket, None, headers, GetBucketVersioning),
       process = { (response: HttpResponse, mat: Materializer) =>
         response match {
           case HttpResponse(status, _, entity, _) if status.isSuccess() =>

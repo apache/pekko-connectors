@@ -39,12 +39,27 @@ import org.apache.pekko.annotation.InternalApi
       case "MakeBucket"              => Some(MakeBucket)
       case "DeleteBucket"            => Some(DeleteBucket)
       case "CheckBucket"             => Some(CheckBucket)
+      case "PutBucketVersioning"     => Some(PutBucketVersioning)
+      case "GetBucketVersioning"     => Some(GetBucketVersioning)
       case _                         => None
     }
   }
 
-  val allRequests: List[S3Request] = List(GetObject, HeadObject, PutObject, InitiateMultipartUpload, UploadPart,
-    CopyPart, DeleteObject, ListBucket, MakeBucket, DeleteBucket, CheckBucket)
+  val allRequests: List[S3Request] = List(
+    GetObject,
+    HeadObject,
+    PutObject,
+    InitiateMultipartUpload,
+    UploadPart,
+    CopyPart,
+    DeleteObject,
+    ListBucket,
+    MakeBucket,
+    DeleteBucket,
+    CheckBucket,
+    PutBucketVersioning,
+    GetBucketVersioning
+  )
 }
 
 /**
@@ -52,6 +67,10 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object GetObject extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html#API_GetObject_RequestSyntax GetObject Request Syntax]]
+   * @return all valid headers for GetObject request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "If-Match",
@@ -75,6 +94,10 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object HeadObject extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html#API_HeadObject_RequestSyntax HeadObject Request Syntax]]
+   * @return all valid headers for HeadObject request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "If-Match",
@@ -98,6 +121,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object PutObject extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html#API_PutObject_RequestSyntax PutObject Request Syntax]]
+   *
+   * @return all valid headers for PutObject request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-acl",
@@ -147,6 +175,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object InitiateMultipartUpload extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html#API_CreateMultipartUpload_RequestSyntax API_CreateMultipartUpload Request Syntax]]
+   *
+   * @return all valid headers for InitiateMultipartUpload request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-acl",
@@ -187,6 +220,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object UploadPart extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html#API_UploadPart_RequestSyntax UploadPart RequestSyntax ]]
+   *
+   * @return all valid headers for UploadPart request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "Content-Length",
@@ -212,6 +250,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object CopyPart extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html#API_UploadPartCopy_RequestSyntax UploadPartCopy Request Syntax]]
+   *
+   * @return all valid headers for CopyPart request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-copy-source",
@@ -239,6 +282,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object DeleteObject extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html#API_DeleteObject_RequestSyntax DeleteObject Request Syntax ]]
+   *
+   * @return all valid headers for DeleteObject request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-mfa",
@@ -258,6 +306,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object ListBucket extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html#API_ListBuckets_RequestSyntax ListBuckets Request Syntax]]
+   *
+   * @return all valid headers for ListBucket request type
+   */
   override def allowedHeaders: Set[String] = Set("Host")
 
   override def toString() = "ListBucket"
@@ -268,6 +321,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object MakeBucket extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html#API_CreateBucket_RequestSyntax CreateBucket Request Syntax]]
+   *
+   * @return all valid headers for MakeBucket request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-acl",
@@ -288,6 +346,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object DeleteBucket extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucket.html#API_DeleteBucket_RequestSyntax DeleteBucket RequestSyntax]]
+   *
+   * @return all valid headers for DeleteBucket request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-expected-bucket-owner"
@@ -301,6 +364,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object CheckBucket extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html#API_HeadBucket_RequestSyntax HeadBucket RequestSyntax]]
+   *
+   * @return all valid headers for CheckBucket request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-expected-bucket-owner"
@@ -314,6 +382,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object PutBucketVersioning extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_PutBucketVersioning.html#API_control_PutBucketVersioning_RequestSyntax PutBucketVersioning Request Syntax]]
+   *
+   * @return all valid headers for PutBucketVersioning request type
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "Content-MD5",
@@ -330,6 +403,11 @@ import org.apache.pekko.annotation.InternalApi
  */
 @InternalApi private[s3] case object GetBucketVersioning extends S3Request {
 
+  /**
+   * See [[https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_GetBucketVersioning.html#API_control_GetBucketVersioning_RequestSyntax GetBucketVersioning Request Syntax]]
+   *
+   * @return
+   */
   override def allowedHeaders: Set[String] = Set(
     "Host",
     "x-amz-expected-bucket-owner"

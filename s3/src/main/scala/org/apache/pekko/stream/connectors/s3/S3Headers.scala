@@ -79,8 +79,9 @@ final class S3Headers private (val cannedAcl: Option[CannedAcl] = None,
 
   @InternalApi private[s3] def headersFor(request: S3Request)(implicit s3Settings: S3Settings) =
     headers.filter(header =>
-      request.allowedHeaders.contains(header.name()) || s3Settings.concereteAdditionalAllowedHeaders.getOrElse(request,
-        Set.empty).contains(header.name())) ++ serverSideEncryption.toIndexedSeq.flatMap(_.headersFor(request))
+      request.allowedHeaders.contains(header.name())
+      || s3Settings.concereteAdditionalAllowedHeaders.getOrElse(request, Set.empty).contains(
+        header.name())) ++ serverSideEncryption.toIndexedSeq.flatMap(_.headersFor(request))
 
   def withCannedAcl(cannedAcl: CannedAcl): S3Headers = copy(cannedAcl = Some(cannedAcl))
   def withMetaHeaders(metaHeaders: MetaHeaders): S3Headers = copy(metaHeaders = Some(metaHeaders))

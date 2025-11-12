@@ -288,4 +288,33 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
     val settings = mkSettings("sign-anonymous-requests = false")
     settings.signAnonymousRequests shouldBe false
   }
+
+  it should "parse additional-allowed-headers" in {
+    val settings = mkSettings("""
+          |additional-allowed-headers {
+          |    GetObject = [GetObject1, GetObject2]
+          |    HeadObject = [HeadObject1, HeadObject2]
+          |    PutObject = [PutObject1, PutObject2]
+          |    InitiateMultipartUpload = [InitiateMultipartUpload1, InitiateMultipartUpload2 ]
+          |    UploadPart = [UploadPart1, UploadPart2]
+          |    CopyPart = [CopyPart1, CopyPart2]
+          |    DeleteObject = [DeleteObject1, DeleteObject2]
+          |    ListBucket = [ListBucket1, ListBucket2]
+          |    MakeBucket = [MakeBucket1, MakeBucket2]
+          |    DeleteBucket = [DeleteBucket1, DeleteBucket2]
+          |    CheckBucket = [CheckBucket1, CheckBucket2]
+          |    PutBucketVersioning = [PutBucketVersioning1, PutBucketVersioning2]
+          |    GetBucketVersioning = [GetBucketVersioning1, GetBucketVersioning2]
+          |}""".stripMargin)
+
+    settings.additionalAllowedHeaders.keySet should contain allElementsOf (pekko.stream.connectors.s3.impl.S3Request.allRequests.map(
+      _.toString()))
+    settings.additionalAllowedHeaders.foreach {
+      case (key, value) =>
+        assert(value.nonEmpty)
+        val result = value.map(_.replaceAll(key, "").toInt)
+        result should contain allElementsOf (Seq(1, 2))
+    }
+  }
+
 }
