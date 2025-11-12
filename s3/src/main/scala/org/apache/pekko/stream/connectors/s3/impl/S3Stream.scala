@@ -718,8 +718,8 @@ import scala.util.{ Failure, Success, Try }
       case _           => downloadRequest
     }
 
-  private def bucketManagementRequest(bucket: String)(method: HttpMethod, conf: S3Settings): HttpRequest =
-    HttpRequests.bucketManagementRequest(S3Location(bucket, key = ""), method)(conf)
+  private def bucketManagementRequest(bucket: String, headers: S3Headers, request: S3Request)(method: HttpMethod, conf: S3Settings): HttpRequest =
+    HttpRequests.bucketManagementRequest(S3Location(bucket, key = ""), method, headers.headersFor(request)(conf))(conf)
 
   def makeBucketSource(bucket: String, headers: S3Headers): Source[Done, NotUsed] = {
     Source
