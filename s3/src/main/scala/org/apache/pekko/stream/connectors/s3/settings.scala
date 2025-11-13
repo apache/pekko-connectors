@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
 import java.util.{ Objects, Optional }
 
 import org.apache.pekko
+import org.apache.pekko.stream.connectors.s3.impl.S3Request
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.http.scaladsl.model.Uri
 import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
@@ -31,7 +32,6 @@ import software.amazon.awssdk.regions.providers._
 import scala.concurrent.duration._
 import scala.jdk.OptionConverters._
 import scala.util.Try
-import org.apache.pekko.stream.connectors.s3.impl.S3Request
 import scala.jdk.CollectionConverters._
 
 final class Proxy private (

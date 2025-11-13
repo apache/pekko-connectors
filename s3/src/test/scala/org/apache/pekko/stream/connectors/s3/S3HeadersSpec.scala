@@ -104,6 +104,6 @@ class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
     }
 
     actualSet.foreach(req => verifyAllPresent(req) shouldBe true)
-  
+
   }
 }
