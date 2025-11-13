@@ -772,9 +772,11 @@ import scala.util.{ Failure, Success, Try }
       attr: Attributes): Future[BucketAccess] =
     checkIfBucketExistsSource(bucket, headers).withAttributes(attr).runWith(Sink.head)
 
-  private def uploadManagementRequest(bucket: String, key: String, uploadId: String, s3Headers: S3Headers, s3Request: S3Request)(method: HttpMethod,
+  private def uploadManagementRequest(bucket: String, key: String, uploadId: String, s3Headers: S3Headers,
+      s3Request: S3Request)(method: HttpMethod,
       conf: S3Settings): HttpRequest =
-    HttpRequests.uploadManagementRequest(S3Location(bucket, key), uploadId, method, s3Headers.headersFor(s3Request)(conf))(conf)
+    HttpRequests.uploadManagementRequest(S3Location(bucket, key), uploadId, method,
+      s3Headers.headersFor(s3Request)(conf))(conf)
 
   def deleteUploadSource(bucket: String, key: String, uploadId: String, headers: S3Headers): Source[Done, NotUsed] =
     s3ManagementRequest[Done](
