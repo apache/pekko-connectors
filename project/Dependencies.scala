@@ -378,7 +378,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.0").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.2.1").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
