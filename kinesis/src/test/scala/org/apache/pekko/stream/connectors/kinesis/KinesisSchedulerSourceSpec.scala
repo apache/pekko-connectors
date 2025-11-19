@@ -449,8 +449,7 @@ class KinesisSchedulerSourceSpec
 
   private trait KinesisSchedulerCheckpointContext {
     val (sourceProbe, sinkProbe) =
-      TestSource
-        .probe[CommittableRecord]
+      TestSource[CommittableRecord]()
         .via(
           KinesisSchedulerSource
             .checkpointRecordsFlow(

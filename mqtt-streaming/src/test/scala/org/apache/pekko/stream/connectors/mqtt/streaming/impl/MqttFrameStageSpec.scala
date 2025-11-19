@@ -74,8 +74,7 @@ class MqttFrameStageSpec
       val bytes1 = ByteString.newBuilder.putByte(1).putBytes(Array.ofDim(0x80)).result()
 
       val (pub, sub) =
-        TestSource
-          .probe(system)
+        TestSource(system)
           .via(new MqttFrameStage(MaxPacketSize * 2))
           .toMat(TestSink(system))(Keep.both)
           .run()

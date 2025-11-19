@@ -451,8 +451,7 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
     val input = Vector("one", "two")
 
     val (sourceProbe, sinkProbe) =
-      TestSource
-        .probe[String]
+      TestSource[String]()
         .map(s => WriteMessage(ByteString(s)))
         .viaMat(flow)(Keep.left)
         .toMat(TestSink())(Keep.both)

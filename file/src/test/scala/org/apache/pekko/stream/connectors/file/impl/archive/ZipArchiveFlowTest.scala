@@ -33,8 +33,7 @@ class ZipArchiveFlowTest
     "stream ends" should {
       "emit element only when downstream requests" in {
         val (upstream, downstream) =
-          TestSource
-            .probe[ByteString]
+          TestSource[ByteString]()
             .via(new ZipArchiveFlow())
             .toMat(TestSink())(Keep.both)
             .run()

@@ -129,8 +129,7 @@ class CsvParsingSpec extends CsvSpec {
     }
 
     "emit completion even without new line at end" in assertAllStagesStopped {
-      val (source, sink) = TestSource
-        .probe[ByteString]
+      val (source, sink) = TestSource[ByteString]()
         .via(CsvParsing.lineScanner())
         .map(_.map(_.utf8String))
         .toMat(TestSink()[List[String]])(Keep.both)

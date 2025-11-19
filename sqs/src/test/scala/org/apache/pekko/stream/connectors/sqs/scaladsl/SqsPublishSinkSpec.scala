@@ -258,7 +258,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
               SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build())
             .build()))
 
-    val (probe, future) = TestSource.probe[Seq[String]].toMat(SqsPublishSink.batch("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[Seq[String]]().toMat(SqsPublishSink.batch("notused"))(Keep.both).run()
     probe
       .sendNext(
         Seq(

@@ -340,8 +340,7 @@ class LogRotatorSinkSpec
           }
       }
       val (probe, completion) =
-        TestSource
-          .probe[ByteString]
+        TestSource[ByteString]()
           .toMat(LogRotatorSink(triggerFunctionCreator, Set(StandardOpenOption.READ)))(Keep.both)
           .run()
       probe.sendNext(ByteString("test"))
@@ -370,8 +369,7 @@ class LogRotatorSinkSpec
         }
     }
     val (probe, completion) =
-      TestSource
-        .probe[ByteString]
+      TestSource[ByteString]()
         .toMat(
           LogRotatorSink.withSinkFactory(
             triggerGeneratorCreator = triggerFunctionCreator,

@@ -135,8 +135,7 @@ class CharsetCodingFlowsSpec
     }
 
     def verifyByteSends(charsetIn: Charset, charsetOut: Charset, in: String) = {
-      val (source, sink) = TestSource
-        .probe[ByteString]
+      val (source, sink) = TestSource[ByteString]()
         .via(TextFlow.transcoding(charsetIn, charsetOut))
         .map(_.decodeString(charsetOut))
         .toMat(Sink.seq)(Keep.both)
@@ -163,8 +162,7 @@ class CharsetCodingFlowsSpec
     }
 
     "complete" in {
-      val (source, sink) = TestSource
-        .probe[ByteString]
+      val (source, sink) = TestSource[ByteString]()
         .via(TextFlow.transcoding(StandardCharsets.UTF_8, StandardCharsets.UTF_8))
         .toMat(TestSink()[ByteString])(Keep.both)
         .run()
