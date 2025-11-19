@@ -62,7 +62,7 @@ class UdpSpec
         Udp.bindFlow(bindToLocal)
       // #bind-flow
 
-      val ((pub, bound), sub) = TestSource[Datagram](system)
+      val ((pub, bound), sub) = TestSource[Datagram]()(system)
         .viaMat(bindFlow)(Keep.both)
         .toMat(TestSink())(Keep.both)
         .run()
@@ -102,7 +102,7 @@ class UdpSpec
       val bindFlow: Flow[Datagram, Datagram, Future[InetSocketAddress]] =
         Udp.bindFlow(bindToLocal, List(UdpSO.broadcast(true)))
 
-      val ((pub, bound), sub) = TestSource[Datagram](system)
+      val ((pub, bound), sub) = TestSource[Datagram]()(system)
         .viaMat(bindFlow)(Keep.both)
         .toMat(TestSink())(Keep.both)
         .run()
@@ -131,12 +131,12 @@ class UdpSpec
     }
 
     "ping-pong messages" in {
-      val ((pub1, bound1), sub1) = TestSource[Datagram](system)
+      val ((pub1, bound1), sub1) = TestSource[Datagram]()(system)
         .viaMat(Udp.bindFlow(bindToLocal))(Keep.both)
         .toMat(TestSink())(Keep.both)
         .run()
 
-      val ((pub2, bound2), sub2) = TestSource[Datagram](system)
+      val ((pub2, bound2), sub2) = TestSource[Datagram]()(system)
         .viaMat(Udp.bindFlow(bindToLocal))(Keep.both)
         .toMat(TestSink())(Keep.both)
         .run()

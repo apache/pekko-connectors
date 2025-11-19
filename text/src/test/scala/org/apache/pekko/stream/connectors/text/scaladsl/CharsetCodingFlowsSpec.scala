@@ -164,7 +164,7 @@ class CharsetCodingFlowsSpec
     "complete" in {
       val (source, sink) = TestSource[ByteString]()
         .via(TextFlow.transcoding(StandardCharsets.UTF_8, StandardCharsets.UTF_8))
-        .toMat(TestSink()[ByteString])(Keep.both)
+        .toMat(TestSink[ByteString]())(Keep.both)
         .run()
       source.sendNext(ByteString("eins,zwei,drei"))
       sink.request(3)

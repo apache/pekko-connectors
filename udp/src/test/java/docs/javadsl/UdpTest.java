@@ -72,7 +72,7 @@ public class UdpTest {
             Pair<TestPublisher.Probe<Datagram>, CompletionStage<InetSocketAddress>>,
             TestSubscriber.Probe<Datagram>>
         materialized =
-            TestSource.<Datagram>probe(system)
+            TestSource.<Datagram>create(system)
                 .viaMat(bindFlow, Keep.both())
                 .toMat(TestSink.create(system), Keep.both())
                 .run(system);
@@ -140,7 +140,7 @@ public class UdpTest {
             Pair<TestPublisher.Probe<Datagram>, CompletionStage<InetSocketAddress>>,
             TestSubscriber.Probe<Datagram>>
         materialized =
-            TestSource.<Datagram>probe(system)
+            TestSource.<Datagram>create(system)
                 .viaMat(bindFlow, Keep.both())
                 .toMat(TestSink.create(system), Keep.both())
                 .run(system);
