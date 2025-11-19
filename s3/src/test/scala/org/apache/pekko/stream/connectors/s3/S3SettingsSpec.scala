@@ -41,6 +41,21 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
           |}
           |multipart-upload.retry-settings = $${retry-settings}
           |sign-anonymous-requests = true
+          |allowed-headers {
+          |    GetObject = [GetObject0]
+          |    HeadObject = [HeadObject0]
+          |    PutObject = [PutObject0]
+          |    InitiateMultipartUpload = [InitiateMultipartUpload0]
+          |    UploadPart = [UploadPart0]
+          |    CopyPart = [CopyPart0]
+          |    DeleteObject = [DeleteObject0]
+          |    ListBucket = [ListBucket0]
+          |    MakeBucket = [MakeBucket0]
+          |    DeleteBucket = [DeleteBucket0]
+          |    CheckBucket = [CheckBucket0]
+          |    PutBucketVersioning = [PutBucketVersioning0]
+          |    GetBucketVersioning = [GetBucketVersioning0]
+          |}
           |additional-allowed-headers {
           |    GetObject = []
           |    HeadObject = []
@@ -307,13 +322,13 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
           |    GetBucketVersioning = [GetBucketVersioning1, GetBucketVersioning2]
           |}""".stripMargin)
 
-    settings.additionalAllowedHeaders.keySet should contain allElementsOf (pekko.stream.connectors.s3.impl.S3Request.allRequests.map(
+    settings.allowedHeaders.keySet should contain allElementsOf (pekko.stream.connectors.s3.impl.S3Request.allRequests.map(
       _.toString()))
-    settings.additionalAllowedHeaders.foreach {
+    settings.allowedHeaders.foreach {
       case (key, value) =>
         assert(value.nonEmpty)
         val result = value.map(_.replaceAll(key, "").toInt)
-        result should contain allElementsOf (Seq(1, 2))
+        result should contain allElementsOf (Seq(0, 1, 2))
     }
   }
 

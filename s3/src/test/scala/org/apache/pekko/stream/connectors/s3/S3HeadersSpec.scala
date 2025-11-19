@@ -17,29 +17,31 @@
 
 package org.apache.pekko.stream.connectors.s3
 
+import com.typesafe.config.ConfigFactory
+import org.apache.pekko.stream.connectors.s3.impl._
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
-import org.apache.pekko.stream.connectors.s3.impl.S3Request
-import com.typesafe.config.ConfigFactory
-import scala.reflect.ClassTag
-import org.apache.pekko.stream.connectors.s3.impl.GetObject
-import org.apache.pekko.stream.connectors.s3.impl.HeadObject
-import org.apache.pekko.stream.connectors.s3.impl.PutObject
-import org.apache.pekko.stream.connectors.s3.impl.InitiateMultipartUpload
-import org.apache.pekko.stream.connectors.s3.impl.UploadPart
-import org.apache.pekko.stream.connectors.s3.impl.CopyPart
-import org.apache.pekko.stream.connectors.s3.impl.DeleteObject
-import org.apache.pekko.stream.connectors.s3.impl.ListBucket
-import org.apache.pekko.stream.connectors.s3.impl.MakeBucket
-import org.apache.pekko.stream.connectors.s3.impl.DeleteBucket
-import org.apache.pekko.stream.connectors.s3.impl.CheckBucket
-import org.apache.pekko.stream.connectors.s3.impl.PutBucketVersioning
-import org.apache.pekko.stream.connectors.s3.impl.GetBucketVersioning
 
 class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
   it should "filter headers based on what's allowed" in {
     val testOverrideConfig = ConfigFactory.parseString("""
-      | pekko.connectors.s3.additional-allowed-headers {
+      | pekko.connectors.s3 {
+      |  allowed-headers {
+      |    GetObject = [base]
+      |    HeadObject = [base]
+      |    PutObject = [base]
+      |    InitiateMultipartUpload = [base]
+      |    UploadPart = [base]
+      |    CopyPart = [base]
+      |    DeleteObject = [base]
+      |    ListBucket = [base]
+      |    MakeBucket = [base]
+      |    DeleteBucket = [base]
+      |    CheckBucket = [base]
+      |    PutBucketVersioning = [base]
+      |    GetBucketVersioning = [base]
+      | }
+      | additional-allowed-headers {
       |    GetObject = [allowedExtra]
       |    HeadObject = [allowedExtra]
       |    PutObject = [allowedExtra]
@@ -54,6 +56,7 @@ class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
       |    PutBucketVersioning = [allowedExtra]
       |    GetBucketVersioning = [allowedExtra]
       | }
+      |}
       |""".stripMargin)
 
     val defaultConfig = ConfigFactory.load()
@@ -61,13 +64,12 @@ class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
 
     S3Request.allRequests.foreach {
       requestType =>
-        val allowedHeaders = requestType.allowedHeaders.zipWithIndex.toMap.view.mapValues(_.toString()).toMap
         val extraHeaders = Map("allowedExtra" -> "allGood", "notAllowed" -> "shouldBeGone")
-        val header = S3Headers().withCustomHeaders(allowedHeaders ++ extraHeaders)
+        val header = S3Headers().withCustomHeaders(Map("base" -> requestType.toString()) ++ extraHeaders)
         val s3Config = finalConfig.getConfig("pekko.connectors.s3")
         val headerFilter = header.headersFor(requestType)(S3Settings.apply(s3Config))
         val result = headerFilter.map(header => (header.name(), header.value()))
-        result should contain allElementsOf (allowedHeaders.toSeq ++ Seq("allowedExtra" -> "allGood"))
+        result should contain allElementsOf (Seq("base" -> requestType.toString) ++ Seq("allowedExtra" -> "allGood"))
     }
 
   }
