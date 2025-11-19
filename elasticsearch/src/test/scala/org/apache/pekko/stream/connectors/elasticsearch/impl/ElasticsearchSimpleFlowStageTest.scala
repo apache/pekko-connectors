@@ -59,7 +59,7 @@ class ElasticsearchSimpleFlowStageTest
                 ElasticsearchParams.V7("es-simple-flow-index"),
                 settings,
                 writer))
-            .toMat(TestSink.probe)(Keep.both)
+            .toMat(TestSink())(Keep.both)
             .run()
 
         upstream.sendNext(dummyMessages)
@@ -84,7 +84,7 @@ class ElasticsearchSimpleFlowStageTest
                 ElasticsearchParams.V7("es-simple-flow-index"),
                 settings.withConnection(ElasticsearchConnectionSettings("http://wololo:9202")),
                 writer))
-            .toMat(TestSink.probe)(Keep.both)
+            .toMat(TestSink())(Keep.both)
             .run()
 
         upstream.sendNext(dummyMessages)

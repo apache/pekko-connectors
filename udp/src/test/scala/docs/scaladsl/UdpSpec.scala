@@ -65,7 +65,7 @@ class UdpSpec
       val ((pub, bound), sub) = TestSource
         .probe[Datagram](system)
         .viaMat(bindFlow)(Keep.both)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
 
       val destination = bound.futureValue
@@ -106,7 +106,7 @@ class UdpSpec
       val ((pub, bound), sub) = TestSource
         .probe[Datagram](system)
         .viaMat(bindFlow)(Keep.both)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
 
       val destination = bound.futureValue
@@ -136,13 +136,13 @@ class UdpSpec
       val ((pub1, bound1), sub1) = TestSource
         .probe[Datagram](system)
         .viaMat(Udp.bindFlow(bindToLocal))(Keep.both)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
 
       val ((pub2, bound2), sub2) = TestSource
         .probe[Datagram](system)
         .viaMat(Udp.bindFlow(bindToLocal))(Keep.both)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
 
       val boundAddress1 = bound1.futureValue

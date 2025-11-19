@@ -74,7 +74,7 @@ public class UdpTest {
         materialized =
             TestSource.<Datagram>probe(system)
                 .viaMat(bindFlow, Keep.both())
-                .toMat(TestSink.probe(system), Keep.both())
+                .toMat(TestSink(system), Keep.both())
                 .run(system);
 
     {
@@ -142,7 +142,7 @@ public class UdpTest {
         materialized =
             TestSource.<Datagram>probe(system)
                 .viaMat(bindFlow, Keep.both())
-                .toMat(TestSink.probe(system), Keep.both())
+                .toMat(TestSink(system), Keep.both())
                 .run(system);
 
     {

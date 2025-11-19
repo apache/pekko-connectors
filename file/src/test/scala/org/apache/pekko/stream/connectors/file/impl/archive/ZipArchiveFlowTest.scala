@@ -36,7 +36,7 @@ class ZipArchiveFlowTest
           TestSource
             .probe[ByteString]
             .via(new ZipArchiveFlow())
-            .toMat(TestSink.probe)(Keep.both)
+            .toMat(TestSink())(Keep.both)
             .run()
 
         upstream.sendNext(FileByteStringSeparators.createStartingByteString("test"))

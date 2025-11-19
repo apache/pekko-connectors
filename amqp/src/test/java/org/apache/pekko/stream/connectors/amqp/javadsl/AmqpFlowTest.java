@@ -108,7 +108,7 @@ public class AmqpFlowTest {
         Source.from(input)
             .map(s -> WriteMessage.create(ByteString.fromString(s)))
             .via(flow)
-            .toMat(TestSink.probe(system), Keep.right())
+            .toMat(TestSink(system), Keep.right())
             .run(system);
 
     result
@@ -142,7 +142,7 @@ public class AmqpFlowTest {
             .map(s -> WriteMessage.create(ByteString.fromString(s)))
             .via(flowWithContext)
             .asSource()
-            .toMat(TestSink.probe(system), Keep.right())
+            .toMat(TestSink(system), Keep.right())
             .run(system);
 
     result
@@ -165,7 +165,7 @@ public class AmqpFlowTest {
         Source.from(input)
             .map(s -> Pair.create(WriteMessage.create(ByteString.fromString(s)), s))
             .via(flow)
-            .toMat(TestSink.probe(system), Keep.right())
+            .toMat(TestSink(system), Keep.right())
             .run(system);
 
     result

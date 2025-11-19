@@ -56,7 +56,7 @@ class AvroParquetSourceSpec
       // #init-source
       val source: Source[GenericRecord, NotUsed] = AvroParquetSource(reader)
       // #init-source
-      val sink = source.runWith(TestSink.probe)
+      val sink = source.runWith(TestSink())
 
       // then
       val result: Seq[GenericRecord] = sink.toStrict(3.seconds)
@@ -80,7 +80,7 @@ class AvroParquetSourceSpec
       // #init-source
       val source: Source[GenericRecord, NotUsed] = AvroParquetSource(reader)
       // #init-source
-      val sink = source.runWith(TestSink.probe)
+      val sink = source.runWith(TestSink())
 
       // then
       val result: Seq[GenericRecord] = sink.toStrict(3.seconds)

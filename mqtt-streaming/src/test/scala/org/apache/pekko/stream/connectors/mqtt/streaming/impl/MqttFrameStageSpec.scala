@@ -41,7 +41,7 @@ class MqttFrameStageSpec
       Source
         .single(bytes)
         .via(new MqttFrameStage(MaxPacketSize))
-        .runWith(TestSink.probe(system))
+        .runWith(TestSink(system))
         .request(1)
         .expectNext(bytes)
         .expectComplete()
@@ -52,7 +52,7 @@ class MqttFrameStageSpec
       Source
         .single(bytes)
         .via(new MqttFrameStage(MaxPacketSize))
-        .runWith(TestSink.probe(system))
+        .runWith(TestSink(system))
         .request(1)
         .expectNext(bytes)
         .expectComplete()
@@ -63,7 +63,7 @@ class MqttFrameStageSpec
       Source
         .single(bytes ++ bytes)
         .via(new MqttFrameStage(MaxPacketSize))
-        .runWith(TestSink.probe(system))
+        .runWith(TestSink(system))
         .request(2)
         .expectNext(bytes, bytes)
         .expectComplete()
@@ -77,7 +77,7 @@ class MqttFrameStageSpec
         TestSource
           .probe(system)
           .via(new MqttFrameStage(MaxPacketSize * 2))
-          .toMat(TestSink.probe(system))(Keep.both)
+          .toMat(TestSink(system))(Keep.both)
           .run()
 
       pub.sendNext(bytes0)
@@ -97,7 +97,7 @@ class MqttFrameStageSpec
         Source
           .single(bytes)
           .via(new MqttFrameStage(MaxPacketSize))
-          .runWith(TestSink.probe(system))
+          .runWith(TestSink(system))
           .request(1)
           .expectError()
       ex.getMessage shouldBe s"Max packet size of $MaxPacketSize exceeded with ${MaxPacketSize + 2}"

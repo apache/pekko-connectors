@@ -133,7 +133,7 @@ class CsvParsingSpec extends CsvSpec {
         .probe[ByteString]
         .via(CsvParsing.lineScanner())
         .map(_.map(_.utf8String))
-        .toMat(TestSink.probe[List[String]])(Keep.both)
+        .toMat(TestSink()[List[String]])(Keep.both)
         .run()
       source.sendNext(ByteString("eins,zwei,drei\nuno,dos,tres\n1,2,3"))
       sink.request(3)

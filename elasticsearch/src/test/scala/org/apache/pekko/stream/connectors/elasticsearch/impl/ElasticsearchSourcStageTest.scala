@@ -46,7 +46,7 @@ class ElasticsearchSourcStageTest
               Map("query" -> """{ "match_all":{}}"""),
               ElasticsearchSourceSettings(ElasticsearchConnectionSettings("http://wololo:9202")),
               (json: String) => ScrollResponse(Some(json), None)))
-          .toMat(TestSink.probe)(Keep.right)
+          .toMat(TestSink())(Keep.right)
           .run()
 
         downstream.request(1)
