@@ -41,6 +41,36 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
           |}
           |multipart-upload.retry-settings = $${retry-settings}
           |sign-anonymous-requests = true
+          |allowed-headers {
+          |    GetObject = [GetObject0]
+          |    HeadObject = [HeadObject0]
+          |    PutObject = [PutObject0]
+          |    InitiateMultipartUpload = [InitiateMultipartUpload0]
+          |    UploadPart = [UploadPart0]
+          |    CopyPart = [CopyPart0]
+          |    DeleteObject = [DeleteObject0]
+          |    ListBucket = [ListBucket0]
+          |    MakeBucket = [MakeBucket0]
+          |    DeleteBucket = [DeleteBucket0]
+          |    CheckBucket = [CheckBucket0]
+          |    PutBucketVersioning = [PutBucketVersioning0]
+          |    GetBucketVersioning = [GetBucketVersioning0]
+          |}
+          |additional-allowed-headers {
+          |    GetObject = []
+          |    HeadObject = []
+          |    PutObject = []
+          |    InitiateMultipartUpload = []
+          |    UploadPart = []
+          |    CopyPart = []
+          |    DeleteObject = []
+          |    ListBucket = []
+          |    MakeBucket = []
+          |    DeleteBucket = []
+          |    CheckBucket = []
+          |    PutBucketVersioning = []
+          |    GetBucketVersioning = []
+          |}
           |$more
         """.stripMargin)
         .resolve)
@@ -273,4 +303,33 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
     val settings = mkSettings("sign-anonymous-requests = false")
     settings.signAnonymousRequests shouldBe false
   }
+
+  it should "parse additional-allowed-headers" in {
+    val settings = mkSettings("""
+          |additional-allowed-headers {
+          |    GetObject = [GetObject1, GetObject2]
+          |    HeadObject = [HeadObject1, HeadObject2]
+          |    PutObject = [PutObject1, PutObject2]
+          |    InitiateMultipartUpload = [InitiateMultipartUpload1, InitiateMultipartUpload2 ]
+          |    UploadPart = [UploadPart1, UploadPart2]
+          |    CopyPart = [CopyPart1, CopyPart2]
+          |    DeleteObject = [DeleteObject1, DeleteObject2]
+          |    ListBucket = [ListBucket1, ListBucket2]
+          |    MakeBucket = [MakeBucket1, MakeBucket2]
+          |    DeleteBucket = [DeleteBucket1, DeleteBucket2]
+          |    CheckBucket = [CheckBucket1, CheckBucket2]
+          |    PutBucketVersioning = [PutBucketVersioning1, PutBucketVersioning2]
+          |    GetBucketVersioning = [GetBucketVersioning1, GetBucketVersioning2]
+          |}""".stripMargin)
+
+    settings.allowedHeaders.keySet should contain allElementsOf (pekko.stream.connectors.s3.impl.S3Request.allRequests.map(
+      _.toString()))
+    settings.allowedHeaders.foreach {
+      case (key, value) =>
+        assert(value.nonEmpty)
+        val result = value.map(_.replaceAll(key, "").toInt)
+        result should contain allElementsOf (Seq(0, 1, 2))
+    }
+  }
+
 }
