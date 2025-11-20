@@ -331,7 +331,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
             .withBroker(s"tcp://localhost:$proxyPort"),
           MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
           8)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
 
       // Ensure that the connection made it all the way to the server by waiting until it receives a message
@@ -396,7 +396,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
             MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
             8))
 
-      val (subscribed, probe) = source1.toMat(TestSink.probe)(Keep.both).run()
+      val (subscribed, probe) = source1.toMat(TestSink())(Keep.both).run()
 
       // Ensure that the connection made it all the way to the server by waiting until it receives a message
       Await.ready(subscribed, timeout)
@@ -446,7 +446,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
           MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
           8)
         .via(sharedKillSwitch.flow)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
       Await.ready(killSwitch, timeout)
 
@@ -482,7 +482,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
             .withOfflinePersistenceSettings(bufferSize = 1234),
           MqttSubscriptions(topic1, MqttQoS.AtLeastOnce),
           8)
-        .toMat(TestSink.probe)(Keep.both)
+        .toMat(TestSink())(Keep.both)
         .run()
 
       // Ensure that the connection made it all the way to the server by waiting until it receives a message

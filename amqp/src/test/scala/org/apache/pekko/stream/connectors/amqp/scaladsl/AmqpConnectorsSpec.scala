@@ -103,7 +103,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
         val input = Vector("one", "two", "three", "four", "five")
         val (rpcQueueF, probe) =
-          Source(input).map(s => ByteString(s)).viaMat(amqpRpcFlow)(Keep.right).toMat(TestSink.probe)(Keep.both).run()
+          Source(input).map(s => ByteString(s)).viaMat(amqpRpcFlow)(Keep.right).toMat(TestSink())(Keep.both).run()
         rpcQueueF.futureValue
 
         val amqpSink = AmqpSink.replyTo(
@@ -134,7 +134,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
       Source
         .empty[ByteString]
         .via(AmqpRpcFlow.simple(AmqpWriteSettings(connectionProvider)))
-        .runWith(TestSink.probe)
+        .runWith(TestSink())
         .ensureSubscription()
         .expectComplete()
 
@@ -358,7 +358,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
             .map(bytes => WriteMessage(bytes))
             .viaMat(amqpRpcFlow)(Keep.right)
             .mapAsync(1)(cm => cm.ack().map(_ => cm.message))
-            .toMat(TestSink.probe)(Keep.both)
+            .toMat(TestSink())(Keep.both)
             .run()
         rpcQueueF.futureValue
 

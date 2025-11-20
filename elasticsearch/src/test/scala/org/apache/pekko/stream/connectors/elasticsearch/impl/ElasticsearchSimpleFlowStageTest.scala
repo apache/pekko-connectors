@@ -52,14 +52,13 @@ class ElasticsearchSimpleFlowStageTest
     "stream ends" should {
       "emit element only when downstream requests" in {
         val (upstream, downstream) =
-          TestSource
-            .probe[(immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]])]
+          TestSource[(immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]])]()
             .via(
               new impl.ElasticsearchSimpleFlowStage[String, NotUsed](
                 ElasticsearchParams.V7("es-simple-flow-index"),
                 settings,
                 writer))
-            .toMat(TestSink.probe)(Keep.both)
+            .toMat(TestSink())(Keep.both)
             .run()
 
         upstream.sendNext(dummyMessages)
@@ -77,14 +76,13 @@ class ElasticsearchSimpleFlowStageTest
     "client cannot connect to ES" should {
       "stop the stream" in {
         val (upstream, downstream) =
-          TestSource
-            .probe[(immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]])]
+          TestSource[(immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]])]()
             .via(
               new impl.ElasticsearchSimpleFlowStage[String, NotUsed](
                 ElasticsearchParams.V7("es-simple-flow-index"),
                 settings.withConnection(ElasticsearchConnectionSettings("http://wololo:9202")),
                 writer))
-            .toMat(TestSink.probe)(Keep.both)
+            .toMat(TestSink())(Keep.both)
             .run()
 
         upstream.sendNext(dummyMessages)

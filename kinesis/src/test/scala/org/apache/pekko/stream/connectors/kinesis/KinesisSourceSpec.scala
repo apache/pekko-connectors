@@ -54,7 +54,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("1").toByteBuffer)).build(),
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build())
 
-        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
+        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink())
 
         probe.requestNext().utf8String shouldEqual "1"
         probe.requestNext().utf8String shouldEqual "2"
@@ -72,7 +72,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("1").toByteBuffer)).build(),
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("2").toByteBuffer)).build())
 
-        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
+        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink())
 
         probe.request(2)
         probe.expectNext().utf8String shouldEqual "1"
@@ -94,7 +94,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("5").toByteBuffer)).build(),
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("6").toByteBuffer)).build())
 
-        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
+        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink())
 
         probe.request(1)
         probe.expectNext().utf8String shouldEqual "1"
@@ -124,7 +124,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
           Record.builder().data(SdkBytes.fromByteBuffer(ByteString("3").toByteBuffer)).build())
 
         val probe =
-          KinesisSource.basicMerge(mergeSettings, amazonKinesisAsync).map(_.utf8String).runWith(TestSink.probe)
+          KinesisSource.basicMerge(mergeSettings, amazonKinesisAsync).map(_.utf8String).runWith(TestSink())
 
         probe.request(6)
         probe.expectNextUnordered("1", "1", "2", "2", "3", "3")
@@ -137,7 +137,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
         override def records =
           util.Arrays.asList(Record.builder().data(SdkBytes.fromByteBuffer(ByteString("1").toByteBuffer)).build())
 
-        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
+        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink())
 
         probe.requestNext().utf8String shouldEqual "1"
         nextShardIterator.set(null)
@@ -150,7 +150,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
 
     "fail with error when GetStreamRequest fails" in assertAllStagesStopped {
       new KinesisSpecContext with WithGetShardIteratorSuccess with WithGetRecordsFailure {
-        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink.probe)
+        val probe = KinesisSource.basic(shardSettings, amazonKinesisAsync).runWith(TestSink())
         probe.request(1)
         probe.expectError() shouldBe an[KinesisErrors.GetRecordsError]
         probe.cancel()

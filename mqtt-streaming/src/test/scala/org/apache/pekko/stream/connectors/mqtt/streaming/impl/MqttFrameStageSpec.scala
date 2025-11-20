@@ -18,8 +18,7 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Keep, Source }
-import pekko.stream.testkit.javadsl.TestSink
-import pekko.stream.testkit.scaladsl.TestSource
+import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
 import pekko.testkit.TestKit
 import pekko.util.ByteString
 import org.scalatest.BeforeAndAfterAll
@@ -41,7 +40,7 @@ class MqttFrameStageSpec
       Source
         .single(bytes)
         .via(new MqttFrameStage(MaxPacketSize))
-        .runWith(TestSink.probe(system))
+        .runWith(TestSink()(system))
         .request(1)
         .expectNext(bytes)
         .expectComplete()
@@ -52,7 +51,7 @@ class MqttFrameStageSpec
       Source
         .single(bytes)
         .via(new MqttFrameStage(MaxPacketSize))
-        .runWith(TestSink.probe(system))
+        .runWith(TestSink()(system))
         .request(1)
         .expectNext(bytes)
         .expectComplete()
@@ -63,7 +62,7 @@ class MqttFrameStageSpec
       Source
         .single(bytes ++ bytes)
         .via(new MqttFrameStage(MaxPacketSize))
-        .runWith(TestSink.probe(system))
+        .runWith(TestSink()(system))
         .request(2)
         .expectNext(bytes, bytes)
         .expectComplete()
@@ -74,10 +73,9 @@ class MqttFrameStageSpec
       val bytes1 = ByteString.newBuilder.putByte(1).putBytes(Array.ofDim(0x80)).result()
 
       val (pub, sub) =
-        TestSource
-          .probe(system)
+        TestSource()(system)
           .via(new MqttFrameStage(MaxPacketSize * 2))
-          .toMat(TestSink.probe(system))(Keep.both)
+          .toMat(TestSink()(system))(Keep.both)
           .run()
 
       pub.sendNext(bytes0)
@@ -97,7 +95,7 @@ class MqttFrameStageSpec
         Source
           .single(bytes)
           .via(new MqttFrameStage(MaxPacketSize))
-          .runWith(TestSink.probe(system))
+          .runWith(TestSink()(system))
           .request(1)
           .expectError()
       ex.getMessage shouldBe s"Max packet size of $MaxPacketSize exceeded with ${MaxPacketSize + 2}"

@@ -41,7 +41,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     when(sqsClient.sendMessage(any[SendMessageRequest]))
       .thenReturn(CompletableFuture.completedFuture(SendMessageResponse.builder().build()))
 
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink("notused"))(Keep.both).run()
     probe.sendNext("notused").sendComplete()
     Await.result(future, 1.second) shouldBe Done
 
@@ -58,7 +58,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
           override def get(): SendMessageResponse = throw new RuntimeException("Fake client error")
         }))
 
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink("notused"))(Keep.both).run()
     probe.sendNext("notused").sendComplete()
 
     a[RuntimeException] should be thrownBy {
@@ -97,7 +97,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
 
   it should "failure the promise on upstream failure" in {
     implicit val sqsClient: SqsAsyncClient = mock[SqsAsyncClient]
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink("notused"))(Keep.both).run()
 
     probe.sendError(new RuntimeException("Fake upstream failure"))
 
@@ -112,7 +112,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     when(sqsClient.sendMessage(any[SendMessageRequest]))
       .thenReturn(CompletableFuture.completedFuture(SendMessageResponse.builder().build()))
 
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink("notused"))(Keep.both).run()
     probe
       .sendNext("test-101")
       .sendNext("test-102")
@@ -138,7 +138,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
               SendMessageBatchResultEntry.builder().id("0").messageId(UUID.randomUUID().toString).build())
             .build()))
 
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink.grouped("notused"))(Keep.both).run()
     probe.sendNext("notused").sendComplete()
     Await.result(future, 1.second) shouldBe Done
 
@@ -164,7 +164,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
 
     val settings = SqsPublishGroupedSettings.create().withMaxBatchSize(5)
 
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused", settings))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink.grouped("notused", settings))(Keep.both).run()
     probe
       .sendNext("notused - 1")
       .sendNext("notused - 2")
@@ -200,7 +200,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
             .failed(BatchResultErrorEntry.builder().id("4").message("a very weird error just happened").build())
             .build()))
 
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink.grouped("notused"))(Keep.both).run()
     probe
       .sendNext("notused - 1")
       .sendNext("notused - 2")
@@ -226,7 +226,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
       }))
 
     val settings = SqsPublishGroupedSettings().withMaxBatchSize(5)
-    val (probe, future) = TestSource.probe[String].toMat(SqsPublishSink.grouped("notused", settings))(Keep.both).run()
+    val (probe, future) = TestSource[String]().toMat(SqsPublishSink.grouped("notused", settings))(Keep.both).run()
     probe
       .sendNext("notused - 1")
       .sendNext("notused - 2")
@@ -258,7 +258,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
               SendMessageBatchResultEntry.builder().id("3").messageId(UUID.randomUUID().toString).build())
             .build()))
 
-    val (probe, future) = TestSource.probe[Seq[String]].toMat(SqsPublishSink.batch("notused"))(Keep.both).run()
+    val (probe, future) = TestSource[Seq[String]]().toMat(SqsPublishSink.batch("notused"))(Keep.both).run()
     probe
       .sendNext(
         Seq(
