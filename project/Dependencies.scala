@@ -27,7 +27,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.1"
 
-  val AwsSdk2Version = "2.38.7"
+  val AwsSdk2Version = "2.38.9"
 
   val NettyVersion = "4.2.7.Final"
 
@@ -414,9 +414,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.45")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.46")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.45"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.46"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"
@@ -448,7 +448,7 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "6.2.14"
-    val SpringBootVersion = "3.5.7"
+    val SpringBootVersion = "3.5.8"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
