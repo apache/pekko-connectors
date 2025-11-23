@@ -441,7 +441,7 @@ object Dependencies {
       "software.amazon.awssdk" % "auth" % AwsSdk2Version,
       // in-memory filesystem for file related tests
       "com.google.jimfs" % "jimfs" % "1.3.1" % Test,
-      "org.apache.commons" % "commons-lang3" % "3.19.0" % Test,
+      "org.apache.commons" % "commons-lang3" % "3.20.0" % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++
     wireMockDependencies)
