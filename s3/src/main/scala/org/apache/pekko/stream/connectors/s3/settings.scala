@@ -35,6 +35,7 @@ import scala.util.Try
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.http.scaladsl.model.Uri
 import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import pekko.util.OptionVal
 
 final class Proxy private (
     val host: String,
@@ -427,8 +428,13 @@ final class S3Settings private (
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
 
   private[s3] val concreateAllowedHeaders: Map[S3Request, Set[String]] = {
-    allowedHeaders.flatMap {
-      case (header, value) => S3Request.fromString(header).map((_, value))
+    allowedHeaders.foldLeft(Map.empty[S3Request, Set[String]]) {
+      case (acc, (header, value)) =>
+        S3Request.fromString(header) match {
+          case OptionVal.Some(header) => acc + (header -> value)
+          case OptionVal.None         => acc
+          case other                  => throw new MatchError(other)
+        }
     }
   }
 

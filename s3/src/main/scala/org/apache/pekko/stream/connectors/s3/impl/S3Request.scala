@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.s3.impl
 
 import org.apache.pekko.annotation.InternalApi
+import org.apache.pekko.util.OptionVal
 
 /**
  * Internal Api
@@ -24,22 +25,22 @@ import org.apache.pekko.annotation.InternalApi
  * Internal Api
  */
 @InternalApi private[s3] object S3Request {
-  def fromString(str: String): Option[S3Request] = {
+  def fromString(str: String): OptionVal[S3Request] = {
     str match {
-      case "GetObject"               => Some(GetObject)
-      case "HeadObject"              => Some(HeadObject)
-      case "PutObject"               => Some(PutObject)
-      case "InitiateMultipartUpload" => Some(InitiateMultipartUpload)
-      case "UploadPart"              => Some(UploadPart)
-      case "CopyPart"                => Some(CopyPart)
-      case "DeleteObject"            => Some(DeleteObject)
-      case "ListBucket"              => Some(ListBucket)
-      case "MakeBucket"              => Some(MakeBucket)
-      case "DeleteBucket"            => Some(DeleteBucket)
-      case "CheckBucket"             => Some(CheckBucket)
-      case "PutBucketVersioning"     => Some(PutBucketVersioning)
-      case "GetBucketVersioning"     => Some(GetBucketVersioning)
-      case _                         => None
+      case "GetObject"               => OptionVal(GetObject)
+      case "HeadObject"              => OptionVal(HeadObject)
+      case "PutObject"               => OptionVal(PutObject)
+      case "InitiateMultipartUpload" => OptionVal(InitiateMultipartUpload)
+      case "UploadPart"              => OptionVal(UploadPart)
+      case "CopyPart"                => OptionVal(CopyPart)
+      case "DeleteObject"            => OptionVal(DeleteObject)
+      case "ListBucket"              => OptionVal(ListBucket)
+      case "MakeBucket"              => OptionVal(MakeBucket)
+      case "DeleteBucket"            => OptionVal(DeleteBucket)
+      case "CheckBucket"             => OptionVal(CheckBucket)
+      case "PutBucketVersioning"     => OptionVal(PutBucketVersioning)
+      case "GetBucketVersioning"     => OptionVal(GetBucketVersioning)
+      case _                         => OptionVal.None
     }
   }
 

@@ -77,7 +77,7 @@ class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
   it should "be able to convert all headers toString and back correctly" in {
     val roundTrip = S3Request.allRequests
       .map(_.toString())
-      .flatMap(S3Request.fromString(_))
+      .flatMap(S3Request.fromString(_).toOption)
 
     roundTrip should contain allElementsOf S3Request.allRequests
 
