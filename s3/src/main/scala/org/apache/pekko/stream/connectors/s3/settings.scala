@@ -477,8 +477,15 @@ final class S3Settings private (
     s"forwardProxy=$forwardProxy," +
     s"validateObjectKey=$validateObjectKey" +
     s"retrySettings=$retrySettings" +
-    s"multipartUploadSettings=$multipartUploadSettings)" +
-    s"signAnonymousRequests=$signAnonymousRequests"
+    s"multipartUploadSettings=$multipartUploadSettings" +
+    s"signAnonymousRequests=$signAnonymousRequests" +
+    s"allowedHeaders=${
+        val entries = allowedHeaders.toSeq.sortBy(_._1).map { case (key, values) =>
+          s"$key -> Set(${values.mkString(", ")})"
+        }.mkString(", ")
+        s"Map($entries)"
+      }" +
+    ")"
 
   override def equals(other: Any): Boolean = other match {
     case that: S3Settings =>
