@@ -240,7 +240,7 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
 
     val requestPayerHeader = "x-amz-request-payer"
     val requestPayerHeaderValue = "requester"
-    val storgeClassHeader = "x-amz-storage-class"
+    val storageClassHeader = "x-amz-storage-class"
     val storageClassHeaderValue = "STANDARD_IA"
 
     val keys = ServerSideEncryption
@@ -268,7 +268,7 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
           .withCustomHeaders(
             Map(
               requestPayerHeader -> requestPayerHeaderValue,
-              storgeClassHeader -> storageClassHeaderValue
+              storageClassHeader -> storageClassHeaderValue
             )
           )
       )
@@ -295,7 +295,7 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
         .withHeader(sseCSourceAlgorithmHeader, new EqualToPattern(sseCSourceAlgorithmHeaderValue))
         .withHeader(sseCSourceKeyHeader, new EqualToPattern(sseCSourceKeyHeaderValue))
         .withHeader(requestPayerHeader, new EqualToPattern(requestPayerHeaderValue))
-        .withoutHeader(storgeClassHeader)
+        .withoutHeader(storageClassHeader)
     )
 
     // SSE headers only

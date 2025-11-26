@@ -427,7 +427,7 @@ final class S3Settings private (
   def withSignAnonymousRequests(value: Boolean): S3Settings =
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
 
-  private[s3] val concreateAllowedHeaders: Map[S3Request, Set[String]] = {
+  private[s3] val concreteAllowedHeaders: Map[S3Request, Set[String]] = {
     allowedHeaders.foldLeft(Map.empty[S3Request, Set[String]]) {
       case (acc, (header, value)) =>
         S3Request.fromString(header) match {
@@ -492,7 +492,7 @@ final class S3Settings private (
       this.validateObjectKey == that.validateObjectKey &&
       Objects.equals(this.retrySettings, that.retrySettings) &&
       Objects.equals(this.multipartUploadSettings, multipartUploadSettings) &&
-      this.signAnonymousRequests == that.signAnonymousRequests
+      this.signAnonymousRequests == that.signAnonymousRequests &&
       this.allowedHeaders == that.allowedHeaders
     case _ => false
   }
