@@ -18,9 +18,11 @@
 package org.apache.pekko.stream.connectors.s3
 
 import com.typesafe.config.ConfigFactory
-import org.apache.pekko.stream.connectors.s3.impl._
+import org.apache.pekko
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
+
+import pekko.stream.connectors.s3.impl._
 
 class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
   it should "filter headers based on what's allowed" in {

@@ -13,8 +13,10 @@
 
 package org.apache.pekko.stream.connectors.s3.impl
 
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.util.OptionVal
+import org.apache.pekko
+
+import pekko.annotation.InternalApi
+import pekko.util.OptionVal
 
 /**
  * Internal Api

@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.s3
 
 import com.typesafe.config.Config
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.s3.impl.S3Request
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
@@ -36,6 +35,7 @@ import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.http.scaladsl.model.Uri
 import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
 import pekko.util.OptionVal
+import pekko.stream.connectors.s3.impl.S3Request
 
 final class Proxy private (
     val host: String,
