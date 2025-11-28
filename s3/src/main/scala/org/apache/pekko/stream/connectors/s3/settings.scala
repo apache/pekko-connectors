@@ -13,24 +13,29 @@
 
 package org.apache.pekko.stream.connectors.s3
 
-import java.nio.file.{ Path, Paths }
-import java.time.{ Duration => JavaDuration }
-import java.util.concurrent.TimeUnit
-import java.util.{ Objects, Optional }
-
-import org.apache.pekko
-import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
-import pekko.http.scaladsl.model.Uri
-import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
 import com.typesafe.config.Config
+import org.apache.pekko
 import org.slf4j.LoggerFactory
 import software.amazon.awssdk.auth.credentials._
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.regions.providers._
 
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.time.{ Duration => JavaDuration }
+import java.util.Objects
+import java.util.Optional
+import java.util.concurrent.TimeUnit
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 import scala.util.Try
+
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
+import pekko.http.scaladsl.model.Uri
+import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
+import pekko.util.OptionVal
+import pekko.stream.connectors.s3.impl.S3Request
 
 final class Proxy private (
     val host: String,
@@ -359,7 +364,9 @@ final class S3Settings private (
     val validateObjectKey: Boolean,
     val retrySettings: RetrySettings,
     val multipartUploadSettings: MultipartUploadSettings,
-    val signAnonymousRequests: Boolean) {
+    val signAnonymousRequests: Boolean,
+    val allowedHeaders: Map[String, Set[String]]
+) {
 
   /** Java API */
   def getBufferType: BufferType = bufferType
@@ -420,6 +427,17 @@ final class S3Settings private (
   def withSignAnonymousRequests(value: Boolean): S3Settings =
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
 
+  private[s3] val concreteAllowedHeaders: Map[S3Request, Set[String]] = {
+    allowedHeaders.foldLeft(Map.empty[S3Request, Set[String]]) {
+      case (acc, (header, value)) =>
+        S3Request.fromString(header) match {
+          case OptionVal.Some(header) => acc + (header -> value)
+          case OptionVal.None         => acc
+          case other                  => throw new MatchError(other)
+        }
+    }
+  }
+
   private def copy(
       bufferType: BufferType = bufferType,
       credentialsProvider: AwsCredentialsProvider = credentialsProvider,
@@ -431,7 +449,9 @@ final class S3Settings private (
       validateObjectKey: Boolean = validateObjectKey,
       retrySettings: RetrySettings = retrySettings,
       multipartUploadSettings: MultipartUploadSettings = multipartUploadSettings,
-      signAnonymousRequests: Boolean = signAnonymousRequests): S3Settings = new S3Settings(
+      signAnonymousRequests: Boolean = signAnonymousRequests,
+      allowedHeaders: Map[String, Set[String]] = allowedHeaders
+  ): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
@@ -442,7 +462,9 @@ final class S3Settings private (
     validateObjectKey,
     retrySettings,
     multipartUploadSettings,
-    signAnonymousRequests)
+    signAnonymousRequests,
+    allowedHeaders
+  )
 
   override def toString: String =
     "S3Settings(" +
@@ -455,8 +477,15 @@ final class S3Settings private (
     s"forwardProxy=$forwardProxy," +
     s"validateObjectKey=$validateObjectKey" +
     s"retrySettings=$retrySettings" +
-    s"multipartUploadSettings=$multipartUploadSettings)" +
-    s"signAnonymousRequests=$signAnonymousRequests"
+    s"multipartUploadSettings=$multipartUploadSettings" +
+    s"signAnonymousRequests=$signAnonymousRequests" +
+    s"allowedHeaders=${
+        val entries = allowedHeaders.toSeq.sortBy(_._1).map { case (key, values) =>
+          s"$key -> Set(${values.mkString(", ")})"
+        }.mkString(", ")
+        s"Map($entries)"
+      }" +
+    ")"
 
   override def equals(other: Any): Boolean = other match {
     case that: S3Settings =>
@@ -470,7 +499,8 @@ final class S3Settings private (
       this.validateObjectKey == that.validateObjectKey &&
       Objects.equals(this.retrySettings, that.retrySettings) &&
       Objects.equals(this.multipartUploadSettings, multipartUploadSettings) &&
-      this.signAnonymousRequests == that.signAnonymousRequests
+      this.signAnonymousRequests == that.signAnonymousRequests &&
+      this.allowedHeaders == that.allowedHeaders
     case _ => false
   }
 
@@ -628,6 +658,37 @@ object S3Settings {
 
     val signAnonymousRequests = c.getBoolean("sign-anonymous-requests")
 
+    val allowedHeadersConfig = c.getConfig("allowed-headers")
+
+    val allowedHeadersBase = S3Request.allRequests.map {
+      requestType =>
+        val requestTypeString = requestType.toString()
+        val value = if (allowedHeadersConfig.hasPath(requestTypeString)) {
+          allowedHeadersConfig.getStringList(requestTypeString).asScala.toSet
+        } else {
+          Set.empty[String]
+        }
+        (requestType.toString(), value)
+    }.toMap
+
+    val additionalAllowedHeadersConfig = c.getConfig("additional-allowed-headers")
+
+    val additionalAllowedHeaders: Map[String, Set[String]] =
+      S3Request.allRequests.map {
+        requestType =>
+          val requestTypeString = requestType.toString()
+          val value = if (additionalAllowedHeadersConfig.hasPath(requestTypeString)) {
+            additionalAllowedHeadersConfig.getStringList(requestTypeString).asScala.toSet
+          } else {
+            Set.empty[String]
+          }
+          (requestType.toString(), value)
+      }.toMap
+
+    val finalAllowedHeaders = allowedHeadersBase ++ additionalAllowedHeaders.map { case (k, v) =>
+      k -> (v ++ allowedHeadersBase.getOrElse(k, Set.empty[String]))
+    }
+
     new S3Settings(
       bufferType,
       credentialsProvider,
@@ -639,7 +700,9 @@ object S3Settings {
       validateObjectKey,
       retrySettings,
       multipartUploadSettings,
-      signAnonymousRequests)
+      signAnonymousRequests,
+      finalAllowedHeaders
+    )
   }
 
   /**
@@ -648,11 +711,27 @@ object S3Settings {
   def create(c: Config): S3Settings = apply(c)
 
   /** Scala API */
+
   def apply(
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
-      listBucketApiVersion: ApiVersion): S3Settings = new S3Settings(
+      listBucketApiVersion: ApiVersion): S3Settings =
+    apply(
+      bufferType,
+      credentialsProvider,
+      s3RegionProvider,
+      listBucketApiVersion,
+      allowedHeaders = Map.empty[String, Set[String]] // default value
+    )
+
+  def apply(
+      bufferType: BufferType,
+      credentialsProvider: AwsCredentialsProvider,
+      s3RegionProvider: AwsRegionProvider,
+      listBucketApiVersion: ApiVersion,
+      allowedHeaders: Map[String, Set[String]]
+  ): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
@@ -663,18 +742,31 @@ object S3Settings {
     validateObjectKey = true,
     RetrySettings.default,
     MultipartUploadSettings(RetrySettings.default),
-    signAnonymousRequests = true)
+    signAnonymousRequests = true,
+    allowedHeaders = allowedHeaders
+  )
 
   /** Java API */
+
   def create(
       bufferType: BufferType,
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
-      listBucketApiVersion: ApiVersion): S3Settings = apply(
+      listBucketApiVersion: ApiVersion): S3Settings =
+    create(bufferType, credentialsProvider, s3RegionProvider, listBucketApiVersion, Map.empty)
+
+  def create(
+      bufferType: BufferType,
+      credentialsProvider: AwsCredentialsProvider,
+      s3RegionProvider: AwsRegionProvider,
+      listBucketApiVersion: ApiVersion,
+      allowedHeaders: Map[String, Set[String]]): S3Settings = apply(
     bufferType,
     credentialsProvider,
     s3RegionProvider,
-    listBucketApiVersion)
+    listBucketApiVersion,
+    allowedHeaders
+  )
 
   /**
    * Scala API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.
