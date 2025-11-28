@@ -240,6 +240,8 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
 
     val requestPayerHeader = "x-amz-request-payer"
     val requestPayerHeaderValue = "requester"
+    val storageClassHeader = "x-amz-storage-class"
+    val storageClassHeaderValue = "STANDARD_IA"
 
     val keys = ServerSideEncryption
       .customerKeys(sseCustomerKey)
@@ -263,7 +265,13 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
         targetBucketKey,
         s3Headers = S3Headers()
           .withServerSideEncryption(keys)
-          .withCustomHeaders(Map(requestPayerHeader -> requestPayerHeaderValue)))
+          .withCustomHeaders(
+            Map(
+              requestPayerHeader -> requestPayerHeaderValue,
+              storageClassHeader -> storageClassHeaderValue
+            )
+          )
+      )
         .run()
 
     result.futureValue shouldBe MultipartUploadResult(targetUrl, targetBucket, targetBucketKey, etag, None)
@@ -286,7 +294,9 @@ class S3SinkSpec extends S3WireMockBase with S3ClientIntegrationSpec with Option
         .withHeader(sseCKeyHeader, new EqualToPattern(sseCKeyHeaderValue))
         .withHeader(sseCSourceAlgorithmHeader, new EqualToPattern(sseCSourceAlgorithmHeaderValue))
         .withHeader(sseCSourceKeyHeader, new EqualToPattern(sseCSourceKeyHeaderValue))
-        .withHeader(requestPayerHeader, new EqualToPattern(requestPayerHeaderValue)))
+        .withHeader(requestPayerHeader, new EqualToPattern(requestPayerHeaderValue))
+        .withoutHeader(storageClassHeader)
+    )
 
     // SSE headers only
     mock.verifyThat(
