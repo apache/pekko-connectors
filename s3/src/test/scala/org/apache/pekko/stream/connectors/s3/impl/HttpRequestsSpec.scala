@@ -46,7 +46,7 @@ class HttpRequestsSpec extends AnyFlatSpec with Matchers with ScalaFutures with 
       def getRegion = s3Region
     }
 
-    S3Settings(bufferType, awsCredentials, regionProvider, listBucketApiVersion)
+    S3Settings(bufferType, awsCredentials, regionProvider, listBucketApiVersion, Map.empty)
   }
 
   val location = S3Location("bucket", "image-1024@2x")

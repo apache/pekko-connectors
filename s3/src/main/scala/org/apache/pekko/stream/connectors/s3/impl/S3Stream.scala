@@ -187,11 +187,12 @@ import scala.util.{ Failure, Success, Try }
       range: Option[ByteRange],
       versionId: Option[String],
       s3Headers: S3Headers): Source[Option[(Source[ByteString, NotUsed], ObjectMetadata)], NotUsed] = {
-    val headers = s3Headers.headersFor(GetObject)
 
     Source
       .fromMaterializer { (mat, attr) =>
         implicit val materializer: Materializer = mat
+        implicit val conf: S3Settings = resolveSettings(attr, mat.system)
+        val headers = s3Headers.headersFor(GetObject)
         issueRequest(s3Location, rangeOption = range, versionId = versionId, s3Headers = headers)(mat, attr)
           .map(response => response.withEntity(response.entity.withoutSizeLimit))
           .mapAsync(parallelism = 1)(entityForSuccess)
@@ -210,12 +211,13 @@ import scala.util.{ Failure, Success, Try }
       range: Option[ByteRange],
       versionId: Option[String],
       s3Headers: S3Headers): Source[ByteString, Future[ObjectMetadata]] = {
-    val headers = s3Headers.headersFor(GetObject)
 
     Source
       .fromMaterializer { (mat, attr) =>
         val objectMetadataMat = Promise[ObjectMetadata]()
         implicit val materializer: Materializer = mat
+        implicit val conf: S3Settings = resolveSettings(attr, mat.system)
+        val headers = s3Headers.headersFor(GetObject)
         issueRequest(s3Location, rangeOption = range, versionId = versionId, s3Headers = headers)(mat, attr)
           .map(response => response.withEntity(response.entity.withoutSizeLimit))
           .mapAsync(parallelism = 1)(entityForSuccess)
@@ -580,6 +582,7 @@ import scala.util.{ Failure, Success, Try }
       .fromMaterializer { (mat, attr) =>
         implicit val materializer: Materializer = mat
         import mat.executionContext
+        implicit val conf: S3Settings = resolveSettings(attr, mat.system)
         val headers = s3Headers.headersFor(HeadObject)
         issueRequest(S3Location(bucket, key), HttpMethods.HEAD, versionId = versionId, s3Headers = headers)(mat, attr)
           .flatMapConcat {
@@ -610,7 +613,7 @@ import scala.util.{ Failure, Success, Try }
     Source
       .fromMaterializer { (mat, attr) =>
         implicit val m: Materializer = mat
-
+        implicit val conf: S3Settings = resolveSettings(attr, mat.system)
         val headers = s3Headers.headersFor(DeleteObject)
         issueRequest(s3Location, HttpMethods.DELETE, versionId = versionId, s3Headers = headers)(mat, attr)
           .flatMapConcat {
@@ -659,8 +662,6 @@ import scala.util.{ Failure, Success, Try }
     // TODO can we take in a Source[ByteString, NotUsed] without forcing chunking
     // chunked requests are causing S3 to think this is a multipart upload
 
-    val headers = s3Headers.headersFor(PutObject)
-
     Source
       .fromMaterializer { (mat, attr) =>
         implicit val materializer: Materializer = mat
@@ -668,6 +669,7 @@ import scala.util.{ Failure, Success, Try }
         import mat.executionContext
         implicit val sys: ActorSystem = mat.system
         implicit val conf: S3Settings = resolveSettings(attr, mat.system)
+        val headers = s3Headers.headersFor(PutObject)
 
         val req = uploadRequest(s3Location, data, contentLength, contentType, headers)
 
@@ -717,8 +719,9 @@ import scala.util.{ Failure, Success, Try }
       case _           => downloadRequest
     }
 
-  private def bucketManagementRequest(bucket: String)(method: HttpMethod, conf: S3Settings): HttpRequest =
-    HttpRequests.bucketManagementRequest(S3Location(bucket, key = ""), method)(conf)
+  private def bucketManagementRequest(bucket: String, headers: S3Headers, request: S3Request)(method: HttpMethod,
+      conf: S3Settings): HttpRequest =
+    HttpRequests.bucketManagementRequest(S3Location(bucket, key = ""), method, headers.headersFor(request)(conf))(conf)
 
   def makeBucketSource(bucket: String, headers: S3Headers): Source[Done, NotUsed] = {
     Source
@@ -738,8 +741,7 @@ import scala.util.{ Failure, Success, Try }
         s3ManagementRequest[Done](
           bucket = bucket,
           method = HttpMethods.PUT,
-          httpRequest = bucketManagementRequest(bucket),
-          headers.headersFor(MakeBucket),
+          httpRequest = bucketManagementRequest(bucket, headers, MakeBucket),
           process = processS3LifecycleResponse,
           httpEntity = maybeRegionPayload)
       }
@@ -753,9 +755,9 @@ import scala.util.{ Failure, Success, Try }
     s3ManagementRequest[Done](
       bucket = bucket,
       method = HttpMethods.DELETE,
-      httpRequest = bucketManagementRequest(bucket),
-      headers.headersFor(DeleteBucket),
-      process = processS3LifecycleResponse)
+      httpRequest = bucketManagementRequest(bucket, headers, DeleteBucket),
+      process = processS3LifecycleResponse
+    )
 
   def deleteBucket(bucket: String, headers: S3Headers)(implicit mat: Materializer, attr: Attributes): Future[Done] =
     deleteBucketSource(bucket, headers).withAttributes(attr).runWith(Sink.ignore)
@@ -764,42 +766,42 @@ import scala.util.{ Failure, Success, Try }
     s3ManagementRequest[BucketAccess](
       bucket = bucketName,
       method = HttpMethods.HEAD,
-      httpRequest = bucketManagementRequest(bucketName),
-      headers.headersFor(CheckBucket),
+      httpRequest = bucketManagementRequest(bucketName, headers, CheckBucket),
       process = processCheckIfExistsResponse)
 
   def checkIfBucketExists(bucket: String, headers: S3Headers)(implicit mat: Materializer,
       attr: Attributes): Future[BucketAccess] =
     checkIfBucketExistsSource(bucket, headers).withAttributes(attr).runWith(Sink.head)
 
-  private def uploadManagementRequest(bucket: String, key: String, uploadId: String)(method: HttpMethod,
+  private def uploadManagementRequest(bucket: String, key: String, uploadId: String, s3Headers: S3Headers,
+      s3Request: S3Request)(method: HttpMethod,
       conf: S3Settings): HttpRequest =
-    HttpRequests.uploadManagementRequest(S3Location(bucket, key), uploadId, method)(conf)
+    HttpRequests.uploadManagementRequest(S3Location(bucket, key), uploadId, method,
+      s3Headers.headersFor(s3Request)(conf))(conf)
 
   def deleteUploadSource(bucket: String, key: String, uploadId: String, headers: S3Headers): Source[Done, NotUsed] =
     s3ManagementRequest[Done](
       bucket = bucket,
       method = HttpMethods.DELETE,
-      httpRequest = uploadManagementRequest(bucket, key, uploadId),
-      headers.headersFor(DeleteBucket),
+      httpRequest = uploadManagementRequest(bucket, key, uploadId, headers, DeleteBucket),
       process = processS3LifecycleResponse)
 
   def deleteUpload(bucket: String, key: String, uploadId: String, headers: S3Headers)(implicit mat: Materializer,
       attr: Attributes): Future[Done] =
     deleteUploadSource(bucket, key, uploadId, headers).withAttributes(attr).runWith(Sink.ignore)
 
-  private def bucketVersioningRequest(bucket: String, mfaStatus: Option[MFAStatus], headers: S3Headers)(
+  private def bucketVersioningRequest(bucket: String, mfaStatus: Option[MFAStatus], headers: S3Headers,
+      s3Request: S3Request)(
       method: HttpMethod,
       conf: S3Settings): HttpRequest =
-    HttpRequests.bucketVersioningRequest(bucket, mfaStatus, method, headers.headers)(conf)
+    HttpRequests.bucketVersioningRequest(bucket, mfaStatus, method, headers.headersFor(s3Request)(conf))(conf)
 
   def putBucketVersioningSource(
       bucket: String, bucketVersioning: BucketVersioning, headers: S3Headers): Source[Done, NotUsed] =
     s3ManagementRequest[Done](
       bucket = bucket,
       method = HttpMethods.PUT,
-      httpRequest = bucketVersioningRequest(bucket, bucketVersioning.mfaDelete, headers),
-      headers.headersFor(PutBucketVersioning),
+      httpRequest = bucketVersioningRequest(bucket, bucketVersioning.mfaDelete, headers, PutBucketVersioning),
       process = processS3LifecycleResponse,
       httpEntity = Some(putBucketVersioningPayload(bucketVersioning)(ExecutionContexts.parasitic)))
 
@@ -813,8 +815,7 @@ import scala.util.{ Failure, Success, Try }
     s3ManagementRequest[BucketVersioningResult](
       bucket = bucket,
       method = HttpMethods.GET,
-      httpRequest = bucketVersioningRequest(bucket, None, headers),
-      headers.headersFor(GetBucketVersioning),
+      httpRequest = bucketVersioningRequest(bucket, None, headers, GetBucketVersioning),
       process = { (response: HttpResponse, mat: Materializer) =>
         response match {
           case HttpResponse(status, _, entity, _) if status.isSuccess() =>
@@ -833,7 +834,6 @@ import scala.util.{ Failure, Success, Try }
       bucket: String,
       method: HttpMethod,
       httpRequest: (HttpMethod, S3Settings) => HttpRequest,
-      headers: Seq[HttpHeader],
       process: (HttpResponse, Materializer) => Future[T],
       httpEntity: Option[Future[RequestEntity]] = None): Source[T, NotUsed] =
     Source
@@ -1337,7 +1337,8 @@ import scala.util.{ Failure, Success, Try }
   private def requestInfoOrUploadState(s3Location: S3Location,
       contentType: ContentType,
       s3Headers: S3Headers,
-      initialUploadState: Option[(String, Int)]): Source[(MultipartUpload, Int), NotUsed] = {
+      initialUploadState: Option[(String, Int)])(
+      implicit s3Settings: S3Settings): Source[(MultipartUpload, Int), NotUsed] = {
     initialUploadState match {
       case Some((uploadId, initialIndex)) =>
         // We are resuming from a previously aborted Multipart upload so rather than creating a new MultipartUpload
@@ -1504,15 +1505,14 @@ import scala.util.{ Failure, Success, Try }
       contentType: ContentType,
       s3Headers: S3Headers,
       partitions: Source[List[CopyPartition], NotUsed]) = {
-    val requestInfo: Source[(MultipartUpload, Int), NotUsed] =
-      initiateUpload(location, contentType, s3Headers.headersFor(InitiateMultipartUpload))
-
-    val headers = s3Headers.headersFor(CopyPart)
 
     Source
       .fromMaterializer { (mat, attr) =>
         implicit val conf: S3Settings = resolveSettings(attr, mat.system)
 
+        val headers = s3Headers.headersFor(CopyPart)
+        val requestInfo: Source[(MultipartUpload, Int), NotUsed] =
+          initiateUpload(location, contentType, s3Headers.headersFor(InitiateMultipartUpload))
         requestInfo
           .zipWith(partitions) {
             case ((upload, _), ls) =>
