@@ -282,7 +282,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.16.3" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.18.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
@@ -306,7 +306,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.141.3" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.143.1" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
