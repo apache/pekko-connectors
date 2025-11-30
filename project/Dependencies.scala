@@ -447,7 +447,7 @@ object Dependencies {
     wireMockDependencies)
 
   val SpringWeb = {
-    val SpringVersion = "6.2.14"
+    val SpringVersion = "7.0.1"
     val SpringBootVersion = "3.5.8"
     Seq(
       libraryDependencies ++= Seq(
