@@ -27,7 +27,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.1"
 
-  val AwsSdk2Version = "2.38.9"
+  val AwsSdk2Version = "2.39.5"
 
   val NettyVersion = "4.2.7.Final"
 
@@ -37,7 +37,7 @@ object Dependencies {
   val PekkoStreamsCirceVersion = "1.1.0"
   val PekkoHttpBinaryVersion = PekkoHttpDependency.default.link
   val ScalaTestVersion = "3.2.19"
-  val TestContainersScalaTestVersion = "0.43.6"
+  val TestContainersScalaTestVersion = "0.44.0"
   val mockitoVersion = "5.20.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.25.8"
   val hoverflyVersion = "0.20.2"
@@ -448,7 +448,7 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "7.0.1"
-    val SpringBootVersion = "3.5.8"
+    val SpringBootVersion = "4.0.0"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
