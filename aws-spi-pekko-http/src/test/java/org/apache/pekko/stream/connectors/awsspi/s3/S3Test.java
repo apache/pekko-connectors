@@ -47,13 +47,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Testcontainers
 public class S3Test {
 
+  public static final String S3_MOCK_VERSION = "4.10.0";
   private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   private static SecureRandom rnd = new SecureRandom();
 
   @Container
   @SuppressWarnings("rawtypes")
   public GenericContainer<?> s3mock =
-      new GenericContainer("adobe/s3mock:4.10.0").withExposedPorts(9090);
+      new GenericContainer("adobe/s3mock:" + S3_MOCK_VERSION).withExposedPorts(9090);
 
   @Test
   public void testS3() throws Exception {
