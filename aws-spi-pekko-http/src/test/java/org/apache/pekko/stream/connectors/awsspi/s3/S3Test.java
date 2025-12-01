@@ -53,7 +53,7 @@ public class S3Test {
   @Container
   @SuppressWarnings("rawtypes")
   public GenericContainer<?> s3mock =
-      new GenericContainer("adobe/s3mock:2.17.0").withExposedPorts(9090);
+      new GenericContainer("adobe/s3mock:4:10.0").withExposedPorts(9090);
 
   @Test
   public void testS3() throws Exception {
