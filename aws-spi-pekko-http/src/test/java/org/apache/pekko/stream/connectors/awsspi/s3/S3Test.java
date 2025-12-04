@@ -19,9 +19,10 @@ package org.apache.pekko.stream.connectors.awsspi.s3;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpAsyncHttpService;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import software.amazon.awssdk.auth.credentials.AnonymousCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
@@ -41,17 +42,19 @@ import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Testcontainers
 public class S3Test {
 
+  public static final String S3_MOCK_VERSION = "4.10.0";
   private static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   private static SecureRandom rnd = new SecureRandom();
 
-  @Rule
+  @Container
   @SuppressWarnings("rawtypes")
   public GenericContainer<?> s3mock =
-      new GenericContainer("adobe/s3mock:2.17.0").withExposedPorts(9090);
+      new GenericContainer("adobe/s3mock:" + S3_MOCK_VERSION).withExposedPorts(9090);
 
   @Test
   public void testS3() throws Exception {
