@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'apache/pekko-connectors'    
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install sbt
         uses: sbt/setup-sbt@26ab4b0fa1c47fa62fc1f6e51823a658fb6c760c # v1.1.7      
       - uses: scalacenter/sbt-dependency-submission@64084844d2b0a9b6c3765f33acde2fbe3f5ae7d3 # v3.1.0
