@@ -31,6 +31,6 @@ addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
 addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "1.2.0")
 // templating
-addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.7.0")
+addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.8.0")
 // Run JUnit 5 tests with sbt
 addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.17.0")
