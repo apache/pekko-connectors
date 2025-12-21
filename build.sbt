@@ -199,9 +199,7 @@ lazy val geode =
         case Some((2, n)) if n == 13 =>
           // https://github.com/scala/bug/issues/12072
           List("-Xlint:-byname-implicit")
-        case Some((2, n)) if n == 12 =>
-          List.empty
-        case Some((3, _)) =>
+        case _ =>
           List.empty
       }
     })
