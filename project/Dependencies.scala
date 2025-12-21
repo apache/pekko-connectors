@@ -128,7 +128,7 @@ object Dependencies {
       "com.dimafeng" %% "testcontainers-scala" % TestContainersScalaTestVersion % Test,
       "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
       "org.junit.vintage" % "junit-vintage-engine" % JupiterKeys.junitVintageVersion.value % Test,
-      "org.testcontainers" % "testcontainers-junit-jupiter" % "2.0.2" % Test,
+      "org.testcontainers" % "testcontainers-junit-jupiter" % "2.0.3" % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test))
 
