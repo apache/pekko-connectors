@@ -99,7 +99,8 @@ class AzureQueueSpec extends TestKit(ActorSystem()) with AsyncFlatSpecLike with 
     futureAssertion
   }
 
-  it should "observe batchSize and not pull too many message in from the CouldQueue into the buffer" in assertAllStagesStopped {
+  it should "observe batchSize and not pull too many message in from the CouldQueue into the buffer" in
+  assertAllStagesStopped {
     val msgs = (1 to 20).map(_ => queueTestMsg)
     msgs.foreach(m => queue.addMessage(m))
 

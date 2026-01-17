@@ -32,11 +32,7 @@ import software.amazon.awssdk.http.async.SdkAsyncHttpClient
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.{
-  Message,
-  MessageAttributeValue,
-  MessageSystemAttributeName,
-  QueueDoesNotExistException,
-  SendMessageRequest
+  Message, MessageAttributeValue, MessageSystemAttributeName, QueueDoesNotExistException, SendMessageRequest
 }
 
 import scala.collection.immutable
@@ -120,7 +116,8 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       val future = SqsSource(queueUrl, settings).runWith(Sink.head)
 
       private val message: Message = future.futureValue
-      message.attributes().keySet.asScala should contain theSameElementsAs allAvailableAttributes
+      message.attributes().keySet.asScala should contain theSameElementsAs
+      allAvailableAttributes
         .map(attr => MessageSystemAttributeName.fromValue(attr.name))
     }
   }
@@ -164,7 +161,8 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       val future = SqsSource(queueUrl, settings).runWith(Sink.head)
 
       private val message: Message = future.futureValue
-      message.attributes().keySet.asScala should contain theSameElementsAs attributes
+      message.attributes().keySet.asScala should contain theSameElementsAs
+      attributes
         .map(_.name)
         .map(MessageSystemAttributeName.fromValue)
     }

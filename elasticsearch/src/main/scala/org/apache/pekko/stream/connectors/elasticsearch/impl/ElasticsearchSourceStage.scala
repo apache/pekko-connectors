@@ -20,11 +20,7 @@ import pekko.http.scaladsl.model.Uri.Path
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.unmarshalling.Unmarshal
 import pekko.stream.connectors.elasticsearch.{
-  ApiVersion,
-  ElasticsearchParams,
-  OpensearchApiVersion,
-  ReadResult,
-  SourceSettingsBase
+  ApiVersion, ElasticsearchParams, OpensearchApiVersion, ReadResult, SourceSettingsBase
 }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }
@@ -145,12 +141,13 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           val queryParams = baseMap ++ routingQueryParam ++ sortQueryParam
           val completeParams = searchParams ++ extraParams.flatten - "routing"
 
-          val searchBody = "{" + completeParams
-            .map {
-              case (name, json) =>
-                "\"" + name + "\":" + json
-            }
-            .mkString(",") + "}"
+          val searchBody = "{" +
+            completeParams
+              .map {
+                case (name, json) =>
+                  "\"" + name + "\":" + json
+              }
+              .mkString(",") + "}"
 
           val endpoint: String = settings.apiVersion match {
             case ApiVersion.V5           => s"/${elasticsearchParams.indexName}/${elasticsearchParams.typeName.get}/_search"

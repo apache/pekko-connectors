@@ -31,7 +31,8 @@ class ShardSettingsSpec extends AnyWordSpec with Matchers with LogCapturing {
     }
 
     "accept all combinations of alterations with ShardIterator" in {
-      noException should be thrownBy baseSettings
+      noException should be thrownBy
+      baseSettings
         .withShardIterator(ShardIterator.AtSequenceNumber("SQC"))
         .withShardIterator(ShardIterator.AfterSequenceNumber("SQC"))
         .withShardIterator(ShardIterator.AtTimestamp(Instant.EPOCH))

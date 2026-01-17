@@ -121,7 +121,8 @@ class MarshallingSpec(_system: ActorSystem)
                                         |        <StorageClass>REDUCED_REDUNDANCY</StorageClass>
                                         |    </Contents>
                                         |</ListBucketResult>""".stripMargin
-  it should "Use the value of the `NextContinuationToken` element as the continuation token of a truncated API V1 response" in {
+  it should
+  "Use the value of the `NextContinuationToken` element as the continuation token of a truncated API V1 response" in {
     val entity =
       HttpEntity(MediaTypes.`application/xml`.withCharset(HttpCharsets.`UTF-8`), listBucketV2TruncatedResponse)
 

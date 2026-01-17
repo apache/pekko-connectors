@@ -18,14 +18,7 @@ import org.apache.pekko
 import pekko.stream.impl.Stages.DefaultAttributes.IODispatcher
 import pekko.stream.stage.{ GraphStageWithMaterializedValue, InHandler, OutHandler }
 import pekko.stream.{
-  Attributes,
-  IOOperationIncompleteException,
-  IOResult,
-  Inlet,
-  Outlet,
-  Shape,
-  SinkShape,
-  SourceShape
+  Attributes, IOOperationIncompleteException, IOResult, Inlet, Outlet, Shape, SinkShape, SourceShape
 }
 import pekko.util.ByteString
 import pekko.util.ByteString.ByteString1C

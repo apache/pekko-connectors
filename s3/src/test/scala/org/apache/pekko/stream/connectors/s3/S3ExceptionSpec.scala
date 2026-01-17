@@ -21,7 +21,8 @@ class S3ExceptionSpec extends AnyFlatSpecLike with Matchers {
 
   "S3 exception" should "be parsed" in {
     val e = S3Exception("Hej", StatusCodes.OK)
-    e.toString shouldBe "org.apache.pekko.stream.connectors.s3.S3Exception: Hej (Status code: 200 OK, Code: 200 OK, RequestId: -, Resource: -)"
+    e.toString shouldBe
+    "org.apache.pekko.stream.connectors.s3.S3Exception: Hej (Status code: 200 OK, Code: 200 OK, RequestId: -, Resource: -)"
   }
 
   it should "parse AWS sample" in {
@@ -37,12 +38,14 @@ class S3ExceptionSpec extends AnyFlatSpecLike with Matchers {
     e.message shouldBe "The resource you requested does not exist"
     e.requestId shouldBe "4442587FB7D0A2F9"
     e.resource shouldBe "/mybucket/myfoto.jpg"
-    e.toString shouldBe "org.apache.pekko.stream.connectors.s3.S3Exception: The resource you requested does not exist (Status code: 404 Not Found, Code: NoSuchKey, RequestId: 4442587FB7D0A2F9, Resource: /mybucket/myfoto.jpg)"
+    e.toString shouldBe
+    "org.apache.pekko.stream.connectors.s3.S3Exception: The resource you requested does not exist (Status code: 404 Not Found, Code: NoSuchKey, RequestId: 4442587FB7D0A2F9, Resource: /mybucket/myfoto.jpg)"
   }
 
   it should "survive null" in {
     val e = S3Exception(null, StatusCodes.NotFound)
-    e.toString shouldBe "org.apache.pekko.stream.connectors.s3.S3Exception (Status code: 404 Not Found, Code: 404 Not Found, RequestId: -, Resource: -)"
+    e.toString shouldBe
+    "org.apache.pekko.stream.connectors.s3.S3Exception (Status code: 404 Not Found, Code: 404 Not Found, RequestId: -, Resource: -)"
   }
 
 }

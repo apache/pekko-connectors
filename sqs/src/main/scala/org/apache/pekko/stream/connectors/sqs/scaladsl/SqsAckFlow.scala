@@ -125,7 +125,8 @@ object SqsAckFlow {
               .build()
         }
 
-        actions -> DeleteMessageBatchRequest
+        actions ->
+        DeleteMessageBatchRequest
           .builder()
           .queueUrl(queueUrl)
           .entries(entries.asJava)
@@ -178,7 +179,8 @@ object SqsAckFlow {
               .build()
         }
 
-        actions -> ChangeMessageVisibilityBatchRequest
+        actions ->
+        ChangeMessageVisibilityBatchRequest
           .builder()
           .queueUrl(queueUrl)
           .entries(entries.asJava)

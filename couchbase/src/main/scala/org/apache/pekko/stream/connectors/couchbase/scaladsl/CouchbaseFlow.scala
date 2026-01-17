@@ -16,15 +16,8 @@ package org.apache.pekko.stream.connectors.couchbase.scaladsl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.couchbase.{
-  CouchbaseDeleteFailure,
-  CouchbaseDeleteResult,
-  CouchbaseDeleteSuccess,
-  CouchbaseSessionRegistry,
-  CouchbaseSessionSettings,
-  CouchbaseWriteFailure,
-  CouchbaseWriteResult,
-  CouchbaseWriteSettings,
-  CouchbaseWriteSuccess
+  CouchbaseDeleteFailure, CouchbaseDeleteResult, CouchbaseDeleteSuccess, CouchbaseSessionRegistry,
+  CouchbaseSessionSettings, CouchbaseWriteFailure, CouchbaseWriteResult, CouchbaseWriteSettings, CouchbaseWriteSuccess
 }
 import pekko.stream.scaladsl.Flow
 import com.couchbase.client.java.document.{ Document, JsonDocument }

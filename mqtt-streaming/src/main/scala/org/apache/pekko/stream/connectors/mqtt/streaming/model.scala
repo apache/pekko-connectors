@@ -94,8 +94,7 @@ final case class ControlPacketFlags(underlying: Int) extends AnyVal {
   /**
    * Convenience for testing bits - returns true if all passed in are set
    */
-  def contains(bits: ControlPacketFlags): Boolean =
-    (underlying & bits.underlying) == bits.underlying
+  def contains(bits: ControlPacketFlags): Boolean = (underlying & bits.underlying) == bits.underlying
 }
 
 /**
@@ -147,8 +146,7 @@ final case class ConnectFlags private[streaming] (underlying: Int) extends AnyVa
   /**
    * Convenience for testing bits - returns true if all passed in are set
    */
-  def contains(bits: ConnectFlags): Boolean =
-    (underlying & bits.underlying) == bits.underlying
+  def contains(bits: ConnectFlags): Boolean = (underlying & bits.underlying) == bits.underlying
 }
 
 object Connect {
@@ -258,8 +256,7 @@ final case class ConnAckReturnCode private[streaming] (underlying: Int) extends 
   /**
    * Convenience for testing bits - returns true if all passed in are set
    */
-  def contains(bits: ConnAckReturnCode): Boolean =
-    (underlying & bits.underlying) == bits.underlying
+  def contains(bits: ConnAckReturnCode): Boolean = (underlying & bits.underlying) == bits.underlying
 }
 
 /**

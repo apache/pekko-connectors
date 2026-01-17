@@ -189,10 +189,10 @@ import scala.xml.NodeSeq
         val bucket = (x \ "Bucket").text
         val key = (x \ "Key").text
         val uploadId = (x \ "UploadId").text
-        val partNumberMarker =
-          (x \ "PartNumberMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text)).map(_.toInt)
-        val nextPartNumberMarker =
-          (x \ "NextPartNumberMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text)).map(_.toInt)
+        val partNumberMarker = (x \ "PartNumberMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text)).map(
+          _.toInt)
+        val nextPartNumberMarker = (x \ "NextPartNumberMarker").headOption.flatMap(x =>
+          Utils.emptyStringToOption(x.text)).map(_.toInt)
 
         val maxParts = (x \ "MaxParts").text.toInt
         val truncated = (x \ isTruncated).text == "true"
@@ -241,18 +241,12 @@ import scala.xml.NodeSeq
       case x             =>
         val bucket = (x \ "Bucket").text
         val name = (x \ "Name").text
-        val prefix =
-          (x \ "Prefix").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
-        val keyMarker =
-          (x \ "KeyMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
-        val nextKeyMarker =
-          (x \ "NextKeyMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
-        val versionIdMarker =
-          (x \ "VersionIdMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
-        val nextVersionIdMarker =
-          (x \ "NextVersionIdMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
-        val delimiter =
-          (x \ "Delimiter").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
+        val prefix = (x \ "Prefix").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
+        val keyMarker = (x \ "KeyMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
+        val nextKeyMarker = (x \ "NextKeyMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
+        val versionIdMarker = (x \ "VersionIdMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
+        val nextVersionIdMarker = (x \ "NextVersionIdMarker").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
+        val delimiter = (x \ "Delimiter").headOption.flatMap(x => Utils.emptyStringToOption(x.text))
         val maxKeys = (x \ "MaxKeys").text.toInt
         val truncated = (x \ isTruncated).text == "true"
 

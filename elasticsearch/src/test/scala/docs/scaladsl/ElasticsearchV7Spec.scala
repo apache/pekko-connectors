@@ -212,7 +212,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
       readTitlesFrom(ApiVersion.V7, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .map(_.book.title)
     }
 
@@ -263,7 +264,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
       readTitlesFrom(ApiVersion.V7, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .map(_.book.title)
     }
 
@@ -319,7 +321,8 @@ class ElasticsearchV7Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2, 3, 4, 5)
       readTitlesFrom(ApiVersion.V7, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .filterNot(_.book.shouldSkip.getOrElse(false))
         .map(_.book.title)
     }

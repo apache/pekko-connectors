@@ -40,9 +40,7 @@ import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.lifecycle.events.{ InitializationInput, ProcessRecordsInput, ShardEndedInput }
 import software.amazon.kinesis.processor.{
-  RecordProcessorCheckpointer,
-  ShardRecordProcessor,
-  ShardRecordProcessorFactory
+  RecordProcessorCheckpointer, ShardRecordProcessor, ShardRecordProcessorFactory
 }
 import software.amazon.kinesis.retrieval.KinesisClientRecord
 import software.amazon.kinesis.retrieval.kpl.ExtendedSequenceNumber
@@ -68,7 +66,8 @@ class KinesisSchedulerSourceSpec
       recordProcessor.processRecords(sampleRecordsInput())
 
       val producedRecord: CommittableRecord = sinkProbe.requestNext()
-      producedRecord.processorData.recordProcessorStartingSequenceNumber shouldBe initializationInput
+      producedRecord.processorData.recordProcessorStartingSequenceNumber shouldBe
+      initializationInput
         .extendedSequenceNumber()
       producedRecord.processorData.shardId shouldBe initializationInput.shardId()
       producedRecord.record shouldBe sampleRecord
@@ -116,7 +115,8 @@ class KinesisSchedulerSourceSpec
         recordProcessor.processRecords(sampleRecordsInput())
 
         var producedRecord: CommittableRecord = sinkProbe.requestNext()
-        producedRecord.processorData.recordProcessorStartingSequenceNumber shouldBe initializationInput
+        producedRecord.processorData.recordProcessorStartingSequenceNumber shouldBe
+        initializationInput
           .extendedSequenceNumber()
         producedRecord.processorData.shardId shouldBe initializationInput.shardId()
         producedRecord.record shouldBe sampleRecord
@@ -127,7 +127,8 @@ class KinesisSchedulerSourceSpec
         otherRecordProcessor.processRecords(sampleRecordsInput())
 
         producedRecord = sinkProbe.requestNext()
-        producedRecord.processorData.recordProcessorStartingSequenceNumber shouldBe otherInitializationInput
+        producedRecord.processorData.recordProcessorStartingSequenceNumber shouldBe
+        otherInitializationInput
           .extendedSequenceNumber()
         producedRecord.processorData.shardId shouldBe otherInitializationInput.shardId()
         producedRecord.record shouldBe sampleRecord

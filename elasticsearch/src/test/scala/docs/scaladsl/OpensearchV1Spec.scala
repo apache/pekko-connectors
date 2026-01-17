@@ -17,13 +17,8 @@ import org.apache.pekko
 import pekko.http.scaladsl.model.Uri.Path
 import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.elasticsearch.{
-  ElasticsearchConnectionSettings,
-  OpensearchApiVersion,
-  OpensearchConnectionSettings,
-  ReadResult,
-  StringMessageWriter,
-  WriteMessage,
-  WriteResult
+  ElasticsearchConnectionSettings, OpensearchApiVersion, OpensearchConnectionSettings, ReadResult, StringMessageWriter,
+  WriteMessage, WriteResult
 }
 import pekko.stream.connectors.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
 import pekko.stream.connectors.elasticsearch._
@@ -230,7 +225,8 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .map(_.book.title)
     }
 
@@ -281,7 +277,8 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .map(_.book.title)
     }
 
@@ -337,7 +334,8 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2, 3, 4, 5)
       readTitlesFrom(OpensearchApiVersion.V1, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .filterNot(_.book.shouldSkip.getOrElse(false))
         .map(_.book.title)
     }

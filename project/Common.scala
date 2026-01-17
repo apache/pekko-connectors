@@ -37,7 +37,8 @@ object Common extends AutoPlugin {
       "Contributors",
       "dev@pekko.apache.org",
       url("https://github.com/apache/pekko-connectors/graphs/contributors")),
-    description := "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Pekko.",
+    description :=
+      "Apache Pekko Connectors is a Reactive Enterprise Integration library for Java and Scala, based on Reactive Streams and Pekko.",
     fatalWarnings := true,
     mimaReportSignatureProblems := true,
     // Ignore unused keys which affect documentation
@@ -104,11 +105,12 @@ object Common extends AutoPlugin {
       "-Xlint:try",
       "-Xlint:unchecked",
       "-Xlint:varargs"),
-    compile / javacOptions ++= (scalaVersion.value match {
-      case Dependencies.Scala213 if insideCI.value && fatalWarnings.value && !Dependencies.CronBuild =>
-        Seq("-Werror")
-      case _ => Seq.empty[String]
-    }),
+    compile / javacOptions ++=
+      (scalaVersion.value match {
+        case Dependencies.Scala213 if insideCI.value && fatalWarnings.value && !Dependencies.CronBuild =>
+          Seq("-Werror")
+        case _ => Seq.empty[String]
+      }),
     autoAPIMappings := true,
     apiURL := {
       val apiVersion = if (isSnapshot.value) "current" else version.value

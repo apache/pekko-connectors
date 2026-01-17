@@ -28,10 +28,7 @@ import pekko.stream.ActorAttributes
 import pekko.stream.connectors.pravega.TableReaderSettings
 import io.pravega.client.KeyValueTableFactory
 import io.pravega.client.tables.{
-  IteratorItem,
-  KeyValueTable,
-  KeyValueTableClientConfiguration,
-  TableEntry => JTableEntry
+  IteratorItem, KeyValueTable, KeyValueTableClientConfiguration, TableEntry => JTableEntry
 }
 
 import pekko.stream.connectors.pravega.TableEntry

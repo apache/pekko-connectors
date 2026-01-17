@@ -260,7 +260,8 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
     }
   }
 
-  ignore should "put message in a flow, then pass the result further with fifo queues" taggedAs Integration in new IntegrationFixture(
+  ignore should "put message in a flow, then pass the result further with fifo queues" taggedAs Integration in
+  new IntegrationFixture(
     fifo = true) {
     // elasticmq does not provide proper fifo support (see https://github.com/adamw/elasticmq/issues/92)
     // set your fifo sqs queue url and awsSqsClient manually
@@ -286,7 +287,8 @@ class SqsPublishSpec extends AnyFlatSpec with Matchers with DefaultTestContext w
     receiveMessage().body() shouldBe "connectors"
   }
 
-  ignore should "put message in a flow, batch, then pass the result further with fifo queues" taggedAs Integration in new IntegrationFixture(
+  ignore should "put message in a flow, batch, then pass the result further with fifo queues" taggedAs Integration in
+  new IntegrationFixture(
     fifo = true) {
     // elasticmq does not provide proper fifo support (see https://github.com/adamw/elasticmq/issues/92)
     // set your fifo sqs queue url and awsSqsClient manually

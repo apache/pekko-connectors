@@ -405,13 +405,18 @@ lazy val docs = project
       "scaladoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/api/pekko/${Dependencies.PekkoBinaryVersion}",
       "javadoc.org.apache.pekko.base_url" -> s"https://pekko.apache.org/japi/pekko/${Dependencies.PekkoBinaryVersion}/",
       "javadoc.org.apache.pekko.link_style" -> "direct",
-      "extref.pekko-http.base_url" -> s"https://pekko.apache.org/docs/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/%s",
-      "scaladoc.org.apache.pekko.http.base_url" -> s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
-      "javadoc.org.apache.pekko.http.base_url" -> s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "extref.pekko-http.base_url" ->
+      s"https://pekko.apache.org/docs/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/%s",
+      "scaladoc.org.apache.pekko.http.base_url" ->
+      s"https://pekko.apache.org/api/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
+      "javadoc.org.apache.pekko.http.base_url" ->
+      s"https://pekko.apache.org/japi/pekko-http/${Dependencies.PekkoHttpBinaryVersion}/",
       // Pekko gRPC
       "pekko-grpc.version" -> Dependencies.PekkoGrpcBinaryVersion,
-      "extref.pekko-grpc.base_url" -> s"https://pekko.apache.org/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
-      "scaladoc.org.apache.pekko.gprc.base_url" -> s"https://pekko.apache.org/api/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/org/apache/pekko/gprc",
+      "extref.pekko-grpc.base_url" ->
+      s"https://pekko.apache.org/docs/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/%s",
+      "scaladoc.org.apache.pekko.gprc.base_url" ->
+      s"https://pekko.apache.org/api/pekko-grpc/${Dependencies.PekkoGrpcBinaryVersion}/org/apache/pekko/gprc",
       // Couchbase
       "couchbase.version" -> Dependencies.CouchbaseVersion,
       "extref.couchbase.base_url" -> s"https://docs.couchbase.com/java-sdk/${Dependencies.CouchbaseVersionForDocs}/%s",
@@ -424,25 +429,32 @@ lazy val docs = project
       "extref.slick.base_url" -> s"https://scala-slick.org/doc/${Dependencies.SlickVersion}/%s",
       // Cassandra
       "extref.cassandra.base_url" -> s"https://cassandra.apache.org/doc/${Dependencies.CassandraVersionInDocs}/%s",
-      "extref.cassandra-driver.base_url" -> s"https://docs.datastax.com/en/developer/java-driver/${Dependencies.CassandraDriverVersionInDocs}/%s",
-      "javadoc.com.datastax.oss.base_url" -> s"https://docs.datastax.com/en/drivers/java/${Dependencies.CassandraDriverVersionInDocs}/",
+      "extref.cassandra-driver.base_url" ->
+      s"https://docs.datastax.com/en/developer/java-driver/${Dependencies.CassandraDriverVersionInDocs}/%s",
+      "javadoc.com.datastax.oss.base_url" ->
+      s"https://docs.datastax.com/en/drivers/java/${Dependencies.CassandraDriverVersionInDocs}/",
       // Solr
       "extref.solr.base_url" -> s"https://solr.apache.org/guide/${Dependencies.SolrVersionForDocs}/%s",
-      "javadoc.org.apache.solr.base_url" -> s"https://solr.apache.org/docs/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
+      "javadoc.org.apache.solr.base_url" ->
+      s"https://solr.apache.org/docs/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",
       "javadoc.javax.jms.base_url" -> "https://docs.oracle.com/javaee/7/api/",
-      "javadoc.com.couchbase.base_url" -> s"https://docs.couchbase.com/sdk-api/couchbase-java-client-${Dependencies.CouchbaseVersion}/",
+      "javadoc.com.couchbase.base_url" ->
+      s"https://docs.couchbase.com/sdk-api/couchbase-java-client-${Dependencies.CouchbaseVersion}/",
       "javadoc.io.pravega.base_url" -> s"http://pravega.io/docs/${Dependencies.PravegaVersionForDocs}/javadoc/clients/",
       "javadoc.org.apache.kudu.base_url" -> s"https://kudu.apache.org/releases/${Dependencies.KuduVersion}/apidocs/",
       "javadoc.org.apache.hadoop.base_url" -> s"https://hadoop.apache.org/docs/r${Dependencies.HadoopVersion}/api/",
       "javadoc.software.amazon.awssdk.base_url" -> "https://sdk.amazonaws.com/java/api/latest/",
-      "javadoc.com.google.auth.base_url" -> "https://www.javadoc.io/doc/com.google.auth/google-auth-library-credentials/latest/",
+      "javadoc.com.google.auth.base_url" ->
+      "https://www.javadoc.io/doc/com.google.auth/google-auth-library-credentials/latest/",
       "javadoc.com.google.auth.link_style" -> "direct",
-      "javadoc.com.fasterxml.jackson.annotation.base_url" -> "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-annotations/latest/",
+      "javadoc.com.fasterxml.jackson.annotation.base_url" ->
+      "https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-annotations/latest/",
       "javadoc.com.fasterxml.jackson.annotation.link_style" -> "direct",
       // Scala
-      "scaladoc.spray.json.base_url" -> s"https://javadoc.io/doc/io.spray/spray-json_${scalaBinaryVersion.value}/latest/",
+      "scaladoc.spray.json.base_url" ->
+      s"https://javadoc.io/doc/io.spray/spray-json_${scalaBinaryVersion.value}/latest/",
       // Eclipse Paho client for MQTT
       "javadoc.org.eclipse.paho.client.mqttv3.base_url" -> "https://www.eclipse.org/paho/files/javadoc/",
       "javadoc.org.eclipse.paho.mqttv5.client.base_url" -> "https://www.eclipse.org/paho/files/javadoc/",

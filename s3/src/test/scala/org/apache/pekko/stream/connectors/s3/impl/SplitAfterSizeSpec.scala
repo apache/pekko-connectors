@@ -50,7 +50,8 @@ class SplitAfterSizeSpec(_system: ActorSystem)
       .futureValue should be(Seq.empty)
   }
 
-  it should "start a new stream after the element that makes it reach a maximum, but not split the element itself" in assertAllStagesStopped {
+  it should "start a new stream after the element that makes it reach a maximum, but not split the element itself" in
+  assertAllStagesStopped {
     Source(Vector(ByteString(1, 2, 3, 4, 5), ByteString(6, 7, 8, 9, 10, 11, 12), ByteString(13, 14)))
       .via(
         SplitAfterSize(10, MaxChunkSize)(Flow[ByteString])

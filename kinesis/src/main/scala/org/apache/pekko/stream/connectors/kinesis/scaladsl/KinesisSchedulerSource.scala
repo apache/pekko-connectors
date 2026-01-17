@@ -18,9 +18,7 @@ import pekko.NotUsed
 import pekko.stream._
 import pekko.stream.connectors.kinesis.impl.KinesisSchedulerSourceStage
 import pekko.stream.connectors.kinesis.{
-  CommittableRecord,
-  KinesisSchedulerCheckpointSettings,
-  KinesisSchedulerSourceSettings
+  CommittableRecord, KinesisSchedulerCheckpointSettings, KinesisSchedulerSourceSettings
 }
 import pekko.stream.scaladsl.{ Flow, RunnableGraph, Sink, Source, SubFlow }
 import software.amazon.kinesis.coordinator.Scheduler

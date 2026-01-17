@@ -141,7 +141,8 @@ import pekko.util.ByteString
     val fileNamePrefix = getString(
       bs,
       fileNameLength + fileModeLength + ownerIdLength + groupIdLength + fileSizeLength +
-      lastModificationLength + headerChecksumLength + linkIndicatorLength + linkFileNameLength + ustarIndicatorLength + ustarVersionLength + ownerNameLength + groupNameLength + deviceMajorNumberLength + deviceMinorNumberLength,
+      lastModificationLength + headerChecksumLength + linkIndicatorLength + linkFileNameLength + ustarIndicatorLength +
+      ustarVersionLength + ownerNameLength + groupNameLength + deviceMajorNumberLength + deviceMinorNumberLength,
       fileNamePrefixLength)
     TarArchiveMetadata(fileNamePrefix, filename, size, lastModification, linkIndicatorByte)
   }

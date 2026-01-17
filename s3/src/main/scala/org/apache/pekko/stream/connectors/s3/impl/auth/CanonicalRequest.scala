@@ -83,7 +83,8 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
       .groupBy(_.lowercaseName)
       .map {
         case (name, headers) =>
-          name -> headers
+          name ->
+          headers
             .map(header => header.value.replaceAll("\\s+", " ").trim)
             .mkString(",")
       }

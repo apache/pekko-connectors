@@ -14,10 +14,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.{
-  Date,
-  DateTime,
-  Time,
-  Timestamp
+  Date, DateTime, Time, Timestamp
 }
 
 import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }

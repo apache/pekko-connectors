@@ -124,15 +124,18 @@ final class PubSubMessage private (val data: Option[String],
 
   override def equals(other: Any): Boolean = other match {
     case that: PubSubMessage =>
-      data == that.data && attributes == that.attributes && messageId == that.messageId && publishTime == that
-        .publishTime && orderingKey == that.orderingKey
+      data == that.data && attributes == that.attributes && messageId == that.messageId &&
+      publishTime ==
+        that
+          .publishTime && orderingKey == that.orderingKey
     case _ => false
   }
 
   override def hashCode: Int = java.util.Objects.hash(data, attributes, messageId, publishTime, orderingKey)
 
   override def toString: String =
-    "PubSubMessage(data=" + data + ",attributes=" + attributes + ",messageId=" + messageId + ",publishTime=" + publishTime + ",orderingKey=" + orderingKey + ")"
+    "PubSubMessage(data=" + data + ",attributes=" + attributes + ",messageId=" + messageId + ",publishTime=" +
+    publishTime + ",orderingKey=" + orderingKey + ")"
 }
 
 object PubSubMessage {

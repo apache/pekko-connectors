@@ -31,7 +31,8 @@ trait TestOps {
     sortCol -> N(sort))
 
   def keyEQ(hash: String): Map[String, Condition] = Map(
-    keyCol -> Condition
+    keyCol ->
+    Condition
       .builder()
       .comparisonOperator(ComparisonOperator.EQ)
       .attributeValueList(S(hash))
@@ -111,7 +112,8 @@ abstract class ItemSpecOps extends TestOps {
             WriteRequest
               .builder()
               .putRequest(
-                PutRequest.builder().item((keyMap(i.toString, i) + ("data1" -> S(
+                PutRequest.builder().item((keyMap(i.toString, i) +
+                ("data1" -> S(
                   "0123456789" * 39000))).asJava).build())
               .build()
           }.asJava).asJava)

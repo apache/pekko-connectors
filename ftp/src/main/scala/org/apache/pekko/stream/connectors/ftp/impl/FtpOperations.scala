@@ -37,7 +37,8 @@ private[ftp] trait FtpOperations extends CommonFtpOperations { self: FtpLike[FTP
     } catch {
       case e: java.net.ConnectException =>
         throw new java.net.ConnectException(
-          e.getMessage + s" host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
+          e.getMessage +
+          s" host=[${connectionSettings.host}], port=${connectionSettings.port} ${connectionSettings.proxy
               .map("proxy=" + _.toString)
               .getOrElse("")}")
     }

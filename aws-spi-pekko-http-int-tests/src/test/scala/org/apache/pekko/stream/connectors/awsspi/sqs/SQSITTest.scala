@@ -23,10 +23,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.{
-  CreateQueueRequest,
-  DeleteQueueRequest,
-  ReceiveMessageRequest,
-  SendMessageRequest
+  CreateQueueRequest, DeleteQueueRequest, ReceiveMessageRequest, SendMessageRequest
 }
 
 import scala.util.Random

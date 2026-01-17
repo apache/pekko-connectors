@@ -84,7 +84,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
       }
     }
 
-    "publish via RPC which expects 2 responses per message and then consume through a simple queue again in the same JVM" in assertAllStagesStopped {
+    "publish via RPC which expects 2 responses per message and then consume through a simple queue again in the same JVM" in
+    assertAllStagesStopped {
       forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-rpc-queue-" + System.currentTimeMillis()
         val queueDeclaration = QueueDeclaration(queueName)
@@ -338,7 +339,8 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
       }
     }
 
-    "publish via RPC and then consume through a simple queue again in the same JVM without autoAck" in assertAllStagesStopped {
+    "publish via RPC and then consume through a simple queue again in the same JVM without autoAck" in
+    assertAllStagesStopped {
 
       forAll { (reuseByteArray: Boolean) =>
         val queueName = "amqp-conn-it-spec-rpc-queue-" + System.currentTimeMillis()

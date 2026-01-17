@@ -74,7 +74,9 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
               try {
                 channel.basicAck(deliveryTag, multiple)
                 unackedMessages -= 1
-                if (unackedMessages == 0 && (isClosed(out) || (isClosed(
+                if (unackedMessages == 0 &&
+                  (isClosed(out) ||
+                  (isClosed(
                     in) && queue.isEmpty && outstandingMessages == 0)))
                   completeStage()
                 promise.complete(Success(Done))
@@ -88,7 +90,9 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
               try {
                 channel.basicNack(deliveryTag, multiple, requeue)
                 unackedMessages -= 1
-                if (unackedMessages == 0 && (isClosed(out) || (isClosed(
+                if (unackedMessages == 0 &&
+                  (isClosed(out) ||
+                  (isClosed(
                     in) && queue.isEmpty && outstandingMessages == 0)))
                   completeStage()
                 promise.complete(Success(Done))
