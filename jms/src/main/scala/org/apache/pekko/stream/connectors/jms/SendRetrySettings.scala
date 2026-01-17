@@ -51,8 +51,9 @@ final class SendRetrySettings private (val initialRetry: scala.concurrent.durati
   def withInfiniteRetries(): SendRetrySettings = withMaxRetries(SendRetrySettings.infiniteRetries)
 
   /** The wait time before the next attempt may be made. */
-  def waitTime(retryNumber: Int): FiniteDuration =
-    (initialRetry * Math.pow(retryNumber, backoffFactor)).asInstanceOf[FiniteDuration].min(maxBackoff)
+  def waitTime(retryNumber: Int)
+      : FiniteDuration = (initialRetry * Math.pow(retryNumber, backoffFactor)).asInstanceOf[FiniteDuration].min(
+    maxBackoff)
 
   private def copy(
       initialRetry: scala.concurrent.duration.FiniteDuration = initialRetry,

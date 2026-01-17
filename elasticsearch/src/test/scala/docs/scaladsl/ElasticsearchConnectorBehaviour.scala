@@ -299,7 +299,8 @@ trait ElasticsearchConnectorBehaviour {
         writeResults.map(_._2) should contain theSameElementsInOrderAs Seq(0, 1, 2)
 
         val (failed, _) = writeResults.filter(!_._1.success).head
-        failed.message shouldBe WriteMessage
+        failed.message shouldBe
+        WriteMessage
           .createIndexMessage("1", JsObject("subject" -> "Akka Concurrency".toJson))
           .withPassThrough(1)
         failed.errorReason shouldBe Some(
@@ -623,7 +624,8 @@ trait ElasticsearchConnectorBehaviour {
 
         // sort: _doc is by design an undefined order and is non-deterministic
         // we cannot check a specific order of values
-        result should contain theSameElementsAs (List("Akka in Action",
+        result should contain theSameElementsAs
+        (List("Akka in Action",
           "Programming in Scala",
           "Learning Scala",
           "Scala for Spark in Production",

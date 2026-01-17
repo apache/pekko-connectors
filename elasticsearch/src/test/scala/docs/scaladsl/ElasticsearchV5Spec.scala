@@ -18,14 +18,8 @@ import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.http.scaladsl.model.Uri.Path
 import pekko.stream.connectors.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
 import pekko.stream.connectors.elasticsearch.{
-  ApiVersion,
-  ElasticsearchConnectionSettings,
-  ElasticsearchSourceSettings,
-  ElasticsearchWriteSettings,
-  ReadResult,
-  StringMessageWriter,
-  WriteMessage,
-  WriteResult
+  ApiVersion, ElasticsearchConnectionSettings, ElasticsearchSourceSettings, ElasticsearchWriteSettings, ReadResult,
+  StringMessageWriter, WriteMessage, WriteResult
 }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.testkit.TestKit
@@ -225,7 +219,8 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
       readTitlesFrom(ApiVersion.V5, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .map(_.book.title)
     }
 
@@ -277,7 +272,8 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2)
       readTitlesFrom(ApiVersion.V5, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .map(_.book.title)
     }
 
@@ -334,7 +330,8 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
       // Make sure all messages was committed to kafka
       committedOffsets.map(_.offset) should contain theSameElementsAs Seq(0, 1, 2, 3, 4, 5)
       readTitlesFrom(ApiVersion.V5, baseSourceSettings,
-        indexName).futureValue.toList should contain allElementsOf messagesFromKafka
+        indexName).futureValue.toList should contain allElementsOf
+      messagesFromKafka
         .filterNot(_.book.shouldSkip.getOrElse(false))
         .map(_.book.title)
     }

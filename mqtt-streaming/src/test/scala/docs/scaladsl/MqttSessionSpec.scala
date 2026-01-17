@@ -19,10 +19,7 @@ import pekko.actor.ActorSystem
 import pekko.pattern.ask
 import pekko.stream.connectors.mqtt.streaming._
 import pekko.stream.connectors.mqtt.streaming.scaladsl.{
-  ActorMqttClientSession,
-  ActorMqttServerSession,
-  Mqtt,
-  MqttServerSession
+  ActorMqttClientSession, ActorMqttServerSession, Mqtt, MqttServerSession
 }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }
@@ -520,7 +517,8 @@ class MqttSessionSpec
       client.watchCompletion().foreach(_ => session.shutdown())
     }
 
-    "receive a QoS 1 publication from a subscribed topic and ack it and then ack it again - the stream should ignore" in assertAllStagesStopped {
+    "receive a QoS 1 publication from a subscribed topic and ack it and then ack it again - the stream should ignore" in
+    assertAllStagesStopped {
       // longer patience needed since Akka 2.6
       implicit val patienceConfig: PatienceConfig = PatienceConfig(scaled(1.second), scaled(50.millis))
 
@@ -673,7 +671,8 @@ class MqttSessionSpec
       client.watchCompletion().foreach(_ => session.shutdown())
     }
 
-    "receive a QoS 1 publication with DUP indicated from a unsubscribed topic - simulates a reconnect" in assertAllStagesStopped {
+    "receive a QoS 1 publication with DUP indicated from a unsubscribed topic - simulates a reconnect" in
+    assertAllStagesStopped {
       val session = ActorMqttClientSession(settings)
 
       val server = TestProbe()

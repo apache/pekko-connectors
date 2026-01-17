@@ -179,7 +179,8 @@ class AmqpDocsSpec extends AmqpSpec {
       mergingFlow.shutdown()
     }
 
-    "publish and consume elements through a simple queue again in the same JVM without autoAck" in assertAllStagesStopped {
+    "publish and consume elements through a simple queue again in the same JVM without autoAck" in
+    assertAllStagesStopped {
       val queueName = "amqp-conn-it-spec-no-auto-ack-" + System.currentTimeMillis()
       val queueDeclaration = QueueDeclaration(queueName)
 

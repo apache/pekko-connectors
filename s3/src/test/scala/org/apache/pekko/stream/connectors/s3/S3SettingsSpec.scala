@@ -242,12 +242,14 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
     settings.listBucketApiVersion shouldEqual ApiVersion.ListBucketVersion1
   }
 
-  it should "instantiate with the list bucket api version 2 if list-bucket-api-version is set to a number that is neither 1 or 2" in {
+  it should
+  "instantiate with the list bucket api version 2 if list-bucket-api-version is set to a number that is neither 1 or 2" in {
     val settings: S3Settings = mkSettings("list-bucket-api-version = 0")
     settings.listBucketApiVersion shouldEqual ApiVersion.ListBucketVersion2
   }
 
-  it should "instantiate with the list bucket api version 2 if list-bucket-api-version is set to a value that is not a number" in {
+  it should
+  "instantiate with the list bucket api version 2 if list-bucket-api-version is set to a value that is not a number" in {
     val settings: S3Settings = mkSettings("list-bucket-api-version = 'version 1'")
     settings.listBucketApiVersion shouldEqual ApiVersion.ListBucketVersion2
   }
@@ -322,7 +324,8 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
           |    GetBucketVersioning = [GetBucketVersioning1, GetBucketVersioning2]
           |}""".stripMargin)
 
-    settings.allowedHeaders.keySet should contain allElementsOf (pekko.stream.connectors.s3.impl.S3Request.allRequests.map(
+    settings.allowedHeaders.keySet should contain allElementsOf
+    (pekko.stream.connectors.s3.impl.S3Request.allRequests.map(
       _.toString()))
     settings.allowedHeaders.foreach {
       case (key, value) =>

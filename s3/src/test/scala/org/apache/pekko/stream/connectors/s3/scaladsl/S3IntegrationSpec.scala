@@ -477,7 +477,8 @@ trait S3IntegrationSpec
   }
 
   // we want ASCII and other UTF-8 characters!
-  it should "upload, download and delete with special characters in the key in non us-east-1 zone" in withBucketWithDots {
+  it should "upload, download and delete with special characters in the key in non us-east-1 zone" in
+  withBucketWithDots {
     bucketWithDots =>
       uploadDownloadAndDeleteInOtherRegionCase(bucketWithDots,
         "føldęrü/1234()[]><!? .TXT")
@@ -542,7 +543,8 @@ trait S3IntegrationSpec
       }
   }
 
-  it should "create multiple versions of an object and successfully clean it with deleteBucketContents" in withBucketWithVersioning {
+  it should "create multiple versions of an object and successfully clean it with deleteBucketContents" in
+  withBucketWithVersioning {
     bucketWithVersioning =>
       // TODO: Figure out a way to properly test this with Minio, see https://github.com/akka/alpakka/issues/2750
       assume(this.isInstanceOf[AWSS3IntegrationSpec])

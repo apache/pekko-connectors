@@ -134,7 +134,8 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
         result.futureValue should contain theSameElementsAs expectedElements
     }
 
-    "publish JMS text messages with properties through a queue and consume them with a selector" in withConnectionFactory() {
+    "publish JMS text messages with properties through a queue and consume them with a selector" in
+    withConnectionFactory() {
       connectionFactory =>
         val queueName = createName("numbers")
         val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
@@ -441,7 +442,8 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
       resultList.toSet should contain theSameElementsAs numsIn.map(_.toString)
     }
 
-    "ensure no message loss or starvation when exceptions occur in a stream missing commits" ignore withConnectionFactory() {
+    "ensure no message loss or starvation when exceptions occur in a stream missing commits" ignore
+    withConnectionFactory() {
       connectionFactory =>
         val queueName = createName("numbers")
         val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(

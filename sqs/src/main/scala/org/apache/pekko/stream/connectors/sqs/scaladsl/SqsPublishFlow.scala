@@ -98,7 +98,8 @@ object SqsPublishFlow {
               .build()
         }
 
-        requests -> SendMessageBatchRequest
+        requests ->
+        SendMessageBatchRequest
           .builder()
           .queueUrl(queueUrl)
           .entries(entries.toList.asJava)

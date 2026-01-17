@@ -182,7 +182,8 @@ class MongoSinkSpec
       val found = Source.fromPublisher(numbersDocumentColl.find()).runWith(Sink.seq).futureValue
 
       found.map(doc =>
-        doc.getInteger("value") -> doc.getInteger("updateValue")) must contain theSameElementsAs testRange
+        doc.getInteger("value") -> doc.getInteger("updateValue")) must contain theSameElementsAs
+      testRange
         .map(i => i -> i * -1)
     }
 
@@ -198,7 +199,8 @@ class MongoSinkSpec
       val found = Source.fromPublisher(numbersDocumentColl.find()).runWith(Sink.seq).futureValue
 
       found.map(doc =>
-        doc.getInteger("value") -> doc.getInteger("updateValue")) must contain theSameElementsAs testRange
+        doc.getInteger("value") -> doc.getInteger("updateValue")) must contain theSameElementsAs
+      testRange
         .map(i => i -> 0)
     }
 

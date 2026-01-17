@@ -98,7 +98,8 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
         }
     }
 
-    "publish JMS text messages with properties through a queue and consume them with a selector" in withConnectionFactory() {
+    "publish JMS text messages with properties through a queue and consume them with a selector" in
+    withConnectionFactory() {
       connectionFactory =>
         val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
           JmsProducerSettings(producerConfig, connectionFactory).withQueue("numbers"))

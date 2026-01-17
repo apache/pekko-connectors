@@ -57,7 +57,8 @@ private[jms] object JmsMessageReader {
       .asInstanceOf[java.util.Enumeration[String]]
       .asScala
       .map { key =>
-        key -> (accessor(key) match {
+        key ->
+        (accessor(key) match {
           case v: java.lang.Boolean => v.booleanValue()
           case v: java.lang.Byte    => v.byteValue()
           case v: java.lang.Short   => v.shortValue()

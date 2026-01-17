@@ -18,9 +18,7 @@
 package org.apache.pekko.stream.connectors.awsspi
 
 import software.amazon.awssdk.auth.credentials.{
-  AwsCredentialsProviderChain,
-  EnvironmentVariableCredentialsProvider,
-  ProfileCredentialsProvider,
+  AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, ProfileCredentialsProvider,
   SystemPropertyCredentialsProvider
 }
 import software.amazon.awssdk.regions.Region

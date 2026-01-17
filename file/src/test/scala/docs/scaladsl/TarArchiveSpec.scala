@@ -336,7 +336,8 @@ class TarArchiveSpec
           .runWith(Sink.ignore)
       val error = tar.failed.futureValue
       error shouldBe a[TarReaderException]
-      error.getMessage shouldBe "The tar content source was not subscribed to within 5000 milliseconds, it must be subscribed to to progress tar file reading."
+      error.getMessage shouldBe
+      "The tar content source was not subscribed to within 5000 milliseconds, it must be subscribed to to progress tar file reading."
     }
   }
 

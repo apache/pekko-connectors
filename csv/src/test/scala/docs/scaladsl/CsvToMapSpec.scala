@@ -196,7 +196,8 @@ class CsvToMapSpec extends CsvSpec {
       // #column-names
     }
 
-    "parse header and decode data line. Be OK with more headers column than data (including the header in the result)" in assertAllStagesStopped {
+    "parse header and decode data line. Be OK with more headers column than data (including the header in the result)" in
+    assertAllStagesStopped {
       // #header-line
       import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
@@ -225,7 +226,8 @@ class CsvToMapSpec extends CsvSpec {
       // #header-line
     }
 
-    "parse header and decode data line. Be OK when there are more data than header column, set a default header in the result" in assertAllStagesStopped {
+    "parse header and decode data line. Be OK when there are more data than header column, set a default header in the result" in
+    assertAllStagesStopped {
       // #header-line
       import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
@@ -254,7 +256,8 @@ class CsvToMapSpec extends CsvSpec {
       // #header-line
     }
 
-    "parse header and decode data line. Be OK when there are more data than header column, set the user configured header in the result" in assertAllStagesStopped {
+    "parse header and decode data line. Be OK when there are more data than header column, set the user configured header in the result" in
+    assertAllStagesStopped {
       // #header-line
       import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
@@ -283,7 +286,8 @@ class CsvToMapSpec extends CsvSpec {
       // #header-line
     }
 
-    "parse header and decode data line. Be OK when there are more headers than data column, set the user configured field value in the result" in assertAllStagesStopped {
+    "parse header and decode data line. Be OK when there are more headers than data column, set the user configured field value in the result" in
+    assertAllStagesStopped {
       // #header-line
       import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
@@ -383,7 +387,8 @@ class CsvToMapSpec extends CsvSpec {
     // #header-line
   }
 
-  "be OK when there are more data than header column, set the user configured header in the result" in assertAllStagesStopped {
+  "be OK when there are more data than header column, set the user configured header in the result" in
+  assertAllStagesStopped {
     // #header-line
     import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 
@@ -412,7 +417,8 @@ class CsvToMapSpec extends CsvSpec {
     // #header-line
   }
 
-  "be OK when there are more headers than data column, set the user configured field value in the result" in assertAllStagesStopped {
+  "be OK when there are more headers than data column, set the user configured field value in the result" in
+  assertAllStagesStopped {
     // #header-line
     import org.apache.pekko.stream.connectors.csv.scaladsl.{ CsvParsing, CsvToMap }
 

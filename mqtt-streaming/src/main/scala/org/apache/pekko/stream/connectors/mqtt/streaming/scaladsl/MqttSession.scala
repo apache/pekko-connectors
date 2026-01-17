@@ -586,7 +586,8 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
 
                 case Command(cp: UnsubAck, completed, _) =>
                   val reply = Promise[Unpublisher.ForwardUnsubAck.type]()
-                  unpublisherPacketRouter ! RemotePacketRouter
+                  unpublisherPacketRouter !
+                  RemotePacketRouter
                     .RouteViaConnection(connectionId, cp.packetId, Unpublisher.UnsubAckReceivedLocally(reply), reply)
 
                   reply.future.onComplete { result =>

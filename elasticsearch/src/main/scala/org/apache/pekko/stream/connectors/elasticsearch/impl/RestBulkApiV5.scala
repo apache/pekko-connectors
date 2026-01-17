@@ -50,16 +50,14 @@ private[impl] final class RestBulkApiV5[T, C](indexName: String,
             "index" -> JsObject(sharedFields ++ fields: _*)
           case Create          => "create" -> JsObject(sharedFields ++ optionalString("_id", message.id): _*)
           case Update | Upsert =>
-            val fields =
-              ("_id" -> JsString(message.id.get)) +: Seq(
-                optionalNumber("_version", message.version),
-                optionalString("version_type", versionType)).flatten
+            val fields = ("_id" -> JsString(message.id.get)) +: Seq(
+              optionalNumber("_version", message.version),
+              optionalString("version_type", versionType)).flatten
             "update" -> JsObject(sharedFields ++ fields: _*)
           case Delete =>
-            val fields =
-              ("_id" -> JsString(message.id.get)) +: Seq(
-                optionalNumber("_version", message.version),
-                optionalString("version_type", versionType)).flatten
+            val fields = ("_id" -> JsString(message.id.get)) +: Seq(
+              optionalNumber("_version", message.version),
+              optionalString("version_type", versionType)).flatten
             "delete" -> JsObject(sharedFields ++ fields: _*)
           case Nop => "" -> JsObject()
         }

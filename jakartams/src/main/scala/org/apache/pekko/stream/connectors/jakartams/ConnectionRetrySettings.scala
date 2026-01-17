@@ -63,8 +63,9 @@ final class ConnectionRetrySettings private (
   def withInfiniteRetries(): ConnectionRetrySettings = withMaxRetries(ConnectionRetrySettings.infiniteRetries)
 
   /** The wait time before the next attempt may be made. */
-  def waitTime(retryNumber: Int): FiniteDuration =
-    (initialRetry * Math.pow(retryNumber, backoffFactor)).asInstanceOf[FiniteDuration].min(maxBackoff)
+  def waitTime(retryNumber: Int)
+      : FiniteDuration = (initialRetry * Math.pow(retryNumber, backoffFactor)).asInstanceOf[FiniteDuration].min(
+    maxBackoff)
 
   private def copy(
       connectTimeout: scala.concurrent.duration.FiniteDuration = connectTimeout,

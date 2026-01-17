@@ -25,10 +25,7 @@ import pekko.util.ByteString
 import software.amazon.awssdk.core.SdkBytes
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient
 import software.amazon.awssdk.services.kinesis.model.{
-  PutRecordsRequest,
-  PutRecordsRequestEntry,
-  PutRecordsResponse,
-  PutRecordsResultEntry
+  PutRecordsRequest, PutRecordsRequestEntry, PutRecordsResponse, PutRecordsResultEntry
 }
 
 import scala.collection.immutable.Queue

@@ -31,7 +31,8 @@ private[google] object EitherFlow {
         val in = b.add(Partition[Either[LeftIn, RightIn]](2, x => if (x.isRight) 1 else 0))
         val out = b.add(Merge[Either[LeftOut, RightOut]](2))
         in ~> Flow[Either[LeftIn, RightIn]].map(_.swap.toOption.get) ~> leftFlow  ~> Flow[LeftOut].map(Left(_)) ~> out
-        in ~> Flow[Either[LeftIn, RightIn]].map(_.toOption.get)      ~> rightFlow ~> Flow[RightOut]
+        in ~> Flow[Either[LeftIn, RightIn]].map(_.toOption.get)      ~> rightFlow ~>
+        Flow[RightOut]
           .map(
             Right(_)) ~> out
         FlowShape(in.in, out.out)

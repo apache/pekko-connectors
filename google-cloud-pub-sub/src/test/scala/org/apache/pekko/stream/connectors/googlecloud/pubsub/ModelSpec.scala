@@ -81,8 +81,10 @@ class ModelSpec extends AnyFunSuite with Matchers with LogCapturing {
   }
 
   test("PubSubMessage toString") {
-    pubSubMessage1.toString shouldBe "PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=None)"
-    pubSubMessage7.toString shouldBe "PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=Some(qwe))"
+    pubSubMessage1.toString shouldBe
+    "PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=None)"
+    pubSubMessage7.toString shouldBe
+    "PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=Some(qwe))"
   }
 
   val receivedMessage1 = ReceivedMessage("1", pubSubMessage1)
@@ -149,8 +151,10 @@ class ModelSpec extends AnyFunSuite with Matchers with LogCapturing {
   }
 
   test("PublishRequest toString") {
-    publishRequest1.toString shouldBe "PublishRequest([PublishMessage(data=abcde,attributes=Some(Map(k1 -> v1, k2 -> v2)),orderingKey=None)])"
-    publishRequest4.toString shouldBe "PublishRequest([PublishMessage(data=abcde,attributes=Some(Map(k1 -> v1, k2 -> v2)),orderingKey=Some(qwe))])"
+    publishRequest1.toString shouldBe
+    "PublishRequest([PublishMessage(data=abcde,attributes=Some(Map(k1 -> v1, k2 -> v2)),orderingKey=None)])"
+    publishRequest4.toString shouldBe
+    "PublishRequest([PublishMessage(data=abcde,attributes=Some(Map(k1 -> v1, k2 -> v2)),orderingKey=Some(qwe))])"
   }
 
   private val publishResponse1 = PublishResponse(Seq.empty[String])
@@ -189,7 +193,9 @@ class ModelSpec extends AnyFunSuite with Matchers with LogCapturing {
   }
 
   test("PullResponse toString") {
-    pullResponse1.toString shouldBe "PullResponse(Some([ReceivedMessage(ackId=1,message=PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=None))]))"
-    pullResponse4.toString shouldBe "PullResponse(Some([ReceivedMessage(ackId=2,message=PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=Some(qwe)))]))"
+    pullResponse1.toString shouldBe
+    "PullResponse(Some([ReceivedMessage(ackId=1,message=PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=None))]))"
+    pullResponse4.toString shouldBe
+    "PullResponse(Some([ReceivedMessage(ackId=2,message=PubSubMessage(data=Some(data),attributes=Some(Map(k1 -> v1)),messageId=Id-1,publishTime=1970-01-01T00:00:00Z,orderingKey=Some(qwe)))]))"
   }
 }

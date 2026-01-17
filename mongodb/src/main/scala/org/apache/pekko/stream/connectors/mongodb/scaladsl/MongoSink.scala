@@ -18,11 +18,7 @@ import pekko.stream.scaladsl.{ Keep, Sink }
 import pekko.Done
 import pekko.stream.connectors.mongodb.{ DocumentReplace, DocumentUpdate }
 import pekko.stream.connectors.mongodb.scaladsl.MongoFlow.{
-  DefaultDeleteOptions,
-  DefaultInsertManyOptions,
-  DefaultInsertOneOptions,
-  DefaultReplaceOptions,
-  DefaultUpdateOptions
+  DefaultDeleteOptions, DefaultInsertManyOptions, DefaultInsertOneOptions, DefaultReplaceOptions, DefaultUpdateOptions
 }
 import com.mongodb.client.model.{ DeleteOptions, InsertManyOptions, InsertOneOptions, ReplaceOptions, UpdateOptions }
 import com.mongodb.reactivestreams.client.MongoCollection

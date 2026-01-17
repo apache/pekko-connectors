@@ -16,11 +16,7 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.couchbase.{
-  CouchbaseDeleteFailure,
-  CouchbaseDeleteResult,
-  CouchbaseWriteFailure,
-  CouchbaseWriteResult,
-  CouchbaseWriteSettings
+  CouchbaseDeleteFailure, CouchbaseDeleteResult, CouchbaseWriteFailure, CouchbaseWriteResult, CouchbaseWriteSettings
 }
 import pekko.stream.connectors.couchbase.scaladsl.CouchbaseFlow
 import pekko.stream.connectors.couchbase.testing.{ CouchbaseSupport, TestObject }

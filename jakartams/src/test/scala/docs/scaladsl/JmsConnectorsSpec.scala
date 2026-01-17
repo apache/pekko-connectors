@@ -313,7 +313,8 @@ class JmsConnectorsSpec extends JmsSpec {
         }
     }
 
-    "publish JMS text messages with properties through a queue and consume them with a selector" in withConnectionFactory() {
+    "publish JMS text messages with properties through a queue and consume them with a selector" in
+    withConnectionFactory() {
       connectionFactory =>
         val jmsSink: Sink[JmsTextMessage, Future[Done]] = JmsProducer.sink(
           JmsProducerSettings(producerConfig, connectionFactory).withQueue("numbers"))
@@ -774,8 +775,7 @@ class JmsConnectorsSpec extends JmsSpec {
           JmsProducerSettings(system, connectionFactory)
             .withQueue("test"))
 
-      val input: immutable.Seq[JmsTextMessage] =
-        (1 to 100).map(i => JmsTextMessage(i.toString))
+      val input: immutable.Seq[JmsTextMessage] = (1 to 100).map(i => JmsTextMessage(i.toString))
 
       val result: Future[Seq[JmsMessage]] = Source(input)
         .via(flow)
