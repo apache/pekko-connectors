@@ -66,7 +66,6 @@ object ControlPacketFlags {
   val ReservedPubRel = ControlPacketFlags(1 << 1)
   val ReservedSubscribe = ControlPacketFlags(1 << 1)
   val ReservedUnsubscribe = ControlPacketFlags(1 << 1)
-  val ReservedUnsubAck = ControlPacketFlags(1 << 1)
   val DUP = ControlPacketFlags(1 << 3)
   val QoSAtMostOnceDelivery = ControlPacketFlags(0)
   val QoSAtLeastOnceDelivery = ControlPacketFlags(1 << 1)
@@ -453,7 +452,7 @@ final case class Unsubscribe @InternalApi private[streaming] (packetId: PacketId
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class UnsubAck(packetId: PacketId)
-    extends ControlPacket(ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedUnsubAck)
+    extends ControlPacket(ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedGeneral)
 
 /**
  * 3.12 PINGREQ – PING request
@@ -709,7 +708,7 @@ object MqttCodec {
       v.topicFilters.foreach {
         case (topicFilter, topicFilterFlags) =>
           topicFilter.encode(packetBsb)
-          packetBsb.putByte(topicFilterFlags.underlying.toByte)
+          packetBsb.putByte((topicFilterFlags.underlying >> 1).toByte)
       }
       // Fixed header
       (v: ControlPacket).encode(bsb, packetBsb.length)
@@ -816,7 +815,7 @@ object MqttCodec {
                 v.decodeSubAck(l)
               case (ControlPacketType.UNSUBSCRIBE, ControlPacketFlags.ReservedUnsubscribe) =>
                 v.decodeUnsubscribe(l)
-              case (ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedUnsubAck) =>
+              case (ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedGeneral) =>
                 v.decodeUnsubAck()
               case (ControlPacketType.PINGREQ, ControlPacketFlags.ReservedGeneral) =>
                 Right(PingReq)
@@ -975,7 +974,7 @@ object MqttCodec {
             : Vector[(Either[DecodeError, String], ControlPacketFlags)] =
           if (remainingLen > 0) {
             val packetLenAtTopicFilter = v.len
-            val topicFilter = (v.decodeString(), ControlPacketFlags(v.getByte & 0xFF))
+            val topicFilter = (v.decodeString(), ControlPacketFlags((v.getByte << 1) & 0xFF))
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
           } else {
             topicFilters
