@@ -100,8 +100,8 @@ public class MqttFlowTest {
   @Test
   public void establishClientBidirectionalConnectionAndSubscribeToATopic()
       throws InterruptedException, ExecutionException, TimeoutException {
-    String clientId = "source-test/flow";
-    String topic = "source-test/topic1";
+    String clientId = "client-flow-test/flow";
+    String topic = "client-flow-test/topic1";
     ByteString uniqueSessionId = ByteString.fromString("establishClientBidirectionalConnectionAndSubscribeToATopic-session");
 
     // #create-streaming-flow
@@ -161,8 +161,8 @@ public class MqttFlowTest {
   @Test
   public void establishServerBidirectionalConnectionAndSubscribeToATopic()
       throws InterruptedException, ExecutionException, TimeoutException {
-    String clientId = "flow-test/flow";
-    String topic = "source-test/topic1";
+    String clientId = "server-flow-test/flow";
+    String topic = "server-flow-test/topic1";
     ByteString uniqueSessionId = ByteString.fromString("establishServerBidirectionalConnectionAndSubscribeToATopic-connection");
     String host = "localhost";
     int port = 9884;
