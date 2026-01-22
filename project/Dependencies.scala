@@ -227,10 +227,8 @@ object Dependencies {
         .map("org.apache.geode" % _ % GeodeVersion) ++
       Seq(
         "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % JacksonVersion,
-        "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion,
-        "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.25.3" % Test,
-        "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
-        "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ JacksonDatabindDependencies ++
+        "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion
+      ) ++ JacksonDatabindDependencies ++
       (if (isScala3.value)
          Seq.empty // Equivalent and relevant shapeless functionality has been mainlined into Scala 3 language/stdlib
        else Seq(
