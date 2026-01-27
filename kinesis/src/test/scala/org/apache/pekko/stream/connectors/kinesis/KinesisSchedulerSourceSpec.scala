@@ -284,7 +284,7 @@ class KinesisSchedulerSourceSpec
           backpressureTimeout = backpressureTimeout))
         .viaMat(Valve(switchMode))(Keep.right)
         .viaMat(KillSwitches.single)(Keep.both)
-        .watchTermination()(Keep.both)
+        .watchTermination(Keep.both)
         .toMat(TestSink())(Keep.both)
         .run()
 

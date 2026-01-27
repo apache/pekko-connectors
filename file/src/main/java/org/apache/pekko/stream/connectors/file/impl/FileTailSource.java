@@ -13,6 +13,13 @@
 
 package org.apache.pekko.stream.connectors.file.impl;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.CompletionHandler;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import org.apache.pekko.annotation.InternalApi;
 import org.apache.pekko.stream.Attributes;
 import org.apache.pekko.stream.Outlet;
@@ -23,14 +30,6 @@ import scala.concurrent.duration.FiniteDuration;
 import scala.util.Failure;
 import scala.util.Success;
 import scala.util.Try;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousFileChannel;
-import java.nio.channels.CompletionHandler;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
 /**
  * INTERNAL API

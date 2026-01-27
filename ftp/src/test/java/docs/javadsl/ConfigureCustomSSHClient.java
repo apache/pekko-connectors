@@ -15,10 +15,10 @@ package docs.javadsl;
 
 // #configure-custom-ssh-client
 
-import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
-import org.apache.pekko.stream.connectors.ftp.javadsl.SftpApi;
 import net.schmizz.sshj.DefaultConfig;
 import net.schmizz.sshj.SSHClient;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
+import org.apache.pekko.stream.connectors.ftp.javadsl.SftpApi;
 
 public class ConfigureCustomSSHClient {
 

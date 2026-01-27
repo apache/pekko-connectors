@@ -13,6 +13,15 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl;
 
+import static org.junit.Assert.*;
+
+import com.google.cloud.bigquery.storage.v1.DataFormat;
+import com.google.cloud.bigquery.storage.v1.ReadSession;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.pekko.stream.Attributes;
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord;
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryStorageSettings;
@@ -21,19 +30,7 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.Sink;
-
-import com.google.cloud.bigquery.storage.v1.DataFormat;
-import com.google.cloud.bigquery.storage.v1.ReadSession;
-
 import org.junit.*;
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import static org.junit.Assert.*;
 
 public class BigQueryStorageSpec extends BigQueryStorageSpecBase {
 

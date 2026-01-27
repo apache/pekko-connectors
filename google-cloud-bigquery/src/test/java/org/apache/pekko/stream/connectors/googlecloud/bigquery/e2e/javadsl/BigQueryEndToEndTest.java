@@ -13,6 +13,26 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.e2e.javadsl;
 
+import static org.junit.Assert.*;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.specto.hoverfly.junit.core.Hoverfly;
+import io.specto.hoverfly.junit.core.HoverflyMode;
+import io.specto.hoverfly.junit.core.SimulationSource;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.marshallers.jackson.Jackson;
@@ -36,30 +56,9 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldS
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableSchema;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.specto.hoverfly.junit.core.Hoverfly;
-import io.specto.hoverfly.junit.core.HoverflyMode;
-import io.specto.hoverfly.junit.core.SimulationSource;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
 
 public class BigQueryEndToEndTest extends EndToEndHelper {
 

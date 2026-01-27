@@ -13,24 +13,23 @@
 
 package org.apache.pekko.stream.connectors.ironmq;
 
+import static scala.collection.JavaConverters.*;
+import static scala.jdk.javaapi.FutureConverters.*;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClient;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static scala.jdk.javaapi.FutureConverters.*;
-import static scala.collection.JavaConverters.*;
 
 public abstract class UnitTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

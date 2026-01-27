@@ -13,6 +13,17 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import javax.xml.stream.XMLOutputFactory;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.connectors.xml.Characters;
@@ -33,19 +44,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import javax.xml.stream.XMLOutputFactory;
-
-import static org.junit.Assert.assertEquals;
 
 public class XmlWritingTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

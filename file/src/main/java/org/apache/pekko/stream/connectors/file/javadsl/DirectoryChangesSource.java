@@ -13,13 +13,11 @@
 
 package org.apache.pekko.stream.connectors.file.javadsl;
 
+import java.nio.file.Path;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.file.DirectoryChange;
 import org.apache.pekko.stream.javadsl.Source;
-
-import java.nio.file.Path;
-
 import scala.jdk.javaapi.DurationConverters;
 
 /**
@@ -40,9 +38,6 @@ public final class DirectoryChangesSource {
       Path directoryPath, java.time.Duration pollInterval, int maxBufferSize) {
     return Source.fromGraph(
         new org.apache.pekko.stream.connectors.file.impl.DirectoryChangesSource<>(
-            directoryPath,
-            DurationConverters.toScala(pollInterval),
-            maxBufferSize,
-            Pair::apply));
+            directoryPath, DurationConverters.toScala(pollInterval), maxBufferSize, Pair::apply));
   }
 }

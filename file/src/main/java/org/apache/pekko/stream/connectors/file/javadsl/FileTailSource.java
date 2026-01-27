@@ -13,15 +13,13 @@
 
 package org.apache.pekko.stream.connectors.file.javadsl;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.javadsl.Framing;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-
 import scala.jdk.javaapi.DurationConverters;
 
 /**
@@ -54,10 +52,7 @@ public final class FileTailSource {
       Path path, int maxChunkSize, long startingPosition, java.time.Duration pollingInterval) {
     return Source.fromGraph(
         new org.apache.pekko.stream.connectors.file.impl.FileTailSource(
-            path,
-            maxChunkSize,
-            startingPosition,
-            DurationConverters.toScala(pollingInterval)));
+            path, maxChunkSize, startingPosition, DurationConverters.toScala(pollingInterval)));
   }
 
   /**

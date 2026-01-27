@@ -13,15 +13,14 @@
 
 package org.apache.pekko.stream.connectors.file.javadsl;
 
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.javadsl.StreamConverters;
-
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public final class Directory {
 

@@ -13,26 +13,25 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.stream.connectors.elasticsearch.*;
-import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchFlow;
-import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSource;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.connectors.elasticsearch.*;
+import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchFlow;
+import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSource;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 @RunWith(value = Parameterized.class)
 public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {

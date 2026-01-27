@@ -13,6 +13,18 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.connectors.sqs.MessageAction;
@@ -24,24 +36,11 @@ import org.apache.pekko.stream.connectors.sqs.SqsAckSettings;
 import org.apache.pekko.stream.connectors.sqs.javadsl.BaseSqsTest;
 import org.apache.pekko.stream.connectors.sqs.javadsl.SqsAckFlow;
 import org.apache.pekko.stream.connectors.sqs.javadsl.SqsAckSink;
-import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
 import org.junit.Test;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.*;
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertEquals;
 
 public class SqsAckTest extends BaseSqsTest {
 

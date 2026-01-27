@@ -13,18 +13,15 @@
 
 package docs.javadsl;
 
-import java.net.URI;
-import java.util.UUID;
-
-import org.apache.pekko.stream.connectors.pravega.PravegaPekkoTestCaseSupport;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-
-import org.apache.pekko.testkit.javadsl.TestKit;
-
 import io.pravega.client.admin.StreamManager;
 import io.pravega.client.stream.ScalingPolicy;
 import io.pravega.client.stream.StreamConfiguration;
+import java.net.URI;
+import java.util.UUID;
+import org.apache.pekko.stream.connectors.pravega.PravegaPekkoTestCaseSupport;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 public abstract class PravegaBaseTestCase extends PravegaPekkoTestCaseSupport {
 

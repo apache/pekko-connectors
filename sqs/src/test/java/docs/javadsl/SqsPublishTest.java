@@ -13,6 +13,15 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.stream.connectors.sqs.SqsPublishBatchSettings;
 import org.apache.pekko.stream.connectors.sqs.SqsPublishGroupedSettings;
@@ -26,16 +35,6 @@ import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.junit.Test;
 import software.amazon.awssdk.services.sqs.model.*;
-
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
 
 public class SqsPublishTest extends BaseSqsTest {
 
@@ -170,7 +169,10 @@ public class SqsPublishTest extends BaseSqsTest {
         // #flow
         // for dynamic SQS queues
         Source.single(
-                SendMessageRequest.builder().messageBody("pekko-connectors-flow").queueUrl(queueUrl).build())
+                SendMessageRequest.builder()
+                    .messageBody("pekko-connectors-flow")
+                    .queueUrl(queueUrl)
+                    .build())
             .via(SqsPublishFlow.create(SqsPublishSettings.create(), sqsClient))
             .runWith(Sink.head(), system);
     // #flow

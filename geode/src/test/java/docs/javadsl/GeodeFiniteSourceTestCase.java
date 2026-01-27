@@ -13,14 +13,13 @@
 
 package docs.javadsl;
 
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 import org.apache.pekko.Done;
 import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
 
 public class GeodeFiniteSourceTestCase extends GeodeBaseTestCase {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
