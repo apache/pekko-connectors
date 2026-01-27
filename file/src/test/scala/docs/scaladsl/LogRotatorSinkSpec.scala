@@ -288,7 +288,7 @@ class LogRotatorSinkSpec
       val (contents, sizes) = readUpFileBytesAndSizesThenClean(files())
       sizes should contain theSameElementsAs Seq(51L, 51L, 51L)
       val uncompressed = Future.sequence(contents.map { c =>
-        Source.single(c).via(Compression.gunzip()).map(_.utf8String).runWith(Sink.head)
+        Source.single(c).via(Compression.gzipDecompress()).map(_.utf8String).runWith(Sink.head)
       })
       uncompressed.futureValue should contain theSameElementsAs TestLines.sliding(2, 2).map(_.mkString("")).toList
     }
