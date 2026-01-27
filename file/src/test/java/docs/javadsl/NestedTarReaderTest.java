@@ -111,7 +111,7 @@ public class NestedTarReaderTest {
                                     .substring(0, TARGZ_EXT.length() - 2)));
                 readMetadata =
                     source
-                        .via(Compression.gunzip(MAX_GUNZIP_CHUNK_SIZE))
+                        .via(Compression.gzipDecompress(MAX_GUNZIP_CHUNK_SIZE))
                         .via(unTarFlow(targetSubDir, system))
                         .runWith(Sink.seq(), system);
               } else {
