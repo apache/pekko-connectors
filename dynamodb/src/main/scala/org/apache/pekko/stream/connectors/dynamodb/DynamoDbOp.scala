@@ -20,7 +20,10 @@ import software.amazon.awssdk.core.async.SdkPublisher
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model._
 import software.amazon.awssdk.services.dynamodb.paginators.{
-  BatchGetItemPublisher, ListTablesPublisher, QueryPublisher, ScanPublisher
+  BatchGetItemPublisher,
+  ListTablesPublisher,
+  QueryPublisher,
+  ScanPublisher
 }
 
 import scala.concurrent.Future

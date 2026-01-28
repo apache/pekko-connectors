@@ -19,7 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.amqp.{
-  AmqpCachedConnectionProvider, AmqpConnectionFactoryConnectionProvider, AmqpProxyConnection, AmqpWriteSettings,
+  AmqpCachedConnectionProvider,
+  AmqpConnectionFactoryConnectionProvider,
+  AmqpProxyConnection,
+  AmqpWriteSettings,
   QueueDeclaration
 }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing

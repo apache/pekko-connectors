@@ -25,7 +25,12 @@ import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
 import pekko.http.scaladsl.model.{ RequestEntity, _ }
 import pekko.stream.connectors.s3.AccessStyle.{ PathAccessStyle, VirtualHostAccessStyle }
 import pekko.stream.connectors.s3.{
-  ApiVersion, BucketVersioning, BucketVersioningStatus, MFAStatus, MultipartUpload, S3Settings
+  ApiVersion,
+  BucketVersioning,
+  BucketVersioningStatus,
+  MFAStatus,
+  MultipartUpload,
+  S3Settings
 }
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString

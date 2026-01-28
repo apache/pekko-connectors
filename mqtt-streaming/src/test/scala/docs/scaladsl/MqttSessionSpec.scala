@@ -19,7 +19,10 @@ import pekko.actor.ActorSystem
 import pekko.pattern.ask
 import pekko.stream.connectors.mqtt.streaming._
 import pekko.stream.connectors.mqtt.streaming.scaladsl.{
-  ActorMqttClientSession, ActorMqttServerSession, Mqtt, MqttServerSession
+  ActorMqttClientSession,
+  ActorMqttServerSession,
+  Mqtt,
+  MqttServerSession
 }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete }

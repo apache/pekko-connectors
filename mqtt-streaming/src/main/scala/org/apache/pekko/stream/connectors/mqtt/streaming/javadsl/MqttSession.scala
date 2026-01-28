@@ -18,8 +18,10 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.actor.ClassicActorSystemProvider
 import pekko.stream.connectors.mqtt.streaming.scaladsl.{
-  ActorMqttClientSession => ScalaActorMqttClientSession, ActorMqttServerSession => ScalaActorMqttServerSession,
-  MqttClientSession => ScalaMqttClientSession, MqttServerSession => ScalaMqttServerSession
+  ActorMqttClientSession => ScalaActorMqttClientSession,
+  ActorMqttServerSession => ScalaActorMqttServerSession,
+  MqttClientSession => ScalaMqttClientSession,
+  MqttServerSession => ScalaMqttServerSession
 }
 import pekko.stream.javadsl.Source
 

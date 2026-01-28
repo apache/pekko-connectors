@@ -20,7 +20,11 @@ import pekko.http.scaladsl.model.Uri.Path
 import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.elasticsearch.scaladsl.ElasticsearchSource
 import pekko.stream.connectors.elasticsearch.{
-  ApiVersionBase, ElasticsearchConnectionSettings, ElasticsearchParams, OpensearchApiVersion, OpensearchParams,
+  ApiVersionBase,
+  ElasticsearchConnectionSettings,
+  ElasticsearchParams,
+  OpensearchApiVersion,
+  OpensearchParams,
   SourceSettingsBase
 }
 import pekko.stream.scaladsl.Sink

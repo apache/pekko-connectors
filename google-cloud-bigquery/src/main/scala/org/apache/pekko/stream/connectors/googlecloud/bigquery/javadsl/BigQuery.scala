@@ -28,7 +28,9 @@ import pekko.stream.connectors.googlecloud.bigquery.model.Dataset
 import pekko.stream.connectors.googlecloud.bigquery.model.{ Job, JobCancelResponse, JobReference }
 import pekko.stream.connectors.googlecloud.bigquery.model.{ QueryRequest, QueryResponse }
 import pekko.stream.connectors.googlecloud.bigquery.model.{
-  TableDataInsertAllRequest, TableDataInsertAllResponse, TableDataListResponse
+  TableDataInsertAllRequest,
+  TableDataInsertAllResponse,
+  TableDataListResponse
 }
 import pekko.stream.connectors.googlecloud.bigquery.model.{ Table, TableListResponse, TableReference, TableSchema }
 import pekko.stream.connectors.googlecloud.bigquery.scaladsl.{ BigQuery => ScalaBigQuery }

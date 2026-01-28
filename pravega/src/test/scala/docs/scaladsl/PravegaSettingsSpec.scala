@@ -15,7 +15,11 @@ package docs.scaladsl
 
 import java.net.URI
 import org.apache.pekko.stream.connectors.pravega.{
-  PravegaBaseSpec, ReaderSettingsBuilder, TableReaderSettingsBuilder, TableWriterSettingsBuilder, WriterSettingsBuilder
+  PravegaBaseSpec,
+  ReaderSettingsBuilder,
+  TableReaderSettingsBuilder,
+  TableWriterSettingsBuilder,
+  WriterSettingsBuilder
 }
 import io.pravega.client.stream.Serializer
 import io.pravega.client.stream.impl.UTF8StringSerializer

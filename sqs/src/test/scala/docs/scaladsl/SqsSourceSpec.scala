@@ -32,7 +32,11 @@ import software.amazon.awssdk.http.async.SdkAsyncHttpClient
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model.{
-  Message, MessageAttributeValue, MessageSystemAttributeName, QueueDoesNotExistException, SendMessageRequest
+  Message,
+  MessageAttributeValue,
+  MessageSystemAttributeName,
+  QueueDoesNotExistException,
+  SendMessageRequest
 }
 
 import scala.collection.immutable

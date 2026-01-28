@@ -14,7 +14,9 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
-  TableFieldSchema, TableFieldSchemaMode, TableFieldSchemaType
+  TableFieldSchema,
+  TableFieldSchemaMode,
+  TableFieldSchemaType
 }
 
 private[schema] final class PrimitiveSchemaWriter[T](`type`: TableFieldSchemaType) extends SchemaWriter[T] {

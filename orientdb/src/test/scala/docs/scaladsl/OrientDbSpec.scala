@@ -18,7 +18,10 @@ import pekko.Done
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.orientdb.scaladsl._
 import pekko.stream.connectors.orientdb.{
-  OrientDbReadResult, OrientDbSourceSettings, OrientDbWriteMessage, OrientDbWriteSettings
+  OrientDbReadResult,
+  OrientDbSourceSettings,
+  OrientDbWriteMessage,
+  OrientDbWriteSettings
 }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }

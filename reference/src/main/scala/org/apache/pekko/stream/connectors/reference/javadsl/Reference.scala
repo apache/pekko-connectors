@@ -19,7 +19,10 @@ import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.stream.connectors.reference.scaladsl
 import pekko.stream.connectors.reference.{
-  ReferenceReadResult, ReferenceWriteMessage, ReferenceWriteResult, SourceSettings
+  ReferenceReadResult,
+  ReferenceWriteMessage,
+  ReferenceWriteResult,
+  SourceSettings
 }
 import pekko.stream.javadsl.{ Flow, Source }
 

@@ -26,7 +26,10 @@ import pekko.stream.connectors.google.{ GoogleAttributes, GoogleSettings }
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.implicits._
 import pekko.stream.connectors.googlecloud.bigquery.model.{
-  Row, TableDataInsertAllRequest, TableDataInsertAllResponse, TableDataListResponse
+  Row,
+  TableDataInsertAllRequest,
+  TableDataInsertAllResponse,
+  TableDataListResponse
 }
 import pekko.stream.connectors.googlecloud.bigquery.{ BigQueryEndpoints, BigQueryException, InsertAllRetryPolicy }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }

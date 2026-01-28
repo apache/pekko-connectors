@@ -18,7 +18,10 @@ import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.cassandra.{ CassandraSessionSettings, CassandraWriteSettings }
 import pekko.stream.connectors.cassandra.scaladsl.{
-  CassandraFlow, CassandraSession, CassandraSource, CassandraSpecBase
+  CassandraFlow,
+  CassandraSession,
+  CassandraSource,
+  CassandraSpecBase
 }
 import pekko.stream.scaladsl.{ Sink, Source, SourceWithContext }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped

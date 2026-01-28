@@ -18,7 +18,8 @@ import java.util.concurrent.CompletionStage
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.ironmq.scaladsl.{
-  Committable => ScalaCommittable, CommittableMessage => ScalaCommittableMessage
+  Committable => ScalaCommittable,
+  CommittableMessage => ScalaCommittableMessage
 }
 
 import scala.concurrent.Future

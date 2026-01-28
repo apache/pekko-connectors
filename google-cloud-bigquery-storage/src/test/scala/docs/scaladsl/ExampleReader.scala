@@ -18,7 +18,10 @@ import pekko.actor.ActorSystem
 import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
 import pekko.stream.connectors.googlecloud.bigquery.storage.{ BigQueryRecord, BigQueryStorageSettings }
 import pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.{
-  BigQueryArrowStorage, BigQueryAvroStorage, BigQueryStorageAttributes, GrpcBigQueryStorageReader
+  BigQueryArrowStorage,
+  BigQueryAvroStorage,
+  BigQueryStorageAttributes,
+  GrpcBigQueryStorageReader
 }
 import org.scalatestplus.mockito.MockitoSugar.mock
 

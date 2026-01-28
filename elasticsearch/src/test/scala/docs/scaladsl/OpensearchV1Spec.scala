@@ -17,8 +17,13 @@ import org.apache.pekko
 import pekko.http.scaladsl.model.Uri.Path
 import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.elasticsearch.{
-  ElasticsearchConnectionSettings, OpensearchApiVersion, OpensearchConnectionSettings, ReadResult, StringMessageWriter,
-  WriteMessage, WriteResult
+  ElasticsearchConnectionSettings,
+  OpensearchApiVersion,
+  OpensearchConnectionSettings,
+  ReadResult,
+  StringMessageWriter,
+  WriteMessage,
+  WriteResult
 }
 import pekko.stream.connectors.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
 import pekko.stream.connectors.elasticsearch._
