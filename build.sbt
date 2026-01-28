@@ -235,6 +235,7 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
   compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation"),
   Compile / compileOrder := CompileOrder.JavaThenScala,
+  Test / compileOrder := CompileOrder.Mixed,
   Test / fork := true,
   Test / javaOptions ++= Seq("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED")
 ).dependsOn(googleCommon)
