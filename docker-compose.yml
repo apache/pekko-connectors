@@ -151,7 +151,7 @@ services:
         --use_hybrid_clock=false
         --unlock_unsafe_flags=true
   kudu-tserver:
-    image: apache/kudu:1.18.1
+    image: apache/kudu:1.17.1
     links:
       - kudu-master
     ports:
