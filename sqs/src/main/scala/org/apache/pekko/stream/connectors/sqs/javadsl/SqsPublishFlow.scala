@@ -17,7 +17,11 @@ import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.ApiMayChange
 import pekko.stream.connectors.sqs.{
-  SqsPublishBatchSettings, SqsPublishGroupedSettings, SqsPublishResult, SqsPublishResultEntry, SqsPublishSettings
+  SqsPublishBatchSettings,
+  SqsPublishGroupedSettings,
+  SqsPublishResult,
+  SqsPublishResultEntry,
+  SqsPublishSettings
 }
 import pekko.stream.javadsl.Flow
 import pekko.stream.scaladsl.{ Flow => SFlow }

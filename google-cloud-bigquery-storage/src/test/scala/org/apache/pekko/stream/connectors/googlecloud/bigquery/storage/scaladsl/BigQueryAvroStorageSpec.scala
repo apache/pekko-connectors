@@ -16,7 +16,9 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl
 import org.apache.pekko
 import pekko.stream.connectors.googlecloud.bigquery.storage.impl.AvroDecoder
 import pekko.stream.connectors.googlecloud.bigquery.storage.{
-  BigQueryRecord, BigQueryStorageSettings, BigQueryStorageSpecBase
+  BigQueryRecord,
+  BigQueryStorageSettings,
+  BigQueryStorageSpecBase
 }
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink

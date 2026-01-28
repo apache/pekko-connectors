@@ -20,7 +20,9 @@ import pekko.annotation.InternalApi
 import pekko.event.{ Logging, LoggingAdapter }
 import pekko.stream._
 import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
-  IncomingConnection, OutgoingConnection, ServerBinding
+  IncomingConnection,
+  OutgoingConnection,
+  ServerBinding
 }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source, SourceQueueWithComplete }
 import pekko.util.ByteString

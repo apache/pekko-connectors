@@ -27,8 +27,16 @@ import pekko.stream.stage._
 import pekko.util.ByteString
 
 import org.eclipse.paho.client.mqttv3.{
-  DisconnectedBufferOptions, IMqttActionListener, IMqttAsyncClient, IMqttDeliveryToken, IMqttToken, MqttAsyncClient,
-  MqttCallbackExtended, MqttConnectOptions, MqttException, MqttMessage => PahoMqttMessage
+  DisconnectedBufferOptions,
+  IMqttActionListener,
+  IMqttAsyncClient,
+  IMqttDeliveryToken,
+  IMqttToken,
+  MqttAsyncClient,
+  MqttCallbackExtended,
+  MqttConnectOptions,
+  MqttException,
+  MqttMessage => PahoMqttMessage
 }
 
 import scala.collection.mutable

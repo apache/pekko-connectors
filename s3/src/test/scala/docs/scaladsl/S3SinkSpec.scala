@@ -22,7 +22,10 @@ import pekko.stream.connectors.s3._
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.util.ByteString
 import com.github.tomakehurst.wiremock.client.WireMock.{
-  headRequestedFor, postRequestedFor, putRequestedFor, urlEqualTo
+  headRequestedFor,
+  postRequestedFor,
+  putRequestedFor,
+  urlEqualTo
 }
 import com.github.tomakehurst.wiremock.http.Fault
 import com.github.tomakehurst.wiremock.matching.EqualToPattern

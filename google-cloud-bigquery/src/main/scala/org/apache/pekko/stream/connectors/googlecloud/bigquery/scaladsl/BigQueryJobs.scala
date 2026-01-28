@@ -31,7 +31,10 @@ import pekko.stream.connectors.googlecloud.bigquery._
 import pekko.stream.connectors.googlecloud.bigquery.model.CreateDisposition.CreateNever
 import pekko.stream.connectors.googlecloud.bigquery.model.SourceFormat.NewlineDelimitedJsonFormat
 import pekko.stream.connectors.googlecloud.bigquery.model.{
-  Job, JobCancelResponse, JobConfiguration, JobConfigurationLoad
+  Job,
+  JobCancelResponse,
+  JobConfiguration,
+  JobConfigurationLoad
 }
 import pekko.stream.connectors.googlecloud.bigquery.model.TableReference
 import pekko.stream.connectors.googlecloud.bigquery.model.WriteDisposition.WriteAppend

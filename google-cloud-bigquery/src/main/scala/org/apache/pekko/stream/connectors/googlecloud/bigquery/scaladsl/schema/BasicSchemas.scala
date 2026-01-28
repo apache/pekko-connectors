@@ -14,7 +14,11 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.{
-  Boolean, Float, Integer, Numeric, String
+  Boolean,
+  Float,
+  Integer,
+  Numeric,
+  String
 }
 
 /**

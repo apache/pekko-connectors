@@ -14,7 +14,9 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.schema
 
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
-  TableFieldSchema, TableFieldSchemaMode, TableSchema
+  TableFieldSchema,
+  TableFieldSchemaMode,
+  TableSchema
 }
 
 import scala.annotation.implicitNotFound

@@ -20,7 +20,11 @@ import pekko.http.scaladsl.model.Uri.Path
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.unmarshalling.Unmarshal
 import pekko.stream.connectors.elasticsearch.{
-  ApiVersion, ElasticsearchParams, OpensearchApiVersion, ReadResult, SourceSettingsBase
+  ApiVersion,
+  ElasticsearchParams,
+  OpensearchApiVersion,
+  ReadResult,
+  SourceSettingsBase
 }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
 import pekko.stream.{ Attributes, Materializer, Outlet, SourceShape }

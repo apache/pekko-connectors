@@ -18,7 +18,9 @@ import pekko.actor.ActorSystem
 import pekko.stream.Attributes
 import pekko.{ Done, NotUsed }
 import pekko.stream.connectors.reference.impl.{
-  ReferenceFlowStage, ReferenceSourceStage, ReferenceWithResourceFlowStage
+  ReferenceFlowStage,
+  ReferenceSourceStage,
+  ReferenceWithResourceFlowStage
 }
 import pekko.stream.connectors.reference._
 import pekko.stream.scaladsl.{ Flow, Source }

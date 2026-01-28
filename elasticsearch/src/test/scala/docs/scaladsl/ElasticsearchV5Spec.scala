@@ -18,8 +18,14 @@ import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.http.scaladsl.model.Uri.Path
 import pekko.stream.connectors.elasticsearch.scaladsl.{ ElasticsearchFlow, ElasticsearchSink, ElasticsearchSource }
 import pekko.stream.connectors.elasticsearch.{
-  ApiVersion, ElasticsearchConnectionSettings, ElasticsearchSourceSettings, ElasticsearchWriteSettings, ReadResult,
-  StringMessageWriter, WriteMessage, WriteResult
+  ApiVersion,
+  ElasticsearchConnectionSettings,
+  ElasticsearchSourceSettings,
+  ElasticsearchWriteSettings,
+  ReadResult,
+  StringMessageWriter,
+  WriteMessage,
+  WriteResult
 }
 import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.testkit.TestKit

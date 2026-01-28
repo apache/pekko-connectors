@@ -16,7 +16,11 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.pravega.{
-  PravegaEvent, ReaderSettingsBuilder, TableReaderSettingsBuilder, TableWriterSettings, TableWriterSettingsBuilder,
+  PravegaEvent,
+  ReaderSettingsBuilder,
+  TableReaderSettingsBuilder,
+  TableWriterSettings,
+  TableWriterSettingsBuilder,
   WriterSettingsBuilder
 }
 import pekko.stream.scaladsl.{ Sink, Source }
