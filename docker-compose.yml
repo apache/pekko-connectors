@@ -138,7 +138,7 @@ services:
     ports:
       - "8080:8080"
   kudu-master:
-    image: apache/kudu:1.17.1
+    image: apache/kudu:1.17.0
     ports:
       - "7051:7051"
     command: [ "master" ]
@@ -151,7 +151,7 @@ services:
         --use_hybrid_clock=false
         --unlock_unsafe_flags=true
   kudu-tserver:
-    image: apache/kudu:1.17.1
+    image: apache/kudu:1.17.0
     links:
       - kudu-master
     ports:
