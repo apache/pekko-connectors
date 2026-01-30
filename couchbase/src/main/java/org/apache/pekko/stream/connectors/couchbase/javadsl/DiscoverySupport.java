@@ -13,12 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl;
 
+import com.typesafe.config.Config;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
-import com.typesafe.config.Config;
-
-import java.util.concurrent.CompletionStage;
 
 /**
  * Utility to delegate Couchbase node address lookup to
@@ -26,8 +25,8 @@ import java.util.concurrent.CompletionStage;
  */
 public final class DiscoverySupport {
 
-  private static final org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport SUPPORT =
-      org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport.INSTANCE();
+  private static final org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport
+      SUPPORT = org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport.INSTANCE();
 
   /**
    * Expects a `service` section in the given Config and reads the given service name's address to

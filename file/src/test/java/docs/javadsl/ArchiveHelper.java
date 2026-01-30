@@ -13,13 +13,12 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.util.ByteString;
-
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.pekko.util.ByteString;
 
 public class ArchiveHelper {
 

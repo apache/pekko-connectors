@@ -13,6 +13,10 @@
 
 package org.apache.pekko.stream.connectors.csv.javadsl;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Optional;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.connectors.csv.scaladsl.CsvQuotingStyle$;
 import org.apache.pekko.stream.javadsl.Flow;
@@ -21,11 +25,6 @@ import scala.Option;
 import scala.Some;
 import scala.collection.JavaConverters;
 import scala.collection.immutable.List;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Optional;
 
 /**
  * Provides CSV formatting flows that convert a sequence of String into their CSV representation in

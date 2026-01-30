@@ -147,7 +147,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
 
       Source
         .single(outgoingMessage)
-        .watchTermination()(Keep.right)
+        .watchTermination(Keep.right)
         .to(AmqpSink.replyTo(AmqpReplyToSinkSettings(connectionProvider)))
         .run()
         .futureValue shouldBe Done

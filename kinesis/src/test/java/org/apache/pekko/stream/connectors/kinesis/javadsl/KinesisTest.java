@@ -13,6 +13,12 @@
 
 package org.apache.pekko.stream.connectors.kinesis.javadsl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.kinesis.ShardSettings;
@@ -27,13 +33,6 @@ import org.junit.Test;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 import software.amazon.awssdk.services.kinesis.model.*;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class KinesisTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -85,15 +84,17 @@ public class KinesisTest {
                 invocation ->
                     CompletableFuture.completedFuture(
                         GetRecordsResponse.builder()
-                            .records(software.amazon.awssdk.services.kinesis.model.Record
-                                    .builder().sequenceNumber("1").build())
+                            .records(
+                                software.amazon.awssdk.services.kinesis.model.Record.builder()
+                                    .sequenceNumber("1")
+                                    .build())
                             .nextShardIterator("iter")
                             .build()));
 
     final Source<software.amazon.awssdk.services.kinesis.model.Record, NotUsed> source =
-            KinesisSource.basic(settings, amazonKinesisAsync);
+        KinesisSource.basic(settings, amazonKinesisAsync);
     final CompletionStage<software.amazon.awssdk.services.kinesis.model.Record> record =
-            source.runWith(Sink.head(), system);
+        source.runWith(Sink.head(), system);
 
     assertEquals("1", record.toCompletableFuture().get(10, TimeUnit.SECONDS).sequenceNumber());
   }

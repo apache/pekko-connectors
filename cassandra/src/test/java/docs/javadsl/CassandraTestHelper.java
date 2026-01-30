@@ -13,6 +13,11 @@
 
 package docs.javadsl;
 
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSession;
@@ -22,12 +27,6 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.FiniteDuration;
-
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CassandraTestHelper {
   final ActorSystem system;

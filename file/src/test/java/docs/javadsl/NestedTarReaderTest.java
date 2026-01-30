@@ -13,6 +13,17 @@
 
 package docs.javadsl;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
@@ -23,23 +34,12 @@ import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class NestedTarReaderTest {
   private static final Logger logger = LoggerFactory.getLogger(NestedTarReaderTest.class);
@@ -111,7 +111,7 @@ public class NestedTarReaderTest {
                                     .substring(0, TARGZ_EXT.length() - 2)));
                 readMetadata =
                     source
-                        .via(Compression.gunzip(MAX_GUNZIP_CHUNK_SIZE))
+                        .via(Compression.gzipDecompress(MAX_GUNZIP_CHUNK_SIZE))
                         .via(unTarFlow(targetSubDir, system))
                         .runWith(Sink.seq(), system);
               } else {

@@ -13,6 +13,15 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.net.URI;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 import org.apache.pekko.Done;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.sqs.MessageAttributeName;
@@ -32,16 +41,6 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
-
-import java.net.URI;
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
-
-import static org.junit.Assert.assertEquals;
 
 public class SqsSourceTest extends BaseSqsTest {
 
@@ -122,7 +121,8 @@ public class SqsSourceTest extends BaseSqsTest {
     // #init-custom-client
 
     customSqsClient
-        .sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody("connectors").build())
+        .sendMessage(
+            SendMessageRequest.builder().queueUrl(queueUrl).messageBody("connectors").build())
         .get(2, TimeUnit.SECONDS);
 
     final CompletionStage<String> cs =

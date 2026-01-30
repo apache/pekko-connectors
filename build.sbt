@@ -13,6 +13,7 @@ sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
 
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
+ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
@@ -292,7 +293,10 @@ lazy val ironmq = pekkoConnectorProject(
   "ironmq",
   "ironmq",
   Dependencies.IronMq,
-  Test / fork := true)
+  Test / fork := true,
+  // org.mdedetrich libs don't have a release that supports Pekko 2 yet
+  // so we need to disable eviction warnings for now
+  evictionErrorLevel := Level.Info)
 
 lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 

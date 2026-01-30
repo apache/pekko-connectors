@@ -13,27 +13,20 @@
 
 package org.apache.pekko.stream.connectors.pravega.javadsl;
 
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.annotation.ApiMayChange;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.pravega.*;
+import org.apache.pekko.stream.connectors.pravega.impl.PravegaTableReadFlow;
 import org.apache.pekko.stream.connectors.pravega.impl.PravegaTableSource;
 import org.apache.pekko.stream.connectors.pravega.impl.PravegaTableWriteFlow;
-import org.apache.pekko.stream.connectors.pravega.impl.PravegaTableReadFlow;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-
-import io.pravega.client.tables.TableKey;
-
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
-import java.nio.ByteBuffer;
-
-import scala.Option;
 import scala.jdk.javaapi.FutureConverters;
 import scala.jdk.javaapi.OptionConverters;
 
