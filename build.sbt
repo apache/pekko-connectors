@@ -262,7 +262,7 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
-  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")).enablePlugins(
+  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation"),
   Compile / compileOrder := CompileOrder.JavaThenScala,
   Test / compileOrder := CompileOrder.Mixed)
   .dependsOn(googleCommon)
