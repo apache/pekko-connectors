@@ -340,7 +340,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
           sel.wakeup()
           sent.future.map(_ => bytes)
         }
-        .watchTermination() {
+        .watchTermination {
           case (_, done) =>
             done.onComplete { _ =>
               sendReceiveContext.send = if (halfClose) {
@@ -401,7 +401,7 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
           .map {
             case (_, source) =>
               source
-                .watchTermination() { (mat, done) =>
+                .watchTermination { (mat, done) =>
                   done
                     .andThen {
                       case _ =>
