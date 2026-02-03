@@ -52,8 +52,10 @@ jobs:
       - name: Cache Coursier cache
         uses: coursier/cache-action@c5ca79321d170b8a18c288d9cadc2a6037166d0f # v6.4.7
 
-      - name: "Code style, compile tests, MiMa. Run locally with: sbt \"javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues\""
-        run: sbt "javafmtCheckAll; +Test/compile; +mimaReportBinaryIssues"
+      # Javafmt code style check disabled temporarily
+      # https://github.com/apache/pekko-connectors/issues/1401
+      - name: "Code style, compile tests, MiMa. Run locally with: sbt \"+Test/compile; +mimaReportBinaryIssues\""
+        run: sbt "+Test/compile; +mimaReportBinaryIssues"
 
       - name: "Integration Test Compile"
         run: sbt "+aws-spi-pekko-http-int-tests/Test/compile"
