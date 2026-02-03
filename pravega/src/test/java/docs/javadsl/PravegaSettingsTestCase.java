@@ -13,21 +13,18 @@
 
 package docs.javadsl;
 
+import io.pravega.client.stream.Serializer;
+import io.pravega.client.stream.impl.UTF8StringSerializer;
+import io.pravega.client.tables.TableKey;
+import java.nio.ByteBuffer;
+import java.time.Duration;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.pravega.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
-
-import io.pravega.client.stream.impl.UTF8StringSerializer;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.nio.ByteBuffer;
-import java.time.Duration;
-
-import io.pravega.client.tables.TableKey;
-import io.pravega.client.stream.Serializer;
 
 public class PravegaSettingsTestCase {
 

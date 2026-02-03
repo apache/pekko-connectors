@@ -13,6 +13,9 @@
 
 package docs.javadsl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.Http;
 import org.apache.pekko.http.javadsl.model.ContentTypes;
@@ -28,10 +31,6 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ElasticsearchTestBase {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -50,6 +49,7 @@ public class ElasticsearchTestBase {
       this.title = title;
     }
   }
+
   // #define-class
 
   @BeforeClass
@@ -64,7 +64,8 @@ public class ElasticsearchTestBase {
   }
 
   protected static void prepareIndex(
-      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase version) throws IOException {
+      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase version)
+      throws IOException {
     connectionSettings =
         ElasticsearchConnectionSettings.create(String.format("http://localhost:%d", port));
 
@@ -120,6 +121,7 @@ public class ElasticsearchTestBase {
     }
     // #custom-search-params
   }
+
   // #custom-search-params
 
   static class KafkaCommitter {

@@ -13,10 +13,12 @@
 
 package org.apache.pekko.stream.connectors.pravega.javadsl;
 
+import io.pravega.client.ClientConfig;
+import io.pravega.client.stream.ReaderGroup;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.annotation.ApiMayChange;
-
 import org.apache.pekko.stream.connectors.pravega.*;
 import org.apache.pekko.stream.connectors.pravega.impl.PravegaFlow;
 import org.apache.pekko.stream.connectors.pravega.impl.PravegaSource;
@@ -24,14 +26,7 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-
-import io.pravega.client.ClientConfig;
-import io.pravega.client.stream.ReaderGroup;
-
-import java.util.concurrent.CompletionStage;
-
 import scala.jdk.javaapi.FutureConverters;
-
 
 @ApiMayChange
 public class Pravega {
@@ -40,6 +35,7 @@ public class Pravega {
 
     return new PravegaReaderGroupManager(scope, clientConfig);
   }
+
   /**
    * Messages are read from a Pravega stream.
    *
@@ -56,6 +52,7 @@ public class Pravega {
       String scope, String streamName, WriterSettings<V> writerSettings) {
     return Flow.fromGraph(new PravegaFlow<>(scope, streamName, writerSettings));
   }
+
   /** Incoming messages are written to Pravega. */
   public static <V> Sink<V, CompletionStage<Done>> sink(
       String scope, String streamName, WriterSettings<V> writerSettings) {

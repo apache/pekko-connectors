@@ -13,6 +13,15 @@
 
 package docs.javadsl;
 
+import com.microsoft.azure.storage.*;
+import com.microsoft.azure.storage.queue.*;
+import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -30,17 +39,6 @@ import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.microsoft.azure.storage.*;
-import com.microsoft.azure.storage.queue.*;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
-
 import org.junit.*;
 
 public class JavaDslTest {
@@ -90,7 +88,8 @@ public class JavaDslTest {
 
   @After
   public void checkForStageLeaks() {
-    StreamTestKit.assertAllStagesStopped(org.apache.pekko.stream.Materializer.matFromSystem(system));
+    StreamTestKit.assertAllStagesStopped(
+        org.apache.pekko.stream.Materializer.matFromSystem(system));
   }
 
   @Test

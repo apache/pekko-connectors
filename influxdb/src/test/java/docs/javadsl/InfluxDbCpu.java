@@ -14,7 +14,6 @@
 package docs.javadsl;
 
 import java.time.Instant;
-
 import org.influxdb.annotation.Measurement;
 
 // #define-class

@@ -13,6 +13,18 @@
 
 package org.apache.pekko.stream.connectors.amqp.javadsl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import com.rabbitmq.client.AuthenticationFailureException;
+import java.net.ConnectException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -31,22 +43,9 @@ import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import com.rabbitmq.client.AuthenticationFailureException;
 import org.junit.*;
 import scala.collection.JavaConverters;
 import scala.concurrent.duration.Duration;
-
-import java.net.ConnectException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /** Needs a local running AMQP server on the default port with no password. */
 public class AmqpConnectorsTest {

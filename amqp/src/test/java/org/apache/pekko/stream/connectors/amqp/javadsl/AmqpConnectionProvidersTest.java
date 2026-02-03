@@ -15,19 +15,18 @@ package org.apache.pekko.stream.connectors.amqp.javadsl;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.pekko.stream.connectors.amqp.*;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import java.net.ConnectException;
+import org.apache.pekko.stream.connectors.amqp.*;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.net.ConnectException;
 
 public class AmqpConnectionProvidersTest {
 

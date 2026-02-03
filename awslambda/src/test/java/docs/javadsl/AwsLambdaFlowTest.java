@@ -13,6 +13,15 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.awslambda.javadsl.AwsLambdaFlow;
@@ -26,16 +35,6 @@ import org.junit.*;
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient;
 import software.amazon.awssdk.services.lambda.model.InvokeRequest;
 import software.amazon.awssdk.services.lambda.model.InvokeResponse;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class AwsLambdaFlowTest {
 
@@ -57,7 +56,8 @@ public class AwsLambdaFlowTest {
 
   @After
   public void checkForStageLeaks() {
-    StreamTestKit.assertAllStagesStopped(org.apache.pekko.stream.Materializer.matFromSystem(system));
+    StreamTestKit.assertAllStagesStopped(
+        org.apache.pekko.stream.Materializer.matFromSystem(system));
   }
 
   @Test

@@ -13,6 +13,14 @@
 
 package docs.javadsl;
 
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.json.javadsl.JsonReader;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
@@ -23,15 +31,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class JsonReaderUsageTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

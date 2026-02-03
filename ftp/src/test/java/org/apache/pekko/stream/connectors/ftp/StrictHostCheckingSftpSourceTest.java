@@ -13,6 +13,9 @@
 
 package org.apache.pekko.stream.connectors.ftp;
 
+import java.net.InetAddress;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
@@ -22,9 +25,6 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
 import org.junit.Rule;
 import org.junit.Test;
-import java.net.InetAddress;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 public class StrictHostCheckingSftpSourceTest extends BaseSftpSupport
     implements CommonFtpStageTest {

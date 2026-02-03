@@ -13,6 +13,12 @@
 
 package docs.javadsl;
 
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.io.Inet;
 import org.apache.pekko.io.UdpSO;
@@ -33,13 +39,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.net.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.CompletionStage;
 
 public class UdpTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
