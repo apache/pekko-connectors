@@ -262,8 +262,11 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
-  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")).enablePlugins(
-  PekkoGrpcPlugin).dependsOn(googleCommon)
+  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation"),
+  Compile / compileOrder := CompileOrder.JavaThenScala,
+  Test / compileOrder := CompileOrder.Mixed)
+  .dependsOn(googleCommon)
+  .enablePlugins(PekkoGrpcPlugin)
 
 lazy val googleCloudStorage = pekkoConnectorProject(
   "google-cloud-storage",
