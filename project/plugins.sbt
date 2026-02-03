@@ -18,6 +18,9 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-bill-of-materials" % "1.0.2")
 addSbtPlugin("com.github.sbt" % "sbt-header" % "5.11.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.4")
+// use newer version of guava so that we can better control formats generated
+// by sbt-java-formatter
+libraryDependencies += "com.google.guava" % "guava" % "33.5.0-android"
 addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.10.0")
 
 // docs

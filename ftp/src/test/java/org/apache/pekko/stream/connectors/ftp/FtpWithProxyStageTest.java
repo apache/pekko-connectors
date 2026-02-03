@@ -13,6 +13,11 @@
 
 package org.apache.pekko.stream.connectors.ftp;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
@@ -23,12 +28,6 @@ import org.apache.pekko.util.ByteString;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 public class FtpWithProxyStageTest extends BaseFtpSupport implements CommonFtpStageTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

@@ -13,17 +13,16 @@
 
 package org.apache.pekko.stream.connectors.csv.javadsl;
 
-import org.apache.pekko.stream.javadsl.Flow;
-import org.apache.pekko.stream.connectors.csv.impl.CsvToMapAsStringsJavaStage;
-import org.apache.pekko.stream.connectors.csv.impl.CsvToMapJavaStage;
-import org.apache.pekko.util.ByteString;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import org.apache.pekko.stream.connectors.csv.impl.CsvToMapAsStringsJavaStage;
+import org.apache.pekko.stream.connectors.csv.impl.CsvToMapJavaStage;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.util.ByteString;
 
 public class CsvToMap {
 

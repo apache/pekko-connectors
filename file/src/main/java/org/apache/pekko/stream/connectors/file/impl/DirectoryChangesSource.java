@@ -13,6 +13,14 @@
 
 package org.apache.pekko.stream.connectors.file.impl;
 
+import static java.nio.file.StandardWatchEventKinds.*;
+
+import com.sun.nio.file.SensitivityWatchEventModifier;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.function.BiFunction;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.annotation.InternalApi;
 import org.apache.pekko.japi.Pair;
@@ -25,16 +33,7 @@ import org.apache.pekko.stream.stage.AbstractOutHandler;
 import org.apache.pekko.stream.stage.GraphStage;
 import org.apache.pekko.stream.stage.GraphStageLogic;
 import org.apache.pekko.stream.stage.TimerGraphStageLogic;
-import com.sun.nio.file.SensitivityWatchEventModifier;
 import scala.concurrent.duration.FiniteDuration;
-
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.function.BiFunction;
-
-import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
  * INTERNAL API

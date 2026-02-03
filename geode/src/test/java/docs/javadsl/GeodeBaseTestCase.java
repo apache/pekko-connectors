@@ -13,6 +13,8 @@
 
 package docs.javadsl;
 
+import java.util.Arrays;
+import java.util.Date;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.geode.GeodeSettings;
@@ -24,13 +26,9 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-
 import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.Date;
 
 public class GeodeBaseTestCase {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -50,6 +48,7 @@ public class GeodeBaseTestCase {
       RegionSettings.create("persons", Person::getId);
   protected final RegionSettings<Integer, Animal> animalRegionSettings =
       RegionSettings.create("animals", Animal::getId);
+
   // #region
 
   @BeforeClass

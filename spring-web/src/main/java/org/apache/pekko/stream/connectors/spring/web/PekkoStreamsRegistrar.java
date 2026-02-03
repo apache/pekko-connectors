@@ -13,14 +13,14 @@
 
 package org.apache.pekko.stream.connectors.spring.web;
 
+import static org.springframework.core.ReactiveTypeDescriptor.multiValue;
+
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.javadsl.AsPublisher;
 import org.springframework.core.ReactiveAdapterRegistry;
 import org.springframework.util.Assert;
-
-import static org.springframework.core.ReactiveTypeDescriptor.multiValue;
 
 public class PekkoStreamsRegistrar {
 
@@ -33,14 +33,20 @@ public class PekkoStreamsRegistrar {
   public void registerAdapters(ReactiveAdapterRegistry registry) {
     Assert.notNull(registry, "registry must not be null");
     registry.registerReactiveType(
-        multiValue(org.apache.pekko.stream.javadsl.Source.class, org.apache.pekko.stream.javadsl.Source::empty),
+        multiValue(
+            org.apache.pekko.stream.javadsl.Source.class,
+            org.apache.pekko.stream.javadsl.Source::empty),
         source ->
             ((org.apache.pekko.stream.javadsl.Source<?, ?>) source)
-                .runWith(org.apache.pekko.stream.javadsl.Sink.asPublisher(AsPublisher.WITH_FANOUT), system),
+                .runWith(
+                    org.apache.pekko.stream.javadsl.Sink.asPublisher(AsPublisher.WITH_FANOUT),
+                    system),
         org.apache.pekko.stream.javadsl.Source::fromPublisher);
 
     registry.registerReactiveType(
-        multiValue(org.apache.pekko.stream.scaladsl.Source.class, org.apache.pekko.stream.scaladsl.Source::empty),
+        multiValue(
+            org.apache.pekko.stream.scaladsl.Source.class,
+            org.apache.pekko.stream.scaladsl.Source::empty),
         source ->
             ((org.apache.pekko.stream.scaladsl.Source<?, ?>) source)
                 .runWith(

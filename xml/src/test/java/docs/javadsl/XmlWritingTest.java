@@ -13,6 +13,17 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import javax.xml.stream.XMLOutputFactory;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.connectors.xml.Characters;
@@ -33,19 +44,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import javax.xml.stream.XMLOutputFactory;
-
-import static org.junit.Assert.assertEquals;
 
 public class XmlWritingTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -99,9 +97,9 @@ public class XmlWritingTest {
 
     // #writer-usage
     final String doc =
-        "<?xml version='1.0' encoding='UTF-8'?>"
-            + "<bk:book xmlns:bk=\"urn:loc.gov:books\" xmlns:isbn=\"urn:ISBN:0-395-36341-6\">"
-            + "<bk:title>Cheaper by the Dozen</bk:title><isbn:number>1568491379</isbn:number></bk:book>";
+        "<?xml version='1.0' encoding='UTF-8'?><bk:book xmlns:bk=\"urn:loc.gov:books\""
+            + " xmlns:isbn=\"urn:ISBN:0-395-36341-6\"><bk:title>Cheaper by the"
+            + " Dozen</bk:title><isbn:number>1568491379</isbn:number></bk:book>";
     final List<Namespace> nmList = new ArrayList<>();
     nmList.add(Namespace.create("urn:loc.gov:books", Optional.of("bk")));
     nmList.add(Namespace.create("urn:ISBN:0-395-36341-6", Optional.of("isbn")));

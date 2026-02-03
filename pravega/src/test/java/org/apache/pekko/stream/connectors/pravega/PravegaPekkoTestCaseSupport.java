@@ -13,8 +13,8 @@
 
 package org.apache.pekko.stream.connectors.pravega;
 
-import org.apache.pekko.actor.ActorSystem;
 import docs.javadsl.PravegaBaseTestCase;
+import org.apache.pekko.actor.ActorSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

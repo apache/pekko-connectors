@@ -15,16 +15,15 @@ package docs.javadsl;
 
 // #use
 import jakarta.annotation.PostConstruct;
-
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.event.LoggingAdapter;
 import org.apache.pekko.stream.javadsl.Source;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.util.Assert;
 
 @RestController
 public class SampleController {

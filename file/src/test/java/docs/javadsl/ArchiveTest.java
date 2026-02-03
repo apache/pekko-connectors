@@ -13,6 +13,21 @@
 
 package docs.javadsl;
 
+import static org.apache.pekko.util.ByteString.emptyByteString;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -32,23 +47,6 @@ import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.junit.*;
-
-import static org.apache.pekko.util.ByteString.emptyByteString;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
 
 public class ArchiveTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

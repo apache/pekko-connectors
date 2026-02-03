@@ -13,18 +13,16 @@
 
 package org.apache.pekko.stream.connectors.geode.javadsl;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
-import org.apache.pekko.stream.connectors.geode.GeodeSettings;
-import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeContinuousSourceStage;
-import org.apache.pekko.stream.javadsl.Source;
+import java.util.concurrent.CompletionStage;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.query.CqException;
 import org.apache.geode.cache.query.CqQuery;
 import org.apache.geode.cache.query.QueryService;
-
-import java.util.concurrent.CompletionStage;
-
+import org.apache.pekko.Done;
+import org.apache.pekko.stream.connectors.geode.GeodeSettings;
+import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
+import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeContinuousSourceStage;
+import org.apache.pekko.stream.javadsl.Source;
 import scala.jdk.javaapi.FutureConverters;
 
 /** Java API: Geode client with server event subscription. Can build continuous sources. */
@@ -44,7 +42,7 @@ public class GeodeWithPoolSubscription extends Geode {
   }
 
   public <V> Source<V, CompletionStage<Done>> continuousQuery(
-          String queryName, String query, PekkoPdxSerializer<V> serializer) {
+      String queryName, String query, PekkoPdxSerializer<V> serializer) {
     registerPDXSerializer(serializer, serializer.clazz());
     return Source.fromGraph(new GeodeContinuousSourceStage<V>(cache(), queryName, query))
         .mapMaterializedValue(FutureConverters::<Done>asJava);

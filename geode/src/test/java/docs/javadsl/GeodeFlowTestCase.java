@@ -13,6 +13,9 @@
 
 package docs.javadsl;
 
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
@@ -22,10 +25,6 @@ import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
 
 public class GeodeFlowTestCase extends GeodeBaseTestCase {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

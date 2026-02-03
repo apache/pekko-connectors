@@ -13,6 +13,13 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -32,14 +39,6 @@ import org.apache.pekko.util.ByteString;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
 
 public class GCStorageTest extends GCStorageWiremockBase {
 
@@ -799,7 +798,8 @@ public class GCStorageTest extends GCStorageWiremockBase {
       source.runWith(sink, system()).toCompletableFuture().get(5, TimeUnit.SECONDS);
     } catch (Exception e) {
       assertEquals(
-          "org.apache.pekko.stream.connectors.googlecloud.storage.FailedUpload: Uploading part failed with status 400 Bad Request: Chunk upload failed",
+          "org.apache.pekko.stream.connectors.googlecloud.storage.FailedUpload: Uploading part"
+              + " failed with status 400 Bad Request: Chunk upload failed",
           e.getMessage());
     }
   }

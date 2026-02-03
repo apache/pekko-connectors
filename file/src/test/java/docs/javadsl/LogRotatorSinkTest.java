@@ -13,6 +13,17 @@
 
 package docs.javadsl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -26,18 +37,6 @@ import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.junit.*;
-
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
 
 public class LogRotatorSinkTest {
 
