@@ -195,7 +195,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
         Future.successful(
           Flow[Command[A]]
             .watch(clientConnector.toClassic)
-            .watchTermination() {
+            .watchTermination {
               case (_, terminated) =>
                 terminated.onComplete {
                   case Failure(_: WatchedActorTerminatedException) =>
@@ -224,7 +224,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
                       case Subscriber.SubscribeFailed    => ActorMqttClientSession.SubscribeFailed
                       case ClientConnector.PingFailed    => ActorMqttClientSession.PingFailed
                     }
-                      .watchTermination() { (_, done) =>
+                      .watchTermination { (_, done) =>
                         done.onComplete {
                           case Success(_) => killSwitch.shutdown()
                           case Failure(t) => killSwitch.abort(t)
@@ -303,7 +303,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
   private[streaming] override def eventFlow[A](connectionId: ByteString): EventFlow[A] =
     Flow[ByteString]
       .watch(clientConnector.toClassic)
-      .watchTermination() {
+      .watchTermination {
         case (_, terminated) =>
           terminated.onComplete {
             case Failure(_: WatchedActorTerminatedException) =>
@@ -531,7 +531,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
         Future.successful(
           Flow[Command[A]]
             .watch(serverConnector.toClassic)
-            .watchTermination() {
+            .watchTermination {
               case (_, terminated) =>
                 terminated.onComplete {
                   case Failure(_: WatchedActorTerminatedException) =>
@@ -560,7 +560,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
                     }.mapError {
                       case ServerConnector.PingFailed => ActorMqttServerSession.PingFailed
                     }
-                      .watchTermination() { (_, done) =>
+                      .watchTermination { (_, done) =>
                         done.onComplete {
                           case Success(_) => killSwitch.shutdown()
                           case Failure(t) => killSwitch.abort(t)
@@ -657,7 +657,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
   override def eventFlow[A](connectionId: ByteString): EventFlow[A] =
     Flow[ByteString]
       .watch(serverConnector.toClassic)
-      .watchTermination() {
+      .watchTermination {
         case (_, terminated) =>
           terminated.onComplete {
             case Failure(_: WatchedActorTerminatedException) =>
