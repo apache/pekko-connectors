@@ -708,6 +708,10 @@ object MqttCodec {
       v.topicFilters.foreach {
         case (topicFilter, topicFilterFlags) =>
           topicFilter.encode(packetBsb)
+          // Pekko QoS constants have been defined as (0, 2, 4), which for most MQTT messages correctly maps to bits 1 and 2.
+          // However for the MQTT Subcribe message, the QoS is encoded in bits 1 and 0. So here we need to shift to the right
+          // before sending the message to the broker. See also:
+          // https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349311
           packetBsb.putByte((topicFilterFlags.underlying >> 1).toByte)
       }
       // Fixed header
@@ -974,6 +978,10 @@ object MqttCodec {
             : Vector[(Either[DecodeError, String], ControlPacketFlags)] =
           if (remainingLen > 0) {
             val packetLenAtTopicFilter = v.len
+            // Pekko QoS constants have been defined as (0, 2, 4), which for most MQTT messages correctly maps to bits 1 and 2.
+            // However for the MQTT Subcribe message, the QoS is encoded in bits 1 and 0. So here we need to shift to the left
+            // after receiving the message from the broker. See also:
+            // https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349311
             val topicFilter = (v.decodeString(), ControlPacketFlags((v.getByte << 1) & 0xFF))
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
           } else {
