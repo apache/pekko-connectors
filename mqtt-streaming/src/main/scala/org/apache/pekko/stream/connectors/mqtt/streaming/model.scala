@@ -979,8 +979,8 @@ object MqttCodec {
           if (remainingLen > 0) {
             val packetLenAtTopicFilter = v.len
             // Pekko QoS constants have been defined as (0, 2, 4), which for most MQTT messages correctly maps to bits 1 and 2.
-            // However for the MQTT Subcribe message, the QoS is encoded in bits 1 and 0. So here we need to shift to the left
-            // after receiving the message from the broker. See also:
+            // However for the MQTT SUBSCRIBE message, the QoS is encoded in bits 1 and 0. So here we need to shift to the left
+            // when decoding a SUBSCRIBE packet. See also:
             // https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349311
             val topicFilter = (v.decodeString(), ControlPacketFlags((v.getByte << 1) & 0xFF))
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
