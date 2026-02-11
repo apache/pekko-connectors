@@ -29,7 +29,7 @@ object Dependencies {
 
   val AwsSdk2Version = "2.41.25"
 
-  val NettyVersion = "4.2.9.Final"
+  val NettyVersion = "4.2.10.Final"
 
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
