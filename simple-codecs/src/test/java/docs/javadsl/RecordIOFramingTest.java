@@ -13,6 +13,14 @@
 
 package docs.javadsl;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.recordio.javadsl.RecordIOFraming;
@@ -24,14 +32,6 @@ import org.apache.pekko.util.ByteString;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class RecordIOFramingTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -47,7 +47,8 @@ public class RecordIOFramingTest {
   public void parseStream() throws InterruptedException, ExecutionException, TimeoutException {
     // #run-via-scanner
     String firstRecordData =
-        "{\"type\": \"SUBSCRIBED\",\"subscribed\": {\"framework_id\": {\"value\":\"12220-3440-12532-2345\"},\"heartbeat_interval_seconds\":15.0}";
+        "{\"type\": \"SUBSCRIBED\",\"subscribed\": {\"framework_id\":"
+            + " {\"value\":\"12220-3440-12532-2345\"},\"heartbeat_interval_seconds\":15.0}";
     String secondRecordData = "{\"type\":\"HEARTBEAT\"}";
 
     String firstRecordWithPrefix = "121\n" + firstRecordData;

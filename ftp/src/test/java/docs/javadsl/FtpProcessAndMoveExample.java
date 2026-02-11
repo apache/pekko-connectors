@@ -14,6 +14,8 @@
 package docs.javadsl;
 
 // #processAndMove
+import java.nio.file.Files;
+import java.util.function.Function;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.ftp.FtpFile;
@@ -21,9 +23,6 @@ import org.apache.pekko.stream.connectors.ftp.FtpSettings;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
 import org.apache.pekko.stream.javadsl.FileIO;
 import org.apache.pekko.stream.javadsl.RunnableGraph;
-
-import java.nio.file.Files;
-import java.util.function.Function;
 
 public class FtpProcessAndMoveExample {
 

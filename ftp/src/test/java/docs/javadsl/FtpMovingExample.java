@@ -14,13 +14,13 @@
 package docs.javadsl;
 
 // #moving
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.connectors.ftp.FtpFile;
 import org.apache.pekko.stream.connectors.ftp.FtpSettings;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
 import org.apache.pekko.stream.javadsl.Sink;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 public class FtpMovingExample {
 

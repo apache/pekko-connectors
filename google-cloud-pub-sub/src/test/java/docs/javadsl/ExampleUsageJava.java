@@ -13,6 +13,15 @@
 
 package docs.javadsl;
 
+import com.google.common.collect.Lists;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.time.Duration;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -22,16 +31,6 @@ import org.apache.pekko.stream.RestartSettings;
 import org.apache.pekko.stream.connectors.googlecloud.pubsub.*;
 import org.apache.pekko.stream.connectors.googlecloud.pubsub.javadsl.GooglePubSub;
 import org.apache.pekko.stream.javadsl.*;
-import com.google.common.collect.Lists;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.time.Duration;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 
 public class ExampleUsageJava {
 

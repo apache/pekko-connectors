@@ -13,11 +13,19 @@
 
 package org.apache.pekko.stream.connectors.ftp;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.time.Instant;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.IOResult;
-import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
@@ -25,15 +33,6 @@ import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.util.ByteString;
 import org.junit.Assert;
-
-import java.time.Instant;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Function;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 interface CommonFtpStageTest extends BaseSupport, PekkoSupport {
 
@@ -49,7 +48,8 @@ interface CommonFtpStageTest extends BaseSupport, PekkoSupport {
       throws Exception;
 
   default <T> T await(CompletionStage<T> result)
-      throws InterruptedException, java.util.concurrent.ExecutionException,
+      throws InterruptedException,
+          java.util.concurrent.ExecutionException,
           java.util.concurrent.TimeoutException {
     return result.toCompletableFuture().get(10, TimeUnit.SECONDS);
   }

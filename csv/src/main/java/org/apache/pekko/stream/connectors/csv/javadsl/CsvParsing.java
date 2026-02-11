@@ -13,12 +13,11 @@
 
 package org.apache.pekko.stream.connectors.csv.javadsl;
 
+import java.util.Collection;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.util.ByteString;
 import scala.collection.JavaConverters;
-
-import java.util.Collection;
 
 public class CsvParsing {
 

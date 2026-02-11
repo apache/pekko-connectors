@@ -18,17 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
-
-import scala.collection.JavaConverters;
-
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
@@ -45,6 +34,14 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.util.ByteString;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+import scala.collection.JavaConverters;
 
 /** Needs a local running AMQP server on the default port with no password. */
 @RunWith(Parameterized.class)
@@ -55,11 +52,8 @@ public class AmqpFlowTest {
     return Arrays.asList(false, true);
   }
 
-  /**
-   * This value is initialized with values from data() array
-   */
-  @Parameter
-  public boolean reuseByteArray;
+  /** This value is initialized with values from data() array */
+  @Parameter public boolean reuseByteArray;
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
