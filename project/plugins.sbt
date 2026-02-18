@@ -17,7 +17,7 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-bill-of-materials" % "1.0.2")
 // discipline
 addSbtPlugin("com.github.sbt" % "sbt-header" % "5.11.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.4")
+addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.5")
 addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.10.0")
 
 // docs
