@@ -66,7 +66,6 @@ object ControlPacketFlags {
   val ReservedPubRel = ControlPacketFlags(1 << 1)
   val ReservedSubscribe = ControlPacketFlags(1 << 1)
   val ReservedUnsubscribe = ControlPacketFlags(1 << 1)
-  val ReservedUnsubAck = ControlPacketFlags(1 << 1)
   val DUP = ControlPacketFlags(1 << 3)
   val QoSAtMostOnceDelivery = ControlPacketFlags(0)
   val QoSAtLeastOnceDelivery = ControlPacketFlags(1 << 1)
@@ -119,7 +118,7 @@ object ConnectFlags {
   val Reserved = ConnectFlags(1)
   val CleanSession = ConnectFlags(1 << 1)
   val WillFlag = ConnectFlags(1 << 2)
-  val WillQoS = ConnectFlags(3 << 3)
+  val Will = ConnectFlags(3 << 3)
   val WillRetain = ConnectFlags(1 << 5)
   val PasswordFlag = ConnectFlags(1 << 6)
   val UsernameFlag = ConnectFlags(1 << 7)
@@ -304,7 +303,7 @@ final case class Publish(override val flags: ControlPacketFlags,
    * Conveniently create a publish message with at least once delivery
    */
   def this(topicName: String, payload: ByteString) =
-    this(ControlPacketFlags.QoSAtLeastOnceDelivery, topicName, Some(PacketId(0)), payload)
+    this(ControlPacketFlags.AtLeastOnceDelivery, topicName, Some(PacketId(0)), payload)
 
   override def toString: String =
     s"""Publish(flags:$flags,topicName:$topicName,packetId:$packetId,payload:${payload.size}b)"""
@@ -318,21 +317,21 @@ final case class PubAck(packetId: PacketId)
     extends ControlPacket(ControlPacketType.PUBACK, ControlPacketFlags.ReservedGeneral)
 
 /**
- * 3.5 PUBREC – Publish received (QoS 2 publish received, part 1)
+ * 3.5 PUBREC – Publish received ( 2 publish received, part 1)
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class PubRec(packetId: PacketId)
     extends ControlPacket(ControlPacketType.PUBREC, ControlPacketFlags.ReservedGeneral)
 
 /**
- * 3.6 PUBREL – Publish release (QoS 2 publish received, part 2)
+ * 3.6 PUBREL – Publish release ( 2 publish received, part 2)
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class PubRel(packetId: PacketId)
     extends ControlPacket(ControlPacketType.PUBREL, ControlPacketFlags.ReservedPubRel)
 
 /**
- * 3.7 PUBCOMP – Publish complete (QoS 2 publish received, part 3)
+ * 3.7 PUBCOMP – Publish complete ( 2 publish received, part 3)
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class PubComp(packetId: PacketId)
@@ -382,7 +381,7 @@ final case class Subscribe @InternalApi private[streaming] (packetId: PacketId,
    * A convenience for subscribing to a single topic with at-least-once semantics
    */
   def this(topicFilter: String) =
-    this(PacketId(0), List(topicFilter -> ControlPacketFlags.QoSAtLeastOnceDelivery))
+    this(PacketId(0), List(topicFilter -> ControlPacketFlags.AtLeastOnceDelivery))
 }
 
 /**
@@ -453,7 +452,7 @@ final case class Unsubscribe @InternalApi private[streaming] (packetId: PacketId
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class UnsubAck(packetId: PacketId)
-    extends ControlPacket(ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedUnsubAck)
+    extends ControlPacket(ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedGeneral)
 
 /**
  * 3.12 PINGREQ – PING request
@@ -533,9 +532,9 @@ object MqttCodec {
   }
 
   /**
-   * A reserved QoS was specified
+   * A reserved  was specified
    */
-  case object InvalidQoS extends DecodeError
+  case object Invalid extends DecodeError
 
   /**
    * Bits 1 to 7 are set with the Connect Ack flags
@@ -672,7 +671,7 @@ object MqttCodec {
     }
   }
 
-  // 3.5 PUBREC – Publish received (QoS 2 publish received, part 1)
+  // 3.5 PUBREC – Publish received ( 2 publish received, part 1)
   implicit class MqttPubRec(val v: PubRec) extends AnyVal {
     def encode(bsb: ByteStringBuilder): ByteStringBuilder = {
       (v: ControlPacket).encode(bsb, 2)
@@ -681,7 +680,7 @@ object MqttCodec {
     }
   }
 
-  // 3.6 PUBREL – Publish release (QoS 2 publish received, part 2)
+  // 3.6 PUBREL – Publish release ( 2 publish received, part 2)
   implicit class MqttPubRel(val v: PubRel) extends AnyVal {
     def encode(bsb: ByteStringBuilder): ByteStringBuilder = {
       (v: ControlPacket).encode(bsb, 2)
@@ -690,7 +689,7 @@ object MqttCodec {
     }
   }
 
-  // 3.7 PUBCOMP – Publish complete (QoS 2 publish received, part 3)
+  // 3.7 PUBCOMP – Publish complete ( 2 publish received, part 3)
   implicit class MqttPubComp(val v: PubComp) extends AnyVal {
     def encode(bsb: ByteStringBuilder): ByteStringBuilder = {
       (v: ControlPacket).encode(bsb, 2)
@@ -709,7 +708,11 @@ object MqttCodec {
       v.topicFilters.foreach {
         case (topicFilter, topicFilterFlags) =>
           topicFilter.encode(packetBsb)
-          packetBsb.putByte(topicFilterFlags.underlying.toByte)
+          // Pekko QoS constants have been defined as (0, 2, 4), which for most MQTT messages correctly maps to bits 1 and 2.
+          // However for the MQTT SUBSCRIBE message, the QoS is encoded in bits 1 and 0. So here we need to shift to the right
+          // when encoding a SUBSCRIBE packet. See also:
+          // https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349311
+          packetBsb.putByte((topicFilterFlags.underlying >> 1).toByte)
       }
       // Fixed header
       (v: ControlPacket).encode(bsb, packetBsb.length)
@@ -816,7 +819,7 @@ object MqttCodec {
                 v.decodeSubAck(l)
               case (ControlPacketType.UNSUBSCRIBE, ControlPacketFlags.ReservedUnsubscribe) =>
                 v.decodeUnsubscribe(l)
-              case (ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedUnsubAck) =>
+              case (ControlPacketType.UNSUBACK, ControlPacketFlags.ReservedGeneral) =>
                 v.decodeUnsubAck()
               case (ControlPacketType.PINGREQ, ControlPacketFlags.ReservedGeneral) =>
                 Right(PingReq)
@@ -975,7 +978,11 @@ object MqttCodec {
             : Vector[(Either[DecodeError, String], ControlPacketFlags)] =
           if (remainingLen > 0) {
             val packetLenAtTopicFilter = v.len
-            val topicFilter = (v.decodeString(), ControlPacketFlags(v.getByte & 0xFF))
+            // Pekko QoS constants have been defined as (0, 2, 4), which for most MQTT messages correctly maps to bits 1 and 2.
+            // However for the MQTT SUBSCRIBE message, the QoS is encoded in bits 1 and 0. So here we need to shift to the left
+            // when decoding a SUBSCRIBE packet. See also:
+            // https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc385349311
+            val topicFilter = (v.decodeString(), ControlPacketFlags((v.getByte << 1) & 0xFF))
             decodeTopicFilters(remainingLen - (packetLenAtTopicFilter - v.len), topicFilters :+ topicFilter)
           } else {
             topicFilters
