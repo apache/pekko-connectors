@@ -101,8 +101,12 @@ private[file] class TarReaderStage
         val trailerLength = TarArchiveEntry.trailerLength(metadata)
         if (buffer.length >= trailerLength) {
           subSource.foreach(_.complete())
-          if (isClosed(flowIn)) completeStage()
-          readHeader(buffer.drop(trailerLength))
+          val remainingBuffer = buffer.drop(trailerLength)
+          if (remainingBuffer.isEmpty && isClosed(flowIn)) {
+            completeStage()  // Safe: no more data to process
+          } else {
+            readHeader(remainingBuffer)  // Continue processing
+          }
         } else setHandlers(flowIn, flowOut, new ReadPastTrailer(metadata, buffer, subSource))
       }
 
