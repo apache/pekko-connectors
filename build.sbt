@@ -479,6 +479,7 @@ lazy val docs = project
         IO.copy(List(dir / "pekko-connectors-root-licenses.md" -> targetFile)).toList
       }
     }.taskValue)
+  .dependsOn(googleCloudBigQueryStorage) // https://github.com/apache/pekko-connectors/issues/1440
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
 
