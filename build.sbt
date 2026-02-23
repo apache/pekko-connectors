@@ -387,7 +387,6 @@ lazy val docs = project
     Compile / paradox / name := "Apache Pekko Connectors",
     publish / skip := true,
     pekkoParadoxGithub := Some("https://github.com/apache/pekko-connectors"),
-    makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
     Preprocess / siteSubdirName := s"api/pekko-connectors/${projectInfoVersion.value}",
     Preprocess / sourceDirectory := (LocalRootProject / ScalaUnidoc / unidoc / target).value,
