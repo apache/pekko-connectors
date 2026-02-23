@@ -387,7 +387,6 @@ lazy val docs = project
     Compile / paradox / name := "Apache Pekko Connectors",
     publish / skip := true,
     pekkoParadoxGithub := Some("https://github.com/apache/pekko-connectors"),
-    makeSite := makeSite.dependsOn(LocalRootProject / ScalaUnidoc / doc).value,
     previewPath := (Paradox / siteSubdirName).value,
     Preprocess / siteSubdirName := s"api/pekko-connectors/${projectInfoVersion.value}",
     Preprocess / sourceDirectory := (LocalRootProject / ScalaUnidoc / unidoc / target).value,
@@ -479,6 +478,7 @@ lazy val docs = project
         IO.copy(List(dir / "pekko-connectors-root-licenses.md" -> targetFile)).toList
       }
     }.taskValue)
+  .dependsOn(googleCloudBigQueryStorage) // https://github.com/apache/pekko-connectors/issues/1440
 
 lazy val testkit = internalProject("testkit", Dependencies.testkit)
 
