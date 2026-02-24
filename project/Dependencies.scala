@@ -413,9 +413,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.49")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.50")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.49"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.50"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"
