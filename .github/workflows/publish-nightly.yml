@@ -20,13 +20,13 @@ name: Publish Nightly
 on:
   workflow_dispatch:
   schedule:
-    - cron: "22 0 * * *"
+    - cron: "0 22 * * *"
 
 jobs:
-  publish:
+  publish-jars:
     # runs on main repo only
     if: github.repository == 'apache/pekko-connectors'
-    name: Publish
+    name: Publish Jars
     runs-on: ubuntu-22.04
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -51,6 +51,29 @@ jobs:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_PW: ${{ secrets.NEXUS_PW }}
         run: sbt +publish
+
+  publish-docs:
+    # runs on main repo only
+    if: github.repository == 'apache/pekko-connectors'
+    name: Publish Documentation
+    runs-on: ubuntu-22.04
+    env:
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install sbt
+        uses: sbt/setup-sbt@1cad58d595b729a71ca2254cdf5b43dd6f42d4bb # v1.1.18
 
       - name: Build Documentation
         run: |-
