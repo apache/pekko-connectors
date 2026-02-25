@@ -239,7 +239,7 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   // the following is needed to exclude the gRPC generated sources for protobuf-java from the doc sources,
   // otherwise the Scaladoc tool fails - https://github.com/apache/pekko-connectors/issues/1440
   Compile / doc / sources := (Compile / doc / sources).value.filterNot { f =>
-    f.getPath.replace('\\','/').contains("/pekko-grpc/main/com/google/protobuf")
+    f.getPath.replace('\\', '/').contains("/pekko-grpc/main/com/google/protobuf")
   },
   Test / fork := true,
   Test / javaOptions ++= Seq("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED")
