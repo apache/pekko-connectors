@@ -267,8 +267,17 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
-  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation")).enablePlugins(
-  PekkoGrpcPlugin).dependsOn(googleCommon)
+  Compile / compileOrder := CompileOrder.JavaThenScala,
+  Test / compileOrder := CompileOrder.Mixed,
+  // the following is needed to exclude the gRPC generated sources for protobuf-java from the doc sources,
+  // otherwise the Scaladoc tool fails - https://github.com/apache/pekko-connectors/issues/1440
+  Compile / doc / sources := (Compile / doc / sources).value.filterNot { f =>
+    f.getPath.replace('\\', '/').contains("/pekko-grpc/main/com/google/protobuf")
+  },
+  Test / fork := true,
+  compile / javacOptions := (compile / javacOptions).value.filterNot(_ == "-Xlint:deprecation"))
+  .enablePlugins(PekkoGrpcPlugin)
+  .dependsOn(googleCommon)
 
 lazy val googleCloudStorage = pekkoConnectorProject(
   "google-cloud-storage",
