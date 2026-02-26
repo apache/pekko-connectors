@@ -249,9 +249,8 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-jackson" % PekkoHttpVersion % Provided,
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "io.spray" %% "spray-json" % "1.3.6",
-      "com.fasterxml.jackson.core" % "jackson-annotations" % "2.20",
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion % Test,
-      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
+      "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ JacksonDatabindDependencies ++ Mockito)
 
   val ArrowVersion = "18.3.0"
   val GoogleBigQueryStorage = Seq(
