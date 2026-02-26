@@ -240,10 +240,8 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   // and issues like https://github.com/apache/pekko-connectors/issues/1457
   Compile / sources := (Compile / sources).value.filterNot { f =>
     f.getPath.replace('\\', '/').contains("/pekko-grpc/main/com/google/protobuf")
-  },
-  Test / fork := true,
-  Test / javaOptions ++= Seq("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED")
-).dependsOn(googleCommon)
+  })
+  .dependsOn(googleCommon)
   .enablePlugins(PekkoGrpcPlugin)
 
 lazy val googleCloudPubSub = pekkoConnectorProject(
