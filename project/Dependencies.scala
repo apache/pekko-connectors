@@ -28,9 +28,9 @@ object Dependencies {
 
   val AvroVersion = "1.11.4"
 
-  val AwsSdk2Version = "2.38.9"
+  val AwsSdk2Version = "2.42.2"
 
-  val NettyVersion = "4.2.5.Final"
+  val NettyVersion = "4.2.10.Final"
 
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
@@ -75,7 +75,7 @@ object Dependencies {
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
   // This should align with the Jackson minor version used in Pekko 1.1.x
   // https://github.com/apache/pekko/blob/main/project/Dependencies.scala
-  val JacksonVersion = "2.19.2"
+  val JacksonVersion = "2.19.4"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
@@ -129,7 +129,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.26.0",
+      "com.rabbitmq" % "amqp-client" % "5.28.0",
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
   val AwsSpiPekkoHttp = Seq(
@@ -166,7 +166,7 @@ object Dependencies {
       "com.microsoft.azure" % "azure-storage" % "8.6.6"))
 
   val CassandraVersionInDocs = "4.0"
-  val CassandraDriverVersion = "4.19.0"
+  val CassandraDriverVersion = "4.19.2"
   val CassandraDriverVersionInDocs = "4.17"
 
   val Cassandra = Seq(
@@ -223,7 +223,7 @@ object Dependencies {
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.16.0",
+      "org.apache.parquet" % "parquet-avro" % "1.17.0",
       "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % "3.3.6" % Test).exclude("log4j", "log4j"),
       ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
@@ -407,7 +407,7 @@ object Dependencies {
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
 
-  val KuduVersion = "1.18.0"
+  val KuduVersion = "1.18.1"
   val Kudu = Seq(
     libraryDependencies ++= Seq(
       "org.apache.kudu" % "kudu-client" % KuduVersion,
