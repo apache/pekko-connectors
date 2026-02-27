@@ -118,7 +118,7 @@ object ConnectFlags {
   val Reserved = ConnectFlags(1)
   val CleanSession = ConnectFlags(1 << 1)
   val WillFlag = ConnectFlags(1 << 2)
-  val Will = ConnectFlags(3 << 3)
+  val WillQoS = ConnectFlags(3 << 3)
   val WillRetain = ConnectFlags(1 << 5)
   val PasswordFlag = ConnectFlags(1 << 6)
   val UsernameFlag = ConnectFlags(1 << 7)
@@ -534,7 +534,7 @@ object MqttCodec {
   /**
    * A reserved QoS was specified
    */
-  case object Invalid extends DecodeError
+  case object InvalidQoS extends DecodeError
 
   /**
    * Bits 1 to 7 are set with the Connect Ack flags
