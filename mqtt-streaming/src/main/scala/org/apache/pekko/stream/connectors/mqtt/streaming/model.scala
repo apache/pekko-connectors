@@ -303,7 +303,7 @@ final case class Publish(override val flags: ControlPacketFlags,
    * Conveniently create a publish message with at least once delivery
    */
   def this(topicName: String, payload: ByteString) =
-    this(ControlPacketFlags.AtLeastOnceDelivery, topicName, Some(PacketId(0)), payload)
+    this(ControlPacketFlags.QoSAtLeastOnceDelivery, topicName, Some(PacketId(0)), payload)
 
   override def toString: String =
     s"""Publish(flags:$flags,topicName:$topicName,packetId:$packetId,payload:${payload.size}b)"""
@@ -317,21 +317,21 @@ final case class PubAck(packetId: PacketId)
     extends ControlPacket(ControlPacketType.PUBACK, ControlPacketFlags.ReservedGeneral)
 
 /**
- * 3.5 PUBREC – Publish received ( 2 publish received, part 1)
+ * 3.5 PUBREC – Publish received (QoS 2 publish received, part 1)
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class PubRec(packetId: PacketId)
     extends ControlPacket(ControlPacketType.PUBREC, ControlPacketFlags.ReservedGeneral)
 
 /**
- * 3.6 PUBREL – Publish release ( 2 publish received, part 2)
+ * 3.6 PUBREL – Publish release (QoS 2 publish received, part 2)
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class PubRel(packetId: PacketId)
     extends ControlPacket(ControlPacketType.PUBREL, ControlPacketFlags.ReservedPubRel)
 
 /**
- * 3.7 PUBCOMP – Publish complete ( 2 publish received, part 3)
+ * 3.7 PUBCOMP – Publish complete (QoS 2 publish received, part 3)
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
 final case class PubComp(packetId: PacketId)
@@ -381,7 +381,7 @@ final case class Subscribe @InternalApi private[streaming] (packetId: PacketId,
    * A convenience for subscribing to a single topic with at-least-once semantics
    */
   def this(topicFilter: String) =
-    this(PacketId(0), List(topicFilter -> ControlPacketFlags.AtLeastOnceDelivery))
+    this(PacketId(0), List(topicFilter -> ControlPacketFlags.QoSAtLeastOnceDelivery))
 }
 
 /**
@@ -532,7 +532,7 @@ object MqttCodec {
   }
 
   /**
-   * A reserved  was specified
+   * A reserved QoS was specified
    */
   case object Invalid extends DecodeError
 
@@ -671,7 +671,7 @@ object MqttCodec {
     }
   }
 
-  // 3.5 PUBREC – Publish received ( 2 publish received, part 1)
+  // 3.5 PUBREC – Publish received (QoS 2 publish received, part 1)
   implicit class MqttPubRec(val v: PubRec) extends AnyVal {
     def encode(bsb: ByteStringBuilder): ByteStringBuilder = {
       (v: ControlPacket).encode(bsb, 2)
@@ -680,7 +680,7 @@ object MqttCodec {
     }
   }
 
-  // 3.6 PUBREL – Publish release ( 2 publish received, part 2)
+  // 3.6 PUBREL – Publish release (QoS 2 publish received, part 2)
   implicit class MqttPubRel(val v: PubRel) extends AnyVal {
     def encode(bsb: ByteStringBuilder): ByteStringBuilder = {
       (v: ControlPacket).encode(bsb, 2)
@@ -689,7 +689,7 @@ object MqttCodec {
     }
   }
 
-  // 3.7 PUBCOMP – Publish complete ( 2 publish received, part 3)
+  // 3.7 PUBCOMP – Publish complete (QoS 2 publish received, part 3)
   implicit class MqttPubComp(val v: PubComp) extends AnyVal {
     def encode(bsb: ByteStringBuilder): ByteStringBuilder = {
       (v: ControlPacket).encode(bsb, 2)
