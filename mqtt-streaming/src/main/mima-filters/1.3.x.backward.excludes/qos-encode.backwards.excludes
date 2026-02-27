@@ -15,4 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
+# Fix Subscribe QoS encode and UnsubAck decode
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.mqtt.streaming.ControlPacketFlags.ReservedUnsubAck")
+
