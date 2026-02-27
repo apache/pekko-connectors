@@ -67,9 +67,9 @@ object Dependencies {
   val Couchbase3Version = "3.6.0"
   val CouchbaseVersionForDocs = "2.7"
 
-  val GoogleAuthVersion = "1.39.0"
-  val JwtScalaVersion = "11.0.2"
-  val Log4jVersion = "2.25.1"
+  val GoogleAuthVersion = "1.43.0"
+  val JwtScalaVersion = "11.0.3"
+  val Log4jVersion = "2.25.3"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
@@ -277,12 +277,12 @@ object Dependencies {
       "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % JacksonVersion % Test,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
-  val ArrowVersion = "16.0.0"
+  val ArrowVersion = "17.0.0"
   val GoogleBigQueryStorage = Seq(
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.18.0" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.22.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
