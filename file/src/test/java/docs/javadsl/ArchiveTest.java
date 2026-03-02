@@ -74,8 +74,8 @@ public class ArchiveTest {
 
   @Test
   public void flowShouldCreateZIPArchive() throws Exception {
-    ByteString fileContent1 = readFileAsByteString(getFileFromResource("akka_full_color.svg"));
-    ByteString fileContent2 = readFileAsByteString(getFileFromResource("akka_icon_reverse.svg"));
+    ByteString fileContent1 = readFileAsByteString(getFileFromResource("pekko_full_color.svg"));
+    ByteString fileContent2 = readFileAsByteString(getFileFromResource("pekko_icon_reverse.svg"));
 
     Source<ByteString, NotUsed> source1 = toSource(fileContent1);
     Source<ByteString, NotUsed> source2 = toSource(fileContent2);
@@ -90,9 +90,9 @@ public class ArchiveTest {
 
     // #sample-zip
     Pair<ArchiveMetadata, Source<ByteString, NotUsed>> pair1 =
-        Pair.create(ArchiveMetadata.create("akka_full_color.svg"), source1);
+        Pair.create(ArchiveMetadata.create("pekko_full_color.svg"), source1);
     Pair<ArchiveMetadata, Source<ByteString, NotUsed>> pair2 =
-        Pair.create(ArchiveMetadata.create("akka_icon_reverse.svg"), source2);
+        Pair.create(ArchiveMetadata.create("pekko_icon_reverse.svg"), source2);
 
     Source<Pair<ArchiveMetadata, Source<ByteString, NotUsed>>, NotUsed> source =
         Source.from(Arrays.asList(pair1, pair2));
@@ -107,8 +107,8 @@ public class ArchiveTest {
     Map<String, ByteString> inputFiles =
         new HashMap<String, ByteString>() {
           {
-            put("akka_full_color.svg", fileContent1);
-            put("akka_icon_reverse.svg", fileContent2);
+            put("pekko_full_color.svg", fileContent1);
+            put("pekko_icon_reverse.svg", fileContent2);
           }
         };
 
@@ -140,8 +140,8 @@ public class ArchiveTest {
 
   @Test
   public void flowShouldCreateTARArchive() throws Exception {
-    Path filePath1 = getFileFromResource("akka_full_color.svg");
-    Path filePath2 = getFileFromResource("akka_icon_reverse.svg");
+    Path filePath1 = getFileFromResource("pekko_full_color.svg");
+    Path filePath2 = getFileFromResource("pekko_icon_reverse.svg");
 
     ByteString fileContent1 = readFileAsByteString(filePath1);
     ByteString fileContent2 = readFileAsByteString(filePath2);
@@ -168,11 +168,11 @@ public class ArchiveTest {
 
     Pair<TarArchiveMetadata, Source<ByteString, NotUsed>> pair1 =
         Pair.create(
-            TarArchiveMetadata.create("subdir", "akka_full_color.svg", size1, lastModification),
+            TarArchiveMetadata.create("subdir", "pekko_full_color.svg", size1, lastModification),
             source1);
     Pair<TarArchiveMetadata, Source<ByteString, NotUsed>> pair2 =
         Pair.create(
-            TarArchiveMetadata.create("akka_icon_reverse.svg", size2, lastModification), source2);
+            TarArchiveMetadata.create("pekko_icon_reverse.svg", size2, lastModification), source2);
 
     Source<Pair<TarArchiveMetadata, Source<ByteString, NotUsed>>, NotUsed> source =
         Source.from(Arrays.asList(dir, pair1, pair2));

@@ -64,8 +64,8 @@ class TarArchiveSpec
     }
 
     "archive file" in {
-      val filePath1 = getPathFromResources("akka_full_color.svg")
-      val filePath2 = getPathFromResources("akka_icon_reverse.svg")
+      val filePath1 = getPathFromResources("pekko_full_color.svg")
+      val filePath2 = getPathFromResources("pekko_icon_reverse.svg")
       val fileStream1: Source[ByteString, Any] = FileIO.fromPath(filePath1)
       val fileStream2: Source[ByteString, Any] = FileIO.fromPath(filePath2)
       val fileContent1 = ByteString(Files.readAllBytes(filePath1))
@@ -88,8 +88,8 @@ class TarArchiveSpec
       val filesStream = Source(
         List(
           (TarArchiveMetadata.directory("subdir", lastModification), Source.empty),
-          (TarArchiveMetadata("subdir", "akka_full_color.svg", fileSize1, lastModification), fileStream1),
-          (TarArchiveMetadata("akka_icon_reverse.svg", fileSize2, lastModification), fileStream2)))
+          (TarArchiveMetadata("subdir", "pekko_full_color.svg", fileSize1, lastModification), fileStream1),
+          (TarArchiveMetadata("pekko_icon_reverse.svg", fileSize2, lastModification), fileStream2)))
 
       val result = filesStream
         .via(Archive.tar())
@@ -107,12 +107,12 @@ class TarArchiveSpec
 
       untar(Paths.get("result.tar").toRealPath(), "xf").foreach(
         _ shouldBe Map(
-          "subdir/akka_full_color.svg" -> fileContent1,
-          "akka_icon_reverse.svg" -> fileContent2))
+          "subdir/pekko_full_color.svg" -> fileContent1,
+          "pekko_icon_reverse.svg" -> fileContent2))
       untar(Paths.get("result.tar.gz").toRealPath(), "xfz").foreach(
         _ shouldBe Map(
-          "subdir/akka_full_color.svg" -> fileContent1,
-          "akka_icon_reverse.svg" -> fileContent2))
+          "subdir/pekko_full_color.svg" -> fileContent1,
+          "pekko_icon_reverse.svg" -> fileContent2))
 
       // cleanup
       new File("result.tar").delete()
