@@ -327,6 +327,55 @@ class TarArchiveSpec
       tar.futureValue shouldBe empty
     }
 
+    "extract all files when upstream closes with buffered entries (bug 1407)" in {
+      // Bug 1407: TarReaderStage was completing prematurely when the upstream closed
+      // while the buffer still contained unprocessed file headers/data.
+      // This test simulates the scenario where:
+      // 1. A multi-file TAR archive is streamed as a single ByteString
+      // 2. The upstream closes immediately after sending all data
+      // 3. The buffer contains multiple file entries to process
+
+      val file1Content = ByteString("content1")
+      val file2Content = ByteString("content2")
+      val file3Content = ByteString("content3")
+
+      val metadata1 = TarArchiveMetadata("file1.txt", file1Content.length)
+      val metadata2 = TarArchiveMetadata("file2.txt", file2Content.length)
+      val metadata3 = TarArchiveMetadata("file3.txt", file3Content.length)
+
+      // Create a TAR archive with 3 files, emitted as a single ByteString
+      // This simulates an S3 stream that closes after sending all data at once
+      val multiFileArchive = Source(
+        immutable.Seq(
+          metadata1 -> Source.single(file1Content),
+          metadata2 -> Source.single(file2Content),
+          metadata3 -> Source.single(file3Content)
+        ))
+        .via(Archive.tar())
+        .runWith(collectByteString)
+
+      // Process the archive - the upstream will close after the single ByteString
+      // Without the fix, only the first file(s) would be extracted
+      val tar = Source
+        .future(multiFileArchive)
+        .via(Archive.tarReader())
+        .mapAsync(1) {
+          case (metadata, source) =>
+            source.runWith(collectByteString).map { bs =>
+              metadata -> bs
+            }
+        }
+        .runWith(Sink.seq)
+
+      val result = tar.futureValue
+
+      // All 3 files should be extracted, not just the first one
+      (result should have).length(3)
+      result(0) shouldBe metadata1 -> file1Content
+      result(1) shouldBe metadata2 -> file2Content
+      result(2) shouldBe metadata3 -> file3Content
+    }
+
     "fail on missing sub source subscription" in {
       val tar =
         Source
