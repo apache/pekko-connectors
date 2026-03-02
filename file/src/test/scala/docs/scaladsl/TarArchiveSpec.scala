@@ -370,7 +370,7 @@ class TarArchiveSpec
       val result = tar.futureValue
 
       // All 3 files should be extracted, not just the first one
-      result should have length 3
+      (result should have).length(3)
       result(0) shouldBe metadata1 -> file1Content
       result(1) shouldBe metadata2 -> file2Content
       result(2) shouldBe metadata3 -> file3Content

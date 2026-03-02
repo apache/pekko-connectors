@@ -103,9 +103,9 @@ private[file] class TarReaderStage
           subSource.foreach(_.complete())
           val remainingBuffer = buffer.drop(trailerLength)
           if (remainingBuffer.isEmpty && isClosed(flowIn)) {
-            completeStage()  // Safe: no more data to process
+            completeStage() // Safe: no more data to process
           } else {
-            readHeader(remainingBuffer)  // Continue processing
+            readHeader(remainingBuffer) // Continue processing
           }
         } else setHandlers(flowIn, flowOut, new ReadPastTrailer(metadata, buffer, subSource))
       }
