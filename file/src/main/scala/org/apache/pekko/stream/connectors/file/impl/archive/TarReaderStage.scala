@@ -198,6 +198,8 @@ private[file] class TarReaderStage
                 subPush(buffer)
                 buffer = ByteString.empty
                 if (isClosed(flowIn)) onUpstreamFinish()
+                // If we still need more file content, pull upstream to unblock it
+                else if (emitted < metadata.size) tryPullIfNeeded()
               } else {
                 tryPullIfNeeded()
               }
@@ -217,6 +219,8 @@ private[file] class TarReaderStage
           if (remaining <= bs.length) {
             val (emit, remain) = bs.splitAt(remaining.toInt)
             subSource.push(emit)
+            emitted += emit.length
+            buffer = ByteString.empty
             readTrailer(metadata, remain, Some(subSource))
           } else {
             subSource.push(bs)
@@ -225,7 +229,14 @@ private[file] class TarReaderStage
         }
 
         override def onPush(): Unit = {
-          subPush(grab(flowIn))
+          val data = grab(flowIn)
+          if (subSource.isAvailable) {
+            // subSource has been pulled and is ready: push directly
+            subPush(data)
+          } else {
+            // subSource not yet pulled: buffer until next onPull()
+            buffer ++= data
+          }
         }
 
         override def onUpstreamFinish(): Unit = {
