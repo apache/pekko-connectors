@@ -61,8 +61,8 @@ class ArchiveSpec
       }
 
       "archive file" in {
-        val filePath1 = getPathFromResources("akka_full_color.svg")
-        val filePath2 = getPathFromResources("akka_icon_reverse.svg")
+        val filePath1 = getPathFromResources("pekko_full_color.svg")
+        val filePath2 = getPathFromResources("pekko_icon_reverse.svg")
         val fileStream1: Source[ByteString, Any] = FileIO.fromPath(filePath1)
         val fileStream2: Source[ByteString, Any] = FileIO.fromPath(filePath2)
 
@@ -77,8 +77,8 @@ class ArchiveSpec
         // #sample-zip
         val filesStream = Source(
           List(
-            (ArchiveMetadata("akka_full_color.svg"), fileStream1),
-            (ArchiveMetadata("akka_icon_reverse.svg"), fileStream2)))
+            (ArchiveMetadata("pekko_full_color.svg"), fileStream1),
+            (ArchiveMetadata("pekko_icon_reverse.svg"), fileStream2)))
 
         val result = filesStream
           .via(Archive.zip())
@@ -101,8 +101,8 @@ class ArchiveSpec
           .runWith(Sink.fold(ByteString.empty)(_ ++ _))
           .futureValue
 
-        unzipResultMap("akka_full_color.svg") shouldBe refFile1
-        unzipResultMap("akka_icon_reverse.svg") shouldBe refFile2
+        unzipResultMap("pekko_full_color.svg") shouldBe refFile1
+        unzipResultMap("pekko_icon_reverse.svg") shouldBe refFile2
 
         // cleanup
         new File("result.zip").delete()
