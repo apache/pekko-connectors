@@ -84,7 +84,7 @@ class ArchiveSpec
           .via(Archive.zip())
           .runWith(FileIO.toPath(Paths.get("result.zip")))
         // #sample-zip
-        result.futureValue.count shouldBe 1178
+        result.futureValue.count shouldBe 1182
 
         val resultFileContent =
           FileIO.fromPath(Paths.get("result.zip")).runWith(Sink.fold(ByteString.empty)(_ ++ _)).futureValue
