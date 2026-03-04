@@ -390,6 +390,47 @@ class TarArchiveSpec
     }
   }
 
+  "tar reader regression" should {
+    // Regression test for: Cannot push port (SubSourceOutlet(fileOut)) twice, or before it being pulled
+    //
+    // Root cause: in CollectFile, onPush() called subPush() unconditionally without checking
+    // whether the subSource outlet was ready to accept a push. When upstream data arrived
+    // while subSource had not yet been pulled by downstream, the push violated Pekko's
+    // back-pressure protocol and crashed.
+    //
+    // Fix: onPush() now checks subSource.isAvailable. If false, data is buffered and flushed
+    // in subSource's onPull() handler once downstream is ready.
+    //
+    // The crash depends on interpreter-internal timing (whether flowOut is available at the
+    // exact moment ReadPastTrailer transitions to the next file), which cannot be controlled
+    // deterministically from a unit test. This test instead verifies correct functional
+    // behaviour when a two-file archive is delivered in small chunks, exercising all
+    // transitions between CollectHeader, CollectFile, and ReadPastTrailer across multiple
+    // upstream pushes — the scenario that triggered the crash in production.
+    "handle chunked delivery of a two-file archive" in {
+      val content1 = ByteString("first file content in tar")
+      val content2 = ByteString("second file content in tar")
+
+      val archiveBytes: ByteString =
+        Source(List(
+          TarArchiveMetadata("file1.txt", content1.length) -> Source.single(content1),
+          TarArchiveMetadata("file2.txt", content2.length) -> Source.single(content2)))
+          .via(Archive.tar())
+          .runWith(collectByteString)
+          .futureValue
+
+      // Deliver the archive in 32-byte chunks to exercise all partial-read code paths.
+      val result = Source(archiveBytes.grouped(32).toList)
+        .via(Archive.tarReader())
+        .mapAsync(1) { case (_, subSource: Source[ByteString, NotUsed]) =>
+          subSource.runWith(collectByteString)
+        }
+        .runWith(Sink.seq)
+
+      result.futureValue shouldBe Seq(content1, content2)
+    }
+  }
+
   "advanced tar reading" should {
     "allow tar files in tar files to be extracted in a single flow" in {
       val tenDigits = ByteString("1234567890")
