@@ -23,6 +23,7 @@ import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings;
 import org.apache.pekko.stream.connectors.mqttv5.MqttMessage;
 import org.apache.pekko.stream.connectors.mqttv5.MqttQoS;
 import org.apache.pekko.stream.connectors.mqttv5.MqttSubscriptions;
+import org.apache.pekko.stream.connectors.mqttv5.MqttUserProperty;
 import org.apache.pekko.stream.connectors.mqttv5.javadsl.MqttMessageWithAck;
 import org.apache.pekko.stream.connectors.mqttv5.javadsl.MqttSink;
 import org.apache.pekko.stream.connectors.mqttv5.javadsl.MqttSource;
@@ -49,6 +50,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import scala.jdk.javaapi.CollectionConverters;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -337,5 +340,42 @@ public class MqttSourceTest {
         assertEquals(
                 MqttMessage.create(willTopic, ByteString.fromString("ohi")),
                 elem.toCompletableFuture().get(3, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void receiveUserProperties() throws Exception {
+        final String topic = "v5/source-test/user-props";
+        MqttConnectionSettings connectionSettings =
+                MqttConnectionSettings.create("tcp://localhost:1883", "test-java-user-props", new MemoryPersistence());
+
+        Source<MqttMessage, CompletionStage<Done>> source =
+                MqttSource.atMostOnce(
+                        connectionSettings.withClientId("source-test/user-props-source"),
+                        MqttSubscriptions.create(topic, MqttQoS.atLeastOnce()),
+                        bufferSize);
+
+        Pair<CompletionStage<Done>, CompletionStage<MqttMessage>> result =
+                source.toMat(Sink.head(), Keep.both()).run(system);
+
+        result.first().toCompletableFuture().get(5, TimeUnit.SECONDS);
+
+        List<MqttUserProperty> userPropsToSend = Arrays.asList(
+                MqttUserProperty.create("x-trace-id", "abc123"),
+                MqttUserProperty.create("x-tenant", "acme"));
+        MqttMessage msg = MqttMessage.create(topic, ByteString.fromString("test"))
+                .withUserProperties(userPropsToSend);
+        Sink<MqttMessage, CompletionStage<Done>> mqttSink =
+                MqttSink.create(
+                        connectionSettings.withClientId("source-test/user-props-sink"),
+                        MqttQoS.atLeastOnce());
+        Source.single(msg).runWith(mqttSink, system);
+
+        MqttMessage received = result.second().toCompletableFuture().get(5, TimeUnit.SECONDS);
+        List<MqttUserProperty> userProps = Arrays.asList(received.userProperties());
+        assertEquals(2, userProps.size());
+        assertEquals("x-trace-id", userProps.get(0).key());
+        assertEquals("abc123", userProps.get(0).value());
+        assertEquals("x-tenant", userProps.get(1).key());
+        assertEquals("acme", userProps.get(1).value());
     }
 }
