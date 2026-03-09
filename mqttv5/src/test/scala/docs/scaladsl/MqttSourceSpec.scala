@@ -20,6 +20,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.Promise
 import scala.concurrent.duration._
+import scala.collection.immutable
 
 import org.apache.pekko.Done
 import org.apache.pekko.NotUsed
@@ -496,7 +497,7 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
 
   "receive user properties from a message" in {
     val topic = "v5/source-spec/user-props"
-    val expectedProps = Seq(
+    val expectedProps = immutable.Seq(
       MqttUserProperty("x-trace-id", "abc123"),
       MqttUserProperty("x-tenant", "acme"))
 

@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.mutable
 import scala.concurrent.Future
 import scala.concurrent.Promise
-import scala.jdk.CollectionConverters._
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
@@ -38,6 +37,7 @@ import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
 import org.apache.pekko.stream.stage._
 import org.apache.pekko.util.ByteString
+import org.apache.pekko.util.ccompat.JavaConverters._
 import org.eclipse.paho.mqttv5.client.DisconnectedBufferOptions
 import org.eclipse.paho.mqttv5.client.IMqttAsyncClient
 import org.eclipse.paho.mqttv5.client.IMqttToken
@@ -238,7 +238,7 @@ abstract class MqttFlowStageLogic[I](
     new MqttCallback {
       override def messageArrived(topic: String, pahoMessage: PahoMqttMessage): Unit = {
         backpressurePahoClient.acquire()
-        val userProps: Seq[MqttUserProperty] =
+        val userProps =
           Option(pahoMessage.getProperties)
             .map(_.getUserProperties.asScala.map(p => MqttUserProperty(p.getKey, p.getValue)).toList)
             .getOrElse(Nil)

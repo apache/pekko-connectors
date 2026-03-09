@@ -14,9 +14,9 @@
 package org.apache.pekko.stream.connectors.mqttv5
 
 import org.apache.pekko
+import pekko.util.ccompat.JavaConverters._
 
 import scala.collection.immutable
-import scala.jdk.CollectionConverters._
 
 final class MqttUserProperty private (val key: String, val value: String) {
   override def toString = s"MqttUserProperty(key=$key,value=$value)"
