@@ -20,7 +20,7 @@ import org.apache.pekko
 import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.stream._
-import pekko.stream.connectors.mqttv5. {MqttConnectionSettings, MqttQoS }
+import pekko.stream.connectors.mqttv5.{ MqttConnectionSettings, MqttQoS }
 import pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
 import pekko.stream.stage._
 import org.eclipse.paho.mqttv5.client.IMqttToken

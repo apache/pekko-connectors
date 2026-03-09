@@ -34,9 +34,9 @@ import pekko.stream.connectors.mqttv5.{
   AuthSettings,
   MqttConnectionSettings,
   MqttMessage,
-  MqttUserProperty,
   MqttOfflinePersistenceSettings,
-  MqttQoS
+  MqttQoS,
+  MqttUserProperty
 }
 import pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
 import pekko.stream.stage._
