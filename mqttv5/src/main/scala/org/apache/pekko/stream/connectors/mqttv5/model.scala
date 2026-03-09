@@ -23,6 +23,7 @@ final class MqttUserProperty private (val key: String, val value: String) {
 
   /** Java API */
   def getKey(): String = key
+
   /** Java API */
   def getValue(): String = value
 
