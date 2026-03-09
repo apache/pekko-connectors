@@ -371,11 +371,11 @@ public class MqttSourceTest {
         Source.single(msg).runWith(mqttSink, system);
 
         MqttMessage received = result.second().toCompletableFuture().get(5, TimeUnit.SECONDS);
-        List<MqttUserProperty> userProps = Arrays.asList(received.userProperties());
+        List<MqttUserProperty> userProps = received.getUserProperties();
         assertEquals(2, userProps.size());
-        assertEquals("x-trace-id", userProps.get(0).key());
-        assertEquals("abc123", userProps.get(0).value());
-        assertEquals("x-tenant", userProps.get(1).key());
-        assertEquals("acme", userProps.get(1).value());
+        assertEquals("x-trace-id", userProps.get(0).getKey());
+        assertEquals("abc123", userProps.get(0).getValue());
+        assertEquals("x-tenant", userProps.get(1).getKey());
+        assertEquals("acme", userProps.get(1).getValue());
     }
 }
