@@ -69,7 +69,10 @@ final class MqttMessage private (
   def withUserProperties(value: java.util.List[MqttUserProperty]): MqttMessage =
     copy(userProperties = value.asScala.toSeq)
 
-  /** Java API */
+  /**
+   * Java API. Returns the user properties.
+   * Modifying the returned list will not change the user properties of this message.
+   */
   def getUserProperties(): java.util.List[MqttUserProperty] = userProperties.asJava
 
   /** Java API */
