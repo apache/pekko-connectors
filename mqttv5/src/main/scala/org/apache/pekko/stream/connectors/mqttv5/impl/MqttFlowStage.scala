@@ -25,30 +25,33 @@ import scala.util.Success
 import scala.util.Try
 import scala.util.control.NonFatal
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.Shape
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.mqttv5.AuthSettings
-import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings
-import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
-import org.apache.pekko.stream.connectors.mqttv5.MqttUserProperty
-import org.apache.pekko.stream.connectors.mqttv5.MqttOfflinePersistenceSettings
-import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
-import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
-import org.apache.pekko.stream.stage._
-import org.apache.pekko.util.ByteString
-import org.eclipse.paho.mqttv5.client.DisconnectedBufferOptions
-import org.eclipse.paho.mqttv5.client.IMqttAsyncClient
-import org.eclipse.paho.mqttv5.client.IMqttToken
-import org.eclipse.paho.mqttv5.client.MqttActionListener
-import org.eclipse.paho.mqttv5.client.MqttAsyncClient
-import org.eclipse.paho.mqttv5.client.MqttCallback
-import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.Shape
+import pekko.stream._
+import pekko.stream.connectors.mqttv5.{
+  AuthSettings,
+  MqttConnectionSettings,
+  MqttMessage,
+  MqttUserProperty,
+  MqttOfflinePersistenceSettings,
+  MqttQoS
+}
+import pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
+import pekko.stream.stage._
+import pekko.util.ByteString
+import org.eclipse.paho.mqttv5.client.{
+  DisconnectedBufferOptions,
+  IMqttAsyncClient,
+  IMqttToken,
+  MqttActionListener,
+  MqttAsyncClient,
+  MqttCallback,
+  MqttDisconnectResponse
+}
 import org.eclipse.paho.mqttv5.common.MqttException
-import org.eclipse.paho.mqttv5.common.packet.MqttProperties
-import org.eclipse.paho.mqttv5.common.packet.MqttReturnCode
-import org.eclipse.paho.mqttv5.common.packet.UserProperty
+import org.eclipse.paho.mqttv5.common.packet.{ MqttProperties, MqttReturnCode, UserProperty }
 import org.eclipse.paho.mqttv5.common.{ MqttMessage => PahoMqttMessage }
 
 /**

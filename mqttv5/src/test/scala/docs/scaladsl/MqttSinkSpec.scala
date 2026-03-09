@@ -16,17 +16,18 @@ package docs.scaladsl
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mqttv5
-import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
-import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
-import org.apache.pekko.stream.connectors.mqttv5.MqttSubscriptions
-import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttSink
-import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttSource
-import org.apache.pekko.stream.scaladsl.Keep
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.mqttv5
+import pekko.stream.connectors.mqttv5.MqttMessage
+import pekko.stream.connectors.mqttv5.MqttQoS
+import pekko.stream.connectors.mqttv5.MqttSubscriptions
+import pekko.stream.connectors.mqttv5.scaladsl.MqttSink
+import pekko.stream.connectors.mqttv5.scaladsl.MqttSource
+import pekko.stream.scaladsl.Keep
+import pekko.stream.scaladsl.Sink
+import pekko.stream.scaladsl.Source
+import pekko.util.ByteString
 import org.eclipse.paho.mqttv5.common.MqttException
 
 class MqttSinkSpec extends MqttSpecBase("MqttSinkSpec") {

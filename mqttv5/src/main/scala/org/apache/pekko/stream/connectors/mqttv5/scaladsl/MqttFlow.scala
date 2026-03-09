@@ -15,16 +15,17 @@ package org.apache.pekko.stream.connectors.mqttv5.scaladsl
 
 import scala.concurrent.Future
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings
-import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
-import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
-import org.apache.pekko.stream.connectors.mqttv5.MqttSubscriptions
-import org.apache.pekko.stream.connectors.mqttv5.impl.MqttFlowStage
-import org.apache.pekko.stream.connectors.mqttv5.impl.MqttFlowStageWithAck
-import org.apache.pekko.stream.connectors.mqttv5.javadsl
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.stream.scaladsl.Keep
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.mqttv5.MqttConnectionSettings
+import pekko.stream.connectors.mqttv5.MqttMessage
+import pekko.stream.connectors.mqttv5.MqttQoS
+import pekko.stream.connectors.mqttv5.MqttSubscriptions
+import pekko.stream.connectors.mqttv5.impl.MqttFlowStage
+import pekko.stream.connectors.mqttv5.impl.MqttFlowStageWithAck
+import pekko.stream.connectors.mqttv5.javadsl
+import pekko.stream.scaladsl.Flow
+import pekko.stream.scaladsl.Keep
 
 /**
  * Scala API

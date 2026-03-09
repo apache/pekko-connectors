@@ -14,16 +14,15 @@
 package org.apache.pekko.stream.connectors.mqttv5.impl
 
 import scala.collection.mutable
-import scala.concurrent.Future
-import scala.concurrent.Promise
+import scala.concurrent.{ Future, Promise }
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream._
-import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings
-import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
-import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
-import org.apache.pekko.stream.stage._
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream._
+import pekko.stream.connectors.mqttv5. {MqttConnectionSettings, MqttQoS }
+import pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
+import pekko.stream.stage._
 import org.eclipse.paho.mqttv5.client.IMqttToken
 
 /**

@@ -16,17 +16,18 @@ package docs.scaladsl
 import scala.concurrent.Future
 import scala.concurrent.Promise
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
-import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
-import org.apache.pekko.stream.connectors.mqttv5.MqttSubscriptions
-import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttFlow
-import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
-import org.apache.pekko.stream.scaladsl.Flow
-import org.apache.pekko.stream.scaladsl.Keep
-import org.apache.pekko.stream.scaladsl.Sink
-import org.apache.pekko.stream.scaladsl.Source
-import org.apache.pekko.util.ByteString
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.mqttv5.MqttMessage
+import pekko.stream.connectors.mqttv5.MqttQoS
+import pekko.stream.connectors.mqttv5.MqttSubscriptions
+import pekko.stream.connectors.mqttv5.scaladsl.MqttFlow
+import pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
+import pekko.stream.scaladsl.Flow
+import pekko.stream.scaladsl.Keep
+import pekko.stream.scaladsl.Sink
+import pekko.stream.scaladsl.Source
+import pekko.util.ByteString
 
 class MqttFlowSpec extends MqttSpecBase("MqttFlowSpec") {
 

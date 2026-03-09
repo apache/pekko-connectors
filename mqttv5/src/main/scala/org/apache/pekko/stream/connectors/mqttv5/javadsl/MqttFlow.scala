@@ -15,9 +15,10 @@ package org.apache.pekko.stream.connectors.mqttv5.javadsl
 
 import java.util.concurrent.CompletionStage
 
-import org.apache.pekko.Done
-import org.apache.pekko.stream.connectors.mqttv5._
-import org.apache.pekko.stream.javadsl.Flow
+import org.apache.pekko
+import pekko.Done
+import pekko.stream.connectors.mqttv5._
+import pekko.stream.javadsl.Flow
 
 import scala.jdk.FutureConverters._
 

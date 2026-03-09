@@ -15,10 +15,11 @@ package docs.scaladsl
 
 import scala.concurrent.duration._
 
-import org.apache.pekko.actor.ActorSystem
-import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings
-import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
-import org.apache.pekko.testkit.TestKit
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.stream.connectors.mqttv5.MqttConnectionSettings
+import pekko.stream.connectors.testkit.scaladsl.LogCapturing
+import pekko.testkit.TestKit
 import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.Eventually
