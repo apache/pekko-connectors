@@ -205,11 +205,11 @@ jobs:
           fetch-tags: true
           persist-credentials: false
 
-      - name: Setup Java 17
+      - name: Setup Java 8
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 8
 
       - name: Install sbt
         uses: sbt/setup-sbt@6bec67c98f542b9e17369bfca0ec822ac1363194 # v1.1.19
