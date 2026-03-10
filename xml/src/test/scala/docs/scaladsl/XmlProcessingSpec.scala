@@ -18,7 +18,7 @@ import pekko.actor.ActorSystem
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.connectors.xml._
 import pekko.stream.connectors.xml.scaladsl.XmlParsing
-import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.scaladsl.{ Flow, Framing, Keep, Sink, Source }
 import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -338,6 +338,42 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
           EndElement("doc"),
           EndDocument))
       configWasCalled shouldBe true
+    }
+
+    "parse XML and attach line numbers as context" in {
+      val doc = """|<doc>
+                   |  <elem>
+                   |    elem1
+                   |  </elem>
+                   |  <elem>
+                   |    elem2
+                   |  </elem>
+                   |</doc>""".stripMargin
+      val resultFuture = Source
+        .single(ByteString(doc))
+        .via(
+          Framing.delimiter(delimiter = ByteString(System.lineSeparator),
+            maximumFrameLength = 65536,
+            allowTruncation = true))
+        .zipWithIndex
+        .runWith(XmlParsing.parserWithContext[Long]().asFlow.toMat(Sink.seq)(Keep.right))
+
+      resultFuture.futureValue should ===(
+        List(
+          (StartDocument, 0L),
+          (StartElement("doc"), 0L),
+          (Characters("  "), 1L),
+          (StartElement("elem"), 1L),
+          (Characters("    elem1"), 2L),
+          (Characters("  "), 3L),
+          (EndElement("elem"), 3L),
+          (Characters("  "), 4L),
+          (StartElement("elem"), 4L),
+          (Characters("    elem2"), 5L),
+          (Characters("  "), 6L),
+          (EndElement("elem"), 6L),
+          (EndElement("doc"), 7L),
+          (EndDocument, 7L)))
     }
 
   }
