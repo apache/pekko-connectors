@@ -15,10 +15,18 @@ package org.apache.pekko.stream.connectors.mqttv5
 
 import org.apache.pekko
 import pekko.util.ccompat.JavaConverters._
+import pekko.util.OptionConverters._
 
 import scala.collection.immutable
 
 final class MqttUserProperty private (val key: String, val value: String) {
+
+  /** Java API */
+  def getKey(): String = key
+
+  /** Java API */
+  def getValue(): String = value
+
   override def toString = s"MqttUserProperty(key=$key,value=$value)"
 
   override def equals(other: Any): Boolean = other match {
@@ -45,7 +53,7 @@ final class MqttMessage private (
     val payload: org.apache.pekko.util.ByteString,
     val qos: Option[MqttQoS],
     val retained: Boolean,
-    val userProperties: Array[MqttUserProperty]
+    val userProperties: Seq[MqttUserProperty]
 ) {
 
   def withTopic(value: String): MqttMessage = copy(topic = value)
@@ -56,18 +64,36 @@ final class MqttMessage private (
 
   /** Scala API */
   def withUserProperties(value: immutable.Seq[MqttUserProperty]): MqttMessage =
-    copy(userProperties = value.toArray)
+    copy(userProperties = value)
 
   /** Java API */
   def withUserProperties(value: java.util.List[MqttUserProperty]): MqttMessage =
-    copy(userProperties = value.asScala.toArray)
+    copy(userProperties = value.asScala.toSeq)
+
+  /**
+   * Java API. Returns the user properties.
+   * Modifying the returned list will not change the user properties of this message.
+   */
+  def getUserProperties(): java.util.List[MqttUserProperty] = userProperties.asJava
+
+  /** Java API */
+  def isRetained(): Boolean = retained
+
+  /** Java API */
+  def getQoS(): java.util.Optional[MqttQoS] = qos.toJava
+
+  /** Java API */
+  def getPayload(): org.apache.pekko.util.ByteString = payload
+
+  /** Java API */
+  def getTopic(): String = topic
 
   private def copy(
       topic: String = topic,
       payload: pekko.util.ByteString = payload,
       qos: Option[MqttQoS] = qos,
       retained: Boolean = retained,
-      userProperties: Array[MqttUserProperty] = userProperties): MqttMessage =
+      userProperties: Seq[MqttUserProperty] = userProperties): MqttMessage =
     new MqttMessage(topic = topic, payload = payload, qos = qos, retained = retained, userProperties = userProperties)
 
   override def toString =
@@ -80,12 +106,12 @@ final class MqttMessage private (
       java.util.Objects.equals(this.payload, that.payload) &&
       java.util.Objects.equals(this.qos, that.qos) &&
       java.util.Objects.equals(this.retained, that.retained) &&
-      java.util.Objects.equals(this.userProperties.toSeq, that.userProperties.toSeq)
+      java.util.Objects.equals(this.userProperties, that.userProperties)
     case _ => false
   }
 
   override def hashCode(): Int =
-    java.util.Objects.hash(topic, payload, qos, Boolean.box(retained), userProperties.toSeq)
+    java.util.Objects.hash(topic, payload, qos, Boolean.box(retained), userProperties)
 }
 
 object MqttMessage {
@@ -98,7 +124,7 @@ object MqttMessage {
     payload,
     qos = None,
     retained = false,
-    userProperties = Array.empty)
+    userProperties = Seq.empty)
 
   /** Java API */
   def create(
@@ -108,5 +134,5 @@ object MqttMessage {
     payload,
     qos = None,
     retained = false,
-    userProperties = Array.empty)
+    userProperties = Seq.empty)
 }
