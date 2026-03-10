@@ -31,11 +31,13 @@ import org.apache.pekko.stream._
 import org.apache.pekko.stream.connectors.mqttv5.AuthSettings
 import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings
 import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
+import org.apache.pekko.stream.connectors.mqttv5.MqttUserProperty
 import org.apache.pekko.stream.connectors.mqttv5.MqttOfflinePersistenceSettings
 import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
 import org.apache.pekko.stream.stage._
 import org.apache.pekko.util.ByteString
+import org.apache.pekko.util.ccompat.JavaConverters._
 import org.eclipse.paho.mqttv5.client.DisconnectedBufferOptions
 import org.eclipse.paho.mqttv5.client.IMqttAsyncClient
 import org.eclipse.paho.mqttv5.client.IMqttToken
@@ -46,6 +48,7 @@ import org.eclipse.paho.mqttv5.client.MqttDisconnectResponse
 import org.eclipse.paho.mqttv5.common.MqttException
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties
 import org.eclipse.paho.mqttv5.common.packet.MqttReturnCode
+import org.eclipse.paho.mqttv5.common.packet.UserProperty
 import org.eclipse.paho.mqttv5.common.{ MqttMessage => PahoMqttMessage }
 
 /**
@@ -235,8 +238,14 @@ abstract class MqttFlowStageLogic[I](
     new MqttCallback {
       override def messageArrived(topic: String, pahoMessage: PahoMqttMessage): Unit = {
         backpressurePahoClient.acquire()
+        val userProps =
+          Option(pahoMessage.getProperties)
+            .map(_.getUserProperties.asScala.map(p => MqttUserProperty(p.getKey, p.getValue)).toList)
+            .getOrElse(Nil)
         val message = new MqttMessageWithAck {
-          override val message: MqttMessage = MqttMessage(topic, ByteString.fromArrayUnsafe(pahoMessage.getPayload))
+          override val message: MqttMessage =
+            MqttMessage(topic, ByteString.fromArrayUnsafe(pahoMessage.getPayload))
+              .withUserProperties(userProps)
 
           override def ack(): Future[Done] = {
             val promise = Promise[Done]()
@@ -403,6 +412,12 @@ abstract class MqttFlowStageLogic[I](
     val pahoMsg = new PahoMqttMessage(msg.payload.toArray)
     pahoMsg.setQos(msg.qos.getOrElse(defaultQoS).value)
     pahoMsg.setRetained(msg.retained)
+
+    if (msg.userProperties.nonEmpty) {
+      val pahoProps = new MqttProperties()
+      pahoProps.setUserProperties(msg.userProperties.map(p => new UserProperty(p.key, p.value)).toList.asJava)
+      pahoMsg.setProperties(pahoProps)
+    }
 
     mqttClient.publish(
       msg.topic,

@@ -20,6 +20,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.Promise
 import scala.concurrent.duration._
+import scala.collection.immutable
 
 import org.apache.pekko.Done
 import org.apache.pekko.NotUsed
@@ -28,6 +29,7 @@ import org.apache.pekko.stream.connectors.mqttv5.MqttConnectionSettings
 import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
 import org.apache.pekko.stream.connectors.mqttv5.MqttQoS
 import org.apache.pekko.stream.connectors.mqttv5.MqttSubscriptions
+import org.apache.pekko.stream.connectors.mqttv5.MqttUserProperty
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttMessageWithAck
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttSink
 import org.apache.pekko.stream.connectors.mqttv5.scaladsl.MqttSource
@@ -491,5 +493,24 @@ class MqttSourceSpec extends MqttSpecBase("MqttSourceSpec") {
       probe2.requestNext(5.seconds) shouldBe msg
       Await.result(proxyKs2, timeout).shutdown()
     }
+  }
+
+  "receive user properties from a message" in {
+    val topic = "v5/source-spec/user-props"
+    val expectedProps = immutable.Seq(
+      MqttUserProperty("x-trace-id", "abc123"),
+      MqttUserProperty("x-tenant", "acme"))
+
+    val (subscribed, result) = MqttSource
+      .atMostOnce(sourceSettings, MqttSubscriptions(topic, MqttQoS.AtLeastOnce), 8)
+      .toMat(Sink.head)(Keep.both)
+      .run()
+
+    Await.ready(subscribed, timeout)
+
+    val msg = MqttMessage(topic, ByteString("test")).withUserProperties(expectedProps)
+    Source.single(msg).runWith(MqttSink(sinkSettings, MqttQoS.AtLeastOnce))
+
+    result.futureValue.userProperties shouldBe expectedProps
   }
 }
