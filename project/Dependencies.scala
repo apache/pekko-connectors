@@ -129,7 +129,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.28.0",
+      "com.rabbitmq" % "amqp-client" % "5.29.0",
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
   val AwsSpiPekkoHttp = Seq(
@@ -282,7 +282,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.22.0" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.22.1" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
@@ -306,7 +306,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.148.0" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.149.0" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
@@ -400,7 +400,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.4.0").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.4.1").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
