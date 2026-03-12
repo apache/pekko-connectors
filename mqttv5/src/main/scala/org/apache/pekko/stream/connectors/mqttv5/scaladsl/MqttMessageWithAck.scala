@@ -15,10 +15,11 @@ package org.apache.pekko.stream.connectors.mqttv5.scaladsl
 
 import scala.concurrent.Future
 
-import org.apache.pekko.Done
-import org.apache.pekko.annotation.InternalApi
-import org.apache.pekko.stream.connectors.mqttv5.MqttMessage
-import org.apache.pekko.stream.connectors.mqttv5.javadsl
+import org.apache.pekko
+import pekko.Done
+import pekko.annotation.InternalApi
+import pekko.stream.connectors.mqttv5.MqttMessage
+import pekko.stream.connectors.mqttv5.javadsl
 
 import scala.jdk.FutureConverters._
 
