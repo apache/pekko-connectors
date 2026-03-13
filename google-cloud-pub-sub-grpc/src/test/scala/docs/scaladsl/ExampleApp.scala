@@ -15,11 +15,11 @@ package docs.scaladsl
 import java.util.logging.{ Level, Logger }
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, Cancellable }
-import pekko.stream.DelayOverflowStrategy
+import pekko.stream.{ DelayOverflowStrategy, RestartSettings }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
 import pekko.stream.scaladsl.{ Sink, Source }
 import com.google.protobuf.ByteString
-import com.google.pubsub.v1.pubsub.{ PublishRequest, PubsubMessage, StreamingPullRequest }
+import com.google.pubsub.v1.pubsub.{ AcknowledgeRequest, PublishRequest, PubsubMessage, StreamingPullRequest }
 import com.typesafe.config.ConfigFactory
 
 import scala.annotation.nowarn
@@ -42,10 +42,11 @@ object ExampleApp {
     import sys.dispatcher
 
     val result = args.toList match {
-      case "publish-single" :: rest => publishSingle(rest)
-      case "publish-stream" :: rest => publishStream(rest)
-      case "subscribe" :: rest      => subscribeStream(rest)
-      case other                    => Future.failed(new Error(s"unknown arguments: $other"))
+      case "publish-single" :: rest        => publishSingle(rest)
+      case "publish-stream" :: rest        => publishStream(rest)
+      case "subscribe" :: rest             => subscribeStream(rest)
+      case "subscribe-auto-extend" :: rest => subscribeAutoExtend(rest)
+      case other                           => Future.failed(new Error(s"unknown arguments: $other"))
     }
 
     result.onComplete { res =>
@@ -95,6 +96,27 @@ object ExampleApp {
     GooglePubSub
       .subscribe(subscribe(projectId, sub), 1.second)
       .to(Sink.foreach(println))
+      .run()
+  }
+
+  private def subscribeAutoExtend(args: List[String])(implicit system: ActorSystem) = {
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val subscriptionFqrs = subFqrs(projectId, sub)
+
+    val restartSettings = RestartSettings(
+      minBackoff = 100.millis,
+      maxBackoff = 10.seconds,
+      randomFactor = 0.2)
+
+    GooglePubSub
+      .subscribe(subscribe(projectId, sub), 1.second, restartSettings)
+      .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, 3.seconds, 30))
+      .map { msg =>
+        println(msg)
+        AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId))
+      }
+      .to(GooglePubSub.acknowledge(parallelism = 1))
+      .mapMaterializedValue(Future.successful(_))
       .run()
   }
 

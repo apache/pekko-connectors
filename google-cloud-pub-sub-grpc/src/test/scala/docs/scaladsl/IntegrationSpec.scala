@@ -220,6 +220,127 @@ class IntegrationSpec
         .to(Sink.ignore)
     }
 
+    "modify ack deadline" in {
+      val projectId = "pekko-connectors"
+      val topic = "simpleTopic"
+      val subscription = "simpleSubscription"
+      val subscriptionFqrs = s"projects/$projectId/subscriptions/$subscription"
+
+      // publish a message
+      val msg = ByteString.copyFromUtf8("Hello deadline extension!")
+      val publishRequest = PublishRequest()
+        .withTopic(s"projects/$projectId/topics/$topic")
+        .addMessages(PubsubMessage().withData(msg))
+      Source.single(publishRequest).via(GooglePubSub.publish(parallelism = 1)).runWith(Sink.head).futureValue
+
+      val request = StreamingPullRequest()
+        .withSubscription(subscriptionFqrs)
+        .withStreamAckDeadlineSeconds(10)
+
+      // #modify-ack-deadline
+      // subscribe, extend deadline, then ack
+      val result = GooglePubSub.subscribe(request, pollInterval = 1.second)
+        .take(1)
+        .mapAsync(1) { receivedMessage =>
+          // extend the ack deadline
+          val modifyRequest = ModifyAckDeadlineRequest(
+            subscription = subscriptionFqrs,
+            ackIds = Seq(receivedMessage.ackId),
+            ackDeadlineSeconds = 30)
+          Source.single(modifyRequest)
+            .via(GooglePubSub.modifyAckDeadlineFlow())
+            .runWith(Sink.head)
+            .map(_ => receivedMessage)(system.dispatcher)
+        }
+        .alsoTo(
+          Flow[ReceivedMessage]
+            .map(msg => AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId)))
+            .to(GooglePubSub.acknowledge(parallelism = 1)))
+        .runWith(Sink.head)
+      // #modify-ack-deadline
+
+      result.futureValue.message.value.data shouldBe msg
+    }
+
+    "auto extend ack deadlines" in {
+      val projectId = "pekko-connectors"
+      val topic = "simpleTopic"
+      val subscription = "simpleSubscription"
+      val subscriptionFqrs = s"projects/$projectId/subscriptions/$subscription"
+
+      // publish a message
+      val msg = ByteString.copyFromUtf8("Hello auto-extend!")
+      val publishRequest = PublishRequest()
+        .withTopic(s"projects/$projectId/topics/$topic")
+        .addMessages(PubsubMessage().withData(msg))
+      Source.single(publishRequest).via(GooglePubSub.publish(parallelism = 1)).runWith(Sink.head).futureValue
+
+      val request = StreamingPullRequest()
+        .withSubscription(subscriptionFqrs)
+        .withStreamAckDeadlineSeconds(10)
+
+      // #subscribe-auto-extend
+      // subscribe with auto-extending deadlines, then ack
+      val result = GooglePubSub.subscribe(request, pollInterval = 1.second)
+        .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, 3.seconds, 30))
+        .take(1)
+        .alsoTo(
+          Flow[ReceivedMessage]
+            .map(msg => AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId)))
+            .to(GooglePubSub.acknowledge(parallelism = 1)))
+        .runWith(Sink.head)
+      // #subscribe-auto-extend
+
+      result.futureValue.message.value.data shouldBe msg
+    }
+
+    "auto extend prevents redelivery during slow processing" in {
+      val projectId = "pekko-connectors"
+      val topic = "simpleTopic"
+      val subscription = "simpleSubscription"
+      val subscriptionFqrs = s"projects/$projectId/subscriptions/$subscription"
+
+      // publish a unique message
+      val msg = ByteString.copyFromUtf8(s"slow-processing-${System.nanoTime()}")
+      val publishRequest = PublishRequest()
+        .withTopic(s"projects/$projectId/topics/$topic")
+        .addMessages(PubsubMessage().withData(msg))
+      Source.single(publishRequest).via(GooglePubSub.publish(parallelism = 1)).runWith(Sink.head).futureValue
+
+      val request = StreamingPullRequest()
+        .withSubscription(subscriptionFqrs)
+        .withStreamAckDeadlineSeconds(10)
+
+      // Subscribe with auto-extend, simulate slow processing (15s > 10s ack deadline),
+      // then ack. Without the deadline extension the message would be redelivered.
+      val received = GooglePubSub.subscribe(request, pollInterval = 1.second)
+        .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, 3.seconds, 10))
+        .filter(_.message.exists(_.data == msg))
+        .take(1)
+        .mapAsync(1) { receivedMessage =>
+          // simulate slow processing that exceeds the ack deadline
+          org.apache.pekko.pattern.after(15.seconds)(
+            Future.successful(receivedMessage))(system)
+        }
+        .alsoTo(
+          Flow[ReceivedMessage]
+            .map(m => AcknowledgeRequest(subscriptionFqrs, Seq(m.ackId)))
+            .to(GooglePubSub.acknowledge(parallelism = 1)))
+        .runWith(Sink.head)
+
+      received.futureValue(timeout(30.seconds)).message.value.data shouldBe msg
+
+      // verify no redelivery — subscription should be empty (for our message)
+      val redelivered = GooglePubSub.subscribe(request, pollInterval = 1.second)
+        .filter(_.message.exists(_.data == msg))
+        .idleTimeout(12.seconds)
+        .runWith(Sink.seq)
+        .failed
+        .futureValue
+
+      redelivered shouldBe a[java.util.concurrent.TimeoutException]
+    }
+
     "republish" in {
       val msg = "Labas!"
 
@@ -264,6 +385,71 @@ class IntegrationSpec
         .runWith(Sink.ignore)
         .failed
         .futureValue
+    }
+
+    "reconnect after emulator restart" in {
+      import pekko.stream.RestartSettings
+      import scala.sys.process._
+
+      val projectId = "pekko-connectors"
+      val topic = "simpleTopic"
+      val subscription = "simpleSubscription"
+      val subscriptionFqrs = s"projects/$projectId/subscriptions/$subscription"
+      val topicFqrs = s"projects/$projectId/topics/$topic"
+
+      val restartSettings = RestartSettings(
+        minBackoff = 100.millis,
+        maxBackoff = 5.seconds,
+        randomFactor = 0.2)
+
+      val request = StreamingPullRequest()
+        .withSubscription(subscriptionFqrs)
+        .withStreamAckDeadlineSeconds(10)
+
+      // publish a message before restart
+      val msg1 = ByteString.copyFromUtf8(s"before-restart-${System.nanoTime()}")
+      Source.single(PublishRequest(topicFqrs, Seq(PubsubMessage().withData(msg1))))
+        .via(GooglePubSub.publish(parallelism = 1)).runWith(Sink.head).futureValue
+
+      // start reconnecting subscriber — take first matching message, ack everything
+      val first = GooglePubSub
+        .subscribe(request, 1.second, restartSettings)
+        .alsoTo(
+          Flow[ReceivedMessage]
+            .map(msg => AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId)))
+            .to(GooglePubSub.acknowledge(parallelism = 1)))
+        .filter(_.message.exists(_.data == msg1))
+        .runWith(Sink.head)
+
+      first.futureValue.message.value.data shouldBe msg1
+
+      // restart emulator — this kills all gRPC connections
+      "docker compose restart gcloud-pubsub-emulator".!
+
+      // wait for emulator to come back up
+      Thread.sleep(8000)
+
+      // recreate topic and subscription (emulator loses state on restart)
+      s"docker compose exec gcloud-pubsub-emulator curl -s -X PUT http://localhost:8538/v1/projects/$projectId/topics/$topic".!
+      s"docker compose exec gcloud-pubsub-emulator curl -s -X PUT http://localhost:8538/v1/projects/$projectId/subscriptions/$subscription -H Content-Type:application/json -d {\"topic\":\"projects/$projectId/topics/$topic\"}".!
+
+      Thread.sleep(2000)
+
+      // publish a second message after restart
+      val msg2 = ByteString.copyFromUtf8(s"after-restart-${System.nanoTime()}")
+      Source.single(PublishRequest(topicFqrs, Seq(PubsubMessage().withData(msg2))))
+        .via(GooglePubSub.publish(parallelism = 1)).runWith(Sink.head).futureValue
+
+      // start another reconnecting subscriber — should connect to the restarted emulator
+      val second = GooglePubSub
+        .subscribe(request, 1.second, restartSettings)
+        .alsoTo(
+          Flow[ReceivedMessage]
+            .map(msg => AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId)))
+            .to(GooglePubSub.acknowledge(parallelism = 1)))
+        .runWith(Sink.head)
+
+      second.futureValue.message.value.data shouldBe msg2
     }
 
     "custom publisher" in {
