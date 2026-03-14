@@ -241,6 +241,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http-spray-json" % PekkoHttpVersion,
       "com.github.jwt-scala" %% "jwt-json-common" % JwtScalaVersion,
       "com.google.auth" % "google-auth-library-credentials" % GoogleAuthVersion,
+      "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val GoogleBigQuery = Seq(

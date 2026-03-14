@@ -218,6 +218,79 @@ public class IntegrationTest {
   }
 
   @Test
+  public void shouldModifyAckDeadline() {
+    final String projectId = "pekko-connectors";
+    final String subscription = "simpleSubscription";
+    final String subscriptionFqrs =
+        "projects/" + projectId + "/subscriptions/" + subscription;
+
+    final StreamingPullRequest request =
+        StreamingPullRequest.newBuilder()
+            .setSubscription(subscriptionFqrs)
+            .setStreamAckDeadlineSeconds(10)
+            .build();
+
+    final Duration pollInterval = Duration.ofSeconds(1);
+    final Source<ReceivedMessage, CompletableFuture<Cancellable>> subscriptionSource =
+        GooglePubSub.subscribe(request, pollInterval);
+
+    // #modify-ack-deadline
+    subscriptionSource
+        .mapAsync(
+            1,
+            receivedMessage -> {
+              ModifyAckDeadlineRequest modifyRequest =
+                  ModifyAckDeadlineRequest.newBuilder()
+                      .setSubscription(subscriptionFqrs)
+                      .addAckIds(receivedMessage.getAckId())
+                      .setAckDeadlineSeconds(30)
+                      .build();
+              return Source.single(modifyRequest)
+                  .via(GooglePubSub.modifyAckDeadlineFlow())
+                  .runWith(Sink.head(), system)
+                  .thenApply(ignore -> receivedMessage);
+            })
+        .map(
+            msg ->
+                AcknowledgeRequest.newBuilder()
+                    .setSubscription(subscriptionFqrs)
+                    .addAckIds(msg.getAckId())
+                    .build())
+        .to(GooglePubSub.acknowledge(1));
+    // #modify-ack-deadline
+  }
+
+  @Test
+  public void shouldAutoExtendAckDeadlines() {
+    final String projectId = "pekko-connectors";
+    final String subscription = "simpleSubscription";
+    final String subscriptionFqrs =
+        "projects/" + projectId + "/subscriptions/" + subscription;
+
+    final StreamingPullRequest request =
+        StreamingPullRequest.newBuilder()
+            .setSubscription(subscriptionFqrs)
+            .setStreamAckDeadlineSeconds(10)
+            .build();
+
+    final Duration pollInterval = Duration.ofSeconds(1);
+    final Source<ReceivedMessage, CompletableFuture<Cancellable>> subscriptionSource =
+        GooglePubSub.subscribe(request, pollInterval);
+
+    // #subscribe-auto-extend
+    subscriptionSource
+        .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, Duration.ofSeconds(3), 30))
+        .map(
+            msg ->
+                AcknowledgeRequest.newBuilder()
+                    .setSubscription(subscriptionFqrs)
+                    .addAckIds(msg.getAckId())
+                    .build())
+        .to(GooglePubSub.acknowledge(1));
+    // #subscribe-auto-extend
+  }
+
+  @Test
   public void customPublisher() {
     // #attributes
     final PubSubSettings settings = PubSubSettings.create(system);

@@ -16,12 +16,8 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc
 import org.apache.pekko
 import pekko.actor.ClassicActorSystemProvider
 import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.DeprecatedCredentials
-import com.google.auth.oauth2.GoogleCredentials
 import com.typesafe.config.Config
 import io.grpc.CallCredentials
-import io.grpc.auth.MoreCallCredentials
-
-import java.util.Collections
 
 import scala.annotation.nowarn
 
@@ -92,11 +88,8 @@ object PubSubSettings {
       config.getBoolean("use-tls"),
       Some(config.getString("rootCa")).filter(_ != "none"),
       config.getString("callCredentials") match {
-        case "google-application-default" | "deprecated" =>
-          val googleCredentials = GoogleCredentials.getApplicationDefault.createScoped(
-            Collections.singletonList("https://www.googleapis.com/auth/pubsub"))
-          Some(DeprecatedCredentials(MoreCallCredentials.from(googleCredentials)))
-        case _ => None
+        case "none" => None
+        case _      => Some(DeprecatedCredentials.marker)
       })
 
   /**
