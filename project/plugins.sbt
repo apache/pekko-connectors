@@ -34,4 +34,4 @@ addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0-M1")
 // templating
 addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.8.0")
 // Run JUnit 5 tests with sbt
-addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.17.0")
+addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.17.1")
