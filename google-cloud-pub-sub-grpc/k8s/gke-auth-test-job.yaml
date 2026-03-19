@@ -1,0 +1,28 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more license agreements; and to You under the Apache License, version 2.0: https://www.apache.org/licenses/LICENSE-2.0
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gke-auth-test
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      serviceAccountName: pekko-test
+      containers:
+      - name: test
+        image: us-central1-docker.pkg.dev/pekko-connectors/pekko-test/gke-auth-test:latest
+        env:
+        - name: PROJECT_ID
+          value: "pekko-connectors"
+        - name: TOPIC
+          value: "simpleTopic"
+        - name: SUBSCRIPTION
+          value: "simpleSubscription"
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+      restartPolicy: Never
