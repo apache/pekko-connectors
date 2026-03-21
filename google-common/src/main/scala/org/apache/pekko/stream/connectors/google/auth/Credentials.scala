@@ -73,11 +73,18 @@ object Credentials {
               }
           }
       }
-    case "service-account" => parseServiceAccount(c)
-    case "compute-engine"  => parseComputeEngine(c)
-    case "user-access"     => parseUserAccess(c)
-    case "access-token"    => parseAccessToken(c)
-    case "none"            => parseNone(c)
+    case "google-application-default" => parseGoogleApplicationDefault(c)
+    case "service-account"            => parseServiceAccount(c)
+    case "compute-engine"             => parseComputeEngine(c)
+    case "user-access"                => parseUserAccess(c)
+    case "access-token"               => parseAccessToken(c)
+    case "none"                       => parseNone(c)
+  }
+
+  private def parseGoogleApplicationDefault(c: Config) = {
+    val scopes = c.getStringList("scopes").asScala.toSet
+    val projectId = c.getString("google-application-default.project-id")
+    GoogleApplicationDefaultCredentials(projectId, scopes)
   }
 
   private def parseServiceAccount(c: Config)(implicit system: ClassicActorSystemProvider) = {
