@@ -20,10 +20,7 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.gke
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.RestartSettings
-import pekko.stream.connectors.googlecloud.pubsub.grpc.{
-  AckDeadlineDistribution,
-  FlowControl
-}
+import pekko.stream.connectors.googlecloud.pubsub.grpc.{ AckDeadlineDistribution, FlowControl }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import com.google.protobuf.ByteString
