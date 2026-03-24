@@ -42,7 +42,7 @@ private[auth] final case class AccessTokenCredentials(projectId: String, accessT
     new GoogleCredentials {
       override def getAuthenticationType: String = "OAuth2"
       override def getRequestMetadata(uri: URI): util.Map[String, util.List[String]] =
-        util.Collections.singletonMap("Authorization", util.Collections.singletonList(accessToken))
+        util.Collections.singletonMap("Authorization", util.Collections.singletonList("Bearer " + accessToken))
       override def hasRequestMetadata: Boolean = true
       override def hasRequestMetadataOnly: Boolean = true
       override def refresh(): Unit = ()

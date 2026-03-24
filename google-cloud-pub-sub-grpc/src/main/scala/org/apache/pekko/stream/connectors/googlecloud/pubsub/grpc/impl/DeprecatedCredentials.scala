@@ -14,12 +14,12 @@
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.impl
 
 import org.apache.pekko.annotation.InternalApi
-import io.grpc.CallCredentials
+import io.grpc.{ CallCredentials, Metadata }
 
 import java.util.concurrent.Executor
 
 /**
- * Used purely as a wrapper class to help migrate to common Google auth.
+ * Marker class indicating that credentials should be resolved via GoogleSettings.
  */
 @InternalApi
 private[grpc] final case class DeprecatedCredentials(underlying: CallCredentials) extends CallCredentials {
@@ -30,4 +30,18 @@ private[grpc] final case class DeprecatedCredentials(underlying: CallCredentials
     underlying.applyRequestMetadata(requestInfo, appExecutor, applier)
 
   override def thisUsesUnstableApi(): Unit = underlying.thisUsesUnstableApi()
+}
+
+@InternalApi
+private[grpc] object DeprecatedCredentials {
+
+  /** A no-op marker instance used to signal "resolve via GoogleSettings". */
+  val marker: CallCredentials = DeprecatedCredentials(new CallCredentials {
+    override def applyRequestMetadata(requestInfo: CallCredentials.RequestInfo,
+        appExecutor: Executor,
+        applier: CallCredentials.MetadataApplier): Unit =
+      applier.apply(new Metadata())
+
+    override def thisUsesUnstableApi(): Unit = ()
+  })
 }
