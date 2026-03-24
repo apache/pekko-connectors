@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl
 
 import java.time.Duration
 import java.util.concurrent.{ CompletableFuture, CompletionStage, ConcurrentHashMap }
+
 import org.apache.pekko
 import pekko.actor.Cancellable
 import pekko.annotation.ApiMayChange
@@ -29,9 +30,7 @@ import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.FlowControlGateStage
 import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1._
 
-import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
-import scala.jdk.DurationConverters._
 
 /**
  * Google Pub/Sub Pekko Stream operator factory.
