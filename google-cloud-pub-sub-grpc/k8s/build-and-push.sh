@@ -41,13 +41,14 @@ cd "${ROOT_DIR}"
 # We need to compile it as part of the project to get all dependencies
 mkdir -p google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke
 cp "${SCRIPT_DIR}/GkeAuthTest.scala" google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/
+cp "${SCRIPT_DIR}/GkeFullFeatureTest.scala" google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/
 cp "${SCRIPT_DIR}/application.conf" google-cloud-pub-sub-grpc/src/main/resources/gke-application.conf
 
 sbt "google-cloud-pub-sub-grpc/compile"
 
 # Export classpath and build the jar
 echo "=== Packaging ==="
-CLASSPATH=$(sbt --error "print google-cloud-pub-sub-grpc/fullClasspath" | tr ',' '\n' | grep -o '/[^ ]*\.jar' | tr '\n' ':')
+FULL_CP=$(sbt --error "print google-cloud-pub-sub-grpc/fullClasspath" | tr ',' '\n' | sed 's/.*Attributed(\(.*\))/\1/')
 CLASSES_DIR=$(sbt --error "print google-cloud-pub-sub-grpc/classDirectory" | tr -d '[:space:]')
 
 # Create staging directory
@@ -60,9 +61,20 @@ cd "${CLASSES_DIR}"
 jar cf "${STAGING}/gke-auth-test.jar" .
 cd "${ROOT_DIR}"
 
-# Copy dependency jars
-echo "${CLASSPATH}" | tr ':' '\n' | while read -r jar; do
-  [ -f "$jar" ] && cp "$jar" "${STAGING}/lib/"
+# Copy dependency jars and package inter-project class directories as jars
+echo "${FULL_CP}" | tr ':' '\n' | while read -r entry; do
+  entry=$(echo "$entry" | tr -d '[:space:]')
+  [ -z "$entry" ] && continue
+  if [ -f "$entry" ] && echo "$entry" | grep -q '\.jar$'; then
+    # External jar dependency
+    cp "$entry" "${STAGING}/lib/"
+  elif [ -d "$entry" ] && [ "$entry" != "$CLASSES_DIR" ]; then
+    # Inter-project classes directory — package as a jar
+    dir_name=$(echo "$entry" | sed 's|.*/\([^/]*\)/target/.*|\1|')
+    cd "$entry"
+    jar cf "${STAGING}/lib/${dir_name}.jar" .
+    cd "${ROOT_DIR}"
+  fi
 done
 
 # Copy the GKE-specific application.conf into the jar
@@ -85,6 +97,7 @@ docker push "${IMAGE}"
 echo "=== Cleaning up ==="
 rm -rf "${STAGING}"
 rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/GkeAuthTest.scala"
+rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/GkeFullFeatureTest.scala"
 rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/resources/gke-application.conf"
 
 echo "=== Done: ${IMAGE} ==="

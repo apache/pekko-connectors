@@ -21,4 +21,5 @@ WORKDIR /app
 COPY lib/ lib/
 COPY gke-auth-test.jar .
 
-ENTRYPOINT ["java", "-cp", "gke-auth-test.jar:lib/*", "org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.gke.GkeAuthTest"]
+ENV MAIN_CLASS=org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.gke.GkeAuthTest
+ENTRYPOINT ["sh", "-c", "java -cp gke-auth-test.jar:lib/* $MAIN_CLASS"]
