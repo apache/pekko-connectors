@@ -31,39 +31,35 @@ import com.google.pubsub.v1.{ SubscriberClient => JavaSubscriberClient }
 /**
  * Holds the gRPC java subscriber client instance.
  */
-final class GrpcSubscriber private (settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem) {
-
-  @ApiMayChange
-  final val client =
-    JavaSubscriberClient.create(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings)(sys), sys)
-
-  sys.registerOnTermination(client.close())
-}
+final class GrpcSubscriber private[grpc] (@ApiMayChange final val client: JavaSubscriberClient)
 
 object GrpcSubscriber {
 
   /**
-   * Creates a publisher with the new actors API.
+   * Creates a subscriber with the new actors API.
    */
   def create(settings: PubSubSettings,
       googleSettings: GoogleSettings,
       sys: ClassicActorSystemProvider): GrpcSubscriber =
     create(settings, googleSettings, sys.classicSystem)
 
-  def create(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber =
-    new GrpcSubscriber(settings, googleSettings, sys)
+  def create(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber = {
+    val c = JavaSubscriberClient.create(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings)(sys), sys)
+    sys.registerOnTermination(c.close())
+    new GrpcSubscriber(c)
+  }
 
   /**
-   * Creates a publisher with the new actors API.
+   * Creates a subscriber with the new actors API.
    */
   def create(settings: PubSubSettings, sys: ClassicActorSystemProvider): GrpcSubscriber =
     create(settings, sys.classicSystem)
 
   def create(settings: PubSubSettings, sys: ActorSystem): GrpcSubscriber =
-    new GrpcSubscriber(settings, GoogleSettings(sys), sys)
+    create(settings, GoogleSettings(sys), sys)
 
   /**
-   * Creates a publisher with the new actors API.
+   * Creates a subscriber with the new actors API.
    */
   def create(sys: ClassicActorSystemProvider): GrpcSubscriber = create(sys.classicSystem)
 

@@ -148,6 +148,41 @@ Scala
 Java
 : @@snip (/google-cloud-pub-sub-grpc/src/test/java/docs/javadsl/IntegrationTest.java) { #acknowledge }
 
+### Extracting ack deadline
+
+@@@ note { .new-in-version }
+
+@ApiMayChange The operators in this section are marked with `@ApiMayChange` and may change in future releases.
+
+@@@
+
+When processing messages takes longer than the acknowledgement deadline, Pub/Sub will redeliver the message. To
+prevent this, you can extend the acknowledgement deadline using `modifyAckDeadlineFlow` or automatically with
+`autoExtendAckDeadlines`.
+
+#### Manual deadline extension
+
+Use `modifyAckDeadlineFlow` to explicitly extend the ack deadline of individual messages during processing:
+
+Scala
+: @@snip (/google-cloud-pub-sub-grpc/src/test/scala/docs/scaladsl/IntegrationSpec.scala) { #modify-ack-deadline }
+
+Java
+: @@snip (/google-cloud-pub-sub-grpc/src/test/java/docs/javadsl/IntegrationTest.java) { #modify-ack-deadline }
+
+#### Automatic deadline extension
+
+For a higher-level approach, `autoExtendAckDeadlines` creates a flow that automatically extends acknowledgement
+deadlines for all messages passing through it. A background timer periodically sends `ModifyAckDeadline` RPCs,
+preventing Pub/Sub from redelivering messages while they are being processed downstream. This is similar to the
+lease management behavior of Google's official client library.
+
+Scala
+: @@snip (/google-cloud-pub-sub-grpc/src/test/scala/docs/scaladsl/IntegrationSpec.scala) { #subscribe-auto-extend }
+
+Java
+: @@snip (/google-cloud-pub-sub-grpc/src/test/java/docs/javadsl/IntegrationTest.java) { #subscribe-auto-extend }
+
 ## Running the test code
 
 @@@ note
@@ -177,8 +212,11 @@ sbt
     ```bash
     env GOOGLE_APPLICATION_CREDENTIALS=/path/to/application/credentials.json sbt
 
-    // receive messages from a subsciptions
+    // receive messages from a subscription
     > google-cloud-pub-sub-grpc/Test/run subscribe <project-id> <subscription-name>
+
+    // receive messages with automatic ack deadline extension
+    > google-cloud-pub-sub-grpc/Test/run subscribe-auto-extend <project-id> <subscription-name>
 
     // publish a single message to a topic
     > google-cloud-pub-sub-grpc/Test/run publish-single <project-id> <topic-name>

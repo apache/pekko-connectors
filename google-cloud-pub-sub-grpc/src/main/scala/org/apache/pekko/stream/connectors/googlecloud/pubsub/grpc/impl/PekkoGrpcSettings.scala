@@ -43,10 +43,8 @@ import scala.annotation.nowarn
         .withFallback(sys.settings.config.getConfig("pekko.grpc.client.\"*\"")))
 
     (config.callCredentials: @nowarn("msg=deprecated")) match {
-      case None                           => settings
-      case Some(DeprecatedCredentials(_)) => // Deprecated credentials were loaded from config so override them
-        sys.log.warning(
-          "Config path pekko.connectors.google.cloud.pubsub.grpc.callCredentials is deprecated, use pekko.connectors.google.credentials")
+      case None                           => settings // explicit opt-out (callCredentials = "none"), e.g. emulator
+      case Some(_: DeprecatedCredentials) => // default: resolve via GoogleSettings
         val credentials = googleSettings.credentials.asGoogle(sys.dispatcher, googleSettings.requestSettings)
         settings.withCallCredentials(MoreCallCredentials.from(credentials))
       case Some(creds) => settings.withCallCredentials(creds)
