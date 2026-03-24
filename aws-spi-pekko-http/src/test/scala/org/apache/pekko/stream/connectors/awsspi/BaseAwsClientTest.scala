@@ -56,7 +56,7 @@ trait LocalstackBaseAwsClientTest[C <: SdkClient] extends BaseAwsClientTest[C] {
 
   override lazy val container: GenericContainer =
     new GenericContainer(
-      dockerImage = "localstack/localstack",
+      dockerImage = "localstack/localstack:4.14",
       exposedPorts = Seq(exposedServicePort),
       env = Map("SERVICES" -> service),
       waitStrategy = Some(LocalStackReadyLogWaitStrategy))
