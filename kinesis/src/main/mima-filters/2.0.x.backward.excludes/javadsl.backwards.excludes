@@ -16,4 +16,4 @@
 # under the License.
 
 # changed methods to return CompletionStage instead of Scala Future
-ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.javadsl.GooglePubSub.subscribeFlow")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.kinesis.javadsl.KinesisSchedulerSource.createSharded")
