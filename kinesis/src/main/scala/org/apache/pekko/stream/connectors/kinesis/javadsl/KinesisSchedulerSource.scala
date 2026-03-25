@@ -45,8 +45,9 @@ object KinesisSchedulerSource {
       settings: KinesisSchedulerSourceSettings): SubSource[CommittableRecord, CompletionStage[Scheduler]] =
     new SubSource(
       scaladsl.KinesisSchedulerSource
-        .sharded(schedulerBuilder.build, settings)
-        .mapMaterializedValue(_.asJava))
+        .apply(schedulerBuilder.build, settings)
+        .mapMaterializedValue(_.asJava)
+        .groupBy(500, _.processorData.shardId))
 
   /**
    * @deprecated Use createSharded which returns CompletionStage instead
