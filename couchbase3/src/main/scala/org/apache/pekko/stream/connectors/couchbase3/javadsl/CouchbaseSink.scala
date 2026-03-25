@@ -32,6 +32,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.insertDoc]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #insertDocFuture} which works like this method worked in 1.x.
    */
   def insertDoc[T](insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
@@ -48,6 +53,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.insert]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #insertFuture} which works like this method worked in 1.x.
    */
   def insert[T](applyId: T => String,
       insertOptions: InsertOptions)(
@@ -66,6 +76,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.upsertDoc]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #upsertDocFuture} which works like this method worked in 1.x.
    */
   def upsertDoc[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
@@ -82,6 +97,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.upsert]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #upsertFuture} which works like this method worked in 1.x.
    */
   def upsert[T](applyId: T => String,
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
@@ -100,6 +120,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.replaceDoc]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #replaceDocFuture} which works like this method worked in 1.x.
    */
   def replaceDoc[T](
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
@@ -118,6 +143,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.replace]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #replaceFuture} which works like this method worked in 1.x.
    */
   def replace[T](applyId: T => String,
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
@@ -136,6 +166,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.remove]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #removeFuture} which works like this method worked in 1.x.
    */
   def remove[T](applyId: T => String,
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
@@ -154,6 +189,11 @@ object CouchbaseSink {
 
   /**
    * reference to [[CouchbaseFlow.exists]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #existsFuture} which works like this method worked in 1.x.
    */
   def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[java.lang.Boolean]] =
