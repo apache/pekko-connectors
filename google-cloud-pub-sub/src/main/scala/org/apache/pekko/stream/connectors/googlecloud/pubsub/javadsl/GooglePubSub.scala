@@ -107,8 +107,8 @@ object GooglePubSub {
    * Creates a flow pulling messages from a subscription.
    * @deprecated Use subscribeFlow which returns CompletionStage instead
    */
-  @deprecated("Use subscribeFlow which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def subscribeFlowWithScalaFuture(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
+  @deprecated("Use subscribeFlow which returns CompletionStage instead", since = "2.0.0")
+  def subscribeFlowFuture(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
     GPubSub
       .subscribeFlow(subscription, config)
       .asJava

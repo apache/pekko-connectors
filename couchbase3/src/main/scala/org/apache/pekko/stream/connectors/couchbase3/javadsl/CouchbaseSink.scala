@@ -41,8 +41,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.insertDoc]]
    * @deprecated Use insertDoc which returns CompletionStage instead
    */
-  @deprecated("Use insertDoc which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def insertDocF[T](insertOptions: InsertOptions)(
+  @deprecated("Use insertDoc which returns CompletionStage instead", since = "2.0.0")
+  def insertDocFuture[T](insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] =
     ScalaCouchbaseSink.insertDoc[T](insertOptions).asJava
 
@@ -58,8 +58,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.insert]]
    * @deprecated Use insert which returns CompletionStage instead
    */
-  @deprecated("Use insert which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def insertF[T](applyId: T => String,
+  @deprecated("Use insert which returns CompletionStage instead", since = "2.0.0")
+  def insertFuture[T](applyId: T => String,
       insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
     ScalaCouchbaseSink.insert[T](applyId, insertOptions).asJava
@@ -75,8 +75,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.upsertDoc]]
    * @deprecated Use upsertDoc which returns CompletionStage instead
    */
-  @deprecated("Use upsertDoc which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def upsertDocF[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
+  @deprecated("Use upsertDoc which returns CompletionStage instead", since = "2.0.0")
+  def upsertDocFuture[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] =
     ScalaCouchbaseSink.upsertDoc[T](upsertOptions).asJava
 
@@ -92,8 +92,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.upsert]]
    * @deprecated Use upsert which returns CompletionStage instead
    */
-  @deprecated("Use upsert which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def upsertF[T](applyId: T => String,
+  @deprecated("Use upsert which returns CompletionStage instead", since = "2.0.0")
+  def upsertFuture[T](applyId: T => String,
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
     ScalaCouchbaseSink.upsert[T](applyId, upsertOptions).asJava
@@ -110,8 +110,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.replaceDoc]]
    * @deprecated Use replaceDoc which returns CompletionStage instead
    */
-  @deprecated("Use replaceDoc which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def replaceDocF[T](
+  @deprecated("Use replaceDoc which returns CompletionStage instead", since = "2.0.0")
+  def replaceDocFuture[T](
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], Future[Done]] =
     ScalaCouchbaseSink.replaceDoc[T](replaceOptions).asJava
@@ -128,8 +128,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.replace]]
    * @deprecated Use replace which returns CompletionStage instead
    */
-  @deprecated("Use replace which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def replaceF[T](applyId: T => String,
+  @deprecated("Use replace which returns CompletionStage instead", since = "2.0.0")
+  def replaceFuture[T](applyId: T => String,
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
     ScalaCouchbaseSink.replace[T](applyId, replaceOptions).asJava
@@ -146,8 +146,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.remove]]
    * @deprecated Use remove which returns CompletionStage instead
    */
-  @deprecated("Use remove which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def removeF[T](applyId: T => String,
+  @deprecated("Use remove which returns CompletionStage instead", since = "2.0.0")
+  def removeFuture[T](applyId: T => String,
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Done]] =
     ScalaCouchbaseSink.remove[T](applyId, removeOptions).asJava
@@ -165,8 +165,8 @@ object CouchbaseSink {
    * reference to [[CouchbaseFlow.exists]]
    * @deprecated Use exists which returns CompletionStage instead
    */
-  @deprecated("Use exists which returns CompletionStage instead", since = "pekko-connectors 1.1")
-  def existsF[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+  @deprecated("Use exists which returns CompletionStage instead", since = "2.0.0")
+  def existsFuture[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, Future[Boolean]] =
     ScalaCouchbaseSink.exists[T](applyId, existsOptions).asJava
 
