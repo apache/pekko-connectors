@@ -95,8 +95,20 @@ object GooglePubSub {
 
   /**
    * Creates a flow pulling messages from a subscription.
+   * The materialized CompletionStage completes when the flow is materialized.
    */
-  def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
+  def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, CompletionStage[NotUsed]] =
+    GPubSub
+      .subscribeFlow(subscription, config)
+      .mapMaterializedValue(_.asJava)
+      .asJava
+
+  /**
+   * Creates a flow pulling messages from a subscription.
+   * @deprecated Use subscribeFlow which returns CompletionStage instead
+   */
+  @deprecated("Use subscribeFlow which returns CompletionStage instead", since = "pekko-connectors 1.1")
+  def subscribeFlowWithScalaFuture(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
     GPubSub
       .subscribeFlow(subscription, config)
       .asJava

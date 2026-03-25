@@ -40,6 +40,18 @@ object KinesisSchedulerSource {
       .mapMaterializedValue(_.asJava)
       .asJava
 
+  def createShardedCs(
+      schedulerBuilder: SchedulerBuilder,
+      settings: KinesisSchedulerSourceSettings): SubSource[CommittableRecord, CompletionStage[Scheduler]] =
+    new SubSource(
+      scaladsl.KinesisSchedulerSource
+        .sharded(schedulerBuilder.build, settings)
+        .mapMaterializedValue(_.asJava))
+
+  /**
+   * @deprecated Use createShardedCs which returns CompletionStage instead
+   */
+  @deprecated("Use createShardedCs which returns CompletionStage instead", since = "pekko-connectors 1.1")
   def createSharded(
       schedulerBuilder: SchedulerBuilder,
       settings: KinesisSchedulerSourceSettings): SubSource[CommittableRecord, Future[Scheduler]] =
