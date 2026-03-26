@@ -15,7 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# changed methods to return CompletionStage instead of Scala Future
+# changed Java DSL significantly because it was used Scala Futures (changed to CompletionStage),
+# implicit params in separate param lists (now just one param list with no implicits) and defaulted parameters
+# have been replaced with method overloads
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.couchbase3.javadsl.CouchbaseFlow.append$*")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.couchbase3.javadsl.CouchbaseFlow.exists$*")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.couchbase3.javadsl.CouchbaseFlow.get$*")
