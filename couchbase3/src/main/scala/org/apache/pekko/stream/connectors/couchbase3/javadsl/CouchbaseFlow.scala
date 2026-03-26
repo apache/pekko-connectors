@@ -107,7 +107,7 @@ object CouchbaseFlow {
    * Inserts a full document which does not exist yet with custom options.
    * @param applyId parse id function, which is the document id
    * @see [[com.couchbase.client.java.AsyncCollection#insert]]
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def insert[T](applyId: T => String,
@@ -137,7 +137,7 @@ object CouchbaseFlow {
    * Replaces a full document which already exists with custom options.
    * @param applyId parse id function, which is the document id
    * @see [[com.couchbase.client.java.AsyncCollection#replace]]
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def replace[T](applyId: T => String,
@@ -167,7 +167,7 @@ object CouchbaseFlow {
    * Upsert a full document which might or might not exist yet with custom options.
    * @param applyId parse id function, which is the document id
    * @see [[com.couchbase.client.java.AsyncCollection#upsert]]
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def upsert[T](applyId: T => String,
@@ -199,7 +199,7 @@ object CouchbaseFlow {
    * Removes a Document from a collection with custom options.
    * @param applyId parse id function, which is the document id, id streams can use `remove[String](e => e)`
    * @see [[com.couchbase.client.java.AsyncCollection#remove]]
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def remove[T](
@@ -242,7 +242,7 @@ object CouchbaseFlow {
    * Checks if the given document ID exists on the active partition with custom options.
    * @param applyId parse id function, which is the document id, id streams can use `exists[String](e => e)`
    * @see [[com.couchbase.client.java.AsyncCollection#exists]]
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def exists[T](
@@ -273,7 +273,7 @@ object CouchbaseFlow {
   /**
    * Updates the expiry of the document with the given id with custom options.
    * @param applyId parse id function, which is the document id
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def touchDuration[T](
@@ -297,7 +297,7 @@ object CouchbaseFlow {
   /**
    * Updates the expiry of the document with the given id with custom options.
    * @see [[com.couchbase.client.java.AsyncCollection#touch]]
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def touchInstant[T](
