@@ -102,7 +102,7 @@ object Dependencies {
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
-    "org.scalatestplus" %% "mockito-5-12" % scalaTestMockitoVersion % Test)
+    "org.scalatestplus" %% "mockito-5-23" % scalaTestMockitoVersion % Test)
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
