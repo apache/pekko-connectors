@@ -95,8 +95,25 @@ object GooglePubSub {
 
   /**
    * Creates a flow pulling messages from a subscription.
+   * The materialized CompletionStage completes when the flow is materialized.
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Flow with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #subscribeFlowFuture} which works like this method worked in 1.x.
    */
-  def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
+  def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, CompletionStage[NotUsed]] =
+    GPubSub
+      .subscribeFlow(subscription, config)
+      .mapMaterializedValue(_.asJava)
+      .asJava
+
+  /**
+   * Creates a flow pulling messages from a subscription.
+   * @deprecated Use subscribeFlow which returns CompletionStage instead
+   */
+  @deprecated("Use subscribeFlow which returns CompletionStage instead", since = "2.0.0")
+  def subscribeFlowFuture(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] =
     GPubSub
       .subscribeFlow(subscription, config)
       .asJava

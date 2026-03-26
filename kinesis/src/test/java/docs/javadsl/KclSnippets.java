@@ -13,6 +13,10 @@
 
 package docs.javadsl;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.CompletionStage;
+
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.connectors.kinesis.CommittableRecord;
 import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerCheckpointSettings;
@@ -20,13 +24,10 @@ import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerSourceSettings
 import org.apache.pekko.stream.connectors.kinesis.javadsl.KinesisSchedulerSource;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.SubSource;
 import software.amazon.kinesis.coordinator.Scheduler;
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory;
 import software.amazon.kinesis.retrieval.KinesisClientRecord;
-
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.concurrent.CompletionStage;
 
 public class KclSnippets {
 
@@ -46,6 +47,13 @@ public class KclSnippets {
   final Source<CommittableRecord, CompletionStage<Scheduler>> schedulerSource =
       KinesisSchedulerSource.create(schedulerBuilder, schedulerSettings);
   // #scheduler-source
+
+  // #sharded-scheduler-source
+  // Use createSharded to get a per-shard sub-source with a Java-friendly CompletionStage
+  // materialized value
+  final SubSource<CommittableRecord, CompletionStage<Scheduler>> shardedSchedulerSource =
+      KinesisSchedulerSource.createSharded(schedulerBuilder, schedulerSettings);
+  // #sharded-scheduler-source
 
   // #checkpoint
   final KinesisSchedulerCheckpointSettings checkpointSettings =

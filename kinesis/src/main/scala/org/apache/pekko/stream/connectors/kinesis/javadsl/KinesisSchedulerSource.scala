@@ -40,7 +40,25 @@ object KinesisSchedulerSource {
       .mapMaterializedValue(_.asJava)
       .asJava
 
+  /**
+   * This functions return type changed in 2.0.0 to return a SubSource with a CompletionStage instead of a Scala
+   * Future, to be more consistent with Java usage.
+   * @see {@link #createShardedFuture} which works like this method worked in 1.x.
+   */
   def createSharded(
+      schedulerBuilder: SchedulerBuilder,
+      settings: KinesisSchedulerSourceSettings): SubSource[CommittableRecord, CompletionStage[Scheduler]] =
+    new SubSource(
+      scaladsl.KinesisSchedulerSource
+        .apply(schedulerBuilder.build, settings)
+        .mapMaterializedValue(_.asJava)
+        .groupBy(500, _.processorData.shardId))
+
+  /**
+   * @deprecated Use createSharded which returns a SubSource with a CompletionStage instead
+   */
+  @deprecated("Use createSharded which returns a SubSource with a CompletionStage instead", since = "2.0.0")
+  def createShardedFuture(
       schedulerBuilder: SchedulerBuilder,
       settings: KinesisSchedulerSourceSettings): SubSource[CommittableRecord, Future[Scheduler]] =
     new SubSource(
