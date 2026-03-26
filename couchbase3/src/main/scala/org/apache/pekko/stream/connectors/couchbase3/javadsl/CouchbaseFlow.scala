@@ -130,7 +130,8 @@ object CouchbaseFlow {
    */
   def getAllReplicasObject[T](target: Class[T],
       asyncCollection: AsyncCollection): Flow[String, T, NotUsed] =
-    ScalaCouchbaseFlow.getAllReplicasObject[T](target, GetAllReplicasOptions.getAllReplicasOptions)(asyncCollection).asJava
+    ScalaCouchbaseFlow.getAllReplicasObject[T](target, GetAllReplicasOptions.getAllReplicasOptions)(
+      asyncCollection).asJava
 
   /**
    * reference to [[CouchbaseFlow.getAllReplicasObject]], deserialize to class with Generics

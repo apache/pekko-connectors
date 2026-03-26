@@ -39,9 +39,22 @@ object CouchbaseSink {
    * </p>
    * @see {@link #insertDocFuture} which works like this method worked in 1.x.
    */
-  def insertDoc[T](insertOptions: InsertOptions)(
-      implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
-    ScalaCouchbaseSink.insertDoc[T](insertOptions).mapMaterializedValue(_.asJava).asJava
+  def insertDoc[T](insertOptions: InsertOptions,
+      asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
+    ScalaCouchbaseSink.insertDoc[T](insertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.insertDoc]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #insertDocFuture} which works like this method worked in 1.x.
+   */
+  def insertDoc[T](
+      asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
+    ScalaCouchbaseSink.insertDoc[T](InsertOptions.insertOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.insertDoc]]
@@ -61,9 +74,22 @@ object CouchbaseSink {
    * @see {@link #insertFuture} which works like this method worked in 1.x.
    */
   def insert[T](applyId: JFunction[T, String],
-      insertOptions: InsertOptions)(
-      implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.insert[T](applyId.apply, insertOptions).mapMaterializedValue(_.asJava).asJava
+      insertOptions: InsertOptions,
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.insert[T](applyId.apply, insertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.insert]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #insertFuture} which works like this method worked in 1.x.
+   */
+  def insert[T](applyId: JFunction[T, String],
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.insert[T](applyId.apply, InsertOptions.insertOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.insert]]
@@ -83,9 +109,22 @@ object CouchbaseSink {
    * </p>
    * @see {@link #upsertDocFuture} which works like this method worked in 1.x.
    */
-  def upsertDoc[T](upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
-    ScalaCouchbaseSink.upsertDoc[T](upsertOptions).mapMaterializedValue(_.asJava).asJava
+  def upsertDoc[T](upsertOptions: UpsertOptions,
+      asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
+    ScalaCouchbaseSink.upsertDoc[T](upsertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.upsertDoc]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #upsertDocFuture} which works like this method worked in 1.x.
+   */
+  def upsertDoc[T](
+      asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
+    ScalaCouchbaseSink.upsertDoc[T](UpsertOptions.upsertOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.upsertDoc]]
@@ -105,9 +144,22 @@ object CouchbaseSink {
    * @see {@link #upsertFuture} which works like this method worked in 1.x.
    */
   def upsert[T](applyId: JFunction[T, String],
-      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.upsert[T](applyId.apply, upsertOptions).mapMaterializedValue(_.asJava).asJava
+      upsertOptions: UpsertOptions,
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.upsert[T](applyId.apply, upsertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.upsert]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #upsertFuture} which works like this method worked in 1.x.
+   */
+  def upsert[T](applyId: JFunction[T, String],
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.upsert[T](applyId.apply, UpsertOptions.upsertOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.upsert]]
@@ -128,9 +180,22 @@ object CouchbaseSink {
    * @see {@link #replaceDocFuture} which works like this method worked in 1.x.
    */
   def replaceDoc[T](
-      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
-    ScalaCouchbaseSink.replaceDoc[T](replaceOptions).mapMaterializedValue(_.asJava).asJava
+      replaceOptions: ReplaceOptions,
+      asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
+    ScalaCouchbaseSink.replaceDoc[T](replaceOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.replaceDoc]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #replaceDocFuture} which works like this method worked in 1.x.
+   */
+  def replaceDoc[T](
+      asyncCollection: AsyncCollection): Sink[MutationDocument[T], CompletionStage[Done]] =
+    ScalaCouchbaseSink.replaceDoc[T](ReplaceOptions.replaceOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.replaceDoc]]
@@ -151,9 +216,22 @@ object CouchbaseSink {
    * @see {@link #replaceFuture} which works like this method worked in 1.x.
    */
   def replace[T](applyId: JFunction[T, String],
-      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.replace[T](applyId.apply, replaceOptions).mapMaterializedValue(_.asJava).asJava
+      replaceOptions: ReplaceOptions,
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.replace[T](applyId.apply, replaceOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.replace]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #replaceFuture} which works like this method worked in 1.x.
+   */
+  def replace[T](applyId: JFunction[T, String],
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.replace[T](applyId.apply, ReplaceOptions.replaceOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.replace]]
@@ -174,9 +252,22 @@ object CouchbaseSink {
    * @see {@link #removeFuture} which works like this method worked in 1.x.
    */
   def remove[T](applyId: JFunction[T, String],
-      removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.remove[T](applyId.apply, removeOptions).mapMaterializedValue(_.asJava).asJava
+      removeOptions: RemoveOptions,
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.remove[T](applyId.apply, removeOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
+
+  /**
+   * reference to [[CouchbaseFlow.remove]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #removeFuture} which works like this method worked in 1.x.
+   */
+  def remove[T](applyId: JFunction[T, String],
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
+    ScalaCouchbaseSink.remove[T](applyId.apply, RemoveOptions.removeOptions())(asyncCollection).mapMaterializedValue(
+      _.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.remove]]
@@ -196,9 +287,23 @@ object CouchbaseSink {
    * </p>
    * @see {@link #existsFuture} which works like this method worked in 1.x.
    */
-  def exists[T](applyId: JFunction[T, String], existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
-      implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[java.lang.Boolean]] =
-    ScalaCouchbaseSink.exists[T](applyId.apply, existsOptions)
+  def exists[T](applyId: JFunction[T, String], existsOptions: ExistsOptions,
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[java.lang.Boolean]] =
+    ScalaCouchbaseSink.exists[T](applyId.apply, existsOptions)(asyncCollection)
+      .mapMaterializedValue(_.map(Boolean.box)(scala.concurrent.ExecutionContext.parasitic).asJava)
+      .asJava
+
+  /**
+   * reference to [[CouchbaseFlow.exists]]
+   * <p>
+   *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
+   *   Scala Future, to be more consistent with Java usage.
+   * </p>
+   * @see {@link #existsFuture} which works like this method worked in 1.x.
+   */
+  def exists[T](applyId: JFunction[T, String],
+      asyncCollection: AsyncCollection): Sink[T, CompletionStage[java.lang.Boolean]] =
+    ScalaCouchbaseSink.exists[T](applyId.apply, ExistsOptions.existsOptions())(asyncCollection)
       .mapMaterializedValue(_.map(Boolean.box)(scala.concurrent.ExecutionContext.parasitic).asJava)
       .asJava
 
