@@ -27,6 +27,7 @@ import org.apache.pekko.stream.javadsl.Flow
 import org.apache.pekko.stream.connectors.couchbase3.scaladsl.{ CouchbaseFlow => ScalaCouchbaseFlow }
 
 import java.time.{ Duration, Instant }
+import java.util.function.{ Function => JFunction }
 
 object CouchbaseFlow {
 
@@ -97,6 +98,18 @@ object CouchbaseFlow {
    * @param applyId parse id function, which is the document id
    * @see [[com.couchbase.client.java.AsyncCollection#insert]]
    */
+  def insert[T](applyId: JFunction[T, String],
+      insertOptions: InsertOptions = InsertOptions.insertOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.insert[T](applyId.apply, insertOptions).asJava
+
+  /**
+   * Inserts a full document which does not exist yet with custom options.
+   * @param applyId parse id function, which is the document id
+   * @see [[com.couchbase.client.java.AsyncCollection#insert]]
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def insert[T](applyId: T => String,
       insertOptions: InsertOptions = InsertOptions.insertOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
@@ -115,6 +128,18 @@ object CouchbaseFlow {
    * @param applyId parse id function, which is the document id
    * @see [[com.couchbase.client.java.AsyncCollection#replace]]
    */
+  def replace[T](applyId: JFunction[T, String],
+      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.replace[T](applyId.apply, replaceOptions).asJava
+
+  /**
+   * Replaces a full document which already exists with custom options.
+   * @param applyId parse id function, which is the document id
+   * @see [[com.couchbase.client.java.AsyncCollection#replace]]
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def replace[T](applyId: T => String,
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
@@ -133,6 +158,18 @@ object CouchbaseFlow {
    * @param applyId parse id function, which is the document id
    * @see [[com.couchbase.client.java.AsyncCollection#upsert]]
    */
+  def upsert[T](applyId: JFunction[T, String],
+      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.upsert[T](applyId.apply, upsertOptions).asJava
+
+  /**
+   * Upsert a full document which might or might not exist yet with custom options.
+   * @param applyId parse id function, which is the document id
+   * @see [[com.couchbase.client.java.AsyncCollection#upsert]]
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def upsert[T](applyId: T => String,
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
@@ -152,6 +189,19 @@ object CouchbaseFlow {
    * @param applyId parse id function, which is the document id, id streams can use `remove[String](e => e)`
    * @see [[com.couchbase.client.java.AsyncCollection#remove]]
    */
+  def remove[T](
+      applyId: JFunction[T, String],
+      removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.remove[T](applyId.apply, removeOptions).asJava
+
+  /**
+   * Removes a Document from a collection with custom options.
+   * @param applyId parse id function, which is the document id, id streams can use `remove[String](e => e)`
+   * @see [[com.couchbase.client.java.AsyncCollection#remove]]
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def remove[T](
       applyId: T => String,
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
@@ -183,6 +233,19 @@ object CouchbaseFlow {
    * @see [[com.couchbase.client.java.AsyncCollection#exists]]
    */
   def exists[T](
+      applyId: JFunction[T, String],
+      existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
+    ScalaCouchbaseFlow.exists[T](applyId.apply, existsOptions).asJava
+
+  /**
+   * Checks if the given document ID exists on the active partition with custom options.
+   * @param applyId parse id function, which is the document id, id streams can use `exists[String](e => e)`
+   * @see [[com.couchbase.client.java.AsyncCollection#exists]]
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
+  def exists[T](
       applyId: T => String,
       existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
@@ -201,6 +264,19 @@ object CouchbaseFlow {
    * @param applyId parse id function, which is the document id
    */
   def touchDuration[T](
+      applyId: JFunction[T, String],
+      expiry: Duration,
+      touchOptions: TouchOptions = TouchOptions.touchOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.touchDuration[T](applyId.apply, expiry, touchOptions).asJava
+
+  /**
+   * Updates the expiry of the document with the given id with custom options.
+   * @param applyId parse id function, which is the document id
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
+  def touchDuration[T](
       applyId: T => String,
       expiry: Duration,
       touchOptions: TouchOptions = TouchOptions.touchOptions())(
@@ -211,6 +287,19 @@ object CouchbaseFlow {
    * Updates the expiry of the document with the given id with custom options.
    * @see [[com.couchbase.client.java.AsyncCollection#touch]]
    */
+  def touchInstant[T](
+      applyId: JFunction[T, String],
+      expiry: Instant,
+      touchOptions: TouchOptions = TouchOptions.touchOptions())(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.touchInstant[T](applyId.apply, expiry, touchOptions).asJava
+
+  /**
+   * Updates the expiry of the document with the given id with custom options.
+   * @see [[com.couchbase.client.java.AsyncCollection#touch]]
+   * @deprecated Use the overloaded method that takes a java.util.function.Function instead
+   */
+  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def touchInstant[T](
       applyId: T => String,
       expiry: Instant,

@@ -25,6 +25,7 @@ import org.apache.pekko.stream.connectors.couchbase3.scaladsl.{ CouchbaseSink =>
 import org.apache.pekko.stream.javadsl.Sink
 
 import java.util.concurrent.CompletionStage
+import java.util.function.{ Function => JFunction }
 import scala.concurrent.Future
 import scala.jdk.FutureConverters._
 
@@ -59,10 +60,10 @@ object CouchbaseSink {
    * </p>
    * @see {@link #insertFuture} which works like this method worked in 1.x.
    */
-  def insert[T](applyId: T => String,
+  def insert[T](applyId: JFunction[T, String],
       insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.insert[T](applyId, insertOptions).mapMaterializedValue(_.asJava).asJava
+    ScalaCouchbaseSink.insert[T](applyId.apply, insertOptions).mapMaterializedValue(_.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.insert]]
@@ -103,10 +104,10 @@ object CouchbaseSink {
    * </p>
    * @see {@link #upsertFuture} which works like this method worked in 1.x.
    */
-  def upsert[T](applyId: T => String,
+  def upsert[T](applyId: JFunction[T, String],
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.upsert[T](applyId, upsertOptions).mapMaterializedValue(_.asJava).asJava
+    ScalaCouchbaseSink.upsert[T](applyId.apply, upsertOptions).mapMaterializedValue(_.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.upsert]]
@@ -149,10 +150,10 @@ object CouchbaseSink {
    * </p>
    * @see {@link #replaceFuture} which works like this method worked in 1.x.
    */
-  def replace[T](applyId: T => String,
+  def replace[T](applyId: JFunction[T, String],
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.replace[T](applyId, replaceOptions).mapMaterializedValue(_.asJava).asJava
+    ScalaCouchbaseSink.replace[T](applyId.apply, replaceOptions).mapMaterializedValue(_.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.replace]]
@@ -172,10 +173,10 @@ object CouchbaseSink {
    * </p>
    * @see {@link #removeFuture} which works like this method worked in 1.x.
    */
-  def remove[T](applyId: T => String,
+  def remove[T](applyId: JFunction[T, String],
       removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[Done]] =
-    ScalaCouchbaseSink.remove[T](applyId, removeOptions).mapMaterializedValue(_.asJava).asJava
+    ScalaCouchbaseSink.remove[T](applyId.apply, removeOptions).mapMaterializedValue(_.asJava).asJava
 
   /**
    * reference to [[CouchbaseFlow.remove]]
@@ -195,9 +196,9 @@ object CouchbaseSink {
    * </p>
    * @see {@link #existsFuture} which works like this method worked in 1.x.
    */
-  def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+  def exists[T](applyId: JFunction[T, String], existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Sink[T, CompletionStage[java.lang.Boolean]] =
-    ScalaCouchbaseSink.exists[T](applyId, existsOptions)
+    ScalaCouchbaseSink.exists[T](applyId.apply, existsOptions)
       .mapMaterializedValue(_.map(Boolean.box)(scala.concurrent.ExecutionContext.parasitic).asJava)
       .asJava
 
