@@ -203,7 +203,7 @@ object Slick {
    *                    DDL statement is acceptable.
    * @param mapper A function to create a result from the incoming element T
    *               and the database statement result.
-   * @deprecated Use the overload with `java.util.concurrent.Executor` instead.
+   * @deprecated Use the overload with `java.util.concurrent.Executor` instead (since 2.0.0).
    */
   @deprecated("Use flowWithPassThrough with java.util.concurrent.Executor instead", "2.0.0")
   @java.lang.Deprecated

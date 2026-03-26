@@ -87,7 +87,7 @@ object CassandraFlow {
    * @param session implicit Cassandra session from `CassandraSessionRegistry`
    * @tparam T stream element type
    * @tparam K extracted key type for grouping into batches
-   * @deprecated Use [[createUnloggedBatch]] with `pekko.japi.function.Function2` for `statementBinder` instead.
+   * @deprecated Use [[createUnloggedBatch]] with `pekko.japi.function.Function2` for `statementBinder` instead (since 2.0.0).
    */
   @deprecated("Use createUnloggedBatch with pekko.japi.function.Function2 for statementBinder instead", "2.0.0")
   @java.lang.Deprecated
