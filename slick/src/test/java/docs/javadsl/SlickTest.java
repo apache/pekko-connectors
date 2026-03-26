@@ -41,6 +41,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -243,7 +244,7 @@ public class SlickTest {
   @Test
   public void testFlowWithPassThroughWithoutParallelismAndReadBackWithSource() throws Exception {
     final Flow<User, User, NotUsed> slickFlow =
-        Slick.flowWithPassThrough(session, system.dispatcher(), insertUser, (user, i) -> user);
+        Slick.flowWithPassThrough(session, (Executor) system.dispatcher(), insertUser, (user, i) -> user);
     final List<User> insertedUsers =
         usersSource
             .via(slickFlow)
@@ -258,7 +259,7 @@ public class SlickTest {
   @Test
   public void testFlowPSWithPassThroughWithoutParallelismAndReadBackWithSource() throws Exception {
     final Flow<User, User, NotUsed> slickFlow =
-        Slick.flowWithPassThrough(session, system.dispatcher(), insertUserPS, (user, i) -> user);
+        Slick.flowWithPassThrough(session, (Executor) system.dispatcher(), insertUserPS, (user, i) -> user);
     final List<User> insertedUsers =
         usersSource
             .via(slickFlow)
@@ -273,7 +274,7 @@ public class SlickTest {
   @Test
   public void testFlowWithPassThroughWithParallelismOf4AndReadBackWithSource() throws Exception {
     final Flow<User, User, NotUsed> slickFlow =
-        Slick.flowWithPassThrough(session, system.dispatcher(), 4, insertUser, (user, i) -> user);
+        Slick.flowWithPassThrough(session, (Executor) system.dispatcher(), 4, insertUser, (user, i) -> user);
     final List<User> insertedUsers =
         usersSource
             .via(slickFlow)
@@ -288,7 +289,7 @@ public class SlickTest {
   @Test
   public void testFlowPSWithPassThroughWithParallelismOf4AndReadBackWithSource() throws Exception {
     final Flow<User, User, NotUsed> slickFlow =
-        Slick.flowWithPassThrough(session, system.dispatcher(), 4, insertUserPS, (user, i) -> user);
+        Slick.flowWithPassThrough(session, (Executor) system.dispatcher(), 4, insertUserPS, (user, i) -> user);
     final List<User> insertedUsers =
         usersSource
             .via(slickFlow)
@@ -325,7 +326,7 @@ public class SlickTest {
             .via(
                 Slick.flowWithPassThrough(
                     session,
-                    system.dispatcher(),
+                    (Executor) system.dispatcher(),
                     insertUserInKafkaMessage,
                     (kafkaMessage, insertCount) -> kafkaMessage.map(user -> insertCount)))
             .mapAsync(
