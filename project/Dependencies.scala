@@ -36,7 +36,7 @@ object Dependencies {
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoStreamsCirceVersion = "1.1.0"
   val PekkoHttpBinaryVersion = PekkoHttpDependency.default.link
-  val ScalaTestVersion = "3.2.19"
+  val ScalaTestVersion = "3.2.20"
   val TestContainersScalaTestVersion = "0.44.1"
   val mockitoVersion = "5.23.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
   val protobufJavaVersion = "3.25.9"
@@ -58,7 +58,7 @@ object Dependencies {
   private def scalaTestPlusScalaCheckVersion(version: String) =
     version.split('.').take(2).mkString("-")
 
-  val scalaTestScalaCheckArtifact = "scalacheck-1-18"
+  val scalaTestScalaCheckArtifact = s"scalacheck-${scalaTestPlusScalaCheckVersion(scalaCheckVersion)}"
   val scalaTestScalaCheckVersion = s"$ScalaTestVersion.0"
   val scalaTestMockitoVersion = s"$ScalaTestVersion.0"
 
@@ -102,7 +102,7 @@ object Dependencies {
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
     // https://github.com/scalatest/scalatestplus-mockito/releases
-    "org.scalatestplus" %% "mockito-5-12" % scalaTestMockitoVersion % Test)
+    "org.scalatestplus" %% "mockito-5-23" % scalaTestMockitoVersion % Test)
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
