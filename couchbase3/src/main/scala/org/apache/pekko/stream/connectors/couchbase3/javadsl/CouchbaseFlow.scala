@@ -99,9 +99,18 @@ object CouchbaseFlow {
    * @see [[com.couchbase.client.java.AsyncCollection#insert]]
    */
   def insert[T](applyId: JFunction[T, String],
-      insertOptions: InsertOptions = InsertOptions.insertOptions())(
+      insertOptions: InsertOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.insert[T](applyId.apply, insertOptions).asJava
+
+  /**
+   * Inserts a full document which does not exist yet with custom options.
+   * @param applyId parse id function, which is the document id
+   * @see [[com.couchbase.client.java.AsyncCollection#insert]]
+   */
+  def insert[T](applyId: JFunction[T, String])(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.insert[T](applyId.apply).asJava
 
   /**
    * Inserts a full document which does not exist yet with custom options.
@@ -129,9 +138,18 @@ object CouchbaseFlow {
    * @see [[com.couchbase.client.java.AsyncCollection#replace]]
    */
   def replace[T](applyId: JFunction[T, String],
-      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
+      replaceOptions: ReplaceOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.replace[T](applyId.apply, replaceOptions).asJava
+
+  /**
+   * Replaces a full document which already exists with custom options.
+   * @param applyId parse id function, which is the document id
+   * @see [[com.couchbase.client.java.AsyncCollection#replace]]
+   */
+  def replace[T](applyId: JFunction[T, String])(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.replace[T](applyId.apply).asJava
 
   /**
    * Replaces a full document which already exists with custom options.
@@ -159,9 +177,18 @@ object CouchbaseFlow {
    * @see [[com.couchbase.client.java.AsyncCollection#upsert]]
    */
   def upsert[T](applyId: JFunction[T, String],
-      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
+      upsertOptions: UpsertOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.upsert[T](applyId.apply, upsertOptions).asJava
+
+  /**
+   * Upsert a full document which might or might not exist yet with custom options.
+   * @param applyId parse id function, which is the document id
+   * @see [[com.couchbase.client.java.AsyncCollection#upsert]]
+   */
+  def upsert[T](applyId: JFunction[T, String])(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.upsert[T](applyId.apply).asJava
 
   /**
    * Upsert a full document which might or might not exist yet with custom options.
@@ -191,9 +218,19 @@ object CouchbaseFlow {
    */
   def remove[T](
       applyId: JFunction[T, String],
-      removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
+      removeOptions: RemoveOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.remove[T](applyId.apply, removeOptions).asJava
+
+  /**
+   * Removes a Document from a collection with custom options.
+   * @param applyId parse id function, which is the document id, id streams can use `remove[String](e => e)`
+   * @see [[com.couchbase.client.java.AsyncCollection#remove]]
+   */
+  def remove[T](
+      applyId: JFunction[T, String])(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.remove[T](applyId.apply).asJava
 
   /**
    * Removes a Document from a collection with custom options.
@@ -234,9 +271,19 @@ object CouchbaseFlow {
    */
   def exists[T](
       applyId: JFunction[T, String],
-      existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+      existsOptions: ExistsOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
     ScalaCouchbaseFlow.exists[T](applyId.apply, existsOptions).asJava
+
+  /**
+   * Checks if the given document ID exists on the active partition with custom options.
+   * @param applyId parse id function, which is the document id, id streams can use `exists[String](e => e)`
+   * @see [[com.couchbase.client.java.AsyncCollection#exists]]
+   */
+  def exists[T](
+      applyId: JFunction[T, String])(
+      implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
+    ScalaCouchbaseFlow.exists[T](applyId.apply).asJava
 
   /**
    * Checks if the given document ID exists on the active partition with custom options.
@@ -246,10 +293,9 @@ object CouchbaseFlow {
    */
   @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
   def exists[T](
-      applyId: T => String,
-      existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
+      applyId: T => String)(
       implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
-    ScalaCouchbaseFlow.exists[T](applyId, existsOptions).asJava
+    ScalaCouchbaseFlow.exists[T](applyId).asJava
 
   /**
    * Updates the expiry of the document with the given id with custom options.
@@ -266,9 +312,19 @@ object CouchbaseFlow {
   def touchDuration[T](
       applyId: JFunction[T, String],
       expiry: Duration,
-      touchOptions: TouchOptions = TouchOptions.touchOptions())(
+      touchOptions: TouchOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.touchDuration[T](applyId.apply, expiry, touchOptions).asJava
+
+  /**
+   * Updates the expiry of the document with the given id with custom options.
+   * @param applyId parse id function, which is the document id
+   */
+  def touchDuration[T](
+      applyId: JFunction[T, String],
+      expiry: Duration)(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.touchDuration[T](applyId.apply, expiry).asJava
 
   /**
    * Updates the expiry of the document with the given id with custom options.
@@ -290,9 +346,19 @@ object CouchbaseFlow {
   def touchInstant[T](
       applyId: JFunction[T, String],
       expiry: Instant,
-      touchOptions: TouchOptions = TouchOptions.touchOptions())(
+      touchOptions: TouchOptions)(
       implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.touchInstant[T](applyId.apply, expiry, touchOptions).asJava
+
+  /**
+   * Updates the expiry of the document with the given id with custom options.
+   * @see [[com.couchbase.client.java.AsyncCollection#touch]]
+   */
+  def touchInstant[T](
+      applyId: JFunction[T, String],
+      expiry: Instant)(
+      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
+    ScalaCouchbaseFlow.touchInstant[T](applyId.apply, expiry).asJava
 
   /**
    * Updates the expiry of the document with the given id with custom options.
