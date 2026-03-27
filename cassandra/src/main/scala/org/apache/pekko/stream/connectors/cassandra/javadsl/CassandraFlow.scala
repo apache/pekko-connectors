@@ -87,11 +87,48 @@ object CassandraFlow {
    * @param session implicit Cassandra session from `CassandraSessionRegistry`
    * @tparam T stream element type
    * @tparam K extracted key type for grouping into batches
+   * @deprecated Use [[createUnloggedBatch]] with `pekko.japi.function.Function2` for `statementBinder` instead (since 2.0.0).
+   */
+  @deprecated("Use createUnloggedBatch with pekko.japi.function.Function2 for statementBinder instead", "2.0.0")
+  @java.lang.Deprecated
+  def createUnloggedBatchWithScalaStatementBinder[T, K](session: CassandraSession,
+      writeSettings: CassandraWriteSettings,
+      cqlStatement: String,
+      statementBinder: (T, PreparedStatement) => BoundStatement,
+      groupingKey: pekko.japi.function.Function[T, K]): Flow[T, T, NotUsed] = {
+    scaladsl.CassandraFlow
+      .createBatch(writeSettings,
+        cqlStatement,
+        (t, preparedStatement) => statementBinder.apply(t, preparedStatement),
+        t => groupingKey.apply(t))(session.delegate)
+      .asJava
+  }
+
+  /**
+   * Creates a flow that uses [[com.datastax.oss.driver.api.core.cql.BatchStatement]] and groups the
+   * elements internally into batches using the `writeSettings` and per `groupingKey`.
+   * Use this when most of the elements in the stream share the same partition key.
+   *
+   * Cassandra batches that share the same partition key will only
+   * resolve to one write internally in Cassandra, boosting write performance.
+   *
+   * "A LOGGED batch to a single partition will be converted to an UNLOGGED batch as an optimization."
+   * ([[https://cassandra.apache.org/doc/latest/cql/dml.html#batch Batch CQL]])
+   *
+   * Be aware that this stage does NOT preserve the upstream order.
+   *
+   * @param writeSettings settings to configure the batching and the write operation
+   * @param cqlStatement raw CQL statement
+   * @param statementBinder function to bind data from the stream element to the prepared statement
+   * @param groupingKey groups the elements to go into the same batch
+   * @param session implicit Cassandra session from `CassandraSessionRegistry`
+   * @tparam T stream element type
+   * @tparam K extracted key type for grouping into batches
    */
   def createUnloggedBatch[T, K](session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
-      statementBinder: (T, PreparedStatement) => BoundStatement,
+      statementBinder: pekko.japi.function.Function2[T, PreparedStatement, BoundStatement],
       groupingKey: pekko.japi.function.Function[T, K]): Flow[T, T, NotUsed] = {
     scaladsl.CassandraFlow
       .createBatch(writeSettings,
