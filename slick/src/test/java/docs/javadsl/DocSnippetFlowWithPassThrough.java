@@ -25,7 +25,6 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.Executor;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -85,7 +84,7 @@ public class DocSnippetFlowWithPassThrough {
             .via(
                 Slick.flowWithPassThrough(
                     session,
-                    (Executor) system.dispatcher(),
+                    system.dispatcher(),
                     // add an optional second argument to specify the parallelism factor (int)
                     (kafkaMessage, connection) -> {
                       PreparedStatement statement =
