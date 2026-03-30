@@ -28,7 +28,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 
 ### Dependency Upgrades
 
-Most dependencies have been upgraded to a recent version that still supports Java 17 as of release time (April 2026).
+Most dependencies have been upgraded to a recent version (April 2026). Pekko 2.x supports Java 17 as a minimum so we've been able to upgrade some dependencies that have dropped Java 8 and 11 support in more recent versions.
 Exceptions include:
 
 * HBase (see Known Issues above)
