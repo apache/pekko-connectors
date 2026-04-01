@@ -131,7 +131,7 @@ object PekkoHttpClient {
   // and returns content-type separately
   private[awsspi] def convertHeaders(
       headers: java.util.Map[String, java.util.List[String]]): (Option[HttpHeader], immutable.Seq[HttpHeader],
-    Option[Long]) = {
+      Option[Long]) = {
     val headersAsScala = {
       val builder = collection.mutable.Map.newBuilder[String, java.util.List[String]]
       headers.forEach { case (k, v) => builder += k -> v }
