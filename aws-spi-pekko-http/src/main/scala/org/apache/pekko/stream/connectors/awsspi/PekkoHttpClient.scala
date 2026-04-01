@@ -104,9 +104,7 @@ object PekkoHttpClient {
         contentLength match {
           case Some(length) =>
             HttpEntity(contentType, length, Source.fromPublisher(contentPublisher).map(ByteString(_)))
-          case None =>
-            val bodySource: Source[ByteString, Any] = Source.fromPublisher(contentPublisher).map(ByteString(_))
-            HttpEntity.Chunked.fromData(contentType, bodySource)
+          case None => HttpEntity(contentType, Source.fromPublisher(contentPublisher).map(ByteString(_)))
         }
       case _ => HttpEntity.Empty
     }
