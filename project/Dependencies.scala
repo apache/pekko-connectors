@@ -363,8 +363,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
       "com.ibm.mq" % "com.ibm.mq.allclient" % "9.4.5.0" % Test,
-      "org.apache.activemq" % "activemq-broker" % "5.19.3" % Test,
-      "org.apache.activemq" % "activemq-client" % "5.19.3" % Test,
+      "org.apache.activemq" % "activemq-broker" % "5.19.4" % Test,
+      "org.apache.activemq" % "activemq-client" % "5.19.4" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
       "com.github.pjfanning" % "jmswrapper" % "0.1.0" % Test) ++ Mockito)
 
@@ -516,7 +516,7 @@ object Dependencies {
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.3.15", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.38.24"))
+      "com.github.jnr" % "jnr-unixsocket" % "0.38.25"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
