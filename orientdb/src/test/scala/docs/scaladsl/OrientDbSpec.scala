@@ -29,9 +29,10 @@ import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.testkit.TestKit
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
 import com.orientechnologies.orient.client.remote.OServerAdmin
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
+import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal
+import com.orientechnologies.orient.core.db.ODatabaseSession
 //#init-settings
-import com.orientechnologies.orient.core.db.OPartitionedDatabasePool
+import com.orientechnologies.orient.core.db.ODatabasePool
 //#init-settings
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal
 import com.orientechnologies.orient.core.record.impl.ODocument
@@ -71,8 +72,8 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
   // #define-class
 
   var oServerAdmin: OServerAdmin = _
-  var oDatabase: OPartitionedDatabasePool = _
-  var client: ODatabaseDocumentTx = _
+  var oDatabase: ODatabasePool = _
+  var client: ODatabaseSession = _
 
   override def beforeAll() = {
     oServerAdmin = new OServerAdmin(url).connect(username, password)
@@ -82,8 +83,8 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
     // #init-settings
 
-    val oDatabase: OPartitionedDatabasePool =
-      new OPartitionedDatabasePool(dbUrl, username, password, Runtime.getRuntime.availableProcessors(), 10)
+    val oDatabase: ODatabasePool =
+      new ODatabasePool(dbUrl, username, password)
 
     system.registerOnTermination(() -> oDatabase.close())
     // #init-settings
@@ -232,9 +233,9 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       val streamCompletion: Future[Done] = OrientDbSource
         .typed(sourceClass, OrientDbSourceSettings(oDatabase), classOf[OrientDbTest.source1])
         .map { (m: OrientDbReadResult[OrientDbTest.source1]) =>
-          val db: ODatabaseDocumentTx = oDatabase.acquire
-          db.setDatabaseOwner(new OObjectDatabaseTx(db))
-          ODatabaseRecordThreadLocal.instance.set(db)
+          val db = oDatabase.acquire
+          new OObjectDatabaseTx(db.asInstanceOf[ODatabaseDocumentInternal])
+          ODatabaseRecordThreadLocal.instance.set(db.asInstanceOf[ODatabaseDocumentInternal])
           val sink: OrientDbTest.sink2 = new OrientDbTest.sink2
           sink.setBook_title(m.oDocument.getBook_title)
           OrientDbWriteMessage(sink)

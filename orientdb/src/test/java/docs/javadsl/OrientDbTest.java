@@ -27,11 +27,12 @@ import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import com.orientechnologies.orient.client.remote.OServerAdmin;
+import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 // #init-settings
-import com.orientechnologies.orient.core.db.OPartitionedDatabasePool;
+import com.orientechnologies.orient.core.db.ODatabasePool;
 // #init-settings
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
+import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
 import org.junit.AfterClass;
@@ -55,8 +56,8 @@ public class OrientDbTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static OServerAdmin oServerAdmin;
-  private static OPartitionedDatabasePool oDatabase;
-  private static ODatabaseDocumentTx client;
+  private static ODatabasePool oDatabase;
+  private static ODatabaseSession client;
   private static ActorSystem system;
 
   // #init-settings
@@ -158,9 +159,7 @@ public class OrientDbTest {
 
     // #init-settings
 
-    oDatabase =
-        new OPartitionedDatabasePool(
-            dbUrl, username, password, Runtime.getRuntime().availableProcessors(), 10);
+    oDatabase = new ODatabasePool(dbUrl, username, password);
 
     system.registerOnTermination(() -> oDatabase.close());
     // #init-settings
@@ -274,8 +273,9 @@ public class OrientDbTest {
                 sourceClass, OrientDbSourceSettings.create(oDatabase), source1.class, null)
             .map(
                 readResult -> {
-                  ODatabaseDocumentTx db = oDatabase.acquire();
-                  db.setDatabaseOwner(new OObjectDatabaseTx(db));
+                  ODatabaseDocumentInternal db =
+                      (ODatabaseDocumentInternal) oDatabase.acquire();
+                  new OObjectDatabaseTx(db);
                   ODatabaseRecordThreadLocal.instance().set(db);
                   sink2 sink = new sink2();
                   sink.setBook_title(readResult.oDocument().getBook_title());
@@ -295,8 +295,9 @@ public class OrientDbTest {
                 sinkClass2, OrientDbSourceSettings.create(oDatabase), sink2.class, null)
             .map(
                 m -> {
-                  ODatabaseDocumentTx db = oDatabase.acquire();
-                  db.setDatabaseOwner(new OObjectDatabaseTx(db));
+                  ODatabaseDocumentInternal db =
+                      (ODatabaseDocumentInternal) oDatabase.acquire();
+                  new OObjectDatabaseTx(db);
                   ODatabaseRecordThreadLocal.instance().set(db);
                   return m.oDocument().getBook_title();
                 })
@@ -351,8 +352,9 @@ public class OrientDbTest {
         .via(OrientDbFlow.createWithPassThrough(sink6, OrientDbWriteSettings.create(oDatabase)))
         .map(
             messages -> {
-              ODatabaseDocumentTx db = oDatabase.acquire();
-              db.setDatabaseOwner(new OObjectDatabaseTx(db));
+              ODatabaseDocumentInternal db =
+                  (ODatabaseDocumentInternal) oDatabase.acquire();
+              new OObjectDatabaseTx(db);
               ODatabaseRecordThreadLocal.instance().set(db);
               messages.stream().forEach(message -> commitToKafka.accept(message.passThrough()));
               return NotUsed.getInstance();

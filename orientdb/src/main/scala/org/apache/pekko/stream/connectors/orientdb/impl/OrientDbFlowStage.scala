@@ -19,7 +19,8 @@ import pekko.stream._
 import pekko.stream.connectors.orientdb.{ OrientDbWriteMessage, OrientDbWriteSettings }
 import pekko.stream.stage._
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
+import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal
+import com.orientechnologies.orient.core.db.ODatabaseSession
 import com.orientechnologies.orient.core.record.ORecord
 import com.orientechnologies.orient.core.record.impl.ODocument
 import com.orientechnologies.orient.core.tx.OTransaction
@@ -54,13 +55,12 @@ private[orientdb] class OrientDbFlowStage[T, C](
 
   sealed abstract class OrientDbLogic extends GraphStageLogic(shape) with InHandler with OutHandler {
 
-    protected var client: ODatabaseDocumentTx = _
+    protected var client: ODatabaseSession = _
     protected var oObjectClient: OObjectDatabaseTx = _
 
     override def preStart(): Unit = {
       client = settings.oDatabasePool.acquire()
-      oObjectClient = new OObjectDatabaseTx(client)
-      client.setDatabaseOwner(oObjectClient)
+      oObjectClient = new OObjectDatabaseTx(client.asInstanceOf[ODatabaseDocumentInternal])
     }
 
     override def postStop(): Unit = {

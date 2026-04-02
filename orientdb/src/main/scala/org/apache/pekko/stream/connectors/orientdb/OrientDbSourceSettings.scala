@@ -13,21 +13,21 @@
 
 package org.apache.pekko.stream.connectors.orientdb
 
-import com.orientechnologies.orient.core.db.OPartitionedDatabasePool
+import com.orientechnologies.orient.core.db.ODatabasePool
 
 final class OrientDbSourceSettings private (
-    val oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool,
+    val oDatabasePool: com.orientechnologies.orient.core.db.ODatabasePool,
     val skip: Int,
     val limit: Int) {
 
   def withOrientDBCredentials(
-      value: com.orientechnologies.orient.core.db.OPartitionedDatabasePool): OrientDbSourceSettings =
+      value: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbSourceSettings =
     copy(oDatabasePool = value)
   def withSkip(value: Int): OrientDbSourceSettings = copy(skip = value)
   def withLimit(value: Int): OrientDbSourceSettings = copy(limit = value)
 
   private def copy(
-      oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool = oDatabasePool,
+      oDatabasePool: com.orientechnologies.orient.core.db.ODatabasePool = oDatabasePool,
       skip: Int = skip,
       limit: Int = limit): OrientDbSourceSettings = new OrientDbSourceSettings(
     oDatabasePool = oDatabasePool,
@@ -45,11 +45,11 @@ final class OrientDbSourceSettings private (
 object OrientDbSourceSettings {
 
   /** Scala API */
-  def apply(oDatabasePool: OPartitionedDatabasePool): OrientDbSourceSettings = new OrientDbSourceSettings(
+  def apply(oDatabasePool: ODatabasePool): OrientDbSourceSettings = new OrientDbSourceSettings(
     oDatabasePool,
     skip = 0,
     limit = 10)
 
   /** Java API */
-  def create(oDatabasePool: OPartitionedDatabasePool): OrientDbSourceSettings = apply(oDatabasePool)
+  def create(oDatabasePool: ODatabasePool): OrientDbSourceSettings = apply(oDatabasePool)
 }
