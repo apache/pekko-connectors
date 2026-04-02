@@ -21,12 +21,16 @@ import pekko.http.javadsl.unmarshalling.Unmarshaller
 import pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse
 import pekko.stream.connectors.googlecloud.bigquery.model.{ TableDataInsertAllRequest, TableDataListResponse }
 import com.fasterxml.jackson.databind.{ JavaType, MapperFeature, ObjectMapper }
+import com.fasterxml.jackson.databind.json.JsonMapper
 
 import java.io.IOException
 
 object BigQueryMarshallers {
 
-  private val defaultObjectMapper = new ObjectMapper().enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+  private val defaultObjectMapper =
+    JsonMapper.builder()
+      .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+      .build()
 
   /**
    * [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataListResponse]]
