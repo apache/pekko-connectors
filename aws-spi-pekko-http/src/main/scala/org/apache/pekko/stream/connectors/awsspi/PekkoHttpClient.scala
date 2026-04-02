@@ -127,7 +127,7 @@ object PekkoHttpClient {
       //
       .getOrElse(ContentTypes.NoContentType)
 
-  // This method converts the headers to Akka-http headers, drops content-length (returning its value separately),
+  // This method converts the headers to Pekko-http headers, drops content-length (returning its value separately),
   // and returns content-type separately
   private[awsspi] def convertHeaders(
       headers: java.util.Map[String, java.util.List[String]]): (Option[HttpHeader], immutable.Seq[HttpHeader],

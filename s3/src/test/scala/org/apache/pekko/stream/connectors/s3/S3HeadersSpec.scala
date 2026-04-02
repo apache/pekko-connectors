@@ -25,6 +25,12 @@ import org.scalatest.matchers.should.Matchers
 import pekko.stream.connectors.s3.impl._
 
 class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
+
+  private lazy val defaultSettings: S3Settings = {
+    val defaultConfig = ConfigFactory.load()
+    S3Settings.apply(defaultConfig.getConfig("pekko.connectors.s3"))
+  }
+
   it should "filter headers based on what's allowed" in {
     val testOverrideConfig = ConfigFactory.parseString("""
       | pekko.connectors.s3 {
@@ -83,6 +89,32 @@ class S3HeadersSpec extends AnyFlatSpecLike with Matchers {
 
     roundTrip should contain allElementsOf S3Request.allRequests
 
+  }
+
+  it should "allow Content-Type header for UploadPart (fix for signature mismatch with AWS SDK v2)" in {
+    val header = S3Headers().withCustomHeaders(Map("Content-Type" -> "application/octet-stream"))
+    val result = header.headersFor(UploadPart)(defaultSettings)
+    result.map(_.name()) should contain("Content-Type")
+  }
+
+  it should "allow x-amz-trailer header for UploadPart" in {
+    val header = S3Headers().withCustomHeaders(Map("x-amz-trailer" -> "x-amz-checksum-sha256"))
+    val result = header.headersFor(UploadPart)(defaultSettings)
+    result.map(_.name()) should contain("x-amz-trailer")
+  }
+
+  it should "allow Content-Length and Content-MD5 headers for InitiateMultipartUpload" in {
+    val header = S3Headers().withCustomHeaders(Map("Content-Length" -> "0", "Content-MD5" -> "abc123"))
+    val result = header.headersFor(InitiateMultipartUpload)(defaultSettings)
+    val resultNames = result.map(_.name())
+    resultNames should contain("Content-Length")
+    resultNames should contain("Content-MD5")
+  }
+
+  it should "filter headers not in the allowlist for UploadPart" in {
+    val header = S3Headers().withCustomHeaders(Map("x-amz-acl" -> "public-read"))
+    val result = header.headersFor(UploadPart)(defaultSettings)
+    result.map(_.name()) should not contain "x-amz-acl"
   }
 
   it should "contain all S3Request types" in {
