@@ -26,9 +26,11 @@ import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.orientechnologies.orient.client.remote.OServerAdmin;
 import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.ODatabaseType;
+import com.orientechnologies.orient.core.db.OrientDB;
+import com.orientechnologies.orient.core.db.OrientDBConfig;
 // #init-settings
 import com.orientechnologies.orient.core.db.ODatabasePool;
 // #init-settings
@@ -55,7 +57,7 @@ import static org.junit.Assert.assertEquals;
 public class OrientDbTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
-  private static OServerAdmin oServerAdmin;
+  private static OrientDB orientDB;
   private static ODatabasePool oDatabase;
   private static ODatabaseSession client;
   private static ActorSystem system;
@@ -64,7 +66,6 @@ public class OrientDbTest {
 
   private static String url = "remote:127.0.0.1:2424/";
   private static String dbName = "GratefulDeadConcertsJava";
-  private static String dbUrl = url + dbName;
   private static String username = "root";
   private static String password = "root";
   // #init-settings
@@ -152,14 +153,12 @@ public class OrientDbTest {
   public static void setup() throws Exception {
     system = ActorSystem.create();
 
-    oServerAdmin = new OServerAdmin(url).connect(username, password);
-    if (!oServerAdmin.existsDatabase(dbName, "plocal")) {
-      oServerAdmin.createDatabase(dbName, "document", "plocal");
-    }
+    orientDB = new OrientDB(url, username, password, OrientDBConfig.defaultConfig());
+    orientDB.createIfNotExists(dbName, ODatabaseType.PLOCAL);
 
     // #init-settings
 
-    oDatabase = new ODatabasePool(dbUrl, username, password);
+    oDatabase = new ODatabasePool(orientDB, dbName, username, password);
 
     system.registerOnTermination(() -> oDatabase.close());
     // #init-settings
@@ -184,13 +183,12 @@ public class OrientDbTest {
     unregister(sink3);
     unregister(sink6);
 
-    if (oServerAdmin.existsDatabase(dbName, "plocal")) {
-      oServerAdmin.dropDatabase(dbName, "plocal");
-    }
-    oServerAdmin.close();
-
     client.close();
     oDatabase.close();
+    if (orientDB.exists(dbName)) {
+      orientDB.drop(dbName);
+    }
+    orientDB.close();
     TestKit.shutdownActorSystem(system);
   }
 
@@ -203,7 +201,7 @@ public class OrientDbTest {
   private static void flush(String className, String fieldName, String fieldValue) {
     ODocument oDocument = new ODocument().field(fieldName, fieldValue);
     oDocument.setClassNameIfExists(className);
-    oDocument.save();
+    client.save(oDocument);
   }
 
   private static void unregister(String className) {
