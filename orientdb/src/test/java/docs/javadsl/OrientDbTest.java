@@ -26,6 +26,7 @@ import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
+import com.orientechnologies.orient.core.annotation.OVersion;
 import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
 import com.orientechnologies.orient.core.db.ODatabaseType;
@@ -80,6 +81,7 @@ public class OrientDbTest {
   public static class source1 {
 
     private String book_title;
+    @OVersion private Integer version;
 
     public void setBook_title(String book_title) {
       this.book_title = book_title;
@@ -93,6 +95,7 @@ public class OrientDbTest {
   public static class sink2 {
 
     private String book_title;
+    @OVersion private Integer version;
 
     public void setBook_title(String book_title) {
       this.book_title = book_title;
