@@ -18,16 +18,19 @@
 package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.Collections
+import java.nio.ByteBuffer
 import com.typesafe.config.ConfigFactory
 
 import org.apache.pekko
 import pekko.http.scaladsl.model.headers.`Content-Type`
-import pekko.http.scaladsl.model.MediaTypes
+import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, MediaTypes }
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
+import org.reactivestreams.Subscriber
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import software.amazon.awssdk.http.SdkHttpConfigurationOption
+import software.amazon.awssdk.http.async.SdkHttpContentPublisher
 import software.amazon.awssdk.utils.AttributeMap
 
 import scala.concurrent.duration._
@@ -49,11 +52,54 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       headers.put("Content-Length", Collections.singletonList("123"))
       headers.put("Accept", Collections.singletonList("*/*"))
 
-      val (contentTypeHeader, reqHeaders) = PekkoHttpClient.convertHeaders(headers)
+      val (contentTypeHeader, reqHeaders, contentLength) = PekkoHttpClient.convertHeaders(headers)
 
       contentTypeHeader.value.lowercaseName() shouldBe `Content-Type`.lowercaseName
       reqHeaders should have size 1
+      contentLength shouldBe Some(123L)
     }
+
+    "return None content length when Content-Length header is absent" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Type", Collections.singletonList("application/xml"))
+      headers.put("Accept", Collections.singletonList("*/*"))
+
+      val (_, _, contentLength) = PekkoHttpClient.convertHeaders(headers)
+
+      contentLength shouldBe None
+    }
+    "use sdk content length from headers when publisher returns empty contentLength" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+        override def subscribe(s: Subscriber[_ >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher,
+          Some(42L))
+      entity.contentLengthOption shouldBe Some(42L)
+    }
+
+    "use publisher contentLength when sdkContentLength is absent" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(99L)
+        override def subscribe(s: Subscriber[_ >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher, None)
+      entity.contentLengthOption shouldBe Some(99L)
+    }
+
+    "prefer sdk content length over publisher contentLength when both are present" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(55L)
+        override def subscribe(s: Subscriber[_ >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher,
+          Some(42L))
+      entity.contentLengthOption shouldBe Some(42L)
+    }
+
     "build() should use default ConnectionPoolSettings" in {
       val pekkoClient: PekkoHttpClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
         .build()

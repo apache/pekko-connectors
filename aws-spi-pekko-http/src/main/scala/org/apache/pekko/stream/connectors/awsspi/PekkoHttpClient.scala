@@ -78,22 +78,30 @@ object PekkoHttpClient {
 
   private[awsspi] def toPekkoRequest(request: SdkHttpRequest,
       contentPublisher: SdkHttpContentPublisher): HttpRequest = {
-    val (contentTypeHeader, reqheaders) = convertHeaders(request.headers())
+    val (contentTypeHeader, reqheaders, sdkContentLength) = convertHeaders(request.headers())
     val method = convertMethod(request.method().name())
     HttpRequest(
       method = method,
       uri = Uri(request.getUri.toString),
       headers = reqheaders,
-      entity =
-        entityForMethodAndContentType(method, contentTypeHeaderToContentType(contentTypeHeader), contentPublisher),
+      entity = entityForMethodAndContentType(method, contentTypeHeaderToContentType(contentTypeHeader),
+        contentPublisher, sdkContentLength),
       protocol = HttpProtocols.`HTTP/1.1`)
   }
 
   private[awsspi] def entityForMethodAndContentType(method: HttpMethod,
       contentType: ContentType,
-      contentPublisher: SdkHttpContentPublisher): RequestEntity =
+      contentPublisher: SdkHttpContentPublisher,
+      sdkContentLength: Option[Long] = None): RequestEntity =
     method.requestEntityAcceptance match {
-      case Expected => contentPublisher.contentLength().toScala match {
+      case Expected =>
+        // Prefer the content length from the SDK request headers over the publisher's value.
+        // This ensures that when the AWS SDK has set a Content-Length (which it always does for
+        // non-chunked-signing requests like UploadPart), Pekko HTTP sends a Content-Length entity
+        // rather than falling back to chunked transfer encoding, which would break AWS SigV4 signing.
+        val contentLength: Option[Long] =
+          sdkContentLength.orElse(contentPublisher.contentLength().toScala.map(_.toLong))
+        contentLength match {
           case Some(length) =>
             HttpEntity(contentType, length, Source.fromPublisher(contentPublisher).map(ByteString(_)))
           case None => HttpEntity(contentType, Source.fromPublisher(contentPublisher).map(ByteString(_)))
@@ -119,35 +127,40 @@ object PekkoHttpClient {
       //
       .getOrElse(ContentTypes.NoContentType)
 
-  // This method converts the headers to Pekko-http headers and drops content-length and returns content-type separately
+  // This method converts the headers to Pekko-http headers, drops content-length (returning its value separately),
+  // and returns content-type separately
   private[awsspi] def convertHeaders(
-      headers: java.util.Map[String, java.util.List[String]]): (Option[HttpHeader], immutable.Seq[HttpHeader]) = {
+      headers: java.util.Map[String, java.util.List[String]]): (Option[HttpHeader], immutable.Seq[HttpHeader],
+      Option[Long]) = {
     val headersAsScala = {
       val builder = collection.mutable.Map.newBuilder[String, java.util.List[String]]
       headers.forEach { case (k, v) => builder += k -> v }
       builder.result()
     }
 
-    headersAsScala.foldLeft((Option.empty[HttpHeader], List.empty[HttpHeader])) { case ((ctHeader, hdrs), header) =>
-      val (headerName, headerValue) = header
-      if (headerValue.size() != 1) {
-        throw new IllegalArgumentException(
-          s"Found invalid header: key: $headerName, Value: ${val list = List.newBuilder[String]
-            headerValue.forEach(v => list += v)
-            list.result()}.")
-      }
-      // skip content-length as it will be calculated by pekko-http itself and must not be provided in the request headers
-      if (`Content-Length`.lowercaseName == headerName.toLowerCase) (ctHeader, hdrs)
-      else {
-        HttpHeader.parse(headerName, headerValue.get(0)) match {
-          case ok: Ok =>
-            // return content-type separately as it will be used to calculate ContentType, which is used on HttpEntity
-            if (ok.header.lowercaseName() == `Content-Type`.lowercaseName) (Some(ok.header), hdrs)
-            else (ctHeader, hdrs :+ ok.header)
-          case error: ParsingResult.Error =>
-            throw new IllegalArgumentException(s"Found invalid header: ${error.errors}.")
+    headersAsScala.foldLeft((Option.empty[HttpHeader], List.empty[HttpHeader], Option.empty[Long])) {
+      case ((ctHeader, hdrs, contentLength), header) =>
+        val (headerName, headerValue) = header
+        if (headerValue.size() != 1) {
+          throw new IllegalArgumentException(
+            s"Found invalid header: key: $headerName, Value: ${val list = List.newBuilder[String]
+              headerValue.forEach(v => list += v)
+              list.result()}.")
         }
-      }
+        // skip content-length as it will be managed by pekko-http in the entity, but capture its value
+        // so we can use it to build a fixed-length entity, preventing a fallback to chunked transfer encoding
+        if (`Content-Length`.lowercaseName == headerName.toLowerCase)
+          (ctHeader, hdrs, Some(headerValue.get(0).toLong))
+        else {
+          HttpHeader.parse(headerName, headerValue.get(0)) match {
+            case ok: Ok =>
+              // return content-type separately as it will be used to calculate ContentType, which is used on HttpEntity
+              if (ok.header.lowercaseName() == `Content-Type`.lowercaseName) (Some(ok.header), hdrs, contentLength)
+              else (ctHeader, hdrs :+ ok.header, contentLength)
+            case error: ParsingResult.Error =>
+              throw new IllegalArgumentException(s"Found invalid header: ${error.errors}.")
+          }
+        }
     }
   }
 
