@@ -35,13 +35,13 @@ services:
   elasticsearch7:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
     ports:
-      - "9202:9200"
+      - "9201:9200"
     environment:
       - "discovery.type=single-node"
   elasticsearch9:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.3.2
     ports:
-      - "9201:9200"
+      - "9202:9200"
     environment:
       - "discovery.type=single-node"
   opensearch1:
