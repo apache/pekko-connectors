@@ -13,17 +13,17 @@
 
 package org.apache.pekko.stream.connectors.orientdb
 
-import com.orientechnologies.orient.core.db.OPartitionedDatabasePool
+import com.orientechnologies.orient.core.db.ODatabasePool
 
 final class OrientDbWriteSettings private (
-    val oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool) {
+    val oDatabasePool: com.orientechnologies.orient.core.db.ODatabasePool) {
 
   def withOrientDBCredentials(
-      value: com.orientechnologies.orient.core.db.OPartitionedDatabasePool): OrientDbWriteSettings =
+      value: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbWriteSettings =
     copy(oDatabasePool = value)
 
   private def copy(
-      oDatabasePool: com.orientechnologies.orient.core.db.OPartitionedDatabasePool): OrientDbWriteSettings =
+      oDatabasePool: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbWriteSettings =
     new OrientDbWriteSettings(
       oDatabasePool = oDatabasePool)
 
@@ -36,10 +36,10 @@ final class OrientDbWriteSettings private (
 object OrientDbWriteSettings {
 
   /** Scala API */
-  def apply(oDatabasePool: OPartitionedDatabasePool): OrientDbWriteSettings =
+  def apply(oDatabasePool: ODatabasePool): OrientDbWriteSettings =
     new OrientDbWriteSettings(
-      oDatabasePool: OPartitionedDatabasePool)
+      oDatabasePool: ODatabasePool)
 
   /** Java API */
-  def create(oDatabasePool: OPartitionedDatabasePool): OrientDbWriteSettings = apply(oDatabasePool)
+  def create(oDatabasePool: ODatabasePool): OrientDbWriteSettings = apply(oDatabasePool)
 }

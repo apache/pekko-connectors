@@ -340,9 +340,7 @@ lazy val orientdb =
     "orientdb",
     "orientdb",
     Dependencies.OrientDB,
-    Test / fork := true,
-    // note: orientdb client needs to be refactored to move off deprecated calls
-    fatalWarnings := false)
+    Test / fork := true)
 
 lazy val reference = internalProject("reference", Dependencies.Reference)
   .dependsOn(testkit % Test)

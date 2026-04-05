@@ -28,10 +28,13 @@ import pekko.stream.scaladsl.{ Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.testkit.TestKit
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
-import com.orientechnologies.orient.client.remote.OServerAdmin
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
+import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal
+import com.orientechnologies.orient.core.db.ODatabaseSession
+import com.orientechnologies.orient.core.db.ODatabaseType
+import com.orientechnologies.orient.core.db.OrientDB
+import com.orientechnologies.orient.core.db.OrientDBConfig
 //#init-settings
-import com.orientechnologies.orient.core.db.OPartitionedDatabasePool
+import com.orientechnologies.orient.core.db.ODatabasePool
 //#init-settings
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal
 import com.orientechnologies.orient.core.record.impl.ODocument
@@ -55,7 +58,6 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
 
   val url = "remote:127.0.0.1:2424/"
   val dbName = "GratefulDeadConcertsScala"
-  val dbUrl = s"$url$dbName"
   val username = "root"
   val password = "root"
   // #init-settings
@@ -70,20 +72,18 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
   case class Book(title: String)
   // #define-class
 
-  var oServerAdmin: OServerAdmin = _
-  var oDatabase: OPartitionedDatabasePool = _
-  var client: ODatabaseDocumentTx = _
+  var orientDB: OrientDB = _
+  var oDatabase: ODatabasePool = _
+  var client: ODatabaseSession = _
 
   override def beforeAll() = {
-    oServerAdmin = new OServerAdmin(url).connect(username, password)
-    if (!oServerAdmin.existsDatabase(dbName, "plocal")) {
-      oServerAdmin.createDatabase(dbName, "document", "plocal")
-    }
+    orientDB = new OrientDB(url, username, password, OrientDBConfig.defaultConfig())
+    orientDB.createIfNotExists(dbName, ODatabaseType.PLOCAL)
 
     // #init-settings
 
-    val oDatabase: OPartitionedDatabasePool =
-      new OPartitionedDatabasePool(dbUrl, username, password, Runtime.getRuntime.availableProcessors(), 10)
+    val oDatabase: ODatabasePool =
+      new ODatabasePool(orientDB, dbName, username, password)
 
     system.registerOnTermination(() -> oDatabase.close())
     // #init-settings
@@ -107,13 +107,12 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
     unregister(sink5)
     unregister(sink7)
 
-    if (oServerAdmin.existsDatabase(dbName, "plocal")) {
-      oServerAdmin.dropDatabase(dbName, "plocal")
-    }
-    oServerAdmin.close()
-
     client.close()
     oDatabase.close()
+    if (orientDB.exists(dbName)) {
+      orientDB.drop(dbName)
+    }
+    orientDB.close()
     TestKit.shutdownActorSystem(system)
   }
 
@@ -125,7 +124,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
     val oDocument = new ODocument()
       .field(fieldName, fieldValue)
     oDocument.setClassNameIfExists(className)
-    oDocument.save()
+    client.save(oDocument)
   }
 
   private def unregister(className: String): Unit =
@@ -232,9 +231,9 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       val streamCompletion: Future[Done] = OrientDbSource
         .typed(sourceClass, OrientDbSourceSettings(oDatabase), classOf[OrientDbTest.source1])
         .map { (m: OrientDbReadResult[OrientDbTest.source1]) =>
-          val db: ODatabaseDocumentTx = oDatabase.acquire
-          db.setDatabaseOwner(new OObjectDatabaseTx(db))
-          ODatabaseRecordThreadLocal.instance.set(db)
+          val db = oDatabase.acquire
+          new OObjectDatabaseTx(db.asInstanceOf[ODatabaseDocumentInternal])
+          ODatabaseRecordThreadLocal.instance.set(db.asInstanceOf[ODatabaseDocumentInternal])
           val sink: OrientDbTest.sink2 = new OrientDbTest.sink2
           sink.setBook_title(m.oDocument.getBook_title)
           OrientDbWriteMessage(sink)
