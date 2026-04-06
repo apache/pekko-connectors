@@ -51,7 +51,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
             new Logic {
               override protected def runQuery(): util.List[T] = {
                 val rs = client.query(q)
-                val results = new util.ArrayList[T]()
+                val results = newArrayListWithSize(rs.estimateSize())
                 try {
                   while (rs.hasNext) results.add(rs.next().toElement.asInstanceOf[T])
                 } finally rs.close()
@@ -62,7 +62,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
             new Logic {
               override protected def runQuery(): util.List[T] = {
                 val rs = client.query(s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}")
-                val results = new util.ArrayList[T]()
+                val results = newArrayListWithSize(rs.estimateSize())
                 try {
                   while (rs.hasNext) results.add(rs.next().toElement.asInstanceOf[T])
                 } finally rs.close()
@@ -82,7 +82,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
 
               override protected def runQuery(): util.List[T] = {
                 val rs = oObjectClient.query(q)
-                val results = new util.ArrayList[T]()
+                val results = newArrayListWithSize(rs.estimateSize())
                 try {
                   while (rs.hasNext) {
                     rs.next().getRecord().toScala.foreach { record =>
@@ -103,7 +103,7 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
               override protected def runQuery(): util.List[T] = {
                 val rs =
                   oObjectClient.query(s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}")
-                val results = new util.ArrayList[T]()
+                val results = newArrayListWithSize(rs.estimateSize())
                 try {
                   while (rs.hasNext) {
                     rs.next().getRecord().toScala.foreach { record =>
@@ -117,6 +117,12 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
         }
 
     }
+
+  // if the size is larger than Int.MaxValue, we will just create an ArrayList with a default
+  // size of 1000 and let it grow as needed - we assume that estimateSize() is just a hint
+  private def newArrayListWithSize(size: Long): util.ArrayList[T] =
+    if (size > Int.MaxValue) new util.ArrayList[T](1000)
+    else new util.ArrayList[T](math.max(size.toInt, 0))
 
   private abstract class Logic extends GraphStageLogic(shape) with OutHandler {
 
