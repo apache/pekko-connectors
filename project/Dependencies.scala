@@ -67,7 +67,7 @@ object Dependencies {
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.43.0"
-  val JwtScalaVersion = "11.0.3"
+  val JwtScalaVersion = "11.0.4"
   val Log4jVersion = "2.25.4"
 
   // Releases https://github.com/FasterXML/jackson-databind/releases
