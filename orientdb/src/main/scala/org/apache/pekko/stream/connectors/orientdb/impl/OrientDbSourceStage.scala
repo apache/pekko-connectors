@@ -21,10 +21,11 @@ import pekko.stream.connectors.orientdb.{ OrientDbReadResult, OrientDbSourceSett
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import pekko.stream.{ ActorAttributes, Attributes, Outlet, SourceShape }
 import com.orientechnologies.orient.`object`.db.OObjectDatabaseTx
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
-import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery
+import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal
+import com.orientechnologies.orient.core.db.ODatabaseSession
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * INTERNAL API
@@ -48,15 +49,25 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
         query match {
           case Some(q) =>
             new Logic {
-              override protected def runQuery(): util.List[T] =
-                client.query[util.List[T]](new OSQLSynchQuery[T](q))
-
+              override protected def runQuery(): util.List[T] = {
+                val rs = client.query(q)
+                val results = newArrayListWithSize(rs.estimateSize())
+                try {
+                  while (rs.hasNext) results.add(rs.next().toElement.asInstanceOf[T])
+                } finally rs.close()
+                results
+              }
             }
           case None =>
             new Logic {
-              override protected def runQuery(): util.List[T] =
-                client.query[util.List[T]](
-                  new OSQLSynchQuery[T](s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"))
+              override protected def runQuery(): util.List[T] = {
+                val rs = client.query(s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}")
+                val results = newArrayListWithSize(rs.estimateSize())
+                try {
+                  while (rs.hasNext) results.add(rs.next().toElement.asInstanceOf[T])
+                } finally rs.close()
+                results
+              }
             }
         }
 
@@ -70,9 +81,16 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
               }
 
               override protected def runQuery(): util.List[T] = {
-                client.setDatabaseOwner(oObjectClient)
-                oObjectClient.getEntityManager.registerEntityClass(c)
-                oObjectClient.query[util.List[T]](new OSQLSynchQuery[T](q))
+                val rs = oObjectClient.query(q)
+                val results = newArrayListWithSize(rs.estimateSize())
+                try {
+                  while (rs.hasNext) {
+                    rs.next().getRecord().toScala.foreach { record =>
+                      results.add(oObjectClient.getUserObjectByRecord(record, null).asInstanceOf[T])
+                    }
+                  }
+                } finally rs.close()
+                results
               }
             }
           case None =>
@@ -82,26 +100,39 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
                 oObjectClient.getEntityManager.registerEntityClass(c)
               }
 
-              override protected def runQuery(): util.List[T] =
-                oObjectClient
-                  .query[util.List[T]](
-                    new OSQLSynchQuery[T](
-                      s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}"))
+              override protected def runQuery(): util.List[T] = {
+                val rs =
+                  oObjectClient.query(s"SELECT * FROM $className SKIP ${skip} LIMIT ${settings.limit}")
+                val results = newArrayListWithSize(rs.estimateSize())
+                try {
+                  while (rs.hasNext) {
+                    rs.next().getRecord().toScala.foreach { record =>
+                      results.add(oObjectClient.getUserObjectByRecord(record, null).asInstanceOf[T])
+                    }
+                  }
+                } finally rs.close()
+                results
+              }
             }
         }
 
     }
 
+  // if the size is larger than Int.MaxValue, we will just create an ArrayList with a default
+  // size of 1000 and let it grow as needed - we assume that estimateSize() is just a hint
+  private def newArrayListWithSize(size: Long): util.ArrayList[T] =
+    if (size > Int.MaxValue) new util.ArrayList[T](1000)
+    else new util.ArrayList[T](math.max(size.toInt, 0))
+
   private abstract class Logic extends GraphStageLogic(shape) with OutHandler {
 
-    protected var client: ODatabaseDocumentTx = _
+    protected var client: ODatabaseSession = _
     protected var oObjectClient: OObjectDatabaseTx = _
     protected var skip = settings.skip
 
     override def preStart(): Unit = {
       client = settings.oDatabasePool.acquire()
-      oObjectClient = new OObjectDatabaseTx(client)
-      client.setDatabaseOwner(oObjectClient)
+      oObjectClient = new OObjectDatabaseTx(client.asInstanceOf[ODatabaseDocumentInternal])
     }
 
     override def postStop(): Unit =
