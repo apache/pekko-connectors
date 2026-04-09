@@ -19,12 +19,15 @@ The most notable issues are with:
 * HBase ([#61](https://github.com/apache/pekko-connectors/issues/61))
 * IronMQ ([#697](https://github.com/apache/pekko-connectors/issues/697))
 
-With OrientDB Connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking with Pekko Connectors 1.0.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
+With OrientDB Connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking with Pekko Connectors 1.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
 
 ### Breaking Changes
 
 * Some previously deprecated methods have been removed.
 * Java APIs have been reworked for Couchbase3 and Slick. There is also a small change for Kinesis.
+
+### Notable Changes
+* OrientDB connector was rewritten to avoid a number of deprecated classes ([PR1553](https://github.com/apache/pekko-connectors/pull/1553)).
 
 ### Dependency Upgrades
 
