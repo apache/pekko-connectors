@@ -52,7 +52,7 @@ services:
       - "discovery.type=single-node"
       - "DISABLE_SECURITY_PLUGIN=true"
   ftp:
-    image: stilliard/pure-ftpd:latest
+    image: stilliard/pure-ftpd:hardened
     ports:
       - "21000:21"
       - "30000-30009:30000-30009"
