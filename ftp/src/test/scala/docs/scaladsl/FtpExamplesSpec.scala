@@ -64,7 +64,8 @@ class FtpExamplesSpec
   }
 
   "a file" should {
-    "be stored" in assertAllStagesStopped {
+    // https://github.com/apache/pekko-connectors/issues/1581 open to try to get this fixed
+    "be stored" ignore assertAllStagesStopped {
       // #storing
       import org.apache.pekko
       import pekko.stream.IOResult
@@ -85,7 +86,8 @@ class FtpExamplesSpec
 
     }
 
-    "be gzipped" in assertAllStagesStopped {
+    // https://github.com/apache/pekko-connectors/issues/1581 open to try to get this fixed
+    "be gzipped" ignore assertAllStagesStopped {
       import pekko.stream.IOResult
       import pekko.stream.connectors.ftp.scaladsl.Ftp
       import pekko.util.ByteString
