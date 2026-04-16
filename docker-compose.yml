@@ -182,7 +182,7 @@ services:
     volumes:
       - ./mqtt/src/test/travis:/mosquitto/config
   orientdb:
-    image: orientdb:3.2.49
+    image: orientdb:3.2.51
     ports:
       - "2424:2424"
     environment:
