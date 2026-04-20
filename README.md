@@ -3,7 +3,7 @@
 [scaladex]:              https://index.scala-lang.org/apache/pekko-connectors
 [scaladex-badge]:        https://index.scala-lang.org/apache/pekko-connectors/latest.svg
 [maven-central]:         https://search.maven.org/#search%7Cga%7C1%7Cpekko-connectors
-[maven-central-badge]:   https://maven-badges.herokuapp.com/maven-central/org.pekko/pekko-connectors-file_2.13/badge.svg
+[maven-central-badge]:   https://maven-badges.sml.io/maven-central/org.apache.pekko/pekko-connectors-file_2.13/badge.svg
 
 Systems don't come alone. In the modern world of microservices and cloud deployment, new components must interact with legacy systems, making integration an important key to success. Reactive Streams give us a technology-independent tool to let these heterogeneous systems communicate without overwhelming each other.
 
