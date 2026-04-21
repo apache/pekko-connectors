@@ -121,6 +121,7 @@ public class SolrTest {
         String title = tuple.getString("title");
         return new Book(title, tuple.getString("comment"));
       };
+
   // #define-class
 
   @Test

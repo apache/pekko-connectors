@@ -31,6 +31,7 @@ import org.apache.pekko.http.javadsl.Http;
 import org.apache.pekko.http.javadsl.model.*;
 import org.apache.pekko.http.javadsl.model.sse.ServerSentEvent;
 import org.apache.pekko.stream.connectors.sse.javadsl.EventSource;
+
 // #event-source
 
 public class EventSourceTest {

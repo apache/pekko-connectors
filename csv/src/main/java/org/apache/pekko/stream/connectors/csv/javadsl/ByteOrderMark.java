@@ -38,5 +38,6 @@ public class ByteOrderMark {
       org.apache.pekko.stream.connectors.csv.scaladsl.ByteOrderMark.UTF_32_LE();
 
   /** Byte Order Mark for UTF-8 */
-  public static final ByteString UTF_8 = org.apache.pekko.stream.connectors.csv.scaladsl.ByteOrderMark.UTF_8();
+  public static final ByteString UTF_8 =
+      org.apache.pekko.stream.connectors.csv.scaladsl.ByteOrderMark.UTF_8();
 }

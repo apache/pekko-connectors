@@ -26,8 +26,8 @@ import java.util.concurrent.CompletionStage;
  */
 public final class DiscoverySupport {
 
-  private static final org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport SUPPORT =
-      org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport.INSTANCE();
+  private static final org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport
+      SUPPORT = org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport.INSTANCE();
 
   /**
    * Expects a `service` section in the given Config and reads the given service name's address to

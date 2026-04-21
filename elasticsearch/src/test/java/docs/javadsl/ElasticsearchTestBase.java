@@ -50,6 +50,7 @@ public class ElasticsearchTestBase {
       this.title = title;
     }
   }
+
   // #define-class
 
   @BeforeClass
@@ -64,7 +65,8 @@ public class ElasticsearchTestBase {
   }
 
   protected static void prepareIndex(
-      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase version) throws IOException {
+      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase version)
+      throws IOException {
     connectionSettings =
         ElasticsearchConnectionSettings.create(String.format("http://localhost:%d", port));
 
@@ -120,6 +122,7 @@ public class ElasticsearchTestBase {
     }
     // #custom-search-params
   }
+
   // #custom-search-params
 
   static class KafkaCommitter {

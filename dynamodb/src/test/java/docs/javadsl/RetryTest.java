@@ -27,6 +27,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 // #awsRetryConfiguration
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.retries.DefaultRetryStrategy;
+
 // #clientRetryConfig
 
 // #awsRetryConfiguration
@@ -48,7 +49,8 @@ public class RetryTest {
             .overrideConfiguration(
                 ClientOverrideConfiguration.builder()
                     .retryStrategy(
-                        // See https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/retries/api/RetryStrategy.html
+                        // See
+                        // https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/retries/api/RetryStrategy.html
                         DefaultRetryStrategy.legacyStrategyBuilder()
                             .treatAsThrottling(e -> true)
                             .build())

@@ -57,7 +57,8 @@ public class AwsLambdaFlowTest {
 
   @After
   public void checkForStageLeaks() {
-    StreamTestKit.assertAllStagesStopped(org.apache.pekko.stream.Materializer.matFromSystem(system));
+    StreamTestKit.assertAllStagesStopped(
+        org.apache.pekko.stream.Materializer.matFromSystem(system));
   }
 
   @Test

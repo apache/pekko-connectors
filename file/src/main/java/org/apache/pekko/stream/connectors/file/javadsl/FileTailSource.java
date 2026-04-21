@@ -54,10 +54,7 @@ public final class FileTailSource {
       Path path, int maxChunkSize, long startingPosition, java.time.Duration pollingInterval) {
     return Source.fromGraph(
         new org.apache.pekko.stream.connectors.file.impl.FileTailSource(
-            path,
-            maxChunkSize,
-            startingPosition,
-            DurationConverters.toScala(pollingInterval)));
+            path, maxChunkSize, startingPosition, DurationConverters.toScala(pollingInterval)));
   }
 
   /**

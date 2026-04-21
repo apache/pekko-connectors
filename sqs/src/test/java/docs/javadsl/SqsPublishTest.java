@@ -170,7 +170,10 @@ public class SqsPublishTest extends BaseSqsTest {
         // #flow
         // for dynamic SQS queues
         Source.single(
-                SendMessageRequest.builder().messageBody("pekko-connectors-flow").queueUrl(queueUrl).build())
+                SendMessageRequest.builder()
+                    .messageBody("pekko-connectors-flow")
+                    .queueUrl(queueUrl)
+                    .build())
             .via(SqsPublishFlow.create(SqsPublishSettings.create(), sqsClient))
             .runWith(Sink.head(), system);
     // #flow

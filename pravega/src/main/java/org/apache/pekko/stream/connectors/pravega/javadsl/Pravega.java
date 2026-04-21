@@ -32,7 +32,6 @@ import java.util.concurrent.CompletionStage;
 
 import scala.jdk.javaapi.FutureConverters;
 
-
 @ApiMayChange
 public class Pravega {
 
@@ -40,6 +39,7 @@ public class Pravega {
 
     return new PravegaReaderGroupManager(scope, clientConfig);
   }
+
   /**
    * Messages are read from a Pravega stream.
    *
@@ -56,6 +56,7 @@ public class Pravega {
       String scope, String streamName, WriterSettings<V> writerSettings) {
     return Flow.fromGraph(new PravegaFlow<>(scope, streamName, writerSettings));
   }
+
   /** Incoming messages are written to Pravega. */
   public static <V> Sink<V, CompletionStage<Done>> sink(
       String scope, String streamName, WriterSettings<V> writerSettings) {

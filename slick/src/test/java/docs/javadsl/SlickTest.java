@@ -50,8 +50,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 /**
- * This unit test is run using a local H2 database using `/tmp/pekko-connectors-slick-h2-test` for temporary
- * storage.
+ * This unit test is run using a local H2 database using `/tmp/pekko-connectors-slick-h2-test` for
+ * temporary storage.
  */
 public class SlickTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();

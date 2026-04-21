@@ -47,7 +47,8 @@ public class Geode extends GeodeCache {
     return factory.addPoolLocator(geodeSettings.hostname(), geodeSettings.port());
   }
 
-  public <V> Source<V, CompletionStage<Done>> query(String query, PekkoPdxSerializer<V> serializer) {
+  public <V> Source<V, CompletionStage<Done>> query(
+      String query, PekkoPdxSerializer<V> serializer) {
 
     registerPDXSerializer(serializer, serializer.clazz());
     return Source.fromGraph(new GeodeFiniteSourceStage<V>(cache(), query))
@@ -55,7 +56,7 @@ public class Geode extends GeodeCache {
   }
 
   public <K, V> Flow<V, V, NotUsed> flow(
-          RegionSettings<K, V> regionSettings, PekkoPdxSerializer<V> serializer) {
+      RegionSettings<K, V> regionSettings, PekkoPdxSerializer<V> serializer) {
 
     registerPDXSerializer(serializer, serializer.clazz());
 
@@ -63,7 +64,7 @@ public class Geode extends GeodeCache {
   }
 
   public <K, V> Sink<V, CompletionStage<Done>> sink(
-          RegionSettings<K, V> regionSettings, PekkoPdxSerializer<V> serializer) {
+      RegionSettings<K, V> regionSettings, PekkoPdxSerializer<V> serializer) {
     return flow(regionSettings, serializer).toMat(Sink.ignore(), Keep.right());
   }
 

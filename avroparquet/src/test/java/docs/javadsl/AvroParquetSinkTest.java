@@ -51,6 +51,7 @@ import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
+
 // #init-writer
 
 public class AvroParquetSinkTest {

@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.pravega;
 
 import org.apache.pekko.Done;
-import org.apache.pekko.stream.connectors.pravega.PravegaReaderGroupManager;
 import org.apache.pekko.stream.javadsl.Source;
 
 import com.typesafe.config.ConfigFactory;

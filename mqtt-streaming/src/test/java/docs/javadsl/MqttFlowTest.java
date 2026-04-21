@@ -102,7 +102,8 @@ public class MqttFlowTest {
       throws InterruptedException, ExecutionException, TimeoutException {
     String clientId = "source-test/flow";
     String topic = "source-test/topic1";
-    ByteString uniqueSessionId = ByteString.fromString("establishClientBidirectionalConnectionAndSubscribeToATopic-session");
+    ByteString uniqueSessionId =
+        ByteString.fromString("establishClientBidirectionalConnectionAndSubscribeToATopic-session");
 
     // #create-streaming-flow
     MqttSessionSettings settings = MqttSessionSettings.create();
@@ -123,8 +124,8 @@ public class MqttFlowTest {
                 new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
                   @Override
                   public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
-                    if (x.getEvent().isPresent() && x.getEvent().get().event() instanceof Publish publish)
-                      return publish;
+                    if (x.getEvent().isPresent()
+                        && x.getEvent().get().event() instanceof Publish publish) return publish;
                     else throw noMatch();
                   }
                 })
@@ -163,7 +164,9 @@ public class MqttFlowTest {
       throws InterruptedException, ExecutionException, TimeoutException {
     String clientId = "flow-test/flow";
     String topic = "source-test/topic1";
-    ByteString uniqueSessionId = ByteString.fromString("establishServerBidirectionalConnectionAndSubscribeToATopic-connection");
+    ByteString uniqueSessionId =
+        ByteString.fromString(
+            "establishServerBidirectionalConnectionAndSubscribeToATopic-connection");
     String host = "localhost";
     int port = 9884;
 
@@ -264,8 +267,8 @@ public class MqttFlowTest {
                 new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
                   @Override
                   public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
-                    if (x.getEvent().isPresent() && x.getEvent().get().event() instanceof Publish publish)
-                      return publish;
+                    if (x.getEvent().isPresent()
+                        && x.getEvent().get().event() instanceof Publish publish) return publish;
                     else throw noMatch();
                   }
                 })

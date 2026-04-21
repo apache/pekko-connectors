@@ -31,6 +31,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.avro.Schema;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.parquet.avro.AvroParquetReader;
+
 // #init-reader
 
 public class Examples {
@@ -56,6 +57,7 @@ public class Examples {
 
   // #init-source
   Source<GenericRecord, NotUsed> source = AvroParquetSource.create(reader);
+
   // #init-source
 
   @SuppressWarnings("deprecation")

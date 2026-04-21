@@ -50,7 +50,8 @@ public class KinesisSnippets {
         KinesisAsyncClient.builder()
             .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
-            // see https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
+            // see
+            // https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
             // .overrideConfiguration(...)
             .build();
 

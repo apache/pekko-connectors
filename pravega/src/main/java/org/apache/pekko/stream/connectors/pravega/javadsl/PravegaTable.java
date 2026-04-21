@@ -26,14 +26,10 @@ import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 
-import io.pravega.client.tables.TableKey;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
-import java.nio.ByteBuffer;
 
-import scala.Option;
 import scala.jdk.javaapi.FutureConverters;
 import scala.jdk.javaapi.OptionConverters;
 
@@ -68,6 +64,7 @@ public class PravegaTable {
     return Source.fromGraph(new PravegaTableSource<K, V>(scope, tableName, tableReaderSettings))
         .mapMaterializedValue(FutureConverters::asJava);
   }
+
   /** A flow from key to and Option[value]. */
   public static <K, V> Flow<K, Optional<V>, NotUsed> readFlow(
       String scope, String tableName, TableSettings<K, V> tableSettings) {

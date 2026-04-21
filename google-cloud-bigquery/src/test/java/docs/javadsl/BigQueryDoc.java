@@ -60,6 +60,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 // #imports
 
 public class BigQueryDoc {
@@ -146,6 +147,7 @@ public class BigQueryDoc {
       }
     }
   }
+
   // #setup
 
   String datasetId;

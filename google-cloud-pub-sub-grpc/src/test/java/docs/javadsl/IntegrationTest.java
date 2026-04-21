@@ -221,8 +221,7 @@ public class IntegrationTest {
   public void shouldModifyAckDeadline() {
     final String projectId = "pekko-connectors";
     final String subscription = "simpleSubscription";
-    final String subscriptionFqrs =
-        "projects/" + projectId + "/subscriptions/" + subscription;
+    final String subscriptionFqrs = "projects/" + projectId + "/subscriptions/" + subscription;
 
     final StreamingPullRequest request =
         StreamingPullRequest.newBuilder()
@@ -264,8 +263,7 @@ public class IntegrationTest {
   public void shouldAutoExtendAckDeadlines() {
     final String projectId = "pekko-connectors";
     final String subscription = "simpleSubscription";
-    final String subscriptionFqrs =
-        "projects/" + projectId + "/subscriptions/" + subscription;
+    final String subscriptionFqrs = "projects/" + projectId + "/subscriptions/" + subscription;
 
     final StreamingPullRequest request =
         StreamingPullRequest.newBuilder()
@@ -305,8 +303,11 @@ public class IntegrationTest {
             .setTopic("projects/" + projectId + "/topics/" + topic)
             .addMessages(PubsubMessage.newBuilder().setData(msg).build())
             .build();
-    Source.single(publishRequest).via(GooglePubSub.publish(1)).runWith(Sink.head(), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+    Source.single(publishRequest)
+        .via(GooglePubSub.publish(1))
+        .runWith(Sink.head(), system)
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
 
     final StreamingPullRequest request =
         StreamingPullRequest.newBuilder()
@@ -315,10 +316,12 @@ public class IntegrationTest {
             .build();
 
     // receive and nack — filter for our specific message to avoid test pollution
-    ReceivedMessage received = GooglePubSub.subscribe(request, Duration.ofSeconds(1))
-        .filter(m -> m.getMessage().getData().equals(msg))
-        .runWith(Sink.head(), system)
-        .toCompletableFuture().get(10, TimeUnit.SECONDS);
+    ReceivedMessage received =
+        GooglePubSub.subscribe(request, Duration.ofSeconds(1))
+            .filter(m -> m.getMessage().getData().equals(msg))
+            .runWith(Sink.head(), system)
+            .toCompletableFuture()
+            .get(10, TimeUnit.SECONDS);
 
     Source.single(
             AcknowledgeRequest.newBuilder()
@@ -327,13 +330,16 @@ public class IntegrationTest {
                 .build())
         .via(GooglePubSub.nackFlow())
         .runWith(Sink.head(), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
 
     // should be redelivered
-    ReceivedMessage redelivered = GooglePubSub.subscribe(request, Duration.ofSeconds(1))
-        .filter(m -> m.getMessage().getData().equals(msg))
-        .runWith(Sink.head(), system)
-        .toCompletableFuture().get(15, TimeUnit.SECONDS);
+    ReceivedMessage redelivered =
+        GooglePubSub.subscribe(request, Duration.ofSeconds(1))
+            .filter(m -> m.getMessage().getData().equals(msg))
+            .runWith(Sink.head(), system)
+            .toCompletableFuture()
+            .get(15, TimeUnit.SECONDS);
 
     assertEquals("nacked message should be redelivered", msg, redelivered.getMessage().getData());
   }
@@ -353,8 +359,11 @@ public class IntegrationTest {
             .setTopic("projects/" + projectId + "/topics/" + topic)
             .addMessages(PubsubMessage.newBuilder().setData(msg).build())
             .build();
-    Source.single(publishRequest).via(GooglePubSub.publish(1)).runWith(Sink.head(), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+    Source.single(publishRequest)
+        .via(GooglePubSub.publish(1))
+        .runWith(Sink.head(), system)
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
 
     final StreamingPullRequest request =
         StreamingPullRequest.newBuilder()
@@ -363,11 +372,13 @@ public class IntegrationTest {
             .build();
 
     // subscribe, dynamically set deadline, then ack
-    ReceivedMessage result = GooglePubSub.subscribe(request, Duration.ofSeconds(1))
-        .take(1)
-        .via(GooglePubSub.modifyAckDeadlineDynamic(subscriptionFqrs, 1, m -> 30))
-        .runWith(Sink.head(), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+    ReceivedMessage result =
+        GooglePubSub.subscribe(request, Duration.ofSeconds(1))
+            .take(1)
+            .via(GooglePubSub.modifyAckDeadlineDynamic(subscriptionFqrs, 1, m -> 30))
+            .runWith(Sink.head(), system)
+            .toCompletableFuture()
+            .get(5, TimeUnit.SECONDS);
 
     // ack the message
     Source.single(
@@ -376,7 +387,8 @@ public class IntegrationTest {
                 .addAckIds(result.getAckId())
                 .build())
         .runWith(GooglePubSub.acknowledge(1), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
   }
 
   @Test
@@ -389,17 +401,17 @@ public class IntegrationTest {
 
     // publish several messages
     final String prefix = "fc-java-" + System.nanoTime();
-    PublishRequest.Builder publishBuilder = PublishRequest.newBuilder()
-        .setTopic("projects/" + projectId + "/topics/" + topic);
+    PublishRequest.Builder publishBuilder =
+        PublishRequest.newBuilder().setTopic("projects/" + projectId + "/topics/" + topic);
     for (int i = 1; i <= 3; i++) {
       publishBuilder.addMessages(
-          PubsubMessage.newBuilder()
-              .setData(ByteString.copyFromUtf8(prefix + "-" + i))
-              .build());
+          PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(prefix + "-" + i)).build());
     }
-    Source.single(publishBuilder.build()).via(GooglePubSub.publish(1))
+    Source.single(publishBuilder.build())
+        .via(GooglePubSub.publish(1))
         .runWith(Sink.head(), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
 
     final StreamingPullRequest request =
         StreamingPullRequest.newBuilder()
@@ -410,16 +422,20 @@ public class IntegrationTest {
     final org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.FlowControl fc =
         org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.FlowControl.create(2);
 
-    List<AcknowledgeRequest> result = GooglePubSub.subscribe(request, Duration.ofSeconds(1))
-        .via(GooglePubSub.flowControlGate(fc))
-        .take(3)
-        .map(m -> AcknowledgeRequest.newBuilder()
-            .setSubscription(subscriptionFqrs)
-            .addAckIds(m.getAckId())
-            .build())
-        .via(GooglePubSub.acknowledgeFlow(fc))
-        .runWith(Sink.seq(), system)
-        .toCompletableFuture().get(15, TimeUnit.SECONDS);
+    List<AcknowledgeRequest> result =
+        GooglePubSub.subscribe(request, Duration.ofSeconds(1))
+            .via(GooglePubSub.flowControlGate(fc))
+            .take(3)
+            .map(
+                m ->
+                    AcknowledgeRequest.newBuilder()
+                        .setSubscription(subscriptionFqrs)
+                        .addAckIds(m.getAckId())
+                        .build())
+            .via(GooglePubSub.acknowledgeFlow(fc))
+            .runWith(Sink.seq(), system)
+            .toCompletableFuture()
+            .get(15, TimeUnit.SECONDS);
 
     assertEquals("should process all 3 messages", 3, result.size());
   }
@@ -440,17 +456,17 @@ public class IntegrationTest {
 
     // publish messages
     final String prefix = "adaptive-java-" + System.nanoTime();
-    PublishRequest.Builder publishBuilder = PublishRequest.newBuilder()
-        .setTopic("projects/" + projectId + "/topics/" + topic);
+    PublishRequest.Builder publishBuilder =
+        PublishRequest.newBuilder().setTopic("projects/" + projectId + "/topics/" + topic);
     for (int i = 1; i <= 2; i++) {
       publishBuilder.addMessages(
-          PubsubMessage.newBuilder()
-              .setData(ByteString.copyFromUtf8(prefix + "-" + i))
-              .build());
+          PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(prefix + "-" + i)).build());
     }
-    Source.single(publishBuilder.build()).via(GooglePubSub.publish(1))
+    Source.single(publishBuilder.build())
+        .via(GooglePubSub.publish(1))
         .runWith(Sink.head(), system)
-        .toCompletableFuture().get(5, TimeUnit.SECONDS);
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
 
     final StreamingPullRequest request =
         StreamingPullRequest.newBuilder()
@@ -458,16 +474,20 @@ public class IntegrationTest {
             .setStreamAckDeadlineSeconds(10)
             .build();
 
-    List<AcknowledgeRequest> result = GooglePubSub.subscribe(request, Duration.ofSeconds(1))
-        .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, Duration.ofSeconds(3), dist))
-        .take(2)
-        .map(m -> AcknowledgeRequest.newBuilder()
-            .setSubscription(subscriptionFqrs)
-            .addAckIds(m.getAckId())
-            .build())
-        .via(GooglePubSub.acknowledgeFlow(dist))
-        .runWith(Sink.seq(), system)
-        .toCompletableFuture().get(15, TimeUnit.SECONDS);
+    List<AcknowledgeRequest> result =
+        GooglePubSub.subscribe(request, Duration.ofSeconds(1))
+            .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, Duration.ofSeconds(3), dist))
+            .take(2)
+            .map(
+                m ->
+                    AcknowledgeRequest.newBuilder()
+                        .setSubscription(subscriptionFqrs)
+                        .addAckIds(m.getAckId())
+                        .build())
+            .via(GooglePubSub.acknowledgeFlow(dist))
+            .runWith(Sink.seq(), system)
+            .toCompletableFuture()
+            .get(15, TimeUnit.SECONDS);
 
     assertEquals("should process all messages", 2, result.size());
     // adaptive deadline should be at least the minimum

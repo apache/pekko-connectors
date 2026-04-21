@@ -40,9 +40,6 @@ public final class DirectoryChangesSource {
       Path directoryPath, java.time.Duration pollInterval, int maxBufferSize) {
     return Source.fromGraph(
         new org.apache.pekko.stream.connectors.file.impl.DirectoryChangesSource<>(
-            directoryPath,
-            DurationConverters.toScala(pollInterval),
-            maxBufferSize,
-            Pair::apply));
+            directoryPath, DurationConverters.toScala(pollInterval), maxBufferSize, Pair::apply));
   }
 }

@@ -66,8 +66,7 @@ public class DirectoryChangesSourceTest {
   public void setup() throws Exception {
     fs =
         Jimfs.newFileSystem(
-            Configuration.forCurrentPlatform()
-                .toBuilder()
+            Configuration.forCurrentPlatform().toBuilder()
                 .setWatchServiceConfiguration(
                     WatchServiceConfiguration.polling(10, TimeUnit.MILLISECONDS))
                 .build());

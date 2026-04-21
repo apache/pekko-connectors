@@ -122,7 +122,8 @@ public class SqsSourceTest extends BaseSqsTest {
     // #init-custom-client
 
     customSqsClient
-        .sendMessage(SendMessageRequest.builder().queueUrl(queueUrl).messageBody("connectors").build())
+        .sendMessage(
+            SendMessageRequest.builder().queueUrl(queueUrl).messageBody("connectors").build())
         .get(2, TimeUnit.SECONDS);
 
     final CompletionStage<String> cs =

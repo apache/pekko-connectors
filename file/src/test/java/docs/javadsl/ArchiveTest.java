@@ -168,11 +168,9 @@ public class ArchiveTest {
 
     Pair<TarArchiveMetadata, Source<ByteString, NotUsed>> pair1 =
         Pair.create(
-            TarArchiveMetadata.create("subdir", "pekko.svg", size1, lastModification),
-            source1);
+            TarArchiveMetadata.create("subdir", "pekko.svg", size1, lastModification), source1);
     Pair<TarArchiveMetadata, Source<ByteString, NotUsed>> pair2 =
-        Pair.create(
-            TarArchiveMetadata.create("foundation.svg", size2, lastModification), source2);
+        Pair.create(TarArchiveMetadata.create("foundation.svg", size2, lastModification), source2);
 
     Source<Pair<TarArchiveMetadata, Source<ByteString, NotUsed>>, NotUsed> source =
         Source.from(Arrays.asList(dir, pair1, pair2));

@@ -41,6 +41,7 @@ public class Examples {
   // #init-sys
 
   ActorSystem system = ActorSystem.create();
+
   // #init-sys
 
   public void initClient() {
@@ -55,7 +56,8 @@ public class Examples {
             .credentialsProvider(credentialsProvider)
             .httpClient(PekkoHttpClient.builder().withActorSystem(system).build())
             // Possibility to configure the retry policy
-            // see https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
+            // see
+            // https://pekko.apache.org/docs/pekko-connectors/current/aws-shared-configuration.html
             // .overrideConfiguration(...)
             .build();
 

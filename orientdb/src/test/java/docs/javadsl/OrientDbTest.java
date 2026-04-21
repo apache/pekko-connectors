@@ -105,6 +105,7 @@ public class OrientDbTest {
       return book_title;
     }
   }
+
   // #define-class
 
   public static class KafkaOffset {
@@ -274,8 +275,7 @@ public class OrientDbTest {
                 sourceClass, OrientDbSourceSettings.create(oDatabase), source1.class, null)
             .map(
                 readResult -> {
-                  ODatabaseDocumentInternal db =
-                      (ODatabaseDocumentInternal) oDatabase.acquire();
+                  ODatabaseDocumentInternal db = (ODatabaseDocumentInternal) oDatabase.acquire();
                   new OObjectDatabaseTx(db);
                   ODatabaseRecordThreadLocal.instance().set(db);
                   sink2 sink = new sink2();
@@ -296,8 +296,7 @@ public class OrientDbTest {
                 sinkClass2, OrientDbSourceSettings.create(oDatabase), sink2.class, null)
             .map(
                 m -> {
-                  ODatabaseDocumentInternal db =
-                      (ODatabaseDocumentInternal) oDatabase.acquire();
+                  ODatabaseDocumentInternal db = (ODatabaseDocumentInternal) oDatabase.acquire();
                   new OObjectDatabaseTx(db);
                   ODatabaseRecordThreadLocal.instance().set(db);
                   return m.oDocument().getBook_title();
@@ -353,8 +352,7 @@ public class OrientDbTest {
         .via(OrientDbFlow.createWithPassThrough(sink6, OrientDbWriteSettings.create(oDatabase)))
         .map(
             messages -> {
-              ODatabaseDocumentInternal db =
-                  (ODatabaseDocumentInternal) oDatabase.acquire();
+              ODatabaseDocumentInternal db = (ODatabaseDocumentInternal) oDatabase.acquire();
               new OObjectDatabaseTx(db);
               ODatabaseRecordThreadLocal.instance().set(db);
               messages.stream().forEach(message -> commitToKafka.accept(message.passThrough()));

@@ -799,7 +799,8 @@ public class GCStorageTest extends GCStorageWiremockBase {
       source.runWith(sink, system()).toCompletableFuture().get(5, TimeUnit.SECONDS);
     } catch (Exception e) {
       assertEquals(
-          "org.apache.pekko.stream.connectors.googlecloud.storage.FailedUpload: Uploading part failed with status 400 Bad Request: Chunk upload failed",
+          "org.apache.pekko.stream.connectors.googlecloud.storage.FailedUpload: Uploading part"
+              + " failed with status 400 Bad Request: Chunk upload failed",
           e.getMessage());
     }
   }

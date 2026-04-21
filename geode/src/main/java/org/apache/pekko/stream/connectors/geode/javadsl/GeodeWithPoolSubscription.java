@@ -44,7 +44,7 @@ public class GeodeWithPoolSubscription extends Geode {
   }
 
   public <V> Source<V, CompletionStage<Done>> continuousQuery(
-          String queryName, String query, PekkoPdxSerializer<V> serializer) {
+      String queryName, String query, PekkoPdxSerializer<V> serializer) {
     registerPDXSerializer(serializer, serializer.clazz());
     return Source.fromGraph(new GeodeContinuousSourceStage<V>(cache(), queryName, query))
         .mapMaterializedValue(FutureConverters::<Done>asJava);

@@ -55,11 +55,8 @@ public class AmqpFlowTest {
     return Arrays.asList(false, true);
   }
 
-  /**
-   * This value is initialized with values from data() array
-   */
-  @Parameter
-  public boolean reuseByteArray;
+  /** This value is initialized with values from data() array */
+  @Parameter public boolean reuseByteArray;
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 

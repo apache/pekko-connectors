@@ -44,8 +44,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CharsetCodingFlowsDoc {
 
-  @Rule
-  public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
+  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final ActorSystem system = ActorSystem.create();
 

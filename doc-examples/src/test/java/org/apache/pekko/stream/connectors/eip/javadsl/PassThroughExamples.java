@@ -112,6 +112,7 @@ class PassThroughFlow {
             }));
   }
 }
+
 // #PassThrough
 
 class PassThroughFlowKafkaCommitExample {
