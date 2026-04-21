@@ -15,6 +15,8 @@ sourceDistIncubating := false
 ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
 ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
+ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
+
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,
   avroparquet,

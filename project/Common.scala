@@ -16,6 +16,7 @@ import com.typesafe.tools.mima.plugin.MimaKeys._
 import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
 import sbtdynver.DynVerPlugin
 import sbtdynver.DynVerPlugin.autoImport.dynverSonatypeSnapshots
+import com.github.sbt.JavaFormatterPlugin.autoImport.javafmtSortImports
 
 object Common extends AutoPlugin {
 
@@ -116,6 +117,7 @@ object Common extends AutoPlugin {
       val apiVersion = if (isSnapshot.value) "current" else version.value
       Some(url(s"https://pekko.apache.org/api/pekko-connectors/$apiVersion/"))
     },
+    javafmtSortImports := false,
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),
     // -a Show stack traces and exception class name for AssertionErrors.
