@@ -34,7 +34,7 @@ object Dependencies {
   // Sync with plugins.sbt
   val PekkoGrpcBinaryVersion = "1.1"
   val PekkoHttpVersion = PekkoHttpDependency.version
-  val PekkoStreamsCirceVersion = "1.1.0"
+  val PekkoStreamsCirceVersion = "2.0.0-M1"
   val PekkoHttpBinaryVersion = PekkoHttpDependency.default.link
   val ScalaTestVersion = "3.2.20"
   val TestContainersScalaTestVersion = "0.44.1"
