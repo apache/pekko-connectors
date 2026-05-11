@@ -51,7 +51,13 @@ final class FlowControl(val maxOutstandingMessages: Long) {
 
   @volatile private[grpc] var onRelease: () => Unit = () => ()
 
-  /** Current number of outstanding (unacknowledged) messages. */
+  /**
+   * Current number of outstanding (unacknowledged) messages. Counts every message that has
+   * been received by `flowControlGate` but not yet released by the corresponding acknowledge
+   * or nack operator. Includes messages still buffered inside the gate that have not yet been
+   * emitted downstream, since the gate acquires permits on receipt to bound server-side
+   * delivery, not just on push to downstream.
+   */
   def outstandingCount: Long = outstanding.get()
 
   /** Release `count` permits, signalling that messages have been acknowledged. */

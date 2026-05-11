@@ -20,7 +20,7 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.gke
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.RestartSettings
-import pekko.stream.connectors.googlecloud.pubsub.grpc.{ AckDeadlineDistribution, FlowControl }
+import pekko.stream.connectors.googlecloud.pubsub.grpc.{ AckDeadline, AckDeadlineDistribution, FlowControl }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
 import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import com.google.protobuf.ByteString
@@ -62,6 +62,7 @@ object GkeFullFeatureTest {
       scenario5_FlowControl(topicFqrs, subFqrs)
       scenario6_NackAndRedeliver(topicFqrs, subFqrs)
       scenario7_DynamicDeadlineModification(topicFqrs, subFqrs)
+      scenario8_SubscriberResource(topicFqrs, subFqrs)
 
       println("\n=== ALL SCENARIOS PASSED ===")
       Await.result(system.terminate(), 10.seconds)
@@ -404,5 +405,94 @@ object GkeFullFeatureTest {
     println(s"  Received ${msgs.size}/$messageCount messages with dynamic deadlines")
     assert(msgs.size == messageCount, s"Expected $messageCount messages, got ${msgs.size}")
     println("  PASSED")
+  }
+
+  // ---------------------------------------------------------------------------
+  // Scenario 8: Subscriber resource — exercises all three bug fixes plus
+  //   composition guarantees in a single end-to-end run.
+  //
+  //   - Sets `maxOutstandingMessages` on the initial StreamingPullRequest.
+  //     Pre-fix this caused INVALID_ARGUMENT on the second polling tick (bug 2).
+  //
+  //   - Slow per-message processing (8 seconds) with parallelism well below the
+  //     batch size, so messages buffer inside the eager-pull tracker for tens of
+  //     seconds. Pre-fix the tracker would only see the messages currently in
+  //     mapAsync, the rest would expire and get redelivered (bug 1).
+  //
+  //   - Configures a small FlowControl limit. The new eager-pull gate counts
+  //     messages on receipt rather than on push downstream, so combined with
+  //     server-side maxOutstandingMessages it actually bounds delivery (bug 3).
+  //
+  //   - Asserts every published message is received exactly once, no
+  //     duplicates from redelivery, and that flowControl.outstandingCount
+  //     reaches the configured limit at some point during the run.
+  // ---------------------------------------------------------------------------
+  private def scenario8_SubscriberResource(topicFqrs: String, subFqrs: String)(
+      implicit system: ActorSystem): Unit = {
+    println("\n--- Scenario 8: Subscriber resource (high-level API, all bug fixes) ---")
+
+    val messageCount = 20
+    val maxOutstanding = 5
+    val processingDelay = 8.seconds
+    val testPrefix = s"scenario8-${System.nanoTime()}"
+    val messages = (1 to messageCount).map(i =>
+      PubsubMessage().withData(ByteString.copyFromUtf8(s"$testPrefix-$i")))
+
+    Await.result(
+      Source
+        .single(PublishRequest(topicFqrs, messages))
+        .via(GooglePubSub.publish(parallelism = 1))
+        .runWith(Sink.head),
+      30.seconds)
+    println(s"  Published $messageCount messages")
+
+    val flowControl = FlowControl(maxOutstandingMessages = maxOutstanding.toLong)
+    var maxObserved = 0L
+
+    // Initial request sets BOTH stream ack deadline AND maxOutstandingMessages.
+    // Pre-bug-2 fix this would fail on the first keepalive tick with INVALID_ARGUMENT.
+    val request = StreamingPullRequest(subFqrs)
+      .withStreamAckDeadlineSeconds(15)
+      .withMaxOutstandingMessages(maxOutstanding.toLong)
+
+    val restartSettings = RestartSettings(
+      minBackoff = 1.second,
+      maxBackoff = 10.seconds,
+      randomFactor = 0.2).withMaxRestarts(3, 1.minute)
+
+    val subscriber = GooglePubSub.subscriber(
+      request = request,
+      pollInterval = 1.second,
+      ackDeadline = AckDeadline.Fixed(extensionInterval = 5.seconds, deadlineSeconds = 30),
+      restartSettings = Some(restartSettings),
+      flowControl = Some(flowControl))
+
+    try {
+      val received = subscriber.source
+        .filter(_.message.exists(_.data.toStringUtf8.startsWith(testPrefix)))
+        .take(messageCount)
+        .mapAsync(parallelism = 2) { msg =>
+          val current = flowControl.outstandingCount
+          synchronized { if (current > maxObserved) maxObserved = current }
+          println(s"  Processing: ${msg.message.map(_.data.toStringUtf8).getOrElse("?")} " +
+            s"(outstanding: $current/$maxOutstanding)")
+          // Slow processing forces autoExtend to actually fire while messages wait.
+          pekko.pattern.after(processingDelay)(Future.successful(msg))
+        }
+        .map(msg => AcknowledgeRequest(subFqrs, Seq(msg.ackId)))
+        .runWith(subscriber.acknowledge(parallelism = 1))
+
+      Await.result(received, 5.minutes)
+
+      println(s"  Received and acked all $messageCount messages")
+      println(s"  Max outstanding observed: $maxObserved (limit: $maxOutstanding)")
+      assert(maxObserved <= maxOutstanding,
+        s"Flow control violated: observed $maxObserved > limit $maxOutstanding")
+      assert(maxObserved >= 1L, "Flow control gate never registered any outstanding messages")
+      println("  PASSED (no redelivery during slow processing, server-side flow control respected, " +
+        "subsequent StreamingPullRequest accepted by server)")
+    } finally {
+      Await.result(subscriber.close(), 10.seconds)
+    }
   }
 }

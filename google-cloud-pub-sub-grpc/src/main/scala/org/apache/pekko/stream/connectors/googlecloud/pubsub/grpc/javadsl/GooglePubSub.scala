@@ -23,10 +23,11 @@ import pekko.stream.{ Attributes, KillSwitches, Materializer, RestartSettings }
 import pekko.stream.javadsl.{ Flow, Keep, RestartSource, Sink, Source }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.{
   AckDeadlineDistribution,
+  AckDeadlineExtender,
   AckDeadlineExtensionException,
   FlowControl
 }
-import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.FlowControlGateStage
+import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.{ EagerPullTrackingStage, FlowControlGateStage }
 import pekko.{ Done, NotUsed }
 import com.google.pubsub.v1._
 
@@ -36,6 +37,12 @@ import scala.jdk.CollectionConverters._
  * Google Pub/Sub Pekko Stream operator factory.
  */
 object GooglePubSub {
+
+  /**
+   * Default size of the eager-pull buffer used by `autoExtendAckDeadlines`. Matches the
+   * default `maxOutstandingMessages` of Google's official client library.
+   */
+  final val DefaultEagerPullBuffer: Int = 1000
 
   /**
    * Create a flow to publish messages to Google Cloud Pub/Sub. The flow emits responses that contain published
@@ -239,6 +246,27 @@ object GooglePubSub {
       extensionInterval: Duration,
       ackDeadlineSeconds: Int,
       maxAckExtensionPeriod: Duration): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    autoExtendAckDeadlines(subscription, extensionInterval, ackDeadlineSeconds, maxAckExtensionPeriod,
+      DefaultEagerPullBuffer)
+
+  /**
+   * Create a flow that automatically extends ack deadlines, with an explicit eager-pull buffer size.
+   *
+   * Identical to the four-argument overload but allows tuning the internal buffer used to
+   * track messages on receipt. A larger buffer absorbs longer downstream stalls without
+   * losing track of in-flight messages; a smaller buffer applies upstream backpressure sooner.
+   *
+   * @param maxBuffer maximum number of in-flight messages held in the eager-pull buffer
+   *                  (default [[DefaultEagerPullBuffer]])
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(
+      subscription: String,
+      extensionInterval: Duration,
+      ackDeadlineSeconds: Int,
+      maxAckExtensionPeriod: Duration,
+      maxBuffer: Int): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
     Flow
       .fromMaterializer { (mat, attr) =>
         val client = subscriber(mat, attr).client
@@ -282,10 +310,8 @@ object GooglePubSub {
 
         Flow.create[ReceivedMessage]()
           .via(killSwitch.flow[ReceivedMessage])
-          .map(((msg: ReceivedMessage) => {
-                tracked.put(msg.getAckId, java.lang.Long.valueOf(System.nanoTime()))
-                msg
-              }): pekko.japi.function.Function[ReceivedMessage, ReceivedMessage])
+          .via(new EagerPullTrackingStage[ReceivedMessage](maxBuffer,
+            msg => tracked.put(msg.getAckId, java.lang.Long.valueOf(System.nanoTime()))))
           .watchTermination((_, done: CompletionStage[Done]) => {
             done.whenComplete((_, _) => {
               ticker.cancel()
@@ -313,6 +339,20 @@ object GooglePubSub {
       subscription: String,
       extensionInterval: Duration,
       distribution: AckDeadlineDistribution): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    autoExtendAckDeadlines(subscription, extensionInterval, distribution, DefaultEagerPullBuffer)
+
+  /**
+   * Adaptive variant of `autoExtendAckDeadlines` with an explicit eager-pull buffer size.
+   * See the four-argument fixed-deadline overload for buffer semantics.
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(
+      subscription: String,
+      extensionInterval: Duration,
+      distribution: AckDeadlineDistribution,
+      maxBuffer: Int): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
     Flow
       .fromMaterializer { (mat, attr) =>
         val client = subscriber(mat, attr).client
@@ -354,10 +394,8 @@ object GooglePubSub {
 
         Flow.create[ReceivedMessage]()
           .via(killSwitch.flow[ReceivedMessage])
-          .map(((msg: ReceivedMessage) => {
-                distribution.recordDelivery(msg.getAckId)
-                msg
-              }): pekko.japi.function.Function[ReceivedMessage, ReceivedMessage])
+          .via(new EagerPullTrackingStage[ReceivedMessage](maxBuffer,
+            msg => distribution.recordDelivery(msg.getAckId)))
           .watchTermination((_, done: CompletionStage[Done]) => {
             done.whenComplete((_, _) => {
               ticker.cancel()
@@ -365,6 +403,46 @@ object GooglePubSub {
             })
             NotUsed
           })
+      }
+      .mapMaterializedValue(_ => NotUsed)
+
+  /**
+   * Create a flow that automatically extends ack deadlines using a caller-owned
+   * [[AckDeadlineExtender]]. The extender owns the tracking map and the background ticker, both
+   * of which live above the lifetime of any single Pub/Sub streaming pull. This makes the flow
+   * restart-safe: when wrapped in `RestartSource.withBackoff`, messages received before a
+   * stream failure remain in the extender's tracking map and continue to receive deadline
+   * extensions during the backoff window.
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(extender: AckDeadlineExtender): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    autoExtendAckDeadlines(extender, DefaultEagerPullBuffer)
+
+  /**
+   * Caller-owned-extender variant of `autoExtendAckDeadlines` with an explicit eager-pull
+   * buffer size.
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(
+      extender: AckDeadlineExtender,
+      maxBuffer: Int): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    Flow
+      .fromMaterializer { (_, _) =>
+        val killSwitch = KillSwitches.shared("autoExtendAckDeadlines")
+        extender.tickerDone.onComplete {
+          case scala.util.Failure(ex) =>
+            killSwitch.abort(new AckDeadlineExtensionException(
+              "Lease management ticker failed; ack deadline extensions have stopped", ex))
+          case _ => ()
+        }(scala.concurrent.ExecutionContext.parasitic)
+
+        Flow.create[ReceivedMessage]()
+          .via(killSwitch.flow[ReceivedMessage])
+          .via(new EagerPullTrackingStage[ReceivedMessage](maxBuffer, msg => extender.track(msg.getAckId)))
       }
       .mapMaterializedValue(_ => NotUsed)
 

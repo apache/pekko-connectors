@@ -19,13 +19,15 @@ import pekko.annotation.ApiMayChange
 import pekko.stream.{ Attributes, KillSwitches, Materializer, RestartSettings }
 import pekko.stream.scaladsl.{ Flow, Keep, RestartSource, Sink, Source }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.{
+  AckDeadline,
   AckDeadlineDistribution,
+  AckDeadlineExtender,
   AckDeadlineExtensionException,
   FlowControl
 }
-import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.FlowControlGateStage
+import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.{ EagerPullTrackingStage, FlowControlGateStage }
 import pekko.{ Done, NotUsed }
-import com.google.pubsub.v1.pubsub._
+import com.google.pubsub.v1.pubsub.{ Subscriber => _, _ }
 
 import java.util.concurrent.ConcurrentHashMap
 import scala.concurrent.duration._
@@ -36,6 +38,14 @@ import scala.jdk.CollectionConverters._
  * Google Pub/Sub Pekko Stream operator factory.
  */
 object GooglePubSub {
+
+  /**
+   * Default size of the eager-pull buffer used by `autoExtendAckDeadlines`. Matches the
+   * default `maxOutstandingMessages` of Google's official client library. When pairing with
+   * server-side flow control via `StreamingPullRequest.maxOutstandingMessages`, a buffer
+   * at least as large as that value avoids unnecessary upstream backpressure.
+   */
+  final val DefaultEagerPullBuffer: Int = 1000
 
   /**
    * Create a flow to publish messages to Google Cloud Pub/Sub. The flow emits responses that contain published
@@ -191,6 +201,11 @@ object GooglePubSub {
    * [[org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.AckDeadlineExtensionException]],
    * even if the stream is idle.
    *
+   * Note: this overload creates a fresh ticker and tracking map for each materialization, so it
+   * is NOT restart-safe. When wrapping the upstream `subscribe` with `RestartSource.withBackoff`,
+   * messages received before a stream failure lose their extension coverage on the next
+   * materialization. For restart-safety, use the [[AckDeadlineExtender]]-based overloads.
+   *
    * Usage:
    * {{{
    * GooglePubSub.subscribe(request, 1.second)
@@ -239,6 +254,29 @@ object GooglePubSub {
       extensionInterval: FiniteDuration,
       ackDeadlineSeconds: Int,
       maxAckExtensionPeriod: FiniteDuration): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    autoExtendAckDeadlines(subscription, extensionInterval, ackDeadlineSeconds, maxAckExtensionPeriod,
+      DefaultEagerPullBuffer)
+
+  /**
+   * Create a flow that automatically extends ack deadlines for messages passing through it,
+   * with an explicit eager-pull buffer size.
+   *
+   * Identical to the four-argument overload but allows tuning the internal buffer used to
+   * track messages on receipt. A larger buffer absorbs longer downstream stalls without
+   * losing track of in-flight messages; a smaller buffer applies upstream backpressure sooner.
+   * Pair with `StreamingPullRequest.maxOutstandingMessages` to bound server-side delivery.
+   *
+   * @param maxBuffer maximum number of in-flight messages held in the eager-pull buffer
+   *                  (default [[DefaultEagerPullBuffer]])
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(
+      subscription: String,
+      extensionInterval: FiniteDuration,
+      ackDeadlineSeconds: Int,
+      maxAckExtensionPeriod: FiniteDuration,
+      maxBuffer: Int): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
     Flow.fromMaterializer { (mat, attr) =>
       val client = subscriber(mat, attr).client
       val tracked = new ConcurrentHashMap[String, Long]()
@@ -278,10 +316,8 @@ object GooglePubSub {
 
       Flow[ReceivedMessage]
         .via(killSwitch.flow)
-        .map { msg =>
-          tracked.put(msg.ackId, System.nanoTime())
-          msg
-        }
+        .via(new EagerPullTrackingStage[ReceivedMessage](maxBuffer,
+          msg => tracked.put(msg.ackId, System.nanoTime())))
         .watchTermination((_, done: Future[Done]) => {
           done.onComplete(_ => cleanup())(ExecutionContext.parasitic)
           NotUsed
@@ -321,6 +357,20 @@ object GooglePubSub {
       subscription: String,
       extensionInterval: FiniteDuration,
       distribution: AckDeadlineDistribution): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    autoExtendAckDeadlines(subscription, extensionInterval, distribution, DefaultEagerPullBuffer)
+
+  /**
+   * Adaptive variant of `autoExtendAckDeadlines` with an explicit eager-pull buffer size.
+   * See the four-argument fixed-deadline overload for buffer semantics.
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(
+      subscription: String,
+      extensionInterval: FiniteDuration,
+      distribution: AckDeadlineDistribution,
+      maxBuffer: Int): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
     Flow.fromMaterializer { (mat, attr) =>
       val client = subscriber(mat, attr).client
       val killSwitch = KillSwitches.shared("autoExtendAckDeadlines")
@@ -359,14 +409,71 @@ object GooglePubSub {
 
       Flow[ReceivedMessage]
         .via(killSwitch.flow)
-        .map { msg =>
-          distribution.recordDelivery(msg.ackId)
-          msg
-        }
+        .via(new EagerPullTrackingStage[ReceivedMessage](maxBuffer,
+          msg => distribution.recordDelivery(msg.ackId)))
         .watchTermination((_, done: Future[Done]) => {
           done.onComplete(_ => cleanup())(ExecutionContext.parasitic)
           NotUsed
         })
+    }.mapMaterializedValue(_ => NotUsed)
+
+  /**
+   * Create a flow that automatically extends ack deadlines using a caller-owned
+   * [[AckDeadlineExtender]]. The extender owns the tracking map and the background ticker, both
+   * of which live above the lifetime of any single Pub/Sub streaming pull. This makes the flow
+   * restart-safe: when wrapped in `RestartSource.withBackoff`, messages received before a
+   * stream failure remain in the extender's tracking map and continue to receive deadline
+   * extensions during the backoff window, matching how Google's official client library
+   * (`MessageDispatcher` inside `StreamingSubscriberConnection`) behaves across reconnects.
+   *
+   * Usage:
+   * {{{
+   * val extender = AckDeadlineExtender(subscriptionFqrs, 8.seconds, 30)
+   *
+   * try {
+   *   RestartSource.withBackoff(restartSettings) { () =>
+   *     GooglePubSub.subscribe(request, 1.second).mapMaterializedValue(_ => NotUsed)
+   *   }
+   *     .via(GooglePubSub.autoExtendAckDeadlines(extender))
+   *     .mapAsync(10)(processMessage)
+   *     .map(msg => AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId)))
+   *     .runWith(GooglePubSub.acknowledge(parallelism = 1))
+   * } finally {
+   *   extender.close()
+   * }
+   * }}}
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(extender: AckDeadlineExtender): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    autoExtendAckDeadlines(extender, DefaultEagerPullBuffer)
+
+  /**
+   * Caller-owned-extender variant of `autoExtendAckDeadlines` with an explicit eager-pull
+   * buffer size. See the single-argument overload for the restart-safety contract and the
+   * fixed-deadline four-argument overload for buffer semantics.
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def autoExtendAckDeadlines(
+      extender: AckDeadlineExtender,
+      maxBuffer: Int): Flow[ReceivedMessage, ReceivedMessage, NotUsed] =
+    Flow.fromMaterializer { (_, _) =>
+      // Per-materialization KillSwitch so a previously-failed extender aborts the new stream
+      // immediately. New materializations after extender failure start in failed state.
+      val killSwitch = KillSwitches.shared("autoExtendAckDeadlines")
+      extender.tickerDone.onComplete {
+        case scala.util.Failure(ex) =>
+          killSwitch.abort(new AckDeadlineExtensionException(
+            "Lease management ticker failed; ack deadline extensions have stopped", ex))
+        case _ => ()
+      }(ExecutionContext.parasitic)
+
+      Flow[ReceivedMessage]
+        .via(killSwitch.flow)
+        .via(new EagerPullTrackingStage[ReceivedMessage](maxBuffer, msg => extender.track(msg.ackId)))
     }.mapMaterializedValue(_ => NotUsed)
 
   /**
@@ -683,6 +790,42 @@ object GooglePubSub {
           .toMat(Sink.ignore)(Keep.right)
       }
       .mapMaterializedValue(_.flatMap(identity)(ExecutionContext.parasitic))
+
+  /**
+   * Create a high-level [[Subscriber]] resource that bundles streaming pull, restart logic,
+   * ack-deadline extension, and optional flow control. The deadline-extension ticker starts at
+   * construction. See [[Subscriber]] for the composition guarantees and lifecycle.
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def subscriber(
+      request: StreamingPullRequest,
+      pollInterval: FiniteDuration,
+      ackDeadline: AckDeadline,
+      restartSettings: Option[RestartSettings] = None,
+      flowControl: Option[FlowControl] = None)(
+      implicit system: pekko.actor.ClassicActorSystemProvider): Subscriber =
+    Subscriber.create(request, pollInterval, ackDeadline, restartSettings, flowControl,
+      GrpcSubscriberExt()(system).subscriber)
+
+  /**
+   * Variant of [[subscriber]] taking an explicit [[GrpcSubscriber]] (useful for tests or for
+   * callers that manage the underlying gRPC client themselves).
+   *
+   * @since 2.0.0
+   */
+  @ApiMayChange
+  def subscriber(
+      request: StreamingPullRequest,
+      pollInterval: FiniteDuration,
+      ackDeadline: AckDeadline,
+      restartSettings: Option[RestartSettings],
+      flowControl: Option[FlowControl],
+      grpcSubscriber: GrpcSubscriber)(
+      implicit system: pekko.actor.ClassicActorSystemProvider): Subscriber =
+    Subscriber.create(request, pollInterval, ackDeadline, restartSettings, flowControl,
+      grpcSubscriber)
 
   private def publisher(mat: Materializer, attr: Attributes) =
     attr

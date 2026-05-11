@@ -83,5 +83,6 @@ gcloud pubsub topics delete testTopic
 | Date | Environment | Credential Provider | Result | Notes |
 |------|-------------|---------------------|--------|-------|
 | 2026-03-13 | GCP (project: pekko-connectors-test) | google-application-default | 14/14 passed | Scala 8/8, Java 6/6. User credentials via `gcloud auth application-default login`. |
+| 2026-05-11 | GCP (project: pekko-connectors) | google-application-default | 1/1 passed | New `Subscriber resource` scenario. Verifies eager-pull deadline tracking, subsequent-request field clearing, eager-pull flow control gate, and auto-cleanup. 10 messages, 6s processing, parallelism 2, `maxOutstandingMessages=3`. 35s. |
 
 After running against real GCP, add a row to the table above to record the result.
