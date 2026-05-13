@@ -31,15 +31,17 @@ import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.time.{ Millis, Seconds, Span }
 import org.scalatest.wordspec.AnyWordSpec
 
 class AutoExtendAckDeadlinesSpec
     extends AnyWordSpec
     with Matchers
     with BeforeAndAfterAll
-    with ScalaFutures {
+    with ScalaFutures
+    with Eventually {
 
   implicit val system: ActorSystem = ActorSystem("AutoExtendAckDeadlinesSpec")
   implicit val patience: PatienceConfig = PatienceConfig(10.seconds, 100.millis)
@@ -179,8 +181,11 @@ class AutoExtendAckDeadlinesSpec
         .toMat(Sink.ignore)(pekko.stream.scaladsl.Keep.left)
         .run()
 
-      // Allow several ticks to fire.
-      Thread.sleep(500)
+      // Wait until the initial request plus at least 2 keepalive ticks have landed,
+      // then cancel. Polls instead of sleeping so a slow CI machine doesn't flake.
+      eventually(timeout(Span(5, Seconds)), interval(Span(50, Millis))) {
+        captured.size should be >= 3
+      }
       cancellableFut.futureValue.cancel()
 
       val first = captured.poll()
