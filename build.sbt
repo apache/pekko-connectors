@@ -17,6 +17,8 @@ ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
 
+ThisBuild / evictionErrorLevel := Level.Info
+
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,
   avroparquet,
