@@ -66,10 +66,13 @@ object GooglePubSub {
       .fromMaterializer { (mat, attr) =>
         val cancellable = new CompletableFuture[Cancellable]()
 
-        val subsequentRequest = request.toBuilder
-          .setSubscription("")
-          .setStreamAckDeadlineSeconds(0)
-          .build()
+        // Don't echo initial-only fields on keepalive requests. Pub/Sub allows only
+        // ackIds, modifyDeadlineSeconds, and modifyDeadlineAckIds on subsequent
+        // StreamingPullRequests; anything else from the initial request (subscription,
+        // streamAckDeadlineSeconds, clientId, maxOutstandingMessages, maxOutstandingBytes)
+        // gets back INVALID_ARGUMENT. defaultInstance clears them all at once and stays
+        // safe if the proto grows more initial-only fields.
+        val subsequentRequest = StreamingPullRequest.getDefaultInstance
 
         subscriber(mat, attr).client
           .streamingPull(

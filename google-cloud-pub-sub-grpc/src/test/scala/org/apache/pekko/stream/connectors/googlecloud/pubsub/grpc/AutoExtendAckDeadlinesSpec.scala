@@ -25,8 +25,10 @@ import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GooglePubSub, 
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub._
 
+import java.util.concurrent.ConcurrentLinkedQueue
 import scala.concurrent.{ Future, Promise }
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.ScalaFutures
@@ -156,8 +158,80 @@ class AutoExtendAckDeadlinesSpec
     }
   }
 
+  "GooglePubSub.subscribe" should {
+    "send only allowed fields on subsequent StreamingPullRequest messages" in {
+      // Regression test: the keepalive tick must NOT echo initial-only fields
+      // (clientId, maxOutstandingMessages, maxOutstandingBytes) back to the server,
+      // which would otherwise return INVALID_ARGUMENT on the first tick.
+      val captured = new ConcurrentLinkedQueue[StreamingPullRequest]()
+      val testSubscriber = new GrpcSubscriber(new CapturingStreamingPullClient(captured)(system))
+
+      val initial = StreamingPullRequest()
+        .withSubscription(subscription)
+        .withStreamAckDeadlineSeconds(60)
+        .withClientId("test-client")
+        .withMaxOutstandingMessages(100L)
+        .withMaxOutstandingBytes(10485760L)
+
+      val cancellableFut = GooglePubSub
+        .subscribe(initial, 100.millis)
+        .withAttributes(PubSubAttributes.subscriber(testSubscriber))
+        .toMat(Sink.ignore)(pekko.stream.scaladsl.Keep.left)
+        .run()
+
+      // Allow several ticks to fire.
+      Thread.sleep(500)
+      cancellableFut.futureValue.cancel()
+
+      val first = captured.poll()
+      first should not be null
+      withClue("initial request must carry caller-supplied fields verbatim: ") {
+        first.subscription shouldBe subscription
+        first.streamAckDeadlineSeconds shouldBe 60
+        first.clientId shouldBe "test-client"
+        first.maxOutstandingMessages shouldBe 100L
+        first.maxOutstandingBytes shouldBe 10485760L
+      }
+
+      val subsequent = Iterator
+        .continually(Option(captured.poll()))
+        .takeWhile(_.isDefined)
+        .flatten
+        .toList
+      subsequent should not be empty
+      subsequent.zipWithIndex.foreach { case (req, idx) =>
+        withClue(s"subsequent request #${idx + 1} must be the default instance: ") {
+          req.subscription shouldBe ""
+          req.streamAckDeadlineSeconds shouldBe 0
+          req.clientId shouldBe ""
+          req.maxOutstandingMessages shouldBe 0L
+          req.maxOutstandingBytes shouldBe 0L
+        }
+      }
+    }
+  }
+
   override def afterAll(): Unit =
     system.terminate()
+}
+
+/**
+ * Stub that captures every StreamingPullRequest sent on the client → server stream
+ * and keeps the response stream open indefinitely (so the polling tick keeps firing).
+ */
+class CapturingStreamingPullClient(captured: ConcurrentLinkedQueue[StreamingPullRequest])(
+    implicit sys: ActorSystem) extends TestSubscriberClientBase {
+  private implicit val mat: pekko.stream.Materializer = pekko.stream.Materializer.matFromSystem(sys)
+
+  override def streamingPull(
+      in: pekko.stream.scaladsl.Source[StreamingPullRequest, pekko.NotUsed])
+      : pekko.stream.scaladsl.Source[StreamingPullResponse, pekko.NotUsed] =
+    pekko.stream.scaladsl.Source
+      .maybe[StreamingPullResponse]
+      .mapMaterializedValue { _ =>
+        in.runForeach(req => captured.add(req))
+        pekko.NotUsed
+      }
 }
 
 /**
