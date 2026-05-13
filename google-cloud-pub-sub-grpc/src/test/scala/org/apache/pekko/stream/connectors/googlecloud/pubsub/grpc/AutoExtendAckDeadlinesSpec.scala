@@ -18,18 +18,18 @@
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc
 
 import org.apache.pekko
-import pekko.Done
+import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
-import pekko.stream.scaladsl.{ Sink, Source }
+import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GooglePubSub, GrpcSubscriber, PubSubAttributes }
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub._
+import org.apache.pekko.stream._
 
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.concurrent.{ Future, Promise }
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
-
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
@@ -178,11 +178,11 @@ class AutoExtendAckDeadlinesSpec
       val cancellableFut = GooglePubSub
         .subscribe(initial, 100.millis)
         .withAttributes(PubSubAttributes.subscriber(testSubscriber))
-        .toMat(Sink.ignore)(pekko.stream.scaladsl.Keep.left)
+        .toMat(Sink.ignore)(Keep.left)
         .run()
 
       // Wait until the initial request plus at least 2 keepalive ticks have landed,
-      // then cancel. Polls instead of sleeping so a slow CI machine doesn't flake.
+      // then cancel.
       eventually(timeout(Span(5, Seconds)), interval(Span(50, Millis))) {
         captured.size should be >= 3
       }
@@ -226,16 +226,16 @@ class AutoExtendAckDeadlinesSpec
  */
 class CapturingStreamingPullClient(captured: ConcurrentLinkedQueue[StreamingPullRequest])(
     implicit sys: ActorSystem) extends TestSubscriberClientBase {
-  private implicit val mat: pekko.stream.Materializer = pekko.stream.Materializer.matFromSystem(sys)
+  private implicit val mat: Materializer = Materializer.matFromSystem(sys)
 
   override def streamingPull(
-      in: pekko.stream.scaladsl.Source[StreamingPullRequest, pekko.NotUsed])
-      : pekko.stream.scaladsl.Source[StreamingPullResponse, pekko.NotUsed] =
-    pekko.stream.scaladsl.Source
+      in: Source[StreamingPullRequest, NotUsed])
+      : Source[StreamingPullResponse, NotUsed] =
+    Source
       .maybe[StreamingPullResponse]
       .mapMaterializedValue { _ =>
         in.runForeach(req => captured.add(req))
-        pekko.NotUsed
+        NotUsed
       }
 }
 
@@ -244,8 +244,6 @@ class CapturingStreamingPullClient(captured: ConcurrentLinkedQueue[StreamingPull
  * for all methods. Tests override only the methods they need.
  */
 trait TestSubscriberClientBase extends SubscriberClient {
-  import pekko.NotUsed
-
   override def createSubscription(in: Subscription): Future[Subscription] = ???
   override def getSubscription(in: GetSubscriptionRequest): Future[Subscription] = ???
   override def updateSubscription(in: UpdateSubscriptionRequest): Future[Subscription] = ???
@@ -255,8 +253,8 @@ trait TestSubscriberClientBase extends SubscriberClient {
   override def acknowledge(in: AcknowledgeRequest): Future[com.google.protobuf.empty.Empty] = ???
   override def pull(in: PullRequest): Future[PullResponse] = ???
   override def streamingPull(
-      in: pekko.stream.scaladsl.Source[StreamingPullRequest, NotUsed])
-      : pekko.stream.scaladsl.Source[StreamingPullResponse, NotUsed] = ???
+      in: Source[StreamingPullRequest, NotUsed])
+      : Source[StreamingPullResponse, NotUsed] = ???
   override def modifyPushConfig(in: ModifyPushConfigRequest): Future[com.google.protobuf.empty.Empty] = ???
   override def getSnapshot(in: GetSnapshotRequest): Future[Snapshot] = ???
   override def listSnapshots(in: ListSnapshotsRequest): Future[ListSnapshotsResponse] = ???
