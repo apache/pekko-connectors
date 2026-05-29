@@ -525,7 +525,7 @@ def pekkoConnectorProject(projectId: String,
       AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
         if (noMimaChecks.contains(moduleName) ||
-          (moduleName == "slick" && scalaVersion.value.startsWith("3"))) {
+          (moduleName == "mongodb" && scalaVersion.value.startsWith("3"))) {
           Set.empty
         } else {
           Set(organization.value %% name.value % mimaCompareVersion)
