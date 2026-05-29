@@ -392,7 +392,6 @@ object Dependencies {
       "org.apache.logging.log4j" % "log4j-to-slf4j" % Log4jVersion % Test))
 
   val MongoDb = Seq(
-    crossScalaVersions -= Scala3,
     libraryDependencies ++= Seq(
       "org.mongodb.scala" %% "mongo-scala-driver" % "5.8.0"))
 
