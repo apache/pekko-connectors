@@ -47,7 +47,7 @@ import scala.util.{ Failure, Success, Try }
 
   private val asyncPushback: AsyncCallback[(Try[Void], A)] = getAsyncCallback {
     case (Failure(exception), msg) =>
-      log.error(s"Failed to send message: $msg", exception)
+      log.error(exception, "Failed to send message: {}", msg)
       semaphore.release()
     case (_, msg) =>
       push(out, msg)

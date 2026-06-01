@@ -281,7 +281,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
     try {
       connectingChannel.register(sel, SelectionKey.OP_READ, sendReceiveContext)
       val finishExpected = connectingChannel.finishConnect()
-      log.debug(s"Unix domain socket connection succeeded, finish $finishExpected")
+      log.debug("Unix domain socket connection succeeded, finish {}", finishExpected)
       require(finishExpected, "Internal error - our call to connection finish wasn't expected.")
       connectionFinished.trySuccess(Done)
     } catch {

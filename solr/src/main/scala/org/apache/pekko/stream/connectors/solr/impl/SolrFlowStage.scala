@@ -137,7 +137,7 @@ private final class SolrFlowLogic[T, C](
       }
       doc
     }
-    if (log.isDebugEnabled) log.debug(s"Update atomically $docs")
+    log.debug("Update atomically {}", docs)
     client.add(collection, docs.asJava, settings.commitWithin)
   }
 
@@ -149,14 +149,14 @@ private final class SolrFlowLogic[T, C](
       .map { message =>
         message.idFieldValue.get
       }
-    if (log.isDebugEnabled) log.debug(s"Delete the ids $docsIds")
+    log.debug("Delete the ids {}", docsIds)
     client.deleteById(collection, docsIds.asJava, settings.commitWithin)
   }
 
   private def deleteEachByQuery(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {
     val responses = messages.map { message =>
       val query = message.query.get
-      if (log.isDebugEnabled) log.debug(s"Delete by the query $query")
+      log.debug("Delete by the query {}", query)
       val req = new UpdateRequest()
       if (message.routingFieldValue.isDefined) req.setParam("_route_", message.routingFieldValue.get)
       req.deleteByQuery(query)
