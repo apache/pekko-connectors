@@ -65,7 +65,7 @@ private[impl] trait HBaseCapabilities { this: StageLogging =>
           tableDescriptor.addFamily(new HColumnDescriptor(cf))
         }
         admin.createTable(tableDescriptor)
-        log.info(s"Table $tableName created with cfs: $columnFamilies.")
+        log.info("Table {} created with cfs: {}.", tableName, columnFamilies)
         connection.getTable(tableName)
       }
     table

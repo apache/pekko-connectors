@@ -59,7 +59,7 @@ import scala.util.control.NonFatal
   private val asyncPushback: AsyncCallback[(Try[Version], KVPair)] = getAsyncCallback { p =>
     p match {
       case (Failure(exception), msg) =>
-        log.error(exception, s"Failed to send message {}", msg)
+        log.error(exception, "Failed to send message {}", msg)
       case (_, msg) =>
         push(out, msg)
     }

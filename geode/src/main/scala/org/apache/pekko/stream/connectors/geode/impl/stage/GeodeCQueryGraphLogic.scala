@@ -55,7 +55,7 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
         onGeodeElement(ev.getNewValue().asInstanceOf[V])
 
       override def onError(ev: CqEvent): Unit =
-        log.error(ev.getThrowable, s"$ev")
+        log.error(ev.getThrowable, "{}", ev)
 
       override def close(): Unit = {
         log.debug("closes")

@@ -99,13 +99,13 @@ import scala.util.{ Failure, Success, Try }
     log.debug("Stopping reader")
     Try(reader.close()) match {
       case Failure(exception) =>
-        log.error(exception, s"Error while closing [{}/{}]", scope, readerGroup.toString)
+        log.error(exception, "Error while closing [{}/{}]", scope, readerGroup.toString)
       case Success(_) =>
         log.debug("Closed reader [{}/{}]", scope, readerGroup.getGroupName)
     }
     Try(readerGroup.close()) match {
       case Failure(exception) =>
-        log.error(exception, s"Error while closing reader group [{}/{}]", scope, readerGroup.getGroupName)
+        log.error(exception, "Error while closing reader group [{}/{}]", scope, readerGroup.getGroupName)
       case Success(_) =>
         log.debug("Closed reader group [{}/{}]", scope, readerGroup.getGroupName)
     }

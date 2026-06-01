@@ -54,7 +54,7 @@ import scala.util.control.NonFatal
   private val asyncMessageSendCallback: AsyncCallback[Try[TableEntry]] = getAsyncCallback { p =>
     p match {
       case Failure(exception) =>
-        log.error(exception, s"Failed to send message {}")
+        log.error(exception, "Failed to send message {}")
       case Success(kv) =>
         if (kv != null)
           push(out, Some(tableSettings.valueSerializer.deserialize(kv.getValue())))
