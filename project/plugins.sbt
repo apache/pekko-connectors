@@ -30,7 +30,7 @@ addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.3")
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
 resolvers += Resolver.ApacheMavenStagingRepo
-addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0-M1")
+addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0-M2")
 // templating
 addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.8.0")
 // Run JUnit 5 tests with sbt
