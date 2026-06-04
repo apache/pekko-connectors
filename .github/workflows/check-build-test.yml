@@ -83,8 +83,7 @@ jobs:
 
       - name: Build Documentation
         run: |-
-          sbt unidoc
-          sbt docs/paradox
+          sbt docs/paradox unidoc
 
   connectors:
     runs-on: ubuntu-22.04
