@@ -67,6 +67,10 @@ object Common extends AutoPlugin {
       "-Wconf:cat=unused-nowarn:s",
       "-Wconf:msg=Prefer the Scala annotation over Java's `@Deprecated`:s",
       "-release:17"),
+    scalacOptions ++= {
+      if (isScala3.value) Seq("-Yfuture-lazy-vals")
+      else Seq.empty
+    },
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
       "Apache Pekko Connectors",
