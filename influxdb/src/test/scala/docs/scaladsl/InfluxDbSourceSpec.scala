@@ -41,7 +41,7 @@ class InfluxDbSourceSpec
 
   implicit val system: ActorSystem = ActorSystem()
 
-  implicit var influxDB: InfluxDB = _
+  implicit var influxDB: InfluxDB = null
 
   override protected def beforeAll(): Unit =
     influxDB = setupConnection(DatabaseName)

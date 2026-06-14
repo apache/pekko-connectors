@@ -75,8 +75,8 @@ class CsvBench {
       "8192", // ~same size as row
       "65536" // ~8k larger than row
     ))
-  var bsSize: Int = _
-  var source: Source[ByteString, NotUsed] = _
+  var bsSize: Int = 0
+  var source: Source[ByteString, NotUsed] = null
 
   @Benchmark
   def parse(bh: Blackhole): Unit = {

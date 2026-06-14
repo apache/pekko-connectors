@@ -47,7 +47,7 @@ import scala.util.{ Failure, Success, Try }
 
   private def out: Outlet[PravegaEvent[A]] = shape.out
 
-  private var reader: EventStreamReader[A] = _
+  private var reader: EventStreamReader[A] = null
 
   protected val clientConfig: ClientConfig = readerSettings.clientConfig
 

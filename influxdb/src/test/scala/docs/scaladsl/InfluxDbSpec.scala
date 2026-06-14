@@ -46,7 +46,7 @@ class InfluxDbSpec
 
   final val DatabaseName = this.getClass.getSimpleName
 
-  implicit var influxDB: InfluxDB = _
+  implicit var influxDB: InfluxDB = null
 
   // #define-class
   override protected def beforeAll(): Unit = {

@@ -34,9 +34,9 @@ private[ftp] trait FtpBrowserGraphStage[FtpClient, S <: RemoteFileSettings]
   def createLogic(inheritedAttributes: Attributes): FtpGraphStageLogic[FtpFile, FtpClient, S] = {
     val logic = new FtpGraphStageLogic[FtpFile, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
 
-      private[this] var buffer: Seq[FtpFile] = Seq.empty[FtpFile]
+      private var buffer: Seq[FtpFile] = Seq.empty[FtpFile]
 
-      private[this] var traversed: Seq[FtpFile] = Seq.empty[FtpFile]
+      private var traversed: Seq[FtpFile] = Seq.empty[FtpFile]
 
       setHandler(
         out,
@@ -70,11 +70,11 @@ private[ftp] trait FtpBrowserGraphStage[FtpClient, S <: RemoteFileSettings]
 
       override protected[this] def matFailure(t: Throwable) = true
 
-      private[this] def initBuffer(basePath: String) =
+      private def initBuffer(basePath: String) =
         getFilesFromPath(basePath)
 
       @scala.annotation.tailrec
-      private[this] def fillBuffer(): Unit = buffer match {
+      private def fillBuffer(): Unit = buffer match {
         case head +: tail if head.isDirectory && branchSelector(head) =>
           buffer = getFilesFromPath(head.path) ++ tail
           if (emitTraversedDirectories) traversed = traversed :+ head
@@ -82,7 +82,7 @@ private[ftp] trait FtpBrowserGraphStage[FtpClient, S <: RemoteFileSettings]
         case _ => // do nothing
       }
 
-      private[this] def getFilesFromPath(basePath: String) =
+      private def getFilesFromPath(basePath: String) =
         if (basePath.isEmpty)
           graphStageFtpLike.listFiles(handler.get)
         else

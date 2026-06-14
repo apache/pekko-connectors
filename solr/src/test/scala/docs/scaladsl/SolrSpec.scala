@@ -47,9 +47,9 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(5.seconds)
 
-  private var cluster: MiniSolrCloudCluster = _
+  private var cluster: MiniSolrCloudCluster = null
 
-  private var zkTestServer: ZkTestServer = _
+  private var zkTestServer: ZkTestServer = null
   implicit val system: ActorSystem = ActorSystem()
   implicit val commitExecutionContext: ExecutionContext = ExecutionContext.global
 

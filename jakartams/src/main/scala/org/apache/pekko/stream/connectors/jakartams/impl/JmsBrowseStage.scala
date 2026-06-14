@@ -36,10 +36,10 @@ private[jakartams] final class JmsBrowseStage(settings: JmsBrowseSettings, queue
     new GraphStageLogic(shape) with OutHandler {
       setHandler(out, this)
 
-      var connection: jms.Connection = _
-      var session: jms.Session = _
-      var browser: jms.QueueBrowser = _
-      var messages: java.util.Enumeration[jms.Message] = _
+      var connection: jms.Connection = null
+      var session: jms.Session = null
+      var browser: jms.QueueBrowser = null
+      var messages: java.util.Enumeration[jms.Message] = null
 
       override def preStart(): Unit = {
         val ackMode = settings.acknowledgeMode.mode

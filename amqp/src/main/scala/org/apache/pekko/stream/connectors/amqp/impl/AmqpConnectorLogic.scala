@@ -22,8 +22,8 @@ import scala.util.control.NonFatal
 
 private trait AmqpConnectorLogic { this: GraphStageLogic =>
 
-  private var connection: Connection = _
-  protected var channel: Channel = _
+  private var connection: Connection = null
+  protected var channel: Channel = null
 
   protected lazy val shutdownCallback: AsyncCallback[Throwable] = getAsyncCallback(onFailure)
   private lazy val shutdownListener = new ShutdownListener {

@@ -47,9 +47,9 @@ import scala.util.control.NonFatal
   private def in = shape.in
   private def out = shape.out
 
-  private var keyValueTableFactory: KeyValueTableFactory = _
+  private var keyValueTableFactory: KeyValueTableFactory = null
 
-  private var table: KeyValueTable = _
+  private var table: KeyValueTable = null
 
   private val onAir = new AtomicInteger
 

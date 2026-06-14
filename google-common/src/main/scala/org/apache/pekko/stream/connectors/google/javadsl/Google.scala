@@ -47,7 +47,7 @@ private[connectors] trait Google {
       unmarshaller: Unmarshaller[HttpResponse, T],
       settings: GoogleSettings,
       system: ClassicActorSystemProvider): CompletionStage[T] =
-    ScalaGoogle.singleRequest[T](request)(unmarshaller.asScala, system, settings).asJava
+    ScalaGoogle.singleRequest[T](request)(system, settings, unmarshaller.asScala).asJava
 
   /**
    * Makes a series of requests to page through a resource. Authentication is handled automatically.

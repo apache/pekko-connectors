@@ -63,7 +63,7 @@ trait CouchbaseSupport {
   val bucketName = "pekko"
   val queryBucketName = "pekkoquery"
 
-  var session: CouchbaseSession = _
+  var session: CouchbaseSession = null
 
   def beforeAll(): Unit = {
     session = Await.result(CouchbaseSession(sessionSettings, bucketName), 10.seconds)

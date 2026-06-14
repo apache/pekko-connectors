@@ -41,7 +41,7 @@ import scala.util.{ Failure, Success, Try }
 
   val clientConfig = writerSettings.clientConfig
 
-  private var writer: EventStreamWriter[A] = _
+  private var writer: EventStreamWriter[A] = null
 
   private val semaphore = new Semaphore(writerSettings.maximumInflightMessages)
 

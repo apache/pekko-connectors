@@ -85,7 +85,7 @@ final class CouchbaseWriteSettings private (val parallelism: Int,
    */
   def withTimeout(timeout: FiniteDuration): CouchbaseWriteSettings = copy(timeout = timeout)
 
-  private[this] def copy(parallelism: Int = parallelism,
+  private def copy(parallelism: Int = parallelism,
       replicateTo: ReplicateTo = replicateTo,
       persistTo: PersistTo = persistTo,
       timeout: FiniteDuration = timeout) =

@@ -57,7 +57,7 @@ import pekko.util.ByteString
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) {
-      private[this] var headers = columnNames
+      private var headers = columnNames
 
       setHandler(
         in,

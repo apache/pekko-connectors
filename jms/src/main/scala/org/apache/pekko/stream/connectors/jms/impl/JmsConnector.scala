@@ -40,7 +40,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   import JmsConnector._
 
-  implicit protected var ec: ExecutionContext = _
+  implicit protected var ec: ExecutionContext = null
 
   private var jmsSessions = Seq.empty[S]
 
@@ -54,7 +54,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   private val connectionFailedCB = getAsyncCallback[Throwable](connectionFailed)
 
-  private var connectionStateQueue: SourceQueueWithComplete[InternalConnectionState] = _
+  private var connectionStateQueue: SourceQueueWithComplete[InternalConnectionState] = null
 
   private val connectionStateSourcePromise = Promise[Source[InternalConnectionState, NotUsed]]()
 

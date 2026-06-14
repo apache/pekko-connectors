@@ -72,9 +72,9 @@ private[kinesis] class KinesisSchedulerSourceStage(
 
     // We're transmitting backpressure from the Outlet to the Scheduler using a Semaphore instance
     // semaphore.acquire ~> callback ~> push downstream ~> semaphore.release
-    private[this] val backpressureSemaphore = new Semaphore(bufferSize)
-    private[this] val buffer = mutable.Queue.empty[CommittableRecord]
-    private[this] var schedulerOpt: Option[Scheduler] = None
+    private val backpressureSemaphore = new Semaphore(bufferSize)
+    private val buffer = mutable.Queue.empty[CommittableRecord]
+    private var schedulerOpt: Option[Scheduler] = None
 
     override def preStart(): Unit = {
       implicit val ec: ExecutionContext = executionContext(attributes)

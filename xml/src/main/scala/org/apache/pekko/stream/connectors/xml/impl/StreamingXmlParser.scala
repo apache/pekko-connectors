@@ -66,7 +66,7 @@ private[xml] object StreamingXmlParser {
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with InHandler with OutHandler {
       private var started: Boolean = false
-      private var context: Ctx = _
+      private var context: Ctx = null.asInstanceOf[Ctx]
 
       import javax.xml.stream.XMLStreamConstants
 

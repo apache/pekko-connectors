@@ -50,7 +50,7 @@ private[ironmq] class IronMqPushStage(queueName: String, settings: IronMqSetting
 
       private var runningFutures: Int = 0
       private var exceptionFromUpstream: Option[Throwable] = None
-      private var client: IronMqClient = _ // set in preStart
+      private var client: IronMqClient = null // set in preStart
 
       override def preStart(): Unit = {
         super.preStart()

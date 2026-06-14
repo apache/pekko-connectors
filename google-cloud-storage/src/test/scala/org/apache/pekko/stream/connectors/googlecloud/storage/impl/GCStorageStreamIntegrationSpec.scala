@@ -43,7 +43,7 @@ trait GCStorageStreamIntegrationSpec
   private implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = 60.seconds, interval = 60.millis)
 
-  var folderName: String = _
+  var folderName: String = null
 
   def testFileName(file: String): String = folderName + file
 

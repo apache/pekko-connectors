@@ -126,8 +126,8 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
 
   private abstract class Logic extends GraphStageLogic(shape) with OutHandler {
 
-    protected var client: ODatabaseSession = _
-    protected var oObjectClient: OObjectDatabaseTx = _
+    protected var client: ODatabaseSession = null
+    protected var oObjectClient: OObjectDatabaseTx = null
     protected var skip = settings.skip
 
     override def preStart(): Unit = {

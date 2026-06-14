@@ -40,7 +40,7 @@ import scala.util.control.NonFatal
 
   override def createLogic(inheritedAttributes: Attributes) =
     new GraphStageLogic(shape) with InHandler with OutHandler {
-      private[this] val buffer = new CsvParser(delimiter, quoteChar, escapeChar, maximumLineLength)
+      private val buffer = new CsvParser(delimiter, quoteChar, escapeChar, maximumLineLength)
 
       setHandlers(in, out, this)
 

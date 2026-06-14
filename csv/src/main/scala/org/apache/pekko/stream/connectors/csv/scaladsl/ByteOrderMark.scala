@@ -23,7 +23,7 @@ import org.apache.pekko.util.ByteString
  */
 object ByteOrderMark {
 
-  private[this] final val ZeroZero = ByteString.apply(0x00.toByte, 0x00.toByte)
+  private final val ZeroZero = ByteString.apply(0x00.toByte, 0x00.toByte)
 
   /** Byte Order Mark for UTF-16 big-endian */
   final val UTF_16_BE = ByteString.apply(0xFE.toByte, 0xFF.toByte)

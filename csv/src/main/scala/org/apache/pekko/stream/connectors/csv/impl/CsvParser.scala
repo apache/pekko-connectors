@@ -60,12 +60,12 @@ import scala.collection.mutable
    *
    * May include previous chunks that start a field but do not complete it.
    */
-  private[this] var buffer: ByteString = ByteString.empty
+  private var buffer: ByteString = ByteString.empty
 
   /**
    * Flag to run BOM checks against first two bytes of the stream.
    */
-  private[this] var firstData = true
+  private var firstData = true
 
   /**
    * Current position within [[buffer]].
@@ -73,7 +73,7 @@ import scala.collection.mutable
    * Points to the same byte as [[current.head]].
    * Used for slicing fields out of [[buffer]] and for debug info.
    */
-  private[this] var pos: Int = 0
+  private var pos: Int = 0
 
   /**
    * Number of bytes dropped on the current row.
@@ -84,27 +84,27 @@ import scala.collection.mutable
    * [[pekko.util.ByteString.ByteStrings]] to a [[pekko.util.ByteString.ByteString1]]
    * to exploit the much faster [[ByteString.slice()]] implementation.
    */
-  private[this] var lineBytesDropped = 0
+  private var lineBytesDropped = 0
 
   /**
    * Position within the current row.
    *
    * Used for enforcing line length limits and as debug info for exceptions.
    */
-  private[this] def lineLength: Int = lineBytesDropped + pos
+  private def lineLength: Int = lineBytesDropped + pos
 
   /**
    * Position within [[buffer]] of the start of the current field.
    */
-  private[this] var fieldStart = 0
-  private[this] var currentLineNo = 1L
+  private var fieldStart = 0
+  private var currentLineNo = 1L
 
   /**
    * Reset after each row.
    */
-  private[this] val columns = mutable.ListBuffer[ByteString]()
-  private[this] var state: State = LineStart
-  private[this] val fieldBuilder = new FieldBuilder
+  private val columns = mutable.ListBuffer[ByteString]()
+  private var state: State = LineStart
+  private val fieldBuilder = new FieldBuilder
 
   /**
    * Current iterator being parsed.
@@ -114,7 +114,7 @@ import scala.collection.mutable
    *
    * We fully parse each chunk before getting the next, so we only need to track one [[ByteIterator]] at a time.
    */
-  private[this] var current: ByteIterator = ByteString.empty.iterator
+  private var current: ByteIterator = ByteString.empty.iterator
 
   def offer(next: ByteString): Unit =
     if (next.nonEmpty) {
@@ -137,17 +137,17 @@ import scala.collection.mutable
     line
   }
 
-  private[this] def advance(n: Int = 1): Unit = {
+  private def advance(n: Int = 1): Unit = {
     pos += n
     current.drop(n)
   }
 
-  private[this] def resetLine(): Unit = {
+  private def resetLine(): Unit = {
     dropReadBuffer()
     lineBytesDropped = 0
   }
 
-  private[this] def dropReadBuffer() = {
+  private def dropReadBuffer() = {
     buffer = buffer.drop(pos)
     lineBytesDropped += pos
     pos = 0
@@ -163,8 +163,8 @@ import scala.collection.mutable
     /**
      * false if [[builder]] is null.
      */
-    private[this] var useBuilder = false
-    private[this] var builder: ByteStringBuilder = _
+    private var useBuilder = false
+    private var builder: ByteStringBuilder = null
 
     /**
      * Set up the ByteString builder instead of relying on `ByteString.slice`.
@@ -186,12 +186,12 @@ import scala.collection.mutable
 
   }
 
-  private[this] def noCharEscaped() =
+  private def noCharEscaped() =
     throw new MalformedCsvException(currentLineNo,
       lineLength,
       s"wrong escaping at $currentLineNo:$lineLength, no character after escape")
 
-  private[this] def checkForByteOrderMark(): Unit =
+  private def checkForByteOrderMark(): Unit =
     if (buffer.length >= 2) {
       if (buffer.startsWith(ByteOrderMark.UTF_8)) {
         advance(3)
@@ -209,7 +209,7 @@ import scala.collection.mutable
       }
     }
 
-  private[this] def parseLine(): Unit = {
+  private def parseLine(): Unit = {
     if (firstData) {
       checkForByteOrderMark()
       firstData = false
@@ -217,7 +217,7 @@ import scala.collection.mutable
     churn()
   }
 
-  private[this] def churn(): Unit = {
+  private def churn(): Unit = {
     while (state != LineEnd && pos < buffer.length) {
       if (lineLength >= maximumLineLength)
         throw new MalformedCsvException(
@@ -405,7 +405,7 @@ import scala.collection.mutable
       }
     }
   }
-  private[this] def maybeExtractLine(requireLineEnd: Boolean): Option[List[ByteString]] =
+  private def maybeExtractLine(requireLineEnd: Boolean): Option[List[ByteString]] =
     if (requireLineEnd) {
       state match {
         case LineEnd =>

@@ -22,8 +22,8 @@ import scala.util.Random
  * Creates a single server and connection factory which is shared for all tests.
  */
 abstract class JmsSharedServerSpec extends JmsSpec {
-  private var jmsBroker: EmbeddedActiveMQServer = _
-  private var connectionFactory: ConnectionFactory = _
+  private var jmsBroker: EmbeddedActiveMQServer = null
+  private var connectionFactory: ConnectionFactory = null
   private val SHARED_SERVER_ID: Int = 2
 
   override def beforeAll(): Unit = {

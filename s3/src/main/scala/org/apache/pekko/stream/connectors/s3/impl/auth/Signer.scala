@@ -46,16 +46,16 @@ import pekko.stream.scaladsl.Source
         .mapMaterializedValue(_ => NotUsed)
     }
 
-  private[this] def sessionHeader(key: SigningKey): Option[HttpHeader] =
+  private def sessionHeader(key: SigningKey): Option[HttpHeader] =
     key.sessionToken.map(RawHeader("X-Amz-Security-Token", _))
 
-  private[this] def authorizationHeader(algorithm: String,
+  private def authorizationHeader(algorithm: String,
       key: SigningKey,
       requestDate: ZonedDateTime,
       canonicalRequest: CanonicalRequest): HttpHeader =
     RawHeader("Authorization", authorizationString(algorithm, key, requestDate, canonicalRequest))
 
-  private[this] def authorizationString(algorithm: String,
+  private def authorizationString(algorithm: String,
       key: SigningKey,
       requestDate: ZonedDateTime,
       canonicalRequest: CanonicalRequest): String = {

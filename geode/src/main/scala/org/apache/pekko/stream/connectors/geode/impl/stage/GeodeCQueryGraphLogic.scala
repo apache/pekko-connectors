@@ -44,7 +44,7 @@ private[geode] abstract class GeodeCQueryGraphLogic[V](val shape: SourceShape[V]
 
   val onElement: AsyncCallback[V]
 
-  private var query: CqQuery = _
+  private var query: CqQuery = null
 
   override def executeQuery() = Try {
 

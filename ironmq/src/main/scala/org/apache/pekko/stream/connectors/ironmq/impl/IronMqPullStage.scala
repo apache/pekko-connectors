@@ -68,7 +68,7 @@ private[ironmq] final class IronMqPullStage(queueName: String, settings: IronMqS
       private var fetching: Boolean = false
 
       private var buffer: List[ReservedMessage] = List.empty
-      private var client: IronMqClient = _ // set in preStart
+      private var client: IronMqClient = null // set in preStart
 
       override def preStart(): Unit =
         client = IronMqClient(settings)(materializer.system, materializer)

@@ -32,13 +32,13 @@ import scala.collection.immutable
     quotingStyle: CsvQuotingStyle,
     charset: Charset = StandardCharsets.UTF_8) {
 
-  private[this] val charsetName = charset.name()
+  private val charsetName = charset.name()
 
-  private[this] val delimiterBs = ByteString(String.valueOf(delimiter), charsetName)
-  private[this] val quoteBs = ByteString(String.valueOf(quoteChar), charsetName)
-  private[this] val duplicatedQuote = ByteString(String.valueOf(Array(quoteChar, quoteChar)), charsetName)
-  private[this] val duplicatedEscape = ByteString(String.valueOf(Array(escapeChar, escapeChar)), charsetName)
-  private[this] val endOfLineBs = ByteString(endOfLine, charsetName)
+  private val delimiterBs = ByteString(String.valueOf(delimiter), charsetName)
+  private val quoteBs = ByteString(String.valueOf(quoteChar), charsetName)
+  private val duplicatedQuote = ByteString(String.valueOf(Array(quoteChar, quoteChar)), charsetName)
+  private val duplicatedEscape = ByteString(String.valueOf(Array(escapeChar, escapeChar)), charsetName)
+  private val endOfLineBs = ByteString(endOfLine, charsetName)
 
   def toCsv(fields: immutable.Iterable[Any]): ByteString =
     if (fields.nonEmpty) nonEmptyToCsv(fields)
