@@ -127,8 +127,8 @@ lazy val `pekko-connectors` = project
     crossScalaVersions := List() // workaround for https://github.com/sbt/sbt/issues/3465
   )
 
-addCommandAlias("applyCodeStyle", ";scalafmtAll; scalafmtSbt; javafmtAll; +headerCreateAll")
-addCommandAlias("checkCodeStyle", ";+headerCheckAll; scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll")
+addCommandAlias("applyCodeStyle", "+headerCreateAll; scalafmtAll; scalafmtSbt; javafmtAll")
+addCommandAlias("checkCodeStyle", "scalafmtCheckAll; scalafmtSbtCheck; javafmtCheckAll; +headerCheckAll")
 
 lazy val amqp = pekkoConnectorProject("amqp", "amqp", Dependencies.Amqp)
 
