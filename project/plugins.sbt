@@ -27,7 +27,7 @@ addSbtPlugin("com.lightbend.paradox" % "sbt-paradox-theme" % "0.10.7")
 addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.10.7")
 
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
-addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.2")
+addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.0.3")
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
 resolvers += Resolver.ApacheMavenStagingRepo
 addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0-M1")
