@@ -27,7 +27,7 @@ import org.apache.hadoop.io.{ SequenceFile, Writable }
 
 object HdfsFlow {
 
-  private[hdfs] val OnlyRotationMessage: PartialFunction[OutgoingMessage[_], RotationMessage] = {
+  private[hdfs] val OnlyRotationMessage: PartialFunction[OutgoingMessage[?], RotationMessage] = {
     case m: RotationMessage => m
   }
 

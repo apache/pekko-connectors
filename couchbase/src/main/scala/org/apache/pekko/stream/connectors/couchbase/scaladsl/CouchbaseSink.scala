@@ -37,7 +37,7 @@ object CouchbaseSink {
   /**
    * Create a sink to update or insert a Couchbase document of the given class.
    */
-  def upsertDoc[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def upsertDoc[T <: Document[?]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Sink[T, Future[Done]] =
     CouchbaseFlow

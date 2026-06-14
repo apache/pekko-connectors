@@ -32,7 +32,7 @@ private[geode] class ShapelessPdxSerializer[A <: AnyRef](enc: PdxEncoder[A], dec
     tag.runtimeClass.isInstance(o) &&
     enc.encode(out, o.asInstanceOf[A])
 
-  override def fromData(clazz: Class[_], in: PdxReader): A =
+  override def fromData(clazz: Class[?], in: PdxReader): A =
     dec.decode(in, null) match {
       case Success(e) => e
       case _          => null.asInstanceOf[A]

@@ -68,7 +68,7 @@ object DynamoDb {
    */
   def source[In <: DynamoDbRequest, Out <: DynamoDbResponse](
       request: In)(
-      implicit client: DynamoDbAsyncClient, operation: DynamoDbPaginatedOp[In, Out, _]): Source[Out, NotUsed] =
+      implicit client: DynamoDbAsyncClient, operation: DynamoDbPaginatedOp[In, Out, ?]): Source[Out, NotUsed] =
     Source.fromPublisher(operation.publisher(request))
 
   /**
@@ -78,7 +78,7 @@ object DynamoDb {
    */
   def flowPaginated[In <: DynamoDbRequest, Out <: DynamoDbResponse]()(
       implicit client: DynamoDbAsyncClient,
-      operation: DynamoDbPaginatedOp[In, Out, _]): Flow[In, Out, NotUsed] = Flow[In].flatMapConcat(source(_))
+      operation: DynamoDbPaginatedOp[In, Out, ?]): Flow[In, Out, NotUsed] = Flow[In].flatMapConcat(source(_))
 
   /**
    * Create a Future that will be completed with a response to a given request.

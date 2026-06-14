@@ -39,7 +39,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to query Couchbase for by `id` and emit documents of the given class.
    */
-  def fromId[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def fromId[T <: Document[?]](sessionSettings: CouchbaseSessionSettings,
       bucketName: String,
       target: Class[T]): Flow[String, T, NotUsed] =
     scaladsl.CouchbaseFlow.fromId(sessionSettings, bucketName, target).asJava
@@ -55,7 +55,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to update or insert a Couchbase document of the given class.
    */
-  def upsertDoc[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def upsertDoc[T <: Document[?]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[T, T, NotUsed] =
     scaladsl.CouchbaseFlow.upsertDoc(sessionSettings, writeSettings, bucketName).asJava
@@ -64,7 +64,7 @@ object CouchbaseFlow {
    * Create a flow to update or insert a Couchbase document of the given class and emit a result so that write failures
    * can be handled in-stream.
    */
-  def upsertDocWithResult[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def upsertDocWithResult[T <: Document[?]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
     scaladsl.CouchbaseFlow.upsertDocWithResult(sessionSettings, writeSettings, bucketName).asJava
@@ -80,7 +80,7 @@ object CouchbaseFlow {
   /**
    * Create a flow to replace a Couchbase document of the given class.
    */
-  def replaceDoc[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def replaceDoc[T <: Document[?]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[T, T, NotUsed] =
     scaladsl.CouchbaseFlow.replaceDoc(sessionSettings, writeSettings, bucketName).asJava
@@ -89,7 +89,7 @@ object CouchbaseFlow {
    * Create a flow to replace a Couchbase document of the given class and emit a result so that write failures
    * can be handled in-stream.
    */
-  def replaceDocWithResult[T <: Document[_]](sessionSettings: CouchbaseSessionSettings,
+  def replaceDocWithResult[T <: Document[?]](sessionSettings: CouchbaseSessionSettings,
       writeSettings: CouchbaseWriteSettings,
       bucketName: String): Flow[T, CouchbaseWriteResult[T], NotUsed] =
     scaladsl.CouchbaseFlow.replaceDocWithResult(sessionSettings, writeSettings, bucketName).asJava

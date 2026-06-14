@@ -27,7 +27,7 @@ import scala.reflect.ClassTag
  */
 trait ProductSchemas extends ProductSchemasInstances { this: StandardSchemas =>
 
-  protected def extractFieldNames(tag: ClassTag[_]): Array[String] =
+  protected def extractFieldNames(tag: ClassTag[?]): Array[String] =
     ProductSchemasSupport.extractFieldNames(tag)
 
 }
@@ -43,5 +43,5 @@ private[schema] final class ProductSchemaWriter[T <: Product](fieldSchemas: Seq[
 }
 
 private object ProductSchemasSupport extends StandardFormats with ProductFormats with AdditionalFormats {
-  override def extractFieldNames(tag: ClassTag[_]): Array[String] = super.extractFieldNames(tag)
+  override def extractFieldNames(tag: ClassTag[?]): Array[String] = super.extractFieldNames(tag)
 }

@@ -32,7 +32,7 @@ import scala.util.control.NonFatal
 trait CassandraLifecycleBase {
   def lifecycleSession: CassandraSession
 
-  def execute(session: CassandraSession, statements: immutable.Seq[BatchableStatement[_]]): Future[Done] = {
+  def execute(session: CassandraSession, statements: immutable.Seq[BatchableStatement[?]]): Future[Done] = {
     val batch = new BatchStatementBuilder(BatchType.LOGGED)
     statements.foreach { stmt =>
       batch.addStatement(stmt)
@@ -62,7 +62,7 @@ trait CassandraLifecycleBase {
 
   def dropKeyspace(name: String): Future[Done] = withSchemaMetadataDisabled(dropKeyspace(lifecycleSession, name))
 
-  def execute(statements: immutable.Seq[BatchableStatement[_]]): Future[Done] = execute(lifecycleSession, statements)
+  def execute(statements: immutable.Seq[BatchableStatement[?]]): Future[Done] = execute(lifecycleSession, statements)
 
   def executeCql(statements: immutable.Seq[String]): Future[Done] = executeCql(lifecycleSession, statements)
 

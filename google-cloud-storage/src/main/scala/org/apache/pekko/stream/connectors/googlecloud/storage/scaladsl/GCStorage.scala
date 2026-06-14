@@ -216,7 +216,7 @@ object GCStorage {
    */
   def simpleUpload(bucket: String,
       objectName: String,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentType: ContentType): Source[StorageObject, NotUsed] =
     GCStorageStream.putObject(bucket, objectName, data, contentType)
 

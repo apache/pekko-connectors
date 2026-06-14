@@ -52,7 +52,7 @@ object Archive {
   /**
    * Flow for packaging multiple files into one TAR file.
    */
-  def tar(): Flow[(TarArchiveMetadata, Source[ByteString, _]), ByteString, NotUsed] =
+  def tar(): Flow[(TarArchiveMetadata, Source[ByteString, ?]), ByteString, NotUsed] =
     TarArchiveManager.tarFlow()
 
   /**

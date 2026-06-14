@@ -107,7 +107,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
    */
   override def get(system: ClassicActorSystemProvider): UnixDomainSocket = super.apply(system.classicSystem)
 
-  def lookup: ExtensionId[_ <: Extension] =
+  def lookup: ExtensionId[? <: Extension] =
     UnixDomainSocket
 
   def createExtension(system: ExtendedActorSystem): UnixDomainSocket =

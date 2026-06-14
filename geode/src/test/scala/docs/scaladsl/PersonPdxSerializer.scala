@@ -32,7 +32,7 @@ object PersonPdxSerializer extends PekkoPdxSerializer[Person] {
     } else
       false
 
-  override def fromData(clazz: Class[_], in: PdxReader): AnyRef = {
+  override def fromData(clazz: Class[?], in: PdxReader): AnyRef = {
     val id: Int = in.readInt("id")
     val name: String = in.readString("name")
     val birthDate: Date = in.readDate("birthDate")

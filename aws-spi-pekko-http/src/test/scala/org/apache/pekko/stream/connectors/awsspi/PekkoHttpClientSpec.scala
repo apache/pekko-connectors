@@ -71,7 +71,7 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
     "use sdk content length from headers when publisher returns empty contentLength" in {
       val publisher = new SdkHttpContentPublisher {
         override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
-        override def subscribe(s: Subscriber[_ >: ByteBuffer]): Unit = {}
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
       }
       val entity =
         PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher,
@@ -82,7 +82,7 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
     "use publisher contentLength when sdkContentLength is absent" in {
       val publisher = new SdkHttpContentPublisher {
         override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(99L)
-        override def subscribe(s: Subscriber[_ >: ByteBuffer]): Unit = {}
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
       }
       val entity =
         PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher, None)
@@ -92,7 +92,7 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
     "prefer sdk content length over publisher contentLength when both are present" in {
       val publisher = new SdkHttpContentPublisher {
         override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(55L)
-        override def subscribe(s: Subscriber[_ >: ByteBuffer]): Unit = {}
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
       }
       val entity =
         PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher,

@@ -54,7 +54,7 @@ import scala.util.{ Either, Failure, Success }
  */
 @InternalApi private[streaming] object Producer {
 
-  type PublishData = Option[_]
+  type PublishData = Option[?]
 
   /*
    * Construct with the starting state
@@ -383,7 +383,7 @@ import scala.util.{ Either, Failure, Success }
   sealed abstract class Request[A]
   final case class Register[A](registrant: ActorRef[A], reply: Promise[Registered]) extends Request[A]
   private final case class Unregister[A](packetId: PacketId) extends Request[A]
-  final case class Route[A](packetId: PacketId, event: A, failureReply: Promise[_]) extends Request[A]
+  final case class Route[A](packetId: PacketId, event: A, failureReply: Promise[?]) extends Request[A]
 
   // Replies
 
@@ -422,7 +422,7 @@ import scala.util.{ Either, Failure, Success }
       step(PacketId(after.underlying + 1))
   }
 
-  private[streaming] case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[_]])
+  private[streaming] case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[?]])
 }
 
 /*
@@ -529,12 +529,12 @@ import scala.util.{ Either, Failure, Success }
   final case class RegisterConnection[A](connectionId: ByteString, clientId: String) extends Request[A]
   private final case class Unregister[A](clientId: Option[String], packetId: PacketId) extends Request[A]
   final case class UnregisterConnection[A](connectionId: ByteString) extends Request[A]
-  final case class Route[A](clientId: Option[String], packetId: PacketId, event: A, failureReply: Promise[_])
+  final case class Route[A](clientId: Option[String], packetId: PacketId, event: A, failureReply: Promise[?])
       extends Request[A]
   final case class RouteViaConnection[A](connectionId: ByteString,
       packetId: PacketId,
       event: A,
-      failureReply: Promise[_])
+      failureReply: Promise[?])
       extends Request[A]
 
   // Replies
@@ -548,7 +548,7 @@ import scala.util.{ Either, Failure, Success }
   def apply[A]: Behavior[Request[A]] =
     new RemotePacketRouter[A].main(Map.empty, Map.empty)
 
-  private[streaming] case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[_]])
+  private[streaming] case class Registration[A](registrant: ActorRef[A], failureReplies: Seq[Promise[?]])
 }
 
 /*

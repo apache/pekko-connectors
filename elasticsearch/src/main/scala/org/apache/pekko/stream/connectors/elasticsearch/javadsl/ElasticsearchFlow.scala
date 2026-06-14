@@ -37,7 +37,7 @@ object ElasticsearchFlow {
    */
   def create[T](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       objectMapper: ObjectMapper)
       : pekko.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
     create(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
@@ -53,7 +53,7 @@ object ElasticsearchFlow {
    */
   def create[T](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       messageWriter: MessageWriter[T])
       : pekko.stream.javadsl.Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] =
     scaladsl.ElasticsearchFlow
@@ -72,7 +72,7 @@ object ElasticsearchFlow {
    */
   def createWithPassThrough[T, C](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       objectMapper: ObjectMapper): pekko.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
     createWithPassThrough(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
 
@@ -88,7 +88,7 @@ object ElasticsearchFlow {
    */
   def createWithPassThrough[T, C](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       messageWriter: MessageWriter[T]): pekko.stream.javadsl.Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] =
     scaladsl.ElasticsearchFlow
       .createWithPassThrough(elasticsearchParams, settings, messageWriter)
@@ -107,7 +107,7 @@ object ElasticsearchFlow {
    */
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       objectMapper: ObjectMapper): pekko.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]],
     java.util.List[WriteResult[T, C]], NotUsed] =
     createBulk(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
@@ -125,7 +125,7 @@ object ElasticsearchFlow {
    */
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       messageWriter: MessageWriter[T]): pekko.stream.javadsl.Flow[java.util.List[WriteMessage[T, C]],
     java.util.List[WriteResult[T, C]], NotUsed] = pekko.stream.scaladsl
     .Flow[java.util.List[WriteMessage[T, C]]]
@@ -148,7 +148,7 @@ object ElasticsearchFlow {
   @ApiMayChange
   def createWithContext[T, C](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       objectMapper: ObjectMapper)
       : pekko.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
     createWithContext(elasticsearchParams, settings, new JacksonWriter[T](objectMapper))
@@ -165,7 +165,7 @@ object ElasticsearchFlow {
   @ApiMayChange
   def createWithContext[T, C](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       messageWriter: MessageWriter[T])
       : pekko.stream.javadsl.FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] =
     scaladsl.ElasticsearchFlow

@@ -49,47 +49,47 @@ private[couchbase] final class CouchbaseSessionJavaAdapter(delegate: scaladsl.Co
 
   override def insert(document: JsonDocument): CompletionStage[JsonDocument] = delegate.insertDoc(document).asJava
 
-  override def insertDoc[T <: Document[_]](document: T): CompletionStage[T] = delegate.insertDoc(document).asJava
+  override def insertDoc[T <: Document[?]](document: T): CompletionStage[T] = delegate.insertDoc(document).asJava
 
   override def insert(
       document: JsonDocument,
       writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument] =
     delegate.insert(document, writeSettings).asJava
 
-  override def insertDoc[T <: Document[_]](
+  override def insertDoc[T <: Document[?]](
       document: T,
       writeSettings: CouchbaseWriteSettings): CompletionStage[T] = delegate.insertDoc(document, writeSettings).asJava
 
   override def get(id: String): CompletionStage[Optional[JsonDocument]] =
     futureOptToJava(delegate.get(id))
 
-  override def get[T <: Document[_]](id: String, clazz: Class[T]): CompletionStage[Optional[T]] =
+  override def get[T <: Document[?]](id: String, clazz: Class[T]): CompletionStage[Optional[T]] =
     futureOptToJava(delegate.get(id, clazz))
 
   override def get(id: String, timeout: Duration): CompletionStage[Optional[JsonDocument]] =
     futureOptToJava(delegate.get(id, FiniteDuration.apply(timeout.toNanos, duration.NANOSECONDS)))
 
-  def get[T <: Document[_]](id: String, timeout: Duration, documentClass: Class[T]): CompletionStage[Optional[T]] =
+  def get[T <: Document[?]](id: String, timeout: Duration, documentClass: Class[T]): CompletionStage[Optional[T]] =
     futureOptToJava(delegate.get(id, FiniteDuration.apply(timeout.toNanos, duration.NANOSECONDS), documentClass))
 
   override def upsert(document: JsonDocument): CompletionStage[JsonDocument] = delegate.upsert(document).asJava
 
-  override def upsertDoc[T <: Document[_]](document: T): CompletionStage[T] = delegate.upsertDoc(document).asJava
+  override def upsertDoc[T <: Document[?]](document: T): CompletionStage[T] = delegate.upsertDoc(document).asJava
 
   override def upsert(document: JsonDocument, writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument] =
     delegate.upsert(document, writeSettings).asJava
 
-  override def upsertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T] =
+  override def upsertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T] =
     delegate.upsertDoc(document, writeSettings).asJava
 
   override def replace(document: JsonDocument): CompletionStage[JsonDocument] = delegate.replace(document).asJava
 
-  override def replaceDoc[T <: Document[_]](document: T): CompletionStage[T] = delegate.replaceDoc(document).asJava
+  override def replaceDoc[T <: Document[?]](document: T): CompletionStage[T] = delegate.replaceDoc(document).asJava
 
   override def replace(document: JsonDocument, writeSettings: CouchbaseWriteSettings): CompletionStage[JsonDocument] =
     delegate.replace(document, writeSettings).asJava
 
-  override def replaceDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T] =
+  override def replaceDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T] =
     delegate.replaceDoc(document, writeSettings).asJava
 
   override def remove(id: String): CompletionStage[Done] = delegate.remove(id).asJava

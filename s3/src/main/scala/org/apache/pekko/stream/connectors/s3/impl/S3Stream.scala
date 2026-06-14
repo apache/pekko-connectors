@@ -654,7 +654,7 @@ import scala.util.{ Failure, Success, Try }
 
   def putObject(s3Location: S3Location,
       contentType: ContentType,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentLength: Long,
       s3Headers: S3Headers): Source[ObjectMetadata, NotUsed] = {
 
@@ -914,7 +914,7 @@ import scala.util.{ Failure, Success, Try }
    */
   def multipartUploadWithContext[C](
       s3Location: S3Location,
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       s3Headers: S3Headers,
       chunkSize: Int = MinChunkSize,
@@ -951,7 +951,7 @@ import scala.util.{ Failure, Success, Try }
       s3Location: S3Location,
       uploadId: String,
       previousParts: immutable.Iterable[Part],
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       s3Headers: S3Headers,
       chunkSize: Int = MinChunkSize,
@@ -1218,7 +1218,7 @@ import scala.util.{ Failure, Success, Try }
       contentType: ContentType,
       s3Headers: S3Headers,
       chunkSize: Int,
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       initialUploadState: Option[(String, Int)] = None)(
       parallelism: Int): Flow[(ByteString, C), UploadPartResponse, NotUsed] = {
 

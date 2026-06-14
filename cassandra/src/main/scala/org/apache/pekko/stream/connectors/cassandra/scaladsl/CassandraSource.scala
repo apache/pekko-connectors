@@ -38,7 +38,7 @@ object CassandraSource {
    *
    * See <a href="https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/queriesTOC.html">Querying data</a>.
    */
-  def apply(stmt: Statement[_])(implicit session: CassandraSession): Source[Row, NotUsed] =
+  def apply(stmt: Statement[?])(implicit session: CassandraSession): Source[Row, NotUsed] =
     session.select(stmt)
 
   /**
@@ -46,7 +46,7 @@ object CassandraSource {
    *
    * See <a href="https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/queriesTOC.html">Querying data</a>.
    */
-  def fromFuture(stmt: Future[Statement[_]])(implicit session: CassandraSession): Source[Row, NotUsed] =
+  def fromFuture(stmt: Future[Statement[?]])(implicit session: CassandraSession): Source[Row, NotUsed] =
     session.select(stmt)
 
 }

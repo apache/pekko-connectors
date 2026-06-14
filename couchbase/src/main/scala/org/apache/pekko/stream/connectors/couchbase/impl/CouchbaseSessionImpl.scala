@@ -48,13 +48,13 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def insert(document: JsonDocument): Future[JsonDocument] = insertDoc(document)
 
-  def insertDoc[T <: Document[_]](document: T): Future[T] =
+  def insertDoc[T <: Document[?]](document: T): Future[T] =
     singleObservableToFuture(asyncBucket.insert(document), document)
 
   def insert(document: JsonDocument, writeSettings: CouchbaseWriteSettings): Future[JsonDocument] =
     insertDoc(document, writeSettings)
 
-  def insertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
+  def insertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
     singleObservableToFuture(asyncBucket.insert(document,
       writeSettings.persistTo,
       writeSettings.replicateTo,
@@ -65,26 +65,26 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
   def get(id: String): Future[Option[JsonDocument]] =
     zeroOrOneObservableToFuture(asyncBucket.get(id))
 
-  def get[T <: Document[_]](id: String, documentClass: Class[T]): Future[Option[T]] =
+  def get[T <: Document[?]](id: String, documentClass: Class[T]): Future[Option[T]] =
     zeroOrOneObservableToFuture(asyncBucket.get(id, documentClass))
 
   def get(id: String, timeout: FiniteDuration): Future[Option[JsonDocument]] =
     zeroOrOneObservableToFuture(asyncBucket.get(id, timeout.toMillis, TimeUnit.MILLISECONDS))
 
-  def get[T <: Document[_]](id: String,
+  def get[T <: Document[?]](id: String,
       timeout: FiniteDuration,
       documentClass: Class[T]): scala.concurrent.Future[Option[T]] =
     zeroOrOneObservableToFuture(asyncBucket.get(id, documentClass, timeout.toMillis, TimeUnit.MILLISECONDS))
 
   def upsert(document: JsonDocument): Future[JsonDocument] = upsertDoc(document)
 
-  def upsertDoc[T <: Document[_]](document: T): Future[T] =
+  def upsertDoc[T <: Document[?]](document: T): Future[T] =
     singleObservableToFuture(asyncBucket.upsert(document), document.id)
 
   def upsert(document: JsonDocument, writeSettings: CouchbaseWriteSettings): Future[JsonDocument] =
     upsertDoc(document, writeSettings)
 
-  def upsertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
+  def upsertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
     singleObservableToFuture(asyncBucket.upsert(document,
       writeSettings.persistTo,
       writeSettings.replicateTo,
@@ -94,13 +94,13 @@ final private[couchbase] class CouchbaseSessionImpl(asyncBucket: AsyncBucket, cl
 
   def replace(document: JsonDocument): Future[JsonDocument] = replaceDoc(document)
 
-  def replaceDoc[T <: Document[_]](document: T): Future[T] =
+  def replaceDoc[T <: Document[?]](document: T): Future[T] =
     singleObservableToFuture(asyncBucket.replace(document), document.id)
 
   def replace(document: JsonDocument, writeSettings: CouchbaseWriteSettings): Future[JsonDocument] =
     replaceDoc(document, writeSettings)
 
-  def replaceDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
+  def replaceDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): Future[T] =
     singleObservableToFuture(asyncBucket.replace(document,
       writeSettings.persistTo,
       writeSettings.replicateTo,

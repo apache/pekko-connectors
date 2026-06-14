@@ -42,7 +42,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
   override def createExtension(system: ExtendedActorSystem) =
     new UnixDomainSocket(system)
 
-  override def lookup: ExtensionId[_ <: Extension] =
+  override def lookup: ExtensionId[? <: Extension] =
     UnixDomainSocket
 
   /**
@@ -135,7 +135,7 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends UnixDomainSock
    *                  independently whether the client is still attempting to write. This setting is recommended
    *                  for servers, and therefore it is the default setting.
    */
-  def bindAndHandle(handler: Flow[ByteString, ByteString, _],
+  def bindAndHandle(handler: Flow[ByteString, ByteString, ?],
       path: Path,
       backlog: Int = 128,
       halfClose: Boolean = false): Future[ServerBinding] =

@@ -150,12 +150,12 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
           override def onPush(): Unit = {
             val elem: E = grab(in)
             elem match {
-              case _: JmsPassThrough[_] =>
+              case _: JmsPassThrough[?] =>
                 val holder = new Holder[E](NotYetThere)
                 inFlightMessages.enqueue(holder)
                 holder(Success(elem))
                 pushNextIfPossible()
-              case m: JmsEnvelope[_] =>
+              case m: JmsEnvelope[?] =>
                 // create a holder object to capture the in-flight message, and enqueue it to preserve message order
                 val holder = new Holder[E](NotYetThere)
                 inFlightMessages.enqueue(holder)
@@ -292,7 +292,7 @@ private[jms] object JmsProducerStage {
     override def apply(t: Try[A]): Unit = elem = t
   }
 
-  case class SendAttempt[E <: JmsEnvelope[_]](envelope: E,
+  case class SendAttempt[E <: JmsEnvelope[?]](envelope: E,
       holder: Holder[E],
       attempt: Int = 0,
       backoffMaxed: Boolean = false)

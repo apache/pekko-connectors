@@ -95,7 +95,7 @@ final class WriteMessage[T, PT] private (val operation: Operation,
     s"""WriteMessage(operation=$operation,id=$id,source=$source,passThrough=$passThrough,version=$version,indexName=$indexName,customMetadata=$customMetadata)"""
 
   override def equals(other: Any): Boolean = other match {
-    case that: WriteMessage[_, _] =>
+    case that: WriteMessage[?, ?] =>
       java.util.Objects.equals(this.operation, that.operation) &&
       java.util.Objects.equals(this.id, that.id) &&
       java.util.Objects.equals(this.source, that.source) &&
@@ -168,7 +168,7 @@ final class WriteResult[T2, C2] @InternalApi private[elasticsearch] (val message
     s"""WriteResult(message=$message,error=$error)"""
 
   override def equals(other: Any): Boolean = other match {
-    case that: WriteResult[_, _] =>
+    case that: WriteResult[?, ?] =>
       java.util.Objects.equals(this.message, that.message) &&
       java.util.Objects.equals(this.error, that.error)
     case _ => false

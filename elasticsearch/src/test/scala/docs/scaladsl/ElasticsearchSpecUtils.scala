@@ -69,7 +69,7 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
   }
 
   def readTitlesFrom(apiVersion: ApiVersionBase,
-      sourceSettings: SourceSettingsBase[_, _],
+      sourceSettings: SourceSettingsBase[?, ?],
       indexName: String): Future[immutable.Seq[String]] =
     ElasticsearchSource
       .typed[Book](

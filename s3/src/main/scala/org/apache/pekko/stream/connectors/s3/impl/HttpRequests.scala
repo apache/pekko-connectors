@@ -241,7 +241,7 @@ import scala.xml.NodeSeq
       .withDefaultHeaders(headers)
 
   def uploadRequest(s3Location: S3Location,
-      payload: Source[ByteString, _],
+      payload: Source[ByteString, ?],
       contentLength: Long,
       contentType: ContentType,
       s3Headers: Seq[HttpHeader])(

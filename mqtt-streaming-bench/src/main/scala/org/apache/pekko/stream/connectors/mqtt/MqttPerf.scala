@@ -87,7 +87,7 @@ class MqttPerf {
               Mqtt
                 .serverSessionFlow(serverSession, ByteString(connection.remoteAddress.getAddress.getAddress))
                 .join(connection.flow))
-            .wireTap(Sink.foreach[Either[DecodeError, streaming.Event[_]]] {
+            .wireTap(Sink.foreach[Either[DecodeError, streaming.Event[?]]] {
               case Right(streaming.Event(_: streaming.Connect, _)) =>
                 server.offer(streaming.Command(connAck))
               case Right(streaming.Event(s: streaming.Subscribe, _)) =>

@@ -151,7 +151,7 @@ final class CassandraSession(@InternalApi private[pekko] val delegate: scaladsl.
    * The returned `CompletionStage` is completed when the statement has been
    * successfully executed, or if it fails.
    */
-  def executeWrite(stmt: Statement[_]): CompletionStage[Done] =
+  def executeWrite(stmt: Statement[?]): CompletionStage[Done] =
     delegate.executeWrite(stmt).asJava
 
   /**
@@ -180,7 +180,7 @@ final class CassandraSession(@InternalApi private[pekko] val delegate: scaladsl.
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: Statement[_]): Source[Row, NotUsed] =
+  def select(stmt: Statement[?]): Source[Row, NotUsed] =
     delegate.select(stmt).asJava
 
   /**
@@ -195,7 +195,7 @@ final class CassandraSession(@InternalApi private[pekko] val delegate: scaladsl.
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: CompletionStage[Statement[_]]): Source[Row, NotUsed] =
+  def select(stmt: CompletionStage[Statement[?]]): Source[Row, NotUsed] =
     delegate.select(stmt.asScala).asJava
 
   /**
@@ -223,7 +223,7 @@ final class CassandraSession(@InternalApi private[pekko] val delegate: scaladsl.
    *
    * The returned `CompletionStage` is completed with the found rows.
    */
-  def selectAll(stmt: Statement[_]): CompletionStage[JList[Row]] =
+  def selectAll(stmt: Statement[?]): CompletionStage[JList[Row]] =
     delegate.selectAll(stmt).map(_.asJava).asJava
 
   /**
@@ -249,7 +249,7 @@ final class CassandraSession(@InternalApi private[pekko] val delegate: scaladsl.
    * The returned `CompletionStage` is completed with the first row,
    * if any.
    */
-  def selectOne(stmt: Statement[_]): CompletionStage[Optional[Row]] =
+  def selectOne(stmt: Statement[?]): CompletionStage[Optional[Row]] =
     delegate.selectOne(stmt).map(_.toJava).asJava
 
   /**

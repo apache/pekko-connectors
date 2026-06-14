@@ -1186,7 +1186,7 @@ trait S3IntegrationSpec
   }
 
   private def uploadAndAndCheckParts(
-      defaultBucket: String, source: Source[ByteString, _], expectedParts: Int): Assertion = {
+      defaultBucket: String, source: Source[ByteString, ?], expectedParts: Int): Assertion = {
     val metadata =
       for {
         _ <- source.runWith(

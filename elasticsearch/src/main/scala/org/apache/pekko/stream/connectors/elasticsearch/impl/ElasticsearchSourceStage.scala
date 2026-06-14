@@ -61,7 +61,7 @@ private[elasticsearch] trait MessageReader[T] {
 private[elasticsearch] final class ElasticsearchSourceStage[T](
     elasticsearchParams: ElasticsearchParams,
     searchParams: Map[String, String],
-    settings: SourceSettingsBase[_, _],
+    settings: SourceSettingsBase[?, ?],
     reader: MessageReader[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStage[SourceShape[ReadResult[T]]] {
 
@@ -86,7 +86,7 @@ object ElasticsearchSourceStage {
 private[elasticsearch] final class ElasticsearchSourceLogic[T](
     elasticsearchParams: ElasticsearchParams,
     searchParams: Map[String, String],
-    settings: SourceSettingsBase[_, _],
+    settings: SourceSettingsBase[?, ?],
     out: Outlet[ReadResult[T]],
     shape: SourceShape[ReadResult[T]],
     reader: MessageReader[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)

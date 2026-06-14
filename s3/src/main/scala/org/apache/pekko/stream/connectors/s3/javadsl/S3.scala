@@ -290,7 +290,7 @@ object S3 {
    */
   def putObject(bucket: String,
       key: String,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentLength: Long,
       contentType: ContentType,
       s3Headers: S3Headers): Source[ObjectMetadata, NotUsed] =
@@ -314,7 +314,7 @@ object S3 {
    */
   def putObject(bucket: String,
       key: String,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentLength: Long,
       contentType: ContentType): Source[ObjectMetadata, NotUsed] =
     putObject(bucket, key, data, contentLength, contentType, S3Headers.empty.withCannedAcl(CannedAcl.Private))
@@ -330,7 +330,7 @@ object S3 {
    */
   def putObject(bucket: String,
       key: String,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentLength: Long): Source[ObjectMetadata, NotUsed] =
     putObject(bucket, key, data, contentLength, ContentTypes.APPLICATION_OCTET_STREAM)
 
@@ -828,7 +828,7 @@ object S3 {
   def multipartUploadWithContext[C](
       bucket: String,
       key: String,
-      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _],
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?],
       contentType: ContentType,
       s3Headers: S3Headers): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
     S3Stream
@@ -870,7 +870,7 @@ object S3 {
   def multipartUploadWithContext[C](
       bucket: String,
       key: String,
-      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _],
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?],
       contentType: ContentType): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
     multipartUploadWithContext[C](bucket,
       key,
@@ -901,7 +901,7 @@ object S3 {
   def multipartUploadWithContext[C](
       bucket: String,
       key: String,
-      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _])
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?])
       : Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
     multipartUploadWithContext[C](bucket, key, chunkUploadSink, ContentTypes.APPLICATION_OCTET_STREAM)
 
@@ -1000,7 +1000,7 @@ object S3 {
       key: String,
       uploadId: String,
       previousParts: java.lang.Iterable[Part],
-      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _],
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?],
       contentType: ContentType,
       s3Headers: S3Headers): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] = {
     S3Stream
@@ -1050,7 +1050,7 @@ object S3 {
       key: String,
       uploadId: String,
       previousParts: java.lang.Iterable[Part],
-      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _],
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?],
       contentType: ContentType): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
     resumeMultipartUploadWithContext[C](bucket,
       key,
@@ -1088,7 +1088,7 @@ object S3 {
       key: String,
       uploadId: String,
       previousParts: java.lang.Iterable[Part],
-      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], _])
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?])
       : Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
     resumeMultipartUploadWithContext[C](bucket,
       key,

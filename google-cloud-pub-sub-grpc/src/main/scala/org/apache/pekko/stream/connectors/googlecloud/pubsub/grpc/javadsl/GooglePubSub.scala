@@ -723,7 +723,7 @@ object GooglePubSub {
       }
       .mapMaterializedValue(flattenCs(_))
 
-  private def flattenCs[T](f: CompletionStage[_ <: CompletionStage[T]]): CompletionStage[T] =
+  private def flattenCs[T](f: CompletionStage[? <: CompletionStage[T]]): CompletionStage[T] =
     f.thenCompose((t: CompletionStage[T]) => t)
 
   private def publisher(mat: Materializer, attr: Attributes) =

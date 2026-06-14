@@ -171,7 +171,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * The returned `Future` is completed when the statement has been
    * successfully executed, or if it fails.
    */
-  def executeWrite(stmt: Statement[_]): Future[Done] = {
+  def executeWrite(stmt: Statement[?]): Future[Done] = {
     underlying().flatMap { cqlSession =>
       cqlSession.executeAsync(stmt).asScala.map(_ => Done)
     }
@@ -194,7 +194,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
   /**
    * INTERNAL API
    */
-  @InternalApi private[pekko] def selectResultSet(stmt: Statement[_]): Future[AsyncResultSet] = {
+  @InternalApi private[pekko] def selectResultSet(stmt: Statement[?]): Future[AsyncResultSet] = {
     underlying().flatMap { s =>
       s.executeAsync(stmt).asScala
     }
@@ -212,7 +212,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: Statement[_]): Source[Row, NotUsed] = {
+  def select(stmt: Statement[?]): Source[Row, NotUsed] = {
     Source
       .futureSource {
         underlying().map { cqlSession =>
@@ -233,7 +233,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * Note that you have to connect a `Sink` that consumes the messages from
    * this `Source` and then `run` the stream.
    */
-  def select(stmt: Future[Statement[_]]): Source[Row, NotUsed] = {
+  def select(stmt: Future[Statement[?]]): Source[Row, NotUsed] = {
     Source
       .futureSource {
         underlying().flatMap(cqlSession => stmt.map(cqlSession -> _)).map {
@@ -269,7 +269,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    *
    * The returned `Future` is completed with the found rows.
    */
-  def selectAll(stmt: Statement[_]): Future[immutable.Seq[Row]] = {
+  def selectAll(stmt: Statement[?]): Future[immutable.Seq[Row]] = {
     select(stmt)
       .runWith(Sink.seq)
   }
@@ -297,7 +297,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    * The returned `Future` is completed with the first row,
    * if any.
    */
-  def selectOne(stmt: Statement[_]): Future[Option[Row]] = {
+  def selectOne(stmt: Statement[?]): Future[Option[Row]] = {
     selectResultSet(stmt).map { rs =>
       Option(rs.one()) // rs.one returns null if exhausted
     }
