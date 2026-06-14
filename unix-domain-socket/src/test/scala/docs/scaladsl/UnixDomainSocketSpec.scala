@@ -145,7 +145,7 @@ class UnixDomainSocketSpec
     }
 
     "be able to materialize outgoing connection flow more than once" in {
-      def materialize(flow: Flow[ByteString, ByteString, _]): Future[Done] =
+      def materialize(flow: Flow[ByteString, ByteString, ?]): Future[Done] =
         Source.single(ByteString("Hello")).via(flow).runWith(Sink.ignore)
 
       val path = dir.resolve("sock5")

@@ -60,9 +60,9 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
 
           if (credentials.password != "") {
             val passwordAuth: AuthPassword = new AuthPassword(new PasswordFinder() {
-              def reqPassword(resource: Resource[_]): Array[Char] = credentials.password.toCharArray
+              def reqPassword(resource: Resource[?]): Array[Char] = credentials.password.toCharArray
 
-              def shouldRetry(resource: Resource[_]) = false
+              def shouldRetry(resource: Resource[?]) = false
             })
 
             ssh.auth(credentials.username, passwordAuth, keyAuth)

@@ -90,7 +90,7 @@ class MqttPerf {
               Mqtt
                 .serverSessionFlow(serverSession, ByteString(connection.remoteAddress.getAddress.getAddress))
                 .join(connection.flow))
-            .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+            .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
               case Right(Event(_: Connect, _)) =>
                 server.offer(Command(connAck))
               case Right(Event(s: Subscribe, _)) =>
@@ -117,7 +117,7 @@ class MqttPerf {
         Mqtt
           .clientSessionFlow(clientSession, ByteString("1"))
           .join(Tcp().outgoingConnection(host, port)))
-      .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+      .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
         case Right(Event(_: SubAck, _)) =>
           subscribed.success(Done)
         case Right(Event(p: Publish, _)) =>

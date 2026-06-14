@@ -75,7 +75,7 @@ object DynamoDb {
    */
   def flowPaginated[In <: DynamoDbRequest, Out <: DynamoDbResponse](
       client: DynamoDbAsyncClient,
-      operation: DynamoDbPaginatedOp[In, Out, _]): Flow[In, Out, NotUsed] =
+      operation: DynamoDbPaginatedOp[In, Out, ?]): Flow[In, Out, NotUsed] =
     scaladsl.DynamoDb.flowPaginated()(client, operation).asJava
 
   /**

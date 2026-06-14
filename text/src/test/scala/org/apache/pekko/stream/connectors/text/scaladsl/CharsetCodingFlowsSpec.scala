@@ -78,7 +78,7 @@ class CharsetCodingFlowsSpec
       // #encoding
       val targetFile = Paths.get("target/outdata.txt")
       val strings = System.getProperties.asScala.map(p => p._1 + " -> " + p._2).toList
-      val stringSource: Source[String, _] = Source(strings)
+      val stringSource: Source[String, ?] = Source(strings)
       val result =
         stringSource
           .via(TextFlow.encoding(StandardCharsets.US_ASCII))
@@ -93,7 +93,7 @@ class CharsetCodingFlowsSpec
       import java.nio.charset.StandardCharsets
 
       val utf16bytes = ByteString("äåûßêëé", StandardCharsets.UTF_16)
-      val byteStringSource: Source[ByteString, _] =
+      val byteStringSource: Source[ByteString, ?] =
         Source
           .single(utf16bytes)
 
@@ -114,7 +114,7 @@ class CharsetCodingFlowsSpec
 
       val utf16bytes = ByteString("äåûßêëé", StandardCharsets.UTF_16)
       val targetFile = Paths.get("target/outdata-transcoding.txt")
-      val byteStringSource: Source[ByteString, _] =
+      val byteStringSource: Source[ByteString, ?] =
         Source
           .single(utf16bytes)
       val result: Future[IOResult] =

@@ -62,7 +62,7 @@ private[ironmq] final class IronMqClient(settings: IronMqSettings)(implicit acto
     }
   }
 
-  private val pipeline: Flow[HttpRequest, HttpResponse, _] = Flow[HttpRequest]
+  private val pipeline: Flow[HttpRequest, HttpResponse, ?] = Flow[HttpRequest]
     .map(_.withHeaders(Authorization(GenericHttpCredentials("OAuth", settings.token))))
     .map(_ -> NotUsed)
     .via(connectionPoolFlow)

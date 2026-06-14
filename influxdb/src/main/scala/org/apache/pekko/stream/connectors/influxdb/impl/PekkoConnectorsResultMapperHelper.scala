@@ -47,10 +47,10 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     .appendZoneOrOffsetId
     .toFormatter
 
-  private[impl] def databaseName(point: Class[_]): String =
+  private[impl] def databaseName(point: Class[?]): String =
     point.getAnnotation(classOf[Measurement]).database();
 
-  private[impl] def retentionPolicy(point: Class[_]): String =
+  private[impl] def retentionPolicy(point: Class[?]): String =
     point.getAnnotation(classOf[Measurement]).retentionPolicy();
 
   private[impl] def convertModelToPoint[T](model: T): Point = {
@@ -70,7 +70,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
         val field = colNameAndFieldMap.get(key)
         val column = field.getAnnotation(classOf[Column])
         val columnName: String = column.name()
-        val fieldType: Class[_] = field.getType()
+        val fieldType: Class[?] = field.getType()
 
         val isAccessible = field.isAccessible() // deprecated in JDK 11+
         if (!isAccessible) {
@@ -96,7 +96,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     }
   }
 
-  private[impl] def cacheClassFields(clazz: Class[_]) =
+  private[impl] def cacheClassFields(clazz: Class[?]) =
     if (!CLASS_FIELD_CACHE.containsKey(clazz.getName)) {
       val initialMap: ConcurrentMap[String, Field] = new ConcurrentHashMap()
       var influxColumnAndFieldMap = CLASS_FIELD_CACHE.putIfAbsent(clazz.getName, initialMap)
@@ -125,20 +125,20 @@ private[impl] class PekkoConnectorsResultMapperHelper {
       .toList
   }
 
-  private def measurementName(point: Class[_]): String =
+  private def measurementName(point: Class[?]): String =
     point.getAnnotation(classOf[Measurement]).name();
 
-  private def timeUnit(point: Class[_]): TimeUnit =
+  private def timeUnit(point: Class[?]): TimeUnit =
     point.getAnnotation(classOf[Measurement]).timeUnit()
 
-  private def setTime(pointBuilder: Point.Builder, fieldType: Class[_], timeUnit: TimeUnit, value: Any): Unit =
+  private def setTime(pointBuilder: Point.Builder, fieldType: Class[?], timeUnit: TimeUnit, value: Any): Unit =
     if (classOf[Instant].isAssignableFrom(fieldType)) {
       val instant = value.asInstanceOf[Instant]
       val time = timeUnit.convert(instant.toEpochMilli, TimeUnit.MILLISECONDS)
       pointBuilder.time(time, timeUnit)
     } else throw new InfluxDBMapperException("Unsupported type " + fieldType + " for time: should be of Instant type")
 
-  private def setField(pointBuilder: Point.Builder, fieldType: Class[_], columnName: String, value: Any): Unit =
+  private def setField(pointBuilder: Point.Builder, fieldType: Class[?], columnName: String, value: Any): Unit =
     if (classOf[java.lang.Boolean].isAssignableFrom(fieldType) || classOf[Boolean].isAssignableFrom(fieldType))
       pointBuilder.addField(columnName, value.asInstanceOf[Boolean])
     else if (classOf[java.lang.Long].isAssignableFrom(fieldType) || classOf[Long].isAssignableFrom(fieldType))
@@ -150,7 +150,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     else if (classOf[String].isAssignableFrom(fieldType)) pointBuilder.addField(columnName, value.asInstanceOf[String])
     else throw new InfluxDBMapperException("Unsupported type " + fieldType + " for column " + columnName)
 
-  private def throwExceptionIfMissingAnnotation(clazz: Class[_]): Unit =
+  private def throwExceptionIfMissingAnnotation(clazz: Class[?]): Unit =
     if (!clazz.isAnnotationPresent(classOf[Measurement]))
       throw new IllegalArgumentException(
         "Class " + clazz.getName + " is not annotated with @" + classOf[Measurement].getSimpleName)
@@ -202,7 +202,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
 
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
-  private def fieldValueForPrimitivesModified[T](fieldType: Class[_], field: Field, obj: T, value: Any): Boolean =
+  private def fieldValueForPrimitivesModified[T](fieldType: Class[?], field: Field, obj: T, value: Any): Boolean =
     if (classOf[Double].isAssignableFrom(fieldType)) {
       field.setDouble(obj, value.asInstanceOf[Double].doubleValue)
       true
@@ -221,7 +221,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
 
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
-  private def fieldValueForPrimitiveWrappersModified[T](fieldType: Class[_],
+  private def fieldValueForPrimitiveWrappersModified[T](fieldType: Class[?],
       field: Field,
       obj: T,
       value: Any): Boolean =
@@ -243,7 +243,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
 
   @throws[IllegalArgumentException]
   @throws[IllegalAccessException]
-  private def fieldValueModified[T](fieldType: Class[_],
+  private def fieldValueModified[T](fieldType: Class[?],
       field: Field,
       obj: T,
       value: Any,

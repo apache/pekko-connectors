@@ -26,10 +26,10 @@ import org.apache.geode.pdx.{ PdxReader, PdxSerializer, PdxWriter }
  */
 @InternalApi
 private[geode] class DelegatingPdxSerializer(
-    isPdxCompat: (Class[_], Class[_]) => Boolean) extends PdxSerializer
+    isPdxCompat: (Class[?], Class[?]) => Boolean) extends PdxSerializer
     with Declarable {
 
-  private var serializers = Map[Class[_], PdxSerializer]()
+  private var serializers = Map[Class[?], PdxSerializer]()
 
   def register[V](serializer: PdxSerializer, clazz: Class[V]): Unit = synchronized {
     if (!serializers.contains(clazz))
@@ -56,7 +56,7 @@ private[geode] class DelegatingPdxSerializer(
    *
    * @return unmarshalled class or null
    */
-  override def fromData(clazz: Class[_], in: PdxReader): AnyRef =
+  override def fromData(clazz: Class[?], in: PdxReader): AnyRef =
     serializers
       .get(clazz)
       .map(_.fromData(clazz, in))

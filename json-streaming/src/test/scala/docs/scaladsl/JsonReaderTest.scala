@@ -35,7 +35,7 @@ class JsonReaderTest extends AnyWordSpec with Matchers with BeforeAndAfterAll wi
   val timeout: FiniteDuration = 3.seconds
 
   // Runs the stream to a sequence sink and returns that sequence
-  def collect[A](source: Source[A, _]): Seq[A] = Await.result(source.runWith(Sink.seq), timeout)
+  def collect[A](source: Source[A, ?]): Seq[A] = Await.result(source.runWith(Sink.seq), timeout)
 
   // Basic documents + elements to use in tests
   val expectedElements: Seq[String] = Seq("""{"name":"test1"}""", """{"name":"test2"}""", """{"name":"test3"}""")

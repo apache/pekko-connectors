@@ -21,13 +21,13 @@ import org.apache.geode.cache.client.ClientCacheFactory
 final class GeodeSettings private (val hostname: String,
     val port: Int = 10334,
     val configure: Option[ClientCacheFactory => ClientCacheFactory] = None,
-    val pdxCompat: (Class[_], Class[_]) => Boolean = (c1, c2) =>
+    val pdxCompat: (Class[?], Class[?]) => Boolean = (c1, c2) =>
       c1.getSimpleName.equals(c2.getSimpleName)) {
 
   private def copy(hostname: String = hostname,
       port: Int = port,
       configure: Option[ClientCacheFactory => ClientCacheFactory] = configure,
-      pdxCompat: (Class[_], Class[_]) => Boolean = pdxCompat) =
+      pdxCompat: (Class[?], Class[?]) => Boolean = pdxCompat) =
     new GeodeSettings(hostname, port, configure, pdxCompat)
 
   /**
@@ -39,7 +39,7 @@ final class GeodeSettings private (val hostname: String,
   /**
    * @param pdxCompat a function that determines if two class are equivalent (java class / scala case class)
    */
-  def withPdxCompat(pdxCompat: (Class[_], Class[_]) => Boolean): GeodeSettings = copy(pdxCompat = pdxCompat)
+  def withPdxCompat(pdxCompat: (Class[?], Class[?]) => Boolean): GeodeSettings = copy(pdxCompat = pdxCompat)
 
   override def toString: String =
     "GeodeSettings(" +

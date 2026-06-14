@@ -29,7 +29,7 @@ object ElasticsearchSink {
   /**
    * Create a sink to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`.
    */
-  def create[T](elasticsearchParams: ElasticsearchParams, settings: WriteSettingsBase[_, _])(
+  def create[T](elasticsearchParams: ElasticsearchParams, settings: WriteSettingsBase[?, ?])(
       implicit sprayJsonWriter: JsonWriter[T]): Sink[WriteMessage[T, NotUsed], Future[Done]] =
     ElasticsearchFlow.create[T](elasticsearchParams, settings).toMat(Sink.ignore)(Keep.right)
 

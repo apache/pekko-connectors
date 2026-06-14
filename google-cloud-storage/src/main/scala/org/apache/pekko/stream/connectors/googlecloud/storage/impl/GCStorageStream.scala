@@ -111,7 +111,7 @@ import scala.concurrent.ExecutionContext.parasitic
 
   def putObject(bucket: String,
       objectName: String,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentType: ContentType): Source[StorageObject, NotUsed] = sourceGCS { settings =>
     val uri = Uri(settings.endpointUrl)
       .withPath(Path("/upload" + settings.basePath) ++ getBucketPath(bucket) / "o")

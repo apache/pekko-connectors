@@ -188,7 +188,7 @@ object S3 {
    */
   def putObject(bucket: String,
       key: String,
-      data: Source[ByteString, _],
+      data: Source[ByteString, ?],
       contentLength: Long,
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       s3Headers: S3Headers): Source[ObjectMetadata, NotUsed] =
@@ -542,7 +542,7 @@ object S3 {
   def multipartUploadWithContext[C](
       bucket: String,
       key: String,
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       metaHeaders: MetaHeaders = MetaHeaders(Map()),
       cannedAcl: CannedAcl = CannedAcl.Private,
@@ -587,7 +587,7 @@ object S3 {
   def multipartUploadWithHeadersAndContext[C](
       bucket: String,
       key: String,
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,
@@ -671,7 +671,7 @@ object S3 {
       key: String,
       uploadId: String,
       previousParts: immutable.Iterable[Part],
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       metaHeaders: MetaHeaders = MetaHeaders(Map()),
       cannedAcl: CannedAcl = CannedAcl.Private,
@@ -758,7 +758,7 @@ object S3 {
       key: String,
       uploadId: String,
       previousParts: immutable.Iterable[Part],
-      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), _],
+      chunkUploadSink: Sink[(UploadPartResponse, immutable.Iterable[C]), ?],
       contentType: ContentType = ContentTypes.`application/octet-stream`,
       chunkSize: Int = MinChunkSize,
       chunkingParallelism: Int = 4,

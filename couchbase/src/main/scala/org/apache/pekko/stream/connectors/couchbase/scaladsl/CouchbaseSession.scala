@@ -114,7 +114,7 @@ trait CouchbaseSession {
    *
    * @return A future that completes with the written document when the write completes
    */
-  def insertDoc[T <: Document[_]](document: T): Future[T]
+  def insertDoc[T <: Document[?]](document: T): Future[T]
 
   /**
    * Insert a JSON document using the given write settings.
@@ -129,7 +129,7 @@ trait CouchbaseSession {
    *
    * @return A future that completes with the written document when the write completes
    */
-  def insertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T]
+  def insertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): Future[T]
 
   /**
    * @return A document if found or none if there is no document for the id
@@ -139,7 +139,7 @@ trait CouchbaseSession {
   /**
    * @return A document of the given type if found or none if there is no document for the id
    */
-  def get[T <: Document[_]](id: String, documentClass: Class[T]): Future[Option[T]]
+  def get[T <: Document[?]](id: String, documentClass: Class[T]): Future[Option[T]]
 
   /**
    * @param timeout fail the returned future with a TimeoutException if it takes longer than this
@@ -150,7 +150,7 @@ trait CouchbaseSession {
   /**
    * @return A document of the given type if found or none if there is no document for the id
    */
-  def get[T <: Document[_]](id: String, timeout: FiniteDuration, documentClass: Class[T]): Future[Option[T]]
+  def get[T <: Document[?]](id: String, timeout: FiniteDuration, documentClass: Class[T]): Future[Option[T]]
 
   /**
    * Upsert using the default write settings.
@@ -168,7 +168,7 @@ trait CouchbaseSession {
    *
    * @return a future that completes when the upsert is done
    */
-  def upsertDoc[T <: Document[_]](document: T): Future[T]
+  def upsertDoc[T <: Document[?]](document: T): Future[T]
 
   /**
    * Upsert using the given write settings
@@ -186,7 +186,7 @@ trait CouchbaseSession {
    *
    * @return a future that completes when the upsert is done
    */
-  def upsertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T]
+  def upsertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): Future[T]
 
   /**
    * Replace using the default write settings.
@@ -204,7 +204,7 @@ trait CouchbaseSession {
    *
    * @return a future that completes when the replace is done
    */
-  def replaceDoc[T <: Document[_]](document: T): Future[T]
+  def replaceDoc[T <: Document[?]](document: T): Future[T]
 
   /**
    * Replace using the given write settings
@@ -222,7 +222,7 @@ trait CouchbaseSession {
    *
    * @return a future that completes when the replace is done
    */
-  def replaceDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): Future[T]
+  def replaceDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): Future[T]
 
   /**
    * Remove a document by id using the default write settings.

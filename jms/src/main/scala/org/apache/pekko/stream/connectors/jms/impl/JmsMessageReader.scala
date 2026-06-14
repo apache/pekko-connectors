@@ -52,7 +52,7 @@ private[jms] object JmsMessageReader {
   def readArray(message: jms.BytesMessage, bufferSize: Int = 4096): Array[Byte] =
     readBytes(message, bufferSize).toArray
 
-  private def createMap(keys: java.util.Enumeration[_], accessor: String => AnyRef) =
+  private def createMap(keys: java.util.Enumeration[?], accessor: String => AnyRef) =
     keys
       .asInstanceOf[java.util.Enumeration[String]]
       .asScala

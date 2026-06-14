@@ -31,7 +31,7 @@ object ElasticsearchSink {
    */
   def create[T](
       elasticsearchParams: ElasticsearchParams,
-      settings: WriteSettingsBase[_, _],
+      settings: WriteSettingsBase[?, ?],
       objectMapper: ObjectMapper): pekko.stream.javadsl.Sink[WriteMessage[T, NotUsed], CompletionStage[Done]] =
     ElasticsearchFlow
       .create(elasticsearchParams, settings, objectMapper)

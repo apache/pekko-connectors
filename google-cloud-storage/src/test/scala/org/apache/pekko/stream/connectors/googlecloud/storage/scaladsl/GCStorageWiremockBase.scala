@@ -827,7 +827,7 @@ abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hove
 
 object GCStorageWiremockBase {
 
-  def getCallerName(clazz: Class[_]): String = {
+  def getCallerName(clazz: Class[?]): String = {
     val s = Thread.currentThread.getStackTrace.map(_.getClassName).drop(1)
       .dropWhile(_.matches("(java.lang.Thread|.*WireMockBase.?$)"))
     val reduced = s.lastIndexWhere(_ == clazz.getName) match {

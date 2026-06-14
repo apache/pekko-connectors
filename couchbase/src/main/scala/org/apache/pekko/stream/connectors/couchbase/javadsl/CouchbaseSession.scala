@@ -113,7 +113,7 @@ abstract class CouchbaseSession {
    *
    * @return A CompletionStage that completes with the written document when the write completes
    */
-  def insertDoc[T <: Document[_]](document: T): CompletionStage[T]
+  def insertDoc[T <: Document[?]](document: T): CompletionStage[T]
 
   /**
    * Insert a JSON document using the given write settings.
@@ -126,7 +126,7 @@ abstract class CouchbaseSession {
    * Insert a document using the given write settings.
    * Separate from `insert` to make the most common case smoother with the type inference
    */
-  def insertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
+  def insertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
 
   /**
    * @return A document if found or none if there is no document for the id
@@ -136,7 +136,7 @@ abstract class CouchbaseSession {
   /**
    * @return A document if found or none if there is no document for the id
    */
-  def get[T <: Document[_]](id: String, documentClass: Class[T]): CompletionStage[Optional[T]]
+  def get[T <: Document[?]](id: String, documentClass: Class[T]): CompletionStage[Optional[T]]
 
   /**
    * @param timeout fail the returned CompletionStage with a TimeoutException if it takes longer than this
@@ -148,7 +148,7 @@ abstract class CouchbaseSession {
    * @param timeout fail the returned CompletionStage with a TimeoutException if it takes longer than this
    * @return A document if found or none if there is no document for the id
    */
-  def get[T <: Document[_]](id: String, timeout: Duration, documentClass: Class[T]): CompletionStage[Optional[T]]
+  def get[T <: Document[?]](id: String, timeout: Duration, documentClass: Class[T]): CompletionStage[Optional[T]]
 
   /**
    * Upsert using the default write settings
@@ -165,7 +165,7 @@ abstract class CouchbaseSession {
    *
    * @return a CompletionStage that completes when the upsert is done
    */
-  def upsertDoc[T <: Document[_]](document: T): CompletionStage[T]
+  def upsertDoc[T <: Document[?]](document: T): CompletionStage[T]
 
   /**
    * Upsert using the given write settings.
@@ -183,7 +183,7 @@ abstract class CouchbaseSession {
    *
    * @return a CompletionStage that completes when the upsert is done
    */
-  def upsertDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
+  def upsertDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
 
   /**
    * Replace using the default write settings
@@ -200,7 +200,7 @@ abstract class CouchbaseSession {
    *
    * @return a CompletionStage that completes when the replace is done
    */
-  def replaceDoc[T <: Document[_]](document: T): CompletionStage[T]
+  def replaceDoc[T <: Document[?]](document: T): CompletionStage[T]
 
   /**
    * Replace using the given write settings.
@@ -218,7 +218,7 @@ abstract class CouchbaseSession {
    *
    * @return a CompletionStage that completes when the replace is done
    */
-  def replaceDoc[T <: Document[_]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
+  def replaceDoc[T <: Document[?]](document: T, writeSettings: CouchbaseWriteSettings): CompletionStage[T]
 
   /**
    * Remove a document by id using the default write settings.

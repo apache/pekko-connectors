@@ -35,7 +35,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 @InternalApi
 private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     elasticsearchParams: ElasticsearchParams,
-    settings: WriteSettingsBase[_, _],
+    settings: WriteSettingsBase[?, ?],
     writer: MessageWriter[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStage[
       FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]),

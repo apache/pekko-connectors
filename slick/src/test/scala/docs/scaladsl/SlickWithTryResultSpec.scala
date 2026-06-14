@@ -230,7 +230,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
         .runWith(Sink.last)
         .futureValue
 
-      inserted mustBe a[Failure[_]]
+      inserted mustBe a[Failure[?]]
 
       getAllUsersFromDb.futureValue mustBe Set(users.head)
     }
@@ -316,7 +316,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
         .runWith(SlickWithTryResult.sinkTry(insertUser))
         .futureValue
 
-      inserted mustBe a[Failure[_]]
+      inserted mustBe a[Failure[?]]
       getAllUsersFromDb.futureValue mustBe Set(users.head)
     }
 
@@ -328,7 +328,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
         .futureValue
 
       records.length mustBe 41
-      inserted mustBe a[Failure[_]]
+      inserted mustBe a[Failure[?]]
       getAllUsersFromDb.futureValue mustBe users
     }
 

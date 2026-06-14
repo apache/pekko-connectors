@@ -41,7 +41,7 @@ object CassandraSource {
    *
    * See <a href="https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/queriesTOC.html">Querying data</a>.
    */
-  def create(session: CassandraSession, stmt: Statement[_]): Source[Row, NotUsed] =
+  def create(session: CassandraSession, stmt: Statement[?]): Source[Row, NotUsed] =
     session.select(stmt)
 
   /**
@@ -49,7 +49,7 @@ object CassandraSource {
    *
    * See <a href="https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/queriesTOC.html">Querying data</a>.
    */
-  def fromCompletionStage(session: CassandraSession, stmt: CompletionStage[Statement[_]]): Source[Row, NotUsed] =
+  def fromCompletionStage(session: CassandraSession, stmt: CompletionStage[Statement[?]]): Source[Row, NotUsed] =
     session.select(stmt)
 
 }

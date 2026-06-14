@@ -46,7 +46,7 @@ private[ironmq] class IronMqPushStage(queueName: String, settings: IronMqSetting
 
       implicit def ec: ExecutionContext = materializer.executionContext
 
-      override protected val logSource: Class[_] = classOf[IronMqPushStage]
+      override protected val logSource: Class[?] = classOf[IronMqPushStage]
 
       private var runningFutures: Int = 0
       private var exceptionFromUpstream: Option[Throwable] = None

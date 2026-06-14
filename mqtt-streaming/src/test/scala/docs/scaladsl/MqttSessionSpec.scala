@@ -1358,7 +1358,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
             case Right(Event(cp: Subscribe, _)) if cp.topicFilters == subscribe.topicFilters =>
@@ -1457,7 +1457,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
             case Right(Event(cp: Subscribe, _))
@@ -1535,7 +1535,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
             case Right(Event(cp: Subscribe, _)) if cp.topicFilters == subscribe.topicFilters =>
@@ -1616,7 +1616,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) => connectReceived.success(Done)
             case _                          =>
           })
@@ -1677,7 +1677,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) => connectReceived.success(Done)
             case _                          =>
           })
@@ -1729,7 +1729,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _))    => connectReceived.success(Done)
             case Right(Event(`disconnect`, _)) => disconnectReceived.success(Done)
             case _                             =>
@@ -1797,7 +1797,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, connectionId)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) if !firstConnectReceived.isCompleted =>
               firstConnectReceived.success(Done)
             case Right(Event(`connect`, _)) =>
@@ -1919,7 +1919,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(session, ByteString.empty)
               .join(pipeToClient))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) =>
               connectReceived.success(Done)
             case Right(Event(cp: Publish, _)) if cp.flags.contains(ControlPacketFlags.DUP) =>
@@ -2012,7 +2012,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(serverSession, ByteString("connection 1"))
               .join(pipeToClient1))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) =>
               connect1Received.success(Done)
             case Right(Event(cp: Subscribe, _)) if cp.topicFilters == subscribe.topicFilters =>
@@ -2075,7 +2075,7 @@ class MqttSessionSpec
             Mqtt
               .serverSessionFlow(serverSession, ByteString("connection 2"))
               .join(pipeToClient2))
-          .wireTap(Sink.foreach[Either[DecodeError, Event[_]]] {
+          .wireTap(Sink.foreach[Either[DecodeError, Event[?]]] {
             case Right(Event(`connect`, _)) =>
               connect2Received.success(Done)
             case Right(Event(cp: Subscribe, _)) if cp.topicFilters == subscribe.topicFilters =>

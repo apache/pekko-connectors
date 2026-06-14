@@ -35,7 +35,7 @@ final class ReadResult[T] @InternalApi private[elasticsearch] (val id: String,
     s"""ReadResult(id=$id,source=$source,version=${version.getOrElse("")})"""
 
   override def equals(other: Any): Boolean = other match {
-    case that: ReadResult[_] =>
+    case that: ReadResult[?] =>
       java.util.Objects.equals(this.id, that.id) &&
       java.util.Objects.equals(this.source, that.source) &&
       java.util.Objects.equals(this.version, that.version)

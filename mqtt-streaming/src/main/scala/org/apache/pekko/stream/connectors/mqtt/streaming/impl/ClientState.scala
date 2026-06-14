@@ -36,7 +36,7 @@ import scala.util.{ Either, Failure, Success }
  */
 @InternalApi private[streaming] object ClientConnector {
 
-  type ConnectData = Option[_]
+  type ConnectData = Option[?]
 
   /*
    * No ACK received - the CONNECT failed
@@ -597,7 +597,7 @@ import scala.util.{ Either, Failure, Success }
  */
 @InternalApi private[streaming] object Subscriber {
 
-  type SubscribeData = Option[_]
+  type SubscribeData = Option[?]
 
   /*
    * No ACK received - the subscription failed
@@ -685,7 +685,7 @@ import scala.util.{ Either, Failure, Success }
    */
   case object UnsubscribeFailed extends Exception with NoStackTrace
 
-  type UnsubscribeData = Option[_]
+  type UnsubscribeData = Option[?]
 
   /*
    * Construct with the starting state

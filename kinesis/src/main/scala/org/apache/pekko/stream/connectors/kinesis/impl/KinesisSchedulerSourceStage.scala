@@ -39,7 +39,7 @@ private[kinesis] object KinesisSchedulerSourceStage {
   final case class NewRecord(cr: CommittableRecord) extends Command
   case object Pump extends Command
   case object Complete extends Command
-  final case class SchedulerShutdown(result: Try[_]) extends Command
+  final case class SchedulerShutdown(result: Try[?]) extends Command
 
 }
 

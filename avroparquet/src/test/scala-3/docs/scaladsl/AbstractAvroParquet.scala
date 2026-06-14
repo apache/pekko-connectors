@@ -13,7 +13,7 @@
 
 package docs.scaladsl
 
-import com.sksamuel.avro4s._
+import com.sksamuel.avro4s.*
 import org.apache.pekko.testkit.TestKit
 import org.scalatest.{ BeforeAndAfterAll, Suite }
 
@@ -32,10 +32,11 @@ trait AbstractAvroParquet extends BeforeAndAfterAll with AbstractAvroParquetBase
   }
 
   private def deleteRecursively(f: File): Boolean = {
-    if (f.isDirectory) f.listFiles match {
-      case null =>
-      case xs   => xs.foreach(deleteRecursively)
-    }
+    if f.isDirectory then
+      f.listFiles match {
+        case null =>
+        case xs   => xs.foreach(deleteRecursively)
+      }
     f.delete()
   }
 }
