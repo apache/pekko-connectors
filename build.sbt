@@ -245,7 +245,6 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
     f.getPath.replace('\\', '/').contains("/pekko-grpc/main/com/google/protobuf")
   },
   Test / fork := true,
-  Test / javaOptions ++= Seq("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED")
 ).dependsOn(googleCommon)
   .enablePlugins(PekkoGrpcPlugin)
 
@@ -302,7 +301,7 @@ lazy val influxdb = pekkoConnectorProject(
   "influxdb",
   Dependencies.InfluxDB,
   Compile / scalacOptions ++= Seq(
-    // JDK 11: method isAccessible in class AccessibleObject is deprecated
+    // project baseline is Java 17: method isAccessible in class AccessibleObject is deprecated
     "-Wconf:cat=deprecation:s"))
 
 lazy val ironmq = pekkoConnectorProject(
@@ -522,7 +521,6 @@ def pekkoConnectorProject(projectId: String,
     .settings(
       name := s"pekko-connectors-$projectId",
       licenses := List(License.Apache2),
-      AutomaticModuleName.settings(s"pekko.stream.connectors.$moduleName"),
       mimaPreviousArtifacts := {
         if (noMimaChecks.contains(moduleName) ||
           (moduleName == "mongodb" && scalaVersion.value.startsWith("3"))) {
