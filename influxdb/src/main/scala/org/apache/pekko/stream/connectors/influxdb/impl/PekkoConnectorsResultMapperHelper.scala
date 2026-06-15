@@ -72,7 +72,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
         val columnName: String = column.name()
         val fieldType: Class[?] = field.getType()
 
-        val isAccessible = field.isAccessible() // deprecated in JDK 11+
+        val isAccessible = field.isAccessible()
         if (!isAccessible) {
           field.setAccessible(true);
         }
@@ -181,7 +181,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     if (value == null) return
     val fieldType = field.getType
     try {
-      val isAccessible = field.isAccessible() // deprecated in JDK 11+
+      val isAccessible = field.isAccessible()
       if (!isAccessible) field.setAccessible(true)
       if (fieldValueModified(fieldType, field, obj, value, precision) || fieldValueForPrimitivesModified(
           fieldType,

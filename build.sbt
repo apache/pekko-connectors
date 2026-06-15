@@ -302,7 +302,7 @@ lazy val influxdb = pekkoConnectorProject(
   "influxdb",
   Dependencies.InfluxDB,
   Compile / scalacOptions ++= Seq(
-    // JDK 11: method isAccessible in class AccessibleObject is deprecated
+    // project baseline is Java 17: method isAccessible in class AccessibleObject is deprecated
     "-Wconf:cat=deprecation:s"))
 
 lazy val ironmq = pekkoConnectorProject(
