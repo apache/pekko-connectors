@@ -55,8 +55,8 @@ private[orientdb] class OrientDbFlowStage[T, C](
 
   sealed abstract class OrientDbLogic extends GraphStageLogic(shape) with InHandler with OutHandler {
 
-    protected var client: ODatabaseSession = _
-    protected var oObjectClient: OObjectDatabaseTx = _
+    protected var client: ODatabaseSession = null
+    protected var oObjectClient: OObjectDatabaseTx = null
 
     override def preStart(): Unit = {
       client = settings.oDatabasePool.acquire()

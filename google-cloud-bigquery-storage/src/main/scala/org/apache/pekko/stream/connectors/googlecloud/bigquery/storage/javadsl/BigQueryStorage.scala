@@ -113,7 +113,7 @@ object BigQueryStorage {
       : Source[(ReadSession.Schema, java.util.List[Source[ReadRowsResponse.Rows, NotUsed]]), CompletionStage[NotUsed]] =
     create(projectId, datasetId, tableId, dataFormat, None, maxNumStreams)
 
-  private[this] def create(
+  private def create(
       projectId: String,
       datasetId: String,
       tableId: String,
@@ -206,7 +206,7 @@ object BigQueryStorage {
       um: Unmarshaller[ByteString, A]): Source[A, CompletionStage[NotUsed]] =
     createMergedStreams(projectId, datasetId, tableId, dataFormat, None, maxNumStreams, um.asScala)
 
-  private[this] def createMergedStreams[A](
+  private def createMergedStreams[A](
       projectId: String,
       datasetId: String,
       tableId: String,

@@ -34,8 +34,8 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
 
   def eventBusEndpoint: String = s"http://localhost:4587"
 
-  implicit var eventBridgeClient: EventBridgeAsyncClient = _
-  var eventBusArn: String = _
+  implicit var eventBridgeClient: EventBridgeAsyncClient = null
+  var eventBusArn: String = null
 
   def createEventBus(): String =
     eventBridgeClient

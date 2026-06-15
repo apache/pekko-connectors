@@ -72,9 +72,9 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
   case class Book(title: String)
   // #define-class
 
-  var orientDB: OrientDB = _
-  var oDatabase: ODatabasePool = _
-  var client: ODatabaseSession = _
+  var orientDB: OrientDB = null
+  var oDatabase: ODatabasePool = null
+  var client: ODatabaseSession = null
 
   override def beforeAll() = {
     orientDB = new OrientDB(url, username, password, OrientDBConfig.defaultConfig())

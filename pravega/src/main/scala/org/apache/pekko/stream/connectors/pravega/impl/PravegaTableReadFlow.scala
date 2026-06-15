@@ -42,8 +42,8 @@ import scala.util.control.NonFatal
   private def in: Inlet[K] = shape.in
   private def out: Outlet[Option[V]] = shape.out
 
-  private var keyValueTableFactory: KeyValueTableFactory = _
-  private var table: KeyValueTable = _
+  private var keyValueTableFactory: KeyValueTableFactory = null
+  private var table: KeyValueTable = null
 
   @volatile
   private var inFlight = 0

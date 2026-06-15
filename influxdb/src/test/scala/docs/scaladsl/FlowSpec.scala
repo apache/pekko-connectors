@@ -47,7 +47,7 @@ class FlowSpec
 
   final val DatabaseName = this.getClass.getSimpleName
 
-  implicit var influxDB: InfluxDB = _
+  implicit var influxDB: InfluxDB = null
 
   override protected def beforeAll(): Unit =
     influxDB = setupConnection(DatabaseName)

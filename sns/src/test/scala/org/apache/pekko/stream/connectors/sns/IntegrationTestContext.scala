@@ -35,8 +35,8 @@ trait IntegrationTestContext extends BeforeAndAfterAll with ScalaFutures {
 
   def snsEndpoint: String = s"http://localhost:4100"
 
-  implicit var snsClient: SnsAsyncClient = _
-  var topicArn: String = _
+  implicit var snsClient: SnsAsyncClient = null
+  var topicArn: String = null
 
   private val topicNumber = new AtomicInteger()
 

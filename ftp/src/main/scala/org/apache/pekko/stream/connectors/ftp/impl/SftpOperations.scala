@@ -191,7 +191,7 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
       }
     }
 
-  private[this] def authPublickey(identity: SftpIdentity)(implicit ssh: SSHClient) = {
+  private def authPublickey(identity: SftpIdentity)(implicit ssh: SSHClient) = {
     def bats(array: Array[Byte]): String = new String(array, StandardCharsets.UTF_8)
 
     val passphrase =

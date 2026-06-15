@@ -48,8 +48,8 @@ private[kinesis] class ShardProcessor(
   // by the AWS KCL Scheduler after the Scheduler run() method has been invoked.
   private val lastRecordSemaphore = new Semaphore(1)
 
-  private var shardData: ShardProcessorData = _
-  private var checkpointer: RecordProcessorCheckpointer = _
+  private var shardData: ShardProcessorData = null
+  private var checkpointer: RecordProcessorCheckpointer = null
   private var shutdown: Option[ShutdownReason] = None
 
   override def initialize(initializationInput: InitializationInput): Unit =

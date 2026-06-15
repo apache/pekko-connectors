@@ -29,7 +29,7 @@ case class AckEnvelope private[jms] (message: jms.Message, private val jmsSessio
 
 case class TxEnvelope private[jms] (message: jms.Message, private val jmsSession: JmsSession) {
 
-  private[this] val commitPromise = Promise[() => Unit]()
+  private val commitPromise = Promise[() => Unit]()
 
   private[jms] val commitFuture: Future[() => Unit] = commitPromise.future
 

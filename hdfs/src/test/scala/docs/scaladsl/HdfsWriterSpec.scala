@@ -41,7 +41,7 @@ class HdfsWriterSpec
     with BeforeAndAfterEach
     with LogCapturing {
 
-  private var hdfsCluster: MiniDFSCluster = _
+  private var hdfsCluster: MiniDFSCluster = null
   private val destination = "/tmp/pekko-connectors/"
 
   implicit val system: ActorSystem = ActorSystem()

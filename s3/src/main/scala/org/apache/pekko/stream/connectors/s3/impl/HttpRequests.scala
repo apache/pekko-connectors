@@ -327,7 +327,7 @@ import scala.xml.NodeSeq
       .withDefaultHeaders(allHeaders)
   }
 
-  private[this] def s3Request(s3Location: S3Location, method: HttpMethod, uriFn: Uri => Uri = identity)(
+  private def s3Request(s3Location: S3Location, method: HttpMethod, uriFn: Uri => Uri = identity)(
       implicit conf: S3Settings): HttpRequest = {
     val loc = s3Location.validate(conf)
     val s3RequestUri = uriFn(requestUri(loc.bucket, Some(loc.key)))
@@ -340,7 +340,7 @@ import scala.xml.NodeSeq
   }
 
   @throws(classOf[IllegalUriException])
-  private[this] def requestAuthority(bucket: String, region: Region)(implicit conf: S3Settings): Authority = {
+  private def requestAuthority(bucket: String, region: Region)(implicit conf: S3Settings): Authority = {
     (conf.endpointUrl, conf.accessStyle) match {
       case (None, PathAccessStyle) =>
         Authority(Uri.Host(s"s3.$region.amazonaws.com"))
@@ -356,7 +356,7 @@ import scala.xml.NodeSeq
     }
   }
 
-  private[this] def requestUri(bucket: String, key: Option[String])(implicit conf: S3Settings): Uri = {
+  private def requestUri(bucket: String, key: Option[String])(implicit conf: S3Settings): Uri = {
     val basePath = conf.accessStyle match {
       case PathAccessStyle =>
         Uri.Path / bucket

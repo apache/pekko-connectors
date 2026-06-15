@@ -58,7 +58,7 @@ private[amqp] final class AmqpRpcFlowStage(writeSettings: AmqpWriteSettings, buf
         private val exchange = settings.exchange.getOrElse("")
         private val routingKey = settings.routingKey.getOrElse("")
         private val queue = mutable.Queue[CommittableReadResult]()
-        private var queueName: String = _
+        private var queueName: String = null
         private var unackedMessages = 0
         private var outstandingMessages = 0
 

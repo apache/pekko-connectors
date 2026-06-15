@@ -51,8 +51,8 @@ import io.pravega.common.util.AsyncIterator
 
   private def out = shape.out
 
-  private var keyValueTableFactory: KeyValueTableFactory = _
-  private var table: KeyValueTable = _
+  private var keyValueTableFactory: KeyValueTableFactory = null
+  private var table: KeyValueTable = null
 
   private val queue = mutable.Queue.empty[TableEntry[V]]
 

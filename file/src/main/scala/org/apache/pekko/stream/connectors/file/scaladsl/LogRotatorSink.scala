@@ -97,7 +97,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
 
   private final class Logic(promise: Promise[Done]) extends GraphStageLogic(shape) {
     val triggerGenerator: T => Option[C] = triggerGeneratorCreator()
-    var sourceOut: SubSourceOutlet[T] = _
+    var sourceOut: SubSourceOutlet[T] = null
     var sinkCompletions: immutable.Seq[Future[R]] = immutable.Seq.empty
     var isFinishing = false
 

@@ -82,9 +82,9 @@ private[google] class JwtSprayJson private (defaultClock: Clock)
       jwtId = safeGetField[String](jsObj, "jti"))
   }
 
-  private[this] def safeRead[A: JsonReader](js: JsValue) =
+  private def safeRead[A: JsonReader](js: JsValue) =
     safeReader[A].read(js).fold(_ => None, a => Option(a))
 
-  private[this] def safeGetField[A: JsonReader](js: JsObject, name: String) =
+  private def safeGetField[A: JsonReader](js: JsObject, name: String) =
     js.fields.get(name).flatMap(safeRead[A])
 }

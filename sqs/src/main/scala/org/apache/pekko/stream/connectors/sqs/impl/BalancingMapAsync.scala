@@ -60,7 +60,7 @@ import scala.util.{ Failure, Success }
     new GraphStageLogic(shape) with InHandler with OutHandler {
 
       lazy val decider = inheritedAttributes.mandatoryAttribute[SupervisionStrategy].decider
-      var buffer: Buffer[Holder[Out]] = _
+      var buffer: Buffer[Holder[Out]] = null
       var parallelism = maxParallelism
 
       private val futureCB = getAsyncCallback[Holder[Out]](holder =>

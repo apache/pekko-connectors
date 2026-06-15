@@ -79,8 +79,8 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
 
     val logic = new FtpGraphStageLogic[ByteString, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
 
-      private[this] var isOpt: Option[InputStream] = None
-      private[this] var readBytesTotal: Long = 0L
+      private var isOpt: Option[InputStream] = None
+      private var readBytesTotal: Long = 0L
 
       setHandler(
         out,
@@ -158,7 +158,7 @@ private[ftp] trait FtpIOSourceStage[FtpClient, S <: RemoteFileSettings]
         matValuePromise.tryFailure(new IOOperationIncompleteException(readBytesTotal, t))
 
       /** BLOCKING I/O READ */
-      private[this] def readChunk() = {
+      private def readChunk() = {
         def read(arr: Array[Byte]) =
           isOpt.flatMap { is =>
             val readBytes = is.read(arr)
@@ -200,8 +200,8 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
 
     val logic = new FtpGraphStageLogic[ByteString, FtpClient, S](shape, ftpLike, connectionSettings, ftpClient) {
 
-      private[this] var osOpt: Option[OutputStream] = None
-      private[this] var writtenBytesTotal: Long = 0L
+      private var osOpt: Option[OutputStream] = None
+      private var writtenBytesTotal: Long = 0L
 
       setHandler(
         in,
@@ -262,7 +262,7 @@ private[ftp] trait FtpIOSinkStage[FtpClient, S <: RemoteFileSettings]
         matValuePromise.tryFailure(new IOOperationIncompleteException(writtenBytesTotal, t))
 
       /** BLOCKING I/O WRITE */
-      private[this] def write(bytes: ByteString) =
+      private def write(bytes: ByteString) =
         osOpt.foreach { os =>
           os.write(bytes.toArray)
           writtenBytesTotal += bytes.size

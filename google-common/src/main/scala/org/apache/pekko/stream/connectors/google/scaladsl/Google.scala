@@ -40,8 +40,9 @@ private[connectors] trait Google {
    * @tparam T the data model for the resource
    * @return a [[scala.concurrent.Future]] containing the unmarshalled response
    */
-  final def singleRequest[T: FromResponseUnmarshaller](
-      request: HttpRequest)(implicit system: ClassicActorSystemProvider, settings: GoogleSettings): Future[T] =
+  final def singleRequest[T](
+      request: HttpRequest)(implicit system: ClassicActorSystemProvider, settings: GoogleSettings,
+      um: FromResponseUnmarshaller[T]): Future[T] =
     GoogleHttp().singleAuthenticatedRequest[T](request)
 
   /**
@@ -64,7 +65,8 @@ private[connectors] trait Google {
    * @tparam Out the data model for the resource
    * @return a [[pekko.stream.scaladsl.Sink]] that materializes a [[scala.concurrent.Future]] containing the unmarshalled resource
    */
-  final def resumableUpload[Out: FromResponseUnmarshaller](request: HttpRequest): Sink[ByteString, Future[Out]] =
+  final def resumableUpload[Out](request: HttpRequest)(
+      implicit um: FromResponseUnmarshaller[Out]): Sink[ByteString, Future[Out]] =
     ResumableUpload[Out](request)
 
 }

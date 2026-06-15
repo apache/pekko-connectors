@@ -69,9 +69,9 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
 
       import shardSettings._
 
-      private[this] var currentShardIterator: String = _
-      private[this] val buffer = mutable.Queue.empty[Record]
-      private[this] var self: StageActor = _
+      private var currentShardIterator: String = null
+      private val buffer = mutable.Queue.empty[Record]
+      private var self: StageActor = null
 
       override def preStart(): Unit = {
         self = getStageActor(awaitingShardIterator)
@@ -144,19 +144,19 @@ private[kinesis] class KinesisSourceStage(shardSettings: ShardSettings, amazonKi
           log.warning("unexpected timer [{}]", other)
       }
 
-      private[this] val handleGetRecords: Try[GetRecordsResponse] => Unit = {
+      private val handleGetRecords: Try[GetRecordsResponse] => Unit = {
         case Failure(exception) => self.ref ! GetRecordsFailure(exception)
         case Success(result)    => self.ref ! GetRecordsSuccess(result)
       }
 
-      private[this] def requestRecords(): Unit =
+      private def requestRecords(): Unit =
         amazonKinesisAsync
           .getRecords(
             GetRecordsRequest.builder().limit(limit).shardIterator(currentShardIterator).build())
           .asScala
           .onComplete(handleGetRecords)(parasitic)
 
-      private[this] def requestShardIterator(): Unit = {
+      private def requestShardIterator(): Unit = {
         val request = Function
           .chain[GetShardIteratorRequest.Builder](
             Seq(

@@ -40,7 +40,7 @@ import scala.concurrent.{ Future, Promise }
   private def in = shape.in
   private def out = shape.out
 
-  private var listener: ActorRef = _
+  private var listener: ActorRef = null
 
   override def preStart(): Unit = {
     implicit val sender: ActorRef = getStageActor(processIncoming).ref

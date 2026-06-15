@@ -25,7 +25,7 @@ import scala.util.{ Failure, Success, Try }
 private[geode] abstract class GeodeSourceStageLogic[V](shape: SourceShape[V], clientCache: ClientCache)
     extends GraphStageLogic(shape) {
 
-  protected var initialResultsIterator: java.util.Iterator[V] = _
+  protected var initialResultsIterator: java.util.Iterator[V] = null
 
   val onConnect: AsyncCallback[Unit]
 

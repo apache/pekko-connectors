@@ -270,8 +270,8 @@ class KinesisSchedulerSourceSpec
 
     private val semaphore = new Semaphore(0)
 
-    var recordProcessor: ShardRecordProcessor = _
-    var otherRecordProcessor: ShardRecordProcessor = _
+    var recordProcessor: ShardRecordProcessor = null
+    var otherRecordProcessor: ShardRecordProcessor = null
     private val schedulerBuilder = { (x: ShardRecordProcessorFactory) =>
       recordProcessor = x.shardRecordProcessor()
       otherRecordProcessor = x.shardRecordProcessor()
@@ -334,7 +334,7 @@ class KinesisSchedulerSourceSpec
     "checkpoint batch of records with same sequence number" in new KinesisSchedulerCheckpointContext {
       val checkpointer: KinesisClientRecord => Unit =
         org.mockito.Mockito.mock(classOf[KinesisClientRecord => Unit])
-      var latestRecord: KinesisClientRecord = _
+      var latestRecord: KinesisClientRecord = null
       val allRecordsPushed: Future[Unit] = Future {
         for (i <- 1 to 3) {
           val clientRecord = org.mockito.Mockito.mock(classOf[KinesisClientRecord])
@@ -370,8 +370,8 @@ class KinesisSchedulerSourceSpec
     "checkpoint batch of records of different shards" in new KinesisSchedulerCheckpointContext {
       val checkpointerShard1: KinesisClientRecord => Unit =
         org.mockito.Mockito.mock(classOf[KinesisClientRecord => Unit])
-      var latestRecordShard1: KinesisClientRecord = _
-      var latestRecordShard2: KinesisClientRecord = _
+      var latestRecordShard1: KinesisClientRecord = null
+      var latestRecordShard2: KinesisClientRecord = null
       val checkpointerShard2: KinesisClientRecord => Unit =
         org.mockito.Mockito.mock(classOf[KinesisClientRecord => Unit])
 

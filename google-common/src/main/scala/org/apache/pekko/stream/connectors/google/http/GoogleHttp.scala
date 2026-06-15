@@ -87,12 +87,13 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
    * If `authenticate = true` adds an Authorization header to each request.
    * Retries the request if the [[FromResponseUnmarshaller]] throws a [[pekko.stream.connectors.google.util.Retry]].
    */
-  def cachedHostConnectionPool[T: FromResponseUnmarshaller](
+  def cachedHostConnectionPool[T](
       host: String,
       port: Int = -1,
       https: Boolean = true,
       authenticate: Boolean = true,
-      parallelism: Int = 1): Flow[HttpRequest, T, Future[HostConnectionPool]] =
+      parallelism: Int = 1)(implicit um: FromResponseUnmarshaller[T])
+      : Flow[HttpRequest, T, Future[HostConnectionPool]] =
     Flow[HttpRequest]
       .map((_, ()))
       .viaMat(cachedHostConnectionPoolWithContext[T, Unit](host, port, https, authenticate, parallelism).asFlow)(
@@ -104,12 +105,13 @@ private[connectors] final class GoogleHttp private (val http: HttpExt) extends A
    * If `authenticate = true` adds an Authorization header to each request.
    * Retries the request if the [[FromResponseUnmarshaller]] throws a [[pekko.stream.connectors.google.util.Retry]].
    */
-  def cachedHostConnectionPoolWithContext[T: FromResponseUnmarshaller, Ctx](
+  def cachedHostConnectionPoolWithContext[T, Ctx](
       host: String,
       port: Int = -1,
       https: Boolean = true,
       authenticate: Boolean = true,
-      parallelism: Int = 1): FlowWithContext[HttpRequest, Ctx, Try[T], Ctx, Future[HostConnectionPool]] =
+      parallelism: Int = 1)(implicit um: FromResponseUnmarshaller[T])
+      : FlowWithContext[HttpRequest, Ctx, Try[T], Ctx, Future[HostConnectionPool]] =
     FlowWithContext.fromTuples {
       Flow.fromMaterializer { (mat, attr) =>
         implicit val settings: GoogleSettings = GoogleAttributes.resolveSettings(mat, attr)

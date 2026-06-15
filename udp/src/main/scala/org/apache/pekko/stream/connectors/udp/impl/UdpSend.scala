@@ -38,7 +38,7 @@ import scala.collection.immutable.Iterable
   private def in = shape.in
   private def out = shape.out
 
-  private var simpleSender: ActorRef = _
+  private var simpleSender: ActorRef = null
 
   override def preStart(): Unit = {
     getStageActor(processIncoming)
