@@ -108,10 +108,11 @@ lazy val `pekko-connectors` = project
     // Therefore some versions are excluded here.
     ScalaUnidoc / unidoc / fullClasspath := {
       (ScalaUnidoc / unidoc / fullClasspath).value
-        .filterNot(_.data.getAbsolutePath.contains("protobuf-java-2.5.0.jar"))
+        .filterNot(_.data.getAbsolutePath.contains("protobuf-java-2."))
+        .filterNot(_.data.getAbsolutePath.contains("protobuf-java-3."))
+        .filterNot(_.data.getAbsolutePath.contains("protobuf-java-4.2"))
         .filterNot(_.data.getAbsolutePath.contains("guava-28.1-android.jar"))
         .filterNot(_.data.getAbsolutePath.contains("commons-net-3.1.jar"))
-        .filterNot(_.data.getAbsolutePath.contains("protobuf-java-2.6.1.jar"))
     },
     ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject
     -- inProjects(
