@@ -25,6 +25,7 @@ import pekko.stream.stage._
 import pekko.util.OptionVal
 
 import javax.jms
+import scala.annotation.nowarn
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NoStackTrace
@@ -74,6 +75,7 @@ private[jms] final class JmsProducerStage[E <: JmsEnvelope[PassThrough], PassThr
     (logic, logic.status)
   }
 
+  @nowarn("msg=inferred structural type")
   private def producerLogic(inheritedAttributes: Attributes) =
     new TimerGraphStageLogic(shape) with JmsProducerConnector with GraphStageCompanion with StageLogging {
 

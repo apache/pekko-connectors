@@ -25,8 +25,6 @@ import scala.concurrent.{ Await, Future }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{ Failure, Success, Try }
 
-import scala.language.postfixOps
-
 private[impl] trait HBaseCapabilities { this: StageLogging =>
 
   def twr[A <: Closeable, B](resource: A)(doWork: A => B): Try[B] =
