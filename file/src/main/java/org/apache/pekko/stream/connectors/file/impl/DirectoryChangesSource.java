@@ -95,6 +95,7 @@ public final class DirectoryChangesSource<T> extends GraphStage<SourceShape<T>> 
     return new TimerGraphStageLogic(shape) {
       private final Queue<T> buffer = new ArrayDeque<>();
       private final WatchService service = directoryPath.getFileSystem().newWatchService();
+      @SuppressWarnings({"deprecation", "removal"})
       private final WatchKey watchKey =
           directoryPath.register(
               service,

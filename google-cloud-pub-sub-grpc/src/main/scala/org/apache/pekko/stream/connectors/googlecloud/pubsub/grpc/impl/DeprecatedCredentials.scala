@@ -17,6 +17,7 @@ import org.apache.pekko.annotation.InternalApi
 import io.grpc.{ CallCredentials, Metadata }
 
 import java.util.concurrent.Executor
+import scala.annotation.nowarn
 
 /**
  * Marker class indicating that credentials should be resolved via GoogleSettings.
@@ -29,6 +30,7 @@ private[grpc] final case class DeprecatedCredentials(underlying: CallCredentials
       applier: CallCredentials.MetadataApplier): Unit =
     underlying.applyRequestMetadata(requestInfo, appExecutor, applier)
 
+  @nowarn("msg=is deprecated")
   override def thisUsesUnstableApi(): Unit = underlying.thisUsesUnstableApi()
 }
 

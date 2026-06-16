@@ -334,14 +334,6 @@ object S3 {
       contentLength: Long): Source[ObjectMetadata, NotUsed] =
     putObject(bucket, key, data, contentLength, ContentTypes.APPLICATION_OCTET_STREAM)
 
-  private def toJava[M](
-      download: pekko.stream.scaladsl.Source[Option[
-          (pekko.stream.scaladsl.Source[ByteString, M], ObjectMetadata)], NotUsed])
-      : Source[Optional[JPair[Source[ByteString, M], ObjectMetadata]], NotUsed] =
-    download.map {
-      _.map { case (stream, meta) => JPair(stream.asJava, meta) }.toJava
-    }.asJava
-
   /**
    * Gets a S3 Object
    *

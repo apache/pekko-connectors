@@ -160,10 +160,10 @@ import scala.concurrent.ExecutionContext.parasitic
         implicit val um: Unmarshaller[HttpResponse, StorageObject] = Unmarshaller.withMaterializer {
           implicit ec => implicit mat =>
             {
-              case HttpResponse(status, _, entity, _) if status.isSuccess() =>
-                Unmarshal(entity).to[StorageObject]
-              case HttpResponse(status, _, entity, _) =>
-                Unmarshal(entity).to[String].flatMap { errorString =>
+              case HttpResponse(status, _, responseEntity, _) if status.isSuccess() =>
+                Unmarshal(responseEntity).to[StorageObject]
+              case HttpResponse(status, _, responseEntity, _) =>
+                Unmarshal(responseEntity).to[String].flatMap { errorString =>
                   Future.failed(new RuntimeException(s"Uploading part failed with status $status: $errorString"))
                 }
             }: PartialFunction[HttpResponse, Future[StorageObject]]

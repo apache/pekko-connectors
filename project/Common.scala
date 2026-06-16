@@ -43,7 +43,7 @@ object Common extends AutoPlugin {
     fatalWarnings := true,
     mimaReportSignatureProblems := true,
     // Ignore unused keys which affect documentation
-    excludeLintKeys ++= Set(scmInfo, projectInfoVersion, autoAPIMappings))
+    excludeLintKeys ++= Set(scmInfo, projectInfoVersion, autoAPIMappings, mimaReportSignatureProblems))
 
   val packagesToSkip = "org.apache.pekko.pattern:" + // for some reason Scaladoc creates this
     "org.mongodb.scala:" + // this one is a mystery as well

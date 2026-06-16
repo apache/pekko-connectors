@@ -20,6 +20,8 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import pekko.util.ByteString
 
+import scala.annotation.nowarn
+
 /**
  * Internal Api
  *
@@ -42,6 +44,7 @@ import pekko.util.ByteString
 
   private case object NewStream
 
+  @nowarn("msg=inferred structural type")
   private def insertMarkers[C](minChunkSize: Long) =
     new GraphStage[FlowShape[(ByteString, C), Any]] {
       val in = Inlet[(ByteString, C)]("SplitAfterSize.in")
