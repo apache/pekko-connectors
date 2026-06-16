@@ -398,6 +398,7 @@ lazy val docs = project
     publish / skip := true,
     pekkoParadoxGithub := Some("https://github.com/apache/pekko-connectors"),
     previewPath := (Paradox / siteSubdirName).value,
+    Global / excludeLintKeys += previewPath,
     Preprocess / siteSubdirName := s"api/pekko-connectors/${projectInfoVersion.value}",
     Preprocess / sourceDirectory := (LocalRootProject / ScalaUnidoc / unidoc / target).value,
     Preprocess / preprocessRules := Seq(
