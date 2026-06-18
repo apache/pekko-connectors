@@ -76,7 +76,9 @@ object Common extends AutoPlugin {
         "-Wconf:msg=Ignoring \\[this\\] qualifier:s",
         "-Wconf:msg=trait App in package scala is deprecated:s",
         "-Wconf:msg=pattern binding uses refutable extractor:s") ++
-        (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 < 9)) Seq("-Yfuture-lazy-vals", "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s") else Seq.empty)
+      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 < 9))
+         Seq("-Yfuture-lazy-vals", "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s")
+       else Seq.empty)
       else Seq(
         "-Xlint",
         "-Ywarn-dead-code",
