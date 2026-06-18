@@ -127,7 +127,8 @@ public class JavaDslTest {
     source.runWith(sink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
 
     Assert.assertNull(
-        queue.retrieveMessage()); // There should be no message because of initial visibility timeout
+        queue
+            .retrieveMessage()); // There should be no message because of initial visibility timeout
   }
 
   @Test
