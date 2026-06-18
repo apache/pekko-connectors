@@ -1218,7 +1218,7 @@ object DecodeErrorOrEvent {
    * JAVA API
    *
    * Return a Class object representing the carry's type. Java's
-   * `.class` method does not do this, and there are many occassions
+   * `.class` method does not do this, and there are many occasions
    * where the generic type needs to be retained.
    * @tparam A The type of the carry
    * @return The `DecodeErrorOrEvent` class including the carry type

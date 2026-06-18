@@ -4,7 +4,7 @@ Local:                              # Environment name that can be passed on the
 # you can now use either 1 port for both sns and sqs or alternatively you can comment out Port and use SqsPort + SnsPort for compatibilyt with
 # yopa and (fage-sns + face-sqs).  If both ways are in the config file on the one "Port" will be used by GoAws
   Port: 4100                        # port to listen on.
-# SqsPort: 9324                     # alterante Sqs Port
+# SqsPort: 9324                     # alternate Sqs Port
 # SnsPort: 9292                     # alternate Sns Port
   Region: local-01
   LogMessages: true                 # Log messages (true/false)

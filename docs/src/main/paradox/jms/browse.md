@@ -46,7 +46,7 @@ Java
 : @@snip [snip](/jms/src/test/java/docs/javadsl/JmsSettingsTest.java) { #consumer-settings }
 
 
-The Apache Pekko Connectors JMS browse soruce is configured via default settings in the [HOCON](https://github.com/lightbend/config#using-hocon-the-json-superset) config file section `pekko.connectors.jms.browse` in your `application.conf`, and settings may be tweaked in the code using the `withXyz` methods. On the second tab the section from `reference.conf` shows the structure to use for configuring multiple set-ups.
+The Apache Pekko Connectors JMS browse source is configured via default settings in the [HOCON](https://github.com/lightbend/config#using-hocon-the-json-superset) config file section `pekko.connectors.jms.browse` in your `application.conf`, and settings may be tweaked in the code using the `withXyz` methods. On the second tab the section from `reference.conf` shows the structure to use for configuring multiple set-ups.
 
 Table
 : Setting               | Description                                                          | Default Value       | 

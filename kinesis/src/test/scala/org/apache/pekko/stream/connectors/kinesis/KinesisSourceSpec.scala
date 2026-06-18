@@ -64,7 +64,7 @@ class KinesisSourceSpec extends AnyWordSpec with Matchers with KinesisMock with 
       }
     }
 
-    "poll for records with mutliple requests" in assertAllStagesStopped {
+    "poll for records with multiple requests" in assertAllStagesStopped {
       new KinesisSpecContext with WithGetShardIteratorSuccess with WithGetRecordsSuccess {
         override def shards: util.List[Shard] = util.Arrays.asList(Shard.builder().shardId("id").build())
 

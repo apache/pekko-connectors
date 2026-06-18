@@ -106,7 +106,7 @@ All Apache Pekko APIs aim to evolve in a binary compatible way within minor vers
 
 1. To generate a case class replacement, consider using [Kaze Class](https://github.com/ktoso/kaze-class)
 
-See [Binary Compatibilty Rules](https://pekko.apache.org/docs/pekko/current/common/binary-compatibility-rules.html) in the Apache Pekko documentation.
+See [Binary Compatibility Rules](https://pekko.apache.org/docs/pekko/current/common/binary-compatibility-rules.html) in the Apache Pekko documentation.
 
 See [Binary Compatibility for library authors](https://docs.scala-lang.org/overviews/core/binary-compatibility-for-library-authors.html)
 

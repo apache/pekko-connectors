@@ -141,7 +141,7 @@ import scala.util.{ Failure, Success, Try }
   /**
    * There is an exception for the ListPartsApi when you reach the last page of pagination, typically the
    * continuationToken (in this case `nextPartNumberMarker`) would be `None`. However specifically for ListPartResult
-   * on the last page the `nextPartNumberMarker` is 0. Ontop of this the `parts` will be empty so we use these
+   * on the last page the `nextPartNumberMarker` is 0. On top of this the `parts` will be empty so we use these
    * conditions to check if we are on the last page.
    */
   def continuationToken: Option[Int] =
