@@ -72,9 +72,9 @@ public class SlickTest {
   private static final Function<User, String> insertUser =
       (user) ->
           "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES ("
-              + user.id
+              + user.id()
               + ", '"
-              + user.name
+              + user.name()
               + "')";
 
   private static final Function2<User, Connection, PreparedStatement> insertUserPS =
@@ -82,8 +82,8 @@ public class SlickTest {
         PreparedStatement statement =
             connection.prepareStatement(
                 "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?, ?)");
-        statement.setInt(1, user.id);
-        statement.setString(2, user.name);
+        statement.setInt(1, user.id());
+        statement.setString(2, user.name());
         return statement;
       };
 

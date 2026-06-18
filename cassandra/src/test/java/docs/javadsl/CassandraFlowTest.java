@@ -39,7 +39,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -191,32 +190,7 @@ public class CassandraFlowTest {
     assertThat(new ArrayList<>(rows), hasItems(persons.stream().map(p -> p.first()).toArray()));
   }
 
-  public static final class Person {
-    public final int id;
-    public final String name;
-    public final String city;
-
-    public Person(int id, String name, String city) {
-      this.id = id;
-      this.name = name;
-      this.city = city;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Person that = (Person) o;
-      return Objects.equals(id, that.id)
-          && Objects.equals(name, that.name)
-          && Objects.equals(city, that.city);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(id, name, city);
-    }
-  }
+  public record Person(int id, String name, String city) {}
 
   public static final class AckHandle {
     public CompletionStage<Done> ack() {

@@ -50,8 +50,8 @@ public class DocSnippetSink {
                           connection.prepareStatement(
                               "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?,"
                                   + " ?)");
-                      statement.setInt(1, user.id);
-                      statement.setString(2, user.name);
+                      statement.setInt(1, user.id());
+                      statement.setString(2, user.name());
                       return statement;
                     }),
                 system);
