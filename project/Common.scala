@@ -65,7 +65,6 @@ object Common extends AutoPlugin {
       "-release:17"),
     scalacOptions ++= {
       if (isScala3.value) Seq(
-        "-Yfuture-lazy-vals",
         "-Wconf:msg=Implicit parameters should be provided with a `using` clause:s",
         "-Wconf:msg=is deprecated for wildcard arguments of types:s",
         "-Wconf:msg=The trailing ` _` for eta-expansion is unnecessary:s",
@@ -76,8 +75,10 @@ object Common extends AutoPlugin {
         "-Wconf:msg=auto insertion will be deprecated:s",
         "-Wconf:msg=Ignoring \\[this\\] qualifier:s",
         "-Wconf:msg=trait App in package scala is deprecated:s",
-        "-Wconf:msg=pattern binding uses refutable extractor:s",
-        "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s")
+        "-Wconf:msg=pattern binding uses refutable extractor:s") ++
+      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 < 9))
+         Seq("-Yfuture-lazy-vals", "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s")
+       else Seq.empty)
       else Seq(
         "-Xlint",
         "-Ywarn-dead-code",
