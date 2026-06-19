@@ -53,8 +53,8 @@ public class DocSnippetFlow {
                           connection.prepareStatement(
                               "INSERT INTO PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS VALUES (?,"
                                   + " ?)");
-                      statement.setInt(1, user.id);
-                      statement.setString(2, user.name);
+                      statement.setInt(1, user.id());
+                      statement.setString(2, user.name());
                       return statement;
                     }))
             .log("nr-of-updated-rows")
