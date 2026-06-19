@@ -17,7 +17,7 @@ With OrientDB Connector, it appears that the latest OrientDB client only works w
 
 ### Fixes
 
-* Properly propogate GoogleSettings in addStandardQuery ([PR1026](https://github.com/apache/pekko-connectors/pull/1026)).
+* Properly propagate GoogleSettings in addStandardQuery ([PR1026](https://github.com/apache/pekko-connectors/pull/1026)).
 * Fix ClassCastException in Google Cloud StorageObject ([PR1031](https://github.com/apache/pekko-connectors/pull/1031)).
 * Fix metadata not working with GCStorage ([PR1045](https://github.com/apache/pekko-connectors/pull/1045)).
 

@@ -212,7 +212,7 @@ trait GCStorageStreamIntegrationSpec
       bs.futureValue shouldBe content
     }
 
-    "get a None when downloading a non extisting file" in {
+    "get a None when downloading a non existing file" in {
       val fileName = testFileName("non-existing-file")
       val download = GCStorageStream
         .download(bucket, fileName)

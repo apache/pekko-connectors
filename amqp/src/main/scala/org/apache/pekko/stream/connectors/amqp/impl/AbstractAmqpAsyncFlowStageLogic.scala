@@ -72,7 +72,7 @@ import scala.concurrent.Promise
     val callback = getAsyncCallback[(DeliveryTag, Boolean)] {
       case (tag: DeliveryTag, multiple: Boolean) => confirmCallback(tag, multiple)
     }
-    new ConfirmCallback { // cant use function literal because it doesn't work with 2.11
+    new ConfirmCallback { // can't use function literal because it doesn't work with 2.11
       override def handle(tag: DeliveryTag, multiple: Boolean): Unit = callback.invoke((tag, multiple))
     }
   }

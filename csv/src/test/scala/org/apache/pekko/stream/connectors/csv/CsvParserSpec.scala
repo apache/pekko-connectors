@@ -230,7 +230,7 @@ class CsvParserSpec extends AnyWordSpec with Matchers with OptionValues with Log
       splitInput("A,B\\", "\\", List("A", "B\\"))
     }
 
-    "handle escaping withing quotes, split over two inputs" in {
+    "handle escaping within quotes, split over two inputs" in {
       splitInput("\"\\", "\\A\",B", List("\\A", "B"))
       splitInput("\"A\\", "\\A\",B", List("A\\A", "B"))
       splitInput("A,\"\\", "\\B\"", List("A", "\\B"))

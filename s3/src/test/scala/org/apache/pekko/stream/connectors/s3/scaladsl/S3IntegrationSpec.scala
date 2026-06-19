@@ -555,7 +555,7 @@ trait S3IntegrationSpec
 
       val results =
         for {
-          // Clean the bucket just incase there is residual data in there
+          // Clean the bucket just in case there is residual data in there
           _ <- S3
             .deleteBucketContents(bucketWithVersioning, deleteAllVersions = true)
             .withAttributes(attributes)
@@ -703,7 +703,7 @@ trait S3IntegrationSpec
    * Creates a `List` of `ByteString` where the size of each ByteString is guaranteed to be at least `S3.MinChunkSize`
    * in size.
    *
-   * This is useful for tests that deal with multipart uploads, since S3 persists a part everytime it receives
+   * This is useful for tests that deal with multipart uploads, since S3 persists a part every time it receives
    * `S3.MinChunkSize` bytes
    * @param numberOfChunks The number of chunks to create
    * @return A List of `ByteString` where each element is at least `S3.MinChunkSize` in size
@@ -934,7 +934,7 @@ trait S3IntegrationSpec
    * Creates a `List` of `List[(ByteString, BigInt)]` where the accumulated size of each ByteString in the list is
    * guaranteed to be at least `S3.MinChunkSize` in size.
    *
-   * This is useful for tests that deal with multipart uploads, since S3 persists a part everytime it receives
+   * This is useful for tests that deal with multipart uploads, since S3 persists a part every time it receives
    * `S3.MinChunkSize` bytes. Unlike `createStringCollectionWithMinChunkSizeRec` this version also adds an index
    * to each individual `ByteString` which is helpful when dealing with testing for context
    * @param numberOfChunks The number of chunks to create

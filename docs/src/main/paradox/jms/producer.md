@@ -163,7 +163,7 @@ Java
 
 There are two implementations: One envelope type containing a messages to send to Jms, and one
 envelope type containing only values to pass through. This allows messages to flow without producing any new messages 
-to Jms. This is primarily useful when committing offsets back to Kakfa, or when acknowledging Jms messages after sending
+to Jms. This is primarily useful when committing offsets back to Kafka, or when acknowledging Jms messages after sending
 the outcome of processing them back to Jms.
 
 Scala
@@ -228,7 +228,7 @@ With the default settings, we'll see retries after 100ms, 400ms, 900ms pauses, u
 
 Consumers, producers and browsers try to reconnect with the same retry characteristics if a connection fails mid-stream.
 
-All JMS settings support setting the `connectionRetrySettings` field using `.withConnectionRetrySettings(retrySettings)` on the given settings. The followings show how to create `ConnectionRetrySettings`:
+All JMS settings support setting the `connectionRetrySettings` field using `.withConnectionRetrySettings(retrySettings)` on the given settings. The following show how to create `ConnectionRetrySettings`:
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsSettingsSpec.scala) { #retry-settings-case-class }
@@ -258,7 +258,7 @@ The retry time is calculated by:
 
 With the default settings, we'll see retries after 20ms, 57ms, 104ms pauses, until the pauses reach 500 ms and will stay with 500 ms intervals for any subsequent retries.
 
-JMS producer settings support configuring retries by using `.withSendRetrySettings(retrySettings)`. The followings show how to create `SendRetrySettings`:
+JMS producer settings support configuring retries by using `.withSendRetrySettings(retrySettings)`. The following show how to create `SendRetrySettings`:
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsSettingsSpec.scala) { #send-retry-settings }
