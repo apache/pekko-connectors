@@ -39,7 +39,7 @@ class MessageAttributeNameSpec extends AnyFlatSpec with Matchers with LogCapturi
       MessageAttributeName(
         "A.really.really.long.attribute.name.that.is.longer.than.what.is.allowed.256.characters.are.allowed." +
         "however.they.cannot.contain.anything.other.than.alphanumerics.hyphens.underscores.and.periods.though" +
-        "you.can't.have.more.than.one.consecutive.period.they.are.also.case.sensitive")
+        "you.cannot.have.more.than.one.consecutive.period.they.are.also.case.sensitive")
     }
   }
   it should "reject names with multiple sequential periods" in {
