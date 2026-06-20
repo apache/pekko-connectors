@@ -353,9 +353,9 @@ object Dependencies {
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
         "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "10.0.0.0" % Test,
-        "org.apache.activemq" % "artemis-server" % artemisVersion % Test,
-        "org.apache.activemq" % "artemis-jakarta-client" % artemisVersion % Test,
-        "org.apache.activemq" % "artemis-junit" % artemisVersion % Test,
+        "org.apache.artemis" % "artemis-server" % artemisVersion % Test,
+        "org.apache.artemis" % "artemis-jakarta-client" % artemisVersion % Test,
+        "org.apache.artemis" % "artemis-junit" % artemisVersion % Test,
         "com.github.pjfanning" % "jakartamswrapper" % "0.1.0" % Test) ++ Mockito)
   }
 
