@@ -63,7 +63,7 @@ object Dependencies {
   val scalaTestMockitoVersion = s"$ScalaTestVersion.0"
 
   val CouchbaseVersion = "2.7.23"
-  val Couchbase3Version = "3.6.0"
+  val Couchbase3Version = "3.6.4"
   val CouchbaseVersionForDocs = "2.7"
 
   val GoogleAuthVersion = "1.48.0"
