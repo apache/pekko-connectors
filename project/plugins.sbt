@@ -34,3 +34,6 @@ addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0-M2")
 addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.8.0")
 // Run JUnit 5 tests with sbt
 addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.19.0")
+
+// https://eed3si9n.com/reducing-scaladoc-file-size-with-sbt-salad-days/
+addSbtPlugin("com.eed3si9n" % "sbt-salad-days" % "0.1.0")
