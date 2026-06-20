@@ -203,8 +203,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.17.1",
       "org.apache.avro" % "avro" % AvroVersion,
-      ("org.apache.hadoop" % "hadoop-client" % "3.3.6" % Test).exclude("log4j", "log4j"),
-      ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-client" % "3.5.0" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-common" % "3.5.0" % Test).exclude("log4j", "log4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.specs2" %% "specs2-core" % "4.23.0" % Test,
@@ -316,7 +316,7 @@ object Dependencies {
         "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
   }
 
-  val HadoopVersion = "3.3.6"
+  val HadoopVersion = "3.5.0"
   val Hdfs = Seq(
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
