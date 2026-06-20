@@ -348,7 +348,7 @@ object Dependencies {
       "io.circe" %% "circe-jawn" % "0.14.15"))
 
   val JakartaMs = {
-    val artemisVersion = "2.42.0"
+    val artemisVersion = "2.54.0"
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
