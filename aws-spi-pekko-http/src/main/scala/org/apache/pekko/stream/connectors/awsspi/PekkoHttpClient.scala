@@ -17,6 +17,7 @@
 
 package org.apache.pekko.stream.connectors.awsspi
 
+import java.util.Locale
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -149,7 +150,7 @@ object PekkoHttpClient {
         }
         // skip content-length as it will be managed by pekko-http in the entity, but capture its value
         // so we can use it to build a fixed-length entity, preventing a fallback to chunked transfer encoding
-        if (`Content-Length`.lowercaseName == headerName.toLowerCase)
+        if (`Content-Length`.lowercaseName == headerName.toLowerCase(Locale.ROOT))
           (ctHeader, hdrs, Some(headerValue.get(0).toLong))
         else {
           HttpHeader.parse(headerName, headerValue.get(0)) match {
