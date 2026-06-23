@@ -24,6 +24,20 @@ REPO="pekko-test"
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO}/gke-auth-test:latest"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+STAGING="${SCRIPT_DIR}/staging"
+
+# Run cleanup unconditionally on exit (success, failure, or interrupt). Without this trap,
+# a script failure between the "Building" step and the "Cleaning up" step at the bottom
+# leaves GkeAuthTest.scala / GkeFullFeatureTest.scala leaked into src/main/scala/.../gke/
+# and a populated staging/ directory.
+cleanup() {
+  rm -rf "${STAGING}"
+  rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/GkeAuthTest.scala"
+  rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/GkeFullFeatureTest.scala"
+  rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/resources/gke-application.conf"
+  rmdir "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke" 2>/dev/null || true
+}
+trap cleanup EXIT
 
 echo "=== Creating Artifact Registry repo (if needed) ==="
 gcloud artifacts repositories create "${REPO}" \
@@ -51,8 +65,7 @@ echo "=== Packaging ==="
 FULL_CP=$(sbt --error "print google-cloud-pub-sub-grpc/fullClasspath" | tr ',' '\n' | sed 's/.*Attributed(\(.*\))/\1/')
 CLASSES_DIR=$(sbt --error "print google-cloud-pub-sub-grpc/classDirectory" | tr -d '[:space:]')
 
-# Create staging directory
-STAGING="${SCRIPT_DIR}/staging"
+# Create staging directory (already declared at the top of the script for the cleanup trap)
 rm -rf "${STAGING}"
 mkdir -p "${STAGING}/lib"
 
@@ -94,10 +107,5 @@ docker build -t "${IMAGE}" "${STAGING}"
 echo "=== Pushing to Artifact Registry ==="
 docker push "${IMAGE}"
 
-echo "=== Cleaning up ==="
-rm -rf "${STAGING}"
-rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/GkeAuthTest.scala"
-rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/scala/org/apache/pekko/stream/connectors/googlecloud/pubsub/grpc/gke/GkeFullFeatureTest.scala"
-rm -f "${ROOT_DIR}/google-cloud-pub-sub-grpc/src/main/resources/gke-application.conf"
-
 echo "=== Done: ${IMAGE} ==="
+# Cleanup runs from the EXIT trap declared at the top of this script.

@@ -16,7 +16,7 @@ import java.util.logging.{ Level, Logger }
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, Cancellable }
 import pekko.stream.{ DelayOverflowStrategy, RestartSettings }
-import pekko.stream.connectors.googlecloud.pubsub.grpc.FlowControl
+import pekko.stream.connectors.googlecloud.pubsub.grpc.{ AckDeadline, FlowControl }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.GooglePubSub
 import pekko.stream.scaladsl.{ Sink, Source }
 import com.google.protobuf.ByteString
@@ -119,16 +119,22 @@ object ExampleApp {
       maxBackoff = 10.seconds,
       randomFactor = 0.2)
 
-    GooglePubSub
-      .subscribe(subscribe(projectId, sub), 1.second, restartSettings)
-      .via(GooglePubSub.autoExtendAckDeadlines(subscriptionFqrs, 3.seconds, 30))
+    // GooglePubSub.subscriber bundles subscribe + restart + autoExtend into one resource. The
+    // composition is correct by construction: tracking state survives reconnect, the deadline
+    // tracker pulls eagerly from the gRPC stream so backpressure on the processing stage
+    // doesn't delay tracking, and close() is called automatically when the source completes.
+    val subscriber = GooglePubSub.subscriber(
+      request = subscribe(projectId, sub),
+      pollInterval = 1.second,
+      ackDeadline = AckDeadline.Fixed(extensionInterval = 3.seconds, deadlineSeconds = 30),
+      restartSettings = Some(restartSettings))
+
+    subscriber.source
       .map { msg =>
         println(msg)
         AcknowledgeRequest(subscriptionFqrs, Seq(msg.ackId))
       }
-      .to(GooglePubSub.acknowledge(parallelism = 1))
-      .mapMaterializedValue(Future.successful(_))
-      .run()
+      .runWith(subscriber.acknowledge(parallelism = 1))
   }
 
   /**

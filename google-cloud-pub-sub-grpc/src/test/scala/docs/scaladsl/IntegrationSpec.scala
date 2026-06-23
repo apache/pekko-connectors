@@ -661,6 +661,85 @@ class IntegrationSpec
 
       Source.single(PublishRequest()).via(publishFlow).to(Sink.ignore)
     }
+
+    "Subscriber resource: end-to-end with all bug fixes + composition guarantees" in {
+      // Exercises the new high-level GooglePubSub.subscriber(...) against real Pub/Sub:
+      //   - sets maxOutstandingMessages on the initial StreamingPullRequest (bug 2 fix:
+      //     subsequent requests must not echo this field)
+      //   - slow per-message processing forces deadlines to age inside the eager-pull
+      //     tracker (bug 1 fix: tracking happens on receipt, not on push downstream)
+      //   - small FlowControl limit verifies the rewritten gate counts on receipt
+      //     (bug 3 fix)
+      //   - asserts every published message is received exactly once with no duplicates
+      import pekko.stream.RestartSettings
+      import pekko.stream.connectors.googlecloud.pubsub.grpc.{ AckDeadline, FlowControl }
+
+      val projectId = "pekko-connectors"
+      val topic = "simpleTopic"
+      val subscription = "simpleSubscription"
+      val topicFqrs = s"projects/$projectId/topics/$topic"
+      val subFqrs = s"projects/$projectId/subscriptions/$subscription"
+
+      val messageCount = 10
+      val maxOutstanding = 3
+      val processingDelay = 6.seconds
+      val testPrefix = s"subscriber-resource-${System.nanoTime()}"
+      val messages = (1 to messageCount).map(i =>
+        PubsubMessage().withData(ByteString.copyFromUtf8(s"$testPrefix-$i")))
+
+      // Publish the batch
+      Source
+        .single(PublishRequest(topicFqrs, messages))
+        .via(GooglePubSub.publish(parallelism = 1))
+        .runWith(Sink.head)
+        .futureValue(timeout(30.seconds))
+
+      val flowControl = FlowControl(maxOutstandingMessages = maxOutstanding.toLong)
+      @volatile var maxObserved = 0L
+
+      // Initial request carries BOTH stream ack deadline AND maxOutstandingMessages.
+      // Pre-bug-2-fix this would fail on the first keepalive tick with INVALID_ARGUMENT.
+      val request = StreamingPullRequest(subFqrs)
+        .withStreamAckDeadlineSeconds(15)
+        .withMaxOutstandingMessages(maxOutstanding.toLong)
+
+      val restartSettings = RestartSettings(1.second, 10.seconds, 0.2).withMaxRestarts(3, 1.minute)
+
+      val subscriber = GooglePubSub.subscriber(
+        request = request,
+        pollInterval = 1.second,
+        ackDeadline = AckDeadline.Fixed(extensionInterval = 5.seconds, deadlineSeconds = 30),
+        restartSettings = Some(restartSettings),
+        flowControl = Some(flowControl))
+
+      try {
+        val received = subscriber.source
+          .filter(_.message.exists(_.data.toStringUtf8.startsWith(testPrefix)))
+          .take(messageCount)
+          .mapAsync(parallelism = 2) { msg =>
+            val current = flowControl.outstandingCount
+            synchronized { if (current > maxObserved) maxObserved = current }
+            // Slow processing forces autoExtend to actually fire while messages wait.
+            pekko.pattern.after(processingDelay)(Future.successful(msg))
+          }
+          .map(msg => (msg.message.map(_.data.toStringUtf8).getOrElse(""), msg.ackId))
+          .alsoTo(
+            Flow[(String, String)]
+              .map { case (_, ackId) => AcknowledgeRequest(subFqrs, Seq(ackId)) }
+              .to(subscriber.acknowledge(parallelism = 1)))
+          .runWith(Sink.seq)
+
+        val msgs = received.futureValue(timeout(5.minutes))
+        val payloads = msgs.map(_._1).toSet
+
+        msgs should have size messageCount.toLong
+        payloads.size shouldBe messageCount // no duplicates
+        maxObserved should be <= maxOutstanding.toLong
+        maxObserved should be >= 1L
+      } finally {
+        subscriber.close().futureValue(timeout(10.seconds))
+      }
+    }
   }
 
   override def afterAll() =

@@ -21,6 +21,7 @@ import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.stream.connectors.googlecloud.pubsub.grpc.{ AckDeadlineExtender, FlowControl }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GooglePubSub, GrpcSubscriber, PubSubAttributes }
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub._
@@ -30,6 +31,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import scala.concurrent.{ Future, Promise }
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
+
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
@@ -65,6 +67,16 @@ class AutoExtendAckDeadlinesSpec
     override def modifyAckDeadline(
         in: ModifyAckDeadlineRequest): Future[com.google.protobuf.empty.Empty] =
       Future.successful(com.google.protobuf.empty.Empty())
+  }
+
+  /** Stub that captures every modifyAckDeadline request for inspection. */
+  class CapturingClient(captured: ConcurrentLinkedQueue[ModifyAckDeadlineRequest])
+      extends TestSubscriberClientBase {
+    override def modifyAckDeadline(
+        in: ModifyAckDeadlineRequest): Future[com.google.protobuf.empty.Empty] = {
+      captured.add(in)
+      Future.successful(com.google.protobuf.empty.Empty())
+    }
   }
 
   "autoExtendAckDeadlines (fixed deadline)" should {
@@ -111,6 +123,119 @@ class AutoExtendAckDeadlinesSpec
 
       result.futureValue should have size 3
       result.futureValue.map(_.ackId) shouldBe Seq("1", "2", "3")
+    }
+
+    "track all in-flight messages eagerly even when downstream is backpressured" in {
+      // Regression test: with a plain `.map` tracker, only the one message held by mapAsync(1)
+      // would be tracked at the first tick. The eager-pull stage must track all buffered
+      // messages so the first ticker tick extends every in-flight ackId.
+      val captured = new ConcurrentLinkedQueue[ModifyAckDeadlineRequest]()
+      val testSubscriber = new GrpcSubscriber(new CapturingClient(captured))
+      val n = 10
+
+      val killSwitch = pekko.stream.KillSwitches.shared("test")
+      val gate = Promise[ReceivedMessage]() // never completes — mapAsync(1) hangs forever
+
+      Source(1 to n)
+        .map(i => makeMsg(i.toString))
+        .via(GooglePubSub.autoExtendAckDeadlines(subscription, 200.millis, 30))
+        .via(killSwitch.flow)
+        .mapAsync(1)(_ => gate.future)
+        .withAttributes(PubSubAttributes.subscriber(testSubscriber))
+        .runWith(Sink.ignore)
+
+      // Wait for the first tick (200ms) plus jitter to fire.
+      Thread.sleep(800)
+      killSwitch.shutdown()
+
+      val firstReq = captured.poll()
+      firstReq should not be null
+      firstReq.subscription shouldBe subscription
+      firstReq.ackDeadlineSeconds shouldBe 30
+      // All n ackIds must appear in the very first extension call. Without eager-pull,
+      // this would only be 1 (the element currently grabbed by mapAsync).
+      firstReq.ackIds.toSet shouldBe (1 to n).map(_.toString).toSet
+    }
+  }
+
+  "autoExtendAckDeadlines (caller-owned AckDeadlineExtender)" should {
+
+    "retain tracking state across stream materializations (restart-safety)" in {
+      // Restart-safety regression test. The internal-ticker overload clears the tracking map
+      // and cancels the ticker when the stream completes, so any messages received before a
+      // RestartSource re-materialization lose extension coverage. The extender owns both the
+      // map and the ticker, so extensions continue across stream completion / re-materialization.
+      val captured = new ConcurrentLinkedQueue[ModifyAckDeadlineRequest]()
+      val testSubscriber = new GrpcSubscriber(new CapturingClient(captured))
+      val extender = AckDeadlineExtender(subscription, 200.millis, 30, 60.minutes, testSubscriber)(system)
+
+      try {
+        // First materialization: emit three messages then complete normally. The eager-pull
+        // tracker writes them into the extender's tracked map.
+        val streamOne = Source(List(makeMsg("a1"), makeMsg("a2"), makeMsg("a3")))
+          .via(GooglePubSub.autoExtendAckDeadlines(extender))
+          .runWith(Sink.ignore)
+        streamOne.futureValue
+
+        // The extender's map must outlive the stream — this is the contract that lets a
+        // RestartSource-wrapped subscribe keep extension coverage during reconnect backoff.
+        extender.trackedSize shouldBe 3
+
+        // Let the ticker fire a few times. Each tick should carry all three ackIds.
+        Thread.sleep(700)
+
+        val allRequests = captured.iterator().asScala.toList
+        val streamOneIds = Set("a1", "a2", "a3")
+        val ticksWithStreamOneIds = allRequests.count(_.ackIds.exists(streamOneIds.contains))
+        ticksWithStreamOneIds should be >= 2
+        allRequests.filter(_.ackIds.exists(streamOneIds.contains)).foreach { req =>
+          req.ackIds.toSet shouldBe streamOneIds
+        }
+
+        // Second materialization: simulate reconnect by running another stream. Tracking from
+        // stream 1 must still be present, and stream 2 entries get added on top.
+        val streamTwo = Source(List(makeMsg("b1"), makeMsg("b2")))
+          .via(GooglePubSub.autoExtendAckDeadlines(extender))
+          .runWith(Sink.ignore)
+        streamTwo.futureValue
+        extender.trackedSize shouldBe 5
+      } finally {
+        extender.close().futureValue
+      }
+    }
+  }
+
+  "GooglePubSub.flowControlGate" should {
+
+    "acquire permits on receipt, not on push to downstream (eager-pull)" in {
+      // Regression test: with the old downstream-demand-bound gate, only the message currently
+      // held by mapAsync would acquire a permit. The eager-pull gate must count every message
+      // it receives, so flowControl.outstandingCount climbs to the limit even when downstream
+      // is fully saturated.
+      val testSubscriber = new GrpcSubscriber(new SucceedingClient())
+      val limit = 5
+      val flowControl = FlowControl(maxOutstandingMessages = limit.toLong)
+      val gate = Promise[ReceivedMessage]() // mapAsync(1) hangs forever
+      val killSwitch = pekko.stream.KillSwitches.shared("flowControlGateTest")
+
+      Source(1 to 100)
+        .map(i => makeMsg(i.toString))
+        .via(GooglePubSub.flowControlGate(flowControl))
+        .via(killSwitch.flow)
+        .mapAsync(1)(_ => gate.future)
+        .withAttributes(PubSubAttributes.subscriber(testSubscriber))
+        .runWith(Sink.ignore)
+
+      // Give the gate time to fill up.
+      Thread.sleep(300)
+
+      // The gate should have admitted exactly `limit` messages: one currently held by mapAsync,
+      // (limit - 1) buffered inside the gate. The Source(1 to 100) provides plenty of upstream
+      // messages, but the gate stops pulling at the limit.
+      // Without eager-pull this would be 1 (only the message in mapAsync had a permit acquired).
+      flowControl.outstandingCount shouldBe limit.toLong
+
+      killSwitch.shutdown()
     }
   }
 
