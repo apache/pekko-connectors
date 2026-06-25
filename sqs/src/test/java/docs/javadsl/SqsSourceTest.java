@@ -35,7 +35,6 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.net.URI;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -87,7 +86,7 @@ public class SqsSourceTest extends BaseSqsTest {
             .withMaxBufferSize(100)
             .withMaxBatchSize(10)
             .withAttributes(
-                Arrays.asList(
+                List.of(
                     MessageSystemAttributeName.senderId(),
                     MessageSystemAttributeName.sentTimestamp()))
             .withMessageAttribute(MessageAttributeName.create("bar.*"))

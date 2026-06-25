@@ -34,8 +34,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -68,10 +66,10 @@ public class HBaseStageTest {
           put.addColumn(
               "info".getBytes("UTF-8"), "name".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
 
-          return Collections.singletonList(put);
+          return List.of(put);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return Collections.emptyList();
+          return List.of();
         }
       };
   // #create-converter-put
@@ -84,10 +82,10 @@ public class HBaseStageTest {
           append.add(
               "info".getBytes("UTF-8"), "aliases".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
 
-          return Collections.singletonList(append);
+          return List.of(append);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return Collections.emptyList();
+          return List.of();
         }
       };
   // #create-converter-append
@@ -98,10 +96,10 @@ public class HBaseStageTest {
         try {
           Delete delete = new Delete(String.format("id_%d", person.id).getBytes("UTF-8"));
 
-          return Collections.singletonList(delete);
+          return List.of(delete);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return Collections.emptyList();
+          return List.of();
         }
       };
   // #create-converter-delete
@@ -113,10 +111,10 @@ public class HBaseStageTest {
           Increment increment = new Increment(String.format("id_%d", person.id).getBytes("UTF-8"));
           increment.addColumn("info".getBytes("UTF-8"), "numberOfChanges".getBytes("UTF-8"), 1);
 
-          return Collections.singletonList(increment);
+          return List.of(increment);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return Collections.emptyList();
+          return List.of();
         }
       };
   // #create-converter-increment
@@ -130,7 +128,7 @@ public class HBaseStageTest {
 
           if (person.id != 0 && person.name.isEmpty()) {
             Delete delete = new Delete(id);
-            return Collections.singletonList(delete);
+            return List.of(delete);
           } else if (person.id != 0) {
             Put put = new Put(id);
             put.addColumn(infoFamily, "name".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
@@ -138,13 +136,13 @@ public class HBaseStageTest {
             Increment increment = new Increment(id);
             increment.addColumn(infoFamily, "numberOfChanges".getBytes("UTF-8"), 1);
 
-            return Arrays.asList(put, increment);
+            return List.of(put, increment);
           } else {
-            return Collections.emptyList();
+            return List.of();
           }
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return Collections.emptyList();
+          return List.of();
         }
       };
 
@@ -158,14 +156,14 @@ public class HBaseStageTest {
         HTableSettings.create(
             HBaseConfiguration.create(),
             TableName.valueOf("person1"),
-            Collections.singletonList("info"),
+            List.of("info"),
             hBaseConverter);
     // #create-settings
 
     // #sink
     final Sink<Person, CompletionStage<Done>> sink = HTableStage.sink(tableSettings);
     CompletionStage<Done> o =
-        Source.from(Arrays.asList(100, 101, 102, 103, 104))
+        Source.from(List.of(100, 101, 102, 103, 104))
             .map((i) -> new Person(i, String.format("name %d", i)))
             .runWith(sink, system);
     // #sink
@@ -180,13 +178,13 @@ public class HBaseStageTest {
         HTableSettings.create(
             HBaseConfiguration.create(),
             TableName.valueOf("person2"),
-            Collections.singletonList("info"),
+            List.of("info"),
             hBaseConverter);
 
     // #flow
     Flow<Person, Person, NotUsed> flow = HTableStage.flow(tableSettings);
     Pair<NotUsed, CompletionStage<List<Person>>> run =
-        Source.from(Arrays.asList(200, 201, 202, 203, 204))
+        Source.from(List.of(200, 201, 202, 203, 204))
             .map((i) -> new Person(i, String.format("name_%d", i)))
             .via(flow)
             .toMat(Sink.seq(), Keep.both())
@@ -207,12 +205,12 @@ public class HBaseStageTest {
         HTableSettings.create(
             HBaseConfiguration.create(),
             TableName.valueOf("person1"),
-            Collections.singletonList("info"),
+            List.of("info"),
             hBaseConverter);
 
     final Sink<Person, CompletionStage<Done>> sink = HTableStage.sink(tableSettings);
     CompletionStage<Done> o =
-        Source.from(Arrays.asList(new Person(300, "name 300"))).runWith(sink, system);
+        Source.from(List.of(new Person(300, "name 300"))).runWith(sink, system);
     assertEquals(Done.getInstance(), o.toCompletableFuture().get(5, TimeUnit.SECONDS));
 
     // #source

@@ -38,7 +38,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -70,7 +69,7 @@ public class JmsBufferedAckConnectorsTest {
   }
 
   private List<JmsTextMessage> createTestMessageList() {
-    List<Integer> intsIn = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    List<Integer> intsIn = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     List<JmsTextMessage> msgsIn = new ArrayList<>();
     for (Integer n : intsIn) {
       msgsIn.add(
@@ -91,7 +90,7 @@ public class JmsBufferedAckConnectorsTest {
               JmsProducer.textSink(
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           Source.from(in).runWith(jmsSink, system);
 
           Source<AckEnvelope, JmsConsumerControl> jmsSource =
@@ -308,7 +307,7 @@ public class JmsBufferedAckConnectorsTest {
   public void publishAndConsumeTopic() throws Exception {
     withConnectionFactory(
         connectionFactory -> {
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           List<String> inNumbers =
               IntStream.range(0, 10).boxed().map(String::valueOf).collect(Collectors.toList());
 

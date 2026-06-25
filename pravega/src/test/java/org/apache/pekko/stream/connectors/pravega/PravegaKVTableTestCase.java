@@ -35,7 +35,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +74,7 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
       throws ExecutionException, InterruptedException, TimeoutException {
 
     final List<Pair<Integer, String>> events =
-        Arrays.asList(
+        List.of(
             new Pair<Integer, String>(1, "One"),
             new Pair<Integer, String>(2, "Two"),
             new Pair<Integer, String>(3, "Three"),
@@ -111,7 +110,7 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
     Flow<Integer, Optional<String>, NotUsed> readFlow =
         PravegaTable.readFlow(scope, tableName, tableReaderSettings);
 
-    List<Integer> ids = Arrays.asList(1, 2, 3, 4);
+    List<Integer> ids = List.of(1, 2, 3, 4);
 
     CompletionStage<List<String>> readFlowFut =
         Source.from(ids)
@@ -127,7 +126,7 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
 
     List<String> values = readFlowFut.toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
 
-    Assert.assertEquals(values, Arrays.asList("One", "Two", "Three", "Four"));
+    Assert.assertEquals(values, List.of("One", "Two", "Three", "Four"));
   }
 
   @BeforeClass

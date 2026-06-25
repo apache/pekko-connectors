@@ -41,8 +41,6 @@ import scala.concurrent.duration.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -110,7 +108,7 @@ public class HdfsWriterTest {
 
     List<RotationMessage> result = new ArrayList<>(resF.toCompletableFuture().get());
     List<RotationMessage> expect =
-        Arrays.asList(
+        List.of(
             new RotationMessage(output("0"), 0),
             new RotationMessage(output("1"), 1),
             new RotationMessage(output("2"), 2),
@@ -231,7 +229,7 @@ public class HdfsWriterTest {
     // After we've written them to HDFS, we want
     // to commit the offset to Kafka
     List<KafkaMessage> messagesFromKafka =
-        Arrays.asList(
+        List.of(
             new KafkaMessage(new Book("Pekko Concurrency"), new KafkaOffset(0)),
             new KafkaMessage(new Book("Pekko in Action"), new KafkaOffset(1)),
             new KafkaMessage(new Book("Effective Pekko"), new KafkaOffset(2)),
@@ -273,10 +271,10 @@ public class HdfsWriterTest {
 
     ArrayList<RotationMessage> logs = new ArrayList<>(resF.toCompletableFuture().get());
     List<RotationMessage> expect =
-        Arrays.asList(new RotationMessage(output("0"), 0), new RotationMessage(output("1"), 1));
+        List.of(new RotationMessage(output("0"), 0), new RotationMessage(output("1"), 1));
 
     // Make sure all messages was committed to kafka
-    assertEquals(Arrays.asList(0, 1, 2, 3, 4, 5), kafkaCommitter.committedOffsets);
+    assertEquals(List.of(0, 1, 2, 3, 4, 5), kafkaCommitter.committedOffsets);
 
     assertEquals(logs, expect);
     JavaTestUtils.verifyOutputFileSize(fs, logs);
@@ -312,7 +310,7 @@ public class HdfsWriterTest {
 
     List<RotationMessage> logs = new ArrayList<>(resF.toCompletableFuture().get());
     List<RotationMessage> expect =
-        Arrays.asList(
+        List.of(
             new RotationMessage(output("0.deflate"), 0),
             new RotationMessage(output("1.deflate"), 1),
             new RotationMessage(output("2.deflate"), 2),
@@ -338,7 +336,7 @@ public class HdfsWriterTest {
 
     List<RotationMessage> logs = new ArrayList<>(resF.toCompletableFuture().get());
     List<RotationMessage> expect =
-        Arrays.asList(
+        List.of(
             new RotationMessage(output("0.deflate"), 0),
             new RotationMessage(output("1.deflate"), 1),
             new RotationMessage(output("2.deflate"), 2),
@@ -369,7 +367,7 @@ public class HdfsWriterTest {
 
     List<RotationMessage> logs = new ArrayList<>(resF.toCompletableFuture().get());
     List<RotationMessage> expect =
-        Collections.singletonList(new RotationMessage(output("0.deflate"), 0));
+        List.of(new RotationMessage(output("0.deflate"), 0));
 
     assertEquals(logs, expect);
     JavaTestUtils.verifyOutputFileSize(fs, logs);

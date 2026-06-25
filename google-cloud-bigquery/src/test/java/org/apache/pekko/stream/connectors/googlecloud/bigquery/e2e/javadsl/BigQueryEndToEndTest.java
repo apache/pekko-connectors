@@ -48,9 +48,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
@@ -170,7 +170,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
   @Test
   public void listNewDataset() throws ExecutionException, InterruptedException {
     List<Dataset> datasets =
-        BigQuery.listDatasets(OptionalInt.empty(), Optional.empty(), Collections.emptyMap())
+        BigQuery.listDatasets(OptionalInt.empty(), Optional.empty(), Map.of())
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get();
@@ -250,7 +250,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
                 tableId(),
                 OptionalLong.empty(),
                 OptionalInt.empty(),
-                Collections.emptyList(),
+                List.of(),
                 BigQueryMarshallers.tableDataListResponseUnmarshaller(A.class))
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
@@ -328,7 +328,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
   @Test
   public void notListDeletedDataset() throws ExecutionException, InterruptedException {
     List<Dataset> datasets =
-        BigQuery.listDatasets(OptionalInt.empty(), Optional.empty(), Collections.emptyMap())
+        BigQuery.listDatasets(OptionalInt.empty(), Optional.empty(), Map.of())
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get();

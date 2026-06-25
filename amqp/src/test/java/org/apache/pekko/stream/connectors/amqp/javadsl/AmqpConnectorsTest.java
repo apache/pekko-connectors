@@ -37,8 +37,6 @@ import scala.collection.JavaConverters;
 import scala.concurrent.duration.Duration;
 
 import java.net.ConnectException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -87,7 +85,7 @@ public class AmqpConnectorsTest {
                 .withRoutingKey(queueName)
                 .withDeclaration(queueDeclaration));
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     final CompletionStage<Done> result =
         Source.from(input).map(ByteString::fromString).runWith(amqpSink, system);
 
@@ -106,7 +104,7 @@ public class AmqpConnectorsTest {
     @SuppressWarnings("unchecked")
     AmqpDetailsConnectionProvider connectionProvider =
         AmqpDetailsConnectionProvider.create("invalid", 5673)
-            .withHostsAndPorts(Collections.singletonList(Pair.create("localhost", 5672)))
+            .withHostsAndPorts(List.of(Pair.create("localhost", 5672)))
             .withCredentials(AmqpCredentials.create("guest", "guest1"));
 
     final Sink<ByteString, CompletionStage<Done>> amqpSink =
@@ -115,7 +113,7 @@ public class AmqpConnectorsTest {
                 .withRoutingKey(queueName)
                 .withDeclaration(queueDeclaration));
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     final CompletionStage<Done> result =
         Source.from(input).map(ByteString::fromString).runWith(amqpSink, system);
 
@@ -134,7 +132,7 @@ public class AmqpConnectorsTest {
     final String queueName = "amqp-conn-it-spec-rpc-queue-" + System.currentTimeMillis();
     final QueueDeclaration queueDeclaration = QueueDeclaration.create(queueName);
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
 
     final Flow<WriteMessage, CommittableReadResult, CompletionStage<String>> ampqRpcFlow =
         AmqpRpcFlow.committableFlow(
@@ -197,7 +195,7 @@ public class AmqpConnectorsTest {
                 .withDeclaration(queueDeclaration),
             bufferSize);
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     Source.from(input)
         .map(ByteString::fromString)
         .runWith(amqpSink, system)
@@ -236,17 +234,17 @@ public class AmqpConnectorsTest {
             AmqpWriteSettings.create(connectionProvider)
                 .withExchange(exchangeName)
                 .withDeclarations(
-                    Arrays.asList(exchangeDeclaration, queueDeclaration, bindingDeclaration)));
+                    List.of(exchangeDeclaration, queueDeclaration, bindingDeclaration)));
 
     final Integer bufferSize = 10;
     final Source<ReadResult, NotUsed> amqpSource =
         AmqpSource.atMostOnceSource(
             NamedQueueSourceSettings.create(connectionProvider, queueName)
                 .withDeclarations(
-                    Arrays.asList(exchangeDeclaration, queueDeclaration, bindingDeclaration)),
+                    List.of(exchangeDeclaration, queueDeclaration, bindingDeclaration)),
             bufferSize);
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<String> routingKeys =
         input.stream().map(s -> "key." + s).collect(Collectors.toList());
     Source.from(input)

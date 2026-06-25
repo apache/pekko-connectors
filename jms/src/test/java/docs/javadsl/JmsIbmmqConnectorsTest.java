@@ -41,7 +41,6 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -107,7 +106,7 @@ public class JmsIbmmqConnectorsTest {
 
     // #ibmmq-queue
 
-    List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+    List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
     Source.from(in).runWith(jmsSink, system);
 
     // #ibmmq-queue
@@ -156,7 +155,7 @@ public class JmsIbmmqConnectorsTest {
             JmsProducerSettings.create(system, queueConnectionFactory)
                 .withDestination(new CustomDestination("custom", createQueue(customQueue))));
 
-    List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+    List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
 
     Source.from(in).runWith(jmsSink, system);
 
@@ -177,7 +176,7 @@ public class JmsIbmmqConnectorsTest {
   public void publishAndConsumeTopic()
       throws JMSException, InterruptedException, ExecutionException, TimeoutException {
 
-    List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+    List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
 
     // #ibmmq-topic
     // Connect to IBM MQ over TCP/IP

@@ -34,9 +34,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -78,11 +77,11 @@ public class XmlParsingTest {
                   list,
                   hasItems(
                       StartDocument.getInstance(),
-                      StartElement.create("doc", Collections.emptyMap()),
-                      StartElement.create("elem", Collections.emptyMap()),
+                      StartElement.create("doc", Map.of()),
+                      StartElement.create("elem", Map.of()),
                       Characters.create("elem1"),
                       EndElement.create("elem"),
-                      StartElement.create("elem", Collections.emptyMap()),
+                      StartElement.create("elem", Map.of()),
                       Characters.create("elem2"),
                       EndElement.create("elem"),
                       EndElement.create("doc"),
@@ -155,11 +154,11 @@ public class XmlParsingTest {
                   list,
                   hasItems(
                       StartDocument.getInstance(),
-                      StartElement.create("doc", Collections.emptyMap()),
-                      StartElement.create("elem", Collections.emptyMap()),
+                      StartElement.create("doc", Map.of()),
+                      StartElement.create("elem", Map.of()),
                       Characters.create("elem1"),
                       EndElement.create("elem"),
-                      StartElement.create("elem", Collections.emptyMap()),
+                      StartElement.create("elem", Map.of()),
                       Characters.create("elem2"),
                       EndElement.create("elem"),
                       EndElement.create("doc"),
@@ -178,7 +177,7 @@ public class XmlParsingTest {
         Flow.<String>create()
             .map(ByteString::fromString)
             .via(XmlParsing.parser())
-            .via(XmlParsing.subslice(Arrays.asList("doc", "elem", "item")))
+            .via(XmlParsing.subslice(List.of("doc", "elem", "item")))
             .toMat(Sink.seq(), Keep.right());
     // #subslice
 
@@ -201,7 +200,7 @@ public class XmlParsingTest {
                   list,
                   hasItems(
                       Characters.create("i1"),
-                      StartElement.create("sub", Collections.emptyMap()),
+                      StartElement.create("sub", Map.of()),
                       Characters.create("i2"),
                       EndElement.create("sub"),
                       Characters.create("i3")));
@@ -218,7 +217,7 @@ public class XmlParsingTest {
         Flow.<String>create()
             .map(ByteString::fromString)
             .via(XmlParsing.parser())
-            .via(XmlParsing.subtree(Arrays.asList("doc", "elem", "item")))
+            .via(XmlParsing.subtree(List.of("doc", "elem", "item")))
             .toMat(Sink.seq(), Keep.right());
     // #subtree
 

@@ -29,8 +29,8 @@ import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class GeodeBaseTestCase {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -59,12 +59,12 @@ public class GeodeBaseTestCase {
   }
 
   static Source<Person, NotUsed> buildPersonsSource(Integer... ids) {
-    return Source.from(Arrays.asList(ids))
+    return Source.from(List.of(ids))
         .map((i) -> new Person(i, String.format("Person Java %d", i), new Date()));
   }
 
   static Source<Animal, NotUsed> buildAnimalsSource(Integer... ids) {
-    return Source.from(Arrays.asList(ids))
+    return Source.from(List.of(ids))
         .map((i) -> new Animal(i, String.format("Animal Java %d", i), 1));
   }
 

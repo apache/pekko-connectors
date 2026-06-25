@@ -32,7 +32,6 @@ import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.connectors.pravega.javadsl.Pravega;
 
-import java.util.Arrays;
 
 import java.util.List;
 import java.util.concurrent.*;
@@ -68,7 +67,7 @@ public class PravegaGraphTestCase extends PravegaBaseTestCase {
 
     createStream(scope, streamName);
 
-    final List<String> events = Arrays.asList("One", "Two", "Three");
+    final List<String> events = List.of("One", "Two", "Three");
 
     Sink<String, CompletionStage<Done>> sinkWithRouting =
         Pravega.sink(scope, streamName, writerSettings);

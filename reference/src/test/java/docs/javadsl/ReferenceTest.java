@@ -96,7 +96,7 @@ public class ReferenceTest {
     final CompletionStage<ReferenceReadResult> stage = source.runWith(Sink.head(), system);
     final ReferenceReadResult msg = stage.toCompletableFuture().get(5, TimeUnit.SECONDS);
 
-    Assert.assertEquals(Collections.singletonList(ByteString.fromString("one")), msg.getData());
+    Assert.assertEquals(List.of(ByteString.fromString("one")), msg.getData());
 
     final OptionalInt expected = OptionalInt.of(100);
     Assert.assertEquals(expected, msg.getBytesRead());
@@ -118,13 +118,13 @@ public class ReferenceTest {
 
     final Source<ReferenceWriteMessage, NotUsed> source =
         Source.from(
-            Arrays.asList(
+            List.of(
                 ReferenceWriteMessage.create()
-                    .withData(Collections.singletonList(ByteString.fromString("one")))
+                    .withData(List.of(ByteString.fromString("one")))
                     .withMetrics(metrics),
                 ReferenceWriteMessage.create()
                     .withData(
-                        Arrays.asList(
+                        List.of(
                             ByteString.fromString("two"),
                             ByteString.fromString("three"),
                             ByteString.fromString("four")))));
@@ -139,7 +139,7 @@ public class ReferenceTest {
             .collect(Collectors.toList());
 
     Assert.assertEquals(
-        Arrays.asList(
+        List.of(
             ByteString.fromString("one"),
             ByteString.fromString("two"),
             ByteString.fromString("three"),
@@ -155,14 +155,14 @@ public class ReferenceTest {
     final List<ReferenceWriteResult> result =
         Source.single(
                 ReferenceWriteMessage.create()
-                    .withData(Collections.singletonList(ByteString.fromString("one"))))
+                    .withData(List.of(ByteString.fromString("one"))))
             .via(Reference.flowWithResource())
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
 
     Assert.assertEquals(
-        Collections.singletonList("one default msg"),
+        List.of("one default msg"),
         result.stream()
             .flatMap(m -> m.getMessage().getData().stream())
             .map(ByteString::utf8String)
@@ -174,7 +174,7 @@ public class ReferenceTest {
     final List<ReferenceWriteResult> result =
         Source.single(
                 ReferenceWriteMessage.create()
-                    .withData(Collections.singletonList(ByteString.fromString("one"))))
+                    .withData(List.of(ByteString.fromString("one"))))
             .via(
                 Reference.flowWithResource()
                     .withAttributes(
@@ -185,7 +185,7 @@ public class ReferenceTest {
             .get(5, TimeUnit.SECONDS);
 
     Assert.assertEquals(
-        Collections.singletonList("one attributes msg"),
+        List.of("one attributes msg"),
         result.stream()
             .flatMap(m -> m.getMessage().getData().stream())
             .map(ByteString::utf8String)

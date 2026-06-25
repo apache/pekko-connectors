@@ -53,7 +53,6 @@ import org.junit.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -237,7 +236,7 @@ public class CouchbaseExamplesTest {
   public void fromId() throws Exception {
     support.upsertSampleData(queryBucketName);
     // #fromId
-    List<String> ids = Arrays.asList("First", "Second", "Third", "Fourth");
+    List<String> ids = List.of("First", "Second", "Third", "Fourth");
 
     CompletionStage<List<JsonDocument>> result =
         Source.from(ids)

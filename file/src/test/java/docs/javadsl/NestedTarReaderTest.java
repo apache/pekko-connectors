@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -98,7 +97,7 @@ public class NestedTarReaderTest {
                         .via(Directory.mkdirs())
                         .toMat(Sink.ignore(), Keep.right())
                         .run(system)
-                        .thenApply(d -> Collections.singletonList(metadata));
+                        .thenApply(d -> List.of(metadata));
               } else if (targetFile.getFileName().toString().endsWith(TARGZ_EXT)) {
                 Path targetSubDir =
                     targetFile
@@ -119,7 +118,7 @@ public class NestedTarReaderTest {
                     source
                         .toMat(Sink.ignore(), Keep.right())
                         .run(system)
-                        .thenApply(d -> Collections.singletonList(metadata));
+                        .thenApply(d -> List.of(metadata));
               }
               return readMetadata;
             })

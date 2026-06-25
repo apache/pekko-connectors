@@ -67,7 +67,7 @@ public class JmsTxConnectorsTest {
   }
 
   private List<JmsTextMessage> createTestMessageList() {
-    List<Integer> intsIn = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    List<Integer> intsIn = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     List<JmsTextMessage> msgsIn = new ArrayList<>();
     for (Integer n : intsIn) {
       msgsIn.add(
@@ -90,7 +90,7 @@ public class JmsTxConnectorsTest {
               JmsProducer.textSink(
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           Source.from(in).runWith(jmsSink, system);
 
           Source<TxEnvelope, JmsConsumerControl> jmsSource =
@@ -314,7 +314,7 @@ public class JmsTxConnectorsTest {
         server -> {
           ConnectionFactory connectionFactory = server.createConnectionFactory();
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           List<String> inNumbers =
               IntStream.range(0, 10).boxed().map(String::valueOf).collect(Collectors.toList());
 

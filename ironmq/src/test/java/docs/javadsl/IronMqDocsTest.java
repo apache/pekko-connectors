@@ -34,7 +34,6 @@ import org.junit.Test;
 import scala.concurrent.Await;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +50,7 @@ public class IronMqDocsTest extends IronMqClientForJava {
   private static final Duration patience = Duration.ofSeconds(5);
 
   private static final List<String> messages =
-      Arrays.asList("test-1", "test-2", "test-3", "test-4", "test-5");
+      List.of("test-1", "test-2", "test-3", "test-4", "test-5");
 
   private final IronMqSettings ironMqSettings = ironMqSettings();
 

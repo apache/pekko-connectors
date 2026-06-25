@@ -14,7 +14,6 @@
 package org.apache.pekko.stream.connectors.amqp.javadsl;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -52,7 +51,7 @@ public class AmqpFlowTest {
 
   @Parameters
   public static Iterable<? extends Object> data() {
-    return Arrays.asList(false, true);
+    return List.of(false, true);
   }
 
   /** This value is initialized with values from data() array */
@@ -97,7 +96,7 @@ public class AmqpFlowTest {
   private void shouldEmitConfirmationForPublishedMessages(
       final Flow<WriteMessage, WriteResult, CompletionStage<Done>> flow) {
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<WriteResult> expectedOutput =
         input.stream().map(pt -> WriteResult.create(true)).collect(Collectors.toList());
 
@@ -127,7 +126,7 @@ public class AmqpFlowTest {
       FlowWithContext<WriteMessage, String, WriteResult, String, CompletionStage<Done>>
           flowWithContext) {
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<Pair<WriteResult, String>> expectedOutput =
         input.stream()
             .map(pt -> Pair.create(WriteResult.create(true), pt))
@@ -152,7 +151,7 @@ public class AmqpFlowTest {
     Flow<Pair<WriteMessage, String>, Pair<WriteResult, String>, CompletionStage<Done>> flow =
         AmqpFlow.createWithConfirmAndPassThroughUnordered(settings());
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<Pair<WriteResult, String>> expectedOutput =
         input.stream()
             .map(pt -> Pair.create(WriteResult.create(true), pt))
