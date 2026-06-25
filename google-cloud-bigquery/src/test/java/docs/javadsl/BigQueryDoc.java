@@ -59,7 +59,6 @@ import java.util.OptionalLong;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 // #imports
 
@@ -226,8 +225,7 @@ public class BigQueryDoc {
     CompletionStage<List<Job>> jobs =
         Source.from(people).via(peopleLoadFlow).runWith(Sink.<Job>seq(), system);
     CompletionStage<List<JobReference>> jobReferences =
-        jobs.thenApply(
-            js -> js.stream().map(j -> j.getJobReference().get()).collect(Collectors.toList()));
+        jobs.thenApply(js -> js.stream().map(j -> j.getJobReference().get()).toList());
     CompletionStage<Boolean> isDone = jobReferences.thenCompose(checkIfJobsDone);
     // #job-status
 

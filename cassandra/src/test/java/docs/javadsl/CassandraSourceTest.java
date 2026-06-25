@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
 import static docs.javadsl.CassandraTestHelper.await;
 import static org.hamcrest.CoreMatchers.*;
@@ -71,9 +70,7 @@ public class CassandraSourceTest {
                         "CREATE TABLE IF NOT EXISTS " + idtable + " (id int PRIMARY KEY);")));
     await(
         helper.cassandraAccess.executeCqlList(
-            data.stream()
-                .map(i -> "INSERT INTO " + idtable + "(id) VALUES (" + i + ")")
-                .collect(Collectors.toList())));
+            data.stream().map(i -> "INSERT INTO " + idtable + "(id) VALUES (" + i + ")").toList()));
   }
 
   @AfterClass

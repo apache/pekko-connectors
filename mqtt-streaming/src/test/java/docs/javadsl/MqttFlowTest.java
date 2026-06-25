@@ -66,7 +66,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -219,9 +218,7 @@ public class MqttFlowTest {
                                 JavaConverters.asJavaCollectionConverter(subscribe.topicFilters())
                                     .asJavaCollection();
                             List<Integer> flags =
-                                topicFilters.stream()
-                                    .map(x -> x._2().underlying())
-                                    .collect(Collectors.toList());
+                                topicFilters.stream().map(x -> x._2().underlying()).toList();
                             queue.offer(
                                 new Command<>(
                                     new SubAck(subscribe.packetId(), flags),

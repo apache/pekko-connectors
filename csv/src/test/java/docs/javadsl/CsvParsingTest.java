@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -79,7 +78,7 @@ public class CsvParsingTest {
         // #line-scanner-string
         Source.single(ByteString.fromString("eins,zwei,drei\n"))
             .via(CsvParsing.lineScanner())
-            .map(line -> line.stream().map(ByteString::utf8String).collect(Collectors.toList()))
+            .map(line -> line.stream().map(ByteString::utf8String).toList())
             .runWith(Sink.head(), system);
     // #line-scanner-string
     List<String> res = completionStage.toCompletableFuture().get(5, TimeUnit.SECONDS);
@@ -111,7 +110,7 @@ public class CsvParsingTest {
     CompletionStage<List<String>> completionStage =
         Source.single(ByteString.fromString("a,b,\\c"))
             .via(CsvParsing.lineScanner())
-            .map(line -> line.stream().map(ByteString::utf8String).collect(Collectors.toList()))
+            .map(line -> line.stream().map(ByteString::utf8String).toList())
             .runWith(Sink.head(), system);
     List<String> res = completionStage.toCompletableFuture().get(5, TimeUnit.SECONDS);
     assertThat(res.get(0), equalTo("a"));

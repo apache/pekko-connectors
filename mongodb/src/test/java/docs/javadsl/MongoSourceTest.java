@@ -33,7 +33,6 @@ import org.junit.*;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
@@ -101,12 +100,12 @@ public class MongoSourceTest {
         data,
         rows.toCompletableFuture().get(5, TimeUnit.SECONDS).stream()
             .map(n -> n.getInteger("_id"))
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
   public void supportCodecRegistryToReadClassObjects() throws Exception {
-    List<Number> data = seed().stream().map(Number::new).collect(Collectors.toList());
+    List<Number> data = seed().stream().map(Number::new).toList();
 
     // #create-source
     final Source<Number, NotUsed> source = MongoSource.create(numbersColl.find(Number.class));
@@ -129,12 +128,12 @@ public class MongoSourceTest {
         data,
         source.runWith(Sink.seq(), system).toCompletableFuture().get(5, TimeUnit.SECONDS).stream()
             .map(n -> n.getInteger("_id"))
-            .collect(Collectors.toList()));
+            .toList());
     assertEquals(
         data,
         source.runWith(Sink.seq(), system).toCompletableFuture().get(5, TimeUnit.SECONDS).stream()
             .map(n -> n.getInteger("_id"))
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
@@ -151,10 +150,10 @@ public class MongoSourceTest {
   }
 
   private List<Integer> seed() throws Exception {
-    final List<Integer> numbers = IntStream.range(1, 10).boxed().collect(Collectors.toList());
+    final List<Integer> numbers = IntStream.range(1, 10).boxed().toList();
 
     final List<Document> documents =
-        numbers.stream().map(i -> Document.parse("{_id:" + i + "}")).collect(Collectors.toList());
+        numbers.stream().map(i -> Document.parse("{_id:" + i + "}")).toList();
 
     final CompletionStage<InsertManyResult> completion =
         Source.fromPublisher(numbersDocumentColl.insertMany(documents))

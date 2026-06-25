@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.amqp.javadsl;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import scala.collection.JavaConverters;
 
@@ -98,7 +97,7 @@ public class AmqpFlowTest {
 
     final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<WriteResult> expectedOutput =
-        input.stream().map(pt -> WriteResult.create(true)).collect(Collectors.toList());
+        input.stream().map(pt -> WriteResult.create(true)).toList();
 
     final TestSubscriber.Probe<WriteResult> result =
         Source.from(input)
@@ -128,9 +127,7 @@ public class AmqpFlowTest {
 
     final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<Pair<WriteResult, String>> expectedOutput =
-        input.stream()
-            .map(pt -> Pair.create(WriteResult.create(true), pt))
-            .collect(Collectors.toList());
+        input.stream().map(pt -> Pair.create(WriteResult.create(true), pt)).toList();
 
     final TestSubscriber.Probe<Pair<WriteResult, String>> result =
         Source.from(input)
@@ -153,9 +150,7 @@ public class AmqpFlowTest {
 
     final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<Pair<WriteResult, String>> expectedOutput =
-        input.stream()
-            .map(pt -> Pair.create(WriteResult.create(true), pt))
-            .collect(Collectors.toList());
+        input.stream().map(pt -> Pair.create(WriteResult.create(true), pt)).toList();
 
     final TestSubscriber.Probe<Pair<WriteResult, String>> result =
         Source.from(input)

@@ -41,12 +41,10 @@ import scala.concurrent.duration.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -280,10 +278,8 @@ public class HdfsWriterTest {
     assertEquals(logs, expect);
     JavaTestUtils.verifyOutputFileSize(fs, logs);
     assertEquals(
-        JavaTestUtils.readLogs(fs, logs).stream()
-            .flatMap(String::lines)
-            .collect(Collectors.toList()),
-        messagesFromKafka.stream().map(message -> message.book.title).collect(Collectors.toList()));
+        JavaTestUtils.readLogs(fs, logs).stream().flatMap(String::lines).toList(),
+        messagesFromKafka.stream().map(message -> message.book.title).toList());
   }
 
   @Test
