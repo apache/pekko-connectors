@@ -60,12 +60,12 @@ public class GeodeBaseTestCase {
 
   static Source<Person, NotUsed> buildPersonsSource(Integer... ids) {
     return Source.from(List.of(ids))
-        .map((i) -> new Person(i, String.format("Person Java %d", i), new Date()));
+        .map((i) -> new Person(i, "Person Java %d".formatted(i), new Date()));
   }
 
   static Source<Animal, NotUsed> buildAnimalsSource(Integer... ids) {
     return Source.from(List.of(ids))
-        .map((i) -> new Animal(i, String.format("Animal Java %d", i), 1));
+        .map((i) -> new Animal(i, "Animal Java %d".formatted(i), 1));
   }
 
   protected Geode createGeodeClient() {

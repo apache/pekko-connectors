@@ -51,7 +51,7 @@ public class EventSourceTest {
     Function<HttpRequest, CompletionStage<HttpResponse>> send =
         (request) -> http.singleRequest(request);
 
-    final Uri targetUri = Uri.create(String.format("http://%s:%d", host, port));
+    final Uri targetUri = Uri.create("http://%s:%d".formatted(host, port));
     final Optional<String> lastEventId = Optional.of("2");
     Source<ServerSentEvent, NotUsed> eventSource =
         EventSource.create(targetUri, send, lastEventId, system);

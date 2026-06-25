@@ -57,9 +57,8 @@ public class SpringWebPekkoStreamsConfiguration {
   private String getActorSystemName(final SpringWebPekkoStreamsProperties properties) {
     Objects.requireNonNull(
         properties,
-        String.format(
-            "%s is not present in application context",
-            SpringWebPekkoStreamsProperties.class.getSimpleName()));
+        "%s is not present in application context"
+            .formatted(SpringWebPekkoStreamsProperties.class.getSimpleName()));
 
     if (isBlank(properties.getActorSystemName())) {
       return DEFAULT_FACTORY_SYSTEM_NAME;

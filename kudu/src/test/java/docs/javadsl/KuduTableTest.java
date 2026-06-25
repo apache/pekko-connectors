@@ -98,7 +98,7 @@ public class KuduTableTest {
 
     CompletionStage<Done> o =
         Source.from(List.of(100, 101, 102, 103, 104))
-            .map((i) -> new Person(i, String.format("name %d", i)))
+            .map((i) -> new Person(i, "name %d".formatted(i)))
             .runWith(sink, system);
     // #sink
     assertEquals(Done.getInstance(), o.toCompletableFuture().get(5, TimeUnit.SECONDS));
@@ -111,7 +111,7 @@ public class KuduTableTest {
 
     CompletionStage<List<Person>> run =
         Source.from(List.of(200, 201, 202, 203, 204))
-            .map((i) -> new Person(i, String.format("name_%d", i)))
+            .map((i) -> new Person(i, "name_%d".formatted(i)))
             .via(flow)
             .toMat(Sink.seq(), Keep.right())
             .run(system);
@@ -140,7 +140,7 @@ public class KuduTableTest {
 
     CompletionStage<List<Person>> run =
         Source.from(List.of(200, 201, 202, 203, 204))
-            .map((i) -> new Person(i, String.format("name_%d", i)))
+            .map((i) -> new Person(i, "name_%d".formatted(i)))
             .via(flow)
             .toMat(Sink.seq(), Keep.right())
             .run(system);

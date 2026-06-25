@@ -64,7 +64,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> hBaseConverter =
       person -> {
         try {
-          Put put = new Put(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Put put = new Put("id_%d".formatted(person.id).getBytes("UTF-8"));
           put.addColumn(
               "info".getBytes("UTF-8"), "name".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
 
@@ -80,7 +80,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> appendHBaseConverter =
       person -> {
         try {
-          Append append = new Append(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Append append = new Append("id_%d".formatted(person.id).getBytes("UTF-8"));
           append.add(
               "info".getBytes("UTF-8"), "aliases".getBytes("UTF-8"), person.name.getBytes("UTF-8"));
 
@@ -96,7 +96,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> deleteHBaseConverter =
       person -> {
         try {
-          Delete delete = new Delete(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Delete delete = new Delete("id_%d".formatted(person.id).getBytes("UTF-8"));
 
           return List.of(delete);
         } catch (UnsupportedEncodingException e) {
@@ -110,7 +110,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> incrementHBaseConverter =
       person -> {
         try {
-          Increment increment = new Increment(String.format("id_%d", person.id).getBytes("UTF-8"));
+          Increment increment = new Increment("id_%d".formatted(person.id).getBytes("UTF-8"));
           increment.addColumn("info".getBytes("UTF-8"), "numberOfChanges".getBytes("UTF-8"), 1);
 
           return List.of(increment);
@@ -125,7 +125,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> complexHBaseConverter =
       person -> {
         try {
-          byte[] id = String.format("id_%d", person.id).getBytes("UTF-8");
+          byte[] id = "id_%d".formatted(person.id).getBytes("UTF-8");
           byte[] infoFamily = "info".getBytes("UTF-8");
 
           if (person.id != 0 && person.name.isEmpty()) {
@@ -166,7 +166,7 @@ public class HBaseStageTest {
     final Sink<Person, CompletionStage<Done>> sink = HTableStage.sink(tableSettings);
     CompletionStage<Done> o =
         Source.from(List.of(100, 101, 102, 103, 104))
-            .map((i) -> new Person(i, String.format("name %d", i)))
+            .map((i) -> new Person(i, "name %d".formatted(i)))
             .runWith(sink, system);
     // #sink
 
@@ -187,7 +187,7 @@ public class HBaseStageTest {
     Flow<Person, Person, NotUsed> flow = HTableStage.flow(tableSettings);
     Pair<NotUsed, CompletionStage<List<Person>>> run =
         Source.from(List.of(200, 201, 202, 203, 204))
-            .map((i) -> new Person(i, String.format("name_%d", i)))
+            .map((i) -> new Person(i, "name_%d".formatted(i)))
             .via(flow)
             .toMat(Sink.seq(), Keep.both())
             .run(system);

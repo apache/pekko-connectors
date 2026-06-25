@@ -256,8 +256,8 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
   @Test
   public void runQuery() throws ExecutionException, InterruptedException {
     String query =
-        String.format(
-            "SELECT string, record, integer FROM %s.%s WHERE boolean;", datasetId(), tableId());
+        "SELECT string, record, integer FROM %s.%s WHERE boolean;"
+            .formatted(datasetId(), tableId());
     List<Tuple3<String, B, Integer>> expectedResults =
         getRows().stream()
             .filter(A::getBoolean)
@@ -281,8 +281,8 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
   @Test
   public void dryRunQuery() throws ExecutionException, InterruptedException {
     String query =
-        String.format(
-            "SELECT string, record, integer FROM %s.%s WHERE boolean;", datasetId(), tableId());
+        "SELECT string, record, integer FROM %s.%s WHERE boolean;"
+            .formatted(datasetId(), tableId());
     QueryResponse<JsonNode> response =
         BigQuery.query(
                 query, true, false, BigQueryMarshallers.queryResponseUnmarshaller(JsonNode.class))

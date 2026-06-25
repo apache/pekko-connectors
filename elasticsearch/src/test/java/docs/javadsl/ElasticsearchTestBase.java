@@ -68,7 +68,7 @@ public class ElasticsearchTestBase {
       int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase version)
       throws IOException {
     connectionSettings =
-        ElasticsearchConnectionSettings.create(String.format("http://localhost:%d", port));
+        ElasticsearchConnectionSettings.create("http://localhost:%d".formatted(port));
 
     register("source", "Akka in Action");
     register("source", "Programming in Scala");
@@ -82,24 +82,24 @@ public class ElasticsearchTestBase {
 
   protected static void cleanIndex() throws IOException {
     HttpRequest request =
-        HttpRequest.DELETE(String.format("%s/_all", connectionSettings.baseUrl()));
+        HttpRequest.DELETE("%s/_all".formatted(connectionSettings.baseUrl()));
     http.singleRequest(request).toCompletableFuture().join();
   }
 
   protected static void flushAndRefresh(String indexName) throws IOException {
     HttpRequest flushRequest =
-        HttpRequest.POST(String.format("%s/%s/_flush", connectionSettings.baseUrl(), indexName));
+        HttpRequest.POST("%s/%s/_flush".formatted(connectionSettings.baseUrl(), indexName));
     http.singleRequest(flushRequest).toCompletableFuture().join();
 
     HttpRequest refreshRequest =
-        HttpRequest.POST(String.format("%s/%s/_refresh", connectionSettings.baseUrl(), indexName));
+        HttpRequest.POST("%s/%s/_refresh".formatted(connectionSettings.baseUrl(), indexName));
     http.singleRequest(refreshRequest).toCompletableFuture().join();
   }
 
   protected static void register(String indexName, String title) {
     HttpRequest request =
-        HttpRequest.POST(String.format("%s/%s/_doc", connectionSettings.baseUrl(), indexName))
-            .withEntity(ContentTypes.APPLICATION_JSON, String.format("{\"title\": \"%s\"}", title));
+        HttpRequest.POST("%s/%s/_doc".formatted(connectionSettings.baseUrl(), indexName))
+            .withEntity(ContentTypes.APPLICATION_JSON, "{\"title\": \"%s\"}".formatted(title));
 
     http.singleRequest(request).toCompletableFuture().join();
   }

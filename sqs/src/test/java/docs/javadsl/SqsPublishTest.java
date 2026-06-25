@@ -378,6 +378,6 @@ public class SqsPublishTest extends BaseSqsTest {
   private String toMd5(String s) throws Exception {
     MessageDigest m = MessageDigest.getInstance("MD5");
     BigInteger bigInt = new BigInteger(1, m.digest(s.getBytes()));
-    return String.format("%032x", bigInt);
+    return "%032x".formatted(bigInt);
   }
 }
