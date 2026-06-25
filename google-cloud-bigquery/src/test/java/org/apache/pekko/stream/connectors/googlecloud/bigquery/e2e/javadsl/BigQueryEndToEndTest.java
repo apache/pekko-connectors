@@ -139,18 +139,13 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
         .settings()
         .config()
         .getString("pekko.connectors.google.bigquery.test.e2e-mode")) {
-      case "simulate":
-        hoverfly.simulate(
-            SimulationSource.url(
-                BigQueryEndToEndTest.class
-                    .getClassLoader()
-                    .getResource("BigQueryEndToEndSpec.json")));
-        break;
-      case "capture":
-        hoverfly.resetMode(HoverflyMode.CAPTURE);
-        break;
-      default:
-        throw new IllegalArgumentException();
+      case "simulate" -> hoverfly.simulate(
+          SimulationSource.url(
+              BigQueryEndToEndTest.class
+                  .getClassLoader()
+                  .getResource("BigQueryEndToEndSpec.json")));
+      case "capture" -> hoverfly.resetMode(HoverflyMode.CAPTURE);
+      default -> throw new IllegalArgumentException();
     }
   }
 
