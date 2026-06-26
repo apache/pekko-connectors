@@ -32,15 +32,6 @@ final class GCStorageSettings private (
     val tokenScope: String) {
 
   /** Java API */
-  def getProjectId: String = projectId
-
-  /** Java API */
-  def getClientEmail: String = clientEmail
-
-  /** Java API */
-  def getPrivateKey: String = privateKey
-
-  /** Java API */
   def getBaseUrl: String = baseUrl
 
   /** Java API */
