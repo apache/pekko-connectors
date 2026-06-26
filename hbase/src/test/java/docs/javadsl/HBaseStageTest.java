@@ -34,6 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -69,7 +70,7 @@ public class HBaseStageTest {
           return List.of(put);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return List.of();
+          return Collections.emptyList();
         }
       };
   // #create-converter-put
@@ -85,7 +86,7 @@ public class HBaseStageTest {
           return List.of(append);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return List.of();
+          return Collections.emptyList();
         }
       };
   // #create-converter-append
@@ -99,7 +100,7 @@ public class HBaseStageTest {
           return List.of(delete);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return List.of();
+          return Collections.emptyList();
         }
       };
   // #create-converter-delete
@@ -114,7 +115,7 @@ public class HBaseStageTest {
           return List.of(increment);
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return List.of();
+          return Collections.emptyList();
         }
       };
   // #create-converter-increment
@@ -138,11 +139,11 @@ public class HBaseStageTest {
 
             return List.of(put, increment);
           } else {
-            return List.of();
+            return Collections.emptyList();
           }
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();
-          return List.of();
+          return Collections.emptyList();
         }
       };
 

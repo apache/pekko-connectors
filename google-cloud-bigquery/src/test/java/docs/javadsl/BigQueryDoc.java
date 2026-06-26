@@ -50,6 +50,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -183,7 +184,7 @@ public class BigQueryDoc {
             tableId,
             OptionalLong.empty(),
             OptionalInt.empty(),
-            List.of(),
+            Collections.emptyList(),
             tableDataListUnmarshaller);
     // #table-data
 
@@ -234,7 +235,7 @@ public class BigQueryDoc {
     // #dataset-methods
     GoogleSettings settings = GoogleSettings.create(system);
     Source<Dataset, NotUsed> allDatasets =
-        BigQuery.listDatasets(OptionalInt.empty(), Optional.empty(), Map.of());
+        BigQuery.listDatasets(OptionalInt.empty(), Optional.empty(), Collections.emptyMap());
     CompletionStage<Dataset> existingDataset = BigQuery.getDataset(datasetId, settings, system);
     CompletionStage<Dataset> newDataset = BigQuery.createDataset("newDatasetId", settings, system);
     CompletionStage<Done> datasetDeleted =

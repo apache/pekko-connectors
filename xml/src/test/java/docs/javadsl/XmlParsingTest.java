@@ -34,6 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,11 +78,11 @@ public class XmlParsingTest {
                   list,
                   hasItems(
                       StartDocument.getInstance(),
-                      StartElement.create("doc", Map.of()),
-                      StartElement.create("elem", Map.of()),
+                      StartElement.create("doc", Collections.emptyMap()),
+                      StartElement.create("elem", Collections.emptyMap()),
                       Characters.create("elem1"),
                       EndElement.create("elem"),
-                      StartElement.create("elem", Map.of()),
+                      StartElement.create("elem", Collections.emptyMap()),
                       Characters.create("elem2"),
                       EndElement.create("elem"),
                       EndElement.create("doc"),
@@ -154,11 +155,11 @@ public class XmlParsingTest {
                   list,
                   hasItems(
                       StartDocument.getInstance(),
-                      StartElement.create("doc", Map.of()),
-                      StartElement.create("elem", Map.of()),
+                      StartElement.create("doc", Collections.emptyMap()),
+                      StartElement.create("elem", Collections.emptyMap()),
                       Characters.create("elem1"),
                       EndElement.create("elem"),
-                      StartElement.create("elem", Map.of()),
+                      StartElement.create("elem", Collections.emptyMap()),
                       Characters.create("elem2"),
                       EndElement.create("elem"),
                       EndElement.create("doc"),
@@ -200,7 +201,7 @@ public class XmlParsingTest {
                   list,
                   hasItems(
                       Characters.create("i1"),
-                      StartElement.create("sub", Map.of()),
+                      StartElement.create("sub", Collections.emptyMap()),
                       Characters.create("i2"),
                       EndElement.create("sub"),
                       Characters.create("i3")));

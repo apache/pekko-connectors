@@ -34,6 +34,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +68,11 @@ public class XmlWritingTest {
         "<?xml version='1.0' encoding='UTF-8'?><doc><elem>elem1</elem><elem>elem2</elem></doc>";
     final List<ParseEvent> docList = new ArrayList<>();
     docList.add(StartDocument.getInstance());
-    docList.add(StartElement.create("doc", Map.of()));
-    docList.add(StartElement.create("elem", Map.of()));
+    docList.add(StartElement.create("doc", Collections.emptyMap()));
+    docList.add(StartElement.create("elem", Collections.emptyMap()));
     docList.add(Characters.create("elem1"));
     docList.add(EndElement.create("elem"));
-    docList.add(StartElement.create("elem", Map.of()));
+    docList.add(StartElement.create("elem", Collections.emptyMap()));
     docList.add(Characters.create("elem2"));
     docList.add(EndElement.create("elem"));
     docList.add(EndElement.create("doc"));
@@ -110,19 +111,19 @@ public class XmlWritingTest {
     docList.add(
         StartElement.create(
             "book",
-            List.of(),
+            Collections.emptyList(),
             Optional.of("bk"),
             Optional.of("urn:loc.gov:books"),
             nmList));
     docList.add(
         StartElement.create(
-            "title", List.of(), Optional.of("bk"), Optional.of("urn:loc.gov:books")));
+            "title", Collections.emptyList(), Optional.of("bk"), Optional.of("urn:loc.gov:books")));
     docList.add(Characters.create("Cheaper by the Dozen"));
     docList.add(EndElement.create("title"));
     docList.add(
         StartElement.create(
             "number",
-            List.of(),
+            Collections.emptyList(),
             Optional.of("isbn"),
             Optional.of("urn:ISBN:0-395-36341-6")));
     docList.add(Characters.create("1568491379"));
@@ -156,11 +157,11 @@ public class XmlWritingTest {
         "<?xml version='1.0' encoding='UTF-8'?><doc><elem>elem1</elem><elem>elem2</elem></doc>";
     final List<ParseEvent> docList = new ArrayList<>();
     docList.add(StartDocument.getInstance());
-    docList.add(StartElement.create("doc", Map.of()));
-    docList.add(StartElement.create("elem", Map.of()));
+    docList.add(StartElement.create("doc", Collections.emptyMap()));
+    docList.add(StartElement.create("elem", Collections.emptyMap()));
     docList.add(Characters.create("elem1"));
     docList.add(EndElement.create("elem"));
-    docList.add(StartElement.create("elem", Map.of()));
+    docList.add(StartElement.create("elem", Collections.emptyMap()));
     docList.add(Characters.create("elem2"));
     docList.add(EndElement.create("elem"));
     docList.add(EndElement.create("doc"));

@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -470,7 +471,7 @@ public class SolrTest {
             .runWith(Sink.seq(), system);
 
     List<String> result = new ArrayList<>(resultOf(res3));
-    List<String> expect = List.of();
+    List<String> expect = Collections.emptyList();
     assertEquals(expect, result);
   }
 
@@ -707,7 +708,7 @@ public class SolrTest {
             .runWith(Sink.seq(), system);
 
     List<String> result = new ArrayList<>(resultOf(res3));
-    List<String> expect = List.of();
+    List<String> expect = Collections.emptyList();
     assertEquals(expect, result);
   }
 
