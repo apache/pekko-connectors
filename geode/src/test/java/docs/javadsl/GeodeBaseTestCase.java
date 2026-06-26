@@ -64,8 +64,7 @@ public class GeodeBaseTestCase {
   }
 
   static Source<Animal, NotUsed> buildAnimalsSource(Integer... ids) {
-    return Source.from(List.of(ids))
-        .map((i) -> new Animal(i, "Animal Java %d".formatted(i), 1));
+    return Source.from(List.of(ids)).map((i) -> new Animal(i, "Animal Java %d".formatted(i), 1));
   }
 
   protected Geode createGeodeClient() {

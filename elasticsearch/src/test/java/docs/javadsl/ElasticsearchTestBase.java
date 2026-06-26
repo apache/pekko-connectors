@@ -81,8 +81,7 @@ public class ElasticsearchTestBase {
   }
 
   protected static void cleanIndex() throws IOException {
-    HttpRequest request =
-        HttpRequest.DELETE("%s/_all".formatted(connectionSettings.baseUrl()));
+    HttpRequest request = HttpRequest.DELETE("%s/_all".formatted(connectionSettings.baseUrl()));
     http.singleRequest(request).toCompletableFuture().join();
   }
 

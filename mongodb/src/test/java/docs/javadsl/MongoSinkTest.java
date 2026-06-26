@@ -96,9 +96,7 @@ public class MongoSinkTest {
             i -> {
               DomainObject domainObject =
                   new DomainObject(
-                      i,
-                      "first-property-%s".formatted(i),
-                      "second-property-%s".formatted(i));
+                      i, "first-property-%s".formatted(i), "second-property-%s".formatted(i));
               System.out.println("%s inserting %s".formatted(i, domainObject));
               return domainObject;
             })
