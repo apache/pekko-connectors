@@ -214,8 +214,7 @@ public class MqttFlowTest {
                                     new ConnAck(
                                         ConnAckFlags.None(),
                                         ConnAckReturnCode.ConnectionAccepted())));
-                          } else if (cp instanceof Subscribe) {
-                            Subscribe subscribe = (Subscribe) cp;
+                          } else if (cp instanceof Subscribe subscribe) {
                             Collection<Tuple2<String, ControlPacketFlags>> topicFilters =
                                 JavaConverters.asJavaCollectionConverter(subscribe.topicFilters())
                                     .asJavaCollection();
