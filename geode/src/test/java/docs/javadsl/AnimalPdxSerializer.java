@@ -27,9 +27,9 @@ public class AnimalPdxSerializer implements PekkoPdxSerializer<Animal> {
   @Override
   public boolean toData(Object o, PdxWriter out) {
     if (o instanceof Animal p) {
-      out.writeInt("id", p.getId());
-      out.writeString("name", p.getName());
-      out.writeInt("owner", p.getOwner());
+      out.writeInt("id", p.id());
+      out.writeString("name", p.name());
+      out.writeInt("owner", p.owner());
       return true;
     }
     return false;

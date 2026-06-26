@@ -30,9 +30,9 @@ public class PersonPdxSerializer implements PekkoPdxSerializer<Person> {
   @Override
   public boolean toData(Object o, PdxWriter out) {
     if (o instanceof Person p) {
-      out.writeInt("id", p.getId());
-      out.writeString("name", p.getName());
-      out.writeDate("birthDate", p.getBirthDate());
+      out.writeInt("id", p.id());
+      out.writeString("name", p.name());
+      out.writeDate("birthDate", p.birthDate());
       return true;
     }
     return false;
