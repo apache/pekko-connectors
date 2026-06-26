@@ -154,8 +154,7 @@ public class ReferenceTest {
   public void resolveResourceFromApplicationConfig() throws Exception {
     final List<ReferenceWriteResult> result =
         Source.single(
-                ReferenceWriteMessage.create()
-                    .withData(List.of(ByteString.fromString("one"))))
+                ReferenceWriteMessage.create().withData(List.of(ByteString.fromString("one"))))
             .via(Reference.flowWithResource())
             .runWith(Sink.seq(), system)
             .toCompletableFuture()
@@ -173,8 +172,7 @@ public class ReferenceTest {
   public void useResourceFromAttributes() throws Exception {
     final List<ReferenceWriteResult> result =
         Source.single(
-                ReferenceWriteMessage.create()
-                    .withData(List.of(ByteString.fromString("one"))))
+                ReferenceWriteMessage.create().withData(List.of(ByteString.fromString("one"))))
             .via(
                 Reference.flowWithResource()
                     .withAttributes(

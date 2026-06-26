@@ -126,10 +126,6 @@ public class CsvToMap {
       Charset charset, String... headers) {
     return Flow.fromGraph(
         new CsvToMapAsStringsJavaStage(
-            Optional.of(List.of(headers)),
-            charset,
-            false,
-            Optional.empty(),
-            Optional.empty()));
+            Optional.of(List.of(headers)), charset, false, Optional.empty(), Optional.empty()));
   }
 }

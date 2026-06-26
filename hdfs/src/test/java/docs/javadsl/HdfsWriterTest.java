@@ -366,8 +366,7 @@ public class HdfsWriterTest {
             .runWith(Sink.seq(), system);
 
     List<RotationMessage> logs = new ArrayList<>(resF.toCompletableFuture().get());
-    List<RotationMessage> expect =
-        List.of(new RotationMessage(output("0.deflate"), 0));
+    List<RotationMessage> expect = List.of(new RotationMessage(output("0.deflate"), 0));
 
     assertEquals(logs, expect);
     JavaTestUtils.verifyOutputFileSize(fs, logs);
