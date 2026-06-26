@@ -20,16 +20,17 @@ import org.apache.pekko.japi.function.Function2;
 import org.apache.pekko.stream.connectors.slick.javadsl.Slick;
 import org.apache.pekko.stream.connectors.slick.javadsl.SlickRow;
 import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,15 +47,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This unit test is run using a local H2 database using `/tmp/pekko-connectors-slick-h2-test` for
  * temporary storage.
  */
+@ExtendWith(LogCapturingExtension.class)
 public class SlickTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
@@ -90,7 +91,7 @@ public class SlickTest {
   private static final String selectAllUsers =
       "SELECT ID, NAME FROM PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS";
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     // #init-mat
     system = ActorSystem.create();
@@ -102,12 +103,12 @@ public class SlickTest {
         system);
   }
 
-  @After
+  @AfterEach
   public void cleanUp() {
     executeStatement("DELETE FROM PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS", session, system);
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     executeStatement("DROP TABLE PEKKO_CONNECTORS_SLICK_JAVADSL_TEST_USERS", session, system);
 

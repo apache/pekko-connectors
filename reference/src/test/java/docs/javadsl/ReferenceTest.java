@@ -22,13 +22,14 @@ import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.reference.*;
 import org.apache.pekko.stream.connectors.reference.javadsl.Reference;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.*;
 import java.util.concurrent.CompletionStage;
@@ -37,21 +38,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /** Append "Test" to every Java test suite. */
+@ExtendWith(LogCapturingExtension.class)
 public class ReferenceTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   static ActorSystem system;
 
   static final String clientId = "test-client-id";
 
   /** Called before test suite. */
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() {
     system = ActorSystem.create("ReferenceTest");
   }
 
   /** Called before every test. */
-  @Before
+  @BeforeEach
   public void setUp() {}
 
   @Test
@@ -95,12 +96,12 @@ public class ReferenceTest {
     final CompletionStage<ReferenceReadResult> stage = source.runWith(Sink.head(), system);
     final ReferenceReadResult msg = stage.toCompletableFuture().get(5, TimeUnit.SECONDS);
 
-    Assert.assertEquals(List.of(ByteString.fromString("one")), msg.getData());
+    Assertions.assertEquals(List.of(ByteString.fromString("one")), msg.getData());
 
     final OptionalInt expected = OptionalInt.of(100);
-    Assert.assertEquals(expected, msg.getBytesRead());
+    Assertions.assertEquals(expected, msg.getBytesRead());
 
-    Assert.assertEquals(Optional.empty(), msg.getBytesReadFailure());
+    Assertions.assertEquals(Optional.empty(), msg.getBytesReadFailure());
   }
 
   @Test
@@ -135,7 +136,7 @@ public class ReferenceTest {
     final List<ByteString> bytes =
         result.stream().flatMap(m -> m.getMessage().getData().stream()).toList();
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         List.of(
             ByteString.fromString("one"),
             ByteString.fromString("two"),
@@ -144,7 +145,7 @@ public class ReferenceTest {
         bytes);
 
     final long actual = result.stream().findFirst().get().getMetrics().get("total");
-    Assert.assertEquals(50L, actual);
+    Assertions.assertEquals(50L, actual);
   }
 
   @Test
@@ -157,7 +158,7 @@ public class ReferenceTest {
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         List.of("one default msg"),
         result.stream()
             .flatMap(m -> m.getMessage().getData().stream())
@@ -179,7 +180,7 @@ public class ReferenceTest {
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         List.of("one attributes msg"),
         result.stream()
             .flatMap(m -> m.getMessage().getData().stream())
@@ -188,11 +189,11 @@ public class ReferenceTest {
   }
 
   /** Called after every test. */
-  @After
+  @AfterEach
   public void tearDown() {}
 
   /** Called after test suite. */
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() {
     TestKit.shutdownActorSystem(system);
   }

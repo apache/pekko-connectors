@@ -33,7 +33,6 @@ import org.apache.solr.client.solrj.io.{ SolrClientCache, Tuple }
 import org.apache.solr.client.solrj.request.{ CollectionAdminRequest, UpdateRequest }
 import org.apache.solr.cloud.{ MiniSolrCloudCluster, ZkTestServer }
 import org.apache.solr.common.SolrInputDocument
-import org.junit.Assert.assertTrue
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
@@ -744,7 +743,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       .uploadConfig(confDir.toPath, "conf")
     solrClient.setIdField("router")
 
-    assertTrue(!solrClient.getZkStateReader.getClusterState.getLiveNodes.isEmpty)
+    assert(!solrClient.getZkStateReader.getClusterState.getLiveNodes.isEmpty)
   }
 
   private val number = new AtomicInteger(2)

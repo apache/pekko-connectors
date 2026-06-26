@@ -17,14 +17,15 @@ import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.SystemMaterializer;
 import org.apache.pekko.stream.connectors.csv.MalformedCsvException;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 // #import
 import org.apache.pekko.stream.connectors.csv.javadsl.CsvParsing;
@@ -40,10 +41,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
+@ExtendWith(LogCapturingExtension.class)
 public class CsvParsingTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
@@ -118,17 +119,17 @@ public class CsvParsingTest {
     assertThat(res.get(2), equalTo("\\c"));
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws Exception {
     TestKit.shutdownActorSystem(system);
   }
 
-  @After
+  @AfterEach
   public void checkForStageLeaks() {
     StreamTestKit.assertAllStagesStopped(SystemMaterializer.get(system).materializer());
   }

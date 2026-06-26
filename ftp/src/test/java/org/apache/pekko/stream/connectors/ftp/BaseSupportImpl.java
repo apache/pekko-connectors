@@ -15,7 +15,7 @@ package org.apache.pekko.stream.connectors.ftp;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public abstract class BaseSupportImpl implements BaseSupport, PekkoSupport {
   abstract Path getRootDir();
 
   @Override
-  @After
+  @AfterEach
   public void cleanFiles() {
     try {
       Files.walkFileTree(

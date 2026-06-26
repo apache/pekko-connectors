@@ -19,7 +19,8 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.kudu.KuduAttributes;
 import org.apache.pekko.stream.connectors.kudu.KuduTableSettings;
 import org.apache.pekko.stream.connectors.kudu.javadsl.KuduTable;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -32,11 +33,11 @@ import org.apache.kudu.client.CreateTableOptions;
 import org.apache.kudu.client.KuduClient;
 import org.apache.kudu.client.KuduException;
 import org.apache.kudu.client.PartialRow;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +45,15 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+@ExtendWith(LogCapturingExtension.class)
 public class KuduTableTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static Schema schema;
 
   private static KuduTableSettings<Person> tableSettings;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
 
@@ -84,7 +85,7 @@ public class KuduTableTest {
     KuduTableTest.tableSettings = tableSettings;
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws KuduException {
     TestKit.shutdownActorSystem(system);
   }

@@ -21,7 +21,8 @@ import org.apache.pekko.stream.connectors.hdfs.*;
 import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsFlow;
 import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsSource;
 import org.apache.pekko.stream.connectors.hdfs.util.JavaTestUtils;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
@@ -33,17 +34,17 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.DefaultCodec;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class HdfsReaderTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static MiniDFSCluster hdfsCluster = null;
   private static ActorSystem system;
@@ -151,7 +152,7 @@ public class HdfsReaderTest {
     assertArrayEquals(readData.toArray(), content.toArray());
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     hdfsCluster = JavaTestUtils.setupCluster();
 
@@ -163,14 +164,14 @@ public class HdfsReaderTest {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws Exception {
     fs.close();
     hdfsCluster.shutdown();
     TestKit.shutdownActorSystem(system);
   }
 
-  @After
+  @AfterEach
   public void afterEach() throws IOException {
     fs.delete(new Path(destination), true);
     fs.delete(settings.pathGenerator().apply(0L, 0L).getParent(), true);

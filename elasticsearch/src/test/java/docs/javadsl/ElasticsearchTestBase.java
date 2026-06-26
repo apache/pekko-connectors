@@ -23,18 +23,18 @@ import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchConnectionS
 import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchParams;
 import org.apache.pekko.stream.connectors.elasticsearch.OpensearchApiVersion;
 import org.apache.pekko.stream.connectors.elasticsearch.OpensearchParams;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtendWith(LogCapturingExtension.class)
 public class ElasticsearchTestBase {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   protected static ElasticsearchConnectionSettings connectionSettings;
   protected static ActorSystem system;
@@ -53,13 +53,13 @@ public class ElasticsearchTestBase {
 
   // #define-class
 
-  @BeforeClass
+  @BeforeAll
   public static void setupBase() {
     system = ActorSystem.create();
     http = Http.get(system);
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

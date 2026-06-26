@@ -30,9 +30,9 @@ import io.pravega.client.stream.impl.UTF8StringSerializer;
 
 import io.pravega.client.tables.KeyValueTableConfiguration;
 import io.pravega.client.tables.TableKey;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -104,8 +104,8 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
                 system);
 
     String result = readingDone.toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
-    Assert.assertTrue(
-        String.format("Read 2 elements [%s]", result), result.equals("One, Two, Three, Four"));
+    Assertions.assertTrue(
+        result.equals("One, Two, Three, Four"), String.format("Read 2 elements [%s]", result));
 
     Flow<Integer, Optional<String>, NotUsed> readFlow =
         PravegaTable.readFlow(scope, tableName, tableReaderSettings);
@@ -126,10 +126,10 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
 
     List<String> values = readFlowFut.toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
 
-    Assert.assertEquals(values, List.of("One", "Two", "Three", "Four"));
+    Assertions.assertEquals(values, List.of("One", "Two", "Three", "Four"));
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUp() {
     createScope(scope);
 

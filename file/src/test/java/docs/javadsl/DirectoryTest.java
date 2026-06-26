@@ -23,7 +23,8 @@ import org.apache.pekko.stream.connectors.file.javadsl.Directory;
 // #ls
 import java.nio.file.FileVisitOption;
 // #walk
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -32,7 +33,7 @@ import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
@@ -41,27 +42,27 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class DirectoryTest {
 
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() throws Exception {
     TestKit.shutdownActorSystem(system);
   }
 
   private FileSystem fs;
 
-  @Before
+  @BeforeEach
   public void setup() {
     fs = Jimfs.newFileSystem(Configuration.unix());
   }
@@ -173,7 +174,7 @@ public class DirectoryTest {
     assertTrue(Files.isDirectory(result.get(1)));
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     fs.close();
     fs = null;

@@ -21,8 +21,8 @@ import docs.javadsl.PravegaBaseTestCase;
 
 import io.pravega.client.stream.ReaderGroup;
 import io.pravega.client.stream.impl.JavaSerializer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import org.apache.pekko.japi.Pair;
 
@@ -110,6 +110,6 @@ public class PravegaGraphTestCase extends PravegaBaseTestCase {
     pair.first().shutdown();
 
     Integer result = pair.second().toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
-    Assert.assertTrue("Read 6 events", result == 0);
+    Assertions.assertTrue(result == 0, "Read 6 events");
   }
 }

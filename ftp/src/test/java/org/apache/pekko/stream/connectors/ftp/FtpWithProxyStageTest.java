@@ -16,13 +16,14 @@ package org.apache.pekko.stream.connectors.ftp;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+
+import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -30,8 +31,8 @@ import java.net.Proxy;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
+@ExtendWith(LogCapturingExtension.class)
 public class FtpWithProxyStageTest extends BaseFtpSupport implements CommonFtpStageTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private final Integer PROXYPORT = 3128;
   private final Proxy PROXY =
@@ -53,13 +54,13 @@ public class FtpWithProxyStageTest extends BaseFtpSupport implements CommonFtpSt
   }
 
   @Test
-  @Ignore("flakey, see https://github.com/akka/alpakka/issues/2126")
+  @Disabled("flakey, see https://github.com/akka/alpakka/issues/2126")
   public void remove() throws Exception {
     CommonFtpStageTest.super.remove();
   }
 
   @Test
-  @Ignore("flakey, see https://github.com/akka/alpakka/issues/2126")
+  @Disabled("flakey, see https://github.com/akka/alpakka/issues/2126")
   public void move() throws Exception {
     CommonFtpStageTest.super.move();
   }

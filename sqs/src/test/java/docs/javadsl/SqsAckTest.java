@@ -26,7 +26,7 @@ import org.apache.pekko.stream.connectors.sqs.javadsl.SqsAckFlow;
 import org.apache.pekko.stream.connectors.sqs.javadsl.SqsAckSink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.javadsl.Sink;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.*;
 
@@ -40,7 +40,7 @@ import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SqsAckTest extends BaseSqsTest {
 

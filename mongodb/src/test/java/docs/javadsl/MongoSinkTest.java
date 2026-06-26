@@ -21,7 +21,8 @@ import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.mongodb.DocumentReplace;
 import org.apache.pekko.stream.connectors.mongodb.DocumentUpdate;
 import org.apache.pekko.stream.connectors.mongodb.javadsl.MongoSink;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
@@ -37,7 +38,7 @@ import org.bson.codecs.ValueCodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +48,11 @@ import java.util.stream.IntStream;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class MongoSinkTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
@@ -120,20 +121,20 @@ public class MongoSinkTest {
         .get(5, TimeUnit.SECONDS);
   }
 
-  @Before
+  @BeforeEach
   public void cleanDb() throws Exception {
     deleteCollection(numbersDocumentColl);
     deleteCollection(domainObjectsDocumentColl);
   }
 
-  @After
+  @AfterEach
   public void checkForLeaks() throws Exception {
     checkCollectionForLeaks(numbersDocumentColl);
     checkCollectionForLeaks(domainObjectsDocumentColl);
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
   }
 
-  @AfterClass
+  @AfterAll
   public static void terminateActorSystem() {
     system.terminate();
   }

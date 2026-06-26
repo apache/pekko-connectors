@@ -15,7 +15,8 @@ package docs.javadsl;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.connectors.xml.Characters;
 import org.apache.pekko.stream.connectors.xml.EndDocument;
 import org.apache.pekko.stream.connectors.xml.EndElement;
@@ -28,10 +29,10 @@ import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import com.fasterxml.aalto.AsyncXMLInputFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
 
 import java.util.Collections;
@@ -48,8 +49,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @SuppressWarnings("deprecation")
+@ExtendWith(LogCapturingExtension.class)
 public class XmlParsingTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
@@ -244,12 +245,12 @@ public class XmlParsingTest {
         .get(5, TimeUnit.SECONDS);
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

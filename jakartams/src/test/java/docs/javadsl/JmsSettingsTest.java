@@ -18,22 +18,22 @@ import com.typesafe.config.ConfigFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.junit.EmbeddedActiveMQResource;
 import org.apache.pekko.stream.connectors.jakartams.*;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
-import org.junit.Rule;
-import org.junit.Test;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.junit.jupiter.api.Test;
 import scala.Option;
 
 import java.time.Duration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // #retry-settings #send-retry-settings
 
+@ExtendWith(LogCapturingExtension.class)
 public class JmsSettingsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   @Test
   public void producerSettings() throws Exception {

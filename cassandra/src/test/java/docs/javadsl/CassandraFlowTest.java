@@ -21,7 +21,8 @@ import org.apache.pekko.japi.function.Function2;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraFlow;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.SourceWithContext;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
@@ -31,10 +32,10 @@ import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSource;
 import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraAccess;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,19 +46,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static docs.javadsl.CassandraTestHelper.await;
 
+@ExtendWith(LogCapturingExtension.class)
 public class CassandraFlowTest {
   static final String TEST_NAME = "CassandraFlowTest";
 
   static CassandraTestHelper helper;
 
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
-
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() {
     helper = new CassandraTestHelper(TEST_NAME);
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     helper.shutdown();
   }

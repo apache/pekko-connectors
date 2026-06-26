@@ -24,7 +24,7 @@ import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishFlow;
 import org.apache.pekko.stream.connectors.sqs.javadsl.SqsPublishSink;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.sqs.model.*;
 
 import java.math.BigInteger;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SqsPublishTest extends BaseSqsTest {
 

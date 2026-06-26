@@ -22,26 +22,26 @@ import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSou
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OpensearchV1Test extends ElasticsearchTestBase {
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws IOException {
     setupBase();
 
     prepareIndex(9203, OpensearchApiVersion.V1);
   }
 
-  @AfterClass
+  @AfterAll
   public static void shutdown() throws IOException {
     cleanIndex();
   }

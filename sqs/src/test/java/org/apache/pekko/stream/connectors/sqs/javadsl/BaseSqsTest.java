@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.sqs.javadsl;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.Http;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.testkit.javadsl.TestKit;
 // #init-client
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -25,10 +24,10 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
 // #init-client
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+
 import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
 
 import java.net.URI;
@@ -37,8 +36,6 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class BaseSqsTest {
 
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
-
   protected static ActorSystem system;
   private static SqsAsyncClient sqsClientForClose;
 
@@ -46,14 +43,14 @@ public abstract class BaseSqsTest {
   protected String sqsEndpoint = "http://localhost:9324";
   protected SqsAsyncClient sqsClient;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     // #init-mat
     system = ActorSystem.create();
     // #init-mat
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws Exception {
     if (sqsClientForClose != null) {
       sqsClientForClose.close();
@@ -65,7 +62,7 @@ public abstract class BaseSqsTest {
         .get(2, TimeUnit.SECONDS);
   }
 
-  @Before
+  @BeforeEach
   public void setupBefore() {
     if (!initialized) {
       sqsClient = createAsyncClient(sqsEndpoint);

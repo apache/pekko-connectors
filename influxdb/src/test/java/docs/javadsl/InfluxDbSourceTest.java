@@ -16,11 +16,12 @@ package docs.javadsl;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
@@ -34,33 +35,33 @@ import static docs.javadsl.TestUtils.dropDatabase;
 import static docs.javadsl.TestUtils.populateDatabase;
 import static docs.javadsl.TestUtils.setupConnection;
 
+@ExtendWith(LogCapturingExtension.class)
 public class InfluxDbSourceTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static InfluxDB influxDB;
 
   private static final String DATABASE_NAME = "InfluxDbSourceTest";
 
-  @BeforeClass
+  @BeforeAll
   public static void setupDatabase() {
     system = ActorSystem.create();
 
     influxDB = setupConnection(DATABASE_NAME);
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     dropDatabase(influxDB, DATABASE_NAME);
     TestKit.shutdownActorSystem(system);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     populateDatabase(influxDB, InfluxDbSourceCpu.class);
   }
 
-  @After
+  @AfterEach
   public void cleanUp() {
     cleanDatabase(influxDB, DATABASE_NAME);
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
@@ -77,7 +78,7 @@ public class InfluxDbSourceTest {
 
     List<InfluxDbSourceCpu> cpus = rows.toCompletableFuture().get();
 
-    Assert.assertEquals(2, cpus.size());
+    Assertions.assertEquals(2, cpus.size());
   }
 
   @Test
@@ -90,10 +91,10 @@ public class InfluxDbSourceTest {
     List<QueryResult> queryResults = completionStage.toCompletableFuture().get();
     QueryResult queryResult = queryResults.get(0);
 
-    Assert.assertFalse(queryResult.hasError());
+    Assertions.assertFalse(queryResult.hasError());
 
     final int resultSize = queryResult.getResults().get(0).getSeries().get(0).getValues().size();
 
-    Assert.assertEquals(2, resultSize);
+    Assertions.assertEquals(2, resultSize);
   }
 }

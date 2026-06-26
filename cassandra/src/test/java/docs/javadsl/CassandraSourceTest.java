@@ -24,16 +24,17 @@ import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSessionRegi
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSource;
 // #cql
 import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraAccess;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 // #statement
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.Statement;
 // #statement
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ import static docs.javadsl.CassandraTestHelper.await;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@ExtendWith(LogCapturingExtension.class)
 public class CassandraSourceTest {
   static final String TEST_NAME = "CassandraSourceTest";
 
@@ -53,9 +55,7 @@ public class CassandraSourceTest {
   static String idtable;
   static final List<Integer> data = List.of(1, 2, 3, 4, 5, 6, 7, 8);
 
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
-
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() throws InterruptedException, ExecutionException, TimeoutException {
 
     helper = new CassandraTestHelper(TEST_NAME);
@@ -73,7 +73,7 @@ public class CassandraSourceTest {
             data.stream().map(i -> "INSERT INTO " + idtable + "(id) VALUES (" + i + ")").toList()));
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     helper.shutdown();
   }

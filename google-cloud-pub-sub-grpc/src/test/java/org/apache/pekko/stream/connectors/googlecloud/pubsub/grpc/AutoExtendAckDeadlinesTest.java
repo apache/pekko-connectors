@@ -17,7 +17,7 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.*;
@@ -32,8 +32,8 @@ import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GrpcSu
 import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.PubSubAttributes;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.junit.AfterClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
 
 public class AutoExtendAckDeadlinesTest {
 
@@ -174,8 +174,8 @@ public class AutoExtendAckDeadlinesTest {
       fail("Expected AckDeadlineExtensionException");
     } catch (ExecutionException e) {
       assertTrue(
-          "Expected AckDeadlineExtensionException but got: " + e.getCause().getClass(),
-          e.getCause() instanceof AckDeadlineExtensionException);
+          e.getCause() instanceof AckDeadlineExtensionException,
+          "Expected AckDeadlineExtensionException but got: " + e.getCause().getClass());
       assertTrue(e.getCause().getMessage().contains("ticker failed"));
     }
   }
@@ -198,8 +198,8 @@ public class AutoExtendAckDeadlinesTest {
       fail("Expected AckDeadlineExtensionException");
     } catch (ExecutionException e) {
       assertTrue(
-          "Expected AckDeadlineExtensionException but got: " + e.getCause().getClass(),
-          e.getCause() instanceof AckDeadlineExtensionException);
+          e.getCause() instanceof AckDeadlineExtensionException,
+          "Expected AckDeadlineExtensionException but got: " + e.getCause().getClass());
       assertTrue(e.getCause().getMessage().contains("ticker failed"));
     }
   }
@@ -286,7 +286,7 @@ public class AutoExtendAckDeadlinesTest {
     assertEquals(3, result.size());
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() {
     system.terminate();
   }

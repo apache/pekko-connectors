@@ -15,7 +15,8 @@ package docs.javadsl;
 
 // #encoding
 import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.connectors.text.javadsl.TextFlow;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.javadsl.FileIO;
@@ -26,9 +27,9 @@ import org.apache.pekko.util.ByteString;
 import java.nio.charset.StandardCharsets;
 
 // #encoding
-import org.junit.AfterClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,16 +38,15 @@ import java.util.Properties;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class CharsetCodingFlowsDoc {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final ActorSystem system = ActorSystem.create();
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     system.terminate();
   }
@@ -72,7 +72,7 @@ public class CharsetCodingFlowsDoc {
             .runWith(FileIO.toPath(targetFile), system);
     // #encoding
     IOResult result = streamCompletion.toCompletableFuture().get(1, TimeUnit.SECONDS);
-    assertTrue("result is greater than 50 bytes", result.count() > 50L);
+    assertTrue(result.count() > 50L, "result is greater than 50 bytes");
   }
 
   @Test
@@ -108,6 +108,6 @@ public class CharsetCodingFlowsDoc {
             .runWith(FileIO.toPath(targetFile), system);
     // #transcoding
     IOResult result = streamCompletion.toCompletableFuture().get(1, TimeUnit.SECONDS);
-    assertTrue("result is greater than 5 bytes", result.count() > 5L);
+    assertTrue(result.count() > 5L, "result is greater than 5 bytes");
   }
 }

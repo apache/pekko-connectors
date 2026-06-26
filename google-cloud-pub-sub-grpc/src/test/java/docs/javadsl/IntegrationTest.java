@@ -24,16 +24,17 @@ import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
 import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GooglePubSub;
 import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.GrpcPublisher;
 import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.javadsl.PubSubAttributes;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.*;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.*;
 
 // #publish-single
 
-import org.junit.AfterClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
@@ -43,11 +44,11 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class IntegrationTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   static final ActorSystem system = ActorSystem.create("IntegrationTest");
 
@@ -76,8 +77,8 @@ public class IntegrationTest {
     // #publish-single
 
     assertTrue(
-        "number of published messages should be more than 0",
-        publishedMessageIds.toCompletableFuture().get(2, TimeUnit.SECONDS).size() > 0);
+        publishedMessageIds.toCompletableFuture().get(2, TimeUnit.SECONDS).size() > 0,
+        "number of published messages should be more than 0");
   }
 
   @Test
@@ -105,8 +106,8 @@ public class IntegrationTest {
     // #publish-fast
 
     assertTrue(
-        "number of published messages should be more than 0",
-        published.toCompletableFuture().get(2, TimeUnit.SECONDS).size() > 0);
+        published.toCompletableFuture().get(2, TimeUnit.SECONDS).size() > 0,
+        "number of published messages should be more than 0");
   }
 
   @Test
@@ -143,9 +144,9 @@ public class IntegrationTest {
     Source.single(publishRequest).via(GooglePubSub.publish(1)).runWith(Sink.ignore(), system);
 
     assertEquals(
-        "received and expected messages not the same",
         msg,
-        first.toCompletableFuture().get(2, TimeUnit.SECONDS).getMessage().getData());
+        first.toCompletableFuture().get(2, TimeUnit.SECONDS).getMessage().getData(),
+        "received and expected messages not the same");
   }
 
   @Test
@@ -182,9 +183,9 @@ public class IntegrationTest {
     Source.single(publishRequest).via(GooglePubSub.publish(1)).runWith(Sink.ignore(), system);
 
     assertEquals(
-        "received and expected messages not the same",
         msg,
-        first.toCompletableFuture().get(2, TimeUnit.SECONDS).getMessage().getData());
+        first.toCompletableFuture().get(2, TimeUnit.SECONDS).getMessage().getData(),
+        "received and expected messages not the same");
   }
 
   @Test
@@ -341,7 +342,7 @@ public class IntegrationTest {
             .toCompletableFuture()
             .get(15, TimeUnit.SECONDS);
 
-    assertEquals("nacked message should be redelivered", msg, redelivered.getMessage().getData());
+    assertEquals(msg, redelivered.getMessage().getData(), "nacked message should be redelivered");
   }
 
   @Test
@@ -437,7 +438,7 @@ public class IntegrationTest {
             .toCompletableFuture()
             .get(15, TimeUnit.SECONDS);
 
-    assertEquals("should process all 3 messages", 3, result.size());
+    assertEquals(3, result.size(), "should process all 3 messages");
   }
 
   @Test
@@ -452,7 +453,7 @@ public class IntegrationTest {
         org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.AckDeadlineDistribution.create();
 
     // initially should use default
-    assertEquals("initial deadline", 60, dist.currentDeadlineSeconds());
+    assertEquals(60, dist.currentDeadlineSeconds(), "initial deadline");
 
     // publish messages
     final String prefix = "adaptive-java-" + System.nanoTime();
@@ -489,9 +490,9 @@ public class IntegrationTest {
             .toCompletableFuture()
             .get(15, TimeUnit.SECONDS);
 
-    assertEquals("should process all messages", 2, result.size());
+    assertEquals(2, result.size(), "should process all messages");
     // adaptive deadline should be at least the minimum
-    assertTrue("deadline should be >= 10", dist.currentDeadlineSeconds() >= 10);
+    assertTrue(dist.currentDeadlineSeconds() >= 10, "deadline should be >= 10");
   }
 
   @Test
@@ -505,7 +506,7 @@ public class IntegrationTest {
     // #attributes
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() {
     system.terminate();
   }

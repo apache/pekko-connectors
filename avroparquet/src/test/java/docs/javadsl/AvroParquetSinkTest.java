@@ -17,7 +17,8 @@ import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.avroparquet.javadsl.AvroParquetSink;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
@@ -28,10 +29,10 @@ import org.apache.parquet.avro.AvroParquetWriter;
 import org.apache.parquet.avro.AvroReadSupport;
 import org.apache.parquet.hadoop.ParquetFileWriter;
 import org.apache.parquet.hadoop.ParquetReader;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,9 +55,8 @@ import org.apache.parquet.hadoop.util.HadoopInputFile;
 
 // #init-writer
 
+@ExtendWith(LogCapturingExtension.class)
 public class AvroParquetSinkTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private final Schema schema =
       new Schema.Parser()
@@ -68,7 +68,7 @@ public class AvroParquetSinkTest {
   private String folder = "target/javaTestFolder";
   private final String file = "./" + folder + "/test.parquet";
 
-  @Before
+  @BeforeEach
   public void setup() {
     system = ActorSystem.create();
     conf.setBoolean(AvroReadSupport.AVRO_COMPATIBILITY, true);
@@ -122,7 +122,7 @@ public class AvroParquetSinkTest {
     return expectedRecords.size();
   }
 
-  @After
+  @AfterEach
   public void checkForStageLeaksAndDeleteCreatedFiles() {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
     TestKit.shutdownActorSystem(system);

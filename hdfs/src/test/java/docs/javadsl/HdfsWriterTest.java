@@ -20,7 +20,8 @@ import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.hdfs.*;
 import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsFlow;
 import org.apache.pekko.stream.connectors.hdfs.util.JavaTestUtils;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -35,7 +36,7 @@ import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.DefaultCodec;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import scala.concurrent.duration.Duration;
 
@@ -46,11 +47,11 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class HdfsWriterTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static MiniDFSCluster hdfsCluster = null;
   private static ActorSystem system;
@@ -473,7 +474,7 @@ public class HdfsWriterTest {
     JavaTestUtils.verifySequenceFile(fs, content, logs);
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     hdfsCluster = JavaTestUtils.setupCluster();
 
@@ -487,14 +488,14 @@ public class HdfsWriterTest {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws Exception {
     fs.close();
     hdfsCluster.shutdown();
     TestKit.shutdownActorSystem(system);
   }
 
-  @After
+  @AfterEach
   public void afterEach() throws IOException {
     fs.delete(new Path(destination), true);
     fs.delete(settings.pathGenerator().apply(0L, 0L).getParent(), true);

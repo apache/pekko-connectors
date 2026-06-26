@@ -22,7 +22,8 @@ import org.apache.pekko.stream.connectors.orientdb.OrientDbWriteSettings;
 import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbFlow;
 import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSink;
 import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSource;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
@@ -38,10 +39,10 @@ import com.orientechnologies.orient.core.db.ODatabasePool;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -51,10 +52,10 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class OrientDbTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static OrientDB orientDB;
   private static ODatabasePool oDatabase;
@@ -151,7 +152,7 @@ public class OrientDbTest {
     }
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     system = ActorSystem.create();
 
@@ -177,7 +178,7 @@ public class OrientDbTest {
     flush(sourceClass, "book_title", "Akka Concurrency");
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() throws Exception {
     unregister(sourceClass);
     unregister(sinkClass1);

@@ -18,10 +18,10 @@ import org.apache.pekko.stream.connectors.pravega.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
 
 import io.pravega.client.stream.impl.UTF8StringSerializer;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -33,7 +33,7 @@ public class PravegaSettingsTestCase {
 
   protected static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
   }
@@ -52,11 +52,11 @@ public class PravegaSettingsTestCase {
             .withSerializer(new UTF8StringSerializer());
     // #reader-settings
 
-    Assert.assertEquals("Timeout value doesn't match", readerSettings.timeout(), 3000);
-    Assert.assertTrue(
-        "TLS does not match", readerSettings.clientConfig().isEnableTlsToController());
-    Assert.assertTrue(
-        "Window should not be enabled", readerSettings.readerConfig().isDisableTimeWindows());
+    Assertions.assertEquals(readerSettings.timeout(), 3000, "Timeout value doesn't match");
+    Assertions.assertTrue(
+        readerSettings.clientConfig().isEnableTlsToController(), "TLS does not match");
+    Assertions.assertTrue(
+        readerSettings.readerConfig().isDisableTimeWindows(), "Window should not be enabled");
   }
 
   @Test
@@ -69,8 +69,8 @@ public class PravegaSettingsTestCase {
             .withSerializer(new UTF8StringSerializer());
     // #writer-settings
 
-    Assert.assertEquals(
-        "Default value doesn't match", writerSettings.maximumInflightMessages(), 10);
+    Assertions.assertEquals(
+        writerSettings.maximumInflightMessages(), 10, "Default value doesn't match");
   }
 
   @Test
@@ -108,11 +108,11 @@ public class PravegaSettingsTestCase {
 
     // #table-reader-settings
 
-    Assert.assertEquals(
-        "Default value doesn't match", tableWriterSettings.maximumInflightMessages(), 10);
+    Assertions.assertEquals(
+        tableWriterSettings.maximumInflightMessages(), 10, "Default value doesn't match");
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

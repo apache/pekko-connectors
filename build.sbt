@@ -8,6 +8,7 @@
  */
 
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
+import com.github.sbt.junit.jupiter.sbt.Import.JupiterKeys
 
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
@@ -18,6 +19,10 @@ ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
 
 ThisBuild / evictionErrorLevel := Level.Info
+
+// JUnit 6.1.0 version overrides
+ThisBuild / JupiterKeys.junitJupiterVersion := "6.1.0"
+ThisBuild / JupiterKeys.junitPlatformVersion := "6.1.0"
 
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,

@@ -23,12 +23,13 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
@@ -49,10 +50,10 @@ import static docs.javadsl.TestUtils.dropDatabase;
 import static docs.javadsl.TestUtils.populateDatabase;
 import static docs.javadsl.TestUtils.resultToPoint;
 import static docs.javadsl.TestUtils.setupConnection;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class InfluxDbTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static InfluxDB influxDB;
@@ -88,25 +89,25 @@ public class InfluxDbTest {
     }
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setupDatabase() {
     system = ActorSystem.create();
 
     influxDB = setupConnection(DATABASE_NAME);
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     dropDatabase(influxDB, DATABASE_NAME);
     TestKit.shutdownActorSystem(system);
   }
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     populateDatabase(influxDB, InfluxDbCpu.class);
   }
 
-  @After
+  @AfterEach
   public void cleanUp() {
     cleanDatabase(influxDB, DATABASE_NAME);
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
@@ -127,7 +128,7 @@ public class InfluxDbTest {
             .runWith(InfluxDbSink.typed(InfluxDbCpu.class, influxDB), system);
     // #run-typed
 
-    Assert.assertNotNull(completionStage.toCompletableFuture().get());
+    Assertions.assertNotNull(completionStage.toCompletableFuture().get());
 
     CompletionStage<List<Cpu>> sources =
         InfluxDbSource.typed(Cpu.class, InfluxDbReadSettings.Default(), influxDB, query)
@@ -149,7 +150,7 @@ public class InfluxDbTest {
             .runWith(InfluxDbSink.create(influxDB), system);
     // #run-query-result
 
-    Assert.assertNotNull(completionStage.toCompletableFuture().get());
+    Assertions.assertNotNull(completionStage.toCompletableFuture().get());
 
     List<QueryResult> queryResult =
         InfluxDbSource.create(influxDB, query)
@@ -182,7 +183,7 @@ public class InfluxDbTest {
     // #run-flow
 
     InfluxDbWriteResult<Point, NotUsed> influxDbWriteResult = completableFuture.get().get(0).get(0);
-    Assert.assertTrue(influxDbWriteResult.error().isEmpty());
+    Assertions.assertTrue(influxDbWriteResult.error().isEmpty());
   }
 
   @Test

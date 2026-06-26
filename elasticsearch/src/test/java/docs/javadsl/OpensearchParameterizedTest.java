@@ -20,9 +20,7 @@ import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSou
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -30,14 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(value = Parameterized.class)
 public class OpensearchParameterizedTest extends ElasticsearchTestBase {
   private final OpensearchApiVersion apiVersion;
 
-  @Parameterized.Parameters(name = "{index}: port={0} api={1}")
   public static Iterable<Object[]> data() {
     return List.of(new Object[][] {{9203, OpensearchApiVersion.V1}});
   }
@@ -46,14 +42,12 @@ public class OpensearchParameterizedTest extends ElasticsearchTestBase {
     this.apiVersion = apiVersion;
   }
 
-  @Parameterized.BeforeParam
   public static void beforeParam(
       int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase osApiVersion)
       throws IOException {
     prepareIndex(port, osApiVersion);
   }
 
-  @Parameterized.AfterParam
   public static void afterParam() throws IOException {
     cleanIndex();
   }

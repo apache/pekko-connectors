@@ -20,7 +20,8 @@ import org.apache.pekko.stream.KillSwitches;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.UniqueKillSwitch;
 import org.apache.pekko.stream.connectors.file.DirectoryChange;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
@@ -30,7 +31,7 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
@@ -45,27 +46,26 @@ import java.util.concurrent.TimeoutException;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.WRITE;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class FileTailSourceTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() throws Exception {
     TestKit.shutdownActorSystem(system);
   }
 
   private FileSystem fs;
 
-  @Before
+  @BeforeEach
   public void setup() {
     fs = Jimfs.newFileSystem(Configuration.unix());
   }
@@ -213,7 +213,7 @@ public class FileTailSourceTest {
     subscriber.expectComplete();
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     fs.close();
     fs = null;

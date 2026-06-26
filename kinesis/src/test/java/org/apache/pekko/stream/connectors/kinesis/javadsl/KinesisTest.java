@@ -16,14 +16,15 @@ package org.apache.pekko.stream.connectors.kinesis.javadsl;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.kinesis.ShardSettings;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 import software.amazon.awssdk.services.kinesis.model.*;
@@ -32,17 +33,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(LogCapturingExtension.class)
 public class KinesisTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static ShardSettings settings;
   private static KinesisAsyncClient amazonKinesisAsync;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     System.setProperty("aws.accessKeyId", "someKeyId");
     System.setProperty("aws.secretKey", "someSecretKey");
@@ -53,12 +54,12 @@ public class KinesisTest {
     amazonKinesisAsync = mock(KinesisAsyncClient.class);
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     TestKit.shutdownActorSystem(system);
   }
 
-  //  @Ignore("This test appears to trigger a deadlock, see
+  //  @Disabled("This test appears to trigger a deadlock, see
   // https://github.com/akka/alpakka/issues/390")
   @Test
   public void PullRecord() throws Exception {

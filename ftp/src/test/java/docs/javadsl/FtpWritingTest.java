@@ -18,7 +18,8 @@ package docs.javadsl;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
 // #create-settings
 import org.apache.pekko.stream.IOResult;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Compression;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.util.ByteString;
@@ -37,20 +38,19 @@ import java.net.InetAddress;
 import org.apache.pekko.stream.connectors.ftp.BaseFtpSupport;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@ExtendWith(LogCapturingExtension.class)
 public class FtpWritingTest extends BaseFtpSupport {
 
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
-
-  @After
+  @AfterEach
   public void afterEach() {
     StreamTestKit.assertAllStagesStopped(getMaterializer());
     TestKit.shutdownActorSystem(getSystem());

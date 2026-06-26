@@ -24,14 +24,15 @@ import org.apache.pekko.stream.connectors.file.TarArchiveMetadata;
 import org.apache.pekko.stream.connectors.file.ZipArchiveMetadata;
 import org.apache.pekko.stream.connectors.file.javadsl.Archive;
 import org.apache.pekko.stream.connectors.file.javadsl.Directory;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.FileIO;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import static org.apache.pekko.util.ByteString.emptyByteString;
 
@@ -50,24 +51,24 @@ import java.util.concurrent.TimeUnit;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+@ExtendWith(LogCapturingExtension.class)
 public class ArchiveTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() throws Exception {
     TestKit.shutdownActorSystem(system);
   }
 
   private ArchiveHelper archiveHelper;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     archiveHelper = new ArchiveHelper();
   }
@@ -280,7 +281,7 @@ public class ArchiveTest {
     assertThat(file.exists(), is(true));
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
   }

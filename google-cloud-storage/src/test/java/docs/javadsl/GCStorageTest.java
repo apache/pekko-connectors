@@ -25,29 +25,29 @@ import org.apache.pekko.stream.connectors.googlecloud.storage.Bucket;
 import org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject;
 import org.apache.pekko.stream.connectors.googlecloud.storage.javadsl.GCStorage;
 import org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl.GCStorageWiremockBase;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(LogCapturingExtension.class)
 public class GCStorageTest extends GCStorageWiremockBase {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private final ActorSystem actorSystem = system();
   private final GoogleSettings sampleSettings = GoogleSettings.create(system());
 
-  @After
+  @AfterEach
   public void afterAll() {
     this.stopWireMockServer();
   }

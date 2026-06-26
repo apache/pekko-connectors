@@ -31,9 +31,9 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient;
 // #init-client
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.eventbridge.model.CreateEventBusRequest;
 import software.amazon.awssdk.services.eventbridge.model.PutEventsRequest;
 import software.amazon.awssdk.services.eventbridge.model.PutEventsRequestEntry;
@@ -62,7 +62,7 @@ public class EventBridgePublisherTest {
     return PutEventsRequest.builder().entries(detailEntry(detail)).build();
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws ExecutionException, InterruptedException {
     system = ActorSystem.create("EventBridgePublisherTest");
     eventBridgeClient = createEventBridgeClient();
@@ -76,7 +76,7 @@ public class EventBridgePublisherTest {
             .eventBusArn();
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() {
     TestKit.shutdownActorSystem(system);
   }

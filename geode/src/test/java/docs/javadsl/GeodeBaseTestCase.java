@@ -19,21 +19,21 @@ import org.apache.pekko.stream.connectors.geode.GeodeSettings;
 import org.apache.pekko.stream.connectors.geode.RegionSettings;
 import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
 import org.apache.pekko.stream.connectors.geode.javadsl.GeodeWithPoolSubscription;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
-import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
 
+@ExtendWith(LogCapturingExtension.class)
 public class GeodeBaseTestCase {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(GeodeFlowTestCase.class);
 
@@ -53,7 +53,7 @@ public class GeodeBaseTestCase {
 
   // #region
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
   }
@@ -87,7 +87,7 @@ public class GeodeBaseTestCase {
     return geode;
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

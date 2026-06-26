@@ -17,8 +17,8 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.apache.pekko.stream.connectors.pravega.PravegaPekkoTestCaseSupport;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
 import org.apache.pekko.testkit.javadsl.TestKit;
 
@@ -44,7 +44,7 @@ public abstract class PravegaBaseTestCase extends PravegaPekkoTestCaseSupport {
     return "java-test-table-" + UUID.randomUUID().toString();
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     init();
   }
@@ -74,7 +74,7 @@ public abstract class PravegaBaseTestCase extends PravegaPekkoTestCaseSupport {
     streamManager.close();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

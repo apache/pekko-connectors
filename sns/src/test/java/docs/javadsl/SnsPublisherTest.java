@@ -18,7 +18,8 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.Http;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.sns.javadsl.SnsPublisher;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
@@ -31,10 +32,10 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsAsyncClient;
 // #init-client
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 
@@ -45,8 +46,8 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+@ExtendWith(LogCapturingExtension.class)
 public class SnsPublisherTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   static ActorSystem system;
   static SnsAsyncClient snsClient;
@@ -54,7 +55,7 @@ public class SnsPublisherTest {
 
   static final String endpoint = "http://localhost:4100";
 
-  @BeforeClass
+  @BeforeAll
   public static void setUpBeforeClass() throws ExecutionException, InterruptedException {
     system = ActorSystem.create("SnsPublisherTest");
     snsClient = createSnsClient();
@@ -65,7 +66,7 @@ public class SnsPublisherTest {
             .topicArn();
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDownAfterClass() throws Exception {
     Http.get(system)
         .shutdownAllConnectionPools()
