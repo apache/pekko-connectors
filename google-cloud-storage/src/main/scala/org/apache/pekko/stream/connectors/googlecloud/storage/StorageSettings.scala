@@ -19,17 +19,6 @@ package org.apache.pekko.stream.connectors.googlecloud.storage
 @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
 @Deprecated
 final class StorageSettings private (val projectId: String, val clientEmail: String, val privateKey: String) {
-  def withProjectId(projectId: String): StorageSettings = copy(projectId = projectId)
-
-  def withClientEmail(clientEmail: String): StorageSettings = copy(clientEmail = clientEmail)
-
-  def withPrivateKey(privateKey: String): StorageSettings = copy(privateKey = privateKey)
-
-  private def copy(projectId: String = projectId,
-      clientEmail: String = clientEmail,
-      privateKey: String = privateKey): StorageSettings =
-    new StorageSettings(projectId, clientEmail, privateKey)
-
   override def toString: String =
     s"StorageSettings(projectId=$projectId, clientEmail=$clientEmail, privateKey=**)"
 }

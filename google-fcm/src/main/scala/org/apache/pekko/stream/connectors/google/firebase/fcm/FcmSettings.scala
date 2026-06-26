@@ -43,27 +43,6 @@ final class FcmSettings private (
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
       "Alpakka 3.0.0") @Deprecated val forwardProxy: Option[ForwardProxy] = Option.empty) {
 
-  /**
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
-  @Deprecated
-  def withClientEmail(value: String): FcmSettings = copy(clientEmail = value)
-
-  /**
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
-  @Deprecated
-  def withPrivateKey(value: String): FcmSettings = copy(privateKey = value)
-
-  /**
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
-  @Deprecated
-  def withProjectId(value: String): FcmSettings = copy(projectId = value)
-
   def withIsTest(value: Boolean): FcmSettings = if (isTest == value) this else copy(isTest = value)
 
   def withMaxConcurrentConnections(value: Int): FcmSettings = copy(maxConcurrentConnections = value)

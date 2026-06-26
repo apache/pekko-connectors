@@ -52,9 +52,6 @@ final class GCStorageSettings private (
   /** Java API */
   def getTokenScope: String = tokenScope
 
-  def withProjectId(value: String): GCStorageSettings = copy(projectId = value)
-  def withClientEmail(value: String): GCStorageSettings = copy(clientEmail = value)
-  def withPrivateKey(value: String): GCStorageSettings = copy(privateKey = value)
   def withBaseUrl(value: String): GCStorageSettings = copy(baseUrl = value)
   def withBasePath(value: String): GCStorageSettings = copy(basePath = value)
   def withTokenUrl(value: String): GCStorageSettings = copy(tokenUrl = value)
