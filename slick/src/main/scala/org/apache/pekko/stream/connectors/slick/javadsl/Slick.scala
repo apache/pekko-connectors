@@ -154,7 +154,7 @@ object Slick {
    * @deprecated Use the overload with `java.util.concurrent.Executor` instead.
    */
   @deprecated("Use flowWithPassThrough with java.util.concurrent.Executor instead", "2.0.0")
-  @java.lang.Deprecated
+  @java.lang.Deprecated(since = "2.0.0")
   def flowWithPassThrough[T, R](
       session: SlickSession,
       executionContext: ExecutionContext,
@@ -226,7 +226,7 @@ object Slick {
    * @deprecated Use the overload with `java.util.concurrent.Executor` instead (since 2.0.0).
    */
   @deprecated("Use flowWithPassThrough with java.util.concurrent.Executor instead", "2.0.0")
-  @java.lang.Deprecated
+  @java.lang.Deprecated(since = "2.0.0")
   def flowWithPassThrough[T, R](
       session: SlickSession,
       executionContext: ExecutionContext,
@@ -301,7 +301,7 @@ object Slick {
    * @deprecated Use the overload with `java.util.concurrent.Executor` instead.
    */
   @deprecated("Use flowWithPassThrough with java.util.concurrent.Executor instead", "2.0.0")
-  @java.lang.Deprecated
+  @java.lang.Deprecated(since = "2.0.0")
   def flowWithPassThrough[T, R](
       session: SlickSession,
       executionContext: ExecutionContext,
@@ -409,7 +409,7 @@ object Slick {
    * @deprecated Use the overload with `java.util.concurrent.Executor` instead.
    */
   @deprecated("Use flowWithPassThrough with java.util.concurrent.Executor instead", "2.0.0")
-  @java.lang.Deprecated
+  @java.lang.Deprecated(since = "2.0.0")
   def flowWithPassThrough[T, R](
       session: SlickSession,
       executionContext: ExecutionContext,
