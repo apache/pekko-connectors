@@ -95,7 +95,7 @@ public class CassandraFlowTest {
             .map(row -> row.getInt("id"))
             .runWith(Sink.seq(), system);
     List<Integer> rows = await(select);
-    assertThat(new ArrayList<>(rows), hasItems(data.toArray()));
+    assertThat(new ArrayList<>(rows), hasItems(data.toArray(Integer[]::new)));
   }
 
   @Test
@@ -140,7 +140,7 @@ public class CassandraFlowTest {
             .map(row -> new Person(row.getInt("id"), row.getString("name"), row.getString("city")))
             .runWith(Sink.seq(), system);
     List<Person> rows = await(select);
-    assertThat(new ArrayList<>(rows), hasItems(persons.toArray()));
+    assertThat(new ArrayList<>(rows), hasItems(persons.toArray(Person[]::new)));
   }
 
   @Test
@@ -187,7 +187,9 @@ public class CassandraFlowTest {
             .map(row -> new Person(row.getInt("id"), row.getString("name"), row.getString("city")))
             .runWith(Sink.seq(), system);
     List<Person> rows = await(select);
-    assertThat(new ArrayList<>(rows), hasItems(persons.stream().map(p -> p.first()).toArray()));
+    assertThat(
+        new ArrayList<>(rows),
+        hasItems(persons.stream().map(p -> p.first()).toArray(Person[]::new)));
   }
 
   public record Person(int id, String name, String city) {}

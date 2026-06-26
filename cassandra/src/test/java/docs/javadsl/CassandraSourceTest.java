@@ -118,7 +118,7 @@ public class CassandraSourceTest {
     // #cql
     List<Integer> rows = await(select);
 
-    assertThat(new ArrayList<>(rows), hasItems(data.toArray()));
+    assertThat(new ArrayList<>(rows), hasItems(data.toArray(Integer[]::new)));
   }
 
   @Test
@@ -150,7 +150,7 @@ public class CassandraSourceTest {
             .map(r -> r.getInt("id"))
             .runWith(Sink.seq(), system);
     // #statement
-    assertThat(new ArrayList<>(await(select)), hasItems(data.toArray()));
+    assertThat(new ArrayList<>(await(select)), hasItems(data.toArray(Integer[]::new)));
   }
 
   public void compileOnlyDiscovery() {

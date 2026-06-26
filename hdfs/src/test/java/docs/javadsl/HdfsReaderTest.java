@@ -42,6 +42,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class HdfsReaderTest {
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
@@ -80,8 +81,10 @@ public class HdfsReaderTest {
     }
 
     assertArrayEquals(
-        readData.toArray(),
-        data.stream().flatMap(bs -> bs.utf8String().chars().mapToObj(i -> (char) i)).toArray());
+        readData.toArray(Character[]::new),
+        data.stream()
+            .flatMap(bs -> bs.utf8String().chars().mapToObj(i -> (char) i))
+            .toArray(Character[]::new));
   }
 
   @Test
@@ -116,8 +119,10 @@ public class HdfsReaderTest {
     }
 
     assertArrayEquals(
-        readData.toArray(),
-        content.stream().flatMap(bs -> bs.utf8String().chars().mapToObj(i -> (char) i)).toArray());
+        readData.toArray(Character[]::new),
+        content.stream()
+            .flatMap(bs -> bs.utf8String().chars().mapToObj(i -> (char) i))
+            .toArray(Character[]::new));
   }
 
   @Test
@@ -151,7 +156,7 @@ public class HdfsReaderTest {
       readData.addAll(result);
     }
 
-    assertArrayEquals(readData.toArray(), content.toArray());
+    assertEquals(readData, content);
   }
 
   @BeforeClass
