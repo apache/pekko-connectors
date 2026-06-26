@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.google.GoogleSettings
-import pekko.stream.connectors.googlecloud.storage.GCStorageSettings
 import pekko.stream.connectors.googlecloud.storage.scaladsl.GCStorageWiremockBase._
 import pekko.testkit.TestKit
 import com.typesafe.config.ConfigFactory
@@ -27,7 +26,6 @@ import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.equalsToJson
 import spray.json.DefaultJsonProtocol.{ mapFormat, StringJsonFormat }
 import spray.json.{ enrichAny, JsObject }
 
-import scala.annotation.nowarn
 import scala.util.Random
 
 abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hoverfly) extends TestKit(_system) {
@@ -852,28 +850,6 @@ object GCStorageWiremockBase {
 
   private def config(proxyPort: Int) =
     ConfigFactory.parseString(s"""
-    |${(GCStorageSettings: @nowarn("msg=deprecated")).ConfigPath} {
-    |  project-id = ""testX-XXXXX""
-    |  client-email = "test-XXX@test-XXXXX.iam.gserviceaccount.com"
-    |  private-key = \"\"\"
-    |-----BEGIN PRIVATE KEY-----
-    |MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAMwkmdwrWp+LLlsf
-    |bVE+neFjZtUNuaD4/tpQ2UIh2u+qU6sr4bG8PPuqSdrt5b0/0vfMZA11mQWmKpg5
-    |PK98kEkhbSvC08fG0TtpR9+vflghOuuvcw6kCniwNbHlOXnE8DwtKQp1DbTUPzMD
-    |hhsIjJaUtv19Xk7gh4MqYgANTm6lAgMBAAECgYEAwBXIeHSKxwiNS8ycbg//Oq7v
-    |eZV6j077bq0YYLO+cDjSlYOq0DSRJTSsXcXvoE1H00aM9mUq4TfjaGyi/3SzxYsr
-    |rSzu/qpYC58MJsnprIjlLgFZmZGe5MOSoul/u6JsBTJGkYPV0xGrtXJY103aSYzC
-    |xthpY0BHy9eO9I/pNlkCQQD/64g4INAiBdM4R5iONQvh8LLvqbb8Bw4vVwVFFnAr
-    |YHcomxtT9TunMad6KPgbOCd/fTttDADrv54htBrFGXeXAkEAzDTtisPKXPByJnUd
-    |jKO2oOg0Fs9IjGeWbnkrsN9j0134ldARE+WbT5S8G5EFo+bQi4ffU3+Y/4ly6Amm
-    |OAAzIwJBANV2GAD5HaHDShK/ZTf4dxjWM+pDnSVKnUJPS039EUKdC8cK2RiGjGNA
-    |v3jdg1Tw2cE1K8QhJwN8qOFj4JBWVbECQQCwcntej9bnf4vi1wd1YnCHkJyRqQIS
-    |7974DhNGfYAQPv5w1JwtCRSuKuJvH1w0R1ijd//scjCNfQKgpNXPRbzpAkAQ8MFA
-    |MLpOLGqezUQthJWmVtnXEXaAlb3yFSRTZQVEselObiIc6EvYzNXv780IDT4pyKjg
-    |8DS9i5jJDIVWr7mA
-    |-----END PRIVATE KEY-----
-    |\"\"\"
-    |}
     |${GoogleSettings.ConfigPath} {
     |  retry-settings {
     |    max-retries = 1

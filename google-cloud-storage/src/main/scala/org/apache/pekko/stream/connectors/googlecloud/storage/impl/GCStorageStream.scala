@@ -23,7 +23,6 @@ import pekko.http.scaladsl.model.Uri.{ Path, Query }
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.unmarshalling.{ FromEntityUnmarshaller, FromResponseUnmarshaller, Unmarshal, Unmarshaller }
 import pekko.stream.connectors.google._
-import pekko.stream.connectors.google.auth.{ Credentials, ServiceAccountCredentials }
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.implicits._
 import pekko.stream.connectors.google.scaladsl.{ `X-Upload-Content-Type`, Paginated }
@@ -35,7 +34,6 @@ import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import spray.json._
 
-import scala.annotation.nowarn
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.ExecutionContext.parasitic
 
@@ -288,51 +286,8 @@ import scala.concurrent.ExecutionContext.parasitic
       }
       .mapMaterializedValue(_ => NotUsed)
 
-  @nowarn("msg=deprecated")
-  private def resolveSettings(mat: Materializer, attr: Attributes) = {
-    implicit val sys: ActorSystem = mat.system
-    val legacySettings = attr
-      .get[GCStorageSettingsValue]
-      .map(_.settings)
-      .getOrElse {
-        val configPath = attr.get[GCStorageSettingsPath](GCStorageSettingsPath.Default).path
-        GCStorageExt(sys).settings(configPath)
-      }
-
-    val settings = GoogleAttributes.resolveSettings(mat, attr)
-
-    if (legacySettings.privateKey == "deprecated")
-      GoogleAttributes.resolveSettings(mat, attr)
-    else {
-      sys.log.warning("Configuration via pekko.connectors.google.cloud.storage is deprecated")
-
-      require(
-        (legacySettings.baseUrl.contains("googleapis.com") || legacySettings.baseUrl == "unsupported")
-        && (legacySettings.basePath.contains("storage/v1") || legacySettings.basePath == "unsupported")
-        && (legacySettings.tokenUrl.contains("googleapis.com") || legacySettings.tokenUrl == "unsupported"),
-        "Non-default base-url/base-path/token-url no longer supported, use config path pekko.connectors.google.forward-proxy")
-
-      val legacyScopes = legacySettings.tokenScope.split(" ").toSet
-      val credentials = Credentials.cache(
-        (
-          legacySettings.projectId,
-          legacySettings.clientEmail,
-          legacySettings.privateKey,
-          legacyScopes,
-          mat.system.name)) {
-        ServiceAccountCredentials(
-          legacySettings.projectId,
-          legacySettings.clientEmail,
-          legacySettings.privateKey,
-          legacyScopes)
-      }
-
-      GoogleSettings(
-        legacySettings.projectId,
-        credentials,
-        settings.requestSettings)
-    }
-  }
+  private def resolveSettings(mat: Materializer, attr: Attributes) =
+    GoogleAttributes.resolveSettings(mat, attr)
 
   private def resolveGCSSettings(mat: Materializer, attr: Attributes): GCSSettings = {
     implicit val sys: ActorSystem = mat.system
