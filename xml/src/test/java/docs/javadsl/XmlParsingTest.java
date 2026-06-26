@@ -103,27 +103,28 @@ public class XmlParsingTest {
                 StringBuilder::new,
                 (textBuffer, parseEvent) -> {
                   // aggregation function
-                  switch (parseEvent.marker()) {
-                    case XMLStartElement:
+                  return switch (parseEvent.marker()) {
+                    case XMLStartElement -> {
                       textBuffer.delete(0, textBuffer.length());
-                      return Pair.create(textBuffer, Optional.<String>empty());
-                    case XMLEndElement:
+                      yield Pair.create(textBuffer, Optional.<String>empty());
+                    }
+                    case XMLEndElement -> {
                       EndElement s = (EndElement) parseEvent;
-                      switch (s.localName()) {
-                        case "elem":
+                      yield switch (s.localName()) {
+                        case "elem" -> {
                           String text = textBuffer.toString();
-                          return Pair.create(textBuffer, Optional.of(text));
-                        default:
-                          return Pair.create(textBuffer, Optional.<String>empty());
-                      }
-                    case XMLCharacters:
-                    case XMLCData:
+                          yield Pair.create(textBuffer, Optional.of(text));
+                        }
+                        default -> Pair.create(textBuffer, Optional.<String>empty());
+                      };
+                    }
+                    case XMLCharacters, XMLCData -> {
                       TextEvent t = (TextEvent) parseEvent;
                       textBuffer.append(t.text());
-                      return Pair.create(textBuffer, Optional.<String>empty());
-                    default:
-                      return Pair.create(textBuffer, Optional.<String>empty());
-                  }
+                      yield Pair.create(textBuffer, Optional.<String>empty());
+                    }
+                    default -> Pair.create(textBuffer, Optional.<String>empty());
+                  };
                 },
                 textBuffer -> Optional.of(Optional.of(textBuffer.toString())))
             .via(Flow.flattenOptional())
