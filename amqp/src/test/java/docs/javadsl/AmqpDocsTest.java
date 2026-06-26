@@ -44,7 +44,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -115,7 +114,7 @@ public class AmqpDocsTest {
         input,
         result.toCompletableFuture().get(3, TimeUnit.SECONDS).stream()
             .map(m -> m.bytes().utf8String())
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
@@ -285,7 +284,7 @@ public class AmqpDocsTest {
         input,
         result.toCompletableFuture().get(3, TimeUnit.SECONDS).stream()
             .map(m -> m.bytes().utf8String())
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
@@ -339,7 +338,7 @@ public class AmqpDocsTest {
         input,
         result2.toCompletableFuture().get(10, TimeUnit.SECONDS).stream()
             .map(m -> m.message().bytes().utf8String())
-            .collect(Collectors.toList()));
+            .toList());
 
     // See https://github.com/akka/akka/issues/26410
     // extra wait before assertAllStagesStopped kicks in
@@ -374,7 +373,7 @@ public class AmqpDocsTest {
     // #create-flow
 
     final List<WriteResult> expectedResult =
-        input.stream().map(s -> WriteResult.create(true)).collect(Collectors.toList());
+        input.stream().map(s -> WriteResult.create(true)).toList();
 
     assertEquals(result, expectedResult);
   }

@@ -26,7 +26,6 @@ import org.junit.Rule;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static scala.jdk.javaapi.FutureConverters.*;
@@ -98,9 +97,7 @@ public abstract class UnitTest {
   protected Message.Ids givenMessages(String queueName, int n) {
 
     List<PushMessage> messages =
-        IntStream.rangeClosed(1, n)
-            .mapToObj(i -> PushMessage.create("test-" + i))
-            .collect(Collectors.toList());
+        IntStream.rangeClosed(1, n).mapToObj(i -> PushMessage.create("test-" + i)).toList();
 
     try {
       return asJava(

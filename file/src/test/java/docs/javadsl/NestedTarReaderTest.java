@@ -38,7 +38,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class NestedTarReaderTest {
   private static final Logger logger = LoggerFactory.getLogger(NestedTarReaderTest.class);
@@ -71,8 +70,7 @@ public class NestedTarReaderTest {
         tempDir.toAbsolutePath().toString());
     List<TarArchiveMetadata> metadata =
         process(file, tempDir, system).toCompletableFuture().get(1, TimeUnit.MINUTES);
-    List<String> names =
-        metadata.stream().map(md -> md.filePathName()).collect(Collectors.toList());
+    List<String> names = metadata.stream().map(md -> md.filePathName()).toList();
     assertThat(names.size(), is(1281));
   }
 

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 // We're going to pretend we got messages from kafka.
@@ -68,15 +67,12 @@ public class DocSnippetFlowWithPassThrough {
     system.registerOnTermination(session::close);
 
     final List<User> users =
-        IntStream.range(0, 42)
-            .boxed()
-            .map((i) -> new User(i, "Name" + i))
-            .collect(Collectors.toList());
+        IntStream.range(0, 42).boxed().map((i) -> new User(i, "Name" + i)).toList();
 
     List<KafkaMessage<User>> messagesFromKafka =
         users.stream()
             .map(user -> new KafkaMessage<>(user, new CommittableOffset(users.indexOf(user))))
-            .collect(Collectors.toList());
+            .toList();
 
     // #flowWithPassThrough-example
     final CompletionStage<Done> done =

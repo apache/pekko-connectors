@@ -42,7 +42,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
@@ -238,7 +237,7 @@ public class XmlParsingTest {
         .thenAccept(
             (list) -> {
               assertThat(
-                  list.stream().map(e -> XmlHelper.asString(e).trim()).collect(Collectors.toList()),
+                  list.stream().map(e -> XmlHelper.asString(e).trim()).toList(),
                   hasItems("<item>i1</item>", "<item><sub>i2</sub></item>", "<item>i3</item>"));
             })
         .toCompletableFuture()

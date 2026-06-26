@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -196,7 +195,7 @@ public class SqsAckTest extends BaseSqsTest {
     List<DeleteMessageBatchResultEntry> entries =
         IntStream.range(0, messages.size())
             .mapToObj(i -> DeleteMessageBatchResultEntry.builder().id(Integer.toString(i)).build())
-            .collect(Collectors.toList());
+            .toList();
     DeleteMessageBatchResponse response =
         DeleteMessageBatchResponse.builder().successful(entries).build();
 
@@ -241,7 +240,7 @@ public class SqsAckTest extends BaseSqsTest {
                     ChangeMessageVisibilityBatchResultEntry.builder()
                         .id(Integer.toString(i))
                         .build())
-            .collect(Collectors.toList());
+            .toList();
     ChangeMessageVisibilityBatchResponse response =
         ChangeMessageVisibilityBatchResponse.builder().successful(entries).build();
 

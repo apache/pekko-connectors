@@ -63,7 +63,6 @@ import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 // #session
 // #registry
-import java.util.stream.Collectors;
 // #sessionFromBucket
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.CouchbaseCluster;
@@ -302,7 +301,7 @@ public class CouchbaseExamplesTest {
         writeResults.stream()
             .filter(CouchbaseWriteResult::isFailure)
             .map(res -> (CouchbaseWriteFailure<StringDocument>) res)
-            .collect(Collectors.toList());
+            .toList();
     // #upsertDocWithResult
 
     assertThat(writeResults.size(), is(sampleSequence.size()));
@@ -404,7 +403,7 @@ public class CouchbaseExamplesTest {
         writeResults.stream()
             .filter(CouchbaseWriteResult::isFailure)
             .map(res -> (CouchbaseWriteFailure<StringDocument>) res)
-            .collect(Collectors.toList());
+            .toList();
     // #replaceDocWithResult
 
     assertThat(writeResults.size(), is(list.size()));

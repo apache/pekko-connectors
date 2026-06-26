@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -74,8 +73,7 @@ public class HdfsReaderTest {
       ArrayList<ByteString> result =
           new ArrayList<>(source.runWith(Sink.seq(), system).toCompletableFuture().get());
       for (ByteString bs : result) {
-        readData.addAll(
-            bs.utf8String().chars().mapToObj(i -> (char) i).collect(Collectors.toList()));
+        readData.addAll(bs.utf8String().chars().mapToObj(i -> (char) i).toList());
       }
     }
 
@@ -110,8 +108,7 @@ public class HdfsReaderTest {
       ArrayList<ByteString> result =
           new ArrayList<>(source.runWith(Sink.seq(), system).toCompletableFuture().get());
       for (ByteString bs : result) {
-        readData.addAll(
-            bs.utf8String().chars().mapToObj(i -> (char) i).collect(Collectors.toList()));
+        readData.addAll(bs.utf8String().chars().mapToObj(i -> (char) i).toList());
       }
     }
 

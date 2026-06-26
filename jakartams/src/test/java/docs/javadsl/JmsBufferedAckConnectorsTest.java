@@ -42,7 +42,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -190,7 +189,7 @@ public class JmsBufferedAckConnectorsTest {
                       jmsTextMessage ->
                           jmsTextMessage.withHeader(JmsCorrelationId.create("correlationId")))
                   .map(jmsTextMessage -> jmsTextMessage.withHeader(JmsReplyTo.queue("test-reply")))
-                  .collect(Collectors.toList());
+                  .toList();
 
           Source.from(msgsIn).runWith(jmsSink, system);
 
@@ -260,9 +259,7 @@ public class JmsBufferedAckConnectorsTest {
                       .withSelector("IsOdd = TRUE"));
 
           List<JmsTextMessage> oddMsgsIn =
-              msgsIn.stream()
-                  .filter(msg -> Integer.valueOf(msg.body()) % 2 == 1)
-                  .collect(Collectors.toList());
+              msgsIn.stream().filter(msg -> Integer.valueOf(msg.body()) % 2 == 1).toList();
           assertEquals(5, oddMsgsIn.size());
 
           CompletionStage<List<Message>> result =
@@ -308,8 +305,7 @@ public class JmsBufferedAckConnectorsTest {
     withConnectionFactory(
         connectionFactory -> {
           List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
-          List<String> inNumbers =
-              IntStream.range(0, 10).boxed().map(String::valueOf).collect(Collectors.toList());
+          List<String> inNumbers = IntStream.range(0, 10).boxed().map(String::valueOf).toList();
 
           Sink<String, CompletionStage<Done>> jmsTopicSink =
               JmsProducer.textSink(
@@ -340,7 +336,7 @@ public class JmsBufferedAckConnectorsTest {
                         return ((TextMessage) env.message()).getText();
                       })
                   .runWith(Sink.seq(), system)
-                  .thenApply(l -> l.stream().sorted().collect(Collectors.toList()));
+                  .thenApply(l -> l.stream().sorted().toList());
           CompletionStage<List<String>> result2 =
               jmsTopicSource2
                   .take(in.size() + inNumbers.size())
@@ -350,7 +346,7 @@ public class JmsBufferedAckConnectorsTest {
                         return ((TextMessage) env.message()).getText();
                       })
                   .runWith(Sink.seq(), system)
-                  .thenApply(l -> l.stream().sorted().collect(Collectors.toList()));
+                  .thenApply(l -> l.stream().sorted().toList());
 
           Thread.sleep(500);
 
@@ -358,10 +354,10 @@ public class JmsBufferedAckConnectorsTest {
           Source.from(inNumbers).runWith(jmsTopicSink2, system);
 
           assertEquals(
-              Stream.concat(in.stream(), inNumbers.stream()).sorted().collect(Collectors.toList()),
+              Stream.concat(in.stream(), inNumbers.stream()).sorted().toList(),
               result.toCompletableFuture().get(5, TimeUnit.SECONDS));
           assertEquals(
-              Stream.concat(in.stream(), inNumbers.stream()).sorted().collect(Collectors.toList()),
+              Stream.concat(in.stream(), inNumbers.stream()).sorted().toList(),
               result2.toCompletableFuture().get(5, TimeUnit.SECONDS));
         });
   }

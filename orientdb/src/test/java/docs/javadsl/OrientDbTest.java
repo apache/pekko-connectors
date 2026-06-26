@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -372,11 +371,8 @@ public class OrientDbTest {
             .get(10, TimeUnit.SECONDS);
 
     assertEquals(
-        messagesFromKafkas.stream()
-            .map(m -> m.getBook_title())
-            .sorted()
-            .collect(Collectors.toList()),
-        result2.stream().sorted().collect(Collectors.toList()));
+        messagesFromKafkas.stream().map(m -> m.getBook_title()).sorted().toList(),
+        result2.stream().sorted().toList());
   }
 
   @Test

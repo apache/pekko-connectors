@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -365,8 +364,8 @@ public class ElasticsearchV7Test extends ElasticsearchTestBase {
             .get(); // Wait for it to complete
 
     assertEquals(
-        messagesFromKafka.stream().map(m -> m.book.title).sorted().collect(Collectors.toList()),
-        result2.stream().sorted().collect(Collectors.toList()));
+        messagesFromKafka.stream().map(m -> m.book.title).sorted().toList(),
+        result2.stream().sorted().toList());
   }
 
   @Test
@@ -428,7 +427,7 @@ public class ElasticsearchV7Test extends ElasticsearchTestBase {
                 d -> {
                   return d.a != null && d.b == null;
                 })
-            .collect(Collectors.toList())
+            .toList()
             .size());
   }
 }

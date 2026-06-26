@@ -22,7 +22,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.influxdb.InfluxDB;
@@ -252,11 +251,8 @@ public class InfluxDbTest {
             .get(10, TimeUnit.SECONDS);
 
     assertEquals(
-        messageFromKafka.stream()
-            .map(m -> m.influxDbCpu.getHostname())
-            .sorted()
-            .collect(Collectors.toList()),
-        result2.stream().sorted().collect(Collectors.toList()));
+        messageFromKafka.stream().map(m -> m.influxDbCpu.getHostname()).sorted().toList(),
+        result2.stream().sorted().toList());
   }
 
   private List<InfluxDbWriteMessage<Point, NotUsed>> points(QueryResult queryResult) {

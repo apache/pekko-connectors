@@ -307,7 +307,7 @@ public class SlickTest {
     final List<KafkaMessage<User>> messagesFromKafka =
         usersList.stream()
             .map(user -> new KafkaMessage<>(user, new KafkaOffset(usersList.indexOf(user))))
-            .collect(Collectors.toList());
+            .toList();
 
     final Function<KafkaMessage<User>, String> insertUserInKafkaMessage =
         insertUser.compose((KafkaMessage<User> kafkaMessage) -> kafkaMessage.msg);

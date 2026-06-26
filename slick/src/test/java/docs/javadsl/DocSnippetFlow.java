@@ -23,7 +23,6 @@ import org.apache.pekko.stream.javadsl.Source;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class DocSnippetFlow {
@@ -35,10 +34,7 @@ public class DocSnippetFlow {
     system.registerOnTermination(session::close);
 
     final List<User> users =
-        IntStream.range(0, 42)
-            .boxed()
-            .map((i) -> new User(i, "Name" + i))
-            .collect(Collectors.toList());
+        IntStream.range(0, 42).boxed().map((i) -> new User(i, "Name" + i)).toList();
 
     int parallelism = 1;
 

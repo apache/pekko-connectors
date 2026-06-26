@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -123,7 +122,7 @@ public class AmqpConnectorsTest {
       throw e.getCause();
     }
     // assertEquals(input, result.toCompletableFuture().get(3, TimeUnit.SECONDS).stream().map(m ->
-    // m.bytes().utf8String()).collect(Collectors.toList()));
+    // m.bytes().utf8String()).toList());
   }
 
   @Test
@@ -172,8 +171,7 @@ public class AmqpConnectorsTest {
         JavaConverters.seqAsJavaListConverter(
                 result.second().toStrict(Duration.create(3, TimeUnit.SECONDS)))
             .asJava();
-    assertEquals(
-        probeResult.stream().map(s -> s.bytes().utf8String()).collect(Collectors.toList()), input);
+    assertEquals(probeResult.stream().map(s -> s.bytes().utf8String()).toList(), input);
     sourceToSink.shutdown();
   }
 
@@ -245,8 +243,7 @@ public class AmqpConnectorsTest {
             bufferSize);
 
     final List<String> input = List.of("one", "two", "three", "four", "five");
-    final List<String> routingKeys =
-        input.stream().map(s -> "key." + s).collect(Collectors.toList());
+    final List<String> routingKeys = input.stream().map(s -> "key." + s).toList();
     Source.from(input)
         .map(s -> WriteMessage.create(ByteString.fromString(s)).withRoutingKey("key." + s))
         .runWith(amqpSink, system);
@@ -258,10 +255,7 @@ public class AmqpConnectorsTest {
             .toCompletableFuture()
             .get(3, TimeUnit.SECONDS);
 
-    assertEquals(
-        routingKeys,
-        result.stream().map(m -> m.envelope().getRoutingKey()).collect(Collectors.toList()));
-    assertEquals(
-        input, result.stream().map(m -> m.bytes().utf8String()).collect(Collectors.toList()));
+    assertEquals(routingKeys, result.stream().map(m -> m.envelope().getRoutingKey()).toList());
+    assertEquals(input, result.stream().map(m -> m.bytes().utf8String()).toList());
   }
 }

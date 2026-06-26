@@ -57,7 +57,6 @@ import java.util.OptionalLong;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -235,7 +234,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
   }
 
   private <T> List<T> sorted(List<T> list) {
-    return list.stream().sorted(Comparator.comparingInt(T::hashCode)).collect(Collectors.toList());
+    return list.stream().sorted(Comparator.comparingInt(T::hashCode)).toList();
   }
 
   @Test
@@ -263,7 +262,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
         getRows().stream()
             .filter(A::getBoolean)
             .map(a -> new Tuple3<>(a.getString(), a.getRecord(), a.getInteger()))
-            .collect(Collectors.toList());
+            .toList();
     List<Tuple3<String, B, Integer>> results =
         BigQuery.query(
                 query, false, false, BigQueryMarshallers.queryResponseUnmarshaller(JsonNode.class))

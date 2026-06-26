@@ -139,7 +139,7 @@ public class MqttSourceTest {
         input,
         unackedResult.second().toCompletableFuture().get(5, TimeUnit.SECONDS).stream()
             .map(m -> m.message().payload().utf8String())
-            .collect(Collectors.toList()));
+            .toList());
 
     Flow<MqttMessageWithAck, MqttMessageWithAck, NotUsed> businessLogic = Flow.create();
 
@@ -159,7 +159,7 @@ public class MqttSourceTest {
         input,
         result.toCompletableFuture().get(3, TimeUnit.SECONDS).stream()
             .map(m -> m.payload().utf8String())
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
@@ -249,7 +249,7 @@ public class MqttSourceTest {
                     Stream.of(
                         MqttMessage.create(topic1, ByteString.fromString("msg" + i.toString())),
                         MqttMessage.create(topic2, ByteString.fromString("msg" + i.toString()))))
-            .collect(Collectors.toList());
+            .toList();
 
     // #run-sink
     Sink<MqttMessage, CompletionStage<Done>> mqttSink =

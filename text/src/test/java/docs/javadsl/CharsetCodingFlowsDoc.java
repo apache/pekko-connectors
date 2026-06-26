@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -60,7 +59,7 @@ public class CharsetCodingFlowsDoc {
     List<String> strings =
         properties.stringPropertyNames().stream()
             .map(p -> p + " -> " + properties.getProperty(p))
-            .collect(Collectors.toList());
+            .toList();
     // #encoding
     Source<String, ?> stringSource = // ...
         // #encoding

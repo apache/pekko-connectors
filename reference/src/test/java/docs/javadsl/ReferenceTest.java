@@ -35,7 +35,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /** Append "Test" to every Java test suite. */
 public class ReferenceTest {
@@ -134,9 +133,7 @@ public class ReferenceTest {
     final List<ReferenceWriteResult> result = stage.toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     final List<ByteString> bytes =
-        result.stream()
-            .flatMap(m -> m.getMessage().getData().stream())
-            .collect(Collectors.toList());
+        result.stream().flatMap(m -> m.getMessage().getData().stream()).toList();
 
     Assert.assertEquals(
         List.of(
@@ -165,7 +162,7 @@ public class ReferenceTest {
         result.stream()
             .flatMap(m -> m.getMessage().getData().stream())
             .map(ByteString::utf8String)
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   @Test
@@ -187,7 +184,7 @@ public class ReferenceTest {
         result.stream()
             .flatMap(m -> m.getMessage().getData().stream())
             .map(ByteString::utf8String)
-            .collect(Collectors.toList()));
+            .toList());
   }
 
   /** Called after every test. */

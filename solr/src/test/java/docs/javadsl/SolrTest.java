@@ -63,7 +63,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -380,7 +379,7 @@ public class SolrTest {
                               }
                               return result.passThrough();
                             })
-                        .collect(Collectors.toList()))
+                        .toList())
             .map(ConsumerMessage::createCommittableOffsetBatch)
             .mapAsync(1, CommittableOffsetBatch::commitJavadsl)
             .runWith(Sink.ignore(), system);
@@ -391,9 +390,7 @@ public class SolrTest {
     // Make sure all messages was committed to kafka
     assertEquals(
         List.of(0, 1, 2),
-        CommittableOffsetBatch.committedOffsets.stream()
-            .map(o -> o.offset)
-            .collect(Collectors.toList()));
+        CommittableOffsetBatch.committedOffsets.stream().map(o -> o.offset).toList());
 
     TupleStream stream = getTupleStream(collectionName);
 
@@ -405,8 +402,8 @@ public class SolrTest {
     List<String> result = new ArrayList<>(resultOf(res2));
 
     assertEquals(
-        messagesFromKafka.stream().map(m -> m.book.title).sorted().collect(Collectors.toList()),
-        result.stream().sorted().collect(Collectors.toList()));
+        messagesFromKafka.stream().map(m -> m.book.title).sorted().toList(),
+        result.stream().sorted().toList());
   }
 
   @Test
@@ -749,7 +746,7 @@ public class SolrTest {
                               }
                               return result.passThrough();
                             })
-                        .collect(Collectors.toList()))
+                        .toList())
             .map(ConsumerMessage::createCommittableOffsetBatch)
             .mapAsync(1, CommittableOffsetBatch::commitJavadsl)
             .runWith(Sink.ignore(), system);
@@ -760,9 +757,7 @@ public class SolrTest {
     // Make sure all messages was committed to kafka
     assertEquals(
         List.of(0, 1, 2),
-        CommittableOffsetBatch.committedOffsets.stream()
-            .map(o -> o.offset)
-            .collect(Collectors.toList()));
+        CommittableOffsetBatch.committedOffsets.stream().map(o -> o.offset).toList());
   }
 
   @BeforeClass
