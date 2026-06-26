@@ -91,7 +91,7 @@ public class DirectoryChangesSourceTest {
     assertEquals(pair1.second(), DirectoryChange.Creation);
     assertEquals(pair1.first(), createdFile);
 
-    Files.write(createdFile, "Some data".getBytes());
+    Files.writeString(createdFile, "Some data");
 
     final Pair<Path, DirectoryChange> pair2 = probe.requestNext();
     assertEquals(pair2.second(), DirectoryChange.Modification);

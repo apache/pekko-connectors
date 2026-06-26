@@ -74,7 +74,7 @@ public class FileTailSourceTest {
   public void canReadAnEntireFile() throws Exception {
     final Path path = fs.getPath("/file");
     final String dataInFile = "a\nb\nc\nd";
-    Files.write(path, dataInFile.getBytes(UTF_8));
+    Files.writeString(path, dataInFile, UTF_8);
 
     final Source<ByteString, NotUsed> source =
         org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.create(
@@ -101,7 +101,7 @@ public class FileTailSourceTest {
   @Test
   public void willReadNewLinesAppendedAfterReadingTheInitialContents() throws Exception {
     final Path path = fs.getPath("/file");
-    Files.write(path, "a\n".getBytes(UTF_8));
+    Files.writeString(path, "a\n", UTF_8);
 
     final Source<String, NotUsed> source =
         org.apache.pekko.stream.connectors.file.javadsl.FileTailSource.createLines(
@@ -123,10 +123,10 @@ public class FileTailSourceTest {
     assertEquals("a", result1);
 
     subscriber.request(1);
-    Files.write(path, "b\n".getBytes(UTF_8), WRITE, APPEND);
+    Files.writeString(path, "b\n", UTF_8, WRITE, APPEND);
     assertEquals("b", subscriber.expectNext());
 
-    Files.write(path, "c\n".getBytes(UTF_8), WRITE, APPEND);
+    Files.writeString(path, "c\n", UTF_8, WRITE, APPEND);
     subscriber.request(1);
     assertEquals("c", subscriber.expectNext());
 
@@ -137,7 +137,7 @@ public class FileTailSourceTest {
   @Test
   public void willCompleteStreamIfFileIsDeleted() throws Exception {
     final Path path = fs.getPath("/file");
-    Files.write(path, "a\n".getBytes(UTF_8));
+    Files.writeString(path, "a\n", UTF_8);
 
     final TestSubscriber.Probe<String> subscriber = TestSubscriber.probe(system);
 
@@ -183,7 +183,7 @@ public class FileTailSourceTest {
   @Test
   public void willCompleteStreamIfFileIsIdle() throws Exception {
     final Path path = fs.getPath("/file");
-    Files.write(path, "a\n".getBytes(UTF_8));
+    Files.writeString(path, "a\n", UTF_8);
 
     final TestSubscriber.Probe<String> subscriber = TestSubscriber.probe(system);
 
