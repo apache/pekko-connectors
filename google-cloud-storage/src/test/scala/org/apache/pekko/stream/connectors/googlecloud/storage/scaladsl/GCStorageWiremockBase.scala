@@ -851,6 +851,13 @@ object GCStorageWiremockBase {
   private def config(proxyPort: Int) =
     ConfigFactory.parseString(s"""
     |${GoogleSettings.ConfigPath} {
+    |  credentials {
+    |    type = "service_account"
+    |    service-account {
+    |      project-id = ""testX-XXXXX""
+    |      client-email = "test-XXX@test-XXXXX.iam.gserviceaccount.com"
+    |    }
+    |  }
     |  retry-settings {
     |    max-retries = 1
     |    max-backoff = 1s
