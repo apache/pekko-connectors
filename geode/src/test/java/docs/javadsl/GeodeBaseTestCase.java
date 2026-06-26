@@ -47,9 +47,9 @@ public class GeodeBaseTestCase {
 
   // #region
   protected final RegionSettings<Integer, Person> personRegionSettings =
-      RegionSettings.create("persons", Person::getId);
+      RegionSettings.create("persons", Person::id);
   protected final RegionSettings<Integer, Animal> animalRegionSettings =
-      RegionSettings.create("animals", Animal::getId);
+      RegionSettings.create("animals", Animal::id);
 
   // #region
 
