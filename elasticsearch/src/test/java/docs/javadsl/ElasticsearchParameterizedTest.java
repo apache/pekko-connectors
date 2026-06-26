@@ -26,7 +26,6 @@ import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,7 @@ public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
 
   @Parameterized.Parameters(name = "{index}: port={0} api={1}")
   public static Iterable<Object[]> data() {
-    return Arrays.asList(
+    return List.of(
         new Object[][] {
           {9201, ApiVersion.V5},
           {9202, ApiVersion.V7}

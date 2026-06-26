@@ -108,7 +108,7 @@ public class JmsConnectorsTest {
   }
 
   private List<JmsTextMessage> createTestMessageList() {
-    List<Integer> intsIn = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    List<Integer> intsIn = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     List<JmsTextMessage> msgsIn = new ArrayList<>();
     for (Integer n : intsIn) {
 
@@ -144,7 +144,7 @@ public class JmsConnectorsTest {
               JmsProducer.textSink(
                   JmsProducerSettings.create(system, connectionFactory).withQueue("test"));
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           CompletionStage<Done> finished = Source.from(in).runWith(jmsSink, system);
           // #text-sink
 
@@ -172,7 +172,7 @@ public class JmsConnectorsTest {
           ActiveMQConnectionFactory connectionFactory =
               (ActiveMQConnectionFactory) server.createConnectionFactory();
           connectionFactory.setTrustedPackages(
-              Arrays.asList(DummyJavaTests.class.getPackage().getName()));
+              List.of(DummyJavaTests.class.getPackage().getName()));
 
           // #object-source
           // #connection-factory-object
@@ -307,7 +307,7 @@ public class JmsConnectorsTest {
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
           CompletionStage<Done> finished =
-              Source.from(Arrays.asList("Message A", "Message B"))
+              Source.from(List.of("Message A", "Message B"))
                   .map(JmsTextMessage::create)
                   .runWith(jmsSink, system);
           // #create-jms-sink
@@ -497,7 +497,7 @@ public class JmsConnectorsTest {
         server -> {
           ConnectionFactory connectionFactory = server.createConnectionFactory();
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           List<String> inNumbers =
               IntStream.range(0, 10).boxed().map(String::valueOf).collect(Collectors.toList());
 
@@ -650,7 +650,7 @@ public class JmsConnectorsTest {
               JmsProducer.textSink(
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
 
           Source.from(in).runWith(jmsSink, system).toCompletableFuture().get();
 
@@ -690,7 +690,7 @@ public class JmsConnectorsTest {
               .setClientID(getClass().getSimpleName());
           // #create-connection-factory-with-client-id
 
-          List<String> in = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
 
           Sink<String, CompletionStage<Done>> jmsTopicSink =
               JmsProducer.textSink(
@@ -750,7 +750,7 @@ public class JmsConnectorsTest {
                   JmsProducerSettings.create(system, connectionFactory).withQueue("test"));
 
           List<JmsTextMessage> input = new ArrayList<>();
-          for (Integer n : Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) {
+          for (Integer n : List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) {
             String queueName = (n % 2 == 0) ? "even" : "odd";
             input.add(JmsTextMessage.create(n.toString()).toQueue(queueName));
           }
@@ -772,8 +772,8 @@ public class JmsConnectorsTest {
                   .map(Integer::parseInt)
                   .runWith(Sink.seq(), system);
 
-          assertEquals(Arrays.asList(1, 3, 5, 7, 9), odd.toCompletableFuture().get());
-          assertEquals(Arrays.asList(2, 4, 6, 8, 10), even.toCompletableFuture().get());
+          assertEquals(List.of(1, 3, 5, 7, 9), odd.toCompletableFuture().get());
+          assertEquals(List.of(2, 4, 6, 8, 10), even.toCompletableFuture().get());
         });
   }
 
@@ -824,7 +824,7 @@ public class JmsConnectorsTest {
               JmsProducer.flexiFlow(
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
-          List<String> data = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> data = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           List<JmsEnvelope<String>> input = new ArrayList<>();
           for (String s : data) {
             String passThrough = s;
@@ -858,7 +858,7 @@ public class JmsConnectorsTest {
               JmsProducer.flexiFlow(
                   JmsProducerSettings.create(producerConfig, connectionFactory).withQueue("test"));
 
-          List<String> data = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
+          List<String> data = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
           List<JmsEnvelope<String>> input = new ArrayList<>();
           for (String s : data) {
             String passThrough = s;

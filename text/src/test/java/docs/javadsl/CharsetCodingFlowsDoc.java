@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CompletionStage;
@@ -91,7 +90,7 @@ public class CharsetCodingFlowsDoc {
             .runWith(Sink.seq(), system);
     // #decoding
     List<String> result = streamCompletion.toCompletableFuture().get(1, TimeUnit.SECONDS);
-    assertEquals(Arrays.asList("äåûßêëé"), result);
+    assertEquals(List.of("äåûßêëé"), result);
   }
 
   @Test

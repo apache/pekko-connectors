@@ -33,7 +33,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +44,7 @@ public class PassThroughExamples {
   public void passThroughWithKeep() throws InterruptedException, ExecutionException {
     // #PassThroughWithKeep
     // Sample Source
-    Source<Integer, NotUsed> source = Source.from(Arrays.asList(1, 2, 3));
+    Source<Integer, NotUsed> source = Source.from(List.of(1, 2, 3));
 
     // Pass through this flow maintaining the original message
     Flow<Integer, Integer, NotUsed> passThroughMe = Flow.of(Integer.class).map(i -> i * 10);
@@ -55,7 +54,7 @@ public class PassThroughExamples {
 
     // Verify results
     List<Integer> list = ret.toCompletableFuture().get();
-    assert list.equals(Arrays.asList(1, 2, 3));
+    assert list.equals(List.of(1, 2, 3));
     // #PassThroughWithKeep
   }
 
@@ -63,7 +62,7 @@ public class PassThroughExamples {
   public void passThroughTuple() throws InterruptedException, ExecutionException {
     // #PassThroughTuple
     // Sample Source
-    Source<Integer, NotUsed> source = Source.from(Arrays.asList(1, 2, 3));
+    Source<Integer, NotUsed> source = Source.from(List.of(1, 2, 3));
 
     // Pass through this flow maintaining the original message
     Flow<Integer, Integer, NotUsed> passThroughMe = Flow.of(Integer.class).map(i -> i * 10);
@@ -74,7 +73,7 @@ public class PassThroughExamples {
     // Verify results
     List<Pair<Integer, Integer>> list = ret.toCompletableFuture().get();
     assert list.equals(
-        Arrays.asList(
+        List.of(
             new Pair<Integer, Integer>(10, 1),
             new Pair<Integer, Integer>(20, 2),
             new Pair<Integer, Integer>(30, 3)));

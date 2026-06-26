@@ -32,7 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -83,7 +83,7 @@ public class LogRotatorSinkTest {
         LogRotatorSink.createFromFunction(sizeBasedTriggerCreator);
     // #size
     CompletionStage<Done> fileSizeCompletion =
-        Source.from(Arrays.asList("test1", "test2", "test3", "test4", "test5", "test6"))
+        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
             .map(ByteString::fromString)
             .runWith(sizeRotatorSink, system);
 
@@ -116,7 +116,7 @@ public class LogRotatorSinkTest {
     // #time
 
     CompletionStage<Done> fileSizeCompletion =
-        Source.from(Arrays.asList("test1", "test2", "test3", "test4", "test5", "test6"))
+        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
             .map(ByteString::fromString)
             .runWith(timeBasedSink, system);
 
@@ -134,11 +134,11 @@ public class LogRotatorSinkTest {
     Creator<Function<ByteString, Optional<Path>>> triggerFunctionCreator = timeBasedTriggerCreator;
 
     Source<ByteString, NotUsed> source =
-        Source.from(Arrays.asList("test1", "test2", "test3", "test4", "test5", "test6"))
+        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
             .map(ByteString::fromString);
     // #sample
     CompletionStage<Done> completion =
-        Source.from(Arrays.asList("test1", "test2", "test3", "test4", "test5", "test6"))
+        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
             .map(ByteString::fromString)
             .runWith(LogRotatorSink.createFromFunction(triggerFunctionCreator), system);
 

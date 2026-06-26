@@ -36,7 +36,6 @@ import software.amazon.awssdk.services.kinesis.model.Record;
 // #source-settings
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 public class KinesisSnippets {
@@ -73,7 +72,7 @@ public class KinesisSnippets {
 
     // #source-list
     final List<ShardSettings> mergeSettings =
-        Arrays.asList(
+        List.of(
             ShardSettings.create("streamName", "shard-id-1"),
             ShardSettings.create("streamName", "shard-id-2"));
     final Source<Record, NotUsed> two = KinesisSource.basicMerge(mergeSettings, amazonKinesisAsync);

@@ -29,7 +29,6 @@ import io.pravega.client.stream.impl.UTF8StringSerializer;
 import io.pravega.client.tables.TableKey;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
@@ -50,7 +49,7 @@ public class PravegaReadWriteDocs extends PravegaPekkoTestCaseSupport {
         Pravega.sink("an_existing_scope", "an_existing_scope", writerSettings);
 
     CompletionStage<Done> doneWithRouting =
-        Source.from(Arrays.asList("One", "Two", "Three")).runWith(sinkWithRouting, system);
+        Source.from(List.of("One", "Two", "Three")).runWith(sinkWithRouting, system);
 
     // #writing
 
@@ -93,7 +92,7 @@ public class PravegaReadWriteDocs extends PravegaPekkoTestCaseSupport {
 
     // #table-writing
     final List<Pair<Integer, String>> events =
-        Arrays.asList(
+        List.of(
             new Pair<Integer, String>(1, "One"),
             new Pair<Integer, String>(2, "Two"),
             new Pair<Integer, String>(3, "Three"),

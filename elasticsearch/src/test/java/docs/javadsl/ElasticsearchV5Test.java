@@ -93,7 +93,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     List<String> result = new ArrayList<>(f2.toCompletableFuture().get());
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -149,7 +149,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     List<String> result = new ArrayList<>(f2.toCompletableFuture().get());
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -208,7 +208,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     List<String> result2 = new ArrayList<>(f2.toCompletableFuture().get());
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -228,7 +228,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     String indexName = "sink3-0";
     CompletionStage<List<WriteResult<String, NotUsed>>> write =
         Source.from(
-                Arrays.asList(
+                List.of(
                     WriteMessage.createIndexMessage("1", "{\"title\": \"Das Parfum\"}"),
                     WriteMessage.createIndexMessage("2", "{\"title\": \"Faust\"}"),
                     WriteMessage.createIndexMessage(
@@ -263,7 +263,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
 
     List<String> result2 = new ArrayList<>(f2.toCompletableFuture().get());
 
-    List<String> expect = Arrays.asList("Das Parfum", "Die unendliche Geschichte", "Faust");
+    List<String> expect = List.of("Das Parfum", "Die unendliche Geschichte", "Faust");
 
     Collections.sort(result2);
     assertEquals(expect, result2);
@@ -274,7 +274,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // #multiple-operations
     // Create, update, upsert and delete documents in sink8/book
     List<WriteMessage<Book, NotUsed>> requests =
-        Arrays.asList(
+        List.of(
             WriteMessage.createIndexMessage("00001", new Book("Book 1")),
             WriteMessage.createUpsertMessage("00002", new Book("Book 2")),
             WriteMessage.createUpsertMessage("00003", new Book("Book 3")),
@@ -306,7 +306,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
             .runWith(Sink.seq(), system);
 
     List<String> result2 = new ArrayList<>(f2.toCompletableFuture().get());
-    List<String> expect = Arrays.asList("Book 1", "Book 3");
+    List<String> expect = List.of("Book 1", "Book 3");
     Collections.sort(result2);
 
     assertEquals(expect, result2);
@@ -320,7 +320,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     // to commit the offset to Kafka
 
     List<KafkaMessage> messagesFromKafka =
-        Arrays.asList(
+        List.of(
             new KafkaMessage(new Book("Book 1"), new KafkaOffset(0)),
             new KafkaMessage(new Book("Book 2"), new KafkaOffset(1)),
             new KafkaMessage(new Book("Book 3"), new KafkaOffset(2)));
@@ -359,7 +359,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     flushAndRefresh("sink6");
 
     // Make sure all messages was committed to kafka
-    assertEquals(Arrays.asList(0, 1, 2), kafkaCommitter.committedOffsets);
+    assertEquals(List.of(0, 1, 2), kafkaCommitter.committedOffsets);
 
     // Assert that all docs were written to elastic
     List<String> result2 =
@@ -386,7 +386,7 @@ public class ElasticsearchV5Test extends ElasticsearchTestBase {
     String typeName = "_doc";
 
     List<TestDoc> docs =
-        Arrays.asList(
+        List.of(
             new TestDoc("1", "a1", "b1", "c1"),
             new TestDoc("2", "a2", "b2", "c2"),
             new TestDoc("3", "a3", "b3", "c3"));

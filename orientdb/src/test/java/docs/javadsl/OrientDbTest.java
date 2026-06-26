@@ -45,7 +45,6 @@ import org.junit.Test;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -253,7 +252,7 @@ public class OrientDbTest {
     List<String> res = new ArrayList<>(result.toCompletableFuture().get(10, TimeUnit.SECONDS));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -306,7 +305,7 @@ public class OrientDbTest {
     List<String> result = new ArrayList<>(f2.toCompletableFuture().get(10, TimeUnit.SECONDS));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -328,7 +327,7 @@ public class OrientDbTest {
 
     List<Integer> committedOffsets = new ArrayList<>();
     List<messagesFromKafka> messagesFromKafkas =
-        Arrays.asList(
+        List.of(
             new messagesFromKafka("Akka Concurrency", new KafkaOffset(0)),
             new messagesFromKafka("Akka in Action", new KafkaOffset(1)),
             new messagesFromKafka("Effective Akka", new KafkaOffset(2)));
@@ -363,7 +362,7 @@ public class OrientDbTest {
         .get(10, TimeUnit.SECONDS);
     // #kafka-example
 
-    assertEquals(Arrays.asList(0, 1, 2), committedOffsets);
+    assertEquals(List.of(0, 1, 2), committedOffsets);
 
     List<Object> result2 =
         OrientDbSource.create(sink6, OrientDbSourceSettings.create(oDatabase), null)
@@ -403,7 +402,7 @@ public class OrientDbTest {
     List<String> result2 = new ArrayList<>(f2.toCompletableFuture().get(10, TimeUnit.SECONDS));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",

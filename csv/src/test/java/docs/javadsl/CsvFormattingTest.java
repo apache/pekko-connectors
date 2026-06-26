@@ -31,8 +31,8 @@ import org.junit.*;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -74,7 +74,7 @@ public class CsvFormattingTest {
       throws InterruptedException, ExecutionException, TimeoutException {
     CompletionStage<ByteString> completionStage =
         // #formatting
-        Source.single(Arrays.asList("one", "two", "three"))
+        Source.single(List.of("one", "two", "three"))
             .via(CsvFormatting.format())
             .runWith(Sink.head(), system);
     // #formatting

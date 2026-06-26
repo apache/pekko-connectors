@@ -37,7 +37,6 @@ import org.junit.*;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -106,7 +105,7 @@ public class DirectoryTest {
 
     final List<Path> result =
         source.runWith(Sink.seq(), system).toCompletableFuture().get(3, TimeUnit.SECONDS);
-    assertEquals(result, Arrays.asList(root, subdir1, file1, subdir2, file2));
+    assertEquals(result, List.of(root, subdir1, file1, subdir2, file2));
   }
 
   @Test
@@ -129,7 +128,7 @@ public class DirectoryTest {
 
     final List<Path> result =
         source.runWith(Sink.seq(), system).toCompletableFuture().get(3, TimeUnit.SECONDS);
-    assertEquals(result, Arrays.asList(root, subdir1, subdir2));
+    assertEquals(result, List.of(root, subdir1, subdir2));
   }
 
   @Test
@@ -141,7 +140,7 @@ public class DirectoryTest {
     Flow<Path, Path, NotUsed> flow = Directory.mkdirs();
 
     CompletionStage<List<Path>> created =
-        Source.from(Arrays.asList(dir.resolve("dirA"), dir.resolve("dirB")))
+        Source.from(List.of(dir.resolve("dirA"), dir.resolve("dirB")))
             .via(flow)
             .runWith(Sink.seq(), system);
     // #mkdirs
@@ -162,7 +161,7 @@ public class DirectoryTest {
         Directory.mkdirsWithContext();
     // #mkdirs
     CompletionStage<List<Path>> created =
-        Source.from(Arrays.asList(dir.resolve("dirA"), dir.resolve("dirB")))
+        Source.from(List.of(dir.resolve("dirA"), dir.resolve("dirB")))
             .asSourceWithContext(ctx -> new SomeContext())
             .via(flowWithContext)
             .asSource()

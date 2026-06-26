@@ -36,7 +36,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +52,7 @@ public class CassandraSourceTest {
   static CassandraTestHelper helper;
 
   static String idtable;
-  static final List<Integer> data = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+  static final List<Integer> data = List.of(1, 2, 3, 4, 5, 6, 7, 8);
 
   @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 

@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -111,7 +110,7 @@ public class MqttSourceTest {
 
     MqttConnectionSettings connectionSettings = baseConnectionSettings;
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
 
     // #create-source-with-manualacks
     Source<MqttMessageWithAck, CompletionStage<Done>> mqttSource =
@@ -177,7 +176,7 @@ public class MqttSourceTest {
 
     final Sink<MqttMessage, CompletionStage<Done>> mqttSink =
         MqttSink.create(sinkSettings, MqttQoS.atLeastOnce());
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
 
     MqttConnectionSettings connectionSettings = sourceSettings.withCleanStart(false);
     MqttSubscriptions subscriptions = MqttSubscriptions.create(topic, MqttQoS.atLeastOnce());
@@ -359,7 +358,7 @@ public class MqttSourceTest {
     result.first().toCompletableFuture().get(5, TimeUnit.SECONDS);
 
     List<MqttUserProperty> userPropsToSend =
-        Arrays.asList(
+        List.of(
             MqttUserProperty.create("x-trace-id", "abc123"),
             MqttUserProperty.create("x-tenant", "acme"));
     MqttMessage msg =

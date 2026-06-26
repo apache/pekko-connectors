@@ -17,8 +17,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -178,7 +176,7 @@ public class InfluxDbTest {
 
     // #run-flow
     CompletableFuture<List<List<InfluxDbWriteResult<Point, NotUsed>>>> completableFuture =
-        Source.single(Collections.singletonList(influxDbWriteMessage))
+        Source.single(List.of(influxDbWriteMessage))
             .via(InfluxDbFlow.create(influxDB))
             .runWith(Sink.seq(), system)
             .toCompletableFuture();
@@ -200,7 +198,7 @@ public class InfluxDbTest {
 
     List<Integer> committedOffsets = new ArrayList<>();
     List<MessageFromKafka> messageFromKafka =
-        Arrays.asList(
+        List.of(
             new MessageFromKafka(
                 new InfluxDbCpu(
                     Instant.now().minusSeconds(1000), "local_1", "eu-west-2", 1.4d, true, 123L),
@@ -240,7 +238,7 @@ public class InfluxDbTest {
         .get(10, TimeUnit.SECONDS);
     // #kafka-example
 
-    assertEquals(Arrays.asList(0, 1, 2), committedOffsets);
+    assertEquals(List.of(0, 1, 2), committedOffsets);
 
     List<String> result2 =
         InfluxDbSource.typed(

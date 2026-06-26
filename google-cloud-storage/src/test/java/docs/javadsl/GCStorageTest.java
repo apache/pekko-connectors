@@ -33,7 +33,6 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
@@ -302,7 +301,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
     final Source<StorageObject, NotUsed> listSource = GCStorage.listBucket(this.bucketName());
 
     assertEquals(
-        Arrays.asList(firstFileName, secondFileName),
+        List.of(firstFileName, secondFileName),
         listSource
             .map(StorageObject::name)
             .runWith(Sink.seq(), system())
@@ -333,7 +332,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
     // #list-bucket
 
     assertEquals(
-        Arrays.asList(firstFileName, secondFileName),
+        List.of(firstFileName, secondFileName),
         listSource
             .map(StorageObject::name)
             .runWith(Sink.seq(), system())
@@ -341,7 +340,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
             .get(5, TimeUnit.SECONDS));
 
     assertEquals(
-        Arrays.asList(firstFileName, firstFileName + '#' + generation(), secondFileName),
+        List.of(firstFileName, firstFileName + '#' + generation(), secondFileName),
         listVersionsSource
             .map(StorageObject::name)
             .runWith(Sink.seq(), system())
@@ -384,7 +383,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
     // #list-bucket-attributes
 
     assertEquals(
-        Arrays.asList(),
+        List.of(),
         listSource
             .map(StorageObject::name)
             .runWith(Sink.seq(), system())
@@ -687,7 +686,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
         GCStorage.deleteObjectsByPrefix(bucketName(), prefix);
 
     assertEquals(
-        Arrays.asList(true, true),
+        List.of(true, true),
         deleteObjectsByPrefixSource
             .runWith(Sink.seq(), system())
             .toCompletableFuture()
@@ -708,7 +707,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
         GCStorage.deleteObjectsByPrefix(bucketName(), prefix);
 
     assertEquals(
-        Arrays.asList(),
+        List.of(),
         deleteObjectsByPrefixSource
             .runWith(Sink.seq(), system())
             .toCompletableFuture()
@@ -760,7 +759,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
 
     final Source<ByteString, NotUsed> source =
         Source.from(
-            Arrays.asList(
+            List.of(
                 ByteString.fromString(firstChunkContent),
                 ByteString.fromString(secondChunkContent)));
 
@@ -791,7 +790,7 @@ public class GCStorageTest extends GCStorageWiremockBase {
 
     final Source<ByteString, NotUsed> source =
         Source.from(
-            Arrays.asList(
+            List.of(
                 ByteString.fromString(firstChunkContent),
                 ByteString.fromString(secondChunkContent)));
 

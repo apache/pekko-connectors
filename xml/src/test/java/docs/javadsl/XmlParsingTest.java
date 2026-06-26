@@ -34,7 +34,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -179,7 +178,7 @@ public class XmlParsingTest {
         Flow.<String>create()
             .map(ByteString::fromString)
             .via(XmlParsing.parser())
-            .via(XmlParsing.subslice(Arrays.asList("doc", "elem", "item")))
+            .via(XmlParsing.subslice(List.of("doc", "elem", "item")))
             .toMat(Sink.seq(), Keep.right());
     // #subslice
 
@@ -219,7 +218,7 @@ public class XmlParsingTest {
         Flow.<String>create()
             .map(ByteString::fromString)
             .via(XmlParsing.parser())
-            .via(XmlParsing.subtree(Arrays.asList("doc", "elem", "item")))
+            .via(XmlParsing.subtree(List.of("doc", "elem", "item")))
             .toMat(Sink.seq(), Keep.right());
     // #subtree
 

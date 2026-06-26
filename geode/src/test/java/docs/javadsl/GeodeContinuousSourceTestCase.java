@@ -25,7 +25,6 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -57,7 +56,7 @@ public class GeodeContinuousSourceTestCase extends GeodeBaseTestCase {
         geode.flow(personRegionSettings, new PersonPdxSerializer());
 
     Pair<NotUsed, CompletionStage<List<Person>>> run =
-        Source.from(Arrays.asList(120))
+        Source.from(List.of(120))
             .map((i) -> new Person(i, String.format("Java flow %d", i), new Date()))
             .via(flow)
             .toMat(Sink.seq(), Keep.both())

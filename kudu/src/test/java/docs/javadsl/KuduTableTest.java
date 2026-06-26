@@ -39,8 +39,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -75,7 +73,7 @@ public class KuduTableTest {
         };
 
     // Kudu table options
-    List<String> rangeKeys = Collections.singletonList("key");
+    List<String> rangeKeys = List.of("key");
     CreateTableOptions createTableOptions =
         new CreateTableOptions().setNumReplicas(1).setRangePartitionColumns(rangeKeys);
 
@@ -98,7 +96,7 @@ public class KuduTableTest {
         KuduTable.sink(tableSettings.withTableName("Sink"));
 
     CompletionStage<Done> o =
-        Source.from(Arrays.asList(100, 101, 102, 103, 104))
+        Source.from(List.of(100, 101, 102, 103, 104))
             .map((i) -> new Person(i, String.format("name %d", i)))
             .runWith(sink, system);
     // #sink
@@ -111,7 +109,7 @@ public class KuduTableTest {
     Flow<Person, Person, NotUsed> flow = KuduTable.flow(tableSettings.withTableName("Flow"));
 
     CompletionStage<List<Person>> run =
-        Source.from(Arrays.asList(200, 201, 202, 203, 204))
+        Source.from(List.of(200, 201, 202, 203, 204))
             .map((i) -> new Person(i, String.format("name_%d", i)))
             .via(flow)
             .toMat(Sink.seq(), Keep.right())
@@ -140,7 +138,7 @@ public class KuduTableTest {
     // #attributes
 
     CompletionStage<List<Person>> run =
-        Source.from(Arrays.asList(200, 201, 202, 203, 204))
+        Source.from(List.of(200, 201, 202, 203, 204))
             .map((i) -> new Person(i, String.format("name_%d", i)))
             .via(flow)
             .toMat(Sink.seq(), Keep.right())

@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.*;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import org.apache.pekko.Done;
@@ -161,7 +160,7 @@ public class AutoExtendAckDeadlinesTest {
   public void fixedDeadlineShouldFailStreamWhenTickerFails() throws Exception {
     GrpcSubscriber testSubscriber = new GrpcSubscriber(new FailingSubscriberClient());
 
-    List<ReceivedMessage> msgs = Arrays.asList(makeMsg("1"), makeMsg("2"), makeMsg("3"));
+    List<ReceivedMessage> msgs = List.of(makeMsg("1"), makeMsg("2"), makeMsg("3"));
 
     CompletionStage<List<ReceivedMessage>> result =
         Source.from(msgs)
@@ -209,7 +208,7 @@ public class AutoExtendAckDeadlinesTest {
   public void fixedDeadlineShouldPassMessagesThroughWhenHealthy() throws Exception {
     GrpcSubscriber testSubscriber = new GrpcSubscriber(new SucceedingSubscriberClient());
 
-    List<ReceivedMessage> msgs = Arrays.asList(makeMsg("1"), makeMsg("2"), makeMsg("3"));
+    List<ReceivedMessage> msgs = List.of(makeMsg("1"), makeMsg("2"), makeMsg("3"));
 
     List<ReceivedMessage> result =
         Source.from(msgs)
@@ -230,7 +229,7 @@ public class AutoExtendAckDeadlinesTest {
     GrpcSubscriber testSubscriber = new GrpcSubscriber(new FailingSubscriberClient());
     AckDeadlineDistribution dist = AckDeadlineDistribution.create();
 
-    List<ReceivedMessage> msgs = Arrays.asList(makeMsg("1"), makeMsg("2"), makeMsg("3"));
+    List<ReceivedMessage> msgs = List.of(makeMsg("1"), makeMsg("2"), makeMsg("3"));
 
     CompletionStage<List<ReceivedMessage>> result =
         Source.from(msgs)
@@ -274,7 +273,7 @@ public class AutoExtendAckDeadlinesTest {
     GrpcSubscriber testSubscriber = new GrpcSubscriber(new SucceedingSubscriberClient());
     AckDeadlineDistribution dist = AckDeadlineDistribution.create();
 
-    List<ReceivedMessage> msgs = Arrays.asList(makeMsg("1"), makeMsg("2"), makeMsg("3"));
+    List<ReceivedMessage> msgs = List.of(makeMsg("1"), makeMsg("2"), makeMsg("3"));
 
     List<ReceivedMessage> result =
         Source.from(msgs)

@@ -83,7 +83,7 @@ public class AmqpDocsTest {
     AmqpDetailsConnectionProvider connectionProvider =
         AmqpDetailsConnectionProvider.create("invalid", 5673)
             .withHostsAndPorts(
-                Arrays.asList(Pair.create("localhost", 5672), Pair.create("localhost", 5674)));
+                List.of(Pair.create("localhost", 5672), Pair.create("localhost", 5674)));
 
     // #create-sink
     final Sink<ByteString, CompletionStage<Done>> amqpSink =
@@ -92,7 +92,7 @@ public class AmqpDocsTest {
                 .withRoutingKey(queueName)
                 .withDeclaration(queueDeclaration));
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     CompletionStage<Done> writing =
         Source.from(input).map(ByteString::fromString).runWith(amqpSink, system);
     // #create-sink
@@ -131,7 +131,7 @@ public class AmqpDocsTest {
                 .withDeclaration(queueDeclaration),
             bufferSize);
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
 
     // #create-rpc-flow
     final Flow<ByteString, ByteString, CompletionStage<String>> ampqRpcFlow =
@@ -262,7 +262,7 @@ public class AmqpDocsTest {
                 .withRoutingKey(queueName)
                 .withDeclaration(queueDeclaration));
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     Source.from(input).map(ByteString::fromString).runWith(amqpSink, system);
 
     // #create-source-withoutautoack
@@ -299,7 +299,7 @@ public class AmqpDocsTest {
                 .withRoutingKey(queueName)
                 .withDeclaration(queueDeclaration));
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
     Source.from(input)
         .map(ByteString::fromString)
         .runWith(amqpSink, system)
@@ -362,7 +362,7 @@ public class AmqpDocsTest {
     final Flow<WriteMessage, WriteResult, CompletionStage<Done>> amqpFlow =
         AmqpFlow.createWithConfirm(settings);
 
-    final List<String> input = Arrays.asList("one", "two", "three", "four", "five");
+    final List<String> input = List.of("one", "two", "three", "four", "five");
 
     final List<WriteResult> result =
         Source.from(input)

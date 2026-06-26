@@ -20,8 +20,8 @@ import org.apache.pekko.util.ByteString;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -109,7 +109,7 @@ public class CsvToMap {
       String... headers) {
     return Flow.fromGraph(
         new CsvToMapJavaStage(
-            Optional.of(Arrays.asList(headers)),
+            Optional.of(List.of(headers)),
             StandardCharsets.UTF_8,
             false,
             Optional.empty(),
@@ -126,10 +126,6 @@ public class CsvToMap {
       Charset charset, String... headers) {
     return Flow.fromGraph(
         new CsvToMapAsStringsJavaStage(
-            Optional.of(Arrays.asList(headers)),
-            charset,
-            false,
-            Optional.empty(),
-            Optional.empty()));
+            Optional.of(List.of(headers)), charset, false, Optional.empty(), Optional.empty()));
   }
 }

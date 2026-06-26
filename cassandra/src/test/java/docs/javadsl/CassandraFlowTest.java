@@ -37,7 +37,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -76,7 +75,7 @@ public class CassandraFlowTest {
                 cassandraAccess
                     .lifecycleSession()
                     .executeDDL("CREATE TABLE IF NOT EXISTS " + table + " (id int PRIMARY KEY);")));
-    List<Integer> data = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+    List<Integer> data = List.of(1, 2, 3, 4, 5, 6, 7, 8);
 
     CompletionStage<Done> written =
         Source.from(data)
@@ -114,7 +113,7 @@ public class CassandraFlowTest {
     // #prepared
 
     List<Person> persons =
-        Arrays.asList(
+        List.of(
             new Person(12, "John", "London"),
             new Person(43, "Umberto", "Roma"),
             new Person(56, "James", "Chicago"));
@@ -157,7 +156,7 @@ public class CassandraFlowTest {
                             + " (id int PRIMARY KEY, name text, city text);")));
 
     List<Pair<Person, AckHandle>> persons =
-        Arrays.asList(
+        List.of(
             Pair.create(new Person(12, "John", "London"), new AckHandle()),
             Pair.create(new Person(43, "Umberto", "Roma"), new AckHandle()),
             Pair.create(new Person(56, "James", "Chicago"), new AckHandle()));

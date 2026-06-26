@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -164,7 +165,7 @@ public class SolrTest {
     List<String> result = new ArrayList<>(resultOf(res2));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -228,7 +229,7 @@ public class SolrTest {
     List<String> result = new ArrayList<>(resultOf(res2));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -277,7 +278,7 @@ public class SolrTest {
     List<String> result = new ArrayList<>(resultOf(res2));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -326,7 +327,7 @@ public class SolrTest {
     List<String> result = new ArrayList<>(resultOf(res2));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency",
             "Akka in Action",
             "Effective Akka",
@@ -343,7 +344,7 @@ public class SolrTest {
     String collectionName = createCollection();
 
     List<CommittableMessage> messagesFromKafka =
-        Arrays.asList(
+        List.of(
             new CommittableMessage(new Book("Book 1"), new CommittableOffset(0)),
             new CommittableMessage(new Book("Book 2"), new CommittableOffset(1)),
             new CommittableMessage(new Book("Book 3"), new CommittableOffset(2)));
@@ -389,7 +390,7 @@ public class SolrTest {
 
     // Make sure all messages was committed to kafka
     assertEquals(
-        Arrays.asList(0, 1, 2),
+        List.of(0, 1, 2),
         CommittableOffsetBatch.committedOffsets.stream()
             .map(o -> o.offset)
             .collect(Collectors.toList()));
@@ -545,7 +546,7 @@ public class SolrTest {
 
     List<String> result = new ArrayList<>(resultOf(res3));
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency. Written by good authors. It's is a good book!!!",
             "Akka in Action. Written by good authors. It's is a good book!!!",
             "Effective Akka. Written by good authors. It's is a good book!!!",
@@ -632,7 +633,7 @@ public class SolrTest {
     List<String> result = new ArrayList<>(resultOf(res3));
 
     List<String> expect =
-        Arrays.asList(
+        List.of(
             "Akka Concurrency. Written by good authors. It's is a good book!!!",
             "Akka in Action. Written by good authors. It's is a good book!!!",
             "Effective Akka. Written by good authors. It's is a good book!!!",
@@ -716,7 +717,7 @@ public class SolrTest {
     String collectionName = createCollection();
 
     List<CommittableOffset> messagesFromKafka =
-        Arrays.asList(new CommittableOffset(0), new CommittableOffset(1), new CommittableOffset(2));
+        List.of(new CommittableOffset(0), new CommittableOffset(1), new CommittableOffset(2));
 
     CommittableOffsetBatch.committedOffsets.clear();
 
@@ -758,7 +759,7 @@ public class SolrTest {
 
     // Make sure all messages was committed to kafka
     assertEquals(
-        Arrays.asList(0, 1, 2),
+        List.of(0, 1, 2),
         CommittableOffsetBatch.committedOffsets.stream()
             .map(o -> o.offset)
             .collect(Collectors.toList()));
@@ -856,7 +857,7 @@ public class SolrTest {
     // #init-client
 
     CloudSolrClient solrClient =
-        new CloudSolrClient.Builder(Arrays.asList(zookeeperHost), Optional.empty()).build();
+        new CloudSolrClient.Builder(List.of(zookeeperHost), Optional.empty()).build();
     // #init-client
     SolrTest.solrClient = solrClient;
 

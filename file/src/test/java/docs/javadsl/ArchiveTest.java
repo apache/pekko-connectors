@@ -41,8 +41,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -95,7 +95,7 @@ public class ArchiveTest {
         Pair.create(ArchiveMetadata.create("foundation.svg"), source2);
 
     Source<Pair<ArchiveMetadata, Source<ByteString, NotUsed>>, NotUsed> source =
-        Source.from(Arrays.asList(pair1, pair2));
+        Source.from(List.of(pair1, pair2));
 
     Sink<ByteString, CompletionStage<IOResult>> fileSink = FileIO.toPath(Paths.get("logo.zip"));
     CompletionStage<IOResult> ioResult = source.via(Archive.zip()).runWith(fileSink, system);
@@ -173,7 +173,7 @@ public class ArchiveTest {
         Pair.create(TarArchiveMetadata.create("foundation.svg", size2, lastModification), source2);
 
     Source<Pair<TarArchiveMetadata, Source<ByteString, NotUsed>>, NotUsed> source =
-        Source.from(Arrays.asList(dir, pair1, pair2));
+        Source.from(List.of(dir, pair1, pair2));
 
     Sink<ByteString, CompletionStage<IOResult>> fileSink = FileIO.toPath(Paths.get("logo.tar"));
     CompletionStage<IOResult> ioResult = source.via(Archive.tar()).runWith(fileSink, system);
@@ -203,7 +203,7 @@ public class ArchiveTest {
     TarArchiveMetadata metadata2 = TarArchiveMetadata.create("dir/file1.txt", tenDigits.length());
     CompletionStage<ByteString> oneFileArchive =
         Source.from(
-                Arrays.asList(
+                List.of(
                     Pair.create(metadata1, Source.empty(ByteString.class)),
                     Pair.create(metadata2, Source.single(tenDigits))))
             .via(Archive.tar())
