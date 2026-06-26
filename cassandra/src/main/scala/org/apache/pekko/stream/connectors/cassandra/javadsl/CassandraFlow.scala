@@ -99,18 +99,6 @@ object CassandraFlow {
     scaladsl.CassandraFlow
       .createBatch(writeSettings,
         cqlStatement,
-        (t, preparedStatement) => statementBinder(t, preparedStatement),
-        t => groupingKey.apply(t))(session.delegate)
-      .asJava
-  }
-  def createUnloggedBatchWithScalaStatementBinder[T, K](session: CassandraSession,
-      writeSettings: CassandraWriteSettings,
-      cqlStatement: String,
-      statementBinder: (T, PreparedStatement) => BoundStatement,
-      groupingKey: pekko.japi.function.Function[T, K]): Flow[T, T, NotUsed] = {
-    scaladsl.CassandraFlow
-      .createBatch(writeSettings,
-        cqlStatement,
         (t, preparedStatement) => statementBinder.apply(t, preparedStatement),
         t => groupingKey.apply(t))(session.delegate)
       .asJava
