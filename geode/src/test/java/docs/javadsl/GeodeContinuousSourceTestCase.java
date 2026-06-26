@@ -46,7 +46,7 @@ public class GeodeContinuousSourceTestCase extends GeodeBaseTestCase {
             .runForeach(
                 p -> {
                   LOGGER.debug(p.toString());
-                  if (p.getId() == 120) {
+                  if (p.id() == 120) {
                     geode.closeContinuousQuery("test");
                   }
                 },

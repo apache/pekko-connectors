@@ -282,8 +282,7 @@ public class HdfsWriterTest {
     JavaTestUtils.verifyOutputFileSize(fs, logs);
     assertEquals(
         JavaTestUtils.readLogs(fs, logs).stream()
-            .map(string -> string.split("\n"))
-            .flatMap(Arrays::stream)
+            .flatMap(String::lines)
             .collect(Collectors.toList()),
         messagesFromKafka.stream().map(message -> message.book.title).collect(Collectors.toList()));
   }
