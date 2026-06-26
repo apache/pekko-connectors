@@ -345,7 +345,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "org.mdedetrich" %% "pekko-stream-circe" % PekkoStreamsCirceVersion,
       "org.mdedetrich" %% "pekko-http-circe" % PekkoStreamsCirceVersion,
-      "io.circe" %% "circe-jawn" % "0.14.15"))
+      "io.circe" %% "circe-jawn" % "0.14.16"))
 
   val JakartaMs = {
     val artemisVersion = "2.54.0"
