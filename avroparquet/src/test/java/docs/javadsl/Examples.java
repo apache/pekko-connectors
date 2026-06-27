@@ -13,24 +13,24 @@
 
 package docs.javadsl;
 
-import java.io.IOException;
-// #init-reader
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.parquet.avro.AvroParquetReader;
-import org.apache.parquet.avro.AvroParquetWriter;
-import org.apache.parquet.hadoop.ParquetReader;
-import org.apache.parquet.hadoop.ParquetWriter;
-import org.apache.parquet.hadoop.util.HadoopInputFile;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.avroparquet.javadsl.AvroParquetFlow;
 import org.apache.pekko.stream.connectors.avroparquet.javadsl.AvroParquetSource;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.parquet.avro.AvroParquetWriter;
+import org.apache.parquet.hadoop.ParquetWriter;
+import org.apache.parquet.hadoop.util.HadoopInputFile;
+import java.io.IOException;
+// #init-reader
+import org.apache.parquet.hadoop.ParquetReader;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.hadoop.fs.Path;
+import org.apache.avro.Schema;
 import org.apache.pekko.stream.javadsl.Source;
+import org.apache.parquet.avro.AvroParquetReader;
 
 // #init-reader
 
