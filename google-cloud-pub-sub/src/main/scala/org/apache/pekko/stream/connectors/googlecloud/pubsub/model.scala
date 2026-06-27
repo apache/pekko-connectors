@@ -31,7 +31,7 @@ class PubSubConfig private (
     /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "Alpakka 3.0.0") @Deprecated val projectId: String,
+      "Alpakka 3.0.0") @Deprecated(since = "Alpakka 3.0.0") val projectId: String,
     val pullReturnImmediately: Boolean,
     val pullMaxMessagesPerInternalBatch: Int,
     @deprecated("Added only to help with migration", "Alpakka 3.0.0") @InternalApi private[pubsub] val settings: Option[

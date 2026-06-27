@@ -32,7 +32,7 @@ final class PubSubSettings private (
     /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
     @deprecated(
       "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "Alpakka 3.0.0") @Deprecated val callCredentials: Option[
+      "Alpakka 3.0.0") @Deprecated(since = "Alpakka 3.0.0") val callCredentials: Option[
       CallCredentials]) {
 
   /**

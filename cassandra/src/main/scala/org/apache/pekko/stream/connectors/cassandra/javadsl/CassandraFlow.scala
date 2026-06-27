@@ -90,7 +90,7 @@ object CassandraFlow {
    * @deprecated Use [[createUnloggedBatch]] with `pekko.japi.function.Function2` for `statementBinder` instead (since 2.0.0).
    */
   @deprecated("Use createUnloggedBatch with pekko.japi.function.Function2 for statementBinder instead", "2.0.0")
-  @java.lang.Deprecated
+  @java.lang.Deprecated(since = "2.0.0")
   def createUnloggedBatchWithScalaStatementBinder[T, K](session: CassandraSession,
       writeSettings: CassandraWriteSettings,
       cqlStatement: String,
