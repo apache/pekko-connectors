@@ -13,23 +13,27 @@
 
 package docs.javadsl;
 
-import static com.couchbase.client.java.query.Select.select;
-import static com.couchbase.client.java.query.dsl.Expression.*;
-// #statement
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.CouchbaseCluster;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.Materializer;
+// #deleteWithResult
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseDeleteResult;
+// #deleteWithResult
+// #upsertDocWithResult
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteFailure;
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteResult;
+// #upsertDocWithResult
+import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteSettings;
+import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseFlow;
+import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSource;
+import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupportClass;
+import org.apache.pekko.stream.connectors.couchbase.testing.TestObject;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import com.couchbase.client.java.PersistTo;
 import com.couchbase.client.java.ReplicateTo;
-import com.couchbase.client.java.auth.PasswordAuthenticator;
-// #sessionFromBucket
-// #statement
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.StringDocument;
 import com.couchbase.client.java.document.json.JsonObject;
@@ -45,40 +49,39 @@ import com.couchbase.client.java.query.N1qlParams;
 import com.couchbase.client.java.query.N1qlQuery;
 // #n1ql
 import com.couchbase.client.java.query.SimpleN1qlQuery;
+
+import org.junit.jupiter.api.*;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
 // #registry
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.Materializer;
-// #deleteWithResult
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseDeleteResult;
-// #deleteWithResult
-// #upsertDocWithResult
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionRegistry;
 // #session
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteFailure;
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteResult;
-// #upsertDocWithResult
-import org.apache.pekko.stream.connectors.couchbase.CouchbaseWriteSettings;
-import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseFlow;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 // #session
 // #registry
 // #sessionFromBucket
-import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSource;
-import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupportClass;
-import org.apache.pekko.stream.connectors.couchbase.testing.TestObject;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.auth.PasswordAuthenticator;
+// #sessionFromBucket
+// #statement
+import static com.couchbase.client.java.query.Select.select;
+import static com.couchbase.client.java.query.dsl.Expression.*;
+// #statement
+
 import scala.concurrent.duration.FiniteDuration;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LogCapturingExtension.class)
 public class CouchbaseExamplesTest {
