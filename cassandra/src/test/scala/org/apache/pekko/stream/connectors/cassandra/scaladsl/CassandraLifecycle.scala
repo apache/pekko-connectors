@@ -23,7 +23,7 @@ import org.scalatest._
 import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }
 
 import scala.collection.immutable
-import scala.concurrent.duration._
+import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 import scala.jdk.FutureConverters._
@@ -44,7 +44,7 @@ trait CassandraLifecycleBase {
     execute(session, statements.map(stmt => SimpleStatement.newInstance(stmt)))
   }
 
-  private val keyspaceTimeout = java.time.Duration.ofSeconds(15)
+  private val keyspaceTimeout = java.time.Duration.ofSeconds(30)
 
   def createKeyspace(session: CassandraSession, name: String): Future[Done] = {
     session.executeWrite(
@@ -103,14 +103,14 @@ trait CassandraLifecycle extends BeforeAndAfterAll with TestKitBase with Cassand
     PatienceConfig(timeout = 4.seconds, interval = 50.millis)
 
   override protected def beforeAll(): Unit = {
-    createKeyspace(keyspaceName).futureValue(PatienceConfiguration.Timeout(15.seconds))
+    createKeyspace(keyspaceName).futureValue(PatienceConfiguration.Timeout(1.minute))
     super.beforeAll()
   }
 
   override protected def afterAll(): Unit = {
     // `dropKeyspace` uses the system dispatcher through `cassandraSession`,
     // so needs to run before the actor system is shut down
-    dropKeyspace(keyspaceName).futureValue(PatienceConfiguration.Timeout(15.seconds))
+    dropKeyspace(keyspaceName).futureValue(PatienceConfiguration.Timeout(1.minute))
     shutdown(system, verifySystemShutdown = true)
     try {
       Await.result(lifecycleSession.close(scala.concurrent.ExecutionContext.global), 20.seconds)
