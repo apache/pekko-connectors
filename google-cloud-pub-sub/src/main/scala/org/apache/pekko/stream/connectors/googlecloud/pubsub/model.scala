@@ -23,22 +23,15 @@ import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 
 /**
- * @param projectId (deprecated) the project Id in the google account
  * @param pullReturnImmediately when pulling messages, if there are non the API will wait or return immediately. Defaults to true.
  * @param pullMaxMessagesPerInternalBatch when pulling messages, the maximum that will be in the batch of messages. Defaults to 1000.
  */
 class PubSubConfig private (
-    /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
-    @deprecated(
-      "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "Alpakka 3.0.0") @Deprecated(since = "Alpakka 3.0.0") val projectId: String,
     val pullReturnImmediately: Boolean,
-    val pullMaxMessagesPerInternalBatch: Int,
-    @deprecated("Added only to help with migration", "Alpakka 3.0.0") @InternalApi private[pubsub] val settings: Option[
-      GoogleSettings]) {
+    val pullMaxMessagesPerInternalBatch: Int) {
 
   override def toString: String =
-    s"PubSubConfig(projectId=$projectId)": @nowarn("msg=deprecated")
+    s"PubSubConfig(pullReturnImmediately=$pullReturnImmediately,pullMaxMessagesPerInternalBatch=$pullMaxMessagesPerInternalBatch)"
 }
 
 object PubSubConfig {
@@ -46,7 +39,7 @@ object PubSubConfig {
   def apply(): PubSubConfig = apply(true, 1000)
 
   def apply(pullReturnImmediately: Boolean, pullMaxMessagesPerInternalBatch: Int): PubSubConfig =
-    new PubSubConfig("", pullReturnImmediately, pullMaxMessagesPerInternalBatch, None)
+    new PubSubConfig(pullReturnImmediately, pullMaxMessagesPerInternalBatch, None)
 
   def create(): PubSubConfig = apply()
 
