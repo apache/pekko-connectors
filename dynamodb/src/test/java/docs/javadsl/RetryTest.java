@@ -15,10 +15,11 @@ package docs.javadsl;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 // #clientRetryConfig
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -32,8 +33,8 @@ import software.amazon.awssdk.retries.DefaultRetryStrategy;
 
 // #awsRetryConfiguration
 
+@ExtendWith(LogCapturingExtension.class)
 public class RetryTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   @Test
   public void setup() throws Exception {

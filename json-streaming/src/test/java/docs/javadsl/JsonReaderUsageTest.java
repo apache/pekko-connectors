@@ -15,14 +15,15 @@ package docs.javadsl;
 
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.json.javadsl.JsonReader;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -33,8 +34,8 @@ import java.util.concurrent.TimeoutException;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@ExtendWith(LogCapturingExtension.class)
 public class JsonReaderUsageTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
@@ -79,12 +80,12 @@ public class JsonReaderUsageTest {
         .get(5, TimeUnit.SECONDS);
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws Exception {
     TestKit.shutdownActorSystem(system);
   }

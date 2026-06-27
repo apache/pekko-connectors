@@ -23,7 +23,8 @@ import org.apache.pekko.stream.connectors.solr.WriteMessage;
 import org.apache.pekko.stream.connectors.solr.javadsl.SolrFlow;
 import org.apache.pekko.stream.connectors.solr.javadsl.SolrSink;
 import org.apache.pekko.stream.connectors.solr.javadsl.SolrSource;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
@@ -47,10 +48,10 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.cloud.MiniSolrCloudCluster;
 import org.apache.solr.cloud.ZkTestServer;
 import org.apache.solr.common.SolrInputDocument;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,11 +65,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class SolrTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static MiniSolrCloudCluster cluster;
   private static SolrClient solrClient;
@@ -760,7 +761,7 @@ public class SolrTest {
         CommittableOffsetBatch.committedOffsets.stream().map(o -> o.offset).toList());
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     setupCluster();
 
@@ -780,7 +781,7 @@ public class SolrTest {
         .commit(solrClient, predefinedCollection);
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws Exception {
     solrClient.close();
     cluster.shutdown();

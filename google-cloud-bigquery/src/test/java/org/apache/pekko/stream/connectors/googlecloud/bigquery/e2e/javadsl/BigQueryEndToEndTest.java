@@ -44,9 +44,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.specto.hoverfly.junit.core.Hoverfly;
 import io.specto.hoverfly.junit.core.HoverflyMode;
 import io.specto.hoverfly.junit.core.SimulationSource;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,7 +58,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BigQueryEndToEndTest extends EndToEndHelper {
 
@@ -131,7 +131,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
                       TableFieldSchemaType.timestamp(),
                       Optional.of(TableFieldSchemaMode.required())))));
 
-  @BeforeClass
+  @BeforeAll
   public static void before() {
     hoverfly.start();
     switch (system
@@ -149,7 +149,7 @@ public class BigQueryEndToEndTest extends EndToEndHelper {
     }
   }
 
-  @AfterClass
+  @AfterAll
   public static void after() {
     hoverfly.close();
     system.terminate();

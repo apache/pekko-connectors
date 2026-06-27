@@ -23,14 +23,15 @@ import org.apache.pekko.stream.connectors.ironmq.javadsl.*;
 
 // #imports
 import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClientForJava;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.AfterClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+
+import org.junit.jupiter.api.Test;
 import scala.concurrent.Await;
 
 import java.time.Duration;
@@ -38,10 +39,10 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class IronMqDocsTest extends IronMqClientForJava {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final ActorSystem system = ActorSystem.create();
   private static final Materializer materializer = Materializer.matFromSystem(system);
@@ -58,7 +59,7 @@ public class IronMqDocsTest extends IronMqClientForJava {
     super(system, materializer);
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     TestKit.shutdownActorSystem(system);
   }

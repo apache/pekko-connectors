@@ -17,7 +17,8 @@ import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.mongodb.javadsl.MongoSource;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
@@ -28,17 +29,17 @@ import org.bson.codecs.ValueCodecProvider;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class MongoSourceTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
@@ -67,7 +68,7 @@ public class MongoSourceTest {
     numbersDocumentColl = db.getCollection("numbers");
   }
 
-  @Before
+  @BeforeEach
   public void cleanDb() throws Exception {
     Source.fromPublisher(numbersDocumentColl.deleteMany(new Document()))
         .runWith(Sink.head(), system)
@@ -75,7 +76,7 @@ public class MongoSourceTest {
         .get(5, TimeUnit.SECONDS);
   }
 
-  @After
+  @AfterEach
   public void checkForLeaks() throws Exception {
     Source.fromPublisher(numbersDocumentColl.deleteMany(new Document()))
         .runWith(Sink.head(), system)
@@ -84,7 +85,7 @@ public class MongoSourceTest {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
   }
 
-  @AfterClass
+  @AfterAll
   public static void terminateActorSystem() {
     system.terminate();
   }

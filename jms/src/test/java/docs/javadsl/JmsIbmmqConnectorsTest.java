@@ -22,7 +22,8 @@ import org.apache.pekko.stream.connectors.jms.TxEnvelope;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
@@ -31,10 +32,10 @@ import com.ibm.mq.jms.MQQueueConnectionFactory;
 import com.ibm.mq.jms.MQQueueSession;
 import com.ibm.mq.jms.MQTopicConnectionFactory;
 import com.ibm.msg.client.wmq.common.CommonConstants;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -49,17 +50,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class JmsIbmmqConnectorsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static MQQueueConnectionFactory queueConnectionFactory;
   private static MQTopicConnectionFactory topicConnectionFactory;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws JMSException {
     system = ActorSystem.create();
     // #ibmmq-connection-factory
@@ -86,7 +86,7 @@ public class JmsIbmmqConnectorsTest {
     return connectionFactory;
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

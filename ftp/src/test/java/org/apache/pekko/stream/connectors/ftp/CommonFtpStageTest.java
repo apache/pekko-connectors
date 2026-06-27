@@ -23,16 +23,16 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.util.ByteString;
-import org.junit.Assert;
 
 import java.time.Instant;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 interface CommonFtpStageTest extends BaseSupport, PekkoSupport {
 
@@ -109,7 +109,7 @@ interface CommonFtpStageTest extends BaseSupport, PekkoSupport {
     byte[] actualStoredContent = getFtpFileContents(fileName);
 
     assertEquals(IOResult.createSuccessful(expectedNumOfBytes), result);
-    Assert.assertArrayEquals(actualStoredContent, getDefaultContent().getBytes());
+    assertArrayEquals(actualStoredContent, getDefaultContent().getBytes());
   }
 
   default void remove() throws Exception {

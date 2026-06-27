@@ -185,7 +185,7 @@ object JavaTestUtils extends TestUtils {
   type Pair[A, B] = pekko.japi.Pair[A, B]
   type Assertion = Unit
 
-  import org.junit.Assert._
+  import org.junit.jupiter.api.Assertions._
 
   import scala.jdk.CollectionConverters._
 

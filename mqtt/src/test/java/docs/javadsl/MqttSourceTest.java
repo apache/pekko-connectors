@@ -23,17 +23,18 @@ import org.apache.pekko.stream.connectors.mqtt.*;
 import org.apache.pekko.stream.connectors.mqtt.javadsl.MqttMessageWithAck;
 import org.apache.pekko.stream.connectors.mqtt.javadsl.MqttSink;
 import org.apache.pekko.stream.connectors.mqtt.javadsl.MqttSource;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +50,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@ExtendWith(LogCapturingExtension.class)
 public class MqttSourceTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final Logger log = LoggerFactory.getLogger(MqttSourceTest.class);
 
@@ -63,12 +63,12 @@ public class MqttSourceTest {
 
   private static final int bufferSize = 8;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     system = ActorSystem.create("MqttSourceTest");
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }
@@ -200,7 +200,7 @@ public class MqttSourceTest {
               try {
                 m.ack().toCompletableFuture().get(3, TimeUnit.SECONDS);
               } catch (Exception e) {
-                assertFalse("Error acking message manually", false);
+                assertFalse(false, "Error acking message manually");
               }
             });
   }

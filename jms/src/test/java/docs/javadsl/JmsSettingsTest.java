@@ -14,17 +14,18 @@
 package docs.javadsl;
 
 import org.apache.pekko.stream.connectors.jms.*;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import com.typesafe.config.ConfigFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // #retry-settings #send-retry-settings
 import com.typesafe.config.Config;
@@ -32,9 +33,8 @@ import scala.Option;
 
 // #retry-settings #send-retry-settings
 
+@ExtendWith(LogCapturingExtension.class)
 public class JmsSettingsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   @Test
   public void producerSettings() throws Exception {

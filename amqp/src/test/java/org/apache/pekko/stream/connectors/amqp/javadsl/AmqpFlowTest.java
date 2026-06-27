@@ -19,13 +19,10 @@ import java.util.concurrent.CompletionStage;
 
 import scala.collection.JavaConverters;
 
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
@@ -35,7 +32,8 @@ import org.apache.pekko.stream.connectors.amqp.AmqpWriteSettings;
 import org.apache.pekko.stream.connectors.amqp.QueueDeclaration;
 import org.apache.pekko.stream.connectors.amqp.WriteMessage;
 import org.apache.pekko.stream.connectors.amqp.WriteResult;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Keep;
@@ -45,27 +43,17 @@ import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.util.ByteString;
 
 /** Needs a local running AMQP server on the default port with no password. */
-@RunWith(Parameterized.class)
+@ExtendWith(LogCapturingExtension.class)
 public class AmqpFlowTest {
-
-  @Parameters
-  public static Iterable<? extends Object> data() {
-    return List.of(false, true);
-  }
-
-  /** This value is initialized with values from data() array */
-  @Parameter public boolean reuseByteArray;
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
   }
 
-  private AmqpWriteSettings settings() {
+  private AmqpWriteSettings settings(boolean reuseByteArray) {
     final String queueName = "amqp-flow-spec" + System.currentTimeMillis();
     final QueueDeclaration queueDeclaration = QueueDeclaration.create(queueName);
 
@@ -77,19 +65,25 @@ public class AmqpFlowTest {
         .withConfirmationTimeout(Duration.ofMillis(200));
   }
 
-  @Test
-  public void shouldEmitConfirmationForPublishedMessagesInSimpleFlow() {
-    shouldEmitConfirmationForPublishedMessages(AmqpFlow.create(settings()));
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldEmitConfirmationForPublishedMessagesInSimpleFlow(boolean reuseByteArray) {
+    shouldEmitConfirmationForPublishedMessages(AmqpFlow.create(settings(reuseByteArray)));
   }
 
-  @Test
-  public void shouldEmitConfirmationForPublishedMessagesInFlowWithConfirm() {
-    shouldEmitConfirmationForPublishedMessages(AmqpFlow.createWithConfirm(settings()));
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldEmitConfirmationForPublishedMessagesInFlowWithConfirm(boolean reuseByteArray) {
+    shouldEmitConfirmationForPublishedMessages(
+        AmqpFlow.createWithConfirm(settings(reuseByteArray)));
   }
 
-  @Test
-  public void shouldEmitConfirmationForPublishedMessagesInFlowWithConfirmUnordered() {
-    shouldEmitConfirmationForPublishedMessages(AmqpFlow.createWithConfirmUnordered(settings()));
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldEmitConfirmationForPublishedMessagesInFlowWithConfirmUnordered(
+      boolean reuseByteArray) {
+    shouldEmitConfirmationForPublishedMessages(
+        AmqpFlow.createWithConfirmUnordered(settings(reuseByteArray)));
   }
 
   private void shouldEmitConfirmationForPublishedMessages(
@@ -111,14 +105,16 @@ public class AmqpFlowTest {
         .expectNextN(JavaConverters.asScalaBufferConverter(expectedOutput).asScala().toList());
   }
 
-  @Test
-  public void shouldPropagateContextInSimpleFlow() {
-    shouldPropagateContext(AmqpFlowWithContext.create(settings()));
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldPropagateContextInSimpleFlow(boolean reuseByteArray) {
+    shouldPropagateContext(AmqpFlowWithContext.create(settings(reuseByteArray)));
   }
 
-  @Test
-  public void shouldPropagateContextInFlowWithConfirm() {
-    shouldPropagateContext(AmqpFlowWithContext.createWithConfirm(settings()));
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldPropagateContextInFlowWithConfirm(boolean reuseByteArray) {
+    shouldPropagateContext(AmqpFlowWithContext.createWithConfirm(settings(reuseByteArray)));
   }
 
   private void shouldPropagateContext(
@@ -143,10 +139,11 @@ public class AmqpFlowTest {
         .expectNextN(JavaConverters.asScalaBufferConverter(expectedOutput).asScala().toList());
   }
 
-  @Test
-  public void shouldPropagatePassThrough() {
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldPropagatePassThrough(boolean reuseByteArray) {
     Flow<Pair<WriteMessage, String>, Pair<WriteResult, String>, CompletionStage<Done>> flow =
-        AmqpFlow.createWithConfirmAndPassThroughUnordered(settings());
+        AmqpFlow.createWithConfirmAndPassThroughUnordered(settings(reuseByteArray));
 
     final List<String> input = List.of("one", "two", "three", "four", "five");
     final List<Pair<WriteResult, String>> expectedOutput =

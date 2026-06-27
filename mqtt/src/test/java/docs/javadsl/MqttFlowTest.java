@@ -24,7 +24,8 @@ import org.apache.pekko.stream.connectors.mqtt.MqttSubscriptions;
 import org.apache.pekko.stream.connectors.mqtt.javadsl.MqttFlow;
 import org.apache.pekko.stream.connectors.mqtt.javadsl.MqttMessageWithAck;
 import org.apache.pekko.stream.connectors.mqtt.javadsl.MqttMessageWithAckImpl;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -32,10 +33,10 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,11 +45,10 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@ExtendWith(LogCapturingExtension.class)
 public class MqttFlowTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final Logger log = LoggerFactory.getLogger(MqttFlowTest.class);
 
@@ -56,12 +56,12 @@ public class MqttFlowTest {
 
   private static final int bufferSize = 8;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
     system = ActorSystem.create("MqttFlowTest");
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

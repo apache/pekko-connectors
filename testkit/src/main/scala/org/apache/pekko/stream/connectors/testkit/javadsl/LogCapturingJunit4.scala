@@ -45,6 +45,7 @@ import org.slf4j.LoggerFactory
  *     </root>
  * }}}
  */
+@deprecated("Use LogCapturingExtension (JUnit Jupiter) instead", "2.0.0")
 final class LogCapturingJunit4 extends TestRule {
   // eager access of CapturingAppender to fail fast if misconfigured
   private val capturingAppender = CapturingAppender.get("")

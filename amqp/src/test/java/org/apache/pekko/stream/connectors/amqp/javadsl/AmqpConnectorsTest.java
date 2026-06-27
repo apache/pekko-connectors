@@ -21,7 +21,8 @@ import org.apache.pekko.stream.KillSwitches;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.UniqueKillSwitch;
 import org.apache.pekko.stream.connectors.amqp.*;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -32,7 +33,7 @@ import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import com.rabbitmq.client.AuthenticationFailureException;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import scala.collection.JavaConverters;
 import scala.concurrent.duration.Duration;
 
@@ -42,35 +43,34 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /** Needs a local running AMQP server on the default port with no password. */
+@ExtendWith(LogCapturingExtension.class)
 public class AmqpConnectorsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }
 
-  @After
+  @AfterEach
   public void checkForStageLeaks() {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
   }
 
   private AmqpConnectionProvider connectionProvider = AmqpLocalConnectionProvider.getInstance();
 
-  @Test(expected = ConnectException.class)
-  public void throwIfCanNotConnect() throws Throwable {
+  @Test
+  public void throwIfCanNotConnect() {
     final String queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis();
     final QueueDeclaration queueDeclaration = QueueDeclaration.create(queueName);
 
@@ -88,15 +88,19 @@ public class AmqpConnectorsTest {
     final CompletionStage<Done> result =
         Source.from(input).map(ByteString::fromString).runWith(amqpSink, system);
 
-    try {
-      result.toCompletableFuture().get();
-    } catch (ExecutionException e) {
-      throw e.getCause();
-    }
+    Assertions.assertThrows(
+        ConnectException.class,
+        () -> {
+          try {
+            result.toCompletableFuture().get();
+          } catch (ExecutionException e) {
+            throw e.getCause();
+          }
+        });
   }
 
-  @Test(expected = AuthenticationFailureException.class)
-  public void throwWithWrongCredentials() throws Throwable {
+  @Test
+  public void throwWithWrongCredentials() {
     final String queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis();
     final QueueDeclaration queueDeclaration = QueueDeclaration.create(queueName);
 
@@ -116,11 +120,15 @@ public class AmqpConnectorsTest {
     final CompletionStage<Done> result =
         Source.from(input).map(ByteString::fromString).runWith(amqpSink, system);
 
-    try {
-      result.toCompletableFuture().get();
-    } catch (ExecutionException e) {
-      throw e.getCause();
-    }
+    Assertions.assertThrows(
+        AuthenticationFailureException.class,
+        () -> {
+          try {
+            result.toCompletableFuture().get();
+          } catch (ExecutionException e) {
+            throw e.getCause();
+          }
+        });
     // assertEquals(input, result.toCompletableFuture().get(3, TimeUnit.SECONDS).stream().map(m ->
     // m.bytes().utf8String()).toList());
   }

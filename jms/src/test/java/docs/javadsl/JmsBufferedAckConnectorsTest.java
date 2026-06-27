@@ -20,17 +20,18 @@ import org.apache.pekko.stream.connectors.jms.*;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import jmstestkit.JmsBroker;
 import com.typesafe.config.Config;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -42,24 +43,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class JmsBufferedAckConnectorsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static Config consumerConfig;
   private static Config producerConfig;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
     consumerConfig = system.settings().config().getConfig(JmsConsumerSettings.configPath());
     producerConfig = system.settings().config().getConfig(JmsProducerSettings.configPath());
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

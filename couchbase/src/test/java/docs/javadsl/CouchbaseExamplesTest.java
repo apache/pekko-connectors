@@ -27,7 +27,8 @@ import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseFlow;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSource;
 import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupportClass;
 import org.apache.pekko.stream.connectors.couchbase.testing.TestObject;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
@@ -49,7 +50,7 @@ import com.couchbase.client.java.query.N1qlQuery;
 // #n1ql
 import com.couchbase.client.java.query.SimpleN1qlQuery;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -77,14 +78,13 @@ import scala.concurrent.duration.FiniteDuration;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(LogCapturingExtension.class)
 public class CouchbaseExamplesTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final CouchbaseSupportClass support = new CouchbaseSupportClass();
   private static final CouchbaseSessionSettings sessionSettings = support.sessionSettings();
@@ -94,7 +94,7 @@ public class CouchbaseExamplesTest {
   private static TestObject sampleData;
   private static List<TestObject> sampleSequence;
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() {
     support.beforeAll();
     actorSystem = support.actorSystem();
@@ -102,12 +102,12 @@ public class CouchbaseExamplesTest {
     sampleSequence = support.sampleJavaList();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() {
     support.afterAll();
   }
 
-  @After
+  @AfterEach
   public void checkForStageLeaks() {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(actorSystem));
   }
@@ -305,7 +305,7 @@ public class CouchbaseExamplesTest {
     // #upsertDocWithResult
 
     assertThat(writeResults.size(), is(sampleSequence.size()));
-    assertTrue("unexpected failed writes", failedDocs.isEmpty());
+    assertTrue(failedDocs.isEmpty(), "unexpected failed writes");
   }
 
   @Test
@@ -330,8 +330,8 @@ public class CouchbaseExamplesTest {
     assert (document.content().get("value") == "FirstReplace");
   }
 
-  @Test(expected = DocumentDoesNotExistException.class)
-  public void replaceFailsWhenDocumentDoesntExists() throws Throwable {
+  @Test
+  public void replaceFailsWhenDocumentDoesntExists() {
 
     support.cleanAllInBucket(bucketName);
 
@@ -347,11 +347,15 @@ public class CouchbaseExamplesTest {
             .runWith(Sink.head(), actorSystem);
     // #replace
 
-    try {
-      jsonDocumentReplace.toCompletableFuture().get(3, TimeUnit.SECONDS);
-    } catch (ExecutionException ex) {
-      throw ex.getCause();
-    }
+    Assertions.assertThrows(
+        DocumentDoesNotExistException.class,
+        () -> {
+          try {
+            jsonDocumentReplace.toCompletableFuture().get(3, TimeUnit.SECONDS);
+          } catch (ExecutionException ex) {
+            throw ex.getCause();
+          }
+        });
   }
 
   @Test

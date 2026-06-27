@@ -43,7 +43,8 @@ import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.ActorMqttServer
 import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.Mqtt;
 import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.MqttClientSession;
 import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.MqttServerSession;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -54,7 +55,7 @@ import org.apache.pekko.stream.javadsl.BroadcastHub;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import scala.Tuple2;
 import scala.collection.JavaConverters;
 
@@ -67,11 +68,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class MqttFlowTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static int TIMEOUT_SECONDS = 5;
 
@@ -82,17 +82,17 @@ public class MqttFlowTest {
     return system;
   }
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = setupSystem();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }
 
-  @After
+  @AfterEach
   public void assertStageStopping() {
     StreamTestKit.assertAllStagesStopped(SystemMaterializer.get(system).materializer());
   }

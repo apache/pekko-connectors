@@ -26,7 +26,8 @@ import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpRpcFlow;
 import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpSink;
 import org.apache.pekko.stream.connectors.amqp.javadsl.AmqpSource;
 import org.apache.pekko.stream.connectors.amqp.javadsl.CommittableReadResult;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -37,7 +38,7 @@ import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 import java.util.*;
@@ -45,26 +46,25 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** Needs a local running AMQP server on the default port with no password. */
+@ExtendWith(LogCapturingExtension.class)
 public class AmqpDocsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }
 
-  @After
+  @AfterEach
   public void checkForStageLeaks() {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
   }

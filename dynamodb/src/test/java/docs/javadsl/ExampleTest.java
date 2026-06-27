@@ -21,13 +21,14 @@ import org.apache.pekko.japi.Pair;
 // #init-client
 import org.apache.pekko.stream.connectors.dynamodb.DynamoDbOp;
 import org.apache.pekko.stream.connectors.dynamodb.javadsl.DynamoDb;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.javadsl.SourceWithContext;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 // #init-client
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import scala.util.Try;
@@ -45,15 +46,15 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(LogCapturingExtension.class)
 public class ExampleTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   static ActorSystem system;
   static DynamoDbAsyncClient client;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws Exception {
 
     // #init-client
@@ -85,7 +86,7 @@ public class ExampleTest {
     ExampleTest.client = client;
   }
 
-  @AfterClass
+  @AfterAll
   public static void tearDown() {
     client.close();
     TestKit.shutdownActorSystem(system);
@@ -104,8 +105,8 @@ public class ExampleTest {
     assertNotNull(result.tableNames());
   }
 
-  @Test(expected = ExecutionException.class)
-  public void allowMultipleRequests() throws Exception {
+  @Test
+  public void allowMultipleRequests() {
     // #flow
     Source<DescribeTableResponse, NotUsed> tableArnSource =
         Source.single(CreateTableRequest.builder().tableName("testTable").build())
@@ -121,11 +122,13 @@ public class ExampleTest {
     CompletionStage<List<DescribeTableResponse>> streamCompletion =
         tableArnSource.runWith(Sink.seq(), system);
     // exception expected
-    streamCompletion.toCompletableFuture().get(5, TimeUnit.SECONDS);
+    Assertions.assertThrows(
+        ExecutionException.class,
+        () -> streamCompletion.toCompletableFuture().get(5, TimeUnit.SECONDS));
   }
 
-  @Test(expected = ExecutionException.class)
-  public void flowWithContext() throws Throwable {
+  @Test
+  public void flowWithContext() {
     class SomeContext {}
 
     // #withContext
@@ -152,11 +155,13 @@ public class ExampleTest {
     CompletionStage<Pair<PutItemResponse, SomeContext>> streamCompletion =
         writtenSource.runWith(Sink.head(), system);
     // exception expected
-    streamCompletion.toCompletableFuture().get(5, TimeUnit.SECONDS);
+    Assertions.assertThrows(
+        ExecutionException.class,
+        () -> streamCompletion.toCompletableFuture().get(5, TimeUnit.SECONDS));
   }
 
-  @Test(expected = ExecutionException.class)
-  public void paginated() throws Exception {
+  @Test
+  public void paginated() {
     // #paginated
     ScanRequest scanRequest = ScanRequest.builder().tableName("testTable").build();
 
@@ -166,11 +171,13 @@ public class ExampleTest {
     // #paginated
     CompletionStage<List<ScanResponse>> streamCompletion = scanPages.runWith(Sink.seq(), system);
     // exception expected
-    streamCompletion.toCompletableFuture().get(1, TimeUnit.SECONDS);
+    Assertions.assertThrows(
+        ExecutionException.class,
+        () -> streamCompletion.toCompletableFuture().get(1, TimeUnit.SECONDS));
   }
 
-  @Test(expected = ExecutionException.class)
-  public void flowPaginated() throws Exception {
+  @Test
+  public void flowPaginated() {
     ScanRequest scanRequest = ScanRequest.builder().tableName("testTable").build();
     // #paginated
     Source<ScanResponse, NotUsed> scanPageInFlow =
@@ -179,6 +186,8 @@ public class ExampleTest {
     CompletionStage<List<ScanResponse>> streamCompletion2 =
         scanPageInFlow.runWith(Sink.seq(), system);
     // exception expected
-    streamCompletion2.toCompletableFuture().get(1, TimeUnit.SECONDS);
+    Assertions.assertThrows(
+        ExecutionException.class,
+        () -> streamCompletion2.toCompletableFuture().get(1, TimeUnit.SECONDS));
   }
 }

@@ -16,13 +16,11 @@ package org.apache.pekko.stream.connectors.ironmq;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClient;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,13 +30,12 @@ import static scala.jdk.javaapi.FutureConverters.*;
 import static scala.collection.JavaConverters.*;
 
 public abstract class UnitTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private ActorSystem system;
   private Materializer materializer;
   private IronMqClient ironMqClient;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     Config config = initConfig();
     system = ActorSystem.create("TestActorSystem", config);
@@ -50,7 +47,7 @@ public abstract class UnitTest {
             materializer);
   }
 
-  @After
+  @AfterEach
   public void teardown() throws Exception {
     materializer.shutdown();
     TestKit.shutdownActorSystem(system);

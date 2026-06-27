@@ -17,7 +17,8 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.io.Inet;
 import org.apache.pekko.io.UdpSO;
 import org.apache.pekko.japi.Pair;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.connectors.udp.Datagram;
 import org.apache.pekko.stream.connectors.udp.javadsl.Udp;
 import org.apache.pekko.stream.javadsl.Flow;
@@ -29,10 +30,10 @@ import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.stream.testkit.javadsl.TestSource;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -41,17 +42,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
+@ExtendWith(LogCapturingExtension.class)
 public class UdpTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create("UdpTest");
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }

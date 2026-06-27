@@ -30,16 +30,17 @@ import org.apache.pekko.stream.connectors.jakartams.javadsl.JmsConsumer;
 import org.apache.pekko.stream.connectors.jakartams.javadsl.JmsConsumerControl;
 import org.apache.pekko.stream.connectors.jakartams.javadsl.JmsProducer;
 import org.apache.pekko.stream.connectors.jakartams.javadsl.JmsProducerStatus;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import scala.util.Failure;
 import scala.util.Success;
 import scala.util.Try;
@@ -54,9 +55,9 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 final class DummyJavaTests implements java.io.Serializable {
 
@@ -86,22 +87,21 @@ final class DummyJavaTests implements java.io.Serializable {
   }
 }
 
+@ExtendWith(LogCapturingExtension.class)
 public class JmsConnectorsTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static Config producerConfig;
   private static Config browseConfig;
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() {
     system = ActorSystem.create();
     producerConfig = system.settings().config().getConfig(JmsProducerSettings.configPath());
     browseConfig = system.settings().config().getConfig(JmsBrowseSettings.configPath());
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() {
     TestKit.shutdownActorSystem(system);
   }
@@ -319,7 +319,7 @@ public class JmsConnectorsTest {
 
           CompletionStage<List<String>> result = controlAndResult.second();
           List<String> outMessages = result.toCompletableFuture().get(3, TimeUnit.SECONDS);
-          assertEquals("unexpected number of elements", expectedMessages, outMessages.size());
+          assertEquals(expectedMessages, outMessages.size(), "unexpected number of elements");
           // #jms-source
           JmsConsumerControl control = controlAndResult.first();
           control.shutdown();
@@ -759,15 +759,15 @@ public class JmsConnectorsTest {
           Try<List<Message>> tryResult = tryFuture.toCompletableFuture().get();
           long endTime = System.currentTimeMillis();
 
-          assertTrue("Total retry is too short", endTime - startTime > 100L + 400L + 900L + 1600L);
-          assertTrue("Result must be a failure", tryResult.isFailure());
+          assertTrue(endTime - startTime > 100L + 400L + 900L + 1600L, "Total retry is too short");
+          assertTrue(tryResult.isFailure(), "Result must be a failure");
           Throwable exception = tryResult.failed().get();
           assertTrue(
-              "Did not fail with a ConnectionRetryException",
-              exception instanceof ConnectionRetryException);
+              exception instanceof ConnectionRetryException,
+              "Did not fail with a ConnectionRetryException");
           assertTrue(
-              "Cause of failure is not a JMSException",
-              exception.getCause() instanceof JMSException);
+              exception.getCause() instanceof JMSException,
+              "Cause of failure is not a JMSException");
         });
   }
 

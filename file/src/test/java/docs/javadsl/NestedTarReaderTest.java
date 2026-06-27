@@ -19,16 +19,17 @@ import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.connectors.file.TarArchiveMetadata;
 import org.apache.pekko.stream.connectors.file.javadsl.Archive;
 import org.apache.pekko.stream.connectors.file.javadsl.Directory;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,22 +40,21 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
+@ExtendWith(LogCapturingExtension.class)
 public class NestedTarReaderTest {
   private static final Logger logger = LoggerFactory.getLogger(NestedTarReaderTest.class);
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static final String TARGZ_EXT = "tar.gz";
   private static final int MAX_GUNZIP_CHUNK_SIZE = 64000;
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() throws Exception {
     TestKit.shutdownActorSystem(system);
   }

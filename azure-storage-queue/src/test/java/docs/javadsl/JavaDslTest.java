@@ -25,7 +25,8 @@ import org.apache.pekko.stream.connectors.azure.storagequeue.javadsl.AzureQueueS
 import org.apache.pekko.stream.connectors.azure.storagequeue.javadsl.AzureQueueWithTimeoutsSink;
 import org.apache.pekko.stream.connectors.azure.storagequeue.javadsl.MessageAndDeleteOrUpdate;
 import org.apache.pekko.stream.connectors.azure.storagequeue.javadsl.MessageWithTimeouts;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
@@ -41,10 +42,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
+@ExtendWith(LogCapturingExtension.class)
 public class JavaDslTest {
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private static ActorSystem system;
   private static final String storageConnectionString = System.getenv("AZURE_CONNECTION_STRING");
@@ -64,7 +65,7 @@ public class JavaDslTest {
 
   private static final CloudQueue queue = queueSupplier.get();
 
-  @BeforeClass
+  @BeforeAll
   public static void setup() throws StorageException {
     system = ActorSystem.create();
 
@@ -73,7 +74,7 @@ public class JavaDslTest {
     }
   }
 
-  @AfterClass
+  @AfterAll
   public static void teardown() throws StorageException {
     TestKit.shutdownActorSystem(system);
     if (queue != null) {
@@ -81,14 +82,14 @@ public class JavaDslTest {
     }
   }
 
-  @Before
+  @BeforeEach
   public void clearQueue() throws StorageException {
     if (queue != null) {
       queue.clear();
     }
   }
 
-  @After
+  @AfterEach
   public void checkForStageLeaks() {
     StreamTestKit.assertAllStagesStopped(
         org.apache.pekko.stream.Materializer.matFromSystem(system));
@@ -97,7 +98,7 @@ public class JavaDslTest {
   @Test
   public void testAzureQueueSink()
       throws StorageException, InterruptedException, ExecutionException, TimeoutException {
-    Assume.assumeNotNull(queue);
+    Assumptions.assumeTrue(queue != null);
     final Source<Integer, NotUsed> sourceInt = Source.range(1, 10);
     final Source<CloudQueueMessage, NotUsed> source =
         sourceInt.map(i -> new CloudQueueMessage("Java Azure Cloud Test " + i.toString()));
@@ -107,13 +108,13 @@ public class JavaDslTest {
 
     source.runWith(sink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
 
-    Assert.assertNotNull(queue.retrieveMessage());
+    Assertions.assertNotNull(queue.retrieveMessage());
   }
 
   @Test
   public void testAzureQueueWithTimeoutsSink()
       throws StorageException, InterruptedException, ExecutionException, TimeoutException {
-    Assume.assumeNotNull(queue);
+    Assumptions.assumeTrue(queue != null);
     final Source<Integer, NotUsed> sourceInt = Source.range(1, 10);
     final Source<MessageWithTimeouts, NotUsed> source =
         sourceInt.map(
@@ -126,7 +127,7 @@ public class JavaDslTest {
 
     source.runWith(sink, system).toCompletableFuture().get(10, TimeUnit.SECONDS);
 
-    Assert.assertNull(
+    Assertions.assertNull(
         queue
             .retrieveMessage()); // There should be no message because of initial visibility timeout
   }
@@ -134,7 +135,7 @@ public class JavaDslTest {
   @Test
   public void testAzureQueueSource()
       throws StorageException, InterruptedException, ExecutionException, TimeoutException {
-    Assume.assumeNotNull(queue);
+    Assumptions.assumeTrue(queue != null);
 
     // Queue 10 Messages
     for (int i = 0; i < 10; i++) {
@@ -152,7 +153,7 @@ public class JavaDslTest {
   @Test
   public void testAzureQueueDeleteSink()
       throws StorageException, InterruptedException, ExecutionException, TimeoutException {
-    Assume.assumeNotNull(queue);
+    Assumptions.assumeTrue(queue != null);
 
     // Queue 10 Messages
     for (int i = 0; i < 10; i++) {
@@ -172,13 +173,13 @@ public class JavaDslTest {
 
     done.toCompletableFuture().get(10, TimeUnit.SECONDS);
 
-    Assert.assertNull(queue.retrieveMessage());
+    Assertions.assertNull(queue.retrieveMessage());
   }
 
   @Test
   public void testAzureQueueDeleteOrUpdateSink()
       throws StorageException, InterruptedException, ExecutionException, TimeoutException {
-    Assume.assumeNotNull(queue);
+    Assumptions.assumeTrue(queue != null);
 
     // Queue 10 Messages
     for (int i = 0; i < 10; i++) {
@@ -202,6 +203,6 @@ public class JavaDslTest {
 
     done.toCompletableFuture().get(10, TimeUnit.SECONDS);
 
-    Assert.assertNull(queue.retrieveMessage());
+    Assertions.assertNull(queue.retrieveMessage());
   }
 }

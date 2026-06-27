@@ -21,7 +21,8 @@ import org.apache.pekko.stream.connectors.file.DirectoryChange;
 // #minimal-sample
 import org.apache.pekko.stream.connectors.file.javadsl.DirectoryChangesSource;
 // #minimal-sample
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
@@ -30,7 +31,7 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 import com.google.common.jimfs.WatchServiceConfiguration;
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -41,28 +42,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(LogCapturingExtension.class)
 public class DirectoryChangesSourceTest {
-
-  @Rule public final LogCapturingJunit4 logCapturing = new LogCapturingJunit4();
 
   private FileSystem fs;
   private Path testDir;
 
   private static ActorSystem system;
 
-  @BeforeClass
+  @BeforeAll
   public static void beforeAll() throws Exception {
     system = ActorSystem.create();
   }
 
-  @AfterClass
+  @AfterAll
   public static void afterAll() throws Exception {
     TestKit.shutdownActorSystem(system);
   }
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     fs =
         Jimfs.newFileSystem(
@@ -141,7 +141,7 @@ public class DirectoryChangesSourceTest {
     probe.cancel();
   }
 
-  @After
+  @AfterEach
   public void tearDown() throws Exception {
     StreamTestKit.assertAllStagesStopped(Materializer.matFromSystem(system));
     fs.close();

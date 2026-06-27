@@ -97,7 +97,10 @@ object Dependencies {
       "org.scalatest" %% "scalatest" % ScalaTestVersion,
       "com.dimafeng" %% "testcontainers-scala-scalatest" % TestContainersScalaTestVersion,
       "com.github.sbt" % "junit-interface" % "0.13.3",
-      "junit" % "junit" % "4.13.2"))
+      "junit" % "junit" % "4.13.2",
+      "org.junit.jupiter" % "junit-jupiter-api" % JupiterKeys.junitJupiterVersion.value,
+      "org.junit.jupiter" % "junit-jupiter-params" % JupiterKeys.junitJupiterVersion.value,
+      "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value))
 
   val Mockito = Seq(
     "org.mockito" % "mockito-core" % mockitoVersion % Test,
@@ -107,6 +110,7 @@ object Dependencies {
   val Amqp = Seq(
     libraryDependencies ++= Seq(
       "com.rabbitmq" % "amqp-client" % "5.32.0",
+      "org.junit.jupiter" % "junit-jupiter-params" % JupiterKeys.junitJupiterVersion.value % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
   val AwsSpiPekkoHttp = Seq(
@@ -176,6 +180,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-stream-testkit" % PekkoVersion % Test,
       "org.apache.pekko" %% "pekko-connectors-kafka" % "2.0.0-M1" % Test,
       "junit" % "junit" % "4.13.2" % Test,
+      "org.junit.jupiter" % "junit-jupiter-api" % JupiterKeys.junitJupiterVersion.value % Test,
       "org.scalatest" %% "scalatest" % ScalaTestVersion % Test))
 
   val DynamoDB = Seq(
