@@ -16,6 +16,18 @@
 # under the License.
 
 # remove deprecated methods
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageAttributes")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageAttributes$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageExt")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageExt$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettings")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettings$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettingsPath")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettingsPath$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettingsValue")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.GCStorageSettingsValue$")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.StorageSettings")
+ProblemFilters.exclude[MissingClassProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.StorageSettings$")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.javadsl.GCStorage.createBucket")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.javadsl.GCStorage.deleteBucket")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.javadsl.GCStorage.getBucket")
