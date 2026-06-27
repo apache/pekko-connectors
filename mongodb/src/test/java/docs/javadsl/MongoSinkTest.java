@@ -96,10 +96,8 @@ public class MongoSinkTest {
             i -> {
               DomainObject domainObject =
                   new DomainObject(
-                      i,
-                      String.format("first-property-%s", i),
-                      String.format("second-property-%s", i));
-              System.out.println(String.format("%s inserting %s", i, domainObject));
+                      i, "first-property-%s".formatted(i), "second-property-%s".formatted(i));
+              System.out.println("%s inserting %s".formatted(i, domainObject));
               return domainObject;
             })
         .runWith(MongoSink.insertOne(domainObjectsColl), system)
@@ -340,8 +338,8 @@ public class MongoSinkTest {
                         Filters.eq("_id", i),
                         new DomainObject(
                             i,
-                            String.format("updated-first-property-%s", i),
-                            String.format("updated-second-property-%s", i))));
+                            "updated-first-property-%s".formatted(i),
+                            "updated-second-property-%s".formatted(i))));
     final CompletionStage<Done> completion =
         source.runWith(MongoSink.replaceOne(domainObjectsColl), system);
     // #replace-one
@@ -361,8 +359,8 @@ public class MongoSinkTest {
                 i ->
                     new DomainObject(
                         i,
-                        String.format("updated-first-property-%s", i),
-                        String.format("updated-second-property-%s", i)))
+                        "updated-first-property-%s".formatted(i),
+                        "updated-second-property-%s".formatted(i)))
             .toList();
 
     assertEquals(expected, found);

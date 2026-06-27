@@ -100,7 +100,7 @@ public abstract class BaseSqsTest {
     return sqsClient
         .createQueue(
             CreateQueueRequest.builder()
-                .queueName(String.format("queue-%s", new Random().nextInt()))
+                .queueName("queue-%s".formatted(new Random().nextInt()))
                 .build())
         .get(2, TimeUnit.SECONDS)
         .queueUrl();

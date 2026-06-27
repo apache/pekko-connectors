@@ -58,7 +58,7 @@ public class GeodeContinuousSourceTestCase extends GeodeBaseTestCase {
 
     Pair<NotUsed, CompletionStage<List<Person>>> run =
         Source.from(List.of(120))
-            .map((i) -> new Person(i, String.format("Java flow %d", i), new Date()))
+            .map((i) -> new Person(i, "Java flow %d".formatted(i), new Date()))
             .via(flow)
             .toMat(Sink.seq(), Keep.both())
             .run(system);

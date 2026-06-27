@@ -887,7 +887,7 @@ public class SolrTest {
     streamContext.setSolrClientCache(solrClientCache);
 
     String expressionStr =
-        String.format("search(%s, q=*:*, fl=\"title,comment\", sort=\"title asc\")", collection);
+        "search(%s, q=*:*, fl=\"title,comment\", sort=\"title asc\")".formatted(collection);
     StreamExpression expression = StreamExpressionParser.parse(expressionStr);
     TupleStream stream = new CloudSolrStream(expression, factory);
     stream.setStreamContext(streamContext);

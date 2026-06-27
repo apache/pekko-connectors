@@ -105,7 +105,7 @@ public class PravegaKVTableTestCase extends PravegaBaseTestCase {
 
     String result = readingDone.toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
     Assertions.assertTrue(
-        result.equals("One, Two, Three, Four"), String.format("Read 2 elements [%s]", result));
+        result.equals("One, Two, Three, Four"), "Read 2 elements [%s]".formatted(result));
 
     Flow<Integer, Optional<String>, NotUsed> readFlow =
         PravegaTable.readFlow(scope, tableName, tableReaderSettings);

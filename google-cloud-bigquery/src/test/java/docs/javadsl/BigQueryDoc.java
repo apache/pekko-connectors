@@ -156,7 +156,7 @@ public class BigQueryDoc {
 
     // #run-query
     String sqlQuery =
-        String.format("SELECT name, addresses FROM %s.%s WHERE age >= 100", datasetId, tableId);
+        "SELECT name, addresses FROM %s.%s WHERE age >= 100".formatted(datasetId, tableId);
     Unmarshaller<HttpEntity, QueryResponse<NameAddressesPair>> queryResponseUnmarshaller =
         BigQueryMarshallers.queryResponseUnmarshaller(NameAddressesPair.class);
     Source<NameAddressesPair, CompletionStage<QueryResponse<NameAddressesPair>>> centenarians =
