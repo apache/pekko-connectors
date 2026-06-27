@@ -22,7 +22,6 @@ ThisBuild / evictionErrorLevel := Level.Info
 
 // JUnit 6.1.0 version overrides
 ThisBuild / JupiterKeys.junitJupiterVersion := "6.1.0"
-ThisBuild / JupiterKeys.junitPlatformVersion := "6.1.0"
 
 lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   amqp,
