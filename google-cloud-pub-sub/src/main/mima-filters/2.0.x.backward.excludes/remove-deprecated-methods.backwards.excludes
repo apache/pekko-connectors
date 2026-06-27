@@ -19,3 +19,4 @@
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.PubSubConfig.create")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.PubSubConfig.apply")
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.PubSubConfig.projectId")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.pubsub.PubSubConfig.settings")
