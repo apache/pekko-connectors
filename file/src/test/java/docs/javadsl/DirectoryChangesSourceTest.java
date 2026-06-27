@@ -13,19 +13,6 @@
 
 package docs.javadsl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.google.common.jimfs.Configuration;
-import com.google.common.jimfs.Jimfs;
-import com.google.common.jimfs.WatchServiceConfiguration;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
@@ -40,8 +27,22 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
+import com.google.common.jimfs.Configuration;
+import com.google.common.jimfs.Jimfs;
+import com.google.common.jimfs.WatchServiceConfiguration;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(LogCapturingExtension.class)
 public class DirectoryChangesSourceTest {
