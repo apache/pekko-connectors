@@ -13,6 +13,11 @@
 
 package org.apache.pekko.stream.connectors.eip.javadsl;
 
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import org.apache.kafka.common.serialization.ByteArrayDeserializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -27,15 +32,9 @@ import org.apache.pekko.kafka.javadsl.Consumer;
 import org.apache.pekko.stream.*;
 import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
 
 public class PassThroughExamples {
   private static ActorSystem system;

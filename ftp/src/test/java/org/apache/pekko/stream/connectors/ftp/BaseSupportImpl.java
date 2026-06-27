@@ -13,14 +13,13 @@
 
 package org.apache.pekko.stream.connectors.ftp;
 
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.Materializer;
-import org.junit.jupiter.api.AfterEach;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.Materializer;
+import org.junit.jupiter.api.AfterEach;
 
 public abstract class BaseSupportImpl implements BaseSupport, PekkoSupport {
 

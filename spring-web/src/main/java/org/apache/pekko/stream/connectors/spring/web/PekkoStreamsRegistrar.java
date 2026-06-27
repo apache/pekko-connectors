@@ -13,14 +13,14 @@
 
 package org.apache.pekko.stream.connectors.spring.web;
 
+import static org.springframework.core.ReactiveTypeDescriptor.multiValue;
+
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.javadsl.AsPublisher;
 import org.springframework.core.ReactiveAdapterRegistry;
 import org.springframework.util.Assert;
-
-import static org.springframework.core.ReactiveTypeDescriptor.multiValue;
 
 public class PekkoStreamsRegistrar {
 

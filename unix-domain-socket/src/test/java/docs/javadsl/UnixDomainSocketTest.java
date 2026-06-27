@@ -13,6 +13,12 @@
 
 package docs.javadsl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.nio.file.Files;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -20,7 +26,6 @@ import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.OverflowStrategy;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.connectors.unixdomainsocket.javadsl.UnixDomainSocket;
 import org.apache.pekko.stream.connectors.unixdomainsocket.javadsl.UnixDomainSocket.IncomingConnection;
 import org.apache.pekko.stream.connectors.unixdomainsocket.javadsl.UnixDomainSocket.ServerBinding;
@@ -32,17 +37,10 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.nio.file.Files;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(LogCapturingExtension.class)
 public class UnixDomainSocketTest {

@@ -13,6 +13,9 @@
 
 package docs.javadsl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.Http;
 import org.apache.pekko.http.javadsl.model.ContentTypes;
@@ -24,14 +27,10 @@ import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchParams;
 import org.apache.pekko.stream.connectors.elasticsearch.OpensearchApiVersion;
 import org.apache.pekko.stream.connectors.elasticsearch.OpensearchParams;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class ElasticsearchTestBase {

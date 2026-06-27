@@ -13,34 +13,32 @@
 
 package org.apache.pekko.stream.connectors.jms.javadsl;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.Pair;
-import org.apache.pekko.stream.connectors.jms.*;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.testkit.javadsl.TestKit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.typesafe.config.Config;
-import org.apache.activemq.command.ActiveMQQueue;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-
-import org.junit.jupiter.api.Test;
-import jmstestkit.JmsBroker;
-
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.TextMessage;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
+import jmstestkit.JmsBroker;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.pekko.Done;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.jms.*;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class JmsAckConnectorsTest {

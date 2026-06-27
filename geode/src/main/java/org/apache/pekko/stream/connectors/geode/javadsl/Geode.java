@@ -13,23 +13,20 @@
 
 package org.apache.pekko.stream.connectors.geode.javadsl;
 
+import java.util.concurrent.CompletionStage;
+import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
-import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.pekko.stream.connectors.geode.GeodeSettings;
+import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.pekko.stream.connectors.geode.RegionSettings;
 import org.apache.pekko.stream.connectors.geode.impl.GeodeCache;
-
 import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeFiniteSourceStage;
 import org.apache.pekko.stream.connectors.geode.impl.stage.GeodeFlowStage;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.geode.cache.client.ClientCacheFactory;
-
-import java.util.concurrent.CompletionStage;
-
 import scala.jdk.javaapi.FutureConverters;
 
 /** Java API: Geode client without server event subscription. */

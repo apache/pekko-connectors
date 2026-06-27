@@ -13,6 +13,15 @@
 
 package docs.javadsl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -30,26 +39,15 @@ import org.apache.pekko.stream.connectors.s3.headers.ServerSideEncryption;
 import org.apache.pekko.stream.connectors.s3.javadsl.S3;
 import org.apache.pekko.stream.connectors.s3.scaladsl.S3WireMockBase;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class S3Test extends S3WireMockBase {

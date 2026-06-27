@@ -13,6 +13,12 @@
 
 package docs.javadsl;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -25,7 +31,6 @@ import org.apache.pekko.stream.connectors.mqttv5.javadsl.MqttFlow;
 import org.apache.pekko.stream.connectors.mqttv5.javadsl.MqttMessageWithAck;
 import org.apache.pekko.stream.connectors.mqttv5.javadsl.MqttMessageWithAckImpl;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -35,17 +40,10 @@ import org.apache.pekko.util.ByteString;
 import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @ExtendWith(LogCapturingExtension.class)
 public class MqttFlowTest {

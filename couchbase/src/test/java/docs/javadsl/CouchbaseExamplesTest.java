@@ -28,7 +28,6 @@ import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSource;
 import org.apache.pekko.stream.connectors.couchbase.testing.CouchbaseSupportClass;
 import org.apache.pekko.stream.connectors.couchbase.testing.TestObject;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
@@ -51,6 +50,7 @@ import com.couchbase.client.java.query.N1qlQuery;
 import com.couchbase.client.java.query.SimpleN1qlQuery;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 import java.util.ArrayList;

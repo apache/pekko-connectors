@@ -15,20 +15,18 @@ package org.apache.pekko.stream.connectors.amqp.javadsl;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.pekko.stream.connectors.amqp.*;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-
-import org.junit.jupiter.api.Test;
-
 import java.net.ConnectException;
+import org.apache.pekko.stream.connectors.amqp.*;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class AmqpConnectionProvidersTest {

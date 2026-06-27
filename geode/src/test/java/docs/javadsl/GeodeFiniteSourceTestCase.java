@@ -13,15 +13,13 @@
 
 package docs.javadsl;
 
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 import org.apache.pekko.Done;
 import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class GeodeFiniteSourceTestCase extends GeodeBaseTestCase {

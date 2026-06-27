@@ -13,27 +13,22 @@
 
 package org.apache.pekko.stream.connectors.pravega;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.stream.javadsl.Source;
-
 import com.typesafe.config.ConfigFactory;
 import docs.javadsl.PravegaBaseTestCase;
-
 import io.pravega.client.stream.ReaderGroup;
 import io.pravega.client.stream.impl.JavaSerializer;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import org.apache.pekko.japi.Pair;
-
-import org.apache.pekko.stream.UniqueKillSwitch;
-import org.apache.pekko.stream.KillSwitches;
-import org.apache.pekko.stream.javadsl.Keep;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.connectors.pravega.javadsl.Pravega;
-
 import java.util.List;
 import java.util.concurrent.*;
+import org.apache.pekko.Done;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.KillSwitches;
+import org.apache.pekko.stream.UniqueKillSwitch;
+import org.apache.pekko.stream.connectors.pravega.javadsl.Pravega;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class PravegaGraphTestCase extends PravegaBaseTestCase {
 

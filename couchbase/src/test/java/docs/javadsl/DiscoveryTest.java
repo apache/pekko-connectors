@@ -21,14 +21,13 @@ import org.apache.pekko.stream.connectors.couchbase.javadsl.DiscoverySupport;
 import org.apache.pekko.stream.connectors.couchbase.javadsl.CouchbaseSession;
 // #registry
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;

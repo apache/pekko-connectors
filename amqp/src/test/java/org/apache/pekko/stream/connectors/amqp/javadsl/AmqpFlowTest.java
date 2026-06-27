@@ -16,14 +16,6 @@ package org.apache.pekko.stream.connectors.amqp.javadsl;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-
-import scala.collection.JavaConverters;
-
-import org.junit.jupiter.api.BeforeAll;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
@@ -33,7 +25,6 @@ import org.apache.pekko.stream.connectors.amqp.QueueDeclaration;
 import org.apache.pekko.stream.connectors.amqp.WriteMessage;
 import org.apache.pekko.stream.connectors.amqp.WriteResult;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Keep;
@@ -41,6 +32,11 @@ import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.util.ByteString;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import scala.collection.JavaConverters;
 
 /** Needs a local running AMQP server on the default port with no password. */
 @ExtendWith(LogCapturingExtension.class)

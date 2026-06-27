@@ -15,13 +15,12 @@ package docs.javadsl;
 
 // #retrieving-with-unconfirmed-reads
 
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.connectors.ftp.SftpSettings;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-
-import java.util.concurrent.CompletionStage;
 
 public class SftpRetrievingExample {
 

@@ -13,20 +13,7 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.function.Creator;
-import org.apache.pekko.japi.function.Function;
-import org.apache.pekko.stream.Materializer;
-import org.apache.pekko.stream.connectors.file.javadsl.LogRotatorSink;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.*;
-import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
-import org.apache.pekko.testkit.javadsl.TestKit;
-import org.apache.pekko.util.ByteString;
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -37,8 +24,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.function.Creator;
+import org.apache.pekko.japi.function.Function;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.connectors.file.javadsl.LogRotatorSink;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.*;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class LogRotatorSinkTest {

@@ -13,26 +13,13 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.pf.PFBuilder;
-import org.apache.pekko.stream.KillSwitches;
-import org.apache.pekko.stream.Materializer;
-import org.apache.pekko.stream.UniqueKillSwitch;
-import org.apache.pekko.stream.connectors.file.DirectoryChange;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.Keep;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.stream.testkit.TestSubscriber;
-import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
-import org.apache.pekko.testkit.javadsl.TestKit;
-import org.apache.pekko.util.ByteString;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.WRITE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
-import org.junit.jupiter.api.*;
-
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -42,11 +29,23 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.TimeoutException;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.WRITE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.pf.PFBuilder;
+import org.apache.pekko.stream.KillSwitches;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.UniqueKillSwitch;
+import org.apache.pekko.stream.connectors.file.DirectoryChange;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.testkit.TestSubscriber;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class FileTailSourceTest {

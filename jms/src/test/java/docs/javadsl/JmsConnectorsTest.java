@@ -13,38 +13,11 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.Pair;
-import org.apache.pekko.stream.connectors.jms.Destination;
-import org.apache.pekko.stream.connectors.jms.*;
-import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
-import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
-import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
-import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducerStatus;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.Flow;
-import org.apache.pekko.stream.javadsl.Keep;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.testkit.javadsl.TestKit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.typesafe.config.Config;
-import jmstestkit.JmsBroker;
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.ActiveMQSession;
-import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.activemq.command.ActiveMQTextMessage;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-
-import org.junit.jupiter.api.Test;
-import scala.util.Failure;
-import scala.util.Success;
-import scala.util.Try;
-
-import javax.jms.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -54,10 +27,35 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import javax.jms.*;
+import jmstestkit.JmsBroker;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.ActiveMQSession;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTextMessage;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.jms.*;
+import org.apache.pekko.stream.connectors.jms.Destination;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
+import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducerStatus;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import scala.util.Failure;
+import scala.util.Success;
+import scala.util.Try;
 
 final class DummyJavaTests implements java.io.Serializable {
 

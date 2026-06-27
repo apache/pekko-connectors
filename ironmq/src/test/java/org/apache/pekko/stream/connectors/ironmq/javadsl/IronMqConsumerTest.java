@@ -13,20 +13,18 @@
 
 package org.apache.pekko.stream.connectors.ironmq.javadsl;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.stream.connectors.ironmq.IronMqSettings;
 import org.apache.pekko.stream.connectors.ironmq.PushMessage;
 import org.apache.pekko.stream.connectors.ironmq.UnitTest;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
-
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.TimeUnit;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class IronMqConsumerTest extends UnitTest {

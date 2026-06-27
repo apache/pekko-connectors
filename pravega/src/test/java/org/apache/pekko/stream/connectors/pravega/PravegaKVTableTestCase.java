@@ -13,33 +13,29 @@
 
 package org.apache.pekko.stream.connectors.pravega;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.japi.Pair;
-
-import org.apache.pekko.stream.connectors.pravega.javadsl.PravegaTable;
-import org.apache.pekko.stream.javadsl.Keep;
-import org.apache.pekko.stream.javadsl.Flow;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
 import docs.javadsl.PravegaBaseTestCase;
 import io.pravega.client.ClientConfig;
 import io.pravega.client.admin.KeyValueTableManager;
 import io.pravega.client.stream.Serializer;
 import io.pravega.client.stream.impl.UTF8StringSerializer;
-
 import io.pravega.client.tables.KeyValueTableConfiguration;
 import io.pravega.client.tables.TableKey;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import java.util.concurrent.*;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.pravega.javadsl.PravegaTable;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class PravegaKVTableTestCase extends PravegaBaseTestCase {
 

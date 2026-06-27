@@ -13,10 +13,22 @@
 
 package docs.javadsl;
 
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.fasterxml.aalto.AsyncXMLInputFactory;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.connectors.xml.Characters;
 import org.apache.pekko.stream.connectors.xml.EndDocument;
 import org.apache.pekko.stream.connectors.xml.EndElement;
@@ -28,25 +40,11 @@ import org.apache.pekko.stream.connectors.xml.javadsl.XmlParsing;
 import org.apache.pekko.stream.javadsl.*;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import com.fasterxml.aalto.AsyncXMLInputFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.w3c.dom.Element;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Consumer;
-
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @SuppressWarnings("deprecation")
 @ExtendWith(LogCapturingExtension.class)
