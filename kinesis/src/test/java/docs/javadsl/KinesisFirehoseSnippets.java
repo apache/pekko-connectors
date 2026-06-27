@@ -15,13 +15,13 @@ package docs.javadsl;
 
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.kinesisfirehose.KinesisFirehoseFlowSettings;
 import org.apache.pekko.stream.connectors.kinesisfirehose.javadsl.KinesisFirehoseFlow;
 import org.apache.pekko.stream.connectors.kinesisfirehose.javadsl.KinesisFirehoseSink;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 // #init-client
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import software.amazon.awssdk.services.firehose.FirehoseAsyncClient;
 // #init-client
 import software.amazon.awssdk.services.firehose.model.PutRecordBatchResponseEntry;
