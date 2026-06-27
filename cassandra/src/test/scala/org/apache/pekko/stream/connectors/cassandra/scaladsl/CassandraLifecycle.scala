@@ -103,7 +103,7 @@ trait CassandraLifecycle extends BeforeAndAfterAll with TestKitBase with Cassand
     PatienceConfig(timeout = 4.seconds, interval = 50.millis)
 
   override protected def beforeAll(): Unit = {
-    createKeyspace(keyspaceName).futureValue
+    createKeyspace(keyspaceName).futureValue(PatienceConfiguration.Timeout(15.seconds))
     super.beforeAll()
   }
 
