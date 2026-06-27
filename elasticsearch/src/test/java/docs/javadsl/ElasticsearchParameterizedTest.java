@@ -20,39 +20,30 @@ import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSou
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
-  private final ApiVersion apiVersion;
+  private ApiVersion apiVersion;
 
-  public static Iterable<Object[]> data() {
-    return List.of(
-        new Object[][] {
-          {9201, ApiVersion.V5},
-          {9202, ApiVersion.V7}
-        });
+  public static Stream<Arguments> data() {
+    return Stream.of(Arguments.of(9201, ApiVersion.V5), Arguments.of(9202, ApiVersion.V7));
   }
 
-  public ElasticsearchParameterizedTest(int port, ApiVersion apiVersion) {
-    this.apiVersion = apiVersion;
-  }
-
-  public static void beforeParam(
-      int port, org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase esApiVersion)
-      throws IOException {
-    prepareIndex(port, esApiVersion);
-  }
-
-  public static void afterParam() throws IOException {
+  @AfterEach
+  public void afterParam() throws IOException {
     cleanIndex();
   }
 
@@ -82,8 +73,11 @@ public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
     // #es-params
   }
 
-  @Test
-  public void testUsingVersions() throws Exception {
+  @ParameterizedTest
+  @MethodSource("data")
+  public void testUsingVersions(int port, ApiVersion apiVersion) throws Exception {
+    this.apiVersion = apiVersion;
+    prepareIndex(port, apiVersion);
     // Since the scala-test does a lot more logic testing,
     // all we need to test here is that we can receive and send version
 
@@ -160,8 +154,11 @@ public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
     assertEquals(false, success);
   }
 
-  @Test
-  public void testUsingVersionType() throws Exception {
+  @ParameterizedTest
+  @MethodSource("data")
+  public void testUsingVersionType(int port, ApiVersion apiVersion) throws Exception {
+    this.apiVersion = apiVersion;
+    prepareIndex(port, apiVersion);
     String indexName = "book-test-version-type";
     String typeName = "_doc";
 
@@ -202,8 +199,11 @@ public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
     assertEquals(externalVersion, message.version().get());
   }
 
-  @Test
-  public void testMultipleIndicesWithNoMatching() throws Exception {
+  @ParameterizedTest
+  @MethodSource("data")
+  public void testMultipleIndicesWithNoMatching(int port, ApiVersion apiVersion) throws Exception {
+    this.apiVersion = apiVersion;
+    prepareIndex(port, apiVersion);
     String indexName = "missing-*";
     String typeName = "_doc";
 

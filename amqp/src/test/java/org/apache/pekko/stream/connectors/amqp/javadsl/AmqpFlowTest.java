@@ -21,7 +21,6 @@ import scala.collection.JavaConverters;
 
 import org.junit.jupiter.api.BeforeAll;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -66,9 +65,10 @@ public class AmqpFlowTest {
         .withConfirmationTimeout(Duration.ofMillis(200));
   }
 
-  @Test
-  public void shouldEmitConfirmationForPublishedMessagesInSimpleFlow() {
-    shouldEmitConfirmationForPublishedMessages(AmqpFlow.create(settings(false)));
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  public void shouldEmitConfirmationForPublishedMessagesInSimpleFlow(boolean reuseByteArray) {
+    shouldEmitConfirmationForPublishedMessages(AmqpFlow.create(settings(reuseByteArray)));
   }
 
   @ParameterizedTest
