@@ -22,7 +22,6 @@ import pekko.stream.connectors.googlecloud.pubsub.impl._
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
 
-import scala.annotation.nowarn
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -123,7 +122,7 @@ protected[pubsub] trait GooglePubSub {
     // some wrapping back and forth as FlowWithContext doesn't offer `setup`
     // https://github.com/akka/akka/issues/27883
     FlowWithContext
-      .fromTuples(flow(config)(httpApi.publish[C](topic, parallelism, overrideHost).asFlow))
+      .fromTuples(httpApi.publish[C](topic, parallelism, overrideHost).asFlow)
       .map(_.messageIds)
 
   /**
@@ -139,7 +138,7 @@ protected[pubsub] trait GooglePubSub {
    * Creates a flow pulling messages from a subscription.
    */
   def subscribeFlow(subscription: String, config: PubSubConfig): Flow[Done, ReceivedMessage, Future[NotUsed]] = {
-    flow(config)(httpApi.pull(subscription, config.pullReturnImmediately, config.pullMaxMessagesPerInternalBatch))
+    httpApi.pull(subscription, config.pullReturnImmediately, config.pullMaxMessagesPerInternalBatch)
       .mapConcat(_.receivedMessages.getOrElse(Seq.empty[ReceivedMessage]).toIndexedSeq)
   }.mapMaterializedValue(_ => Future.successful(NotUsed))
 
@@ -147,16 +146,12 @@ protected[pubsub] trait GooglePubSub {
    * Creates a flow for acknowledging messages on a subscription.
    */
   def acknowledgeFlow(subscription: String, config: PubSubConfig): Flow[AcknowledgeRequest, Done, NotUsed] =
-    flow(config)(httpApi.acknowledge(subscription))
+    httpApi.acknowledge(subscription)
 
   /**
    * Creates a sink for acknowledging messages on a subscription.
    */
   def acknowledge(subscription: String, config: PubSubConfig): Sink[AcknowledgeRequest, Future[Done]] =
     acknowledgeFlow(subscription, config).toMat(Sink.ignore)(Keep.right)
-
-  @nowarn("msg=deprecated")
-  private def flow[In, Out](config: PubSubConfig)(flow: Flow[In, Out, NotUsed]): Flow[In, Out, NotUsed] =
-    flow.addAttributes(config.settings.fold(Attributes.none)(GoogleAttributes.settings))
 
 }

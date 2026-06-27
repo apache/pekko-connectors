@@ -20,16 +20,15 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
 import pekko.actor.ActorSystem
+import pekko.stream._
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.scaladsl.{ GooglePubSub, GrpcSubscriber, PubSubAttributes }
 import com.google.protobuf.ByteString
 import com.google.pubsub.v1.pubsub._
-import org.apache.pekko.stream._
 
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.concurrent.{ Future, Promise }
 import scala.concurrent.duration._
-import scala.jdk.CollectionConverters._
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.matchers.should.Matchers

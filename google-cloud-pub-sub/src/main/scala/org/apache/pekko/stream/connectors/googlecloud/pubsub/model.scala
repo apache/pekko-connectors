@@ -16,9 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub
 import java.time.Instant
 import org.apache.pekko
 import pekko.annotation.InternalApi
-import pekko.stream.connectors.google.GoogleSettings
 
-import scala.annotation.nowarn
 import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 
@@ -39,7 +37,7 @@ object PubSubConfig {
   def apply(): PubSubConfig = apply(true, 1000)
 
   def apply(pullReturnImmediately: Boolean, pullMaxMessagesPerInternalBatch: Int): PubSubConfig =
-    new PubSubConfig(pullReturnImmediately, pullMaxMessagesPerInternalBatch, None)
+    new PubSubConfig(pullReturnImmediately, pullMaxMessagesPerInternalBatch)
 
   def create(): PubSubConfig = apply()
 
