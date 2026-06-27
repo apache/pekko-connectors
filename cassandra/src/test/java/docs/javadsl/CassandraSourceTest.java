@@ -15,6 +15,18 @@ package docs.javadsl;
 
 // #init-session
 
+import static docs.javadsl.CassandraTestHelper.await;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+import com.datastax.oss.driver.api.core.cql.Statement;
+// #statement
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSession;
@@ -25,26 +37,12 @@ import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSource;
 // #cql
 import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraAccess;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
-// #statement
-import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.datastax.oss.driver.api.core.cql.Statement;
 // #statement
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
-import static docs.javadsl.CassandraTestHelper.await;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class CassandraSourceTest {

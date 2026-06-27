@@ -13,13 +13,11 @@
 
 package org.apache.pekko.stream.connectors.file.javadsl;
 
+import java.nio.file.Path;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.file.DirectoryChange;
 import org.apache.pekko.stream.javadsl.Source;
-
-import java.nio.file.Path;
-
 import scala.jdk.javaapi.DurationConverters;
 
 /**

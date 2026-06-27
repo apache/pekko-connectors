@@ -13,6 +13,12 @@
 
 package docs.javadsl;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -26,20 +32,12 @@ import org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject;
 import org.apache.pekko.stream.connectors.googlecloud.storage.javadsl.GCStorage;
 import org.apache.pekko.stream.connectors.googlecloud.storage.scaladsl.GCStorageWiremockBase;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
 import org.junit.jupiter.api.AfterEach;
-
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class GCStorageTest extends GCStorageWiremockBase {

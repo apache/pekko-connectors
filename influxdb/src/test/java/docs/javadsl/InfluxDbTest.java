@@ -13,6 +13,13 @@
 
 package docs.javadsl;
 
+import static docs.javadsl.TestUtils.cleanDatabase;
+import static docs.javadsl.TestUtils.dropDatabase;
+import static docs.javadsl.TestUtils.populateDatabase;
+import static docs.javadsl.TestUtils.resultToPoint;
+import static docs.javadsl.TestUtils.setupConnection;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -22,15 +29,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.influxdb.InfluxDB;
-import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
-import org.influxdb.dto.QueryResult;
-import org.junit.jupiter.api.*;
-
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -41,16 +39,17 @@ import org.apache.pekko.stream.connectors.influxdb.InfluxDbWriteResult;
 import org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbFlow;
 import org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSink;
 import org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSource;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import static docs.javadsl.TestUtils.cleanDatabase;
-import static docs.javadsl.TestUtils.dropDatabase;
-import static docs.javadsl.TestUtils.populateDatabase;
-import static docs.javadsl.TestUtils.resultToPoint;
-import static docs.javadsl.TestUtils.setupConnection;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.influxdb.InfluxDB;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class InfluxDbTest {

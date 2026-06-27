@@ -16,18 +16,17 @@ package docs.javadsl;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.testkit.javadsl.TestKit;
-
 import org.junit.jupiter.api.Test;
 // #clientRetryConfig
+import org.junit.jupiter.api.extension.ExtendWith;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.retries.DefaultRetryStrategy;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 // #awsRetryConfiguration
-import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
-import software.amazon.awssdk.retries.DefaultRetryStrategy;
 
 // #clientRetryConfig
 

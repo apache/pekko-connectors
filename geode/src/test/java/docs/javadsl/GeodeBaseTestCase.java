@@ -13,6 +13,8 @@
 
 package docs.javadsl;
 
+import java.util.Date;
+import java.util.List;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.geode.GeodeSettings;
@@ -20,17 +22,13 @@ import org.apache.pekko.stream.connectors.geode.RegionSettings;
 import org.apache.pekko.stream.connectors.geode.javadsl.Geode;
 import org.apache.pekko.stream.connectors.geode.javadsl.GeodeWithPoolSubscription;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Date;
-import java.util.List;
 
 @ExtendWith(LogCapturingExtension.class)
 public class GeodeBaseTestCase {

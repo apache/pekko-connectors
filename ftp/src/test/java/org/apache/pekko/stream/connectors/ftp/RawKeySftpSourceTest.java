@@ -13,21 +13,20 @@
 
 package org.apache.pekko.stream.connectors.ftp;
 
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.stream.IOResult;
-import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.util.ByteString;
-
-import org.junit.jupiter.api.Test;
 import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.IOResult;
+import org.apache.pekko.stream.connectors.ftp.javadsl.Sftp;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.util.ByteString;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class RawKeySftpSourceTest extends BaseSftpSupport implements CommonFtpStageTest {

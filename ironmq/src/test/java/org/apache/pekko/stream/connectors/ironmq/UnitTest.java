@@ -13,21 +13,20 @@
 
 package org.apache.pekko.stream.connectors.ironmq;
 
+import static scala.collection.JavaConverters.*;
+import static scala.jdk.javaapi.FutureConverters.*;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.IntStream;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.connectors.ironmq.impl.IronMqClient;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.IntStream;
-
-import static scala.jdk.javaapi.FutureConverters.*;
-import static scala.collection.JavaConverters.*;
 
 public abstract class UnitTest {
 

@@ -13,6 +13,8 @@
 
 package docs.javadsl;
 
+import java.time.Duration;
+import java.util.List;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
@@ -34,9 +36,6 @@ import software.amazon.awssdk.services.kinesis.model.PutRecordsResultEntry;
 import software.amazon.awssdk.services.kinesis.model.Record;
 // #source-settings
 // #source-settings
-
-import java.time.Duration;
-import java.util.List;
 
 public class KinesisSnippets {
 

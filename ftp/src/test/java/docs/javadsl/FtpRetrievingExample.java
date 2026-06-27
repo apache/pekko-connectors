@@ -14,12 +14,12 @@
 package docs.javadsl;
 
 // #retrieving
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.stream.IOResult;
 import org.apache.pekko.stream.connectors.ftp.FtpSettings;
 import org.apache.pekko.stream.connectors.ftp.javadsl.Ftp;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-import java.util.concurrent.CompletionStage;
 
 public class FtpRetrievingExample {
 

@@ -13,9 +13,9 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 import org.apache.geode.pdx.PdxReader;
 import org.apache.geode.pdx.PdxWriter;
+import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 
 // #animal-pdx-serializer
 public class AnimalPdxSerializer implements PekkoPdxSerializer<Animal> {

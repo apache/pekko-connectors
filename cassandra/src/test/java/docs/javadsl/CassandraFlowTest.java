@@ -13,38 +13,35 @@
 
 package docs.javadsl;
 
+import static docs.javadsl.CassandraTestHelper.await;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+// #prepared
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 import org.apache.pekko.Done;
 // #prepared
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.function.Function2;
 import org.apache.pekko.japi.Pair;
+import org.apache.pekko.japi.function.Function2;
 import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraFlow;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.SourceWithContext;
-import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.PreparedStatement;
-// #prepared
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSession;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraSource;
 import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraAccess;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.stream.javadsl.SourceWithContext;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import static docs.javadsl.CassandraTestHelper.await;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class CassandraFlowTest {

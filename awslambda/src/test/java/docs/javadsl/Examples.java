@@ -13,28 +13,27 @@
 
 package docs.javadsl;
 
+import java.util.List;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.NotUsed;
 // #init-sys
 import org.apache.pekko.actor.ActorSystem;
 // #init-sys
 import org.apache.pekko.stream.connectors.awslambda.javadsl.AwsLambdaFlow;
+import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 // #init-client
-import org.apache.pekko.stream.connectors.awsspi.PekkoHttpClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.SdkBytes;
+// #run
 import software.amazon.awssdk.services.lambda.LambdaAsyncClient;
 // #init-client
 // #run
 import software.amazon.awssdk.services.lambda.model.InvokeRequest;
 import software.amazon.awssdk.services.lambda.model.InvokeResponse;
-import software.amazon.awssdk.core.SdkBytes;
-// #run
-
-import java.util.List;
-import java.util.concurrent.CompletionStage;
 
 public class Examples {
 

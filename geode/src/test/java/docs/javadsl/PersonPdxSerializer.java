@@ -13,11 +13,10 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
+import java.util.Date;
 import org.apache.geode.pdx.PdxReader;
 import org.apache.geode.pdx.PdxWriter;
-
-import java.util.Date;
+import org.apache.pekko.stream.connectors.geode.PekkoPdxSerializer;
 
 // #person-pdx-serializer
 public class PersonPdxSerializer implements PekkoPdxSerializer<Person> {

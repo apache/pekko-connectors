@@ -13,37 +13,20 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.Done;
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.connectors.orientdb.OrientDbWriteMessage;
-import org.apache.pekko.stream.connectors.orientdb.OrientDbSourceSettings;
-import org.apache.pekko.stream.connectors.orientdb.OrientDbWriteSettings;
-import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbFlow;
-import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSink;
-import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSource;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.testkit.javadsl.TestKit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.orientechnologies.orient.core.annotation.OVersion;
 import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
+import com.orientechnologies.orient.core.db.ODatabasePool;
+// #init-settings
 import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.db.ODatabaseType;
 import com.orientechnologies.orient.core.db.OrientDB;
 import com.orientechnologies.orient.core.db.OrientDBConfig;
 // #init-settings
-import com.orientechnologies.orient.core.db.ODatabasePool;
-// #init-settings
-import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.object.db.OObjectDatabaseTx;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-
-import org.junit.jupiter.api.Test;
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,8 +34,23 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.apache.pekko.Done;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.connectors.orientdb.OrientDbSourceSettings;
+import org.apache.pekko.stream.connectors.orientdb.OrientDbWriteMessage;
+import org.apache.pekko.stream.connectors.orientdb.OrientDbWriteSettings;
+import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbFlow;
+import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSink;
+import org.apache.pekko.stream.connectors.orientdb.javadsl.OrientDbSource;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class OrientDbTest {

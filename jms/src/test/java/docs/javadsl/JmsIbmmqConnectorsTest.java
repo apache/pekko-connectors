@@ -13,6 +13,25 @@
 
 package docs.javadsl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.ibm.mq.jms.MQConnectionFactory;
+import com.ibm.mq.jms.MQQueueConnectionFactory;
+import com.ibm.mq.jms.MQQueueSession;
+import com.ibm.mq.jms.MQTopicConnectionFactory;
+import com.ibm.msg.client.wmq.common.CommonConstants;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.stream.connectors.jms.CustomDestination;
@@ -23,34 +42,13 @@ import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumer;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsConsumerControl;
 import org.apache.pekko.stream.connectors.jms.javadsl.JmsProducer;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.testkit.javadsl.TestKit;
-import com.ibm.mq.jms.MQConnectionFactory;
-import com.ibm.mq.jms.MQQueueConnectionFactory;
-import com.ibm.mq.jms.MQQueueSession;
-import com.ibm.mq.jms.MQTopicConnectionFactory;
-import com.ibm.msg.client.wmq.common.CommonConstants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.Test;
-
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Function;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class JmsIbmmqConnectorsTest {
