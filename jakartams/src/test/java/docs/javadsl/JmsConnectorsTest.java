@@ -759,15 +759,15 @@ public class JmsConnectorsTest {
           Try<List<Message>> tryResult = tryFuture.toCompletableFuture().get();
           long endTime = System.currentTimeMillis();
 
-          assertTrue("Total retry is too short", endTime - startTime > 100L + 400L + 900L + 1600L);
-          assertTrue("Result must be a failure", tryResult.isFailure());
+          assertTrue(endTime - startTime > 100L + 400L + 900L + 1600L, "Total retry is too short");
+          assertTrue(tryResult.isFailure(), "Result must be a failure");
           Throwable exception = tryResult.failed().get();
           assertTrue(
-              "Did not fail with a ConnectionRetryException",
-              exception instanceof ConnectionRetryException);
+              exception instanceof ConnectionRetryException,
+              "Did not fail with a ConnectionRetryException");
           assertTrue(
-              "Cause of failure is not a JMSException",
-              exception.getCause() instanceof JMSException);
+              exception.getCause() instanceof JMSException,
+              "Cause of failure is not a JMSException");
         });
   }
 

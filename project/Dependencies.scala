@@ -99,6 +99,7 @@ object Dependencies {
       "com.github.sbt" % "junit-interface" % "0.13.3",
       "junit" % "junit" % "4.13.2",
       "org.junit.jupiter" % "junit-jupiter-api" % JupiterKeys.junitJupiterVersion.value,
+      "org.junit.jupiter" % "junit-jupiter-params" % JupiterKeys.junitJupiterVersion.value,
       "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value))
 
   val Mockito = Seq(
