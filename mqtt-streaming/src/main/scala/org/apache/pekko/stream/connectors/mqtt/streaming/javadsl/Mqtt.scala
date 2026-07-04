@@ -26,7 +26,7 @@ object Mqtt {
   /**
    * Create a bidirectional flow that maintains client session state with an MQTT endpoint.
    * The bidirectional flow can be joined with an endpoint flow that receives
-   * [[ByteString]] payloads and independently produces [[ByteString]] payloads e.g.
+   * `ByteString` payloads and independently produces `ByteString` payloads e.g.
    * an MQTT server.
    *
    * @param session the client session to use
@@ -44,7 +44,7 @@ object Mqtt {
   /**
    * Create a bidirectional flow that maintains server session state with an MQTT endpoint.
    * The bidirectional flow can be joined with an endpoint flow that receives
-   * [[ByteString]] payloads and independently produces [[ByteString]] payloads e.g.
+   * `ByteString` payloads and independently produces `ByteString` payloads e.g.
    * an MQTT server.
    *
    * @param session the server session to use

@@ -72,7 +72,7 @@ object AmqpRpcFlow {
    * delivered one time but in failure cases could be duplicated.
    *
    * If you commit the offset before processing the message you get "at-most once delivery" semantics,
-   * and for that there is a [[#atMostOnceFlow]].
+   * and for that there is a `atMostOnceFlow`.
    *
    * Compared to auto-commit, this gives exact control over when a message is considered consumed.
    */

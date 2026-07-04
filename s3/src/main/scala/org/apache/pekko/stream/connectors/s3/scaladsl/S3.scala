@@ -176,13 +176,13 @@ object S3 {
     deleteObjectsByPrefix(bucket, None, deleteAllVersions, S3Headers.empty)
 
   /**
-   * Uploads a S3 Object, use this for small files and [[multipartUpload]] for bigger ones
+   * Uploads a S3 Object, use this for small files and `multipartUpload` for bigger ones
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
-   * @param data a [[Stream]] of [[ByteString]]
+   * @param data a `Source` of `ByteString`
    * @param contentLength the number of bytes that will be uploaded (required!)
-   * @param contentType an optional [[ContentType]]
+   * @param contentType an optional `ContentType`
    * @param s3Headers any headers you want to add
    * @return a [[pekko.stream.scaladsl.Source Source]] containing the [[ObjectMetadata]] of the uploaded S3 Object
    */
@@ -469,10 +469,10 @@ object S3 {
    * @param key the s3 object key
    * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
-   * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
+   * @param cannedAcl a `CannedAcl`, defaults to `CannedAcl.Private`
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts [[ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts `ByteString`'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUpload(
       bucket: String,
@@ -534,10 +534,10 @@ object S3 {
    *                        with the returned `Sink`.
    * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
-   * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
+   * @param cannedAcl a `CannedAcl`, defaults to `CannedAcl.Private`
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts (`ByteString`, `C`)'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithContext[C](
       bucket: String,
@@ -582,7 +582,7 @@ object S3 {
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
    * @param s3Headers any headers you want to add
-   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts (`ByteString`, `C`)'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithHeadersAndContext[C](
       bucket: String,
@@ -610,10 +610,10 @@ object S3 {
    * @param previousParts The previously uploaded parts ending just before when this upload will commence
    * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
-   * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
+   * @param cannedAcl a `CannedAcl`, defaults to `CannedAcl.Private`
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts [[ByteString]]'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts `ByteString`'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUpload(
       bucket: String,
@@ -661,10 +661,10 @@ object S3 {
    *                        with the returned `Sink`.
    * @param contentType an optional [[pekko.http.scaladsl.model.ContentType ContentType]]
    * @param metaHeaders any meta-headers you want to add
-   * @param cannedAcl a [[CannedAcl]], defaults to [[CannedAcl.Private]]
+   * @param cannedAcl a `CannedAcl`, defaults to `CannedAcl.Private`
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
-   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts (`ByteString`, `C`)'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithContext[C](
       bucket: String,
@@ -751,7 +751,7 @@ object S3 {
    * @param chunkSize the size of the requests sent to S3, minimum [[MinChunkSize]]
    * @param chunkingParallelism the number of parallel requests used for the upload, defaults to 4
    * @param s3Headers any headers you want to add
-   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts ([[ByteString]], [[C]])'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.scaladsl.Sink Sink]] that accepts (`ByteString`, `C`)'s and materializes to a [[scala.concurrent.Future Future]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithHeadersAndContext[C](
       bucket: String,

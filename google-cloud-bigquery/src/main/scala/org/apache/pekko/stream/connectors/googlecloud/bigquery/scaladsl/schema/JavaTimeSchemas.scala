@@ -23,7 +23,7 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldS
 import java.time.{ Instant, LocalDate, LocalDateTime, LocalTime }
 
 /**
- * Provides BigQuery schemas for [[java.time]] classes.
+ * Provides BigQuery schemas for `java.time` classes.
  */
 trait JavaTimeSchemas {
   implicit val localDateSchemaWriter: SchemaWriter[LocalDate] = new PrimitiveSchemaWriter(Date)

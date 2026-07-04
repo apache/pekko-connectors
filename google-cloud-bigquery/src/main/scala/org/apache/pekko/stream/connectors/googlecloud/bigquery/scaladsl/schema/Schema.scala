@@ -18,7 +18,7 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableSchema
 object Schema {
 
   /**
-   * Materialize an implicit [[TableSchema]] for `T`
+   * Materialize an implicit `TableSchema` for `T`
    */
   def apply[T](implicit writer: TableSchemaWriter[T]): TableSchema =
     writer.write

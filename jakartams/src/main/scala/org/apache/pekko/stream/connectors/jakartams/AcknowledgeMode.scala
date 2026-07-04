@@ -17,7 +17,7 @@ import jakarta.jms
 
 /**
  * JMS acknowledge modes.
- * See [[jakarta.jms.Connection#createSession-boolean-int-]]
+ * See `jakarta.jms.Connection#createSession(boolean, int)`
  */
 final class AcknowledgeMode(val mode: Int) {
   override def equals(other: Any): Boolean = other match {

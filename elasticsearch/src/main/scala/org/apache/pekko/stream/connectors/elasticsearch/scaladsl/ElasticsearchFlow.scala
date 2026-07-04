@@ -84,9 +84,9 @@ object ElasticsearchFlow {
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[immutable.Seq[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]]s containing type `T`
+   * `immutable.Seq[WriteMessage]`s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the immutable.Seq[[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]
+   * The result status is part of the `immutable.Seq[WriteResult]`
    * and must be checked for successful execution.
    *
    * This factory method requires an implicit Spray JSON writer for `T`.
@@ -98,9 +98,9 @@ object ElasticsearchFlow {
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[immutable.Seq[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]]s containing type `T`
+   * `immutable.Seq[WriteMessage]`s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the immutable.Seq[[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]
+   * The result status is part of the `immutable.Seq[WriteResult]`
    * and must be checked for successful execution.
    */
   def createBulk[T, C](

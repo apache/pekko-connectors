@@ -31,13 +31,13 @@ import pekko.stream.connectors.influxdb.impl.{ InfluxDbRawSourceStage, InfluxDbS
 object InfluxDbSource {
 
   /**
-   * Java API: creates an [[InfluxDbRawSourceStage]] from a given statement.
+   * Java API: creates an `InfluxDbRawSourceStage` from a given statement.
    */
   def create(influxDB: InfluxDB, query: Query): Source[QueryResult, NotUsed] =
     Source.fromGraph(new InfluxDbRawSourceStage(query, influxDB))
 
   /**
-   * Java API: creates an  [[InfluxDbSourceStage]] of elements of `T` from `query`.
+   * Java API: creates an  `InfluxDbSourceStage` of elements of `T` from `query`.
    */
   def typed[T](clazz: Class[T], settings: InfluxDbReadSettings, influxDB: InfluxDB, query: Query): Source[T, NotUsed] =
     Source.fromGraph(

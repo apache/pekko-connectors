@@ -44,7 +44,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    * @param dryRun if set to `true` BigQuery doesn't run the job and instead returns statistics about the job such as how many bytes would be processed
    * @param useLegacySql specifies whether to use BigQuery's legacy SQL dialect for this query
    * @tparam Out the data model of the query results
-   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the result and materializes
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an `Out` for each row of the result and materializes
    *         a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def query[Out](query: String, dryRun: Boolean = false, useLegacySql: Boolean = true)(
@@ -59,7 +59,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    *
    * @param query the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryRequest]]
    * @tparam Out the data model of the query results
-   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the results and materializes
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an `Out` for each row of the results and materializes
    *         a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.JobReference]] and
    *         a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
@@ -134,7 +134,7 @@ private[scaladsl] trait BigQueryQueries { this: BigQueryRest =>
    * @param timeout specifies the maximum amount of time that the client is willing to wait for the query to complete
    * @param location the geographic location of the job. Required except for US and EU
    * @tparam Out the data model of the query results
-   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row of the results and materializes a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an `Out` for each row of the results and materializes a [[scala.concurrent.Future]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def queryResults[Out](
       jobId: String,

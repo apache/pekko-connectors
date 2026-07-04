@@ -22,7 +22,7 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.model.{
 import scala.annotation.implicitNotFound
 
 /**
- * Provides a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchema]] for type [[T]].
+ * Provides a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchema]] for type `T`.
  */
 @implicitNotFound(msg = "Cannot find SchemaWriter type class for ${T}")
 trait SchemaWriter[-T] {
@@ -38,7 +38,7 @@ object SchemaWriter {
 }
 
 /**
- * Provides a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableSchema]] for type [[T]].
+ * Provides a [[org.apache.pekko.stream.connectors.googlecloud.bigquery.model.TableSchema]] for type `T`.
  */
 @implicitNotFound(msg = "Cannot find TableSchemaWriter type class for ${T}")
 trait TableSchemaWriter[-T] extends SchemaWriter[T] {

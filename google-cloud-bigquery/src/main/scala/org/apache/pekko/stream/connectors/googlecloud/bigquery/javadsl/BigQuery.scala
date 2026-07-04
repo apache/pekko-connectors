@@ -210,7 +210,7 @@ object BigQuery extends Google {
    * @param selectedFields subset of fields to return, supports select into sub fields. Example: `selectedFields = List.of("a", "e.d.f")`
    * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataListResponse]]
    * @tparam Out the data model of each row
-   * @return a [[pekko.stream.javadsl.Source]] that emits an [[Out]] for each row in the table
+   * @return a [[pekko.stream.javadsl.Source]] that emits an `Out` for each row in the table
    */
   def listTableData[Out](
       datasetId: String,
@@ -238,7 +238,7 @@ object BigQuery extends Google {
    * @param templateSuffix if specified, treats the destination table as a base template, and inserts the rows into an instance table named "{destination}{templateSuffix}"
    * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllRequest]]
    * @tparam In the data model for each record
-   * @return a [[pekko.stream.javadsl.Sink]] that inserts each batch of [[In]] into the table
+   * @return a [[pekko.stream.javadsl.Sink]] that inserts each batch of `In` into the table
    */
   def insertAll[In](
       datasetId: String,
@@ -285,7 +285,7 @@ object BigQuery extends Google {
    * @param useLegacySql specifies whether to use BigQuery's legacy SQL dialect for this query
    * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    * @tparam Out the data model of the query results
-   * @return a [[pekko.stream.javadsl.Source]] that emits an [[Out]] for each row of the results and materializes
+   * @return a [[pekko.stream.javadsl.Source]] that emits an `Out` for each row of the results and materializes
    *         a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def query[Out](
@@ -305,7 +305,7 @@ object BigQuery extends Google {
    * @param query the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryRequest]]
    * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    * @tparam Out the data model of the query results
-   * @return a [[pekko.stream.javadsl.Source]] that emits an [[Out]] for each row of the results and materializes
+   * @return a [[pekko.stream.javadsl.Source]] that emits an `Out` for each row of the results and materializes
    *         a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.JobReference]]
    *         a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
@@ -335,7 +335,7 @@ object BigQuery extends Google {
    * @param location the geographic location of the job. Required except for US and EU
    * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    * @tparam Out the data model of the query results
-   * @return a [[pekko.stream.javadsl.Source]] that emits an [[Out]] for each row of the results and materializes a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
+   * @return a [[pekko.stream.javadsl.Source]] that emits an `Out` for each row of the results and materializes a [[java.util.concurrent.CompletionStage]] containing the [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    */
   def getQueryResults[Out](
       jobId: String,
@@ -364,7 +364,7 @@ object BigQuery extends Google {
    * @param location the geographic location of the job. Required except for US and EU
    * @param settings the [[pekko.stream.connectors.google.GoogleSettings]]
    * @param system the actor system
-   * @return a [[java.util.concurrent.CompletionStage]] containing the [[Job]]
+   * @return a [[java.util.concurrent.CompletionStage]] containing the `Job`
    */
   def getJob(jobId: String,
       location: util.Optional[String],
@@ -395,9 +395,9 @@ object BigQuery extends Google {
    *
    * @param datasetId dataset ID of the table to insert into
    * @param tableId table ID of the table to insert into
-   * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for [[In]]
+   * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for `In`
    * @tparam In the data model for each record
-   * @return a [[pekko.stream.javadsl.Flow]] that uploads each [[In]] and emits a [[Job]] for every upload job created
+   * @return a [[pekko.stream.javadsl.Flow]] that uploads each `In` and emits a `Job` for every upload job created
    */
   def insertAllAsync[In](datasetId: String,
       tableId: String,
@@ -413,9 +413,9 @@ object BigQuery extends Google {
    *
    * @param datasetId dataset ID of the table to insert into
    * @param tableId table ID of the table to insert into
-   * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for [[In]]
+   * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for `In`
    * @tparam In the data model for each record
-   * @return a [[pekko.stream.javadsl.Flow]] that uploads each [[In]] and emits a [[Job]] for every upload job created
+   * @return a [[pekko.stream.javadsl.Flow]] that uploads each `In` and emits a `Job` for every upload job created
    */
   def insertAllAsync[In](datasetId: String,
       tableId: String,
@@ -433,10 +433,10 @@ object BigQuery extends Google {
    * @see [[https://cloud.google.com/bigquery/docs/reference/api-uploads BigQuery reference]]
    *
    * @param job the job to start
-   * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for [[Job]]
-   * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[Job]]
+   * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for `Job`
+   * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for `Job`
    * @tparam Job the data model for a job
-   * @return a [[pekko.stream.javadsl.Sink]] that uploads bytes and materializes a [[java.util.concurrent.CompletionStage]] containing the [[Job]] when completed
+   * @return a [[pekko.stream.javadsl.Sink]] that uploads bytes and materializes a [[java.util.concurrent.CompletionStage]] containing the `Job` when completed
    */
   def createLoadJob[@nowarn("msg=shadows") Job](
       job: Job,
