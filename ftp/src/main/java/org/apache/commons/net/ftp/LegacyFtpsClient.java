@@ -58,8 +58,8 @@ public final class LegacyFtpsClient extends FTPSClient {
   }
 
   /**
-   * Returns a socket of the data connection. Wrapped as an `SSLSocket`, which carries out
-   * handshake processing.
+   * Returns a socket of the data connection. Wrapped as an `SSLSocket`, which carries out handshake
+   * processing.
    *
    * @param command The textual representation of the FTP command to send.
    * @param arg The arguments to the FTP command. If this parameter is set to null, then the command

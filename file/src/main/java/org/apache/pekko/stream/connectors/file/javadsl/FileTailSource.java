@@ -79,8 +79,8 @@ public final class FileTailSource {
   }
 
   /**
-   * Same as `createLines(Path, int, java.time.Duration, String, Charset)` but using the OS
-   * default line separator and UTF-8 for charset
+   * Same as `createLines(Path, int, java.time.Duration, String, Charset)` but using the OS default
+   * line separator and UTF-8 for charset
    */
   public static Source<String, NotUsed> createLines(
       Path path, int maxChunkSize, java.time.Duration pollingInterval) {
