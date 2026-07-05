@@ -19,9 +19,7 @@ import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
 
-/**
- * Utility to delegate Couchbase node address lookup to Apache Pekko Discovery.
- */
+/** Utility to delegate Couchbase node address lookup to Apache Pekko Discovery. */
 public final class DiscoverySupport {
 
   private static final org.apache.pekko.stream.connectors.couchbase.scaladsl.DiscoverySupport
