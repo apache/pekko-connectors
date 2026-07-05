@@ -9,6 +9,7 @@
 
 import net.bzzt.reproduciblebuilds.ReproducibleBuildsPlugin.reproducibleBuildsCheckResolver
 import com.github.sbt.junit.jupiter.sbt.Import.JupiterKeys
+import sbtprotoc.ProtocPlugin.autoImport.PB
 
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
@@ -275,6 +276,12 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
+  PB.generate / excludeFilter := {
+    val previousFilter = (PB.generate / excludeFilter).value
+    new SimpleFileFilter(f =>
+      previousFilter.accept(f) ||
+      (Common.isScala3Next.value && f.getAbsolutePath.replace('\\', '/').contains("grpc/reflection/v1alpha")))
+  },
   // the following is needed to exclude the gRPC generated sources for protobuf-java from the sources,
   // they cause Scaladoc tool fails - https://github.com/apache/pekko-connectors/issues/1440
   // and issues like https://github.com/apache/pekko-connectors/issues/1457

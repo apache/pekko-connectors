@@ -30,6 +30,11 @@ object Common extends AutoPlugin {
   override def requires = JvmPlugin && HeaderPlugin && ApacheSonatypePlugin && DynVerPlugin
 
   val isScala3 = Def.setting(scalaBinaryVersion.value == "3")
+  val isScala3Next = Def.setting(scalaVersion.value == Dependencies.Scala3Next)
+  val isScala38OrLater = Def.setting(CrossVersion.partialVersion(scalaVersion.value).exists {
+    case (3, minor) if minor >= 8 => true
+    case _                        => false
+  })
 
   override def globalSettings = Seq(
     scmInfo := Some(ScmInfo(url("https://github.com/apache/pekko-connectors"),
@@ -54,7 +59,7 @@ object Common extends AutoPlugin {
   override lazy val projectSettings = Dependencies.CommonSettings ++ Seq(
     projectInfoVersion := (if (isSnapshot.value) "snapshot" else version.value),
     crossVersion := CrossVersion.binary,
-    crossScalaVersions := Dependencies.ScalaVersions,
+    crossScalaVersions := Dependencies.PublishedScalaVersions,
     scalaVersion := Dependencies.Scala213,
     scalacOptions ++= Seq(
       "-encoding",
@@ -76,7 +81,9 @@ object Common extends AutoPlugin {
         "-Wconf:msg=Ignoring \\[this\\] qualifier:s",
         "-Wconf:msg=trait App in package scala is deprecated:s",
         "-Wconf:msg=pattern binding uses refutable extractor:s") ++
-      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 < 9))
+      (if (isScala38OrLater.value) Seq("-Wconf:any:s")
+       else Seq.empty) ++
+      (if (scalaVersion.value.startsWith("3.3."))
          Seq("-Yfuture-lazy-vals", "-Wconf:msg=bad option.*-Yfuture-lazy-vals:s")
        else Seq.empty)
       else Seq(
@@ -84,6 +91,10 @@ object Common extends AutoPlugin {
         "-Ywarn-dead-code",
         "-Wconf:cat=unused-nowarn:s",
         "-Wconf:msg=Prefer the Scala annotation over Java's `@Deprecated`:s")
+    },
+    dependencyOverrides ++= {
+      if (isScala3.value) Seq("org.scala-lang" %% "scala3-library" % scalaVersion.value)
+      else Seq.empty
     },
     Compile / doc / scalacOptions := scalacOptions.value ++ Seq(
       "-doc-title",
@@ -124,6 +135,11 @@ object Common extends AutoPlugin {
       "-Xlint:try",
       "-Xlint:unchecked",
       "-Xlint:varargs"),
+    compile / javacOptions := {
+      val options = (compile / javacOptions).value
+      if (isScala38OrLater.value) options.filterNot(_.startsWith("-Xlint")) ++ Seq("-nowarn", "-Xlint:none")
+      else options
+    },
     compile / javacOptions ++=
       (scalaVersion.value match {
         case Dependencies.Scala213 if insideCI.value && fatalWarnings.value && !Dependencies.CronBuild =>

@@ -18,7 +18,8 @@ object Dependencies {
 
   val Scala213 = "2.13.18" // update even in link-validator.conf
   val Scala3 = "3.3.8"
-  val ScalaVersions = Seq(Scala213, Scala3)
+  val Scala3Next = "3.8.4"
+  val PublishedScalaVersions = Seq(Scala213, Scala3)
 
   val PekkoVersion = PekkoCoreDependency.version
   val PekkoBinaryVersion = PekkoCoreDependency.default.link

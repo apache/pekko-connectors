@@ -47,6 +47,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /** Needs a local running AMQP server on the default port with no password. */
+@SuppressWarnings("unchecked")
 @ExtendWith(LogCapturingExtension.class)
 public class AmqpDocsTest {
 
