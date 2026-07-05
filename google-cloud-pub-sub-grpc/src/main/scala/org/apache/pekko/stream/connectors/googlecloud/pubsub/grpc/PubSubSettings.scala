@@ -15,11 +15,7 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc
 
 import org.apache.pekko
 import pekko.actor.ClassicActorSystemProvider
-import pekko.stream.connectors.googlecloud.pubsub.grpc.impl.DeprecatedCredentials
 import com.typesafe.config.Config
-import io.grpc.CallCredentials
-
-import scala.annotation.nowarn
 
 /**
  * Connection settings used to establish Pub/Sub connection.
@@ -28,12 +24,7 @@ final class PubSubSettings private (
     val host: String,
     val port: Int,
     val useTls: Boolean,
-    val rootCa: Option[String],
-    /** @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]] */
-    @deprecated(
-      "Use org.apache.pekko.stream.connectors.google.GoogleSettings",
-      "Alpakka 3.0.0") @Deprecated(since = "Alpakka 3.0.0") val callCredentials: Option[
-      CallCredentials]) {
+    val rootCa: Option[String]) {
 
   /**
    * Endpoint hostname where the gRPC connection is made.
@@ -52,31 +43,20 @@ final class PubSubSettings private (
   def withRootCa(rootCa: String): PubSubSettings =
     copy(rootCa = Some(rootCa))
 
-  /**
-   * Credentials that are going to be used for gRPC call authorization.
-   * @deprecated Use [[pekko.stream.connectors.google.GoogleSettings]]
-   */
-  @deprecated("Use org.apache.pekko.stream.connectors.google.GoogleSettings", "Alpakka 3.0.0")
-  @Deprecated
-  def withCallCredentials(callCredentials: CallCredentials): PubSubSettings =
-    copy(callCredentials = Some(callCredentials))
-
   private def copy(host: String = host,
       port: Int = port,
       useTls: Boolean = useTls,
-      rootCa: Option[String] = rootCa,
-      callCredentials: Option[CallCredentials] = callCredentials: @nowarn("msg=deprecated")) =
-    new PubSubSettings(host, port, useTls, rootCa, callCredentials)
+      rootCa: Option[String] = rootCa) =
+    new PubSubSettings(host, port, useTls, rootCa)
 }
 
 object PubSubSettings {
 
   /**
-   * Create settings for unsecure (no tls), unauthenticated (no root ca)
-   * and unauthorized (no call credentials) endpoint.
+   * Create settings for unsecure (no tls), unauthenticated (no root ca) endpoint.
    */
   def apply(host: String, port: Int): PubSubSettings =
-    new PubSubSettings(host, port, false, None, None)
+    new PubSubSettings(host, port, false, None)
 
   /**
    * Create settings from config instance.
@@ -86,11 +66,7 @@ object PubSubSettings {
       config.getString("host"),
       config.getInt("port"),
       config.getBoolean("use-tls"),
-      Some(config.getString("rootCa")).filter(_ != "none"),
-      config.getString("callCredentials") match {
-        case "none" => None
-        case _      => Some(DeprecatedCredentials.marker)
-      })
+      Some(config.getString("rootCa")).filter(_ != "none"))
 
   /**
    * Create settings from the new actor API's ActorSystem config.
@@ -106,8 +82,7 @@ object PubSubSettings {
   /**
    * Java API
    *
-   * Create settings for unsecure (no tls), unauthenticated (no root ca)
-   * and unauthorized (no call credentials) endpoint.
+   * Create settings for unsecure (no tls), unauthenticated (no root ca) endpoint.
    */
   def create(host: String, port: Int): PubSubSettings =
     PubSubSettings(host, port)

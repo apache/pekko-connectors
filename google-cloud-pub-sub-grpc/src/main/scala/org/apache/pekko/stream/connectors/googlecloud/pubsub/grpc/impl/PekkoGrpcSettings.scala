@@ -18,11 +18,10 @@ import pekko.actor.ActorSystem
 import pekko.annotation.InternalApi
 import pekko.grpc.GrpcClientSettings
 import pekko.stream.connectors.google.GoogleSettings
+import pekko.stream.connectors.google.auth.{ Credentials, NoCredentials }
 import pekko.stream.connectors.googlecloud.pubsub.grpc.PubSubSettings
 import com.typesafe.config.ConfigFactory
 import io.grpc.auth.MoreCallCredentials
-
-import scala.annotation.nowarn
 
 /**
  * Internal API
@@ -42,12 +41,11 @@ import scala.annotation.nowarn
         .parseString(pekkoGrpcConfig)
         .withFallback(sys.settings.config.getConfig("pekko.grpc.client.\"*\"")))
 
-    (config.callCredentials: @nowarn("msg=deprecated")) match {
-      case None                           => settings // explicit opt-out (callCredentials = "none"), e.g. emulator
-      case Some(_: DeprecatedCredentials) => // default: resolve via GoogleSettings
-        val credentials = googleSettings.credentials.asGoogle(sys.dispatcher, googleSettings.requestSettings)
+    googleSettings.credentials match {
+      case _: NoCredentials   => settings // no credentials (e.g. emulator)
+      case creds: Credentials =>
+        val credentials = creds.asGoogle(sys.dispatcher, googleSettings.requestSettings)
         settings.withCallCredentials(MoreCallCredentials.from(credentials))
-      case Some(creds) => settings.withCallCredentials(creds)
     }
   }
 }

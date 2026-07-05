@@ -47,7 +47,6 @@ pekko.connectors.google.cloud.pubsub.grpc {
   # host = "localhost"
   # port = 8538
   # use-tls = false
-  # callCredentials = "none"
 }
 
 pekko.connectors.google {
