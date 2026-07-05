@@ -15,15 +15,30 @@ package org.apache.pekko.stream.connectors.spring.web;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Spring Boot configuration properties for Pekko Streams Spring Web integration.
+ *
+ * <p>Properties are bound under the {@code pekko.stream.connectors.spring.web} prefix.
+ */
 @ConfigurationProperties(prefix = "pekko.stream.connectors.spring.web")
 public class SpringWebPekkoStreamsProperties {
 
   private String actorSystemName;
 
+  /**
+   * Returns the name of the actor system to create. If not set, a default name is used.
+   *
+   * @return the actor system name, or {@code null} if not configured
+   */
   public String getActorSystemName() {
     return actorSystemName;
   }
 
+  /**
+   * Sets the name of the actor system to create.
+   *
+   * @param actorSystemName the actor system name
+   */
   public void setActorSystemName(String actorSystemName) {
     this.actorSystemName = actorSystemName;
   }

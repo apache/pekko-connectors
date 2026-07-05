@@ -28,8 +28,8 @@ public class CsvToMap {
 
   /**
    * A flow translating incoming {@link Collection<ByteString>} to a {@link Map<String, ByteString>}
-   * using the stream's first element's values as keys. The charset to decode [[ByteString]] to
-   * [[String]] defaults to UTF-8.
+   * using the stream's first element's values as keys. The charset to decode {@code ByteString} to
+   * {@code String} defaults to UTF-8.
    */
   public static Flow<Collection<ByteString>, Map<String, ByteString>, ?> toMap() {
     return toMap(StandardCharsets.UTF_8);

@@ -26,6 +26,15 @@ import org.springframework.core.ReactiveAdapterRegistry;
 
 import org.apache.pekko.actor.ActorSystem;
 
+/**
+ * Spring Boot auto-configuration that sets up Pekko Streams integration for Spring Web.
+ *
+ * <p>This configuration is activated when Pekko Streams ({@code
+ * org.apache.pekko.stream.javadsl.Source}) is on the classpath. It creates an {@link ActorSystem}
+ * (unless one is already present) and registers Pekko Streams reactive type adapters with Spring's
+ * {@link ReactiveAdapterRegistry}, allowing Spring Web controllers to return Pekko Streams sources
+ * directly.
+ */
 @Configuration
 @ConditionalOnClass(org.apache.pekko.stream.javadsl.Source.class)
 @EnableConfigurationProperties(SpringWebPekkoStreamsProperties.class)
@@ -36,6 +45,12 @@ public class SpringWebPekkoStreamsConfiguration {
   private final ActorSystem system;
   private final SpringWebPekkoStreamsProperties properties;
 
+  /**
+   * Creates the configuration, starts the {@link ActorSystem}, and registers Pekko Streams reactive
+   * type adapters with the shared {@link ReactiveAdapterRegistry}.
+   *
+   * @param properties the Spring Boot configuration properties for Pekko Streams integration
+   */
   public SpringWebPekkoStreamsConfiguration(final SpringWebPekkoStreamsProperties properties) {
     this.properties = properties;
     final ReactiveAdapterRegistry registry = ReactiveAdapterRegistry.getSharedInstance();
@@ -44,12 +59,22 @@ public class SpringWebPekkoStreamsConfiguration {
     new PekkoStreamsRegistrar(system).registerAdapters(registry);
   }
 
+  /**
+   * Returns the {@link ActorSystem} managed by this configuration.
+   *
+   * @return the actor system instance created during initialization
+   */
   @Bean
   @ConditionalOnMissingBean(ActorSystem.class)
   public ActorSystem getActorSystem() {
     return system;
   }
 
+  /**
+   * Returns the configuration properties used by this configuration.
+   *
+   * @return the Pekko Streams Spring Web properties
+   */
   public SpringWebPekkoStreamsProperties getProperties() {
     return properties;
   }

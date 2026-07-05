@@ -20,8 +20,8 @@ import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
 
 /**
- * Utility to delegate Couchbase node address lookup to
- * [[https://pekko.apache.org/docs/pekko/current/discovery/index.html Pekko Discovery]].
+ * Utility to delegate Couchbase node address lookup to <a
+ * href="https://pekko.apache.org/docs/pekko/current/discovery/index.html">Pekko Discovery</a>.
  */
 public final class DiscoverySupport {
 
