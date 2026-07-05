@@ -55,8 +55,9 @@ pekko.connectors.google.cloud.bigquery.grpc {
   host = "localhost"
   port = 21000
   rootCa = "none"
-  callCredentials = "none"
 }
+
+pekko.connectors.google.credentials.provider = none
 ```
 
 For more configuration details consider the underlying configuration for @extref:[Apache Pekko gRPC](pekko-grpc:/client/configuration.html).

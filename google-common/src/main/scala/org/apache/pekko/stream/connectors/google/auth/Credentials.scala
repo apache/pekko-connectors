@@ -24,7 +24,6 @@ import com.typesafe.config.Config
 
 import java.util.concurrent.Executor
 
-import scala.collection.immutable.ListMap
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 import scala.jdk.DurationConverters._
@@ -103,16 +102,6 @@ object Credentials {
   private def parseAccessToken(c: Config) = AccessTokenCredentials(c.getConfig("access-token"))
 
   private def parseNone(c: Config) = NoCredentials(c.getConfig("none"))
-
-  private var _cache: Map[Any, Credentials] = ListMap.empty
-  @deprecated("Intended only to help with migration", "Alpakka 3.0.0")
-  private[connectors] def cache(key: Any)(default: => Credentials) =
-    _cache.getOrElse(key, {
-        val credentials = default
-        _cache += (key -> credentials)
-        credentials
-      })
-
 }
 
 @DoNotInherit
