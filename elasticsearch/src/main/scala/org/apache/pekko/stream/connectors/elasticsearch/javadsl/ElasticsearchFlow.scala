@@ -96,9 +96,9 @@ object ElasticsearchFlow {
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[java.util.List[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * `java.util.List[WriteMessage]`s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[java.util.List[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]]
+   * The result status is part of the `java.util.List[WriteResult]`
    * and must be checked for successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -114,9 +114,9 @@ object ElasticsearchFlow {
 
   /**
    * Create a flow to update Elasticsearch with
-   * [[java.util.List[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * `java.util.List[WriteMessage]`s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the [[java.util.List[pekko.stream.connectors.elasticsearch.WriteResult WriteResult]]]
+   * The result status is part of the `java.util.List[WriteResult]`
    * and must be checked for successful execution.
    *
    * Warning: When settings configure retrying, messages are emitted out-of-order when errors are detected.
@@ -143,7 +143,7 @@ object ElasticsearchFlow {
    * successful execution.
    *
    * @param objectMapper Jackson object mapper converting type `T` to JSON
-   * @throws IllegalArgumentException When settings configure retrying.
+   * @throws java.lang.IllegalArgumentException When settings configure retrying.
    */
   @ApiMayChange
   def createWithContext[T, C](
@@ -160,7 +160,7 @@ object ElasticsearchFlow {
    * successful execution.
    *
    * @param messageWriter converts type `T` to a `String` containing valid JSON
-   * @throws IllegalArgumentException When settings configure retrying.
+   * @throws java.lang.IllegalArgumentException When settings configure retrying.
    */
   @ApiMayChange
   def createWithContext[T, C](

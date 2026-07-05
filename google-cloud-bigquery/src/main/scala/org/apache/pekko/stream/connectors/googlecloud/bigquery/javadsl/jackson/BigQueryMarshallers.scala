@@ -44,7 +44,7 @@ object BigQueryMarshallers {
   /**
    * [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataListResponse]]
    *
-   * @param mapper an [[ObjectMapper]]
+   * @param mapper an `ObjectMapper`
    * @param `type` the data model for each row
    * @tparam T the data model for each row
    */
@@ -63,7 +63,7 @@ object BigQueryMarshallers {
   /**
    * [[pekko.http.javadsl.marshalling.Marshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.TableDataInsertAllRequest]]
    *
-   * @param mapper an [[ObjectMapper]]
+   * @param mapper an `ObjectMapper`
    * @tparam T the data model for each row
    */
   def tableDataInsertAllRequestMarshaller[T](
@@ -82,7 +82,7 @@ object BigQueryMarshallers {
   /**
    * [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for [[pekko.stream.connectors.googlecloud.bigquery.model.QueryResponse]]
    *
-   * @param mapper an [[ObjectMapper]]
+   * @param mapper an `ObjectMapper`
    * @param `type` the data model for each row
    * @tparam T the data model for each row
    */

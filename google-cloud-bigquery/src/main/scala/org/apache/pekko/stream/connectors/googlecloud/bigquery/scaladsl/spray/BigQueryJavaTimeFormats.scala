@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter.{ ISO_LOCAL_DATE, ISO_LOCAL_DATE_TIME,
 import scala.util.Try
 
 /**
- * Provides the BigQueryJsonFormats for [[java.time]] classes.
+ * Provides the BigQueryJsonFormats for `java.time` classes.
  */
 trait BigQueryJavaTimeFormats {
 

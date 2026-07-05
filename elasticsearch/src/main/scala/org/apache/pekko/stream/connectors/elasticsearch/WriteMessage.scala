@@ -148,7 +148,7 @@ object WriteMessage {
  * [[org.apache.pekko.stream.connectors.elasticsearch.testkit.MessageFactory]].
  */
 final class WriteResult[T2, C2] @InternalApi private[elasticsearch] (val message: WriteMessage[T2, C2],
-    /** JSON structure of the Elasticsearch error. */
+    /* JSON structure of the Elasticsearch error. */
     val error: Option[String]) {
   val success: Boolean = error.isEmpty
 

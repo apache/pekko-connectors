@@ -175,7 +175,7 @@ object TableSchema {
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tableschema BigQuery reference]]
    *
    * @param fields describes the fields in a table
-   * @return a [[TableSchema]]
+   * @return a `TableSchema`
    */
   def create(fields: util.List[TableFieldSchema]) = TableSchema(fields.asScala.toList)
 
@@ -184,7 +184,7 @@ object TableSchema {
    * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tableschema BigQuery reference]]
    *
    * @param fields describes the fields in a table
-   * @return a [[TableSchema]]
+   * @return a `TableSchema`
    */
   @varargs
   def create(fields: TableFieldSchema*) = TableSchema(fields.toList)

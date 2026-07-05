@@ -90,7 +90,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    * @param datasetId dataset ID of the table to insert into
    * @param tableId table ID of the table to insert into
    * @tparam In the data model for each record
-   * @return a [[pekko.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
+   * @return a [[pekko.stream.scaladsl.Flow]] that uploads each `In` and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
    */
   def insertAllAsync[In: ToEntityMarshaller](datasetId: String, tableId: String): Flow[In, Job, NotUsed] =
     insertAllAsync(datasetId, tableId, None)
@@ -104,7 +104,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    * @param tableId table ID of the table to insert into
    * @param labels the labels associated with this job
    * @tparam In the data model for each record
-   * @return a [[pekko.stream.scaladsl.Flow]] that uploads each [[In]] and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
+   * @return a [[pekko.stream.scaladsl.Flow]] that uploads each `In` and emits a [[pekko.stream.connectors.googlecloud.bigquery.model.Job]] for every upload job created
    */
   def insertAllAsync[In: ToEntityMarshaller](datasetId: String,
       tableId: String,
@@ -160,7 +160,7 @@ private[scaladsl] trait BigQueryJobs { this: BigQueryRest =>
    *
    * @param job the job to start
    * @tparam Job the data model for a job
-   * @return a [[pekko.stream.scaladsl.Sink]] that uploads bytes and materializes a [[scala.concurrent.Future]] containing the [[Job]] when completed
+   * @return a [[pekko.stream.scaladsl.Sink]] that uploads bytes and materializes a [[scala.concurrent.Future]] containing the `Job` when completed
    */
   def createLoadJob[@nowarn("msg=shadows") Job: ToEntityMarshaller: FromEntityUnmarshaller](
       job: Job): Sink[ByteString, Future[Job]] =

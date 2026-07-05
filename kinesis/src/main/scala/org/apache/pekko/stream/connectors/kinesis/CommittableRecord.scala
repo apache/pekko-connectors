@@ -87,7 +87,7 @@ object CommittableRecord {
     Ordering[(String, Long)].on(cr => (cr.sequenceNumber, cr.subSequenceNumber))
 
   /**
-   * See [[pekko.stream.connectors.kinesis.impl.ShardProcessor]]
+   * See `pekko.stream.connectors.kinesis.impl.ShardProcessor`
    */
   final class ShardProcessorData(
       val shardId: String,
@@ -95,7 +95,7 @@ object CommittableRecord {
       val pendingCheckpointSequenceNumber: ExtendedSequenceNumber)
 
   /**
-   * See [[pekko.stream.connectors.kinesis.impl.ShardProcessor]]
+   * See `pekko.stream.connectors.kinesis.impl.ShardProcessor`
    */
   final class BatchData(
       val cacheEntryTime: Instant,

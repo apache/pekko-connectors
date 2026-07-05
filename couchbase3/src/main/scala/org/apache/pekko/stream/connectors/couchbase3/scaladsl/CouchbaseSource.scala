@@ -101,7 +101,7 @@ object CouchbaseSource {
       .map(_.contentAs(target))
 
   /**
-   * similar to Get[[CouchbaseSource.get]], batch get documents from collection by ScanType[[ScanType]]
+   * similar to Get[[CouchbaseSource.get]], batch get documents from collection by ScanType`ScanType`
    */
   def scan(scanType: ScanType, options: ScanOptions = ScanOptions.scanOptions())(
       implicit asyncCollection: AsyncCollection): Source[ScanResult, NotUsed] =
@@ -216,7 +216,7 @@ object CouchbaseSource {
 
   /**
    * Fetches all indexes from this collection with custom options.
-   * @see [[com.couchbase.client.java.manager.query.AsyncCollectionQueryIndexManager#getAllIndexes]]
+   * @see `AsyncCollectionQueryIndexManager#getAllIndexes`
    */
   def queryAllIndex(options: GetAllQueryIndexesOptions = GetAllQueryIndexesOptions.getAllQueryIndexesOptions)(
       implicit asyncCollection: AsyncCollection): Source[QueryIndex, NotUsed] =

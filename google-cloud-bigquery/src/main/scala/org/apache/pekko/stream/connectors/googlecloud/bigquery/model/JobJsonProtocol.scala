@@ -66,7 +66,7 @@ object Job {
    * @param configuration describes the job configuration
    * @param jobReference reference describing the unique-per-user name of the job
    * @param status the status of this job
-   * @return a [[Job]]
+   * @return a `Job`
    */
   def create(configuration: util.Optional[JobConfiguration],
       jobReference: util.Optional[JobReference],

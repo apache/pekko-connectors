@@ -101,9 +101,9 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
    * @param branchSelector a predicate for pruning the tree. Takes a remote folder and return true
    *                       if you want to enter that remote folder.
    *                       Default behaviour is full recursive which is equivalent with calling this function
-   *                       with [[ls(basePath,connectionSettings,f->true)]].
+   *                       with `ls(basePath, connectionSettings, f => true)`.
    *
-   *                       Calling [[ls(basePath,connectionSettings,f->false)]] will emit only the files and folder in
+   *                       Calling `ls(basePath, connectionSettings, f => false)` will emit only the files and folder in
    *                       non-recursive fashion
    *
    * @return A [[pekko.stream.javadsl.Source Source]] of [[FtpFile]]s
@@ -118,9 +118,9 @@ sealed trait FtpApi[FtpClient, S <: RemoteFileSettings] { self: FtpSourceFactory
    * @param branchSelector a predicate for pruning the tree. Takes a remote folder and return true
    *                       if you want to enter that remote folder.
    *                       Default behaviour is full recursive which is equivalent with calling this function
-   *                       with [[ls(basePath,connectionSettings,f->true)]].
+   *                       with `ls(basePath, connectionSettings, f => true)`.
    *
-   *                       Calling [[ls(basePath,connectionSettings,f->false)]] will emit only the files and folder in
+   *                       Calling `ls(basePath, connectionSettings, f => false)` will emit only the files and folder in
    *                       non-recursive fashion
    * @param emitTraversedDirectories whether to include entered directories in the stream
    *

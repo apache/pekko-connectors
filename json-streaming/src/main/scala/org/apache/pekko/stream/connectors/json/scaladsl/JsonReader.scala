@@ -39,7 +39,7 @@ object JsonReader {
    * A Flow that consumes incoming json in chunks and produces a stream of parsable json values
    * according to the JsonPath given. The passed String will need to be parsed first.
    *
-   * @see [[#select]]
+   * @see `select`
    */
   def select(path: String): Flow[ByteString, ByteString, NotUsed] = select(JsonPathCompiler.compile(path))
 }

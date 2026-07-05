@@ -24,7 +24,7 @@ import scala.jdk.FutureConverters._
 object AwsLambdaFlow {
 
   /**
-   * Scala API: creates a [[AwsLambdaFlowStage]] for a AWS Lambda function invocation using [[LambdaAsyncClient]]
+   * Scala API: creates a `AwsLambdaFlowStage` for a AWS Lambda function invocation using `LambdaAsyncClient`
    */
   def apply(
       parallelism: Int)(implicit awsLambdaClient: LambdaAsyncClient): Flow[InvokeRequest, InvokeResponse, NotUsed] =

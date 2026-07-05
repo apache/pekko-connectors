@@ -28,7 +28,7 @@ import scala.concurrent.Future
 object HdfsSource {
 
   /**
-   * Scala API: creates a [[Source]] that consumes as [[ByteString]]
+   * Scala API: creates a `Source` that consumes as `ByteString`
    *
    * @param fs Hadoop file system
    * @param path the file to open
@@ -41,7 +41,7 @@ object HdfsSource {
     StreamConverters.fromInputStream(() => fs.open(path), chunkSize)
 
   /**
-   * Scala API: creates a [[Source]] that consumes as [[ByteString]]
+   * Scala API: creates a `Source` that consumes as `ByteString`
    *
    * @param fs Hadoop file system
    * @param path the file to open
@@ -56,7 +56,7 @@ object HdfsSource {
     StreamConverters.fromInputStream(() => codec.createInputStream(fs.open(path)), chunkSize)
 
   /**
-   * Scala API: creates a [[Source]] that consumes as [[(K, V]]
+   * Scala API: creates a `Source` that consumes as `(K, V)`
    *
    * @param fs Hadoop file system
    * @param path the file to open

@@ -37,7 +37,7 @@ final class TarArchiveMetadata private (
     val filePathName: String,
     val size: Long,
     val lastModification: Instant,
-    /**
+    /*
      * See constants `TarchiveMetadata.linkIndicatorNormal`
      */
     val linkIndicatorByte: Byte) {

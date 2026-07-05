@@ -145,7 +145,7 @@ object FilePathGenerator {
    * Scala API: creates [[FilePathGenerator]] to rotate output
    *
    * @param f    a function that takes rotation count and timestamp to return path of output
-   * @param temp the temporary directory that [[org.apache.pekko.stream.connectors.hdfs.impl.HdfsFlowStage]] use
+   * @param temp the temporary directory that `org.apache.pekko.stream.connectors.hdfs.impl.HdfsFlowStage` use
    */
   def apply(f: (Long, Long) => String, temp: String = DefaultTempDirectory): FilePathGenerator =
     new FilePathGenerator {

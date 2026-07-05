@@ -32,7 +32,7 @@ import scala.jdk.FutureConverters._
 object CouchbaseSink {
 
   /**
-   * reference to [[CouchbaseFlow.insertDoc]]
+   * reference to `CouchbaseFlow.insertDoc`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -44,7 +44,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.insertDoc[T](insertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.insertDoc]]
+   * reference to `CouchbaseFlow.insertDoc`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -57,7 +57,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.insertDoc]]
+   * reference to `CouchbaseFlow.insertDoc`
    * @deprecated Use insertDoc which returns CompletionStage instead
    */
   @deprecated("Use insertDoc which returns CompletionStage instead", since = "2.0.0")
@@ -66,7 +66,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.insertDoc[T](insertOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.insert]]
+   * reference to `CouchbaseFlow.insert`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -79,7 +79,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.insert[T](applyId.apply, insertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.insert]]
+   * reference to `CouchbaseFlow.insert`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -92,7 +92,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.insert]]
+   * reference to `CouchbaseFlow.insert`
    * @deprecated Use insert which returns CompletionStage instead
    */
   @deprecated("Use insert which returns CompletionStage instead", since = "2.0.0")
@@ -102,7 +102,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.insert[T](applyId, insertOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.upsertDoc]]
+   * reference to `CouchbaseFlow.upsertDoc`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -114,7 +114,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.upsertDoc[T](upsertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.upsertDoc]]
+   * reference to `CouchbaseFlow.upsertDoc`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -127,7 +127,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.upsertDoc]]
+   * reference to `CouchbaseFlow.upsertDoc`
    * @deprecated Use upsertDoc which returns CompletionStage instead
    */
   @deprecated("Use upsertDoc which returns CompletionStage instead", since = "2.0.0")
@@ -136,7 +136,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.upsertDoc[T](upsertOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.upsert]]
+   * reference to `CouchbaseFlow.upsert`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -149,7 +149,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.upsert[T](applyId.apply, upsertOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.upsert]]
+   * reference to `CouchbaseFlow.upsert`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -162,7 +162,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.upsert]]
+   * reference to `CouchbaseFlow.upsert`
    * @deprecated Use upsert which returns CompletionStage instead
    */
   @deprecated("Use upsert which returns CompletionStage instead", since = "2.0.0")
@@ -172,7 +172,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.upsert[T](applyId, upsertOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.replaceDoc]]
+   * reference to `CouchbaseFlow.replaceDoc`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -185,7 +185,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.replaceDoc[T](replaceOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.replaceDoc]]
+   * reference to `CouchbaseFlow.replaceDoc`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -198,7 +198,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.replaceDoc]]
+   * reference to `CouchbaseFlow.replaceDoc`
    * @deprecated Use replaceDoc which returns CompletionStage instead
    */
   @deprecated("Use replaceDoc which returns CompletionStage instead", since = "2.0.0")
@@ -208,7 +208,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.replaceDoc[T](replaceOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.replace]]
+   * reference to `CouchbaseFlow.replace`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -221,7 +221,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.replace[T](applyId.apply, replaceOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.replace]]
+   * reference to `CouchbaseFlow.replace`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -234,7 +234,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.replace]]
+   * reference to `CouchbaseFlow.replace`
    * @deprecated Use replace which returns CompletionStage instead
    */
   @deprecated("Use replace which returns CompletionStage instead", since = "2.0.0")
@@ -244,7 +244,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.replace[T](applyId, replaceOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.remove]]
+   * reference to `CouchbaseFlow.remove`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -257,7 +257,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.remove[T](applyId.apply, removeOptions)(asyncCollection).mapMaterializedValue(_.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.remove]]
+   * reference to `CouchbaseFlow.remove`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -270,7 +270,7 @@ object CouchbaseSink {
       _.asJava).asJava
 
   /**
-   * reference to [[CouchbaseFlow.remove]]
+   * reference to `CouchbaseFlow.remove`
    * @deprecated Use remove which returns CompletionStage instead
    */
   @deprecated("Use remove which returns CompletionStage instead", since = "2.0.0")
@@ -280,7 +280,7 @@ object CouchbaseSink {
     ScalaCouchbaseSink.remove[T](applyId, removeOptions).asJava
 
   /**
-   * reference to [[CouchbaseFlow.exists]]
+   * reference to `CouchbaseFlow.exists`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -294,7 +294,7 @@ object CouchbaseSink {
       .asJava
 
   /**
-   * reference to [[CouchbaseFlow.exists]]
+   * reference to `CouchbaseFlow.exists`
    * <p>
    *   This function's return type changed in 2.0.0 to return a Sink with a CompletionStage instead of a
    *   Scala Future, to be more consistent with Java usage.
@@ -308,7 +308,7 @@ object CouchbaseSink {
       .asJava
 
   /**
-   * reference to [[CouchbaseFlow.exists]]
+   * reference to `CouchbaseFlow.exists`
    * @deprecated Use exists which returns CompletionStage instead
    */
   @deprecated("Use exists which returns CompletionStage instead", since = "2.0.0")

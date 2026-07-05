@@ -99,7 +99,7 @@ object CouchbaseFlow {
   /**
    * Inserts a full document which does not exist yet with custom options.
    * @param applyId parse id function, which is the document id
-   * @see [[com.couchbase.client.java.AsyncCollection#insert]]
+   * @see `AsyncCollection#insert`
    */
   def insert[T](applyId: T => String,
       insertOptions: InsertOptions = InsertOptions.insertOptions())(
@@ -126,7 +126,7 @@ object CouchbaseFlow {
   /**
    * Replaces a full document which already exists with custom options.
    * @param applyId parse id function, which is the document id
-   * @see [[com.couchbase.client.java.AsyncCollection#replace]]
+   * @see `AsyncCollection#replace`
    */
   def replace[T](applyId: T => String,
       replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
@@ -152,7 +152,7 @@ object CouchbaseFlow {
   /**
    * Upsert a full document which might or might not exist yet with custom options.
    * @param applyId parse id function, which is the document id
-   * @see [[com.couchbase.client.java.AsyncCollection#upsert]]
+   * @see `AsyncCollection#upsert`
    */
   def upsert[T](applyId: T => String,
       upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
@@ -179,7 +179,7 @@ object CouchbaseFlow {
   /**
    * Removes a Document from a collection with custom options.
    * @param applyId parse id function, which is the document id, id streams can use `remove[String](e => e)`
-   * @see [[com.couchbase.client.java.AsyncCollection#remove]]
+   * @see `AsyncCollection#remove`
    */
   def remove[T](
       applyId: T => String,
@@ -194,7 +194,7 @@ object CouchbaseFlow {
 
   /**
    * Performs mutations to document fragments with custom options.
-   * @see [[com.couchbase.client.java.AsyncCollection#mutateIn]]
+   * @see `AsyncCollection#mutateIn`
    */
   def mutateIn(specs: java.util.List[MutateInSpec], options: MutateInOptions = MutateInOptions.mutateInOptions())(
       implicit asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
@@ -219,7 +219,7 @@ object CouchbaseFlow {
   /**
    * Checks if the given document ID exists on the active partition with custom options.
    * @param applyId parse id function, which is the document id, id streams can use `exists[String](e => e)`
-   * @see [[com.couchbase.client.java.AsyncCollection#exists]]
+   * @see `AsyncCollection#exists`
    */
   def exists[T](applyId: T => String, existsOptions: ExistsOptions = ExistsOptions.existsOptions())(
       implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
@@ -231,7 +231,7 @@ object CouchbaseFlow {
 
   /**
    * Updates the expiry of the document with the given id with custom options.
-   * @see [[com.couchbase.client.java.AsyncCollection#touch]]
+   * @see `AsyncCollection#touch`
    */
   def touch(expiry: Duration, options: TouchOptions = TouchOptions.touchOptions())(
       implicit asyncCollection: AsyncCollection): Flow[String, MutationResult, NotUsed] =
@@ -255,7 +255,7 @@ object CouchbaseFlow {
 
   /**
    * Updates the expiry of the document with the given id with custom options.
-   * @see [[com.couchbase.client.java.AsyncCollection#touch]]
+   * @see `AsyncCollection#touch`
    */
   def touchInstant[T](applyId: T => String, expiry: Instant,
       touchOptions: TouchOptions = TouchOptions.touchOptions())(
@@ -268,7 +268,7 @@ object CouchbaseFlow {
 
   /**
    * Appends binary content to the document with custom options.
-   * @see [[com.couchbase.client.java.AsyncBinaryCollection#append]]
+   * @see `AsyncBinaryCollection#append`
    */
   def append(options: AppendOptions = AppendOptions.appendOptions())(
       implicit asyncCollection: AsyncCollection): Flow[MutationBinaryDocument, MutationResult, NotUsed] =
@@ -279,7 +279,7 @@ object CouchbaseFlow {
 
   /**
    * Prepends binary content to the document with custom options.
-   * @see [[com.couchbase.client.java.AsyncBinaryCollection#prepend]]
+   * @see `AsyncBinaryCollection#prepend`
    */
   def prepend(options: PrependOptions = PrependOptions.prependOptions())(
       implicit asyncCollection: AsyncCollection): Flow[MutationBinaryDocument, MutationResult, NotUsed] =
@@ -291,7 +291,7 @@ object CouchbaseFlow {
 
   /**
    * Increments the counter document by one or the number defined in the options.
-   * @see [[com.couchbase.client.java.AsyncBinaryCollection#increment]]
+   * @see `AsyncBinaryCollection#increment`
    */
   def increment(options: IncrementOptions = IncrementOptions.incrementOptions())(
       implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =
@@ -302,7 +302,7 @@ object CouchbaseFlow {
 
   /**
    * Decrements the counter document by one or the number defined in the options.
-   * @see [[com.couchbase.client.java.AsyncBinaryCollection#decrement]]
+   * @see `AsyncBinaryCollection#decrement`
    */
   def decrement(options: DecrementOptions = DecrementOptions.decrementOptions())(
       implicit asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =

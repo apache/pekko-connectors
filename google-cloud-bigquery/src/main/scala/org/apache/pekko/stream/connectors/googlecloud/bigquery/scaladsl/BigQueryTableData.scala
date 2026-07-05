@@ -51,7 +51,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    * @param maxResults row limit of the table
    * @param selectedFields subset of fields to return, supports select into sub fields. Example: `selectedFields = Seq("a", "e.d.f")`
    * @tparam Out the data model of each row
-   * @return a [[pekko.stream.scaladsl.Source]] that emits an [[Out]] for each row in the table
+   * @return a [[pekko.stream.scaladsl.Source]] that emits an `Out` for each row in the table
    */
   def tableData[Out](datasetId: String,
       tableId: String,
@@ -79,7 +79,7 @@ private[scaladsl] trait BigQueryTableData { this: BigQueryRest =>
    * @param retryPolicy [[pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy]] determining whether to retry and deduplicate
    * @param templateSuffix if specified, treats the destination table as a base template, and inserts the rows into an instance table named "{destination}{templateSuffix}"
    * @tparam In the data model for each record
-   * @return a [[pekko.stream.scaladsl.Sink]] that inserts each batch of [[In]] into the table
+   * @return a [[pekko.stream.scaladsl.Sink]] that inserts each batch of `In` into the table
    */
   def insertAll[In](
       datasetId: String,

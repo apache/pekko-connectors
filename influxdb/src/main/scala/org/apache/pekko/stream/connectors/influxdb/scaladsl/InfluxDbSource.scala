@@ -31,7 +31,7 @@ import org.influxdb.dto.{ Query, QueryResult }
 object InfluxDbSource {
 
   /**
-   * Scala API: creates an [[pekko.stream.connectors.influxdb.impl.InfluxDbRawSourceStage]] from a given statement.
+   * Scala API: creates an `pekko.stream.connectors.influxdb.impl.InfluxDbRawSourceStage` from a given statement.
    */
   def apply(influxDB: InfluxDB, query: Query): Source[QueryResult, NotUsed] =
     Source.fromGraph(new InfluxDbRawSourceStage(query, influxDB))

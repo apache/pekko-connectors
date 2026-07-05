@@ -37,10 +37,10 @@ import scala.util.Try;
  * <p>Read the entire contents of a file, and then when the end is reached, keep reading newly
  * appended data. Like the unix command `tail -f`.
  *
- * <p>Aborting the stage can be done by combining with a [[org.apache.pekko.stream.KillSwitch]]
+ * <p>Aborting the stage can be done by combining with a `org.apache.pekko.stream.KillSwitch`
  *
- * <p>To use the stage from Scala see the factory methods in {@link
- * org.apache.pekko.stream.connectors.file.scaladsl.FileTailSource}
+ * <p>To use the stage from Scala see the factory methods in
+ * `org.apache.pekko.stream.connectors.file.scaladsl.FileTailSource`
  */
 @InternalApi
 public final class FileTailSource extends GraphStage<SourceShape<ByteString>> {

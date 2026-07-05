@@ -31,7 +31,7 @@ object ElasticsearchSource {
   /**
    * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
    * of Spray's [[spray.json.JsObject]].
-   * Alias of [[create]].
+   * Alias of `create`.
    */
   def apply(
       elasticsearchParams: ElasticsearchParams,
@@ -42,7 +42,7 @@ object ElasticsearchSource {
   /**
    * Creates a [[pekko.stream.scaladsl.Source]] from Elasticsearch that streams [[ReadResult]]s
    * of Spray's [[spray.json.JsObject]].
-   * Alias of [[create]].
+   * Alias of `create`.
    *
    * Example of searchParams-usage:
    *  Map( "query" -> """{"match_all": {}}""" )

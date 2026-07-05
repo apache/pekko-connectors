@@ -278,7 +278,7 @@ object S3 {
       .asJava
 
   /**
-   * Uploads a S3 Object, use this for small files and [[multipartUpload]] for bigger ones
+   * Uploads a S3 Object, use this for small files and `multipartUpload` for bigger ones
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
@@ -303,7 +303,7 @@ object S3 {
       .asJava
 
   /**
-   * Uploads a S3 Object, use this for small files and [[multipartUpload]] for bigger ones
+   * Uploads a S3 Object, use this for small files and `multipartUpload` for bigger ones
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
@@ -320,7 +320,7 @@ object S3 {
     putObject(bucket, key, data, contentLength, contentType, S3Headers.empty.withCannedAcl(CannedAcl.Private))
 
   /**
-   * Uploads a S3 Object, use this for small files and [[multipartUpload]] for bigger ones
+   * Uploads a S3 Object, use this for small files and `multipartUpload` for bigger ones
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
@@ -815,7 +815,7 @@ object S3 {
    *                        with the returned `Sink`.
    * @param contentType an optional [[pekko.http.javadsl.model.ContentType ContentType]]
    * @param s3Headers any headers you want to add
-   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of [[C]])'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of `C`)'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithContext[C](
       bucket: String,
@@ -857,7 +857,7 @@ object S3 {
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
    * @param contentType an optional [[pekko.http.javadsl.model.ContentType ContentType]]
-   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of [[C]])'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of `C`)'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithContext[C](
       bucket: String,
@@ -888,7 +888,7 @@ object S3 {
    *                        backpressure is applied to the upload stream if `chunkUploadSink` is too slow, likewise any
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
-   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of [[C]])'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of `C`)'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
    */
   def multipartUploadWithContext[C](
       bucket: String,
@@ -985,7 +985,7 @@ object S3 {
    *                        with the returned `Sink`.
    * @param contentType an optional [[pekko.http.javadsl.model.ContentType ContentType]]
    * @param s3Headers any headers you want to add
-   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of [[C]])'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of `C`)'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithContext[C](
       bucket: String,
@@ -1035,7 +1035,7 @@ object S3 {
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
    * @param contentType an optional [[pekko.http.javadsl.model.ContentType ContentType]]
-   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of [[C]])'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of `C`)'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithContext[C](
       bucket: String,
@@ -1073,7 +1073,7 @@ object S3 {
    *                        backpressure is applied to the upload stream if `chunkUploadSink` is too slow, likewise any
    *                        failure will also be propagated to the upload stream. Sink Materialization is also shared
    *                        with the returned `Sink`.
-   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of [[C]])'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
+   * @return a [[pekko.stream.javadsl.Sink Sink]] that accepts [[pekko.japi.Pair Pair]] of ([[pekko.util.ByteString ByteString]] of `C`)'s and materializes to a [[java.util.concurrent.CompletionStage CompletionStage]] of [[MultipartUploadResult]]
    */
   def resumeMultipartUploadWithContext[C](
       bucket: String,
