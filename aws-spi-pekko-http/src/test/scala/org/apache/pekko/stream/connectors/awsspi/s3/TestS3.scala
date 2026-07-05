@@ -27,6 +27,7 @@ import software.amazon.awssdk.core.async.{ AsyncRequestBody, AsyncResponseTransf
 import software.amazon.awssdk.services.s3.{ S3AsyncClient, S3Configuration }
 import software.amazon.awssdk.services.s3.model._
 
+import scala.annotation.nowarn
 import scala.concurrent.duration._
 import scala.util.Random
 
@@ -154,6 +155,7 @@ class TestS3 extends BaseAwsClientTest[S3AsyncClient] {
     bucketName
   }
 
+  @nowarn("msg=deprecated")
   private def withClient(testCode: S3AsyncClient => Any): Any = {
 
     val pekkoClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory().build()

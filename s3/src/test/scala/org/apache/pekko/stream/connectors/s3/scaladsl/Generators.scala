@@ -20,7 +20,6 @@ package org.apache.pekko.stream.connectors.s3.scaladsl
 import org.scalacheck.Gen
 
 import scala.annotation.nowarn
-import scala.language.postfixOps
 object Generators {
   val MaxBucketLength: Int = 63
 

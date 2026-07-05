@@ -26,7 +26,7 @@ import scala.jdk.CollectionConverters._
 class S3ExtSpec extends AnyFlatSpecLike with Matchers {
   it should "reuse application config from actor system" in {
     val config = ConfigFactory.parseMap(
-      Map(
+      Map[String, Any](
         "pekko.connectors.s3.endpoint-url" -> "http://localhost:8001",
         "pekko.connectors.s3.path-style-access" -> true).asJava)
     implicit val system: ActorSystem = ActorSystem.create("s3", config)

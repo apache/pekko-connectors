@@ -31,7 +31,7 @@ import scala.util.Random
 abstract class GCStorageWiremockBase(_system: ActorSystem, _wireMockServer: Hoverfly) extends TestKit(_system) {
 
   def this(mock: Hoverfly) =
-    this(ActorSystem(getCallerName(getClass),
+    this(ActorSystem(getCallerName(classOf[GCStorageWiremockBase]),
       config(mock.getHoverflyConfig.getProxyPort).withFallback(ConfigFactory.load())),
       mock)
 
@@ -848,7 +848,7 @@ object GCStorageWiremockBase {
     server
   }
 
-  private def config(proxyPort: Int) =
+  def config(proxyPort: Int) =
     ConfigFactory.parseString(s"""
     |${GoogleSettings.ConfigPath} {
     |  credentials {

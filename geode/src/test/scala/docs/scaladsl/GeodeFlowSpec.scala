@@ -21,7 +21,6 @@ import pekko.stream.scaladsl.{ Flow, Sink }
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
-import scala.language.postfixOps
 
 class GeodeFlowSpec extends GeodeBaseSpec {
 

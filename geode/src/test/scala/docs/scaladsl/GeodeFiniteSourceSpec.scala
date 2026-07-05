@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
-import scala.language.postfixOps
 
 class GeodeFiniteSourceSpec extends GeodeBaseSpec {
 

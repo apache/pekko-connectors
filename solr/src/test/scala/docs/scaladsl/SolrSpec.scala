@@ -36,6 +36,7 @@ import org.apache.solr.common.SolrInputDocument
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
+import scala.annotation.nowarn
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
@@ -719,6 +720,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
     TestKit.shutdownActorSystem(system)
   }
 
+  @nowarn("msg=deprecated")
   private def setupCluster(): Unit = {
     val targetDir = new File("solr/target")
     val testWorkingDir =
