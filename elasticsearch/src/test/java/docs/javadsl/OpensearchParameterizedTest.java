@@ -13,27 +13,26 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.stream.connectors.elasticsearch.*;
-import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchFlow;
-import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSource;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.stream.connectors.elasticsearch.*;
+import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchFlow;
+import org.apache.pekko.stream.connectors.elasticsearch.javadsl.ElasticsearchSource;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class OpensearchParameterizedTest extends ElasticsearchTestBase {
   private OpensearchApiVersion apiVersion;

@@ -13,21 +13,15 @@
 
 package docs.javadsl;
 
-import org.apache.pekko.NotUsed;
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.actor.Cancellable;
-import org.apache.pekko.japi.Pair;
-import org.apache.pekko.stream.connectors.hdfs.*;
-import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsFlow;
-import org.apache.pekko.stream.connectors.hdfs.util.JavaTestUtils;
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.apache.pekko.stream.javadsl.Flow;
-import org.apache.pekko.stream.javadsl.Keep;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.testkit.javadsl.TestKit;
-import org.apache.pekko.util.ByteString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -36,19 +30,23 @@ import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.compress.DefaultCodec;
+import org.apache.pekko.NotUsed;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.actor.Cancellable;
+import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.hdfs.*;
+import org.apache.pekko.stream.connectors.hdfs.javadsl.HdfsFlow;
+import org.apache.pekko.stream.connectors.hdfs.util.JavaTestUtils;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Flow;
+import org.apache.pekko.stream.javadsl.Keep;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.javadsl.Source;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.apache.pekko.util.ByteString;
 import org.junit.jupiter.api.*;
-
+import org.junit.jupiter.api.extension.ExtendWith;
 import scala.concurrent.duration.Duration;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LogCapturingExtension.class)
 public class HdfsWriterTest {

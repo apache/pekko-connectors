@@ -13,6 +13,12 @@
 
 package docs.javadsl;
 
+import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 import org.apache.pekko.Done;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
@@ -20,13 +26,6 @@ import org.apache.pekko.stream.connectors.slick.javadsl.Slick;
 import org.apache.pekko.stream.connectors.slick.javadsl.SlickSession;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-
-import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 // We're going to pretend we got messages from kafka.
 // After we've written them to a db with Slick, we want

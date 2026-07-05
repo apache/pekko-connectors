@@ -24,7 +24,6 @@ import org.apache.pekko.stream.connectors.file.javadsl.Directory;
 import java.nio.file.FileVisitOption;
 // #walk
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.FlowWithContext;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -34,6 +33,7 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.file.FileSystem;
 import java.nio.file.Files;

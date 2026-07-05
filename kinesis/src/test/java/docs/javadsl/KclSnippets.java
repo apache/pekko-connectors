@@ -16,7 +16,6 @@ package docs.javadsl;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.CompletionStage;
-
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.connectors.kinesis.CommittableRecord;
 import org.apache.pekko.stream.connectors.kinesis.KinesisSchedulerCheckpointSettings;

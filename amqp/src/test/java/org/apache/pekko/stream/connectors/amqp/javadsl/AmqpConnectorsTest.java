@@ -13,6 +13,15 @@
 
 package org.apache.pekko.stream.connectors.amqp.javadsl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import com.rabbitmq.client.AuthenticationFailureException;
+import java.net.ConnectException;
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -22,7 +31,6 @@ import org.apache.pekko.stream.Materializer;
 import org.apache.pekko.stream.UniqueKillSwitch;
 import org.apache.pekko.stream.connectors.amqp.*;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
@@ -32,19 +40,10 @@ import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.stream.testkit.javadsl.TestSink;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
-import com.rabbitmq.client.AuthenticationFailureException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import scala.collection.JavaConverters;
 import scala.concurrent.duration.Duration;
-
-import java.net.ConnectException;
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /** Needs a local running AMQP server on the default port with no password. */
 @ExtendWith(LogCapturingExtension.class)

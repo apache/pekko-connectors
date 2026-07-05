@@ -13,12 +13,11 @@
 
 package org.apache.pekko.stream.connectors.couchbase.javadsl;
 
+import com.typesafe.config.Config;
+import java.util.concurrent.CompletionStage;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.actor.ClassicActorSystemProvider;
 import org.apache.pekko.stream.connectors.couchbase.CouchbaseSessionSettings;
-import com.typesafe.config.Config;
-
-import java.util.concurrent.CompletionStage;
 
 /**
  * Utility to delegate Couchbase node address lookup to

@@ -13,27 +13,26 @@
 
 package docs.javadsl;
 
-import java.util.List;
-import java.util.concurrent.CompletionStage;
-
-import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.influxdb.InfluxDB;
-import org.influxdb.dto.Query;
-import org.influxdb.dto.QueryResult;
-import org.junit.jupiter.api.*;
-
-import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.stream.Materializer;
-import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings;
-import org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSource;
-import org.apache.pekko.stream.javadsl.Sink;
-import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
-import org.apache.pekko.testkit.javadsl.TestKit;
 import static docs.javadsl.TestUtils.cleanDatabase;
 import static docs.javadsl.TestUtils.dropDatabase;
 import static docs.javadsl.TestUtils.populateDatabase;
 import static docs.javadsl.TestUtils.setupConnection;
+
+import java.util.List;
+import java.util.concurrent.CompletionStage;
+import org.apache.pekko.actor.ActorSystem;
+import org.apache.pekko.stream.Materializer;
+import org.apache.pekko.stream.connectors.influxdb.InfluxDbReadSettings;
+import org.apache.pekko.stream.connectors.influxdb.javadsl.InfluxDbSource;
+import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
+import org.apache.pekko.stream.javadsl.Sink;
+import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
+import org.apache.pekko.testkit.javadsl.TestKit;
+import org.influxdb.InfluxDB;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(LogCapturingExtension.class)
 public class InfluxDbSourceTest {

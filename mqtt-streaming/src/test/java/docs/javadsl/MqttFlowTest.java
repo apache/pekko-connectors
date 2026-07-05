@@ -13,6 +13,16 @@
 
 package docs.javadsl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -44,31 +54,20 @@ import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.Mqtt;
 import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.MqttClientSession;
 import org.apache.pekko.stream.connectors.mqtt.streaming.javadsl.MqttServerSession;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.apache.pekko.stream.javadsl.BroadcastHub;
 import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.javadsl.SourceQueueWithComplete;
 import org.apache.pekko.stream.javadsl.Tcp;
-import org.apache.pekko.stream.javadsl.BroadcastHub;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import scala.Tuple2;
 import scala.collection.JavaConverters;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(LogCapturingExtension.class)
 public class MqttFlowTest {

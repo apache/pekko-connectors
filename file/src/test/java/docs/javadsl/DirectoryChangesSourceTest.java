@@ -22,7 +22,6 @@ import org.apache.pekko.stream.connectors.file.DirectoryChange;
 import org.apache.pekko.stream.connectors.file.javadsl.DirectoryChangesSource;
 // #minimal-sample
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.stream.testkit.TestSubscriber;
@@ -32,6 +31,7 @@ import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 import com.google.common.jimfs.WatchServiceConfiguration;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
