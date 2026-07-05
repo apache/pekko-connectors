@@ -84,6 +84,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LogCapturingExtension.class)
+@SuppressWarnings("unchecked")
 public class CouchbaseExamplesTest {
 
   private static final CouchbaseSupportClass support = new CouchbaseSupportClass();

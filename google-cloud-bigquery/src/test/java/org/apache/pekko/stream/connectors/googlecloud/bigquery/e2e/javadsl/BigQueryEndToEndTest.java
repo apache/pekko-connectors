@@ -59,6 +59,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("unchecked")
 public class BigQueryEndToEndTest extends EndToEndHelper {
 
   private static ActorSystem system = ActorSystem.create("BigQueryEndToEndTest");
