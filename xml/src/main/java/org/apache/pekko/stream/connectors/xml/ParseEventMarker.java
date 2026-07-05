@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.xml;
 
 /**
- * Mirrors the sub-classes of [[ParseEvent]] to allow use with Java switch statements instead of
+ * Mirrors the sub-classes of {@link ParseEvent} to allow use with Java switch statements instead of
  * chained `instanceOf` tests.
  */
 public enum ParseEventMarker {

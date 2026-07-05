@@ -53,8 +53,8 @@ public class PravegaTable {
   /**
    * Messages are read from a Pravega table.
    *
-   * <p>Materialized value is a [[Future]] which completes to [[Done]] as soon as the Pravega reader
-   * is open.
+   * <p>Materialized value is a {@code Future} which completes to {@code Done} as soon as the
+   * Pravega reader is open.
    */
   public static <K, V> Source<TableEntry<V>, CompletionStage<Done>> source(
       String scope, String tableName, TableReaderSettings<K, V> tableReaderSettings) {
