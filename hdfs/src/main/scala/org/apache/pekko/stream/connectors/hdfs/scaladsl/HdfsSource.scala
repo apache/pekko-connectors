@@ -90,8 +90,8 @@ object HdfsSource {
     val valueHandle = getNoArgConstructor(classV)
     val it = Iterator
       .continually {
-        val key = keyHandle.invokeWithArguments().asInstanceOf[K]
-        val value = valueHandle.invokeWithArguments().asInstanceOf[V]
+        val key = keyHandle.invoke().asInstanceOf[K]
+        val value = valueHandle.invoke().asInstanceOf[V]
         val hasCurrent = reader.next(key, value)
         (hasCurrent, (key, value))
       }

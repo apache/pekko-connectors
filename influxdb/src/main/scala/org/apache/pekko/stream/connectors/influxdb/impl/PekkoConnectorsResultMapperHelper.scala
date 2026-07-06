@@ -149,7 +149,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
       val colMap = CLASS_COLUMN_CACHE.get(clazz)
 
       val handle = getOrCreateConstructorHandle(clazz)
-      val obj: T = handle.invokeWithArguments().asInstanceOf[T]
+      val obj: T = handle.invoke().asInstanceOf[T]
       for (i <- 0 until columns.size()) {
         val colInfo = colMap.get(columns.get(i))
         if (colInfo != null) {
