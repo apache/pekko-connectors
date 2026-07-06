@@ -13,6 +13,9 @@
 
 package org.apache.pekko.stream.connectors.hdfs.scaladsl
 
+import java.lang.invoke.{ MethodHandle, MethodHandles, MethodType }
+import java.util.concurrent.ConcurrentHashMap
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.ActorAttributes.IODispatcher
@@ -26,6 +29,20 @@ import org.apache.hadoop.io.{ SequenceFile, Writable }
 import scala.concurrent.Future
 
 object HdfsSource {
+
+  private val constructorCache = new ConcurrentHashMap[Class[?], MethodHandle]()
+  private val LOOKUP = MethodHandles.lookup()
+
+  private def getNoArgConstructor[T](clazz: Class[T]): MethodHandle = {
+    var handle = constructorCache.get(clazz)
+    if (handle == null) {
+      val lookup = MethodHandles.privateLookupIn(clazz, LOOKUP)
+      handle = lookup.findConstructor(clazz, MethodType.methodType(Void.TYPE))
+      val existing = constructorCache.putIfAbsent(clazz, handle)
+      if (existing != null) handle = existing
+    }
+    handle
+  }
 
   /**
    * Scala API: creates a `Source` that consumes as `ByteString`
@@ -69,10 +86,12 @@ object HdfsSource {
       classK: Class[K],
       classV: Class[V]): Source[(K, V), NotUsed] = {
     val reader: SequenceFile.Reader = new SequenceFile.Reader(fs.getConf, SequenceFile.Reader.file(path))
+    val keyHandle = getNoArgConstructor(classK)
+    val valueHandle = getNoArgConstructor(classV)
     val it = Iterator
       .continually {
-        val key = classK.getDeclaredConstructor().newInstance()
-        val value = classV.getDeclaredConstructor().newInstance()
+        val key = keyHandle.invokeWithArguments().asInstanceOf[K]
+        val value = valueHandle.invokeWithArguments().asInstanceOf[V]
         val hasCurrent = reader.next(key, value)
         (hasCurrent, (key, value))
       }

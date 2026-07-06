@@ -56,7 +56,7 @@ public class InfluxDbSourceTest {
   }
 
   @BeforeEach
-  public void setUp() throws Exception {
+  public void setUp() throws Throwable {
     populateDatabase(influxDB, InfluxDbSourceCpu.class);
   }
 

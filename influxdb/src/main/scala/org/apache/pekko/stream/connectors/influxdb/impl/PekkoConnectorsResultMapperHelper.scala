@@ -13,10 +13,11 @@
 
 package org.apache.pekko.stream.connectors.influxdb.impl
 
-import java.lang.reflect.Field
+import java.lang.invoke.{ MethodHandle, MethodHandles, MethodType, VarHandle }
 import java.time.Instant
 import java.time.format.DateTimeFormatterBuilder
 import java.time.temporal.ChronoField
+import java.util.function.Function
 import java.util.concurrent.{ ConcurrentHashMap, ConcurrentMap }
 import java.util.concurrent.TimeUnit
 
@@ -35,7 +36,7 @@ import scala.jdk.CollectionConverters._
 @InternalApi
 private[impl] class PekkoConnectorsResultMapperHelper {
 
-  val CLASS_FIELD_CACHE: ConcurrentHashMap[String, ConcurrentMap[String, Field]] = new ConcurrentHashMap();
+  import PekkoConnectorsResultMapperHelper.{ CLASS_COLUMN_CACHE, CONSTRUCTOR_CACHE, ColumnInfo, LOOKUP }
 
   private val FRACTION_MIN_WIDTH = 0
   private val FRACTION_MAX_WIDTH = 9
@@ -57,7 +58,7 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     throwExceptionIfMissingAnnotation(model.getClass)
     cacheClassFields(model.getClass)
 
-    val colNameAndFieldMap: ConcurrentMap[String, Field] = CLASS_FIELD_CACHE.get(model.getClass.getName)
+    val colMap: ConcurrentMap[String, ColumnInfo] = CLASS_COLUMN_CACHE.get(model.getClass)
 
     try {
       val modelType = model.getClass();
@@ -66,27 +67,18 @@ private[impl] class PekkoConnectorsResultMapperHelper {
       val time = timeUnit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
       val pointBuilder: Point.Builder = Point.measurement(measurement).time(time, timeUnit);
 
-      for (key <- colNameAndFieldMap.keySet().asScala) {
-        val field = colNameAndFieldMap.get(key)
-        val column = field.getAnnotation(classOf[Column])
-        val columnName: String = column.name()
-        val fieldType: Class[?] = field.getType()
+      for (key <- colMap.keySet().asScala) {
+        val colInfo = colMap.get(key)
+        val value = colInfo.varHandle.get(model);
 
-        val isAccessible = field.isAccessible()
-        if (!isAccessible) {
-          field.setAccessible(true);
-        }
-
-        val value = field.get(model);
-
-        if (column.tag()) {
-          pointBuilder.tag(columnName, value.toString());
-        } else if ("time".equals(columnName)) {
+        if (colInfo.isTag) {
+          pointBuilder.tag(colInfo.columnName, value.toString());
+        } else if ("time".equals(colInfo.columnName)) {
           if (value != null) {
-            setTime(pointBuilder, fieldType, timeUnit, value);
+            setTime(pointBuilder, colInfo.fieldType, timeUnit, value);
           }
         } else {
-          setField(pointBuilder, fieldType, columnName, value);
+          setField(pointBuilder, colInfo.fieldType, colInfo.columnName, value);
         }
       }
 
@@ -96,27 +88,13 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     }
   }
 
-  private[impl] def cacheClassFields(clazz: Class[?]) =
-    if (!CLASS_FIELD_CACHE.containsKey(clazz.getName)) {
-      val initialMap: ConcurrentMap[String, Field] = new ConcurrentHashMap()
-      var influxColumnAndFieldMap = CLASS_FIELD_CACHE.putIfAbsent(clazz.getName, initialMap)
-
-      if (influxColumnAndFieldMap == null) {
-        influxColumnAndFieldMap = initialMap;
-      }
-
-      var c = clazz;
-
-      while (c != null) {
-        for (field <- c.getDeclaredFields()) {
-          val colAnnotation = field.getAnnotation(classOf[Column]);
-          if (colAnnotation != null) {
-            influxColumnAndFieldMap.put(colAnnotation.name(), field);
-          }
-        }
-        c = c.getSuperclass();
-      }
-    }
+  private[impl] def cacheClassFields(clazz: Class[?]): Unit =
+    CLASS_COLUMN_CACHE.computeIfAbsent(
+      clazz,
+      new Function[Class[?], ConcurrentMap[String, ColumnInfo]] {
+        override def apply(clazz: Class[?]): ConcurrentMap[String, ColumnInfo] =
+          PekkoConnectorsResultMapperHelper.classColumnMap(clazz)
+      })
 
   private[impl] def parseSeriesAs[T](clazz: Class[T], series: QueryResult.Series, precision: TimeUnit): List[T] = {
     cacheClassFields(clazz)
@@ -155,111 +133,115 @@ private[impl] class PekkoConnectorsResultMapperHelper {
       throw new IllegalArgumentException(
         "Class " + clazz.getName + " is not annotated with @" + classOf[Measurement].getSimpleName)
 
+  private def getOrCreateConstructorHandle(clazz: Class[?]): MethodHandle =
+    CONSTRUCTOR_CACHE.computeIfAbsent(
+      clazz,
+      new Function[Class[?], MethodHandle] {
+        override def apply(clazz: Class[?]): MethodHandle =
+          MethodHandles.privateLookupIn(clazz, LOOKUP).findConstructor(clazz, MethodType.methodType(Void.TYPE))
+      })
+
   private def parseRowAs[T](clazz: Class[T],
       columns: java.util.List[String],
       values: java.util.List[AnyRef],
       precision: TimeUnit): T =
     try {
-      val fieldMap = CLASS_FIELD_CACHE.get(clazz.getName)
+      val colMap = CLASS_COLUMN_CACHE.get(clazz)
 
-      val obj: T = clazz.getDeclaredConstructor().newInstance()
+      val handle = getOrCreateConstructorHandle(clazz)
+      val obj: T = handle.invokeWithArguments().asInstanceOf[T]
       for (i <- 0 until columns.size()) {
-        val correspondingField = fieldMap.get(columns.get(i))
-        if (correspondingField != null) {
-          setFieldValue(obj, correspondingField, values.get(i), precision)
+        val colInfo = colMap.get(columns.get(i))
+        if (colInfo != null) {
+          setFieldValue(obj, colInfo, values.get(i), precision)
         }
       }
       obj
     } catch {
-      case e @ (_: InstantiationException | _: IllegalAccessException) =>
+      case e: InfluxDBMapperException => throw e
+      case e: Exception               =>
         throw new InfluxDBMapperException(e)
     }
 
-  @throws[IllegalArgumentException]
-  @throws[IllegalAccessException]
-  private def setFieldValue[T](obj: T, field: Field, value: Any, precision: TimeUnit): Unit = {
+  private def setFieldValue[T](obj: T, colInfo: ColumnInfo, value: Any, precision: TimeUnit): Unit = {
     if (value == null) return
-    val fieldType = field.getType
+    val fieldType = colInfo.fieldType
     try {
-      val isAccessible = field.isAccessible()
-      if (!isAccessible) field.setAccessible(true)
-      if (fieldValueModified(fieldType, field, obj, value, precision) || fieldValueForPrimitivesModified(
-          fieldType,
-          field,
-          obj,
-          value) || fieldValueForPrimitiveWrappersModified(fieldType, field, obj, value)) return
+      if (fieldValueModified(fieldType, colInfo, obj, value, precision) ||
+        fieldValueForPrimitivesModified(fieldType, colInfo, obj, value) ||
+        fieldValueForPrimitiveWrappersModified(fieldType, colInfo, obj, value)) return
       val msg =
-        s"""Class '${obj.getClass.getName}' field '${field.getName}' is from an unsupported type '${field.getType}'."""
+        s"""Class '${obj.getClass.getName}' field '${colInfo.fieldName}' is from an unsupported type '${colInfo.fieldType}'."""
       throw new InfluxDBMapperException(msg)
     } catch {
       case e: ClassCastException =>
         val msg =
-          s"""Class '${obj.getClass.getName}' field '${field.getName}' was defined with a different field type and caused a ClassCastException.
+          s"""Class '${obj.getClass.getName}' field '${colInfo.fieldName}' was defined with a different field type and caused a ClassCastException.
              |The correct type is '${value.getClass.getName}' (current field value: '${value}')""".stripMargin
         throw new InfluxDBMapperException(msg)
     }
   }
 
-  @throws[IllegalArgumentException]
-  @throws[IllegalAccessException]
-  private def fieldValueForPrimitivesModified[T](fieldType: Class[?], field: Field, obj: T, value: Any): Boolean =
+  private def fieldValueForPrimitivesModified[T](
+      fieldType: Class[?],
+      colInfo: ColumnInfo,
+      obj: T,
+      value: Any): Boolean =
     if (classOf[Double].isAssignableFrom(fieldType)) {
-      field.setDouble(obj, value.asInstanceOf[Double].doubleValue)
+      colInfo.varHandle.set(obj, value.asInstanceOf[Double].doubleValue)
       true
     } else if (classOf[Long].isAssignableFrom(fieldType)) {
-      field.setLong(obj, value.asInstanceOf[Double].longValue)
+      colInfo.varHandle.set(obj, value.asInstanceOf[Double].longValue)
       true
     } else if (classOf[Int].isAssignableFrom(fieldType)) {
-      field.setInt(obj, value.asInstanceOf[Double].intValue)
+      colInfo.varHandle.set(obj, value.asInstanceOf[Double].intValue)
       true
     } else if (classOf[Boolean].isAssignableFrom(fieldType)) {
-      field.setBoolean(obj, String.valueOf(value).toBoolean)
+      colInfo.varHandle.set(obj, String.valueOf(value).toBoolean)
       true
     } else {
       false
     }
 
-  @throws[IllegalArgumentException]
-  @throws[IllegalAccessException]
-  private def fieldValueForPrimitiveWrappersModified[T](fieldType: Class[?],
-      field: Field,
+  private def fieldValueForPrimitiveWrappersModified[T](
+      fieldType: Class[?],
+      colInfo: ColumnInfo,
       obj: T,
       value: Any): Boolean =
     if (classOf[java.lang.Double].isAssignableFrom(fieldType)) {
-      field.set(obj, value)
+      colInfo.varHandle.set(obj, value)
       true
     } else if (classOf[java.lang.Long].isAssignableFrom(fieldType)) {
-      field.set(obj, value.asInstanceOf[Double].longValue())
+      colInfo.varHandle.set(obj, value.asInstanceOf[Double].longValue())
       true
     } else if (classOf[Integer].isAssignableFrom(fieldType)) {
-      field.set(obj, value.asInstanceOf[java.lang.Integer])
+      colInfo.varHandle.set(obj, value.asInstanceOf[java.lang.Integer])
       true
     } else if (classOf[java.lang.Boolean].isAssignableFrom(fieldType)) {
-      field.set(obj, value.asInstanceOf[java.lang.Boolean])
+      colInfo.varHandle.set(obj, value.asInstanceOf[java.lang.Boolean])
       true
     } else {
       false
     }
 
-  @throws[IllegalArgumentException]
-  @throws[IllegalAccessException]
-  private def fieldValueModified[T](fieldType: Class[?],
-      field: Field,
+  private def fieldValueModified[T](
+      fieldType: Class[?],
+      colInfo: ColumnInfo,
       obj: T,
       value: Any,
       precision: TimeUnit): Boolean =
     if (classOf[String].isAssignableFrom(fieldType)) {
-      field.set(obj, String.valueOf(value))
+      colInfo.varHandle.set(obj, String.valueOf(value))
       true
     } else if (classOf[Instant].isAssignableFrom(fieldType)) {
-      val instant: Instant = getInstant(field, value, precision)
-      field.set(obj, instant)
+      val instant: Instant = getInstant(colInfo, value, precision)
+      colInfo.varHandle.set(obj, instant)
       true
     } else {
       false
     }
 
-  private def getInstant(field: Field, value: Any, precision: TimeUnit): Instant =
+  private def getInstant(colInfo: ColumnInfo, value: Any, precision: TimeUnit): Instant =
     if (value.isInstanceOf[String]) Instant.from(RFC3339_FORMATTER.parse(String.valueOf(value)))
     else if (value.isInstanceOf[java.lang.Long]) Instant.ofEpochMilli(toMillis(value.asInstanceOf[Long], precision))
     else if (value.isInstanceOf[java.lang.Double])
@@ -267,9 +249,54 @@ private[impl] class PekkoConnectorsResultMapperHelper {
     else if (value.isInstanceOf[java.lang.Integer])
       Instant.ofEpochMilli(toMillis(value.asInstanceOf[Integer].longValue, precision))
     else {
-      throw new InfluxDBMapperException(s"""Unsupported type ${field.getClass} for field ${field.getName}""")
+      throw new InfluxDBMapperException(s"""Unsupported type for field ${colInfo.fieldName}""")
     }
 
   private def toMillis(value: Long, precision: TimeUnit) = TimeUnit.MILLISECONDS.convert(value, precision)
 
+}
+
+@InternalApi
+private[impl] object PekkoConnectorsResultMapperHelper {
+  private val CLASS_COLUMN_CACHE: ConcurrentHashMap[Class[?], ConcurrentMap[String, ColumnInfo]] =
+    new ConcurrentHashMap()
+
+  private val CONSTRUCTOR_CACHE: ConcurrentHashMap[Class[?], MethodHandle] = new ConcurrentHashMap()
+
+  private val LOOKUP = MethodHandles.lookup()
+
+  final class ColumnInfo(
+      val columnName: String,
+      val isTag: Boolean,
+      val fieldType: Class[?],
+      val varHandle: VarHandle,
+      val fieldName: String)
+
+  private def classColumnMap(clazz: Class[?]): ConcurrentMap[String, ColumnInfo] = {
+    val columnMap: ConcurrentMap[String, ColumnInfo] = new ConcurrentHashMap()
+    var c = clazz
+
+    while (c != null) {
+      val fields = c.getDeclaredFields
+      if (fields.nonEmpty) {
+        val privateLookup = MethodHandles.privateLookupIn(c, LOOKUP)
+        for (field <- fields) {
+          val colAnnotation = field.getAnnotation(classOf[Column])
+          if (colAnnotation != null) {
+            val varHandle = privateLookup.findVarHandle(c, field.getName, field.getType)
+            val colInfo = new ColumnInfo(
+              colAnnotation.name(),
+              colAnnotation.tag(),
+              field.getType,
+              varHandle,
+              field.getName)
+            columnMap.put(colAnnotation.name(), colInfo)
+          }
+        }
+      }
+      c = c.getSuperclass
+    }
+
+    columnMap
+  }
 }
