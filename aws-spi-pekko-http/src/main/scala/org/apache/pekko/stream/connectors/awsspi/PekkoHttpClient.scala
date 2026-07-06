@@ -19,6 +19,7 @@ package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.Locale
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
+import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl._
@@ -239,7 +240,8 @@ object PekkoHttpClient {
   lazy val xAmzJson11 = ContentType(MediaType.customBinary("application", "x-amz-json-1.1", Compressible))
   lazy val xAmzCbor11 = ContentType(MediaType.customBinary("application", "x-amz-cbor-1.1", Compressible))
   lazy val formUrlEncoded =
-    ContentType(MediaType.applicationWithOpenCharset("x-www-form-urlencoded"), HttpCharset.custom("utf-8"))
+    ContentType(MediaType.applicationWithOpenCharset("x-www-form-urlencoded"),
+      HttpCharset.custom(StandardCharsets.UTF_8.name))
   lazy val applicationXml = ContentType(MediaType.customBinary("application", "xml", Compressible))
 
   lazy val contentTypeMap: collection.immutable.Map[String, ContentType] = collection.immutable.Map(

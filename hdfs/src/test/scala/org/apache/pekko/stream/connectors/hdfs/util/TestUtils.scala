@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.hdfs.util
 
 import java.io.{ File, InputStream, StringWriter }
 import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
 import java.util
 
 import org.apache.pekko
@@ -38,7 +39,7 @@ sealed trait TestUtils {
 
   def read(stream: InputStream): String = {
     val writer = new StringWriter
-    IOUtils.copy(stream, writer, "UTF-8")
+    IOUtils.copy(stream, writer, StandardCharsets.UTF_8)
     writer.toString
   }
 
