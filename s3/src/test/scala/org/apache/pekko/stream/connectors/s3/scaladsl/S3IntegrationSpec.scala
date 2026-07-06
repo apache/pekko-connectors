@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.s3.scaladsl
 
+import java.nio.charset.StandardCharsets
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.Http
@@ -771,7 +773,7 @@ trait S3IntegrationSpec
           parts.nonEmpty shouldBe true
           uploadIds.size shouldBe 1
           parts.size shouldBe 3
-          parts.map(_.size) shouldBe inputsUntilAbort.map(_.utf8String.getBytes("UTF-8").length)
+          parts.map(_.size) shouldBe inputsUntilAbort.map(_.utf8String.getBytes(StandardCharsets.UTF_8).length)
           // In S3 the etag's are actually an MD5 hash of the contents of the part so we can use this to check
           // that the data has been uploaded correctly and in the right order, see
           // https://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonResponseHeaders.html

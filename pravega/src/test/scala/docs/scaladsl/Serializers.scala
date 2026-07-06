@@ -15,6 +15,7 @@ package docs.scaladsl
 
 import io.pravega.client.stream.Serializer
 import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
 import io.pravega.client.stream.impl.UTF8StringSerializer
 
 object Serializers {
@@ -23,7 +24,7 @@ object Serializers {
 
   implicit val personSerializer: Serializer[Person] = new Serializer[Person] {
     def serialize(x: Person): ByteBuffer = {
-      val name = x.firstname.getBytes("UTF-8")
+      val name = x.firstname.getBytes(StandardCharsets.UTF_8)
       val buff = ByteBuffer.allocate(4 + name.length).putInt(x.id)
       buff.put(ByteBuffer.wrap(name))
       buff.position(0)

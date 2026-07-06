@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.s3.impl
 
 import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.time.Instant
 
 import org.apache.pekko
@@ -60,7 +61,8 @@ import scala.xml.NodeSeq
       case x             =>
         CompleteMultipartUploadResult(
           Try(Uri((x \ "Location").text))
-            .getOrElse(Uri((x \ "Location").text.split("/").map(s => URLEncoder.encode(s, "utf-8")).mkString("/"))),
+            .getOrElse(Uri(
+              (x \ "Location").text.split("/").map(s => URLEncoder.encode(s, StandardCharsets.UTF_8)).mkString("/"))),
           (x \ "Bucket").text,
           (x \ "Key").text,
           (x \ "ETag").text.drop(1).dropRight(1))
