@@ -82,6 +82,7 @@ public class AmqpFlowTest {
         AmqpFlow.createWithConfirmUnordered(settings(reuseByteArray)));
   }
 
+  @SuppressWarnings("unchecked")
   private void shouldEmitConfirmationForPublishedMessages(
       final Flow<WriteMessage, WriteResult, CompletionStage<Done>> flow) {
 
@@ -113,6 +114,7 @@ public class AmqpFlowTest {
     shouldPropagateContext(AmqpFlowWithContext.createWithConfirm(settings(reuseByteArray)));
   }
 
+  @SuppressWarnings("unchecked")
   private void shouldPropagateContext(
       FlowWithContext<WriteMessage, String, WriteResult, String, CompletionStage<Done>>
           flowWithContext) {
@@ -137,6 +139,7 @@ public class AmqpFlowTest {
 
   @ParameterizedTest
   @ValueSource(booleans = {false, true})
+  @SuppressWarnings("unchecked")
   public void shouldPropagatePassThrough(boolean reuseByteArray) {
     Flow<Pair<WriteMessage, String>, Pair<WriteResult, String>, CompletionStage<Done>> flow =
         AmqpFlow.createWithConfirmAndPassThroughUnordered(settings(reuseByteArray));

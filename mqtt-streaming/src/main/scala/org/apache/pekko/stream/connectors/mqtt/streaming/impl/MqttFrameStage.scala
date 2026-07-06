@@ -47,7 +47,7 @@ import scala.collection.immutable
         } else {
           Left(new IllegalStateException(s"Max packet size of $maxPacketSize exceeded with $packetSize"))
         }
-      case _: Left[BufferUnderflow.type, Int] @unchecked =>
+      case Left(_) =>
         Right((bytesToEmit, bytesReceived))
     }
   }

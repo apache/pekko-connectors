@@ -26,6 +26,7 @@ import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Source }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 
+import scala.annotation.nowarn
 import scala.concurrent.{ Future, Promise }
 import scala.util.control.NoStackTrace
 import scala.util.{ Failure, Success }
@@ -300,6 +301,7 @@ final class ActorMqttClientSession(settings: MqttSessionSettings)(implicit syste
       }
       .mapMaterializedValue(_ => NotUsed)
 
+  @nowarn("msg=exhaustive")
   private[streaming] override def eventFlow[A](connectionId: ByteString): EventFlow[A] =
     Flow[ByteString]
       .watch(clientConnector.toClassic)
@@ -654,6 +656,7 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
       }
       .mapMaterializedValue(_ => NotUsed)
 
+  @nowarn("msg=exhaustive")
   override def eventFlow[A](connectionId: ByteString): EventFlow[A] =
     Flow[ByteString]
       .watch(serverConnector.toClassic)

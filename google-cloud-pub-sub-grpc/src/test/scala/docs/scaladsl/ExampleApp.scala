@@ -76,7 +76,7 @@ object ExampleApp {
   }
 
   private def publishSingle(args: List[String])(implicit system: ActorSystem) = {
-    val projectId :: topic :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: topic :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
 
     Source
       .single(publish(projectId, topic)("Hello!"))
@@ -85,7 +85,7 @@ object ExampleApp {
   }
 
   private def publishStream(args: List[String])(implicit system: ActorSystem) = {
-    val projectId :: topic :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: topic :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
 
     Source
       .tick(0.seconds, 1.second, ())
@@ -102,7 +102,7 @@ object ExampleApp {
   }
 
   private def subscribeStream(args: List[String])(implicit system: ActorSystem) = {
-    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
 
     GooglePubSub
       .subscribe(subscribe(projectId, sub), 1.second)
@@ -111,7 +111,7 @@ object ExampleApp {
   }
 
   private def subscribeAutoExtend(args: List[String])(implicit system: ActorSystem) = {
-    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
     val subscriptionFqrs = subFqrs(projectId, sub)
 
     val restartSettings = RestartSettings(
@@ -138,7 +138,7 @@ object ExampleApp {
    * Usage: subscribe-flow-control <projectId> <subscription>
    */
   private def subscribeFlowControl(args: List[String])(implicit system: ActorSystem) = {
-    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
     val subscriptionFqrs = subFqrs(projectId, sub)
 
     val restartSettings = RestartSettings(
@@ -170,7 +170,7 @@ object ExampleApp {
   private def subscribeNackRetry(args: List[String])(implicit system: ActorSystem) = {
     import system.dispatcher
 
-    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
     val subscriptionFqrs = subFqrs(projectId, sub)
 
     val restartSettings = RestartSettings(
@@ -206,7 +206,7 @@ object ExampleApp {
    * Usage: subscribe-dynamic-deadline <projectId> <subscription>
    */
   private def subscribeDynamicDeadline(args: List[String])(implicit system: ActorSystem) = {
-    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
     val subscriptionFqrs = subFqrs(projectId, sub)
 
     val restartSettings = RestartSettings(
@@ -246,7 +246,7 @@ object ExampleApp {
   private def subscribeAdaptive(args: List[String])(implicit system: ActorSystem) = {
     import org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc.AckDeadlineDistribution
 
-    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive")
+    val projectId :: sub :: Nil = args: @nowarn("msg=match may not be exhaustive|more specialized")
     val subscriptionFqrs = subFqrs(projectId, sub)
 
     val restartSettings = RestartSettings(

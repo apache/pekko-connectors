@@ -71,7 +71,7 @@ class InfluxDbSourceSpec
     val query = new Query("SELECT man() FROM invalid", DatabaseName)
 
     val result = InfluxDbSource(influxDB, query) // .runWith(Sink.seq)
-      .recover {
+      .recover[Any] {
         case e: InfluxDBException => e.getMessage
       }
       .runWith(Sink.seq)
@@ -98,7 +98,7 @@ class InfluxDbSourceSpec
 
     val result = InfluxDbSource
       .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) // .runWith(Sink.seq)
-      .recover {
+      .recover[Any] {
         case e: InfluxDBException => e.getMessage
       }
       .runWith(Sink.seq)
@@ -112,7 +112,7 @@ class InfluxDbSourceSpec
 
     val result = InfluxDbSource
       .typed(classOf[InfluxDbSourceCpu], InfluxDbReadSettings.Default, influxDB, query) // .runWith(Sink.seq)
-      .recover {
+      .recover[Any] {
         case e: InfluxDBException => e.getMessage
       }
       .runWith(Sink.seq)

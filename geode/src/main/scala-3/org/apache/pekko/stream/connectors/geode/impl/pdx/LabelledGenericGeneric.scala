@@ -19,6 +19,7 @@ package org.apache.pekko.stream.connectors.geode.impl.pdx
 
 import org.apache.pekko.annotation.InternalApi
 
+import scala.annotation.nowarn
 import scala.deriving.Mirror
 
 @InternalApi
@@ -53,6 +54,7 @@ private[pekko] object LabelledGeneric {
 
   inline def apply[A](using l: LabelledGeneric[A]): LabelledGeneric.Aux[A, l.Repr] = l
 
+  @nowarn("msg=New anonymous class definition will be duplicated")
   transparent inline given productInst[A <: Product](
       using m: Mirror.ProductOf[A])
       : LabelledGeneric.Aux[A, ZipWith[m.MirroredElemLabels, m.MirroredElemTypes, FieldType]] =

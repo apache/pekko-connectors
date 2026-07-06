@@ -13,10 +13,6 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm
 
-import org.apache.pekko
-
-import java.util.Objects
-
 final class FcmSettings private (
     val isTest: Boolean,
     val maxConcurrentConnections: Int) {

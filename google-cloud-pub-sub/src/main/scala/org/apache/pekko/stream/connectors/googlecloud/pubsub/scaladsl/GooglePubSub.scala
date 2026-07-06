@@ -15,8 +15,6 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.scaladsl
 
 import org.apache.pekko
 import pekko.actor.Cancellable
-import pekko.stream.Attributes
-import pekko.stream.connectors.google.GoogleAttributes
 import pekko.stream.connectors.googlecloud.pubsub._
 import pekko.stream.connectors.googlecloud.pubsub.impl._
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
