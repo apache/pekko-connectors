@@ -848,7 +848,7 @@ object GCStorageWiremockBase {
     server
   }
 
-  def config(proxyPort: Int) =
+  private def config(proxyPort: Int) =
     ConfigFactory.parseString(s"""
     |${GoogleSettings.ConfigPath} {
     |  credentials {
