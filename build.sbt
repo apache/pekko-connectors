@@ -250,8 +250,8 @@ lazy val googleCloudBigQueryStorage = pekkoConnectorProject(
   Compile / sources := (Compile / sources).value.filterNot { f =>
     f.getPath.replace('\\', '/').contains("/pekko-grpc/main/com/google/protobuf")
   },
-  Compile / PB.targets := Seq(
-    scalapb.gen(scala3Sources = Common.isScala3.value) -> (Compile / sourceManaged).value / "scalapb"
+  Compile / pekkoGrpcCodeGeneratorSettings ++= (
+    if (Common.isScala3.value) Seq("scala3_sources") else Seq.empty
   ),
   Test / fork := true,
   Test / javaOptions ++= Seq("--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED")
@@ -285,8 +285,8 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
       previousFilter.accept(f) ||
       (Common.isScala3Next.value && f.getAbsolutePath.replace('\\', '/').contains("grpc/reflection/v1alpha")))
   },
-  Compile / PB.targets := Seq(
-    scalapb.gen(scala3Sources = Common.isScala3.value) -> (Compile / sourceManaged).value / "scalapb"
+  Compile / pekkoGrpcCodeGeneratorSettings ++= (
+    if (Common.isScala3.value) Seq("scala3_sources") else Seq.empty
   ),
   // the following is needed to exclude the gRPC generated sources for protobuf-java from the sources,
   // they cause Scaladoc tool fails - https://github.com/apache/pekko-connectors/issues/1440
