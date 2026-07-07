@@ -202,7 +202,7 @@ object Dependencies {
       "com.google.jimfs" % "jimfs" % "1.3.1" % Test))
 
   val avro4sVersion: Def.Initialize[String] = Def.setting {
-    if (Common.isScala3.value) "5.0.9" else "4.1.1"
+    if (Common.isScala3.value) "5.0.15" else "4.1.2"
   }
 
   val AvroParquet = Seq(
