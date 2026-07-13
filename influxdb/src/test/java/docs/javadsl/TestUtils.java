@@ -17,7 +17,9 @@ import static docs.javadsl.TestConstants.INFLUXDB_URL;
 import static docs.javadsl.TestConstants.PASSWORD;
 import static docs.javadsl.TestConstants.USERNAME;
 
-import java.lang.reflect.Constructor;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -40,17 +42,27 @@ public class TestUtils {
     // #init-client
   }
 
-  public static void populateDatabase(InfluxDB influxDB, Class<?> clazz) throws Exception {
+  public static void populateDatabase(InfluxDB influxDB, Class<?> clazz) throws Throwable {
     InfluxDBMapper influxDBMapper = new InfluxDBMapper(influxDB);
-    Constructor<?> cons =
-        clazz.getConstructor(
-            Instant.class, String.class, String.class, Double.class, Boolean.class, Long.class);
+    MethodHandle cons =
+        MethodHandles.privateLookupIn(clazz, MethodHandles.lookup())
+            .findConstructor(
+                clazz,
+                MethodType.methodType(
+                    Void.TYPE,
+                    Instant.class,
+                    String.class,
+                    String.class,
+                    Double.class,
+                    Boolean.class,
+                    Long.class));
     Object firstCore =
-        cons.newInstance(
+        cons.invokeWithArguments(
             Instant.now().minusSeconds(1000), "local_1", "eu-west-2", 1.4d, true, 123l);
     influxDBMapper.save(firstCore);
     Object secondCore =
-        cons.newInstance(Instant.now().minusSeconds(500), "local_2", "eu-west-2", 1.4d, true, 123l);
+        cons.invokeWithArguments(
+            Instant.now().minusSeconds(500), "local_2", "eu-west-2", 1.4d, true, 123l);
     influxDBMapper.save(secondCore);
   }
 

@@ -26,6 +26,7 @@ import org.mockito.Mockito._
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 
+import java.lang.invoke.MethodHandles
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
@@ -511,11 +512,12 @@ class JmsConnectorsSpec extends JmsSpec {
 
       // make sure connection was closed
       eventually {
-        val isClosedField =
-          connectionFactory.cachedConnection.getClass.getDeclaredFields.filter(x => x.getName == "closed").head
-        isClosedField.setAccessible(true)
+        val conn = connectionFactory.cachedConnection
+        val connClass = conn.getClass
+        val lookup = MethodHandles.privateLookupIn(connClass, MethodHandles.lookup())
+        val isClosedHandle = lookup.findVarHandle(connClass, "closed", classOf[Boolean])
 
-        val isClosedValue = isClosedField.get(connectionFactory.cachedConnection)
+        val isClosedValue = isClosedHandle.get(conn)
         isClosedValue shouldBe true
       }
     }
@@ -535,11 +537,12 @@ class JmsConnectorsSpec extends JmsSpec {
       completionFuture.failed.futureValue shouldBe a[RuntimeException]
       // make sure connection was closed
       eventually {
-        val isClosedField =
-          connectionFactory.cachedConnection.getClass.getDeclaredFields.filter(x => x.getName == "closed").head
-        isClosedField.setAccessible(true)
+        val conn = connectionFactory.cachedConnection
+        val connClass = conn.getClass
+        val lookup = MethodHandles.privateLookupIn(connClass, MethodHandles.lookup())
+        val isClosedHandle = lookup.findVarHandle(connClass, "closed", classOf[Boolean])
 
-        val isClosedValue = isClosedField.get(connectionFactory.cachedConnection)
+        val isClosedValue = isClosedHandle.get(conn)
         isClosedValue shouldBe true
       }
     }

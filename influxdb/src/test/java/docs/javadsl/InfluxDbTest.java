@@ -102,7 +102,7 @@ public class InfluxDbTest {
   }
 
   @BeforeEach
-  public void setUp() throws Exception {
+  public void setUp() throws Throwable {
     populateDatabase(influxDB, InfluxDbCpu.class);
   }
 
