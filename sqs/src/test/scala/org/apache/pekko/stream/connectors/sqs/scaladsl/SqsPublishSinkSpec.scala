@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.sqs.scaladsl
 
 import java.util.UUID
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
-import java.util.function.Supplier
 
 import org.apache.pekko
 import pekko.Done
@@ -54,9 +53,7 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
 
     when(sqsClient.sendMessage(any[SendMessageRequest]()))
       .thenReturn(
-        CompletableFuture.supplyAsync[SendMessageResponse](new Supplier[SendMessageResponse] {
-          override def get(): SendMessageResponse = throw new RuntimeException("Fake client error")
-        }))
+        CompletableFuture.supplyAsync[SendMessageResponse](() => throw new RuntimeException("Fake client error")))
 
     val (probe, future) = TestSource[String]().toMat(SqsPublishSink("notused"))(Keep.both).run()
     probe.sendNext("notused").sendComplete()
@@ -221,9 +218,8 @@ class SqsPublishSinkSpec extends AnyFlatSpec with Matchers with DefaultTestConte
     implicit val sqsClient: SqsAsyncClient = mock[SqsAsyncClient]
     when(
       sqsClient.sendMessageBatch(any[SendMessageBatchRequest]())).thenReturn(
-      CompletableFuture.supplyAsync[SendMessageBatchResponse](new Supplier[SendMessageBatchResponse] {
-        override def get(): SendMessageBatchResponse = throw new RuntimeException("Fake client error")
-      }))
+      CompletableFuture.supplyAsync[SendMessageBatchResponse](() => throw new RuntimeException("Fake client error"))
+    )
 
     val settings = SqsPublishGroupedSettings().withMaxBatchSize(5)
     val (probe, future) = TestSource[String]().toMat(SqsPublishSink.grouped("notused", settings))(Keep.both).run()
