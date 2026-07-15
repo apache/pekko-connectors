@@ -472,14 +472,8 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
       val connectionFinished = Promise[Done]()
       val cancellable =
         connectTimeout match {
-          case d: FiniteDuration =>
-            Some(system.scheduler.scheduleOnce(d,
-              new Runnable {
-                override def run(): Unit =
-                  channel.close()
-              }))
-          case _ =>
-            None
+          case d: FiniteDuration => Some(system.scheduler.scheduleOnce(d, () => channel.close()))
+          case _                 => None
         }
       val (context, connectionFlow) = sendReceiveStructures(sel, receiveBufferSize, sendBufferSize, halfClose)
       val ra = new JnrUnixSocketAddress(remoteAddress.path.toFile)

@@ -14,7 +14,7 @@
 package docs.scaladsl
 
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
-import java.util.function.Supplier
+
 import org.apache.pekko
 import pekko.Done
 import pekko.stream.connectors.sqs.scaladsl._
@@ -279,9 +279,8 @@ class SqsAckSpec extends AnyFlatSpec with Matchers with DefaultTestContext with 
 
     when(mockAwsSqsClient.deleteMessageBatch(any[DeleteMessageBatchRequest]))
       .thenReturn(
-        CompletableFuture.supplyAsync[DeleteMessageBatchResponse](new Supplier[DeleteMessageBatchResponse] {
-          override def get(): DeleteMessageBatchResponse = throw new RuntimeException("Fake client error")
-        }))
+        CompletableFuture.supplyAsync[DeleteMessageBatchResponse](() =>
+          throw new RuntimeException("Fake client error")))
 
     val future = Source(messages)
       .take(10)

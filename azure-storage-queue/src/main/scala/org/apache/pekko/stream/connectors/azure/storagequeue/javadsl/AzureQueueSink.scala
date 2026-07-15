@@ -13,15 +13,15 @@
 
 package org.apache.pekko.stream.connectors.azure.storagequeue.javadsl
 
-import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
-import org.apache.pekko
-import pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSinkFunctions
-import pekko.stream.javadsl.Sink
-import pekko.Done
 import java.util.concurrent.CompletionStage
 import java.util.function.Supplier
 
+import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
+import org.apache.pekko
+import pekko.Done
 import pekko.stream.connectors.azure.storagequeue.DeleteOrUpdateMessage
+import pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSinkFunctions
+import pekko.stream.javadsl.Sink
 
 object AzureQueueSink {
 

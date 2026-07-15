@@ -13,14 +13,14 @@
 
 package org.apache.pekko.stream.connectors.azure.storagequeue.javadsl
 
-import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
-import org.apache.pekko
-import pekko.stream.connectors.azure.storagequeue.AzureQueueSourceSettings
-import pekko.stream.javadsl.Source
-import pekko.NotUsed
 import java.util.function.Supplier
 
+import com.microsoft.azure.storage.queue.{ CloudQueue, CloudQueueMessage }
+import org.apache.pekko
+import pekko.NotUsed
+import pekko.stream.connectors.azure.storagequeue.AzureQueueSourceSettings
 import pekko.stream.connectors.azure.storagequeue.impl.AzureQueueSourceStage
+import pekko.stream.javadsl.Source
 
 object AzureQueueSource {
 
