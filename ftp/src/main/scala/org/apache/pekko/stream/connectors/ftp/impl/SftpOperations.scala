@@ -138,6 +138,7 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
       offset: Long,
       maxUnconfirmedReads: Int): Try[InputStream] =
     Try {
+      CommonFtpOperations.validatePath(name, "name")
       val remoteFile = handler.open(name, java.util.EnumSet.of(OpenMode.READ))
       val is = maxUnconfirmedReads match {
         case m if m > 1 =>
@@ -169,6 +170,7 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
 
   def storeFileOutputStream(name: String, handler: Handler, append: Boolean): Try[OutputStream] =
     Try {
+      CommonFtpOperations.validatePath(name, "name")
       import OpenMode._
       val openModes =
         if (append) java.util.EnumSet.of(WRITE, CREAT, APPEND)
@@ -208,9 +210,14 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
     }
   }
 
-  def move(fromPath: String, destinationPath: String, handler: Handler): Unit =
+  def move(fromPath: String, destinationPath: String, handler: Handler): Unit = {
+    CommonFtpOperations.validatePath(fromPath, "fromPath")
+    CommonFtpOperations.validatePath(destinationPath, "destinationPath")
     handler.rename(fromPath, destinationPath)
+  }
 
-  def remove(path: String, handler: Handler): Unit =
+  def remove(path: String, handler: Handler): Unit = {
+    CommonFtpOperations.validatePath(path, "path")
     handler.rm(path)
+  }
 }

@@ -17,6 +17,33 @@ import java.time.Instant
 import java.time.temporal.ChronoField
 import java.util.Objects
 
+/**
+ * INTERNAL API
+ *
+ * Shared validation for path traversal sequences (Zip Slip / Tar Slip).
+ */
+private[file] object PathTraversalValidation {
+
+  /**
+   * Validate that a path segment does not contain traversal sequences.
+   * Rejects segments containing `..` as a path component, and absolute paths.
+   *
+   * @param value     the path segment to validate
+   * @param fieldName the name of the field for error messages
+   * @throws IllegalArgumentException if the segment contains traversal sequences
+   */
+  def validate(value: String, fieldName: String): Unit = {
+    require(value != null, s"$fieldName must not be null")
+    // Reject absolute paths
+    require(!value.startsWith("/"), s"$fieldName must not be an absolute path: '$value'")
+    // Reject path traversal sequences: ".." as a standalone segment
+    val segments = value.split('/')
+    require(
+      !segments.contains(".."),
+      s"$fieldName must not contain path traversal sequences: '$value'")
+  }
+}
+
 final class ArchiveMetadata private (
     val filePath: String)
 
@@ -26,6 +53,7 @@ object ArchiveMetadata {
 }
 
 final case class ZipArchiveMetadata(name: String) {
+  PathTraversalValidation.validate(name, "Zip entry name")
   def getName() = name
 }
 object ZipArchiveMetadata {
@@ -129,9 +157,11 @@ object TarArchiveMetadata {
       require(
         value.length <= 154,
         "File path prefix must be between 1 and 154 characters long")
+      PathTraversalValidation.validate(value, "File path prefix")
     }
     require(filePathName.length >= 0 && filePathName.length <= 99,
       s"File path name must be between 0 and 99 characters long, was ${filePathName.length}")
+    PathTraversalValidation.validate(filePathName, "File path name")
 
     new TarArchiveMetadata(filePathPrefix,
       filePathName,
