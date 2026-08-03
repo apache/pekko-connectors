@@ -242,7 +242,11 @@ object ForwardProxy {
       else
         None
 
-    ForwardProxy(scheme, c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem)
+    val minTlsVersion =
+      if (c.hasPath("min-tls-version")) c.getString("min-tls-version")
+      else "TLSv1.2"
+
+    ForwardProxy(scheme, c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem, minTlsVersion)
   }
 
   def create(c: Config, system: ClassicActorSystemProvider) =
@@ -252,9 +256,10 @@ object ForwardProxy {
       host: String,
       port: Int,
       credentials: Option[BasicHttpCredentials],
-      trustPem: Option[String])(implicit system: ClassicActorSystemProvider): ForwardProxy = {
+      trustPem: Option[String],
+      minTlsVersion: String = "TLSv1.2")(implicit system: ClassicActorSystemProvider): ForwardProxy = {
     ForwardProxy(
-      trustPem.fold(Http(system.classicSystem).defaultClientHttpsContext)(ForwardProxyHttpsContext(_)),
+      trustPem.fold(Http(system.classicSystem).defaultClientHttpsContext)(ForwardProxyHttpsContext(_, minTlsVersion)),
       ForwardProxyPoolSettings(scheme, host, port, credentials)(system.classicSystem))
   }
 
@@ -265,6 +270,15 @@ object ForwardProxy {
       trustPem: Optional[String],
       system: ClassicActorSystemProvider) =
     apply(scheme, host, port, credentials.toScala.asInstanceOf[Option[BasicHttpCredentials]], trustPem.toScala)(system)
+
+  def create(scheme: String,
+      host: String,
+      port: Int,
+      credentials: Optional[jm.headers.BasicHttpCredentials],
+      trustPem: Optional[String],
+      minTlsVersion: String,
+      system: ClassicActorSystemProvider) =
+    apply(scheme, host, port, credentials.toScala.asInstanceOf[Option[BasicHttpCredentials]], trustPem.toScala, minTlsVersion)(system)
 
   def create(connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings) =
     apply(connectionContext.asInstanceOf[HttpsConnectionContext], poolSettings.asInstanceOf[ConnectionPoolSettings])

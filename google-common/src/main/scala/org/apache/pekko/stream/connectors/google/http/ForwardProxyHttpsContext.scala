@@ -25,10 +25,13 @@ import javax.net.ssl.{ SSLContext, TrustManagerFactory }
 @InternalApi
 private[google] object ForwardProxyHttpsContext {
 
-  def apply(trustPemPath: String): HttpsConnectionContext = {
+  private val TlsVersions = Map(
+    "TLSv1.2" -> Array("TLSv1.2", "TLSv1.3"),
+    "TLSv1.3" -> Array("TLSv1.3"))
+
+  def apply(trustPemPath: String, minTlsVersion: String = "TLSv1.2"): HttpsConnectionContext = {
     val certificate = x509Certificate(trustPemPath: String)
     val sslContext = SSLContext.getInstance("TLS")
-    sslContext.getDefaultSSLParameters.setProtocols(Array("TLSv1.2", "TLSv1.3"))
 
     val alias = certificate.getIssuerX500Principal.getName
     val trustStore = KeyStore.getInstance(KeyStore.getDefaultType)
@@ -39,6 +42,9 @@ private[google] object ForwardProxyHttpsContext {
     tmf.init(trustStore)
     val trustManagers = tmf.getTrustManagers
     sslContext.init(null, trustManagers, null)
+    val protocols = TlsVersions.getOrElse(minTlsVersion,
+      throw new IllegalArgumentException(s"Unsupported TLS version: $minTlsVersion. Minimum supported is TLSv1.2. Valid values: ${TlsVersions.keys.mkString(", ")}"))
+    sslContext.getDefaultSSLParameters.setProtocols(protocols)
     ConnectionContext.httpsClient(sslContext)
   }
 

@@ -171,7 +171,10 @@ object ForwardProxy {
         Some(ForwardProxyTrustPem(c.getString("trust-pem")))
       else
         None
-    ForwardProxy(c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem)
+    val minTlsVersion =
+      if (c.hasPath("min-tls-version")) c.getString("min-tls-version")
+      else "TLSv1.2"
+    ForwardProxy(c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem, minTlsVersion)
   }
 
   /**
@@ -182,8 +185,9 @@ object ForwardProxy {
   def apply(host: String,
       port: Int,
       credentials: Option[ForwardProxyCredentials],
-      trustPem: Option[ForwardProxyTrustPem]) =
-    new ForwardProxy(host, port, credentials, trustPem)
+      trustPem: Option[ForwardProxyTrustPem],
+      minTlsVersion: String = "TLSv1.2") =
+    new ForwardProxy(host, port, credentials, trustPem, minTlsVersion)
 
   /**
    * Java API.
@@ -216,17 +220,20 @@ object ForwardProxy {
 final case class ForwardProxy @InternalApi private (host: String,
     port: Int,
     credentials: Option[ForwardProxyCredentials],
-    trustPem: Option[ForwardProxyTrustPem]) {
+    trustPem: Option[ForwardProxyTrustPem],
+    minTlsVersion: String = "TLSv1.2") {
 
   def getHost = host
   def getPort = port
   def getCredentials = credentials
   def getForwardProxyTrustPem = trustPem
+  def getMinTlsVersion = minTlsVersion
 
   def withHost(host: String) = copy(host = host)
   def withPort(port: Int) = copy(port = port)
   def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
   def withTrustPem(trustPem: ForwardProxyTrustPem) = copy(trustPem = Option(trustPem))
+  def withMinTlsVersion(minTlsVersion: String) = copy(minTlsVersion = minTlsVersion)
 }
 
 object ForwardProxyCredentials {

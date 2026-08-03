@@ -31,20 +31,23 @@ private[pushkit] object ForwardProxyHttpsContext {
 
   val X509 = "X509"
 
+  private val TlsVersions = Map(
+    "TLSv1.2" -> Array("TLSv1.2", "TLSv1.3"),
+    "TLSv1.3" -> Array("TLSv1.3"))
+
   implicit class ForwardProxyHttpsContext(forwardProxy: ForwardProxy) {
 
     def httpsContext(system: ActorSystem): HttpsConnectionContext = {
       forwardProxy.trustPem match {
-        case Some(trustPem) => createHttpsContext(trustPem)
+        case Some(trustPem) => createHttpsContext(trustPem, forwardProxy.minTlsVersion)
         case None           => Http()(system).defaultClientHttpsContext
       }
     }
   }
 
-  private def createHttpsContext(trustPem: ForwardProxyTrustPem) = {
+  private def createHttpsContext(trustPem: ForwardProxyTrustPem, minTlsVersion: String) = {
     val certificate = x509Certificate(trustPem)
     val sslContext = SSLContext.getInstance("TLS")
-    sslContext.getDefaultSSLParameters.setProtocols(Array("TLSv1.2", "TLSv1.3"))
 
     val alias = certificate.getIssuerX500Principal.getName
     val trustStore = KeyStore.getInstance(KeyStore.getDefaultType)
@@ -55,6 +58,9 @@ private[pushkit] object ForwardProxyHttpsContext {
     tmf.init(trustStore)
     val trustManagers = tmf.getTrustManagers
     sslContext.init(null, trustManagers, null)
+    val protocols = TlsVersions.getOrElse(minTlsVersion,
+      throw new IllegalArgumentException(s"Unsupported TLS version: $minTlsVersion. Minimum supported is TLSv1.2. Valid values: ${TlsVersions.keys.mkString(", ")}"))
+    sslContext.getDefaultSSLParameters.setProtocols(protocols)
     ConnectionContext.httpsClient(sslContext)
   }
 
