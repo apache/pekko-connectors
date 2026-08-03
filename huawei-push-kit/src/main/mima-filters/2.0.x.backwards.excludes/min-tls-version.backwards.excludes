@@ -15,4 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.stream.connectors.google.ResumableUpload$Chunk$")
+# Add min-tls-version setting
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.huawei.pushkit.ForwardProxy.unapply")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.huawei.pushkit.ForwardProxy.apply")
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.huawei.pushkit.ForwardProxy.copy")
