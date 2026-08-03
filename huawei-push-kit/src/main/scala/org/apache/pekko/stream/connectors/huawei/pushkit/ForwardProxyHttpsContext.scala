@@ -29,7 +29,6 @@ import javax.net.ssl.{ SSLContext, TrustManagerFactory }
 @InternalApi
 private[pushkit] object ForwardProxyHttpsContext {
 
-  val SSL = "SSL"
   val X509 = "X509"
 
   implicit class ForwardProxyHttpsContext(forwardProxy: ForwardProxy) {
@@ -44,7 +43,8 @@ private[pushkit] object ForwardProxyHttpsContext {
 
   private def createHttpsContext(trustPem: ForwardProxyTrustPem) = {
     val certificate = x509Certificate(trustPem)
-    val sslContext = SSLContext.getInstance(SSL)
+    val sslContext = SSLContext.getInstance("TLS")
+    sslContext.getDefaultSSLParameters.setProtocols(Array("TLSv1.2", "TLSv1.3"))
 
     val alias = certificate.getIssuerX500Principal.getName
     val trustStore = KeyStore.getInstance(KeyStore.getDefaultType)

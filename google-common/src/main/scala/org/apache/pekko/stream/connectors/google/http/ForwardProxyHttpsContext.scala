@@ -27,7 +27,8 @@ private[google] object ForwardProxyHttpsContext {
 
   def apply(trustPemPath: String): HttpsConnectionContext = {
     val certificate = x509Certificate(trustPemPath: String)
-    val sslContext = SSLContext.getInstance("SSL")
+    val sslContext = SSLContext.getInstance("TLS")
+    sslContext.getDefaultSSLParameters.setProtocols(Array("TLSv1.2", "TLSv1.3"))
 
     val alias = certificate.getIssuerX500Principal.getName
     val trustStore = KeyStore.getInstance(KeyStore.getDefaultType)
