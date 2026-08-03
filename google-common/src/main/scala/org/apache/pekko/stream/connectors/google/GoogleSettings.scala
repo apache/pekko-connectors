@@ -271,6 +271,7 @@ object ForwardProxy {
       system: ClassicActorSystemProvider) =
     apply(scheme, host, port, credentials.toScala.asInstanceOf[Option[BasicHttpCredentials]], trustPem.toScala)(system)
 
+  /** @since 2.0.0 */
   def create(scheme: String,
       host: String,
       port: Int,

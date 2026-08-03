@@ -227,12 +227,16 @@ final case class ForwardProxy @InternalApi private (host: String,
   def getPort = port
   def getCredentials = credentials
   def getForwardProxyTrustPem = trustPem
+
+  /** @since 2.0.0 */
   def getMinTlsVersion = minTlsVersion
 
   def withHost(host: String) = copy(host = host)
   def withPort(port: Int) = copy(port = port)
   def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
   def withTrustPem(trustPem: ForwardProxyTrustPem) = copy(trustPem = Option(trustPem))
+
+  /** @since 2.0.0 */
   def withMinTlsVersion(minTlsVersion: String) = copy(minTlsVersion = minTlsVersion)
 }
 
