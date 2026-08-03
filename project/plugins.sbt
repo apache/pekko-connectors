@@ -18,7 +18,7 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-bill-of-materials" % "1.1.1")
 addSbtPlugin("com.github.sbt" % "sbt-header" % "5.11.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.2")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.6")
-addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.12.0")
+addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.13.1")
 
 // docs
 addSbtPlugin("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.1")
