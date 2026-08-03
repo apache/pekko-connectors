@@ -13,7 +13,7 @@ addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.35")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.2.0")
 addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.4.7")
 addSbtPlugin("com.github.sbt" % "sbt-license-report" % "1.10.0")
-addSbtPlugin("com.lightbend.sbt" % "sbt-bill-of-materials" % "1.0.2")
+addSbtPlugin("com.lightbend.sbt" % "sbt-bill-of-materials" % "1.1.1")
 // discipline
 addSbtPlugin("com.github.sbt" % "sbt-header" % "5.11.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.2")
