@@ -53,7 +53,13 @@ private[connectors] object ServiceAccountCredentials {
     apply(projectId, clientEmail, privateKey, scopes)
   }
 
-  final case class ServiceAccountCredentialsFile(project_id: String, client_email: String, private_key: String)
+  final case class ServiceAccountCredentialsFile(project_id: String, client_email: String, private_key: String) {
+    override def toString: String =
+      "ServiceAccountCredentialsFile(" +
+      s"project_id=$project_id," +
+      s"client_email=$client_email," +
+      s"private_key=*****)"
+  }
   implicit val serviceAccountCredentialsFormat: RootJsonFormat[ServiceAccountCredentialsFile] = jsonFormat3(
     ServiceAccountCredentialsFile.apply)
 }

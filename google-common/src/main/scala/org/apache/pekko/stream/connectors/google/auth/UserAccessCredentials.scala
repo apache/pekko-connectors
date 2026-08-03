@@ -59,7 +59,14 @@ private[connectors] object UserAccessCredentials {
   final case class UserAccessCredentialsFile(client_id: String,
       client_secret: String,
       refresh_token: String,
-      quota_project_id: String)
+      quota_project_id: String) {
+    override def toString: String =
+      "UserAccessCredentialsFile(" +
+      s"client_id=$client_id," +
+      s"client_secret=*****," +
+      s"refresh_token=*****," +
+      s"quota_project_id=$quota_project_id)"
+  }
   implicit val userAccessCredentialsFormat: RootJsonFormat[UserAccessCredentialsFile] = jsonFormat4(
     UserAccessCredentialsFile.apply)
 }

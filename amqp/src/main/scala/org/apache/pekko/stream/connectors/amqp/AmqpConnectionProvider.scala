@@ -53,10 +53,12 @@ final class AmqpUriConnectionProvider private (val uri: String) extends AmqpConn
     factory.newConnection
   }
 
-  override def toString: String =
+  override def toString: String = {
+    val maskedUri = uri.replaceAll("://([^@]*)@", "://*****@")
     "AmqpUriConnectionProvider(" +
-    s"uri=$uri" +
+    s"uri=$maskedUri" +
     ")"
+  }
 }
 
 object AmqpUriConnectionProvider {

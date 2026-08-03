@@ -31,7 +31,7 @@ final class Credentials private (
   override def toString =
     "Credentials(" +
     s"username=$username," +
-    s"password=${"*" * password.length}" +
+    s"password=*****" +
     ")"
 
   override def equals(other: Any): Boolean = other match {

@@ -143,6 +143,14 @@ final case class HmsSettings @InternalApi private (
     maxConcurrentConnections: Int,
     forwardProxy: Option[ForwardProxy]) {
 
+  override def toString: String =
+    "HmsSettings(" +
+    s"appId=$appId," +
+    s"appSecret=*****," +
+    s"test=$test," +
+    s"maxConcurrentConnections=$maxConcurrentConnections," +
+    s"forwardProxy=$forwardProxy)"
+
   def getAppId = appId
   def getAppSecret = appSecret
   def isTest = test
@@ -242,6 +250,11 @@ object ForwardProxyCredentials {
 }
 
 final case class ForwardProxyCredentials @InternalApi private (username: String, password: String) {
+
+  override def toString: String =
+    "ForwardProxyCredentials(" +
+    s"username=$username," +
+    s"password=*****)"
 
   def getUsername: String = username
   def getPassword: String = password
