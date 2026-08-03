@@ -59,7 +59,8 @@ private[pushkit] object ForwardProxyHttpsContext {
     val trustManagers = tmf.getTrustManagers
     sslContext.init(null, trustManagers, null)
     val protocols = TlsVersions.getOrElse(minTlsVersion,
-      throw new IllegalArgumentException(s"Unsupported TLS version: $minTlsVersion. Minimum supported is TLSv1.2. Valid values: ${TlsVersions.keys.mkString(", ")}"))
+      throw new IllegalArgumentException(
+        s"Unsupported TLS version: $minTlsVersion. Minimum supported is TLSv1.2. Valid values: ${TlsVersions.keys.mkString(", ")}"))
     sslContext.getDefaultSSLParameters.setProtocols(protocols)
     ConnectionContext.httpsClient(sslContext)
   }
