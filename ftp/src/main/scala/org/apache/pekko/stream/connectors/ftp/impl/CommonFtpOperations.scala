@@ -76,21 +76,26 @@ private[ftp] trait CommonFtpOperations {
     retrieveFileInputStream(name, handler, 0L)
 
   def retrieveFileInputStream(name: String, handler: Handler, offset: Long): Try[InputStream] = Try {
+    CommonFtpOperations.validatePath(name, "name")
     handler.setRestartOffset(offset)
     val is = handler.retrieveFileStream(name)
     if (is != null) is else throw new IOException(s"$name: No such file or directory")
   }
 
   def storeFileOutputStream(name: String, handler: Handler, append: Boolean): Try[OutputStream] = Try {
+    CommonFtpOperations.validatePath(name, "name")
     val os = if (append) handler.appendFileStream(name) else handler.storeFileStream(name)
     if (os != null) os else throw new IOException(s"Could not write to $name")
   }
 
   def move(fromPath: String, destinationPath: String, handler: Handler): Unit = {
+    CommonFtpOperations.validatePath(fromPath, "fromPath")
+    CommonFtpOperations.validatePath(destinationPath, "destinationPath")
     if (!handler.rename(fromPath, destinationPath)) throw new IOException(s"Could not move $fromPath")
   }
 
   def remove(path: String, handler: Handler): Unit = {
+    CommonFtpOperations.validatePath(path, "path")
     if (!handler.deleteFile(path)) throw new IOException(s"Could not delete $path")
   }
 
@@ -108,10 +113,41 @@ private[ftp] trait CommonFtpOperations {
 }
 
 private[ftp] object CommonFtpOperations {
-  def concatPath(path: String, name: String): String =
-    if (path.endsWith("/")) {
+
+  /**
+   * Validate that a path does not contain traversal sequences (`..`).
+   * Rejects null values and paths containing `..` as a path segment.
+   *
+   * @param path      the path to validate
+   * @param fieldName the name of the field for error messages
+   * @throws IllegalArgumentException if the path contains traversal sequences
+   */
+  def validatePath(path: String, fieldName: String): Unit = {
+    require(path != null, s"$fieldName must not be null")
+    val segments = path.split('/')
+    require(!segments.contains(".."), s"$fieldName must not contain path traversal sequences: '$path'")
+  }
+
+  def concatPath(path: String, name: String): String = {
+    validatePath(name, "name")
+    require(!name.startsWith("/"), s"name must not be an absolute path: '$name'")
+
+    val result = if (path.endsWith("/")) {
       path ++ name
     } else {
       s"$path/$name"
     }
+
+    // Validate the normalized result doesn't escape the base path
+    val normalized = java.nio.file.Paths.get(result).normalize().toString
+    val normalizedBase = java.nio.file.Paths.get(path).normalize().toString
+    // On Windows, Paths.get normalizes to backslash; compare with forward-slash versions
+    val normalizedFwd = normalized.replace('\\', '/')
+    val normalizedBaseFwd = normalizedBase.replace('\\', '/')
+    require(
+      normalizedFwd.startsWith(normalizedBaseFwd),
+      s"concatPath result '$result' escapes base path '$path' after normalization")
+
+    result
+  }
 }
