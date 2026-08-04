@@ -43,6 +43,7 @@ object Dependencies {
   val protobufJavaVersion = "4.35.1"
   val hoverflyVersion = "0.20.2"
   val scalaCheckVersion = "1.19.0"
+  val HadoopVersion = "3.4.3"
 
   // Legacy versions support Slf4J v1 for compatibility with older libs
   val Slf4jVersion = "2.0.18"
@@ -209,8 +210,8 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.17.1",
       "org.apache.avro" % "avro" % AvroVersion,
-      ("org.apache.hadoop" % "hadoop-client" % "3.3.6" % Test).exclude("log4j", "log4j"),
-      ("org.apache.hadoop" % "hadoop-common" % "3.3.6" % Test).exclude("log4j", "log4j"),
+      ("org.apache.hadoop" % "hadoop-client" % HadoopVersion % Test).exclude("ch.qos.reload4j", "reload4j"),
+      ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("ch.qos.reload4j", "reload4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.specs2" %% "specs2-core" % "4.23.0" % Test,
@@ -322,7 +323,6 @@ object Dependencies {
         "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
   }
 
-  val HadoopVersion = "3.3.6"
   val Hdfs = Seq(
     libraryDependencies ++= Seq(
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
