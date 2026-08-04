@@ -66,7 +66,8 @@ public class CsvFormattingTest {
             endOfLine,
             CsvQuotingStyle.REQUIRED,
             charset,
-            byteOrderMark);
+            byteOrderMark,
+            false);
     // #flow-type
   }
 
