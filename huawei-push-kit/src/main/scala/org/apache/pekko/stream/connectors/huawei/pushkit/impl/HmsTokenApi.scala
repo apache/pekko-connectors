@@ -36,6 +36,7 @@ import scala.concurrent.Future
 private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwardProxy: Option[ForwardProxy]) {
   import PushKitJsonSupport._
 
+  private val log = system.log
   private val authUrl = "https://oauth-login.cloud.huawei.com/oauth2/v3/token"
 
   def now: Long = JwtTime.nowSeconds(Clock.systemUTC())
@@ -43,7 +44,6 @@ private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwar
   def getAccessToken(clientId: String, privateKey: String)(
       implicit materializer: Materializer): Future[AccessTokenExpiry] = {
     import materializer.executionContext
-    val expiresAt = now + 3600
 
     val requestEntity = FormData(
       "grant_type" -> "client_credentials",
@@ -60,9 +60,15 @@ private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwar
       }
       result <- Unmarshal(response.entity).to[OAuthResponse]
     } yield {
+      val expiresIn = if (result.expires_in > 0) result.expires_in
+      else {
+        log.warning("Huawei OAuth2 response contained invalid expires_in ({}), falling back to default {}s",
+          result.expires_in, HmsTokenApi.DefaultExpiresIn)
+        HmsTokenApi.DefaultExpiresIn
+      }
       AccessTokenExpiry(
         accessToken = result.access_token,
-        expiresAt = expiresAt)
+        expiresAt = now + expiresIn)
     }
   }
 }
@@ -72,6 +78,7 @@ private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwar
  */
 @InternalApi
 private[pushkit] object HmsTokenApi {
+  val DefaultExpiresIn = 3600
   case class AccessTokenExpiry(accessToken: String, expiresAt: Long)
   case class OAuthResponse(access_token: String, token_type: String, expires_in: Int)
 }

@@ -23,19 +23,20 @@ import pekko.stream.Materializer
 import pekko.stream.connectors.google.http.GoogleHttp
 import pekko.stream.connectors.google.jwt.JwtSprayJson
 import pekko.stream.connectors.google.{ implicits, RequestSettings }
+import pdi.jwt.{ JwtClaim, JwtTime }
 import pdi.jwt.JwtAlgorithm.RS256
-import pdi.jwt.JwtClaim
 import spray.json.DefaultJsonProtocol._
 import spray.json.JsonFormat
 
 import java.time.Clock
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.util.control.NonFatal
 
 @InternalApi
 private[auth] object GoogleOAuth2 {
 
   private val oAuthTokenUrl = "https://oauth2.googleapis.com/token"
+  private[auth] val DefaultExpiresIn = 3600
 
   def getAccessToken(clientEmail: String, privateKey: String, scopes: Set[String])(
       implicit mat: Materializer,
@@ -51,7 +52,16 @@ private[auth] object GoogleOAuth2 {
         "grant_type" -> "urn:ietf:params:oauth:grant-type:jwt-bearer",
         "assertion" -> generateJwt(clientEmail, privateKey, scopes)).toEntity
 
-      GoogleHttp().singleRequest[AccessToken](HttpRequest(POST, oAuthTokenUrl, entity = entity))
+      GoogleHttp().singleRequest[AccessTokenResponse](HttpRequest(POST, oAuthTokenUrl, entity = entity)).map {
+        case AccessTokenResponse(access_token, _, expires_in) =>
+          val safeExpiresIn = if (expires_in > 0) expires_in
+          else {
+            system.log.warning("Google OAuth2 response contained invalid expires_in ({}), falling back to default {}s",
+              expires_in, DefaultExpiresIn)
+            DefaultExpiresIn
+          }
+          AccessToken(access_token, JwtTime.nowSeconds + safeExpiresIn)
+      }(ExecutionContext.parasitic)
     } catch {
       case NonFatal(e) =>
         Future.failed(e)

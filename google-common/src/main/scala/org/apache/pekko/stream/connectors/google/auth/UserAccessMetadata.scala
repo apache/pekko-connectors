@@ -23,6 +23,7 @@ import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.http.scaladsl.model.{ FormData, HttpRequest }
 import pekko.http.scaladsl.unmarshalling.Unmarshal
 import pekko.stream.Materializer
+import pdi.jwt.JwtTime
 
 import java.time.Clock
 import scala.concurrent.Future
@@ -49,7 +50,15 @@ private[auth] object UserAccessMetadata {
     implicit val system: ActorSystem = mat.system
     for {
       response <- Http().singleRequest(tokenRequest(clientId, clientSecret, refreshToken))
-      token <- Unmarshal(response.entity).to[AccessToken]
-    } yield token
+      tokenResponse <- Unmarshal(response.entity).to[AccessTokenResponse]
+    } yield {
+      val expiresIn = if (tokenResponse.expires_in > 0) tokenResponse.expires_in
+      else {
+        system.log.warning("Google OAuth2 response contained invalid expires_in ({}), falling back to default {}s",
+          tokenResponse.expires_in, GoogleOAuth2.DefaultExpiresIn)
+        GoogleOAuth2.DefaultExpiresIn
+      }
+      AccessToken(tokenResponse.access_token, JwtTime.nowSeconds + expiresIn)
+    }
   }
 }
