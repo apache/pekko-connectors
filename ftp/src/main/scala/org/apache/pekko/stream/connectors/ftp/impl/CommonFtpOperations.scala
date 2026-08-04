@@ -115,8 +115,15 @@ private[ftp] trait CommonFtpOperations {
 private[ftp] object CommonFtpOperations {
 
   /**
+   * Normalize a path to use `/` separators. FTP uses `/` by protocol;
+   * normalizing early ensures all downstream checks only need to handle `/`.
+   */
+  private def normalizeSeparators(path: String): String = path.replace('\\', '/')
+
+  /**
    * Validate that a path does not contain traversal sequences (`..`).
    * Rejects null values and paths containing `..` as a path segment.
+   * Accepts both `/` and `\` separators; backslashes are normalized to `/` before checking.
    *
    * @param path      the path to validate
    * @param fieldName the name of the field for error messages
@@ -124,29 +131,32 @@ private[ftp] object CommonFtpOperations {
    */
   def validatePath(path: String, fieldName: String): Unit = {
     require(path != null, s"$fieldName must not be null")
-    val segments = path.split('/')
+    val normalized = normalizeSeparators(path)
+    val segments = normalized.split('/')
     require(!segments.contains(".."), s"$fieldName must not contain path traversal sequences: '$path'")
   }
 
   def concatPath(path: String, name: String): String = {
-    validatePath(name, "name")
-    require(!name.startsWith("/"), s"name must not be an absolute path: '$name'")
+    val normName = normalizeSeparators(name)
+    validatePath(normName, "name")
+    require(!normName.startsWith("/"), s"name must not be an absolute path: '$normName'")
 
-    val result = if (path.endsWith("/")) {
-      path ++ name
+    val normPath = normalizeSeparators(path)
+    val result = if (normPath.endsWith("/")) {
+      normPath ++ normName
     } else {
-      s"$path/$name"
+      s"$normPath/$normName"
     }
 
     // Validate the normalized result doesn't escape the base path
     val normalized = java.nio.file.Paths.get(result).normalize().toString
-    val normalizedBase = java.nio.file.Paths.get(path).normalize().toString
+    val normalizedBase = java.nio.file.Paths.get(normPath).normalize().toString
     // On Windows, Paths.get normalizes to backslash; compare with forward-slash versions
     val normalizedFwd = normalized.replace('\\', '/')
     val normalizedBaseFwd = normalizedBase.replace('\\', '/')
     require(
       normalizedFwd.startsWith(normalizedBaseFwd),
-      s"concatPath result '$result' escapes base path '$path' after normalization")
+      s"concatPath result '$result' escapes base path '$normPath' after normalization")
 
     result
   }
