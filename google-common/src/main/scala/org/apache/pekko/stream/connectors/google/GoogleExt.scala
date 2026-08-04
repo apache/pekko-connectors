@@ -32,7 +32,7 @@ import scala.collection.immutable.ListMap
 @InternalApi
 private[google] final class GoogleExt private (sys: ExtendedActorSystem) extends Extension {
   private var cachedSettings: Map[String, GoogleSettings] = ListMap.empty
-  val settings: GoogleSettings = settings(GoogleSettings.ConfigPath)
+  lazy val settings: GoogleSettings = settings(GoogleSettings.ConfigPath)
 
   def settings(path: String): GoogleSettings =
     cachedSettings.getOrElse(path, {
