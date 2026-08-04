@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import pekko.stream.scaladsl.{ Merge, Source }
+import pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.avro.AvroRows
 import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
@@ -30,10 +30,7 @@ object AvroSource {
   }
 
   def readMerged(client: BigQueryReadClient, session: ReadSession): Source[AvroRows, NotUsed] =
-    read(client, session) match {
-      case Seq(single) => single
-      case sources     => Source.combine(sources.head, sources.tail.head, sources.tail.tail: _*)(Merge(_))
-    }
+    read(client, session).reduce((a, b) => a.merge(b))
 
   def readRecords(client: BigQueryReadClient, session: ReadSession): Seq[Source[BigQueryRecord, NotUsed]] =
     read(client, session)

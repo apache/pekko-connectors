@@ -23,7 +23,8 @@ import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 /**
  * Holds the gRPC scala reader client instance.
  */
-final class GrpcBigQueryStorageReader private (settings: BigQueryStorageSettings, sys: ClassicActorSystemProvider) {
+final class GrpcBigQueryStorageReader private[scaladsl] (val settings: BigQueryStorageSettings,
+    sys: ClassicActorSystemProvider) {
 
   @ApiMayChange
   final val client = BigQueryReadClient(PekkoGrpcSettings.fromBigQuerySettings(settings)(sys))(sys)
