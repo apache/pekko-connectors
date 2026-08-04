@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import pekko.stream.scaladsl.{ Merge, Source }
+import pekko.stream.scaladsl.Source
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
@@ -32,24 +32,24 @@ import scala.jdk.CollectionConverters._
 
 object ArrowSource {
 
-  def readRecordsMerged(client: BigQueryReadClient, readSession: ReadSession): Source[List[BigQueryRecord], NotUsed] =
+  def readRecordsMerged(client: BigQueryReadClient,
+      readSession: ReadSession,
+      allocatorBytes: Long): Source[List[BigQueryRecord], NotUsed] =
     readMerged(client, readSession)
       .map { a =>
-        val reader = new SimpleRowReader(readSession.schema.arrowSchema.get)
+        val reader = new SimpleRowReader(readSession.schema.arrowSchema.get, allocatorBytes)
         try reader.read(a)
         finally reader.close()
       }
 
   def readMerged(client: BigQueryReadClient, session: ReadSession): Source[ArrowRecordBatch, NotUsed] =
-    read(client, session) match {
-      case Seq(single) => single
-      case sources     => Source.combine(sources.head, sources.tail.head, sources.tail.tail: _*)(Merge(_))
-    }
+    read(client, session).reduce((a, b) => a.merge(b))
 
-  def readRecords(client: BigQueryReadClient, session: ReadSession): Seq[Source[BigQueryRecord, NotUsed]] =
+  def readRecords(client: BigQueryReadClient, session: ReadSession,
+      allocatorBytes: Long): Seq[Source[BigQueryRecord, NotUsed]] =
     read(client, session)
       .map { a =>
-        a.map(new SimpleRowReader(session.schema.arrowSchema.get).read(_))
+        a.map(new SimpleRowReader(session.schema.arrowSchema.get, allocatorBytes).read(_))
           .mapConcat(c => c)
       }
 
@@ -62,14 +62,9 @@ object ArrowSource {
 
 }
 
-object SimpleRowReader {
-  val DefaultAllocationLimit: Long = 256L * 1024 * 1024 // 256 MB
-}
+final class SimpleRowReader(val schema: ArrowSchema, allocatorBytes: Long) extends AutoCloseable {
 
-final class SimpleRowReader(val schema: ArrowSchema, allocationLimit: Long = SimpleRowReader.DefaultAllocationLimit)
-    extends AutoCloseable {
-
-  val allocator = new RootAllocator(allocationLimit)
+  val allocator = new RootAllocator(allocatorBytes)
 
   val sd = MessageSerializer.deserializeSchema(
     new ReadChannel(

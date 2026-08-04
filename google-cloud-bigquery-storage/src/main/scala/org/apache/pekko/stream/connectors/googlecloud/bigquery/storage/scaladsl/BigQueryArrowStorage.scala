@@ -42,7 +42,7 @@ object BigQueryArrowStorage {
       tableId,
       readOptions,
       maxNumStreams,
-      (_, client, session) => ArrowSource.readRecordsMerged(client, session))
+      (_, client, session, allocatorBytes) => ArrowSource.readRecordsMerged(client, session, allocatorBytes))
       .flatMapConcat(a => a)
 
   def readRecords(projectId: String,
@@ -55,7 +55,7 @@ object BigQueryArrowStorage {
       tableId,
       readOptions,
       maxNumStreams,
-      (_, client, session) => ArrowSource.readRecords(client, session))
+      (_, client, session, allocatorBytes) => ArrowSource.readRecords(client, session, allocatorBytes))
 
   def readMerged(projectId: String,
       datasetId: String,
@@ -67,7 +67,7 @@ object BigQueryArrowStorage {
       tableId,
       readOptions,
       maxNumStreams,
-      (schema, client, session) => (schema, ArrowSource.readMerged(client, session)))
+      (schema, client, session, _) => (schema, ArrowSource.readMerged(client, session)))
 
   def read(projectId: String,
       datasetId: String,
@@ -79,20 +79,22 @@ object BigQueryArrowStorage {
       tableId,
       readOptions,
       maxNumStreams,
-      (schema, client, session) => (schema, ArrowSource.read(client, session)))
+      (schema, client, session, _) => (schema, ArrowSource.read(client, session)))
 
   private def readAndMapTo[T](projectId: String,
       datasetId: String,
       tableId: String,
       readOptions: Option[TableReadOptions],
       maxNumStreams: Int,
-      fx: (ArrowSchema, BigQueryReadClient, ReadSession) => T): Source[T, Future[NotUsed]] =
+      fx: (ArrowSchema, BigQueryReadClient, ReadSession, Long) => T): Source[T, Future[NotUsed]] =
     Source.fromMaterializer { (mat, attr) =>
-      val client = reader(mat.system, attr).client
+      val rdr = reader(mat.system, attr)
+      val client = rdr.client
+      val allocatorBytes = rdr.settings.arrowAllocatorBytes
       readSession(client, projectId, datasetId, tableId, DataFormat.ARROW, readOptions, maxNumStreams)
         .map { session =>
           session.schema match {
-            case ReadSession.Schema.ArrowSchema(schema) => fx(schema, client, session)
+            case ReadSession.Schema.ArrowSchema(schema) => fx(schema, client, session, allocatorBytes)
             case other                                  => throw new IllegalArgumentException(s"Only Arrow format is supported, received: $other")
           }
         }

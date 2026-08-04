@@ -32,7 +32,8 @@ class BigQueryArrowStorageSpec
 
   "BigQueryArrowStorage.readArrow" should {
 
-    val reader = new SimpleRowReader(ArrowSchema(serializedSchema = GCPSerializedArrowSchema))
+    val reader = new SimpleRowReader(ArrowSchema(serializedSchema = GCPSerializedArrowSchema),
+      BigQueryStorageSettings.DefaultArrowAllocatorBytes)
     val expectedRecords = reader.read(ArrowRecordBatch(GCPSerializedArrowTenRecordBatch, 10))
 
     "stream the results for a query in records merged" in {
@@ -83,7 +84,7 @@ class BigQueryArrowStorageSpec
         .futureValue
         .head
 
-      val rowReader = new SimpleRowReader(schema)
+      val rowReader = new SimpleRowReader(schema, BigQueryStorageSettings.DefaultArrowAllocatorBytes)
       val records = rowReader.read(recordBatch)
 
       records shouldBe expectedRecords

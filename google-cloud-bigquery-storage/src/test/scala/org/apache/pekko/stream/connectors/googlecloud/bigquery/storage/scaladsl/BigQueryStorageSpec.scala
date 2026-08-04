@@ -103,7 +103,8 @@ class BigQueryStorageSpec
     }
 
     "stream the results for a query using arrow deserializer" in {
-      val reader = new SimpleRowReader(ArrowSchema(serializedSchema = GCPSerializedArrowSchema))
+      val reader = new SimpleRowReader(ArrowSchema(serializedSchema = GCPSerializedArrowSchema),
+        BigQueryStorageSettings.DefaultArrowAllocatorBytes)
       val expectedRecords = reader.read(ArrowRecordBatch(GCPSerializedArrowTenRecordBatch, 10))
 
       implicit val um: ArrowByteStringDecoder = new ArrowByteStringDecoder(ArrowSchema(GCPSerializedArrowSchema))
