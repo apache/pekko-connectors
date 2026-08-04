@@ -137,10 +137,11 @@ private[ftp] object CommonFtpOperations {
   }
 
   def concatPath(path: String, name: String): String = {
+    validatePath(name, "name")
     val normName = normalizeSeparators(name)
-    validatePath(normName, "name")
     require(!normName.startsWith("/"), s"name must not be an absolute path: '$normName'")
 
+    require(path != null, "path must not be null")
     val normPath = normalizeSeparators(path)
     val result = if (normPath.endsWith("/")) {
       normPath ++ normName
