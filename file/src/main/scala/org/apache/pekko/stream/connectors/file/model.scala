@@ -20,12 +20,20 @@ import java.util.Objects
 /**
  * INTERNAL API
  *
- * Shared validation for path traversal sequences (Zip Slip / Tar Slip).
+ * Validation for path traversal sequences in archive entry names (Zip Slip / Tar Slip).
+ *
+ * Only forward slash (`/`) is checked as the path separator because:
+ * - ZIP files use forward slashes per the ZIP Application Note (PKWARE) section 4.4.17
+ * - TAR file names use forward slashes per POSIX.1 (IEEE Std 1003.1) and the USTAR format
+ *   (POSIX.1-2001 / IEEE Std 1003.1-2001, extended by POSIX.1-2008 pax headers)
+ *
+ * Windows backslashes are not valid path separators in either format and would be treated
+ * as literal characters in entry names, not as directory separators.
  */
-private[file] object PathTraversalValidation {
+private[file] object ArchivePathTraversalValidation {
 
   /**
-   * Validate that a path segment does not contain traversal sequences.
+   * Validate that an archive path segment does not contain traversal sequences.
    * Rejects segments containing `..` as a path component, and absolute paths.
    *
    * @param value     the path segment to validate
@@ -53,7 +61,7 @@ object ArchiveMetadata {
 }
 
 final case class ZipArchiveMetadata(name: String) {
-  PathTraversalValidation.validate(name, "Zip entry name")
+  ArchivePathTraversalValidation.validate(name, "Zip entry name")
   def getName() = name
 }
 object ZipArchiveMetadata {
@@ -157,11 +165,11 @@ object TarArchiveMetadata {
       require(
         value.length <= 154,
         "File path prefix must be between 1 and 154 characters long")
-      PathTraversalValidation.validate(value, "File path prefix")
+      ArchivePathTraversalValidation.validate(value, "File path prefix")
     }
     require(filePathName.length >= 0 && filePathName.length <= 99,
       s"File path name must be between 0 and 99 characters long, was ${filePathName.length}")
-    PathTraversalValidation.validate(filePathName, "File path name")
+    ArchivePathTraversalValidation.validate(filePathName, "File path name")
 
     new TarArchiveMetadata(filePathPrefix,
       filePathName,
