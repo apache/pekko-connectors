@@ -86,13 +86,18 @@ object ElasticsearchSourceStage {
    */
   @InternalApi
   private[elasticsearch] def buildSearchBody(params: Map[String, String]): String = {
-    "{" +
-    params
-      .map {
-        case (name, json) =>
-          name.toJson.compactPrint + ":" + json
-      }
-      .mkString(",") + "}"
+    val sb = new StringBuilder()
+    sb.append('{')
+    var first = true
+    params.foreach {
+      case (name, json) =>
+        if (first) first = false else sb.append(',')
+        sb.append(name.toJson.compactPrint)
+        sb.append(':')
+        sb.append(json)
+    }
+    sb.append('}')
+    sb.toString
   }
 }
 
