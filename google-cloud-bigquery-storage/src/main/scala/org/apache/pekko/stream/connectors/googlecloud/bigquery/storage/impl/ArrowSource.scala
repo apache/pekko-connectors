@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.impl
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord
-import pekko.stream.scaladsl.Source
+import pekko.stream.scaladsl.{ Merge, Source }
 import com.google.cloud.bigquery.storage.v1.arrow.{ ArrowRecordBatch, ArrowSchema }
 import com.google.cloud.bigquery.storage.v1.storage.BigQueryReadClient
 import com.google.cloud.bigquery.storage.v1.stream.ReadSession
@@ -34,11 +34,17 @@ object ArrowSource {
 
   def readRecordsMerged(client: BigQueryReadClient, readSession: ReadSession): Source[List[BigQueryRecord], NotUsed] =
     readMerged(client, readSession)
-      .map(a => new SimpleRowReader(readSession.schema.arrowSchema.get).read(a))
+      .map { a =>
+        val reader = new SimpleRowReader(readSession.schema.arrowSchema.get)
+        try reader.read(a)
+        finally reader.close()
+      }
 
   def readMerged(client: BigQueryReadClient, session: ReadSession): Source[ArrowRecordBatch, NotUsed] =
-    read(client, session)
-      .reduce((a, b) => a.merge(b))
+    read(client, session) match {
+      case Seq(single) => single
+      case sources     => Source.combine(sources.head, sources.tail.head, sources.tail.tail: _*)(Merge(_))
+    }
 
   def readRecords(client: BigQueryReadClient, session: ReadSession): Seq[Source[BigQueryRecord, NotUsed]] =
     read(client, session)
@@ -56,9 +62,14 @@ object ArrowSource {
 
 }
 
-final class SimpleRowReader(val schema: ArrowSchema) extends AutoCloseable {
+object SimpleRowReader {
+  val DefaultAllocationLimit: Long = 256L * 1024 * 1024 // 256 MB
+}
 
-  val allocator = new RootAllocator(Long.MaxValue)
+final class SimpleRowReader(val schema: ArrowSchema, allocationLimit: Long = SimpleRowReader.DefaultAllocationLimit)
+    extends AutoCloseable {
+
+  val allocator = new RootAllocator(allocationLimit)
 
   val sd = MessageSerializer.deserializeSchema(
     new ReadChannel(
