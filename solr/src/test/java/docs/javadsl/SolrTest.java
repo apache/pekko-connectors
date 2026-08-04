@@ -390,6 +390,8 @@ public class SolrTest {
         List.of(0, 1, 2),
         CommittableOffsetBatch.committedOffsets.stream().map(o -> o.offset).toList());
 
+    solrClient.commit(collectionName);
+
     TupleStream stream = getTupleStream(collectionName);
 
     CompletionStage<List<String>> res2 =

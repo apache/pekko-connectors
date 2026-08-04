@@ -26,24 +26,24 @@
     </updateHandler>
     <query>
         <maxBooleanClauses>1024</maxBooleanClauses>
-        <filterCache class="solr.FastLRUCache"
+        <filterCache class="org.apache.solr.search.FastLRUCache"
                      size="10"
                      initialSize="0"
                      autowarmCount="0"/>
-        <queryResultCache class="solr.LRUCache"
+        <queryResultCache class="org.apache.solr.search.LRUCache"
                           size="10"
                           initialSize="0"
                           autowarmCount="0"/>
-        <documentCache class="solr.LRUCache"
+        <documentCache class="org.apache.solr.search.LRUCache"
                        size="10"
                        initialSize="0"
                        autowarmCount="0"/>
         <cache name="perSegFilter"
-               class="solr.search.LRUCache"
+               class="org.apache.solr.search.LRUCache"
                size="10"
                initialSize="0"
                autowarmCount="10"
-               regenerator="solr.NoOpRegenerator"/>
+               regenerator="org.apache.solr.search.NoOpRegenerator"/>
 
         <enableLazyFieldLoading>true</enableLazyFieldLoading>
         <queryResultWindowSize>20</queryResultWindowSize>

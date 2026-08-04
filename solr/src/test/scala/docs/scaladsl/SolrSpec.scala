@@ -323,6 +323,8 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
       // Make sure all messages was committed to kafka
       assert(List(0, 1, 2) == committedOffsets.map(_.offset))
 
+      solrClient.commit(collectionName)
+
       val stream = getTupleStream(collectionName)
 
       val res2 = SolrSource
@@ -494,6 +496,8 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
             binder = bookToDoc))
 
       deleteElements.futureValue
+
+      solrClient.commit(collectionName)
 
       val stream3 = getTupleStream(collectionName)
 
