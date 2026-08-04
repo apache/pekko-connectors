@@ -31,11 +31,26 @@ import scala.jdk.OptionConverters._
  * INTERNAL API
  */
 @InternalApi
+private[orientdb] object OrientDbSourceStage {
+  // Valid OrientDB class names: letters, digits, underscores; must start with letter or underscore
+  private val ValidClassName = "^[a-zA-Z_][a-zA-Z0-9_]*$".r
+
+  private[orientdb] def validateClassName(name: String): Unit = {
+    require(name != null && name.nonEmpty, "className must not be null or empty")
+    require(
+      ValidClassName.matches(name),
+      s"className contains invalid characters: '$name'. Only letters, digits, and underscores are allowed.")
+  }
+}
+
+@InternalApi
 private[orientdb] final class OrientDbSourceStage[T](className: String,
     query: Option[String],
     settings: OrientDbSourceSettings,
     clazz: Option[Class[T]] = None)
     extends GraphStage[SourceShape[OrientDbReadResult[T]]] {
+
+  OrientDbSourceStage.validateClassName(className)
 
   val out: Outlet[OrientDbReadResult[T]] = Outlet("OrientDBSource.out")
   override val shape = SourceShape(out)
