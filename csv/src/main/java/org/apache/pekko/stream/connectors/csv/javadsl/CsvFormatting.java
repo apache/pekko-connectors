@@ -69,8 +69,8 @@ public class CsvFormatting {
    * @param charset Character set to be used
    * @param byteOrderMark Optional byte order mark
    * @param mitigateFormulaInjection Prefix cells starting with formula-triggering characters
-   *                                 ({@code =}, {@code +}, {@code -}, {@code @}, tab, carriage return)
-   *                                 with a single quote to prevent formula injection in spreadsheet applications
+   *     ({@code =}, {@code +}, {@code -}, {@code @}, tab, carriage return) with a single quote to
+   *     prevent formula injection in spreadsheet applications
    * @param <T> Any collection implementation
    * @return The formatting flow
    */
@@ -89,7 +89,13 @@ public class CsvFormatting {
         byteOrderMark.<Option<ByteString>>map(Some::apply).orElse(Option.empty());
     org.apache.pekko.stream.scaladsl.Flow<List<String>, ByteString, NotUsed> formattingFlow =
         org.apache.pekko.stream.connectors.csv.scaladsl.CsvFormatting.format(
-            delimiter, quoteChar, escapeChar, endOfLine, qs, charset, byteOrderMarkScala,
+            delimiter,
+            quoteChar,
+            escapeChar,
+            endOfLine,
+            qs,
+            charset,
+            byteOrderMarkScala,
             mitigateFormulaInjection);
     return Flow.<T>create()
         .map(c -> JavaConverters.collectionAsScalaIterableConverter(c).asScala().toList())
