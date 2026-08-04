@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.jakartams.impl
 
+import java.util.concurrent.ConcurrentLinkedQueue
+
 import jakarta.jms
 import org.apache.pekko
 import pekko.annotation.InternalApi
@@ -20,7 +22,8 @@ import pekko.stream.connectors.jakartams._
 import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue }
 import pekko.stream.{ Attributes, Outlet, SourceShape }
 
-import scala.concurrent.{ Await, TimeoutException }
+import scala.concurrent.ExecutionContext
+import scala.util.{ Failure, Success }
 
 /**
  * Internal API.
@@ -43,6 +46,15 @@ private[jakartams] final class JmsTxSourceStage(settings: JmsConsumerSettings, d
 
   private final class JmsTxSourceStageLogic(inheritedAttributes: Attributes)
       extends SourceStageLogic[TxEnvelope](shape, out, settings, destination, inheritedAttributes) {
+
+    // Queue of pending commit/rollback actions awaiting execution on the JMS provider's thread.
+    // Actions are enqueued when the user calls commit()/rollback() on a TxEnvelope, and drained
+    // at the start of the next onMessage() callback so they run on the correct thread.
+    // This avoids blocking the JMS provider's delivery thread while waiting for user acknowledgment,
+    // while still satisfying the JMS spec requirement that commit/rollback execute on the
+    // session's delivery thread (enforced strictly by IBM MQ).
+    private val pendingActions = new ConcurrentLinkedQueue[() => Unit]()
+
     protected def createSession(connection: jms.Connection,
         createDestination: jms.Session => jakarta.jms.Destination) = {
       val session =
@@ -62,24 +74,19 @@ private[jakartams] final class JmsTxSourceStage(settings: JmsConsumerSettings, d
 
                 def onMessage(message: jms.Message): Unit =
                   try {
+                    // Drain any pending commit/rollback actions from previous messages.
+                    // This runs on the JMS provider's delivery thread, satisfying the JMS spec
+                    // requirement that commit/rollback must happen on the session's thread.
+                    drainPendingActions()
+
                     val envelope = TxEnvelope(message, session)
                     handleMessage.invoke(envelope)
-                    try {
-                      // JMS spec defines that commit/rollback must be done on the same thread.
-                      // While some JMS implementations work without this constraint, IBM MQ is
-                      // very strict about the spec and throws exceptions when called from a different thread.
-                      val action = Await.result(envelope.commitFuture, settings.ackTimeout)
-                      action()
-                    } catch {
-                      case _: TimeoutException =>
-                        val exception = new JmsTxAckTimeout(settings.ackTimeout)
-                        session.session.rollback()
-                        if (settings.failStreamOnAckTimeout) {
-                          handleError.invoke(exception)
-                        } else {
-                          log.warning(exception.getMessage)
-                        }
-                    }
+                    // Don't block here — listen for the user's acknowledgment and enqueue it
+                    // for execution on the next onMessage() callback (on the provider's thread).
+                    envelope.commitFuture.onComplete {
+                      case Success(action) => pendingActions.add(action)
+                      case Failure(_)      => // stage already failed or timed out
+                    }(ExecutionContext.parasitic)
                   } catch {
                     case e: IllegalArgumentException => handleError.invoke(e) // Invalid envelope. Fail the stage.
                     case e: jms.JMSException         => handleError.invoke(e)
@@ -93,6 +100,23 @@ private[jakartams] final class JmsTxSourceStage(settings: JmsConsumerSettings, d
             "Session must be of type JmsSession, it is a " +
             jmsSession.getClass.getName)
       }
+
+    /**
+     * Execute any pending commit/rollback actions that were enqueued by user acknowledgment.
+     * Must be called on the JMS provider's delivery thread.
+     */
+    private def drainPendingActions(): Unit = {
+      var action = pendingActions.poll()
+      while (action != null) {
+        try {
+          action()
+        } catch {
+          case e: jms.JMSException =>
+            log.error(e, "Failed to execute pending JMS action")
+        }
+        action = pendingActions.poll()
+      }
+    }
   }
 
 }
