@@ -112,19 +112,11 @@ private final class SolrFlowLogic[T, C](
       }
 
       message.routingFieldValue.foreach { routingFieldValue =>
-        val routingField = client match {
-          case csc: CloudSolrClient => {
-            val docCollection = Option(csc.getZkStateReader.getCollection(collection))
-            docCollection.flatMap { dc =>
-              Option(dc.getRouter.getRouteField(dc))
-            }
-          }
-          case _ => None
-        }
-        routingField.foreach { routingField =>
+        val routingField = getRoutingField()
+        routingField.foreach { rf =>
           message.idField.foreach { idField =>
-            if (routingField != idField)
-              doc.addField(routingField, routingFieldValue)
+            if (rf != idField)
+              doc.addField(rf, routingFieldValue)
           }
         }
       }
@@ -139,6 +131,20 @@ private final class SolrFlowLogic[T, C](
     }
     log.debug("Update atomically {}", docs)
     client.add(collection, docs.asJava, settings.commitWithin)
+  }
+
+  private def getRoutingField(): Option[String] = {
+    try {
+      client match {
+        case csc: CloudSolrClient =>
+          val provider = csc.getClusterStateProvider
+          val docCollection = provider.getCollection(collection)
+          Option(docCollection.getRouter.getRouteField(docCollection))
+        case _ => None
+      }
+    } catch {
+      case _: Exception => None
+    }
   }
 
   private def deleteBulkToSolrByIds(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {

@@ -44,7 +44,6 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.beans.Field;
-import org.apache.solr.client.solrj.embedded.JettyConfig;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.ZkClientClusterStateProvider;
 import org.apache.solr.client.solrj.io.SolrClientCache;
@@ -58,6 +57,7 @@ import org.apache.solr.client.solrj.io.stream.expr.StreamFactory;
 import org.apache.solr.client.solrj.request.CollectionAdminRequest;
 import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.embedded.JettyConfig;
 import org.apache.solr.cloud.MiniSolrCloudCluster;
 import org.apache.solr.cloud.ZkTestServer;
 import org.apache.solr.common.SolrInputDocument;
@@ -846,7 +846,9 @@ public class SolrTest {
             testWorkingDir.toPath(),
             MiniSolrCloudCluster.DEFAULT_CLOUD_SOLR_XML,
             JettyConfig.builder().setContext("/solr").build(),
-            zkTestServer);
+            zkTestServer,
+            true);
+    cluster.uploadConfigSet(confDir.toPath(), "conf");
 
     // #init-client
 
@@ -855,10 +857,7 @@ public class SolrTest {
     // #init-client
     SolrTest.solrClient = solrClient;
 
-    ((ZkClientClusterStateProvider) solrClient.getClusterStateProvider())
-        .uploadConfig(confDir.toPath(), "conf");
-
-    assertTrue(!solrClient.getZkStateReader().getClusterState().getLiveNodes().isEmpty());
+    assertTrue(!solrClient.getClusterStateProvider().getLiveNodes().isEmpty());
   }
 
   private static AtomicInteger number = new AtomicInteger(2);
