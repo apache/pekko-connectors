@@ -210,8 +210,12 @@ object Dependencies {
     libraryDependencies ++= Seq(
       "org.apache.parquet" % "parquet-avro" % "1.17.1",
       "org.apache.avro" % "avro" % AvroVersion,
-      ("org.apache.hadoop" % "hadoop-client" % HadoopVersion % Test).exclude("ch.qos.reload4j", "reload4j"),
-      ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("ch.qos.reload4j", "reload4j"),
+      ("org.apache.hadoop" % "hadoop-client" % HadoopVersion % Test)
+        .exclude("ch.qos.reload4j", "reload4j")
+        .exclude("org.slf4j", "slf4j-reload4j"),
+      ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test)
+        .exclude("ch.qos.reload4j", "reload4j")
+        .exclude("org.slf4j", "slf4j-reload4j"),
       "com.sksamuel.avro4s" %% "avro4s-core" % avro4sVersion.value % Test,
       "org.scalacheck" %% "scalacheck" % scalaCheckVersion % Test,
       "org.specs2" %% "specs2-core" % "4.23.0" % Test,
@@ -309,31 +313,38 @@ object Dependencies {
 
   val HBase = {
     val hbaseVersion = "1.4.14"
-    val hadoopVersion = "3.3.6"
     Seq(
       libraryDependencies ++= Seq(
-        ("org.apache.hbase" % "hbase-shaded-client" % hbaseVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-          "slf4j-log4j12"),
-        ("org.apache.hbase" % "hbase-common" % hbaseVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-          "slf4j-log4j12"),
-        ("org.apache.hadoop" % "hadoop-common" % hadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-          "slf4j-log4j12"),
-        ("org.apache.hadoop" % "hadoop-mapreduce-client-core" % hadoopVersion).exclude("log4j", "log4j").exclude(
-          "org.slf4j", "slf4j-log4j12"),
+        ("org.apache.hbase" % "hbase-shaded-client" % hbaseVersion)
+          .exclude("log4j", "log4j")
+          .exclude("org.slf4j", "slf4j-log4j12"),
+        ("org.apache.hbase" % "hbase-common" % hbaseVersion)
+          .exclude("log4j", "log4j")
+          .exclude("org.slf4j", "slf4j-log4j12"),
+        ("org.apache.hadoop" % "hadoop-common" % HadoopVersion)
+          .exclude("ch.qos.reload4j", "reload4j")
+          .exclude("org.slf4j", "slf4j-reload4j"),
+        ("org.apache.hadoop" % "hadoop-mapreduce-client-core" % HadoopVersion)
+          .exclude("ch.qos.reload4j", "reload4j")
+          .exclude("org.slf4j", "slf4j-reload4j"),
         "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
   }
 
   val Hdfs = Seq(
     libraryDependencies ++= Seq(
-      ("org.apache.hadoop" % "hadoop-client" % HadoopVersion).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"),
+      ("org.apache.hadoop" % "hadoop-client" % HadoopVersion)
+        .exclude("ch.qos.reload4j", "reload4j")
+        .exclude("org.slf4j", "slf4j-reload4j"),
       "org.typelevel" %% "cats-core" % "2.13.0",
-      ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"),
-      ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"),
-      ("org.apache.hadoop" % "hadoop-minicluster" % HadoopVersion % Test).exclude("log4j", "log4j").exclude("org.slf4j",
-        "slf4j-log4j12"),
+      ("org.apache.hadoop" % "hadoop-hdfs" % HadoopVersion % Test)
+        .exclude("ch.qos.reload4j", "reload4j")
+        .exclude("org.slf4j", "slf4j-reload4j"),
+      ("org.apache.hadoop" % "hadoop-common" % HadoopVersion % Test)
+        .exclude("ch.qos.reload4j", "reload4j")
+        .exclude("org.slf4j", "slf4j-reload4j"),
+      ("org.apache.hadoop" % "hadoop-minicluster" % HadoopVersion % Test)
+        .exclude("ch.qos.reload4j", "reload4j")
+        .exclude("org.slf4j", "slf4j-reload4j"),
       "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test) ++ Mockito)
 
   val HuaweiPushKit = Seq(
