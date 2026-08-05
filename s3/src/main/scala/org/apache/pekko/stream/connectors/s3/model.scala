@@ -46,7 +46,7 @@ final class MFA private (val serialNumber: String, val tokenCode: String) {
   override def toString: String =
     "MFA(" +
     s"serialNumber=$serialNumber," +
-    s"tokenCode=$tokenCode" +
+    s"tokenCode=*****" +
     ")"
 
   override def equals(other: Any): Boolean = other match {

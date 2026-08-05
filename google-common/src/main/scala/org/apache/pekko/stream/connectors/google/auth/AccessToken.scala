@@ -26,6 +26,10 @@ import scala.concurrent.duration._
 private[auth] final case class AccessToken(token: String, expiresAt: Long) {
   def expiresSoon(in: FiniteDuration = 1.minute)(implicit clock: Clock): Boolean =
     expiresAt < JwtTime.nowSeconds + in.toSeconds
+
+  override def toString: String =
+    "AccessToken(token=*****," +
+    s"expiresAt=$expiresAt)"
 }
 
 @InternalApi
@@ -39,7 +43,12 @@ private[auth] object AccessToken {
 }
 
 @InternalApi
-private[auth] final case class AccessTokenResponse(access_token: String, token_type: String, expires_in: Int)
+private[auth] final case class AccessTokenResponse(access_token: String, token_type: String, expires_in: Int) {
+  override def toString: String =
+    "AccessTokenResponse(access_token=*****," +
+    s"token_type=$token_type," +
+    s"expires_in=$expires_in)"
+}
 
 @InternalApi
 private[auth] object AccessTokenResponse {

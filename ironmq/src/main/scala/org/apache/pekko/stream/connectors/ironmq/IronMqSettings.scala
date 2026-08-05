@@ -57,7 +57,7 @@ final class IronMqSettings private (
     "IronMqSettings(" +
     s"endpoint=$endpoint," +
     s"projectId=$projectId," +
-    s"token=$token," +
+    s"token=*****," +
     s"consumerSettings=$consumerSettings" +
     ")"
 }

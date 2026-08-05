@@ -33,6 +33,11 @@ private[auth] object AccessTokenCredentials {
 private[auth] final case class AccessTokenCredentials(projectId: String, accessToken: String) extends Credentials
     with RetrievableCredentials {
 
+  override def toString: String =
+    "AccessTokenCredentials(" +
+    s"projectId=$projectId," +
+    s"accessToken=*****)"
+
   private val futureToken = Future.successful(OAuth2BearerToken(accessToken))
 
   override def get()(implicit ec: ExecutionContext, settings: RequestSettings): Future[OAuth2BearerToken] =

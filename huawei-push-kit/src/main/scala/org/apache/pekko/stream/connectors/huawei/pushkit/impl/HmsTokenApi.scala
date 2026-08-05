@@ -72,6 +72,15 @@ private[pushkit] class HmsTokenApi(http: => HttpExt, system: ActorSystem, forwar
  */
 @InternalApi
 private[pushkit] object HmsTokenApi {
-  case class AccessTokenExpiry(accessToken: String, expiresAt: Long)
-  case class OAuthResponse(access_token: String, token_type: String, expires_in: Int)
+  case class AccessTokenExpiry(accessToken: String, expiresAt: Long) {
+    override def toString: String =
+      "AccessTokenExpiry(accessToken=*****," +
+      s"expiresAt=$expiresAt)"
+  }
+  case class OAuthResponse(access_token: String, token_type: String, expires_in: Int) {
+    override def toString: String =
+      "OAuthResponse(access_token=*****," +
+      s"token_type=$token_type," +
+      s"expires_in=$expires_in)"
+  }
 }
