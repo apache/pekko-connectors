@@ -77,6 +77,28 @@ object ElasticsearchSourceStage {
   def validate(indexName: String): Unit = {
     require(indexName != null, "You must define an index name")
   }
+
+  /**
+   * INTERNAL API
+   *
+   * Construct a JSON search body from parameters. Keys are properly escaped
+   * using spray-json; values are treated as raw JSON.
+   */
+  @InternalApi
+  private[elasticsearch] def buildSearchBody(params: Map[String, String]): String = {
+    val sb = new StringBuilder()
+    sb.append('{')
+    var first = true
+    params.foreach {
+      case (name, json) =>
+        if (first) first = false else sb.append(',')
+        sb.append(name.toJson.compactPrint)
+        sb.append(':')
+        sb.append(json)
+    }
+    sb.append('}')
+    sb.toString
+  }
 }
 
 /**
@@ -145,13 +167,7 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           val queryParams = baseMap ++ routingQueryParam ++ sortQueryParam
           val completeParams = searchParams ++ extraParams.flatten - "routing"
 
-          val searchBody = "{" +
-            completeParams
-              .map {
-                case (name, json) =>
-                  "\"" + name + "\":" + json
-              }
-              .mkString(",") + "}"
+          val searchBody = ElasticsearchSourceStage.buildSearchBody(completeParams)
 
           val endpoint: String = settings.apiVersion match {
             case ApiVersion.V5           => s"/${elasticsearchParams.indexName}/${elasticsearchParams.typeName.get}/_search"
