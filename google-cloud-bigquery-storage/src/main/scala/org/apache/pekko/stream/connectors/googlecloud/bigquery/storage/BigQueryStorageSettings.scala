@@ -19,7 +19,8 @@ import com.typesafe.config.Config
 final class BigQueryStorageSettings private (
     val host: String,
     val port: Int,
-    val rootCa: Option[String] = None) {
+    val rootCa: Option[String] = None,
+    val arrowAllocatorBytes: Long = BigQueryStorageSettings.DefaultArrowAllocatorBytes) {
 
   /**
    * Endpoint hostname where the gRPC connection is made.
@@ -38,18 +39,33 @@ final class BigQueryStorageSettings private (
   def withRootCa(rootCa: String): BigQueryStorageSettings =
     copy(rootCa = Some(rootCa))
 
-  private def copy(host: String = host, port: Int = port, rootCa: Option[String] = rootCa) =
-    new BigQueryStorageSettings(host, port, rootCa)
+  /**
+   * Maximum bytes the Arrow root allocator may reserve per batch.
+   * The allocator is created per batch and closed after reading, so this bounds
+   * native memory for a single batch rather than the lifetime of the stream.
+   */
+  def withArrowAllocatorBytes(bytes: Long): BigQueryStorageSettings =
+    copy(arrowAllocatorBytes = bytes)
+
+  private def copy(
+      host: String = host,
+      port: Int = port,
+      rootCa: Option[String] = rootCa,
+      arrowAllocatorBytes: Long = arrowAllocatorBytes) =
+    new BigQueryStorageSettings(host, port, rootCa, arrowAllocatorBytes)
 
   override def toString: String =
     "BigQueryStorageSettings(" +
     s"host=$host, " +
     s"port=$port, " +
-    s"rootCa=$rootCa" +
+    s"rootCa=$rootCa, " +
+    s"arrowAllocatorBytes=$arrowAllocatorBytes" +
     ")"
 }
 
 object BigQueryStorageSettings {
+
+  val DefaultArrowAllocatorBytes: Long = 512L * 1024 * 1024 // 512 MB
 
   /**
    * Create settings for unsecure (no tls), unauthenticated (no root ca)
@@ -73,7 +89,12 @@ object BigQueryStorageSettings {
         case _                              => bigQueryConfig
       }
 
-    Seq(setRootCa).foldLeft(bigQueryConfig) {
+    val setAllocatorBytes = (bigQueryConfig: BigQueryStorageSettings) =>
+      if (config.hasPath("arrowAllocatorBytes"))
+        bigQueryConfig.withArrowAllocatorBytes(config.getBytes("arrowAllocatorBytes"))
+      else bigQueryConfig
+
+    Seq(setRootCa, setAllocatorBytes).foldLeft(bigQueryConfig) {
       case (c, f) => f(c)
     }
   }
