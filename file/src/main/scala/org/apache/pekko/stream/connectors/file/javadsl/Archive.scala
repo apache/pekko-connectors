@@ -32,6 +32,9 @@ object Archive {
 
   /**
    * Flow for compressing multiple files into one ZIP file.
+   * @param deflateCompression optional compression level, 0-9, where 0 is no compression and 9 is maximum compression.
+   * If not specified, the default compression level of the underlying library will be used.
+   * @since 2.0.0
    */
   def zip(
       deflateCompression: Option[Int]): Flow[Pair[ArchiveMetadata, Source[ByteString, NotUsed]], ByteString, NotUsed] =
