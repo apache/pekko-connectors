@@ -219,7 +219,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(Sink.ignore)
 
       kafkaToEs.futureValue shouldBe Done
-      // #kafka-example
       flushAndRefresh(connectionSettings, indexName)
 
       // Make sure all messages was committed to kafka
@@ -234,7 +233,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       // #kafka-example
       // We're going to pretend we got messages from kafka.
-      // After we've written them to Elastic, we want
+      // After we've written them to Elastic in bulk, we want
       // to commit the offset to Kafka
 
       case class KafkaOffset(offset: Int)
@@ -272,7 +271,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(Sink.ignore)
 
       kafkaToEs.futureValue shouldBe Done
-      // #kafka-example
       flushAndRefresh(connectionSettings, indexName)
 
       // Make sure all messages was committed to kafka
@@ -287,7 +285,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       // #kafka-example
       // We're going to pretend we got messages from kafka.
-      // After we've written them to Elastic, we want
+      // Of those, only some will be written to Elastic, we want
       // to commit the offset to Kafka
 
       case class KafkaOffset(offset: Int)
@@ -330,7 +328,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(Sink.ignore)
 
       kafkaToEs.futureValue shouldBe Done
-      // #kafka-example
       flushAndRefresh(connectionSettings, indexName)
 
       // Make sure all messages was committed to kafka
@@ -346,7 +343,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
       // #kafka-example
       // We're going to pretend we got messages from kafka.
-      // After we've written them to Elastic, we want
+      // After we skip all NOP docs, we want
       // to commit the offset to Kafka
 
       case class KafkaOffset(offset: Int)
@@ -388,7 +385,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(Sink.ignore)
 
       kafkaToEs.futureValue shouldBe Done
-      // #kafka-example
       flushAndRefresh(connectionSettings, indexName)
 
       // Make sure all messages was committed to kafka
