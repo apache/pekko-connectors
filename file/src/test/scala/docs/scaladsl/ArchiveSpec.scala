@@ -15,6 +15,7 @@ package docs.scaladsl
 
 import java.io._
 import java.nio.file.{ Files, Path, Paths }
+import java.util.zip.Deflater
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.file.ArchiveMetadata
@@ -112,6 +113,19 @@ class ArchiveSpec
         val inputFiles = generateInputFiles(5, 100)
         val inputStream = filesToStream(inputFiles)
         val zipFlow = Archive.zip()
+
+        val pekkoZipped: Future[ByteString] =
+          inputStream
+            .via(zipFlow)
+            .runWith(Sink.fold(ByteString.empty)(_ ++ _))
+
+        archiveHelper.unzip(pekkoZipped.futureValue).asScala shouldBe inputFiles
+      }
+
+      "archive files with compression flag" in {
+        val inputFiles = generateInputFiles(5, 100)
+        val inputStream = filesToStream(inputFiles)
+        val zipFlow = Archive.zip(Some(Deflater.NO_COMPRESSION))
 
         val pekkoZipped: Future[ByteString] =
           inputStream
