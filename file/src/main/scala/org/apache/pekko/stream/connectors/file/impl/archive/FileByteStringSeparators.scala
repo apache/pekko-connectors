@@ -35,10 +35,10 @@ import pekko.util.ByteString
     ByteString(endFileWord)
 
   def isStartingByteString(b: ByteString): Boolean =
-    b.utf8String.startsWith(startFileWord)
+    b.size >= 7 && b.slice(0, 7).utf8String == startFileWord
 
   def isEndingByteString(b: ByteString): Boolean =
-    b.utf8String == endFileWord
+    b.size == 5 && b.utf8String == endFileWord
 
   def getPathFromStartingByteString(b: ByteString): String = {
     val splitted = b.utf8String.split(separator)
