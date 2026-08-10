@@ -143,6 +143,14 @@ final case class HmsSettings @InternalApi private (
     maxConcurrentConnections: Int,
     forwardProxy: Option[ForwardProxy]) {
 
+  override def toString: String =
+    "HmsSettings(" +
+    s"appId=$appId," +
+    s"appSecret=*****," +
+    s"test=$test," +
+    s"maxConcurrentConnections=$maxConcurrentConnections," +
+    s"forwardProxy=$forwardProxy)"
+
   def getAppId = appId
   def getAppSecret = appSecret
   def isTest = test
@@ -171,7 +179,10 @@ object ForwardProxy {
         Some(ForwardProxyTrustPem(c.getString("trust-pem")))
       else
         None
-    ForwardProxy(c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem)
+    val minTlsVersion =
+      if (c.hasPath("min-tls-version")) c.getString("min-tls-version")
+      else "TLSv1.2"
+    ForwardProxy(c.getString("host"), c.getInt("port"), maybeCredentials, maybeTrustPem, minTlsVersion)
   }
 
   /**
@@ -182,8 +193,9 @@ object ForwardProxy {
   def apply(host: String,
       port: Int,
       credentials: Option[ForwardProxyCredentials],
-      trustPem: Option[ForwardProxyTrustPem]) =
-    new ForwardProxy(host, port, credentials, trustPem)
+      trustPem: Option[ForwardProxyTrustPem],
+      minTlsVersion: String = "TLSv1.2") =
+    new ForwardProxy(host, port, credentials, trustPem, minTlsVersion)
 
   /**
    * Java API.
@@ -216,17 +228,24 @@ object ForwardProxy {
 final case class ForwardProxy @InternalApi private (host: String,
     port: Int,
     credentials: Option[ForwardProxyCredentials],
-    trustPem: Option[ForwardProxyTrustPem]) {
+    trustPem: Option[ForwardProxyTrustPem],
+    minTlsVersion: String = "TLSv1.2") {
 
   def getHost = host
   def getPort = port
   def getCredentials = credentials
   def getForwardProxyTrustPem = trustPem
 
+  /** @since 2.0.0 */
+  def getMinTlsVersion = minTlsVersion
+
   def withHost(host: String) = copy(host = host)
   def withPort(port: Int) = copy(port = port)
   def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
   def withTrustPem(trustPem: ForwardProxyTrustPem) = copy(trustPem = Option(trustPem))
+
+  /** @since 2.0.0 */
+  def withMinTlsVersion(minTlsVersion: String) = copy(minTlsVersion = minTlsVersion)
 }
 
 object ForwardProxyCredentials {
@@ -242,6 +261,11 @@ object ForwardProxyCredentials {
 }
 
 final case class ForwardProxyCredentials @InternalApi private (username: String, password: String) {
+
+  override def toString: String =
+    "ForwardProxyCredentials(" +
+    s"username=$username," +
+    s"password=*****)"
 
   def getUsername: String = username
   def getPassword: String = password

@@ -26,13 +26,18 @@ import pekko.util.{ ByteString, ByteStringBuilder }
  * INTERNAL API
  */
 @InternalApi private[file] final class ZipArchiveFlowStage(
-    val shape: FlowShape[ByteString, ByteString]) extends GraphStageLogic(shape) {
+    val shape: FlowShape[ByteString, ByteString],
+    deflateCompression: Option[Int] = None) extends GraphStageLogic(shape) {
 
   private def in = shape.in
   private def out = shape.out
 
   private val builder = new ByteStringBuilder()
   private val zip = new ZipOutputStream(builder.asOutputStream)
+
+  override def preStart(): Unit =
+    deflateCompression.foreach(l => zip.setLevel(l))
+
   private var emptyStream = true
 
   setHandler(
@@ -88,7 +93,8 @@ import pekko.util.{ ByteString, ByteStringBuilder }
 /**
  * INTERNAL API
  */
-@InternalApi private[file] final class ZipArchiveFlow extends GraphStage[FlowShape[ByteString, ByteString]] {
+@InternalApi private[file] final class ZipArchiveFlow(deflateCompression: Option[Int] = None)
+    extends GraphStage[FlowShape[ByteString, ByteString]] {
 
   val in: Inlet[ByteString] = Inlet(Logging.simpleName(this) + ".in")
   val out: Outlet[ByteString] = Outlet(Logging.simpleName(this) + ".out")
@@ -99,5 +105,5 @@ import pekko.util.{ ByteString, ByteStringBuilder }
   override val shape: FlowShape[ByteString, ByteString] = FlowShape(in, out)
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
-    new ZipArchiveFlowStage(shape)
+    new ZipArchiveFlowStage(shape, deflateCompression)
 }
