@@ -30,7 +30,8 @@ import scala.collection.immutable
     escapeChar: Char,
     endOfLine: String,
     quotingStyle: CsvQuotingStyle,
-    charset: Charset = StandardCharsets.UTF_8) {
+    charset: Charset = StandardCharsets.UTF_8,
+    mitigateFormulaInjection: Boolean = false) {
 
   private val charsetName = charset.name()
 
@@ -39,6 +40,10 @@ import scala.collection.immutable
   private val duplicatedQuote = ByteString(String.valueOf(Array(quoteChar, quoteChar)), charsetName)
   private val duplicatedEscape = ByteString(String.valueOf(Array(escapeChar, escapeChar)), charsetName)
   private val endOfLineBs = ByteString(endOfLine, charsetName)
+  private val formulaPrefixBs = ByteString("'", charsetName)
+
+  // Characters that trigger formula interpretation in spreadsheet applications (Excel, LibreOffice)
+  private val formulaTriggerChars = Set('=', '+', '-', '@', '\t', '\r')
 
   def toCsv(fields: immutable.Iterable[Any]): ByteString =
     if (fields.nonEmpty) nonEmptyToCsv(fields)
@@ -80,8 +85,13 @@ import scala.collection.immutable
 
     def append(field: String) = {
       val (quoteIt, splitAt) = requiresQuotesOrSplit(field)
-      if (quoteIt || quotingStyle == CsvQuotingStyle.Always) {
+      val needsFormulaMitigation = mitigateFormulaInjection &&
+        field.nonEmpty && formulaTriggerChars.contains(field.charAt(0))
+      if (quoteIt || quotingStyle == CsvQuotingStyle.Always || needsFormulaMitigation) {
         builder ++= quoteBs
+        if (needsFormulaMitigation) {
+          builder ++= formulaPrefixBs
+        }
         if (splitAt != -1) {
           splitAndDuplicateQuotesAndEscapes(field, splitAt)
         } else {

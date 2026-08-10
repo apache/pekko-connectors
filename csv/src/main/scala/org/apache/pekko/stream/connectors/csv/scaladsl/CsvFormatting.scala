@@ -42,6 +42,9 @@ object CsvFormatting {
    * @param quotingStyle Quote all fields, or only fields requiring quotes (default)
    * @param charset Character set, defaults to UTF-8
    * @param byteOrderMark Certain CSV readers (namely Microsoft Excel) require a Byte Order mark, defaults to None
+   * @param mitigateFormulaInjection Prefix cells starting with formula-triggering characters
+   *                                 (`=`, `+`, `-`, `@`, `\t`, `\r`) with a single quote to prevent
+   *                                 formula injection in spreadsheet applications (default false)
    */
   def format[T <: immutable.Iterable[String]](
       delimiter: Char = Comma,
@@ -50,9 +53,10 @@ object CsvFormatting {
       endOfLine: String = "\r\n",
       quotingStyle: CsvQuotingStyle = CsvQuotingStyle.Required,
       charset: Charset = StandardCharsets.UTF_8,
-      byteOrderMark: Option[ByteString] = None): Flow[T, ByteString, NotUsed] = {
+      byteOrderMark: Option[ByteString] = None,
+      mitigateFormulaInjection: Boolean = false): Flow[T, ByteString, NotUsed] = {
     val formatter =
-      new CsvFormatter(delimiter, quoteChar, escapeChar, endOfLine, quotingStyle, charset)
+      new CsvFormatter(delimiter, quoteChar, escapeChar, endOfLine, quotingStyle, charset, mitigateFormulaInjection)
     byteOrderMark.fold {
       Flow[T].map(formatter.toCsv).named("CsvFormatting")
     } { bom =>

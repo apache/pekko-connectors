@@ -114,6 +114,39 @@ class CsvFormatterSpec extends AnyWordSpec with Matchers with LogCapturing {
     }
   }
 
+  "CSV Formatter with formula injection mitigation" should {
+    val formatter =
+      new CsvFormatter(',', '"', '\\', "\r\n", CsvQuotingStyle.Required, StandardCharsets.UTF_8, true)
+
+    "prefix formula starting with =" in {
+      expectInOut(formatter, "=SUM(A1)")("\"'=SUM(A1)\"\r\n")
+    }
+
+    "prefix formula starting with +" in {
+      expectInOut(formatter, "+cmd|' /C calc'!A0")("\"'+cmd|' /C calc'!A0\"\r\n")
+    }
+
+    "prefix formula starting with -" in {
+      expectInOut(formatter, "-2+3")("\"'-2+3\"\r\n")
+    }
+
+    "prefix formula starting with @" in {
+      expectInOut(formatter, "@SUM(A1)")("\"'@SUM(A1)\"\r\n")
+    }
+
+    "not prefix normal text" in {
+      expectInOut(formatter, "normal", "text")("normal,text\r\n")
+    }
+
+    "not prefix empty string" in {
+      expectInOut(formatter, "", "text")(",text\r\n")
+    }
+
+    "handle mixed fields" in {
+      expectInOut(formatter, "safe", "=DANGEROUS", "also-safe")("safe,\"'=DANGEROUS\",also-safe\r\n")
+    }
+  }
+
   private def expectInOut(formatter: CsvFormatter, in: String*)(expect: String): Unit =
     formatter.toCsv(in.toList).utf8String should be(expect)
 
