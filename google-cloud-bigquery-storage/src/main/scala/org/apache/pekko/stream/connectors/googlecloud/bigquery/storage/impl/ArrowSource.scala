@@ -49,8 +49,11 @@ object ArrowSource {
       allocatorBytes: Long): Seq[Source[BigQueryRecord, NotUsed]] =
     read(client, session)
       .map { a =>
-        a.map(new SimpleRowReader(session.schema.arrowSchema.get, allocatorBytes).read(_))
-          .mapConcat(c => c)
+        a.map { batch =>
+          val reader = new SimpleRowReader(session.schema.arrowSchema.get, allocatorBytes)
+          try reader.read(batch)
+          finally reader.close()
+        }.mapConcat(c => c)
       }
 
   def read(client: BigQueryReadClient, session: ReadSession): Seq[Source[ArrowRecordBatch, NotUsed]] =
