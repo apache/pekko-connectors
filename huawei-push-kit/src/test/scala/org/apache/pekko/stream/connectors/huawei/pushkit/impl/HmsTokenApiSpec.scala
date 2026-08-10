@@ -103,6 +103,45 @@ class HmsTokenApiSpec
         case AccessTokenExpiry("token", exp) if exp > (System.currentTimeMillis / 1000L + 3000L) =>
       }
     }
+
+    "use expires_in from server response" in {
+      val http = mock[HttpExt]
+      when(
+        http.singleRequest(any[HttpRequest](),
+          any[HttpsConnectionContext](),
+          any[ConnectionPoolSettings](),
+          any[LoggingAdapter]())).thenReturn(
+        Future.successful(
+          HttpResponse(
+            entity = HttpEntity(ContentTypes.`application/json`,
+              """{"access_token": "token", "token_type": "String", "expires_in": 7200}"""))))
+
+      val api = new HmsTokenApi(http, system, Option.empty)
+      val result = api.getAccessToken(config.appId, config.appSecret).futureValue
+      result.accessToken shouldBe "token"
+      // expires_in=7200 means expiry should be ~7200s from now, well beyond the old hardcoded 3600s
+      result.expiresAt should be > (System.currentTimeMillis / 1000L + 6000L)
+    }
+
+    "fall back to default expiry when expires_in is invalid" in {
+      val http = mock[HttpExt]
+      when(
+        http.singleRequest(any[HttpRequest](),
+          any[HttpsConnectionContext](),
+          any[ConnectionPoolSettings](),
+          any[LoggingAdapter]())).thenReturn(
+        Future.successful(
+          HttpResponse(
+            entity = HttpEntity(ContentTypes.`application/json`,
+              """{"access_token": "token", "token_type": "String", "expires_in": 0}"""))))
+
+      val api = new HmsTokenApi(http, system, Option.empty)
+      val result = api.getAccessToken(config.appId, config.appSecret).futureValue
+      result.accessToken shouldBe "token"
+      // expires_in=0 should fall back to default 3600s
+      result.expiresAt should be > (System.currentTimeMillis / 1000L + 3000L)
+      result.expiresAt should be < (System.currentTimeMillis / 1000L + 4000L)
+    }
   }
 
 }
