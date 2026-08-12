@@ -32,19 +32,28 @@ import scala.jdk.CollectionConverters._
 
 object ArrowSource {
 
-  def readRecordsMerged(client: BigQueryReadClient, readSession: ReadSession): Source[List[BigQueryRecord], NotUsed] =
+  def readRecordsMerged(client: BigQueryReadClient,
+      readSession: ReadSession,
+      allocatorBytes: Long): Source[List[BigQueryRecord], NotUsed] =
     readMerged(client, readSession)
-      .map(a => new SimpleRowReader(readSession.schema.arrowSchema.get).read(a))
+      .map { a =>
+        val reader = new SimpleRowReader(readSession.schema.arrowSchema.get, allocatorBytes)
+        try reader.read(a)
+        finally reader.close()
+      }
 
   def readMerged(client: BigQueryReadClient, session: ReadSession): Source[ArrowRecordBatch, NotUsed] =
-    read(client, session)
-      .reduce((a, b) => a.merge(b))
+    read(client, session).reduce((a, b) => a.merge(b))
 
-  def readRecords(client: BigQueryReadClient, session: ReadSession): Seq[Source[BigQueryRecord, NotUsed]] =
+  def readRecords(client: BigQueryReadClient, session: ReadSession,
+      allocatorBytes: Long): Seq[Source[BigQueryRecord, NotUsed]] =
     read(client, session)
       .map { a =>
-        a.map(new SimpleRowReader(session.schema.arrowSchema.get).read(_))
-          .mapConcat(c => c)
+        a.map { batch =>
+          val reader = new SimpleRowReader(session.schema.arrowSchema.get, allocatorBytes)
+          try reader.read(batch)
+          finally reader.close()
+        }.mapConcat(c => c)
       }
 
   def read(client: BigQueryReadClient, session: ReadSession): Seq[Source[ArrowRecordBatch, NotUsed]] =
@@ -56,9 +65,9 @@ object ArrowSource {
 
 }
 
-final class SimpleRowReader(val schema: ArrowSchema) extends AutoCloseable {
+final class SimpleRowReader(val schema: ArrowSchema, allocatorBytes: Long) extends AutoCloseable {
 
-  val allocator = new RootAllocator(Long.MaxValue)
+  val allocator = new RootAllocator(allocatorBytes)
 
   val sd = MessageSerializer.deserializeSchema(
     new ReadChannel(
