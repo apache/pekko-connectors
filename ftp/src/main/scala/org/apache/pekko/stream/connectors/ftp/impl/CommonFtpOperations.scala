@@ -159,8 +159,9 @@ private[ftp] object CommonFtpOperations {
     }
     val collapsed = collapseSegments(result)
     val collapsedBase = collapseSegments(normPath)
+    // collapsedBase is empty when the base path is "/" (root) — everything is under root
     require(
-      collapsed == collapsedBase || collapsed.startsWith(collapsedBase + "/"),
+      collapsedBase.isEmpty || collapsed == collapsedBase || collapsed.startsWith(collapsedBase + "/"),
       s"concatPath result '$result' escapes base path '$normPath'")
 
     result

@@ -93,4 +93,8 @@ class CommonFtpOperationsSpec extends AnyFlatSpec with Matchers {
   it should "handle dot segments without platform normalization" in {
     CommonFtpOperations.concatPath("/base", "./file.txt") shouldBe "/base/./file.txt"
   }
+
+  it should "allow names under root path" in {
+    CommonFtpOperations.concatPath("/", "sample_dir") shouldBe "/sample_dir"
+  }
 }
