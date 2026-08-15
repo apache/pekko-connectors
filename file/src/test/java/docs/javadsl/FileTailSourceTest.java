@@ -136,6 +136,7 @@ public class FileTailSourceTest {
   }
 
   @Test
+  @DisabledOnOs(OS.WINDOWS)
   public void willCompleteStreamIfFileIsDeleted() throws Exception {
     final Path path = fs.getPath("/file");
     Files.writeString(path, "a\n", UTF_8);
