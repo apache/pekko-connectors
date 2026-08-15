@@ -149,15 +149,19 @@ private[ftp] object CommonFtpOperations {
       s"$normPath/$normName"
     }
 
-    // Validate the normalized result doesn't escape the base path
-    val normalized = java.nio.file.Paths.get(result).normalize().toString
-    val normalizedBase = java.nio.file.Paths.get(normPath).normalize().toString
-    // On Windows, Paths.get normalizes to backslash; compare with forward-slash versions
-    val normalizedFwd = normalized.replace('\\', '/')
-    val normalizedBaseFwd = normalizedBase.replace('\\', '/')
+    // Pure string segment walk — no platform-dependent normalization.
+    // `..` and absolute names are already rejected upstream; this collapses
+    // `.` segments and empty segments (double slashes) so the prefix check
+    // cannot be fooled by cosmetic differences.
+    def collapseSegments(p: String): String = {
+      val parts = p.split('/').filter(s => s.nonEmpty && s != ".")
+      if (parts.isEmpty) "" else parts.mkString("/")
+    }
+    val collapsed = collapseSegments(result)
+    val collapsedBase = collapseSegments(normPath)
     require(
-      normalizedFwd.startsWith(normalizedBaseFwd),
-      s"concatPath result '$result' escapes base path '$normPath' after normalization")
+      collapsed == collapsedBase || collapsed.startsWith(collapsedBase + "/"),
+      s"concatPath result '$result' escapes base path '$normPath'")
 
     result
   }
