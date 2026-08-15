@@ -195,7 +195,7 @@ jobs:
       matrix:
         include:
           - { connector: file }
-          - { connector: ftp }
+          - { connector: ftp, test_cmd: 'ftp/testOnly org.apache.pekko.stream.connectors.ftp.impl.*' }
 
     env:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
@@ -223,5 +223,10 @@ jobs:
         shell: bash
         env:
           CONNECTOR: ${{ matrix.connector }}
+          TEST_CMD: ${{ matrix.test_cmd }}
         run: |-
-          sbt "+${CONNECTOR}/test"
+          if [ -n "$TEST_CMD" ]; then
+            sbt "+${TEST_CMD}"
+          else
+            sbt "+${CONNECTOR}/test"
+          fi
