@@ -175,7 +175,8 @@ class ArchiveSpec
             }
           // #zip-reader
         } finally {
-          Files.walk(target).sorted(java.util.Comparator.reverseOrder()).iterator().asScala.foreach(p => Files.delete(p))
+          Files.walk(target).sorted(java.util.Comparator.reverseOrder()).iterator().asScala.foreach(p =>
+            Files.delete(p))
         }
       }
     }
