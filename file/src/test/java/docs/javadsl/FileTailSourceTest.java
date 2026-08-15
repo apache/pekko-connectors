@@ -17,6 +17,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.WRITE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
@@ -180,6 +182,7 @@ public class FileTailSourceTest {
   }
 
   @Test
+  @DisabledOnOs(OS.WINDOWS)
   public void willCompleteStreamIfFileIsIdle() throws Exception {
     final Path path = fs.getPath("/file");
     Files.writeString(path, "a\n", UTF_8);

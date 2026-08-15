@@ -47,8 +47,11 @@ class FileTailSourceExtrasSpec
   private val fs = Jimfs.newFileSystem(Configuration.forCurrentPlatform)
   private val testFile = fs.getRootDirectories.asScala.head.resolve("file")
 
+  private val isWindows = System.getProperty("os.name", "").toLowerCase.contains("windows")
+
   "The FileTailSource" should assertAllStagesStopped {
     "demo stream shutdown when file deleted" in {
+      assume(!isWindows, "Jimfs WatchService does not fire events on Windows")
       val path = testFile
       Files.write(path, "a\n".getBytes(UTF_8))
 
@@ -83,6 +86,7 @@ class FileTailSourceExtrasSpec
     }
 
     "demo stream shutdown when with idle timeout" in {
+      assume(!isWindows, "Jimfs file I/O does not work reliably on Windows")
       val path = testFile
       Files.write(path, "a\n".getBytes(UTF_8))
 
