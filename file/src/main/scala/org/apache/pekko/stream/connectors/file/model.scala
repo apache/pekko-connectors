@@ -22,19 +22,20 @@ import java.util.Objects
  *
  * Validation for path traversal sequences in archive entry names (Zip Slip / Tar Slip).
  *
- * Only forward slash (`/`) is checked as the path separator because:
+ * Both forward slash (`/`) and backslash (`\`) are rejected as path separators because:
  * - ZIP files use forward slashes per the ZIP Application Note (PKWARE) section 4.4.17
  * - TAR file names use forward slashes per POSIX.1 (IEEE Std 1003.1) and the USTAR format
  *   (POSIX.1-2001 / IEEE Std 1003.1-2001, extended by POSIX.1-2008 pax headers)
- *
- * Windows backslashes are not valid path separators in either format and would be treated
- * as literal characters in entry names, not as directory separators.
+ * - On Windows, backslashes are path separators and would be interpreted by the filesystem
+ *   API when extracting, even though they are not valid separators in the archive formats.
+ *   Rejecting them prevents path traversal via crafted archives on Windows hosts.
  */
 private[file] object ArchivePathTraversalValidation {
 
   /**
    * Validate that an archive path segment does not contain traversal sequences.
-   * Rejects segments containing `..` as a path component, and absolute paths.
+   * Rejects segments containing `..` as a path component, absolute paths, and
+   * backslashes (which Windows treats as path separators during extraction).
    *
    * @param value     the path segment to validate
    * @param fieldName the name of the field for error messages
@@ -44,6 +45,8 @@ private[file] object ArchivePathTraversalValidation {
     require(value != null, s"$fieldName must not be null")
     // Reject absolute paths
     require(!value.startsWith("/"), s"$fieldName must not be an absolute path: '$value'")
+    // Reject backslashes — not valid in ZIP/TAR specs, but treated as path separators on Windows
+    require(!value.contains('\\'), s"$fieldName must not contain backslashes: '$value'")
     // Reject path traversal sequences: ".." as a standalone segment
     val segments = value.split('/')
     require(

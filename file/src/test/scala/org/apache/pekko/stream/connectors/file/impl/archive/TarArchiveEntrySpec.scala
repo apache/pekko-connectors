@@ -72,6 +72,18 @@ class TarArchiveEntrySpec extends AnyFlatSpec with Matchers {
     meta.filePath shouldBe "file.txt"
   }
 
+  it should "reject backslashes in filename" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("\\etc\\passwd", 100L)
+    }
+  }
+
+  it should "reject backslashes in prefix" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("\\etc", "passwd", 100L, Instant.now)
+    }
+  }
+
   "Metadata entries" should "be created and parsed back" in {
     val filePathPrefix = "dir1/dir2"
     val filename = "thefile.txt"

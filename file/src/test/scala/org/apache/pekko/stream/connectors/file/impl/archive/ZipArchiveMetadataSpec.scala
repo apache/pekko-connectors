@@ -50,4 +50,16 @@ class ZipArchiveMetadataSpec extends AnyFlatSpec with Matchers {
     val meta = ZipArchiveMetadata("file.txt")
     meta.name shouldBe "file.txt"
   }
+
+  it should "reject backslashes in name" in {
+    an[IllegalArgumentException] should be thrownBy {
+      ZipArchiveMetadata("\\etc\\passwd")
+    }
+  }
+
+  it should "reject backslashes in middle of path" in {
+    an[IllegalArgumentException] should be thrownBy {
+      ZipArchiveMetadata("dir\\..\\..\\etc\\passwd")
+    }
+  }
 }
