@@ -106,6 +106,7 @@ class LogRotatorSinkSpec
     }
 
     "work for size-based rotation " in assertAllStagesStopped {
+      val createdFiles = Seq.newBuilder[Path]
       // #size
       import org.apache.pekko.stream.connectors.file.scaladsl.LogRotatorSink
 
@@ -115,6 +116,7 @@ class LogRotatorSinkSpec
         (element: ByteString) =>
           if (size + element.size > max) {
             val path = Files.createTempFile("out-", ".log")
+            createdFiles += path
             size = element.size
             Some(path)
           } else {
@@ -131,7 +133,11 @@ class LogRotatorSinkSpec
         .map(ByteString(_))
         .runWith(sizeRotatorSink)
 
-      fileSizeCompletion.futureValue shouldBe Done
+      try {
+        fileSizeCompletion.futureValue shouldBe Done
+      } finally {
+        createdFiles.result().foreach(f => Files.deleteIfExists(f))
+      }
     }
 
     "work for time-based rotation " in assertAllStagesStopped {
