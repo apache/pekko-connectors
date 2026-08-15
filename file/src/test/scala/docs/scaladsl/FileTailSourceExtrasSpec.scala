@@ -43,7 +43,7 @@ class FileTailSourceExtrasSpec
     with ScalaFutures
     with LogCapturing {
 
-  private val fs = Jimfs.newFileSystem(Configuration.forCurrentPlatform.toBuilder.build)
+  private val fs = Jimfs.newFileSystem(Configuration.unix())
 
   "The FileTailSource" should assertAllStagesStopped {
     "demo stream shutdown when file deleted" in {

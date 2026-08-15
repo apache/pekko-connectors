@@ -136,7 +136,7 @@ class LogRotatorSinkSpec
 
     "work for time-based rotation " in assertAllStagesStopped {
       // #time
-      val destinationDir = FileSystems.getDefault.getPath("/tmp")
+      val destinationDir = Files.createTempDirectory(fs.getPath("/"), "time-rotation")
       val formatter = DateTimeFormatter.ofPattern("'stream-'yyyy-MM-dd_HH'.log'")
 
       val timeBasedTriggerCreator: () => ByteString => Option[Path] = () => {
@@ -180,7 +180,7 @@ class LogRotatorSinkSpec
 
     "work for stream-based rotation " in assertAllStagesStopped {
       // #stream
-      val destinationDir = FileSystems.getDefault.getPath("/tmp")
+      val destinationDir = Files.createTempDirectory(fs.getPath("/"), "stream-rotation")
 
       val streamBasedTriggerCreator: () => ((String, String)) => Option[Path] = () => {
         var currentFilename: Option[String] = None
