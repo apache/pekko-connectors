@@ -22,6 +22,68 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class TarArchiveEntrySpec extends AnyFlatSpec with Matchers {
+
+  "Path traversal validation" should "reject dot-dot in filename" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("../etc/passwd", 100L)
+    }
+  }
+
+  it should "reject dot-dot in prefix" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("../../etc", "passwd", 100L, Instant.now)
+    }
+  }
+
+  it should "reject absolute path in filename" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("/etc/passwd", 100L)
+    }
+  }
+
+  it should "reject dot-dot in middle of path" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("dir/../../../etc/passwd", 100L)
+    }
+  }
+
+  it should "reject dot-dot via parse" in {
+    // Build a tar header with a malicious filename
+    val malicious = TarArchiveMetadata("dir/file.txt", 100L)
+    val entry = new TarArchiveEntry(malicious)
+    val header = entry.headerBytes
+    // Corrupt the filename field to contain ../
+    val corrupted = header.toArray
+    val evilName = "../etc/crontab"
+    evilName.getBytes.zipWithIndex.foreach { case (b, i) => corrupted(i) = b }
+    corrupted(evilName.length) = 0 // null terminator
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveEntry.parse(ByteString(corrupted))
+    }
+  }
+
+  it should "accept normal relative paths" in {
+    val meta = TarArchiveMetadata("dir/subdir/file.txt", 100L)
+    meta.filePath shouldBe "dir/subdir/file.txt"
+  }
+
+  it should "accept simple filename" in {
+    val meta = TarArchiveMetadata("file.txt", 100L)
+    meta.filePath shouldBe "file.txt"
+  }
+
+  it should "reject backslashes in filename" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("\\etc\\passwd", 100L)
+    }
+  }
+
+  it should "reject backslashes in prefix" in {
+    an[IllegalArgumentException] should be thrownBy {
+      TarArchiveMetadata("\\etc", "passwd", 100L, Instant.now)
+    }
+  }
+
   "Metadata entries" should "be created and parsed back" in {
     val filePathPrefix = "dir1/dir2"
     val filename = "thefile.txt"

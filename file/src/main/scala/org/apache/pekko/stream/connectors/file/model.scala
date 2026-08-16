@@ -17,6 +17,44 @@ import java.time.Instant
 import java.time.temporal.ChronoField
 import java.util.Objects
 
+/**
+ * INTERNAL API
+ *
+ * Validation for path traversal sequences in archive entry names (Zip Slip / Tar Slip).
+ *
+ * Both forward slash (`/`) and backslash (`\`) are rejected as path separators because:
+ * - ZIP files use forward slashes per the ZIP Application Note (PKWARE) section 4.4.17
+ * - TAR file names use forward slashes per POSIX.1 (IEEE Std 1003.1) and the USTAR format
+ *   (POSIX.1-2001 / IEEE Std 1003.1-2001, extended by POSIX.1-2008 pax headers)
+ * - On Windows, backslashes are path separators and would be interpreted by the filesystem
+ *   API when extracting, even though they are not valid separators in the archive formats.
+ *   Rejecting them prevents path traversal via crafted archives on Windows hosts.
+ */
+private[file] object ArchivePathTraversalValidation {
+
+  /**
+   * Validate that an archive path segment does not contain traversal sequences.
+   * Rejects segments containing `..` as a path component, absolute paths, and
+   * backslashes (which Windows treats as path separators during extraction).
+   *
+   * @param value     the path segment to validate
+   * @param fieldName the name of the field for error messages
+   * @throws IllegalArgumentException if the segment contains traversal sequences
+   */
+  def validate(value: String, fieldName: String): Unit = {
+    require(value != null, s"$fieldName must not be null")
+    // Reject absolute paths
+    require(!value.startsWith("/"), s"$fieldName must not be an absolute path: '$value'")
+    // Reject backslashes — not valid in ZIP/TAR specs, but treated as path separators on Windows
+    require(!value.contains('\\'), s"$fieldName must not contain backslashes: '$value'")
+    // Reject path traversal sequences: ".." as a standalone segment
+    val segments = value.split('/')
+    require(
+      !segments.contains(".."),
+      s"$fieldName must not contain path traversal sequences: '$value'")
+  }
+}
+
 final class ArchiveMetadata private (
     val filePath: String)
 
@@ -26,6 +64,7 @@ object ArchiveMetadata {
 }
 
 final case class ZipArchiveMetadata(name: String) {
+  ArchivePathTraversalValidation.validate(name, "Zip entry name")
   def getName() = name
 }
 object ZipArchiveMetadata {
@@ -129,9 +168,11 @@ object TarArchiveMetadata {
       require(
         value.length <= 154,
         "File path prefix must be between 1 and 154 characters long")
+      ArchivePathTraversalValidation.validate(value, "File path prefix")
     }
     require(filePathName.length >= 0 && filePathName.length <= 99,
       s"File path name must be between 0 and 99 characters long, was ${filePathName.length}")
+    ArchivePathTraversalValidation.validate(filePathName, "File path name")
 
     new TarArchiveMetadata(filePathPrefix,
       filePathName,

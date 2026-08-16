@@ -163,22 +163,27 @@ class ArchiveSpec
         val target: Path = // ???
           // #zip-reader
           Files.createTempDirectory("pekko-connectors-zip-")
-        // #zip-reader
-        Archive
-          .zipReader(zipFile)
-          .mapAsyncUnordered(4) {
-            case (metadata, source) =>
-              val targetFile = target.resolve(metadata.name)
-              targetFile.toFile.getParentFile.mkdirs() // missing error handler
-              source.runWith(FileIO.toPath(targetFile))
-          }
-        // #zip-reader
+        try {
+          // #zip-reader
+          Archive
+            .zipReader(zipFile)
+            .mapAsyncUnordered(4) {
+              case (metadata, source) =>
+                val targetFile = target.resolve(metadata.name)
+                targetFile.toFile.getParentFile.mkdirs() // missing error handler
+                source.runWith(FileIO.toPath(targetFile))
+            }
+          // #zip-reader
+        } finally {
+          Files.walk(target).sorted(java.util.Comparator.reverseOrder()).iterator().asScala.foreach(p =>
+            Files.delete(p))
+        }
       }
     }
   }
 
   private def getPathFromResources(fileName: String): Path =
-    Paths.get(getClass.getClassLoader.getResource(fileName).getPath)
+    Paths.get(getClass.getClassLoader.getResource(fileName).toURI)
 
   private def generateInputFiles(numberOfFiles: Int, lengthOfFile: Int): Map[String, ByteString] = {
     val r = new scala.util.Random(31)

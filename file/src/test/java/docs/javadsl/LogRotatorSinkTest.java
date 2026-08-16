@@ -15,7 +15,6 @@ package docs.javadsl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -93,7 +92,7 @@ public class LogRotatorSinkTest {
   @Test
   public void timeBased() throws Exception {
     // #time
-    final Path destinationDir = FileSystems.getDefault().getPath("/tmp");
+    final Path destinationDir = Files.createTempDirectory("log-rotation-test");
     final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("'stream-'yyyy-MM-dd_HH'.log'");
 
     Creator<Function<ByteString, Optional<Path>>> timeBasedTriggerCreator =
@@ -114,47 +113,59 @@ public class LogRotatorSinkTest {
         LogRotatorSink.createFromFunction(timeBasedTriggerCreator);
     // #time
 
-    CompletionStage<Done> fileSizeCompletion =
-        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
-            .map(ByteString::fromString)
-            .runWith(timeBasedSink, system);
+    try {
+      CompletionStage<Done> fileSizeCompletion =
+          Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
+              .map(ByteString::fromString)
+              .runWith(timeBasedSink, system);
 
-    assertEquals(
-        Done.getInstance(), fileSizeCompletion.toCompletableFuture().get(2, TimeUnit.SECONDS));
+      assertEquals(
+          Done.getInstance(), fileSizeCompletion.toCompletableFuture().get(2, TimeUnit.SECONDS));
 
-    /*
-    // #sample
-    import org.apache.pekko.stream.connectors.file.javadsl.LogRotatorSink;
+      /*
+      // #sample
+      import org.apache.pekko.stream.connectors.file.javadsl.LogRotatorSink;
 
-    Creator<Function<ByteString, Optional<Path>>> triggerFunctionCreator = ...;
+      Creator<Function<ByteString, Optional<Path>>> triggerFunctionCreator = ...;
 
-    // #sample
-    */
-    Creator<Function<ByteString, Optional<Path>>> triggerFunctionCreator = timeBasedTriggerCreator;
+      // #sample
+      */
+      Creator<Function<ByteString, Optional<Path>>> triggerFunctionCreator =
+          timeBasedTriggerCreator;
 
-    Source<ByteString, NotUsed> source =
-        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
-            .map(ByteString::fromString);
-    // #sample
-    CompletionStage<Done> completion =
-        Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
-            .map(ByteString::fromString)
-            .runWith(LogRotatorSink.createFromFunction(triggerFunctionCreator), system);
+      Source<ByteString, NotUsed> source =
+          Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
+              .map(ByteString::fromString);
+      // #sample
+      CompletionStage<Done> completion =
+          Source.from(List.of("test1", "test2", "test3", "test4", "test5", "test6"))
+              .map(ByteString::fromString)
+              .runWith(LogRotatorSink.createFromFunction(triggerFunctionCreator), system);
 
-    // GZip compressing the data written
-    CompletionStage<Done> compressedCompletion =
-        source.runWith(
-            LogRotatorSink.withSinkFactory(
-                triggerFunctionCreator,
-                path ->
-                    Flow.of(ByteString.class)
-                        .via(Compression.gzip())
-                        .toMat(FileIO.toPath(path), Keep.right())),
-            system);
-    // #sample
+      // GZip compressing the data written
+      CompletionStage<Done> compressedCompletion =
+          source.runWith(
+              LogRotatorSink.withSinkFactory(
+                  triggerFunctionCreator,
+                  path ->
+                      Flow.of(ByteString.class)
+                          .via(Compression.gzip())
+                          .toMat(FileIO.toPath(path), Keep.right())),
+              system);
+      // #sample
 
-    assertEquals(Done.getInstance(), completion.toCompletableFuture().get(2, TimeUnit.SECONDS));
-    assertEquals(
-        Done.getInstance(), compressedCompletion.toCompletableFuture().get(2, TimeUnit.SECONDS));
+      assertEquals(Done.getInstance(), completion.toCompletableFuture().get(2, TimeUnit.SECONDS));
+      assertEquals(
+          Done.getInstance(), compressedCompletion.toCompletableFuture().get(2, TimeUnit.SECONDS));
+    } finally {
+      // Clean up temp directory and all files created by the trigger
+      java.util.Comparator<java.io.File> reverse =
+          (a, b) -> b.getAbsolutePath().compareTo(a.getAbsolutePath());
+      java.io.File[] children = destinationDir.toFile().listFiles();
+      if (children != null) {
+        java.util.Arrays.stream(children).sorted(reverse).forEach(java.io.File::delete);
+      }
+      destinationDir.toFile().delete();
+    }
   }
 }

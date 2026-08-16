@@ -106,6 +106,7 @@ class LogRotatorSinkSpec
     }
 
     "work for size-based rotation " in assertAllStagesStopped {
+      val createdFiles = Seq.newBuilder[Path]
       // #size
       import org.apache.pekko.stream.connectors.file.scaladsl.LogRotatorSink
 
@@ -115,6 +116,7 @@ class LogRotatorSinkSpec
         (element: ByteString) =>
           if (size + element.size > max) {
             val path = Files.createTempFile("out-", ".log")
+            createdFiles += path
             size = element.size
             Some(path)
           } else {
@@ -131,12 +133,16 @@ class LogRotatorSinkSpec
         .map(ByteString(_))
         .runWith(sizeRotatorSink)
 
-      fileSizeCompletion.futureValue shouldBe Done
+      try {
+        fileSizeCompletion.futureValue shouldBe Done
+      } finally {
+        createdFiles.result().foreach(f => Files.deleteIfExists(f))
+      }
     }
 
     "work for time-based rotation " in assertAllStagesStopped {
       // #time
-      val destinationDir = FileSystems.getDefault.getPath("/tmp")
+      val destinationDir = Files.createTempDirectory(fs.getPath("/"), "time-rotation")
       val formatter = DateTimeFormatter.ofPattern("'stream-'yyyy-MM-dd_HH'.log'")
 
       val timeBasedTriggerCreator: () => ByteString => Option[Path] = () => {
@@ -180,7 +186,7 @@ class LogRotatorSinkSpec
 
     "work for stream-based rotation " in assertAllStagesStopped {
       // #stream
-      val destinationDir = FileSystems.getDefault.getPath("/tmp")
+      val destinationDir = Files.createTempDirectory(fs.getPath("/"), "stream-rotation")
 
       val streamBasedTriggerCreator: () => ((String, String)) => Option[Path] = () => {
         var currentFilename: Option[String] = None

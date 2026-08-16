@@ -185,3 +185,48 @@ jobs:
       - name: Print logs on failure
         if: failure()
         run: find . -name "*.log" -exec ./scripts/cat-log.sh {} \;
+
+  connectors-windows:
+    runs-on: windows-latest
+    if: github.repository == 'apache/pekko-connectors'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { connector: file }
+          - { connector: ftp, test_cmd: 'ftp/testOnly org.apache.pekko.stream.connectors.ftp.impl.*' }
+
+    env:
+      JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install sbt
+        uses: sbt/setup-sbt@bfea3c5f48abd221b04a6df4798aa5eb8b6a2baf # v1.5.6
+
+      - name: Cache Coursier cache
+        uses: coursier/cache-action@95e5b1029b6b86e7bac033ee44a0697d8a527d2d # v6.4.7
+
+      - name: ${{ matrix.connector }}
+        shell: bash
+        env:
+          CONNECTOR: ${{ matrix.connector }}
+          TEST_CMD: ${{ matrix.test_cmd }}
+        run: |-
+          if [ -n "$TEST_CMD" ]; then
+            sbt "+${TEST_CMD}"
+          else
+            sbt "+${CONNECTOR}/test"
+          fi

@@ -178,36 +178,40 @@ class TarArchiveSpec
         Source.future(oneFileArchive)
       val target = Files.createTempDirectory("pekko-connectors-tar-")
 
-      // #tar-reader
-      val tar =
-        bytesSource
-          .via(Archive.tarReader())
-          .mapAsync(1) {
-            case (metadata, source) =>
-              val targetFile = target.resolve(metadata.filePath)
-              if (metadata.isDirectory) {
-                Source
-                  .single(targetFile)
-                  .via(Directory.mkdirs())
-                  .runWith(Sink.ignore)
-              } else {
-                // create the target directory
-                Source
-                  .single(targetFile.getParent)
-                  .via(Directory.mkdirs())
-                  .runWith(Sink.ignore)
-                  .map { _ =>
-                    // stream the file contents to a local file
-                    source.runWith(FileIO.toPath(targetFile))
-                  }
-              }
-          }
-          .runWith(Sink.ignore)
-      // #tar-reader
-      tar.futureValue shouldBe Done
-      val file: File = target.resolve("dir/file1.txt").toFile
-      eventually {
-        file.exists() shouldBe true
+      try {
+        // #tar-reader
+        val tar =
+          bytesSource
+            .via(Archive.tarReader())
+            .mapAsync(1) {
+              case (metadata, source) =>
+                val targetFile = target.resolve(metadata.filePath)
+                if (metadata.isDirectory) {
+                  Source
+                    .single(targetFile)
+                    .via(Directory.mkdirs())
+                    .runWith(Sink.ignore)
+                } else {
+                  // create the target directory
+                  Source
+                    .single(targetFile.getParent)
+                    .via(Directory.mkdirs())
+                    .runWith(Sink.ignore)
+                    .map { _ =>
+                      // stream the file contents to a local file
+                      source.runWith(FileIO.toPath(targetFile))
+                    }
+                }
+            }
+            .runWith(Sink.ignore)
+        // #tar-reader
+        tar.futureValue shouldBe Done
+        val file: File = target.resolve("dir/file1.txt").toFile
+        eventually {
+          file.exists() shouldBe true
+        }
+      } finally {
+        Files.walk(target).sorted(Comparator.reverseOrder()).iterator().asScala.foreach(p => Files.delete(p))
       }
     }
 

@@ -43,11 +43,16 @@ class FileTailSourceExtrasSpec
     with ScalaFutures
     with LogCapturing {
 
-  private val fs = Jimfs.newFileSystem(Configuration.forCurrentPlatform.toBuilder.build)
+  import scala.jdk.CollectionConverters._
+  private val fs = Jimfs.newFileSystem(Configuration.forCurrentPlatform)
+  private val testFile = fs.getRootDirectories.asScala.head.resolve("file")
+
+  private val isWindows = System.getProperty("os.name", "").toLowerCase.contains("windows")
 
   "The FileTailSource" should assertAllStagesStopped {
     "demo stream shutdown when file deleted" in {
-      val path = fs.getPath("/file")
+      assume(!isWindows, "Jimfs WatchService does not fire events on Windows")
+      val path = testFile
       Files.write(path, "a\n".getBytes(UTF_8))
 
       // #shutdown-on-delete
@@ -81,7 +86,8 @@ class FileTailSourceExtrasSpec
     }
 
     "demo stream shutdown when with idle timeout" in {
-      val path = fs.getPath("/file")
+      assume(!isWindows, "Jimfs file I/O does not work reliably on Windows")
+      val path = testFile
       Files.write(path, "a\n".getBytes(UTF_8))
 
       // #shutdown-on-idle-timeout
@@ -106,5 +112,10 @@ class FileTailSourceExtrasSpec
       probe.expectComplete()
     }
 
+  }
+
+  override protected def afterAll(): Unit = {
+    fs.close()
+    super.afterAll()
   }
 }
