@@ -28,7 +28,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.2"
 
-  val AwsSdk2Version = "2.53.3"
+  val AwsSdk2Version = "2.54.1"
 
   val NettyVersion = "4.2.17.Final"
 
@@ -111,7 +111,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.34.0",
+      "com.rabbitmq" % "amqp-client" % "5.35.0",
       "org.junit.jupiter" % "junit-jupiter-params" % JupiterKeys.junitJupiterVersion.value % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
@@ -462,7 +462,7 @@ object Dependencies {
     wireMockDependencies)
 
   val SpringWeb = {
-    val SpringVersion = "7.0.8"
+    val SpringVersion = "7.0.9"
     val SpringBootVersion = "4.1.1"
     Seq(
       libraryDependencies ++= Seq(
@@ -532,7 +532,7 @@ object Dependencies {
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.4.0", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.39.2"))
+      "com.github.jnr" % "jnr-unixsocket" % "0.39.3"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
