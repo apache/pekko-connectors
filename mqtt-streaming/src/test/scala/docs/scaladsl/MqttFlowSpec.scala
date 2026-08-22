@@ -101,7 +101,8 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
       // #run-streaming-flow
 
       // for shutting down properly
-      commands.complete()
+      // Sink.head may already have cancelled upstream, which completes the queue
+      if (!commands.isCompleted) commands.complete()
       completion.foreach(_ => session.shutdown())
       // #run-streaming-flow
     }
