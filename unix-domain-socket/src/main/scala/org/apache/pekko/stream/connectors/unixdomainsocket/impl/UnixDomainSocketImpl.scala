@@ -245,7 +245,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
   private def acceptKey(
       localAddress: JnrUnixSocketAddress,
-      incomingConnectionQueue: SourceQueueWithComplete[IncomingConnection],
+      incomingConnectionQueue: BoundedSourceQueue[IncomingConnection],
       halfClose: Boolean,
       receiveBufferSize: Int,
       sendBufferSize: Int)(sel: Selector, key: SelectionKey)(implicit mat: Materializer, ec: ExecutionContext): Unit = {
@@ -262,12 +262,17 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
       try {
         acceptedChannel.register(sel, SelectionKey.OP_READ, context)
       } catch { case _: IOException => }
-      incomingConnectionQueue.offer(
+      val queued = incomingConnectionQueue.offer(
         IncomingConnection(
           localAddress = UnixSocketAddress(Paths.get(localAddress.path())),
           remoteAddress = UnixSocketAddress(
             Paths.get(Option(acceptingChannel.getRemoteSocketAddress).getOrElse(new JnrUnixSocketAddress("")).path())),
           flow = connectionFlow))
+      if (queued != QueueOfferResult.Enqueued) {
+        // the connection could not be handed to the stream - close it rather than leaving it dangling
+        try acceptedChannel.close()
+        catch { case _: IOException => }
+      }
     }
   }
 
@@ -394,9 +399,10 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
       halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] = {
 
     val bind: () => Source[IncomingConnection, Future[ServerBinding]] = { () =>
-      val (incomingConnectionQueue, incomingConnectionSource) =
+      val ((incomingConnectionQueue, incomingConnectionTermination), incomingConnectionSource) =
         Source
-          .queue[IncomingConnection](2, OverflowStrategy.backpressure)
+          .queue[IncomingConnection](backlog)
+          .watchTermination(Keep.both)
           .prefixAndTail(0)
           .map {
             case (_, source) =>
@@ -433,21 +439,21 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
           ServerBinding(UnixSocketAddress(Paths.get(address.path))) { () =>
             registeredKey.cancel()
             channel.close()
-            incomingConnectionQueue.complete()
-            incomingConnectionQueue.watchCompletion().map(_ => ())
+            if (!incomingConnectionQueue.isCompleted) incomingConnectionQueue.complete()
+            incomingConnectionTermination.map(_ => ())
           })
       } catch {
         case e: IOException =>
           val withAddress = new IOException(e.getMessage + s" ($address)", e)
           registeredKey.cancel()
           channel.close()
-          incomingConnectionQueue.fail(withAddress)
+          if (!incomingConnectionQueue.isCompleted) incomingConnectionQueue.fail(withAddress)
           serverBinding.failure(withAddress)
 
         case NonFatal(e) =>
           registeredKey.cancel()
           channel.close()
-          incomingConnectionQueue.fail(e)
+          if (!incomingConnectionQueue.isCompleted) incomingConnectionQueue.fail(e)
           serverBinding.failure(e)
       }
 
