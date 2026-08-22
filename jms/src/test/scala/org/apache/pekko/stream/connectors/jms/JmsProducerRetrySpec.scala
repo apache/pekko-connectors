@@ -27,8 +27,11 @@ import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 
+import scala.annotation.nowarn
 import scala.concurrent.duration._
 
+// this spec exercises Source.queue with OverflowStrategy.backpressure semantics
+@nowarn("cat=deprecation")
 class JmsProducerRetrySpec extends JmsSpec {
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(20.seconds)
