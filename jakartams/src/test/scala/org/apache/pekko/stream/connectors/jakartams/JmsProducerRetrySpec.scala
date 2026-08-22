@@ -16,9 +16,11 @@ package org.apache.pekko.stream.connectors.jakartams
 import com.github.pjfanning.jakartamswrapper.WrappedConnectionFactory
 import jakarta.jms.{ JMSException, Message, TextMessage }
 import org.apache.pekko
+import pekko.Done
 import pekko.stream._
 import pekko.stream.connectors.jakartams.scaladsl.{ JmsConsumer, JmsProducer }
 import pekko.stream.scaladsl.{ Keep, Sink, Source }
+import pekko.testkit.TestProbe
 import org.mockito.ArgumentMatchers.{ any, anyInt, anyLong }
 import org.mockito.Mockito.when
 import org.mockito.invocation.InvocationOnMock
@@ -50,8 +52,15 @@ class JmsProducerRetrySpec extends JmsSpec {
               SendRetrySettings(system).withInitialRetry(10.millis).withMaxBackoff(10.millis).withInfiniteRetries()))
         .withAttributes(ActorAttributes.supervisionStrategy(stoppingDecider))
 
-      val (queue, result) = Source
-        .queue[Int](10, OverflowStrategy.backpressure)
+      // one element is accepted at a time, each acknowledged back to `probe` before the next is sent
+      val probe = TestProbe()
+      val ackMessage = "ack"
+
+      val (ref, result) = Source
+        .actorRefWithBackpressure[Int](
+          ackMessage,
+          { case Done => CompletionStrategy.draining },
+          PartialFunction.empty)
         .zipWithIndex
         .map(e => JmsMapMessage(Map("time" -> System.currentTimeMillis(), "index" -> e._2)))
         .via(jms)
@@ -64,7 +73,12 @@ class JmsProducerRetrySpec extends JmsSpec {
         .take(20)
         .runWith(Sink.seq)
 
-      for (_ <- 1 to 10) queue.offer(1) // 10 before the crash
+      def offer(elem: Int): Unit = {
+        ref.tell(elem, probe.ref)
+        probe.expectMsg(20.seconds, ackMessage)
+      }
+
+      for (_ <- 1 to 10) offer(1) // 10 before the crash
       Thread.sleep(500)
       server.stop() // crash.
 
@@ -72,8 +86,8 @@ class JmsProducerRetrySpec extends JmsSpec {
       // https://activemq.apache.org/how-do-i-restart-embedded-broker.html
       server.start() // recover.
       val restartTime = System.currentTimeMillis()
-      for (_ <- 1 to 10) queue.offer(1) // 10 after the crash
-      queue.complete()
+      for (_ <- 1 to 10) offer(1) // 10 after the crash
+      ref.tell(Done, probe.ref)
 
       val resultList = result.futureValue
       def index(m: Map[String, Any]) = m("index").asInstanceOf[Long]
