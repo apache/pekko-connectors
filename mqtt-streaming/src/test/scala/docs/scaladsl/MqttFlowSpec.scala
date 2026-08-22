@@ -30,7 +30,6 @@ import pekko.util.ByteString
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 
-import scala.annotation.nowarn
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
@@ -46,8 +45,6 @@ class TypedMqttFlowSpec
       "typed-flow-spec/topic1",
       pekko.actor.typed.ActorSystem(Behaviors.ignore, "TypedMqttFlowSpec").toClassic)
 
-// this spec exercises Source.queue with explicit OverflowStrategy buffering semantics
-@nowarn("cat=deprecation")
 abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSystem) extends TestKit(system)
     with AnyWordSpecLike with Matchers with BeforeAndAfterAll with ScalaFutures with LogCapturing {
 
