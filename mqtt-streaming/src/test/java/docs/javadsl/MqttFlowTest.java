@@ -153,7 +153,8 @@ public class MqttFlowTest {
     // #run-streaming-flow
 
     // for shutting down properly
-    commands.complete();
+    // Sink.head may already have cancelled upstream, which completes the queue
+    if (!commands.isCompleted()) commands.complete();
     commandsCompletion.thenAccept(done -> session.shutdown());
     // #run-streaming-flow
 
