@@ -125,7 +125,8 @@ public class MqttFlowTest {
                       @Override
                       public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
                         if (x.getEvent().isPresent()
-                            && x.getEvent().get().event() instanceof Publish publish) return publish;
+                            && x.getEvent().get().event() instanceof Publish publish)
+                          return publish;
                         else throw noMatch();
                       }
                     })
@@ -268,7 +269,8 @@ public class MqttFlowTest {
                       @Override
                       public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
                         if (x.getEvent().isPresent()
-                            && x.getEvent().get().event() instanceof Publish publish) return publish;
+                            && x.getEvent().get().event() instanceof Publish publish)
+                          return publish;
                         else throw noMatch();
                       }
                     })

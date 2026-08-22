@@ -21,7 +21,7 @@ import pekko.actor.typed.scaladsl.adapter._
 import pekko.event.{ Logging, LoggingAdapter }
 import pekko.stream.connectors.mqtt.streaming._
 import pekko.stream.connectors.mqtt.streaming.scaladsl.{ ActorMqttClientSession, ActorMqttServerSession, Mqtt }
-import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, SourceQueueWithComplete, Tcp }
+import pekko.stream.scaladsl.{ BroadcastHub, Flow, Keep, Sink, Source, Tcp }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
@@ -76,9 +76,10 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
       // #create-streaming-flow
 
       // #run-streaming-flow
-      val (commands: SourceQueueWithComplete[Command[Nothing]], events: Future[Publish]) =
+      val ((commands, completion), events) =
         Source
-          .queue(2, OverflowStrategy.fail)
+          .queue[Command[Nothing]](2)
+          .watchTermination(Keep.both)
           .via(mqttFlow)
           .collect {
             case Right(Event(p: Publish, _)) => p
@@ -101,7 +102,7 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
 
       // for shutting down properly
       commands.complete()
-      commands.watchCompletion().foreach(_ => session.shutdown())
+      completion.foreach(_ => session.shutdown())
       // #run-streaming-flow
     }
   }
@@ -131,7 +132,7 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
                   .join(connection.flow)
 
               val (queue, source) = Source
-                .queue[Command[Nothing]](3, OverflowStrategy.dropHead)
+                .queue[Command[Nothing]](10)
                 .via(mqttFlow)
                 .toMat(BroadcastHub.sink)(Keep.both)
                 .run()
@@ -167,9 +168,10 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
       val clientSession = ActorMqttClientSession(settings)
       val connection = Tcp().outgoingConnection(host, binding.localAddress.getPort)
       val mqttFlow = Mqtt.clientSessionFlow(clientSession, ByteString("1")).join(connection)
-      val (commands, events) =
+      val ((commands, completion), events) =
         Source
-          .queue(2, OverflowStrategy.fail)
+          .queue[Command[Nothing]](2)
+          .watchTermination(Keep.both)
           .via(mqttFlow)
           .log("received")
           .collect {
@@ -193,7 +195,7 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
       server.shutdown()
       session.shutdown()
       // #run-streaming-bind-flow
-      commands.watchCompletion().foreach(_ => clientSession.shutdown())
+      completion.foreach(_ => clientSession.shutdown())
     }
   }
 
@@ -209,7 +211,7 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
         val conn = Tcp().outgoingConnection("localhost", 1883)
         val mqttFlow = Mqtt.clientSessionFlow(session, ByteString(id)).join(conn)
         val (commands, events) = Source
-          .queue(10, OverflowStrategy.fail)
+          .queue[Command[Nothing]](10)
           .via(mqttFlow)
           .collect {
             case Right(Event(p: SubAck, _)) => p
