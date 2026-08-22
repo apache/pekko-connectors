@@ -34,6 +34,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.{ SelectionKey, Selector }
 import java.nio.file.{ Files, Path, Paths }
+import scala.annotation.nowarn
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.util.control.NonFatal
@@ -292,6 +293,10 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
     }
   }
 
+  // `Source.queue` with an `OverflowStrategy` is deprecated in favour of `Source.queue(bufferSize)`, but the
+  // `BoundedSourceQueue` it materializes drops the newest element instead of backpressuring. The selector loop
+  // relies on the offer `Future` to know when a read has been consumed, so the deprecated overload is kept here.
+  @nowarn("msg=deprecated")
   private def sendReceiveStructures(sel: Selector, receiveBufferSize: Int, sendBufferSize: Int, halfClose: Boolean)(
       implicit mat: Materializer,
       ec: ExecutionContext): (SendReceiveContext, Flow[ByteString, ByteString, NotUsed]) = {
@@ -389,6 +394,9 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
   private val sendBufferSize: Int =
     system.settings.config.getBytes("pekko.stream.connectors.unix-domain-socket.send-buffer-size").toInt
 
+  // See the note on `sendReceiveStructures`: accepted connections must not be dropped when the buffer is full,
+  // so the deprecated `Source.queue` overload with `OverflowStrategy.backpressure` is kept here.
+  @nowarn("msg=deprecated")
   protected def bind(path: Path,
       backlog: Int = 128,
       halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] = {

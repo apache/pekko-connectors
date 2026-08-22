@@ -28,6 +28,7 @@ import pekko.stream.{ ActorAttributes, Attributes, OverflowStrategy }
 import javax.jms
 
 import scala.concurrent.{ ExecutionContext, Future, Promise }
+import scala.annotation.nowarn
 import scala.util.control.NonFatal
 import scala.util.{ Failure, Success, Try }
 
@@ -63,6 +64,9 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   private var connectionState: InternalConnectionState = JmsConnectorDisconnected
 
+  // `Source.queue` with an `OverflowStrategy` is deprecated, but the `BoundedSourceQueue` that
+  // `Source.queue(bufferSize)` materializes drops the newest element rather than the oldest.
+  @nowarn("msg=deprecated")
   override def preStart(): Unit = {
     // keep two elements since the time between initializing and connected can be very short.
     // always drops the old state, and keeps the most current (two) state(s) in the queue.
