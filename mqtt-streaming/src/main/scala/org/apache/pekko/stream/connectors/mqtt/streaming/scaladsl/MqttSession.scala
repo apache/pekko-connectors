@@ -449,6 +449,10 @@ final class ActorMqttServerSession(settings: MqttSessionSettings)(implicit syste
   private val system = systemProvider.classicSystem
   private val serverSessionId = serverSessionCounter.getAndIncrement()
 
+  // `Source.queue` with an `OverflowStrategy` is deprecated, but the `BoundedSourceQueue` that
+  // `Source.queue(bufferSize)` materializes drops the newest element instead of backpressuring.
+  // The offer `Future` is used to backpressure the session, so the deprecated overload is kept here.
+  @nowarn("msg=deprecated")
   private val (terminations, terminationsSource) = Source
     .queue[ServerConnector.ClientSessionTerminated](settings.clientTerminationWatcherBufferSize,
       OverflowStrategy.backpressure)
