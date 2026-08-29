@@ -140,8 +140,10 @@ import io.pravega.common.util.AsyncIterator
 
   override def postStop(): Unit = {
     log.debug("Stopping reader {}", tableName)
-    table.close()
-    keyValueTableFactory.close()
+    PravegaTableCleanup.closeTableAndFactory(
+      if (table ne null) table.close(),
+      if (keyValueTableFactory ne null) keyValueTableFactory.close())((what, exc) =>
+      log.error(exc, "Error while closing {} for [{}]", what, tableName))
   }
 
 }
