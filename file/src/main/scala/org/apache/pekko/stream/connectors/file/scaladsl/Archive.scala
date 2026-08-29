@@ -22,6 +22,7 @@ import pekko.util.ByteString
 
 import java.io.File
 import java.nio.charset.{ Charset, StandardCharsets }
+import java.util.zip.Deflater
 
 /**
  * Scala API.
@@ -30,16 +31,28 @@ object Archive {
 
   /**
    * Flow for compressing multiple files into one ZIP file.
+   *
    * @param deflateCompression optional compression level, 0-9, where 0 is no compression and 9 is maximum compression.
-   * If not specified, the default compression level of the underlying library will be used.
+   * `Deflater.DEFAULT_COMPRESSION` (-1) is also accepted. If not specified, the default compression
+   * level of the underlying library is used.
    * @since 2.0.0
    */
   def zip(
-      deflateCompression: Option[Int]): Flow[(ArchiveMetadata, Source[ByteString, Any]), ByteString, NotUsed] =
+      deflateCompression: Option[Int]): Flow[(ArchiveMetadata, Source[ByteString, Any]), ByteString, NotUsed] = {
+    deflateCompression.foreach { level =>
+      require(
+        level == Deflater.DEFAULT_COMPRESSION ||
+        (level >= Deflater.NO_COMPRESSION &&
+        level <= Deflater.BEST_COMPRESSION),
+        s"deflateCompression must be between ${Deflater.NO_COMPRESSION} and ${Deflater.BEST_COMPRESSION}, " +
+        s"or ${Deflater.DEFAULT_COMPRESSION} for the default, was $level")
+    }
     ZipArchiveManager.zipFlow(deflateCompression)
+  }
 
   /**
-   * Flow for compressing multiple files into one ZIP file.
+   * Flow for compressing multiple files into one ZIP file, using the default
+   * compression level of the underlying library.
    */
   def zip(): Flow[(ArchiveMetadata, Source[ByteString, Any]), ByteString, NotUsed] =
     zip(None)
