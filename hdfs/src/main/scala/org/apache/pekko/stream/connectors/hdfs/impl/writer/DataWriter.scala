@@ -47,6 +47,9 @@ private[writer] final case class DataWriter(
     copy(maybeTargetPath = Some(createTargetPath(pathGenerator, rotationCount)))
   }
 
+  override def close(): Unit =
+    if (isOutputOpened) output.close()
+
   override def create(fs: FileSystem, file: Path): FSDataOutputStream = fs.create(file, overwrite)
 
 }

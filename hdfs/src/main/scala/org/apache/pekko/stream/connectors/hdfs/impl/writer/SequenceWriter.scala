@@ -48,6 +48,9 @@ private[writer] final case class SequenceWriter[K <: Writable, V <: Writable](
     copy(maybeTargetPath = Some(createTargetPath(pathGenerator, rotationCount)))
   }
 
+  override def close(): Unit =
+    if (isOutputOpened) output.close()
+
   override protected def create(fs: FileSystem, file: Path): SequenceFile.Writer = {
     val ops = SequenceFile.Writer.file(file) +: writerOptions
     SequenceFile.createWriter(fs.getConf, ops: _*)
