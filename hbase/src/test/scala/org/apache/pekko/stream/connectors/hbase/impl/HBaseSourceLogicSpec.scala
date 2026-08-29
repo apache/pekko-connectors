@@ -28,8 +28,8 @@ class HBaseSourceLogicSpec extends AnyWordSpec with Matchers {
 
     "close the scanner, the table and the connection" in {
       val closed = ListBuffer.empty[String]
-      HBaseSourceLogic.closeAll(closed += "scanner", closed += "table", closed += "connection")(
-        (_, _) => fail("no error expected"))
+      HBaseSourceLogic.closeAll(closed += "scanner", closed += "table", closed += "connection")((_, _) =>
+        fail("no error expected"))
       closed.toList shouldBe List("scanner", "table", "connection")
     }
 
