@@ -45,11 +45,8 @@ object Dependencies {
   val scalaCheckVersion = "1.19.0"
   val HadoopVersion = "3.4.3"
 
-  // Legacy versions support Slf4J v1 for compatibility with older libs
   val Slf4jVersion = "2.0.18"
-  val Slf4jLegacyVersion = "1.7.36"
   val LogbackVersion = "1.6.3"
-  val LogbackLegacyVersion = "1.2.13"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -509,12 +506,11 @@ object Dependencies {
   val Solr = Seq(
     libraryDependencies ++= Seq(
       "org.apache.solr" % "solr-solrj" % SolrjVersion,
-      ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
-        "log4j-slf4j-impl"),
-      "org.slf4j" % "log4j-over-slf4j" % Slf4jLegacyVersion % Test),
-    dependencyOverrides ++= Seq(
-      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
+      ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test)
+        // exclude the slf4j providers backed by log4j2 so that logback
+        // (used by pekko-connectors-testkit's log capturing) stays the only provider
+        .exclude("org.apache.logging.log4j", "log4j-slf4j-impl")
+        .exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(
