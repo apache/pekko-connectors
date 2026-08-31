@@ -122,7 +122,12 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
               case null                                   =>
               case sendReceiveContext: SendReceiveContext =>
                 sendReceiveContext.send match {
-                  case SendRequested(buffer, sent) if keySelectable && key.isWritable =>
+                  // Attempt the write whenever the key is selected, not only when it reports
+                  // writable. The underlying jnr-enxio selectors register edge-triggered kqueue
+                  // filters and can lose a write-readiness event when a read event for the same
+                  // channel arrives in the same batch - a non-blocking write simply returns 0
+                  // when the socket has no space, so trying is always safe.
+                  case SendRequested(buffer, sent) if keySelectable =>
                     val channel = key.channel().asInstanceOf[UnixSocketChannel]
 
                     val written =
@@ -142,10 +147,14 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
                     log.debug("written: {} remaining: {}", written, remaining)
 
-                    if (written >= 0 && remaining == 0) {
-                      sendReceiveContext.send = SendAvailable(buffer)
-                      key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE)
-                      sent.success(Done)
+                    if (written >= 0) {
+                      if (remaining == 0) {
+                        sendReceiveContext.send = SendAvailable(buffer)
+                        key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE)
+                        sent.success(Done)
+                      } else {
+                        key.interestOps(key.interestOps() | SelectionKey.OP_WRITE)
+                      }
                     }
                   case _: SendRequested =>
                     key.interestOps(key.interestOps() | SelectionKey.OP_WRITE)
@@ -175,7 +184,11 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                     } catch { case _: IOException => }
                 }
                 sendReceiveContext.receive match {
-                  case ReceiveAvailable(queue, buffer) if keySelectable && key.isReadable =>
+                  // As for writes above, attempt the read whenever the key is selected so that a
+                  // read-readiness event lost to the edge-triggered selector is recovered by the
+                  // event that clobbered it. A read of 0 bytes means "no data yet" and leaves the
+                  // registered read interest as it is.
+                  case ReceiveAvailable(queue, buffer) if keySelectable =>
                     buffer.clear()
 
                     val channel = key.channel.asInstanceOf[UnixSocketChannel]
@@ -190,12 +203,14 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
                     log.debug("read: {}", read)
 
-                    if (read >= 0) {
+                    if (read > 0) {
                       buffer.flip()
                       val pendingResult = queue.offer(ByteString(buffer))
                       pendingResult.onComplete(_ => sel.wakeup())
                       sendReceiveContext.receive = PendingReceiveAck(queue, buffer, pendingResult)
                       key.interestOps(key.interestOps() & ~SelectionKey.OP_READ)
+                    } else if (read == 0) {
+                      // No data available - the key was selected for another reason
                     } else {
                       queue.complete()
                       try {
