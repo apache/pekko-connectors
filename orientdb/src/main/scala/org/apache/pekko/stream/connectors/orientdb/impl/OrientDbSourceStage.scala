@@ -50,7 +50,10 @@ private[orientdb] final class OrientDbSourceStage[T](className: String,
     clazz: Option[Class[T]] = None)
     extends GraphStage[SourceShape[OrientDbReadResult[T]]] {
 
-  OrientDbSourceStage.validateClassName(className)
+  // `className` is interpolated into the SELECT below, so it has to be validated.
+  // When an explicit `query` is given the class name is never used, and callers
+  // are not required to supply a meaningful one.
+  if (query.isEmpty) OrientDbSourceStage.validateClassName(className)
 
   val out: Outlet[OrientDbReadResult[T]] = Outlet("OrientDBSource.out")
   override val shape = SourceShape(out)
