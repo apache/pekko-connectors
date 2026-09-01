@@ -15,7 +15,16 @@ package org.apache.pekko.stream.connectors.unixdomainsocket
 package impl
 
 import org.apache.pekko
-import pekko.actor.{ Cancellable, CoordinatedShutdown, ExtendedActorSystem, Extension }
+import pekko.actor.{
+  Actor,
+  ActorRef,
+  Cancellable,
+  CoordinatedShutdown,
+  ExtendedActorSystem,
+  Extension,
+  PoisonPill,
+  Props
+}
 import pekko.annotation.InternalApi
 import pekko.event.{ Logging, LoggingAdapter }
 import pekko.stream._
@@ -24,7 +33,7 @@ import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket.{
   OutgoingConnection,
   ServerBinding
 }
-import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
 import pekko.util.ByteString
 import pekko.{ Done, NotUsed }
 import jnr.enxio.channels.NativeSelectorProvider
@@ -34,7 +43,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.{ SelectionKey, Selector }
 import java.nio.file.{ Files, Path, Paths }
-import scala.annotation.nowarn
+import java.util.concurrent.atomic.{ AtomicLong, AtomicReference }
 import scala.concurrent.duration.{ Duration, FiniteDuration }
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.util.control.NonFatal
@@ -47,15 +56,83 @@ import scala.util.{ Failure, Success, Try }
 private[unixdomainsocket] object UnixDomainSocketImpl {
 
   private sealed abstract class ReceiveContext(
-      val queue: SourceQueueWithComplete[ByteString],
+      val queue: ReceiveQueue,
       val buffer: ByteBuffer)
   private case class ReceiveAvailable(
-      override val queue: SourceQueueWithComplete[ByteString],
+      override val queue: ReceiveQueue,
       override val buffer: ByteBuffer) extends ReceiveContext(queue, buffer)
   private case class PendingReceiveAck(
-      override val queue: SourceQueueWithComplete[ByteString],
+      override val queue: ReceiveQueue,
       override val buffer: ByteBuffer,
-      pendingResult: Future[QueueOfferResult]) extends ReceiveContext(queue, buffer)
+      pendingResult: Future[Done]) extends ReceiveContext(queue, buffer)
+
+  private case object ReceiveAck
+  private case object ReceiveComplete
+
+  private val receiveAckActorCounter = new AtomicLong()
+
+  /**
+   * Receives the acknowledgements of [[Source.actorRefWithBackpressure]] on behalf of the io thread. The
+   * acknowledgement is only sent once the read-side stream has taken the element, so completing `pendingAck`
+   * is what tells the io thread that it may read from the socket again.
+   */
+  private final class ReceiveAckActor(pendingAck: AtomicReference[Promise[Done]], sel: Selector) extends Actor {
+    override def receive: Receive = {
+      case _ =>
+        val ack = pendingAck.getAndSet(null)
+        if (ack ne null) ack.trySuccess(Done)
+        sel.wakeup()
+    }
+  }
+
+  /**
+   * Hands bytes read from the socket to the read-side stream, one element at a time. `offer` must not be
+   * called again until the returned future has completed - the io thread enforces this by clearing
+   * `OP_READ` until then.
+   */
+  private final class ReceiveQueue(
+      ref: ActorRef,
+      ackReceiver: ActorRef,
+      pendingAck: AtomicReference[Promise[Done]],
+      val completion: Future[Done]) {
+
+    def offer(bytes: ByteString): Future[Done] = {
+      val ack = Promise[Done]()
+      pendingAck.set(ack)
+      ref.tell(bytes, ackReceiver)
+      ack.future
+    }
+
+    def complete(): Unit = ref.tell(ReceiveComplete, ackReceiver)
+  }
+
+  private def receiveStructures(sel: Selector, system: ExtendedActorSystem)(
+      implicit mat: Materializer,
+      ec: ExecutionContext): (ReceiveQueue, Source[ByteString, NotUsed]) = {
+    val pendingAck = new AtomicReference[Promise[Done]]()
+    val ackReceiver = system.systemActorOf(
+      Props(new ReceiveAckActor(pendingAck, sel)),
+      s"unix-domain-socket-receive-ack-${receiveAckActorCounter.incrementAndGet()}")
+
+    val ((ref, completion), receiveSource) =
+      Source
+        .actorRefWithBackpressure[ByteString](
+          ReceiveAck,
+          { case ReceiveComplete => CompletionStrategy.draining },
+          PartialFunction.empty)
+        .watchTermination(Keep.both)
+        .preMaterialize()
+
+    completion.onComplete { _ =>
+      // no further acknowledgement can arrive, so release the io thread rather than leaving OP_READ cleared
+      val outstanding = pendingAck.getAndSet(null)
+      if (outstanding ne null) outstanding.tryFailure(new IOException("Read-side stream terminated"))
+      ackReceiver ! PoisonPill
+      sel.wakeup()
+    }
+
+    (new ReceiveQueue(ref, ackReceiver, pendingAck, completion), receiveSource)
+  }
 
   private sealed abstract class SendContext(
       val buffer: ByteBuffer)
@@ -201,7 +278,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                       queue.complete()
                       try {
                         if (!sendReceiveContext.halfClose || sendReceiveContext.isOutputShutdown) {
-                          queue.watchCompletion().onComplete { _ =>
+                          queue.completion.onComplete { _ =>
                             log.debug("Read-side is shutting down")
                             key.cancel()
                             try {
@@ -221,7 +298,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
                   case _: ReceiveAvailable                                                                        =>
                   case PendingReceiveAck(receiveQueue, receiveBuffer, pendingResult) if pendingResult.isCompleted =>
                     pendingResult.value.get match {
-                      case Success(QueueOfferResult.Enqueued) =>
+                      case Success(_) =>
                         key.interestOps(key.interestOps() | SelectionKey.OP_READ)
                         sendReceiveContext.receive = ReceiveAvailable(receiveQueue, receiveBuffer)
                       case e =>
@@ -246,7 +323,8 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
   private def acceptKey(
       localAddress: JnrUnixSocketAddress,
-      incomingConnectionQueue: SourceQueueWithComplete[IncomingConnection],
+      system: ExtendedActorSystem,
+      incomingConnectionQueue: BoundedSourceQueue[IncomingConnection],
       halfClose: Boolean,
       receiveBufferSize: Int,
       sendBufferSize: Int)(sel: Selector, key: SelectionKey)(implicit mat: Materializer, ec: ExecutionContext): Unit = {
@@ -259,16 +337,21 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
 
     if (acceptedChannel != null) {
       acceptedChannel.configureBlocking(false)
-      val (context, connectionFlow) = sendReceiveStructures(sel, receiveBufferSize, sendBufferSize, halfClose)
+      val (context, connectionFlow) = sendReceiveStructures(sel, system, receiveBufferSize, sendBufferSize, halfClose)
       try {
         acceptedChannel.register(sel, SelectionKey.OP_READ, context)
       } catch { case _: IOException => }
-      incomingConnectionQueue.offer(
+      val queued = incomingConnectionQueue.offer(
         IncomingConnection(
           localAddress = UnixSocketAddress(Paths.get(localAddress.path())),
           remoteAddress = UnixSocketAddress(
             Paths.get(Option(acceptingChannel.getRemoteSocketAddress).getOrElse(new JnrUnixSocketAddress("")).path())),
           flow = connectionFlow))
+      if (queued != QueueOfferResult.Enqueued) {
+        // the connection could not be handed to the stream - close it rather than leaving it dangling
+        try acceptedChannel.close()
+        catch { case _: IOException => }
+      }
     }
   }
 
@@ -293,21 +376,16 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
     }
   }
 
-  // `Source.queue` with an `OverflowStrategy` is deprecated in favour of `Source.queue(bufferSize)`, but the
-  // `BoundedSourceQueue` it materializes drops the newest element instead of backpressuring. The selector loop
-  // relies on the offer `Future` to know when a read has been consumed, so the deprecated overload is kept here.
-  @nowarn("msg=deprecated")
-  private def sendReceiveStructures(sel: Selector, receiveBufferSize: Int, sendBufferSize: Int, halfClose: Boolean)(
+  private def sendReceiveStructures(
+      sel: Selector,
+      system: ExtendedActorSystem,
+      receiveBufferSize: Int,
+      sendBufferSize: Int,
+      halfClose: Boolean)(
       implicit mat: Materializer,
       ec: ExecutionContext): (SendReceiveContext, Flow[ByteString, ByteString, NotUsed]) = {
 
-    val (receiveQueue, receiveSource) =
-      Source
-        .queue[ByteString](2, OverflowStrategy.backpressure)
-        .prefixAndTail(0)
-        .map(_._2)
-        .toMat(Sink.head)(Keep.both)
-        .run()
+    val (receiveQueue, receiveSource) = receiveStructures(sel, system)
     val sendReceiveContext =
       new SendReceiveContext(
         SendAvailable(ByteBuffer.allocate(sendBufferSize)),
@@ -360,7 +438,7 @@ private[unixdomainsocket] object UnixDomainSocketImpl {
         }
         .to(Sink.ignore))
 
-    (sendReceiveContext, Flow.fromSinkAndSource(sendSink, Source.futureSource(receiveSource)))
+    (sendReceiveContext, Flow.fromSinkAndSource(sendSink, receiveSource))
   }
 }
 
@@ -394,17 +472,15 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
   private val sendBufferSize: Int =
     system.settings.config.getBytes("pekko.stream.connectors.unix-domain-socket.send-buffer-size").toInt
 
-  // See the note on `sendReceiveStructures`: accepted connections must not be dropped when the buffer is full,
-  // so the deprecated `Source.queue` overload with `OverflowStrategy.backpressure` is kept here.
-  @nowarn("msg=deprecated")
   protected def bind(path: Path,
       backlog: Int = 128,
       halfClose: Boolean = false): Source[IncomingConnection, Future[ServerBinding]] = {
 
     val bind: () => Source[IncomingConnection, Future[ServerBinding]] = { () =>
-      val (incomingConnectionQueue, incomingConnectionSource) =
+      val ((incomingConnectionQueue, incomingConnectionTermination), incomingConnectionSource) =
         Source
-          .queue[IncomingConnection](2, OverflowStrategy.backpressure)
+          .queue[IncomingConnection](backlog)
+          .watchTermination(Keep.both)
           .prefixAndTail(0)
           .map {
             case (_, source) =>
@@ -433,7 +509,7 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
       val registeredKey =
         channel.register(sel,
           SelectionKey.OP_ACCEPT,
-          acceptKey(address, incomingConnectionQueue, halfClose, receiveBufferSize, sendBufferSize) _)
+          acceptKey(address, system, incomingConnectionQueue, halfClose, receiveBufferSize, sendBufferSize) _)
       try {
         channel.socket().bind(address, backlog)
         sel.wakeup()
@@ -441,21 +517,21 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
           ServerBinding(UnixSocketAddress(Paths.get(address.path))) { () =>
             registeredKey.cancel()
             channel.close()
-            incomingConnectionQueue.complete()
-            incomingConnectionQueue.watchCompletion().map(_ => ())
+            if (!incomingConnectionQueue.isCompleted) incomingConnectionQueue.complete()
+            incomingConnectionTermination.map(_ => ())
           })
       } catch {
         case e: IOException =>
           val withAddress = new IOException(e.getMessage + s" ($address)", e)
           registeredKey.cancel()
           channel.close()
-          incomingConnectionQueue.fail(withAddress)
+          if (!incomingConnectionQueue.isCompleted) incomingConnectionQueue.fail(withAddress)
           serverBinding.failure(withAddress)
 
         case NonFatal(e) =>
           registeredKey.cancel()
           channel.close()
-          incomingConnectionQueue.fail(e)
+          if (!incomingConnectionQueue.isCompleted) incomingConnectionQueue.fail(e)
           serverBinding.failure(e)
       }
 
@@ -483,7 +559,7 @@ private[unixdomainsocket] abstract class UnixDomainSocketImpl(system: ExtendedAc
           case d: FiniteDuration => Some(system.scheduler.scheduleOnce(d, () => channel.close()))
           case _                 => None
         }
-      val (context, connectionFlow) = sendReceiveStructures(sel, receiveBufferSize, sendBufferSize, halfClose)
+      val (context, connectionFlow) = sendReceiveStructures(sel, system, receiveBufferSize, sendBufferSize, halfClose)
       val ra = new JnrUnixSocketAddress(remoteAddress.path.toFile)
       val log = system.log
       val registeredKey =

@@ -28,7 +28,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.2"
 
-  val AwsSdk2Version = "2.54.1"
+  val AwsSdk2Version = "2.54.7"
 
   val NettyVersion = "4.2.17.Final"
 
@@ -45,11 +45,8 @@ object Dependencies {
   val scalaCheckVersion = "1.19.0"
   val HadoopVersion = "3.4.3"
 
-  // Legacy versions support Slf4J v1 for compatibility with older libs
   val Slf4jVersion = "2.0.18"
-  val Slf4jLegacyVersion = "1.7.36"
   val LogbackVersion = "1.6.3"
-  val LogbackLegacyVersion = "1.2.13"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -68,7 +65,7 @@ object Dependencies {
   val Couchbase3Version = "3.6.4"
   val CouchbaseVersionForDocs = "2.7"
 
-  val GoogleAuthVersion = "1.50.0"
+  val GoogleAuthVersion = "1.51.0"
   val JwtScalaVersion = "11.0.4"
   val Log4jVersion = "2.26.1"
 
@@ -269,7 +266,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.31.0" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.32.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
@@ -293,7 +290,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.153.0" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.154.0" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
@@ -365,7 +362,7 @@ object Dependencies {
       "io.circe" %% "circe-jawn" % "0.14.16"))
 
   val JakartaMs = {
-    val artemisVersion = "2.55.0"
+    val artemisVersion = "2.56.0"
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
@@ -410,7 +407,7 @@ object Dependencies {
 
   val MongoDb = Seq(
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "5.10.0"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "5.11.0"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
@@ -509,12 +506,11 @@ object Dependencies {
   val Solr = Seq(
     libraryDependencies ++= Seq(
       "org.apache.solr" % "solr-solrj" % SolrjVersion,
-      ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
-        "log4j-slf4j-impl"),
-      "org.slf4j" % "log4j-over-slf4j" % Slf4jLegacyVersion % Test),
-    dependencyOverrides ++= Seq(
-      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
+      ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test)
+        // exclude the slf4j providers backed by log4j2 so that logback
+        // (used by pekko-connectors-testkit's log capturing) stays the only provider
+        .exclude("org.apache.logging.log4j", "log4j-slf4j-impl")
+        .exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(
