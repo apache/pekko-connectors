@@ -17,7 +17,7 @@ services:
     volumes:
     - ./sns/src/test/travis/:/conf/
   amqp:
-    image: rabbitmq:3
+    image: rabbitmq:4
     ports:
       - "5672:5672"
   cassandra:
