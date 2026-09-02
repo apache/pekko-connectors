@@ -4,7 +4,7 @@
 
 services:
   amazoneventbridge:
-    image: localstack/localstack:0.10.7
+    image: localstack/localstack:4.14
     environment:
       - "SERVICES=events"
       - "DEBUG=true"
