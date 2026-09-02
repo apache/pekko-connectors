@@ -52,7 +52,16 @@ private[writer] final case class CompressedDataWriter(
   override def rotate(rotationCount: Long): CompressedDataWriter = {
     cmpOutput.finish()
     output.close()
+    // the compressor came from CodecPool and holds native memory; a rotation
+    // builds a new writer that takes another one, so this one has to go back
+    CodecPool.returnCompressor(compressor)
     copy(maybeTargetPath = Some(outputFileWithExtension(rotationCount)))
+  }
+
+  override def close(): Unit = {
+    // `cmpOutput` wraps `output`, so creating it already forced the lazy value
+    if (isOutputOpened) output.close()
+    CodecPool.returnCompressor(compressor)
   }
 
   override protected def create(fs: FileSystem, file: Path): FSDataOutputStream = fs.create(file, overwrite)

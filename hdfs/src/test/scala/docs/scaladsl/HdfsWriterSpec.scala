@@ -14,6 +14,7 @@
 package docs.scaladsl
 
 import org.apache.pekko
+import pekko.NotUsed
 import pekko.actor.ActorSystem
 import pekko.stream.connectors.hdfs._
 import pekko.stream.connectors.hdfs.scaladsl.HdfsFlow
@@ -28,9 +29,10 @@ import org.apache.hadoop.io.Text
 import org.apache.hadoop.io.compress._
 import org.apache.hadoop.io.compress.zlib.ZlibCompressor.CompressionLevel
 import org.scalatest._
+import org.scalatest.concurrent.Eventually
 
 import scala.concurrent.duration.{ Duration, _ }
-import scala.concurrent.{ Await, ExecutionContextExecutor }
+import scala.concurrent.{ Await, ExecutionContextExecutor, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -39,6 +41,7 @@ class HdfsWriterSpec
     with Matchers
     with BeforeAndAfterAll
     with BeforeAndAfterEach
+    with Eventually
     with LogCapturing {
 
   private var hdfsCluster: MiniDFSCluster = null
@@ -490,6 +493,50 @@ class HdfsWriterSpec
       logs.size shouldEqual 1
       verifyOutputFileSize(fs, logs)
       verifySequenceFile(fs, content, logs)
+    }
+  }
+
+  "HdfsFlowStage" should {
+    "release the writer when the stream fails" in {
+      // Regression test: the output is only closed by `rotate`, which runs on
+      // the normal completion path. Without a postStop, a stream that fails
+      // mid-write leaves the temp file open on an HDFS lease, so the file stays
+      // "under construction" and the bytes written are never committed.
+      val flow = HdfsFlow.data(
+        fs,
+        SyncStrategy.none,
+        RotationStrategy.size(1, FileUnit.GB),
+        settings)
+
+      val startedAt = System.currentTimeMillis()
+      val failure = new RuntimeException("boom")
+      val result = Source(books)
+        .map(HdfsWriteMessage(_))
+        .concat(Source.future(pekko.pattern.after(200.millis)(Future.failed(failure))))
+        .via(flow)
+        .runWith(Sink.ignore)
+
+      Await.ready(result, 10.seconds)
+      result.value.get.isFailure shouldBe true
+
+      // only the file this stage wrote: other tests in this suite leave their
+      // own temp files behind, and afterEach does not always clear them
+      val tempDir = new Path(settings.pathGenerator.tempDirectory)
+      val leftOver =
+        if (fs.exists(tempDir)) fs.listStatus(tempDir).toList.filter(_.getModificationTime >= startedAt)
+        else Nil
+      withClue("the stage should have written a temp file before failing: ") {
+        leftOver should not be empty
+      }
+
+      // A file still held open for write reports length 0 until the lease is
+      // released, because the last block is not committed. Closing the writer
+      // in postStop commits it, so the bytes written before the failure show up.
+      leftOver.foreach { st =>
+        withClue(s"temp file ${st.getPath} was not closed, so its length is not committed: ") {
+          fs.getFileStatus(st.getPath).getLen should be > 0L
+        }
+      }
     }
   }
 

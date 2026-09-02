@@ -25,6 +25,7 @@ import pekko.stream.stage._
 import cats.data.State
 
 import scala.concurrent.duration.FiniteDuration
+import scala.util.control.NonFatal
 
 /**
  * Internal API
@@ -61,7 +62,8 @@ private[hdfs] final class HdfsFlowLogic[W, I, C](
     outlet: Outlet[OutgoingMessage[C]],
     shape: FlowShape[HdfsWriteMessage[I, C], OutgoingMessage[C]]) extends TimerGraphStageLogic(shape)
     with InHandler
-    with OutHandler {
+    with OutHandler
+    with StageLogging {
 
   private var state = FlowState(initialHdfsWriter, initialRotationStrategy, initialSyncStrategy)
 
@@ -91,6 +93,17 @@ private[hdfs] final class HdfsFlowLogic[W, I, C](
 
   override def onUpstreamFailure(ex: Throwable): Unit =
     failStage(ex)
+
+  // The writer's output is only closed by `rotate`, which runs on the normal
+  // completion path. On any other stop — upstream failure, downstream cancel,
+  // or a write throwing — the output would stay open on an HDFS lease, so it
+  // is released here. Closing twice is harmless; the temp file is deliberately
+  // left in place, as it is on a failed rotation.
+  override def postStop(): Unit =
+    try state.writer.close()
+    catch {
+      case NonFatal(ex) => log.error(ex, "Problem occurred during writer close")
+    }
 
   override def onUpstreamFinish(): Unit =
     state.logicState match {
