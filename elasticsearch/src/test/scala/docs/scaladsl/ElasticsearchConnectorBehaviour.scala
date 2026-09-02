@@ -670,7 +670,7 @@ trait ElasticsearchConnectorBehaviour {
 
     lazy val _ = {
       // #connection-settings
-      val connectionSettings = ElasticsearchConnectionSettings("http://localhost:9200")
+      val connectionSettings = ElasticsearchConnectionSettings("https://localhost:9200")
         .withCredentials("user", "password")
       // #connection-settings
       // #source-settings
