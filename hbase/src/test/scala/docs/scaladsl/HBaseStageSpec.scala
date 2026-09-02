@@ -145,7 +145,66 @@ class HBaseStageSpec
 
       f.futureValue.size shouldBe 1
     }
+
+    "append to a cell through a flow" in {
+      val appendSettings = tableSettings.withConverter(appendHBaseConverter)
+
+      val f = Source(List(Person(200, "-a"), Person(200, "-b")))
+        .via(HTableStage.flow(appendSettings))
+        .runWith(Sink.ignore)
+      f.futureValue shouldBe Done
+
+      val results = readRow(200).futureValue
+      results should have size 1
+      Bytes.toString(results.head.getValue("info", "aliases")) shouldBe "-a-b"
+    }
+
+    "increment a cell through a flow" in {
+      val incrementSettings = tableSettings.withConverter(incrementHBaseConverter)
+
+      val f = Source(List.fill(3)(Person(210, "increment")))
+        .via(HTableStage.flow(incrementSettings))
+        .runWith(Sink.ignore)
+      f.futureValue shouldBe Done
+
+      val results = readRow(210).futureValue
+      results should have size 1
+      Bytes.toLong(results.head.getValue("info", "numberOfChanges")) shouldBe 3L
+    }
+
+    "delete a row through a flow" in {
+      Source.single(Person(220, "to be deleted")).runWith(HTableStage.sink(tableSettings)).futureValue shouldBe Done
+      readRow(220).futureValue should have size 1
+
+      val deleteSettings = tableSettings.withConverter(deleteHBaseConverter)
+      Source
+        .single(Person(220, "to be deleted"))
+        .via(HTableStage.flow(deleteSettings))
+        .runWith(Sink.ignore)
+        .futureValue shouldBe Done
+
+      readRow(220).futureValue shouldBe empty
+    }
+
+    "apply a converter that emits multiple or no mutations" in {
+      val complexSettings = tableSettings.withConverter(mutationsHBaseConverter)
+
+      val f = Source(List(Person(0, "skipped"), Person(230, "mixed"), Person(231, "")))
+        .via(HTableStage.flow(complexSettings))
+        .runWith(Sink.seq)
+      f.futureValue should have size 3
+
+      val results = readRow(230).futureValue
+      results should have size 1
+      Bytes.toString(results.head.getValue("info", "name")) shouldBe "mixed"
+      Bytes.toLong(results.head.getValue("info", "numberOfChanges")) shouldBe 1L
+      readRow(0).futureValue shouldBe empty
+      readRow(231).futureValue shouldBe empty
+    }
   }
+
+  private def readRow(id: Int) =
+    HTableStage.source(new Scan(new Get(Bytes.toBytes(s"id_$id"))), tableSettings).runWith(Sink.seq)
 
   override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)

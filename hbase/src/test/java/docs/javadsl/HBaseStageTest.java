@@ -26,6 +26,7 @@ import java.util.function.Function;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -203,6 +204,98 @@ public class HBaseStageTest {
     // #source
 
     assertEquals(1, f.toCompletableFuture().get().size());
+  }
+
+  @Test
+  public void appendThroughFlow() throws Exception {
+    HTableSettings<Person> appendSettings = mutationTableSettings(appendHBaseConverter);
+
+    CompletionStage<Done> f =
+        Source.from(List.of(new Person(400, "-a"), new Person(400, "-b")))
+            .via(HTableStage.flow(appendSettings))
+            .runWith(Sink.ignore(), system);
+    assertEquals(Done.getInstance(), f.toCompletableFuture().get(5, TimeUnit.SECONDS));
+
+    List<Result> results = readRow(appendSettings, 400);
+    assertEquals(1, results.size());
+    assertEquals(
+        "-a-b",
+        new String(
+            results.get(0).getValue(bytes("info"), bytes("aliases")), StandardCharsets.UTF_8));
+  }
+
+  @Test
+  public void incrementThroughFlow() throws Exception {
+    HTableSettings<Person> incrementSettings = mutationTableSettings(incrementHBaseConverter);
+
+    CompletionStage<Done> f =
+        Source.from(List.of(new Person(410, "inc"), new Person(410, "inc"), new Person(410, "inc")))
+            .via(HTableStage.flow(incrementSettings))
+            .runWith(Sink.ignore(), system);
+    assertEquals(Done.getInstance(), f.toCompletableFuture().get(5, TimeUnit.SECONDS));
+
+    List<Result> results = readRow(incrementSettings, 410);
+    assertEquals(1, results.size());
+    assertEquals(
+        3L, Bytes.toLong(results.get(0).getValue(bytes("info"), bytes("numberOfChanges"))));
+  }
+
+  @Test
+  public void deleteThroughFlow() throws Exception {
+    HTableSettings<Person> putSettings = mutationTableSettings(hBaseConverter);
+    CompletionStage<Done> put =
+        Source.single(new Person(420, "to be deleted"))
+            .runWith(HTableStage.sink(putSettings), system);
+    assertEquals(Done.getInstance(), put.toCompletableFuture().get(5, TimeUnit.SECONDS));
+    assertEquals(1, readRow(putSettings, 420).size());
+
+    HTableSettings<Person> deleteSettings = mutationTableSettings(deleteHBaseConverter);
+    CompletionStage<Done> delete =
+        Source.single(new Person(420, "to be deleted"))
+            .via(HTableStage.flow(deleteSettings))
+            .runWith(Sink.ignore(), system);
+    assertEquals(Done.getInstance(), delete.toCompletableFuture().get(5, TimeUnit.SECONDS));
+
+    assertEquals(0, readRow(putSettings, 420).size());
+  }
+
+  @Test
+  public void complexConverterThroughFlow() throws Exception {
+    HTableSettings<Person> complexSettings = mutationTableSettings(complexHBaseConverter);
+
+    CompletionStage<List<Person>> f =
+        Source.from(
+                List.of(new Person(0, "skipped"), new Person(430, "mixed"), new Person(431, "")))
+            .via(HTableStage.flow(complexSettings))
+            .runWith(Sink.seq(), system);
+    assertEquals(3, f.toCompletableFuture().get(5, TimeUnit.SECONDS).size());
+
+    List<Result> results = readRow(complexSettings, 430);
+    assertEquals(1, results.size());
+    assertEquals(
+        "mixed",
+        new String(results.get(0).getValue(bytes("info"), bytes("name")), StandardCharsets.UTF_8));
+    assertEquals(
+        1L, Bytes.toLong(results.get(0).getValue(bytes("info"), bytes("numberOfChanges"))));
+    assertEquals(0, readRow(complexSettings, 0).size());
+    assertEquals(0, readRow(complexSettings, 431).size());
+  }
+
+  private static byte[] bytes(String s) {
+    return s.getBytes(StandardCharsets.UTF_8);
+  }
+
+  private HTableSettings<Person> mutationTableSettings(Function<Person, List<Mutation>> converter) {
+    return HTableSettings.create(
+        HBaseConfiguration.create(), TableName.valueOf("person3"), List.of("info"), converter);
+  }
+
+  private List<Result> readRow(HTableSettings<Person> tableSettings, int id) throws Exception {
+    Scan scan = new Scan(new Get("id_%d".formatted(id).getBytes(StandardCharsets.UTF_8)));
+    return HTableStage.source(scan, tableSettings)
+        .runWith(Sink.seq(), system)
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
   }
 }
 
