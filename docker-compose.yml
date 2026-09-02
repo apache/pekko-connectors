@@ -105,14 +105,13 @@ services:
       - -c
       - |
         set -ex
-        base=http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors
-        until curl -s --fail $base/topics > /dev/null; do
+        until curl -s --fail http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics > /dev/null; do
           sleep 2
         done
-        curl -s -X PUT $base/topics/simpleTopic
-        curl -s -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/simpleTopic"}' $base/subscriptions/simpleSubscription
-        curl -s -X PUT $base/topics/testTopic
-        curl -s -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/testTopic"}' $base/subscriptions/testSubscription
+        curl -s --fail -X PUT http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics/simpleTopic
+        curl -s --fail -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/simpleTopic"}' http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/subscriptions/simpleSubscription
+        curl -s --fail -X PUT http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics/testTopic
+        curl -s --fail -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/testTopic"}' http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/subscriptions/testSubscription
   hbase:
     image: harisekhon/hbase:1.4
     hostname: hbase
