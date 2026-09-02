@@ -267,9 +267,14 @@ public class HBaseStageTest {
   public void complexConverterThroughFlow() throws Exception {
     HTableSettings<Person> complexSettings = mutationTableSettings(complexHBaseConverter);
 
+    int mixedId = randomRowId();
+    int deletedId = randomRowId();
     CompletionStage<List<Person>> f =
         Source.from(
-                List.of(new Person(0, "skipped"), new Person(430, "mixed"), new Person(431, "")))
+                List.of(
+                    new Person(0, "skipped"),
+                    new Person(mixedId, "mixed"),
+                    new Person(deletedId, "")))
             .via(HTableStage.flow(complexSettings))
             .runWith(Sink.seq(), system);
     assertEquals(3, f.toCompletableFuture().get(5, TimeUnit.SECONDS).size());
