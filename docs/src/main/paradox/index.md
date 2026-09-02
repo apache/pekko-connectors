@@ -41,7 +41,6 @@ The [Apache Pekko Connectors project](https://pekko.apache.org/docs/pekko-connec
 * [HTTP](external/http.md)
 * [IBM Bluemix Cloud Object storage](bluemix-cos.md)
 * [InfluxDB](influxdb.md)
-* [IronMQ](ironmq.md)
 * [JMS](jms/index.md)
 * [MongoDB](mongodb.md)
 * [MQTT](mqtt.md)
