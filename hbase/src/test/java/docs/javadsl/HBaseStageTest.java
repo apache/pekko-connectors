@@ -75,7 +75,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> appendHBaseConverter =
       person -> {
         Append append = new Append("id_%d".formatted(person.id).getBytes(StandardCharsets.UTF_8));
-        append.add(
+        append.addColumn(
             "info".getBytes(StandardCharsets.UTF_8),
             "aliases".getBytes(StandardCharsets.UTF_8),
             person.name.getBytes(StandardCharsets.UTF_8));
