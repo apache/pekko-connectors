@@ -20,7 +20,7 @@ import java.time.Duration
 
 class MinioContainer(accessKey: String, secretKey: String, domain: String)
     extends GenericContainer(
-      "minio/minio:RELEASE.2024-12-18T13-15-44Z",
+      "minio/minio:RELEASE.2025-09-07T16-13-09Z",
       exposedPorts = List(9000),
       waitStrategy = Some(Wait.forHttp("/minio/health/ready").forPort(9000).withStartupTimeout(Duration.ofSeconds(10))),
       command = List("server", "/data"),
