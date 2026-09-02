@@ -257,6 +257,47 @@ services:
       
       sleep 2 # just wait a tiny bit more after creating the bucket
       "
+  # couchbase3 shares host ports with the couchbase service above (the SDK
+  # requires the standard ports), so only one of the two can run at a time
+  couchbase3:
+    image: couchbase:community-8.0.2
+    ports:
+      - "8091-8096:8091-8096"
+      - "11210-11211:11210-11211"
+  couchbase3_prep:
+    image: couchbase:community-8.0.2
+    links:
+      - "couchbase3"
+    entrypoint: ""
+    command: >
+      bash -c
+      "echo 'waiting until couchbase is up'
+
+      until `curl --output /dev/null --silent --head --fail http://couchbase3:8091`; do
+            printf '.'
+            sleep 2
+      done
+
+      couchbase-cli cluster-init -c couchbase3
+      --cluster-username Administrator
+      --cluster-password password
+      --cluster-ramsize 300
+      --cluster-index-ramsize 256
+      --cluster-fts-ramsize 256
+      --cluster-query-ramsize 256
+      --services data,index,query,fts
+
+      couchbase-cli bucket-create -c couchbase3
+      -u Administrator -p password
+      --bucket pekko
+      --bucket-type couchbase
+      --storage-backend couchstore
+      --bucket-ramsize 120
+      --bucket-replica 0
+      --wait
+
+      sleep 2 # just wait a tiny bit more after creating the bucket
+      "
 
 volumes:
   kudu-tserver-data:
