@@ -18,12 +18,12 @@
 package org.apache.pekko.stream.connectors.awsspi.sns
 
 import org.apache.pekko
-import pekko.stream.connectors.awsspi.{ LocalstackBaseAwsClientTest, PekkoHttpAsyncHttpService }
+import pekko.stream.connectors.awsspi.{ GoAwsSNSBaseAwsClientTest, PekkoHttpAsyncHttpService }
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.{ CreateTopicRequest, PublishRequest }
 
-class TestSNS extends LocalstackBaseAwsClientTest[SnsAsyncClient] {
+class TestSNS extends GoAwsSNSBaseAwsClientTest[SnsAsyncClient] {
 
   "Async SNS client" should {
     "publish a message to a topic" in withClient { implicit client =>
@@ -53,6 +53,4 @@ class TestSNS extends LocalstackBaseAwsClientTest[SnsAsyncClient] {
       client.close()
     }
   }
-
-  override def service: String = "sns"
 }

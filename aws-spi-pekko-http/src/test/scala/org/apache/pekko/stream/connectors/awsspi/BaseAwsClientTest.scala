@@ -20,13 +20,14 @@ package org.apache.pekko.stream.connectors.awsspi
 import java.net.URI
 
 import org.apache.pekko
-import pekko.stream.connectors.awsspi.testcontainers.LocalStackReadyLogWaitStrategy
+import pekko.stream.connectors.awsspi.testcontainers.TimeoutWaitStrategy
 import com.dimafeng.testcontainers.{ ForAllTestContainer, GenericContainer }
 import org.scalatest.concurrent.{ Eventually, Futures, IntegrationPatience }
 import org.scalatest.BeforeAndAfter
 import software.amazon.awssdk.core.SdkClient
 import software.amazon.awssdk.regions.Region
 
+import scala.concurrent.duration._
 import scala.util.Random
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -49,17 +50,26 @@ trait BaseAwsClientTest[C <: SdkClient]
   def randomIdentifier(length: Int): String = Random.alphanumeric.take(length).mkString
 }
 
-trait LocalstackBaseAwsClientTest[C <: SdkClient] extends BaseAwsClientTest[C] {
-  def service: String
+trait DynamoDBLocalBaseAwsClientTest[C <: SdkClient] extends BaseAwsClientTest[C] {
 
-  lazy val exposedServicePort: Int = 4566
+  lazy val exposedServicePort: Int = 8000
 
   override lazy val container: GenericContainer =
     new GenericContainer(
-      dockerImage = "localstack/localstack:4.14",
+      dockerImage = "amazon/dynamodb-local:3.3.1",
       exposedPorts = Seq(exposedServicePort),
-      env = Map("SERVICES" -> service),
-      waitStrategy = Some(LocalStackReadyLogWaitStrategy))
+      waitStrategy = Some(TimeoutWaitStrategy(10.seconds)))
+}
+
+trait GoAwsSNSBaseAwsClientTest[C <: SdkClient] extends BaseAwsClientTest[C] {
+
+  lazy val exposedServicePort: Int = 4100
+
+  override lazy val container: GenericContainer =
+    new GenericContainer(
+      dockerImage = "pafortin/goaws:v0.3.1",
+      exposedPorts = Seq(exposedServicePort),
+      waitStrategy = Some(TimeoutWaitStrategy(10.seconds)))
 }
 
 trait ElasticMQSQSBaseAwsClientTest[C <: SdkClient] extends BaseAwsClientTest[C] {
