@@ -128,6 +128,8 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       topicConnectionFactory.setPort(1414)
       topicConnectionFactory.setQueueManager("QM1")
       topicConnectionFactory.setChannel("DEV.APP.SVRCONN")
+      topicConnectionFactory.setStringProperty(JmsConstants.USERID, "app")
+      topicConnectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd")
 
       // #ibmmq-topic
       // Connect to IBM MQ over TCP/IP
