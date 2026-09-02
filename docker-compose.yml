@@ -94,20 +94,25 @@ services:
       - "8538:8538"
     command: gcloud beta emulators pubsub start --project=pekko-connectors --host-port=0.0.0.0:8538
   gcloud-pubsub-emulator_prep:
-    image: martynas/gcloud-pubsub-client
+    # same image as the emulator itself; creates the topics and subscriptions
+    # the tests expect, via the emulator's REST API
+    image: google/cloud-sdk:554.0.0
     links:
       - "gcloud-pubsub-emulator"
-    environment:
-      - "PUBSUB_PROJECT_ID=pekko-connectors"
-      - "PUBSUB_EMULATOR_HOST=gcloud-pubsub-emulator:8538"
     entrypoint: ""
-    command: >
-      bash -c "
-        python publisher.py pekko-connectors create simpleTopic &&
-        python subscriber.py pekko-connectors create simpleTopic simpleSubscription
-        python publisher.py pekko-connectors create testTopic &&
-        python subscriber.py pekko-connectors create testTopic testSubscription
-      "
+    command:
+      - bash
+      - -c
+      - |
+        set -ex
+        base=http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors
+        until curl -s --fail $base/topics > /dev/null; do
+          sleep 2
+        done
+        curl -s -X PUT $base/topics/simpleTopic
+        curl -s -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/simpleTopic"}' $base/subscriptions/simpleSubscription
+        curl -s -X PUT $base/topics/testTopic
+        curl -s -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/testTopic"}' $base/subscriptions/testSubscription
   hbase:
     image: harisekhon/hbase:1.4
     hostname: hbase
