@@ -35,7 +35,7 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       // Create the IBM MQ MQQueueConnectionFactory
       val connectionFactory = new MQQueueConnectionFactory()
 
-      // align to docker image: ibmcom/mq:9.1.1.0
+      // align to docker image: icr.io/ibm-messaging/mq
       connectionFactory.setHostName("localhost")
       connectionFactory.setPort(1414)
       connectionFactory.setQueueManager("QM1")

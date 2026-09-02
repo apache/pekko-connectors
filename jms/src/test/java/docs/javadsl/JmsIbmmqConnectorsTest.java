@@ -74,7 +74,7 @@ public class JmsIbmmqConnectorsTest {
   private static MQConnectionFactory initDefaultFactory(MQConnectionFactory connectionFactory)
       throws JMSException {
     // #ibmmq-connection-factory
-    // align to docker image: ibmcom/mq:9.1.1.0
+    // align to docker image: icr.io/ibm-messaging/mq
     connectionFactory.setHostName("localhost");
     connectionFactory.setPort(1414);
     connectionFactory.setQueueManager("QM1");
