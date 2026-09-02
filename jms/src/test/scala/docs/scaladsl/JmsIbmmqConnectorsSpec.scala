@@ -19,6 +19,7 @@ import pekko.stream.connectors.jms._
 import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
 import pekko.stream.scaladsl.{ Sink, Source }
 import com.ibm.mq.jms.{ MQQueueConnectionFactory, MQQueueSession, MQTopicConnectionFactory }
+import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.wmq.common.CommonConstants
 import javax.jms.{ Session, TextMessage }
 import scala.collection.immutable
@@ -39,6 +40,9 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       connectionFactory.setPort(1414)
       connectionFactory.setQueueManager("QM1")
       connectionFactory.setChannel("DEV.APP.SVRCONN")
+      // the developer image requires a password for the "app" user since MQ 9.3.4
+      connectionFactory.setStringProperty(JmsConstants.USERID, "app")
+      connectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd")
 
       // #ibmmq-connection-factory
 

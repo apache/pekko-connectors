@@ -19,6 +19,7 @@ import com.ibm.mq.jakarta.jms.MQConnectionFactory;
 import com.ibm.mq.jakarta.jms.MQQueueConnectionFactory;
 import com.ibm.mq.jakarta.jms.MQQueueSession;
 import com.ibm.mq.jakarta.jms.MQTopicConnectionFactory;
+import com.ibm.msg.client.jakarta.jms.JmsConstants;
 import com.ibm.msg.client.jakarta.wmq.common.CommonConstants;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
@@ -79,6 +80,9 @@ public class JmsIbmmqConnectorsTest {
     connectionFactory.setPort(1414);
     connectionFactory.setQueueManager("QM1");
     connectionFactory.setChannel("DEV.APP.SVRCONN");
+    // the developer image requires a password for the "app" user since MQ 9.3.4
+    connectionFactory.setStringProperty(JmsConstants.USERID, "app");
+    connectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd");
 
     // #ibmmq-connection-factory
     return connectionFactory;
