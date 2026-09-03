@@ -26,6 +26,7 @@ import pekko.stream.scaladsl.{ BroadcastHub, Keep, Source, SourceQueueWithComple
 import pekko.util.ByteString
 import scala.collection.immutable.Seq
 import scala.concurrent.Promise
+import scala.annotation.nowarn
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NoStackTrace
 import scala.util.{ Failure, Success }
@@ -380,6 +381,10 @@ import scala.util.{ Failure, Success }
   private val ConsumerNamePrefix = "consumer-"
   private val ProducerNamePrefix = "producer-"
 
+  // `Source.queue` with an `OverflowStrategy` is deprecated, but the `BoundedSourceQueue` that
+  // `Source.queue(bufferSize)` materializes drops the newest element instead of backpressuring.
+  // The offer `Future` is used to backpressure the session, so the deprecated overload is kept here.
+  @nowarn("msg=deprecated")
   def clientConnect(data: ConnectReceived)(implicit mat: Materializer): Behavior[Event] = Behaviors.setup { context =>
     context.log.debug("clientConnect stash={}", data.stash)
     data.local.trySuccess(ForwardConnect)

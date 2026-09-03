@@ -28,8 +28,8 @@ import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.JavaPartialFunction;
 import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.BoundedSourceQueue;
 import org.apache.pekko.stream.KillSwitches;
-import org.apache.pekko.stream.OverflowStrategy;
 import org.apache.pekko.stream.SystemMaterializer;
 import org.apache.pekko.stream.UniqueKillSwitch;
 import org.apache.pekko.stream.connectors.mqtt.streaming.Command;
@@ -59,7 +59,6 @@ import org.apache.pekko.stream.javadsl.Flow;
 import org.apache.pekko.stream.javadsl.Keep;
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import org.apache.pekko.stream.javadsl.SourceQueueWithComplete;
 import org.apache.pekko.stream.javadsl.Tcp;
 import org.apache.pekko.stream.testkit.javadsl.StreamTestKit;
 import org.apache.pekko.testkit.javadsl.TestKit;
@@ -116,22 +115,26 @@ public class MqttFlowTest {
     // #create-streaming-flow
 
     // #run-streaming-flow
-    Pair<SourceQueueWithComplete<Command<Object>>, CompletionStage<Publish>> run =
-        Source.<Command<Object>>queue(3, OverflowStrategy.fail())
-            .via(mqttFlow)
-            .collect(
-                new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
-                  @Override
-                  public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
-                    if (x.getEvent().isPresent()
-                        && x.getEvent().get().event() instanceof Publish publish) return publish;
-                    else throw noMatch();
-                  }
-                })
-            .toMat(Sink.head(), Keep.both())
-            .run(system);
+    Pair<Pair<BoundedSourceQueue<Command<Object>>, CompletionStage<Done>>, CompletionStage<Publish>>
+        run =
+            Source.<Command<Object>>queue(3)
+                .watchTermination(Keep.both())
+                .via(mqttFlow)
+                .collect(
+                    new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
+                      @Override
+                      public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
+                        if (x.getEvent().isPresent()
+                            && x.getEvent().get().event() instanceof Publish publish)
+                          return publish;
+                        else throw noMatch();
+                      }
+                    })
+                .toMat(Sink.head(), Keep.both())
+                .run(system);
 
-    SourceQueueWithComplete<Command<Object>> commands = run.first();
+    BoundedSourceQueue<Command<Object>> commands = run.first().first();
+    CompletionStage<Done> commandsCompletion = run.first().second();
     commands.offer(new Command<>(new Connect(clientId, ConnectFlags.CleanSession())));
     commands.offer(new Command<>(new Subscribe(topic)));
     session.tell(
@@ -150,12 +153,13 @@ public class MqttFlowTest {
     // #run-streaming-flow
 
     // for shutting down properly
-    commands.complete();
-    commands.watchCompletion().thenAccept(done -> session.shutdown());
+    // Sink.head may already have cancelled upstream, which completes the queue
+    if (!commands.isCompleted()) commands.complete();
+    commandsCompletion.thenAccept(done -> session.shutdown());
     // #run-streaming-flow
 
     // Wait until things have been torn down before considering the test complete
-    commands.watchCompletion().toCompletableFuture().get();
+    commandsCompletion.toCompletableFuture().get();
   }
 
   @Test
@@ -189,15 +193,15 @@ public class MqttFlowTest {
                           .join(connection.flow());
 
                   Pair<
-                          SourceQueueWithComplete<Command<Object>>,
+                          BoundedSourceQueue<Command<Object>>,
                           Source<DecodeErrorOrEvent<Object>, NotUsed>>
                       run =
-                          Source.<Command<Object>>queue(2, OverflowStrategy.dropHead())
+                          Source.<Command<Object>>queue(10)
                               .via(mqttFlow)
                               .toMat(BroadcastHub.of(DecodeErrorOrEvent.classOf()), Keep.both())
                               .run(system);
 
-                  SourceQueueWithComplete<Command<Object>> queue = run.first();
+                  BoundedSourceQueue<Command<Object>> queue = run.first();
                   Source<DecodeErrorOrEvent<Object>, NotUsed> source = run.second();
 
                   CompletableFuture<Done> subscribed = new CompletableFuture<>();
@@ -256,22 +260,26 @@ public class MqttFlowTest {
     Flow<Command<Object>, DecodeErrorOrEvent<Object>, NotUsed> mqttFlow =
         Mqtt.clientSessionFlow(clientSession, uniqueSessionId).join(connection);
 
-    Pair<SourceQueueWithComplete<Command<Object>>, CompletionStage<Publish>> run =
-        Source.<Command<Object>>queue(3, OverflowStrategy.fail())
-            .via(mqttFlow)
-            .collect(
-                new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
-                  @Override
-                  public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
-                    if (x.getEvent().isPresent()
-                        && x.getEvent().get().event() instanceof Publish publish) return publish;
-                    else throw noMatch();
-                  }
-                })
-            .toMat(Sink.head(), Keep.both())
-            .run(system);
+    Pair<Pair<BoundedSourceQueue<Command<Object>>, CompletionStage<Done>>, CompletionStage<Publish>>
+        run =
+            Source.<Command<Object>>queue(3)
+                .watchTermination(Keep.both())
+                .via(mqttFlow)
+                .collect(
+                    new JavaPartialFunction<DecodeErrorOrEvent<Object>, Publish>() {
+                      @Override
+                      public Publish apply(DecodeErrorOrEvent<Object> x, boolean isCheck) {
+                        if (x.getEvent().isPresent()
+                            && x.getEvent().get().event() instanceof Publish publish)
+                          return publish;
+                        else throw noMatch();
+                      }
+                    })
+                .toMat(Sink.head(), Keep.both())
+                .run(system);
 
-    SourceQueueWithComplete<Command<Object>> commands = run.first();
+    BoundedSourceQueue<Command<Object>> commands = run.first().first();
+    CompletionStage<Done> commandsCompletion = run.first().second();
     commands.offer(new Command<>(new Connect(clientId, ConnectFlags.None())));
     commands.offer(new Command<>(new Subscribe(topic)));
     clientSession.tell(
@@ -290,7 +298,7 @@ public class MqttFlowTest {
 
     // for shutting down properly
     server.shutdown();
-    commands.watchCompletion().thenAccept(done -> session.shutdown());
+    commandsCompletion.thenAccept(done -> session.shutdown());
     // #run-streaming-bind-flow
   }
 }
