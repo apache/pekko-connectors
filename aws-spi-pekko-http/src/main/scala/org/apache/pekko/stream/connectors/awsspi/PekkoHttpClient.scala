@@ -167,7 +167,7 @@ object PekkoHttpClient {
   }
 
   private[awsspi] def tryCreateCustomContentType(contentTypeStr: String): ContentType = {
-    logger.debug(s"Try to parse content type from $contentTypeStr")
+    logger.debug("Try to parse content type from {}", contentTypeStr)
     // Prefer a proper parse so that values with parameters (e.g. "text/plain; charset=UTF-8")
     // keep their parameters instead of ending up embedded in the subtype.
     ContentType.parse(contentTypeStr) match {
