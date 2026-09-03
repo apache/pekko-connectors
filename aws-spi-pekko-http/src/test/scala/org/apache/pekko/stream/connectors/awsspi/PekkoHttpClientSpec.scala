@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigFactory
 
 import org.apache.pekko
 import pekko.http.scaladsl.model.headers.`Content-Type`
-import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, MediaTypes }
+import pekko.http.scaladsl.model.{ ContentTypes, HttpHeader, HttpMethods, MediaTypes }
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 import org.reactivestreams.Subscriber
 import org.scalatest.OptionValues
@@ -44,6 +44,29 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       val contentTypeStr = "application/xml"
       val contentType = PekkoHttpClient.tryCreateCustomContentType(contentTypeStr)
       contentType.mediaType should be(MediaTypes.`application/xml`)
+    }
+
+    "parse custom content type with parameters preserving the parameters" in {
+      val contentType = PekkoHttpClient.tryCreateCustomContentType("text/plain; charset=UTF-8")
+      contentType.mediaType.mainType shouldBe "text"
+      contentType.mediaType.subType shouldBe "plain"
+      contentType.charsetOption.map(_.value) shouldBe Some("UTF-8")
+    }
+
+    "fall back to a custom binary content type when proper parsing fails" in {
+      val contentType = PekkoHttpClient.tryCreateCustomContentType("foo/bar baz")
+      contentType.mediaType.mainType shouldBe "foo"
+      contentType.mediaType.subType shouldBe "bar baz"
+    }
+
+    "map form-urlencoded content type with charset to the predefined content type" in {
+      val header = HttpHeader.parse("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8") match {
+        case HttpHeader.ParsingResult.Ok(h, _) => h
+        case error                             => fail(s"could not parse header: $error")
+      }
+      val contentType = PekkoHttpClient.contentTypeHeaderToContentType(Some(header))
+      contentType.mediaType.subType shouldBe "x-www-form-urlencoded"
+      contentType shouldBe PekkoHttpClient.formUrlEncoded
     }
 
     "remove 'ContentType' return 'ContentLength' separate from sdk headers" in {

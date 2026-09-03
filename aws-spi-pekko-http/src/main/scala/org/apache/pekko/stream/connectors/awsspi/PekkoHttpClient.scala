@@ -168,10 +168,16 @@ object PekkoHttpClient {
 
   private[awsspi] def tryCreateCustomContentType(contentTypeStr: String): ContentType = {
     logger.debug(s"Try to parse content type from $contentTypeStr")
-    val mainAndsubType = contentTypeStr.split('/')
-    if (mainAndsubType.length == 2)
-      ContentType(MediaType.customBinary(mainAndsubType(0), mainAndsubType(1), Compressible))
-    else throw new RuntimeException(s"Could not parse custom content type '$contentTypeStr'.")
+    // Prefer a proper parse so that values with parameters (e.g. "text/plain; charset=UTF-8")
+    // keep their parameters instead of ending up embedded in the subtype.
+    ContentType.parse(contentTypeStr) match {
+      case Right(contentType) => contentType
+      case Left(_)            =>
+        val mainAndsubType = contentTypeStr.split('/')
+        if (mainAndsubType.length == 2)
+          ContentType(MediaType.customBinary(mainAndsubType(0), mainAndsubType(1), Compressible))
+        else throw new RuntimeException(s"Could not parse custom content type '$contentTypeStr'.")
+    }
   }
 
   private[awsspi] def buildConnectionPoolSettings(
@@ -248,7 +254,8 @@ object PekkoHttpClient {
     "application/x-amz-json-1.0" -> xAmzJson,
     "application/x-amz-json-1.1" -> xAmzJson11,
     "application/x-amz-cbor-1.1" -> xAmzCbor11, // used by Kinesis
-    "application/x-www-form-urlencoded; charset-UTF-8" -> formUrlEncoded,
+    // No charset-suffixed key is needed: `application/x-www-form-urlencoded` is a fixed-charset
+    // media type, so a parsed Content-Type header always renders without a charset parameter.
     "application/x-www-form-urlencoded" -> formUrlEncoded,
     "application/xml" -> applicationXml)
 
