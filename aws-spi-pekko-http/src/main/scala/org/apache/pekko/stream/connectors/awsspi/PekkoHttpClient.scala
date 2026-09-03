@@ -19,6 +19,7 @@ package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.Locale
 import java.util.concurrent.{ CompletableFuture, TimeUnit }
+import java.util.concurrent.atomic.AtomicLong
 import java.nio.charset.StandardCharsets
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -44,6 +45,7 @@ import software.amazon.awssdk.utils.AttributeMap
 import scala.collection.immutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, ExecutionContext }
+import scala.util.control.NonFatal
 import scala.jdk.DurationConverters._
 import scala.jdk.OptionConverters._
 
@@ -53,7 +55,7 @@ class PekkoHttpClient(
     private[awsspi] val connectionContext: HttpsConnectionContext
 )(
     implicit
-    actorSystem: ActorSystem,
+    private[awsspi] val actorSystem: ActorSystem,
     ec: ExecutionContext) extends SdkAsyncHttpClient {
   import PekkoHttpClient._
 
@@ -69,7 +71,11 @@ class PekkoHttpClient(
   }
 
   override def close(): Unit =
-    shutdownHandle()
+    try shutdownHandle()
+    catch {
+      case NonFatal(e) =>
+        logger.warn("Failure while shutting down the PekkoHttpClient", e)
+    }
 
   override def clientName(): String = "pekko-http"
 }
@@ -77,6 +83,8 @@ class PekkoHttpClient(
 object PekkoHttpClient {
 
   val logger = LoggerFactory.getLogger(this.getClass)
+
+  private val autoCreatedSystemCounter = new AtomicLong()
 
   private[awsspi] def toPekkoRequest(request: SdkHttpRequest,
       contentPublisher: SdkHttpContentPublisher): HttpRequest = {
@@ -197,7 +205,10 @@ object PekkoHttpClient {
         (c, _) => c)
       extends SdkAsyncHttpClient.Builder[PekkoHttpClientBuilder] {
     def buildWithDefaults(serviceDefaults: AttributeMap): SdkAsyncHttpClient = {
-      implicit val as = actorSystem.getOrElse(ActorSystem("aws-pekko-http"))
+      // Give each auto-created system a unique name so that multiple clients in one JVM
+      // remain distinguishable in logs and thread names.
+      implicit val as = actorSystem.getOrElse(
+        ActorSystem(s"aws-pekko-http-${autoCreatedSystemCounter.incrementAndGet()}"))
       implicit val ec = executionContext.getOrElse(as.dispatcher)
 
       val resolvedOptions = serviceDefaults.merge(SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS);
