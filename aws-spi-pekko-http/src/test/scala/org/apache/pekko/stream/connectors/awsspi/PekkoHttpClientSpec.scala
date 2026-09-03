@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigFactory
 
 import org.apache.pekko
 import pekko.http.scaladsl.model.headers.`Content-Type`
-import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, MediaTypes }
+import pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpMethods, MediaTypes }
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 import org.reactivestreams.Subscriber
 import org.scalatest.OptionValues
@@ -98,6 +98,48 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
         PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher,
           Some(42L))
       entity.contentLengthOption shouldBe Some(42L)
+    }
+
+    "attach the request body for a DELETE request when the SDK provides content" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(10L)
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.DELETE, ContentTypes.`application/json`, publisher)
+      entity.contentLengthOption shouldBe Some(10L)
+      entity.contentType shouldBe ContentTypes.`application/json`
+    }
+
+    "attach the request body for a GET request when the SDK headers provide a content length" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType, publisher,
+          Some(5L))
+      entity.contentLengthOption shouldBe Some(5L)
+    }
+
+    "keep a GET request bodiless when no content is present" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType,
+        publisher) shouldBe HttpEntity.Empty
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType, publisher,
+        Some(0L)) shouldBe HttpEntity.Empty
+    }
+
+    "never attach a request body for a method that disallows an entity" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(10L)
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.HEAD, ContentTypes.NoContentType,
+        publisher) shouldBe HttpEntity.Empty
     }
 
     "build() should use default ConnectionPoolSettings" in {
