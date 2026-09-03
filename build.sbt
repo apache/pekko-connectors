@@ -51,7 +51,6 @@ lazy val userProjects: Seq[ProjectReference] = List[ProjectReference](
   hdfs,
   huaweiPushKit,
   influxdb,
-  ironmq,
   jakartams,
   jms,
   jsonStreaming,
@@ -322,12 +321,6 @@ lazy val influxdb = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     // project baseline is Java 17: method isAccessible in class AccessibleObject is deprecated
     "-Wconf:cat=deprecation:s"))
-
-lazy val ironmq = pekkoConnectorProject(
-  "ironmq",
-  "ironmq",
-  Dependencies.IronMq,
-  Test / fork := true)
 
 lazy val jms = pekkoConnectorProject("jms", "jms", Dependencies.Jms)
 
