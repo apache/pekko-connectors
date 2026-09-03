@@ -159,6 +159,21 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
     }
 
+    "reject a non-numeric Content-Length header value with a clear error" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Length", Collections.singletonList("not-a-number"))
+
+      val e = the[IllegalArgumentException] thrownBy PekkoHttpClient.convertHeaders(headers)
+      e.getMessage should include("not-a-number")
+    }
+
+    "reject a negative Content-Length header value" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Length", Collections.singletonList("-1"))
+
+      an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
+    }
+
     "return None content length when Content-Length header is absent" in {
       val headers = new java.util.HashMap[String, java.util.List[String]]
       headers.put("Content-Type", Collections.singletonList("application/xml"))

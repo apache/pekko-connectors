@@ -188,7 +188,7 @@ object PekkoHttpClient {
         // skip content-length as it will be managed by pekko-http in the entity, but capture its value
         // so we can use it to build a fixed-length entity, preventing a fallback to chunked transfer encoding
         if (`Content-Length`.lowercaseName == lowercaseName)
-          (ctHeader, hdrs, Some(requireSingleValue().toLong))
+          (ctHeader, hdrs, Some(parseContentLength(requireSingleValue())))
         else if (`Content-Type`.lowercaseName == lowercaseName) {
           // return content-type separately as it will be used to calculate ContentType, which is used on HttpEntity
           (Some(parseHeader(headerName, requireSingleValue())), hdrs, contentLength)
@@ -206,6 +206,18 @@ object PekkoHttpClient {
       case error: ParsingResult.Error =>
         throw new IllegalArgumentException(s"Found invalid header: ${error.errors}.")
     }
+
+  private def parseContentLength(headerValue: String): Long = {
+    val length =
+      try headerValue.toLong
+      catch {
+        case _: NumberFormatException =>
+          throw new IllegalArgumentException(s"Found invalid Content-Length header value: '$headerValue'.")
+      }
+    if (length < 0)
+      throw new IllegalArgumentException(s"Found invalid Content-Length header value: '$headerValue'.")
+    length
+  }
 
   private[awsspi] def tryCreateCustomContentType(contentTypeStr: String): ContentType = {
     logger.debug("Try to parse content type from {}", contentTypeStr)
