@@ -210,27 +210,27 @@ services:
       - 9090:9090
       - 12345:12345
     command: standalone
-  couchbase:
+  couchbase7:
     image: couchbase:community-7.6.1
     ports:
       - "8091-8096:8091-8096"
       - "11210-11211:11210-11211"
-  couchbase_prep:
+  couchbase7_prep:
     image: couchbase:community-7.6.1
     links:
-      - "couchbase"
+      - "couchbase7"
     entrypoint: ""
     # when we drop couchbase2, we don't need to create bucket pekkoquery
     command: >
       bash -c 
       "echo 'waiting until couchbase is up'
       
-      until `curl --output /dev/null --silent --head --fail http://couchbase:8091`; do
+      until `curl --output /dev/null --silent --head --fail http://couchbase7:8091`; do
             printf '.'
             sleep 2
       done
       
-      couchbase-cli cluster-init -c couchbase
+      couchbase-cli cluster-init -c couchbase7
       --cluster-username Administrator
       --cluster-password password
       --cluster-ramsize 300
@@ -239,7 +239,7 @@ services:
       --cluster-query-ramsize 256
       --services data,index,query,fts
       
-      couchbase-cli bucket-create -c couchbase
+      couchbase-cli bucket-create -c couchbase7
       -u Administrator -p password
       --bucket pekko
       --bucket-type couchbase
@@ -247,7 +247,7 @@ services:
       --bucket-replica 1
       --wait
       
-      couchbase-cli bucket-create -c couchbase
+      couchbase-cli bucket-create -c couchbase7
       -u Administrator -p password
       --bucket pekkoquery
       --bucket-type couchbase
@@ -255,6 +255,47 @@ services:
       --bucket-replica 1
       --wait
       
+      sleep 2 # just wait a tiny bit more after creating the bucket
+      "
+  # couchbase8 shares host ports with the couchbase7 service above (the SDK
+  # requires the standard ports), so only one of the two can run at a time
+  couchbase8:
+    image: couchbase:community-8.0.2
+    ports:
+      - "8091-8096:8091-8096"
+      - "11210-11211:11210-11211"
+  couchbase8_prep:
+    image: couchbase:community-8.0.2
+    links:
+      - "couchbase8"
+    entrypoint: ""
+    command: >
+      bash -c
+      "echo 'waiting until couchbase is up'
+
+      until `curl --output /dev/null --silent --head --fail http://couchbase8:8091`; do
+            printf '.'
+            sleep 2
+      done
+
+      couchbase-cli cluster-init -c couchbase8
+      --cluster-username Administrator
+      --cluster-password password
+      --cluster-ramsize 300
+      --cluster-index-ramsize 256
+      --cluster-fts-ramsize 256
+      --cluster-query-ramsize 256
+      --services data,index,query,fts
+
+      couchbase-cli bucket-create -c couchbase8
+      -u Administrator -p password
+      --bucket pekko
+      --bucket-type couchbase
+      --storage-backend couchstore
+      --bucket-ramsize 120
+      --bucket-replica 0
+      --wait
+
       sleep 2 # just wait a tiny bit more after creating the bucket
       "
 
