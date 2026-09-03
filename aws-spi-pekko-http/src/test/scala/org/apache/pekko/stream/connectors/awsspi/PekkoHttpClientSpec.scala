@@ -19,9 +19,12 @@ package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.Collections
 import java.nio.ByteBuffer
+import javax.net.ssl.SSLContext
 import com.typesafe.config.ConfigFactory
 
 import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.ConnectionContext
 import pekko.http.scaladsl.model.headers.`Content-Type`
 import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, MediaTypes }
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
@@ -33,6 +36,7 @@ import software.amazon.awssdk.http.SdkHttpConfigurationOption
 import software.amazon.awssdk.http.async.SdkHttpContentPublisher
 import software.amazon.awssdk.utils.AttributeMap
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.jdk.DurationConverters._
 
@@ -159,6 +163,36 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
         .asInstanceOf[PekkoHttpClient]
 
       pekkoClient.connectionSettings shouldBe connectionPoolSettings
+    }
+
+    "give each auto-created client a uniquely named actor system" in {
+      val client1 = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
+        .build()
+        .asInstanceOf[PekkoHttpClient]
+      val client2 = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
+        .build()
+        .asInstanceOf[PekkoHttpClient]
+      try {
+        client1.actorSystem.name should startWith("aws-pekko-http")
+        client2.actorSystem.name should startWith("aws-pekko-http")
+        client1.actorSystem.name should not be client2.actorSystem.name
+      } finally {
+        client1.close()
+        client2.close()
+      }
+    }
+
+    "not propagate failures from the shutdown handle on close()" in {
+      implicit val system: ActorSystem = ActorSystem("pekko-http-client-close-spec")
+      try {
+        val client = new PekkoHttpClient(
+          () => throw new IllegalStateException("simulated shutdown failure"),
+          ConnectionPoolSettings(system),
+          ConnectionContext.httpsClient(SSLContext.getDefault))(system, system.dispatcher)
+        noException should be thrownBy client.close()
+      } finally {
+        Await.result(system.terminate(), 10.seconds)
+      }
     }
 
     "withConnectionPoolSettings().build() should use passed ConnectionPoolSettings" in {
