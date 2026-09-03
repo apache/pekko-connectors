@@ -143,28 +143,41 @@ object PekkoHttpClient {
     headersAsScala.foldLeft((Option.empty[HttpHeader], List.empty[HttpHeader], Option.empty[Long])) {
       case ((ctHeader, hdrs, contentLength), header) =>
         val (headerName, headerValue) = header
-        if (headerValue.size() != 1) {
-          throw new IllegalArgumentException(
-            s"Found invalid header: key: $headerName, Value: ${val list = List.newBuilder[String]
-              headerValue.forEach(v => list += v)
-              list.result()}.")
+        val values = {
+          val list = List.newBuilder[String]
+          headerValue.forEach(v => list += v)
+          list.result()
         }
+        def requireSingleValue(): String = {
+          if (values.size != 1) {
+            throw new IllegalArgumentException(s"Found invalid header: key: $headerName, Value: $values.")
+          }
+          values.head
+        }
+        if (values.isEmpty) {
+          throw new IllegalArgumentException(s"Found invalid header with no values: key: $headerName.")
+        }
+        val lowercaseName = headerName.toLowerCase(Locale.ROOT)
         // skip content-length as it will be managed by pekko-http in the entity, but capture its value
         // so we can use it to build a fixed-length entity, preventing a fallback to chunked transfer encoding
-        if (`Content-Length`.lowercaseName == headerName.toLowerCase(Locale.ROOT))
-          (ctHeader, hdrs, Some(headerValue.get(0).toLong))
-        else {
-          HttpHeader.parse(headerName, headerValue.get(0)) match {
-            case ok: Ok =>
-              // return content-type separately as it will be used to calculate ContentType, which is used on HttpEntity
-              if (ok.header.lowercaseName() == `Content-Type`.lowercaseName) (Some(ok.header), hdrs, contentLength)
-              else (ctHeader, hdrs :+ ok.header, contentLength)
-            case error: ParsingResult.Error =>
-              throw new IllegalArgumentException(s"Found invalid header: ${error.errors}.")
-          }
+        if (`Content-Length`.lowercaseName == lowercaseName)
+          (ctHeader, hdrs, Some(requireSingleValue().toLong))
+        else if (`Content-Type`.lowercaseName == lowercaseName) {
+          // return content-type separately as it will be used to calculate ContentType, which is used on HttpEntity
+          (Some(parseHeader(headerName, requireSingleValue())), hdrs, contentLength)
+        } else {
+          // repeated header fields are valid HTTP; emit one header per value
+          (ctHeader, hdrs ::: values.map(parseHeader(headerName, _)), contentLength)
         }
     }
   }
+
+  private def parseHeader(headerName: String, headerValue: String): HttpHeader =
+    HttpHeader.parse(headerName, headerValue) match {
+      case ok: Ok                     => ok.header
+      case error: ParsingResult.Error =>
+        throw new IllegalArgumentException(s"Found invalid header: ${error.errors}.")
+    }
 
   private[awsspi] def tryCreateCustomContentType(contentTypeStr: String): ContentType = {
     logger.debug(s"Try to parse content type from $contentTypeStr")
