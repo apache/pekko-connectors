@@ -45,7 +45,7 @@ object Dependencies {
   val scalaCheckVersion = "1.20.0"
   val HadoopVersion = "3.4.3"
 
-  val Slf4jVersion = "2.0.18"
+  val Slf4jVersion = "2.0.19"
   val LogbackVersion = "1.6.3"
 
   /**
