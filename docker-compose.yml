@@ -108,14 +108,14 @@ services:
         python subscriber.py pekko-connectors create testTopic testSubscription
       "
   hbase:
-    image: harisekhon/hbase:1.4
+    image: harisekhon/hbase:2.1
     hostname: hbase
     ports:
       - 2181:2181
       - 16000:16000
       - 16010:16010
-      - 16201:16201
-      - 16301:16301
+      - 16020:16020
+      - 16030:16030
   ibmmq:
     image: icr.io/ibm-messaging/mq:9.4.5.1-r1
     environment:
