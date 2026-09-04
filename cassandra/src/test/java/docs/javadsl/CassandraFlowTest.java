@@ -17,7 +17,6 @@ import org.apache.pekko.Done;
 // #prepared
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
-import org.apache.pekko.japi.Function2;
 import org.apache.pekko.japi.Pair;
 import org.apache.pekko.stream.connectors.cassandra.CassandraWriteSettings;
 import org.apache.pekko.stream.connectors.cassandra.javadsl.CassandraFlow;
@@ -100,6 +99,7 @@ public class CassandraFlowTest {
   }
 
   @Test
+  @SuppressWarnings("deprecation") // CassandraFlow.create takes the deprecated pekko.japi.Function2
   public void typedUpdate() throws InterruptedException, ExecutionException, TimeoutException {
     String table = helper.createTableName();
     await(
@@ -120,7 +120,7 @@ public class CassandraFlowTest {
             new Person(43, "Umberto", "Roma"),
             new Person(56, "James", "Chicago"));
 
-    Function2<Person, PreparedStatement, BoundStatement> statementBinder =
+    org.apache.pekko.japi.Function2<Person, PreparedStatement, BoundStatement> statementBinder =
         (person, preparedStatement) -> preparedStatement.bind(person.id, person.name, person.city);
 
     CompletionStage<List<Person>> written =

@@ -10,7 +10,7 @@
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import de.heikoseeberger.sbtheader._
+import sbtheader._
 import com.lightbend.paradox.projectinfo.ParadoxProjectInfoPluginKeys._
 import com.typesafe.tools.mima.plugin.MimaKeys._
 import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin

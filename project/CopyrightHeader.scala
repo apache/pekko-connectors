@@ -11,8 +11,8 @@
  * Copyright (C) 2018-2022 Lightbend Inc. <https://www.lightbend.com>
  */
 
-import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
-import de.heikoseeberger.sbtheader.{ CommentCreator, HeaderPlugin, NewLine }
+import sbtheader.HeaderPlugin.autoImport._
+import sbtheader.{ CommentCreator, HeaderPlugin, NewLine }
 import org.apache.commons.lang3.StringUtils
 import sbt.Keys._
 import sbt._
