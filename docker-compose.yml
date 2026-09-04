@@ -115,10 +115,11 @@ services:
       - 16201:16201
       - 16301:16301
   ibmmq:
-    image: ibmcom/mq:latest
+    image: icr.io/ibm-messaging/mq:9.4.5.1-r1
     environment:
       LICENSE: accept
       MQ_QMGR_NAME: QM1
+      MQ_APP_PASSWORD: passw0rd
     ports:
       - "1414:1414"
       - "9443:9443"
