@@ -8,11 +8,12 @@ services:
     ports:
       - "4587:5000"
   amazonsns:
-    image: pafortin/goaws
+    image: admiralpiett/goaws:v0.5.4
     ports:
       - "4100:4100"
     volumes:
     - ./sns/src/test/travis/:/conf/
+    command: ["-config", "/conf/goaws.yaml"]
   amqp:
     image: rabbitmq:4
     ports:
