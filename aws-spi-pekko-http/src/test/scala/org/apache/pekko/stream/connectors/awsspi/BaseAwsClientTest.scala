@@ -67,7 +67,7 @@ trait GoAwsSNSBaseAwsClientTest[C <: SdkClient] extends BaseAwsClientTest[C] {
 
   override lazy val container: GenericContainer =
     new GenericContainer(
-      dockerImage = "pafortin/goaws:v0.3.1",
+      dockerImage = "admiralpiett/goaws:v0.5.4",
       exposedPorts = Seq(exposedServicePort),
       waitStrategy = Some(TimeoutWaitStrategy(10.seconds)))
 }

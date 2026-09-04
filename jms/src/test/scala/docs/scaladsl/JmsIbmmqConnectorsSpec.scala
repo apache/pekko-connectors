@@ -19,6 +19,7 @@ import pekko.stream.connectors.jms._
 import pekko.stream.connectors.jms.scaladsl.{ JmsConsumer, JmsConsumerControl, JmsProducer }
 import pekko.stream.scaladsl.{ Sink, Source }
 import com.ibm.mq.jms.{ MQQueueConnectionFactory, MQQueueSession, MQTopicConnectionFactory }
+import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.wmq.common.CommonConstants
 import javax.jms.{ Session, TextMessage }
 import scala.collection.immutable
@@ -34,11 +35,14 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       // Create the IBM MQ MQQueueConnectionFactory
       val connectionFactory = new MQQueueConnectionFactory()
 
-      // align to docker image: ibmcom/mq:9.1.1.0
+      // align to docker image: icr.io/ibm-messaging/mq
       connectionFactory.setHostName("localhost")
       connectionFactory.setPort(1414)
       connectionFactory.setQueueManager("QM1")
       connectionFactory.setChannel("DEV.APP.SVRCONN")
+      // the developer image requires a password for the "app" user since MQ 9.3.4
+      connectionFactory.setStringProperty(JmsConstants.USERID, "app")
+      connectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd")
 
       // #ibmmq-connection-factory
 
@@ -123,6 +127,8 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       topicConnectionFactory.setPort(1414)
       topicConnectionFactory.setQueueManager("QM1")
       topicConnectionFactory.setChannel("DEV.APP.SVRCONN")
+      topicConnectionFactory.setStringProperty(JmsConstants.USERID, "app")
+      topicConnectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd")
 
       // #ibmmq-topic
       // Connect to IBM MQ over TCP/IP

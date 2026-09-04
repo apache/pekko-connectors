@@ -309,7 +309,7 @@ object Dependencies {
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val HBase = {
-    val hbaseVersion = "1.4.14"
+    val hbaseVersion = "2.6.6"
     Seq(
       libraryDependencies ++= Seq(
         ("org.apache.hbase" % "hbase-shaded-client" % hbaseVersion)

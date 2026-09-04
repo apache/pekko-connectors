@@ -120,8 +120,7 @@ jobs:
           - { connector: google-cloud-storage }
           - { connector: google-common }
           - { connector: google-fcm }
-          # hbase disabled until we resolve why new docker image fails our build: https://github.com/akka/alpakka/issues/2185
-          # - { connector: hbase,                        pre_cmd: 'docker compose up -d hbase' }
+          - { connector: hbase,                        pre_cmd: './scripts/hbase-server.sh' }
           - { connector: hdfs }
           - { connector: huawei-push-kit }
           - { connector: influxdb,                     pre_cmd: 'docker compose up -d influxdb' }

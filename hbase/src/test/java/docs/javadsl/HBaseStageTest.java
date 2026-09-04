@@ -26,6 +26,7 @@ import java.util.function.Function;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -75,7 +76,7 @@ public class HBaseStageTest {
   Function<Person, List<Mutation>> appendHBaseConverter =
       person -> {
         Append append = new Append("id_%d".formatted(person.id).getBytes(StandardCharsets.UTF_8));
-        append.add(
+        append.addColumn(
             "info".getBytes(StandardCharsets.UTF_8),
             "aliases".getBytes(StandardCharsets.UTF_8),
             person.name.getBytes(StandardCharsets.UTF_8));
@@ -203,6 +204,112 @@ public class HBaseStageTest {
     // #source
 
     assertEquals(1, f.toCompletableFuture().get().size());
+  }
+
+  @Test
+  public void appendThroughFlow() throws Exception {
+    HTableSettings<Person> appendSettings = mutationTableSettings(appendHBaseConverter);
+
+    // unique row per run: the sbt cross-build reruns this suite against the same HBase instance
+    int id = randomRowId();
+    CompletionStage<Done> f =
+        Source.from(List.of(new Person(id, "-a"), new Person(id, "-b")))
+            .via(HTableStage.flow(appendSettings))
+            .runWith(Sink.ignore(), system);
+    assertEquals(Done.getInstance(), f.toCompletableFuture().get(5, TimeUnit.SECONDS));
+
+    List<Result> results = readRow(appendSettings, id);
+    assertEquals(1, results.size());
+    assertEquals(
+        "-a-b",
+        new String(
+            results.get(0).getValue(bytes("info"), bytes("aliases")), StandardCharsets.UTF_8));
+  }
+
+  @Test
+  public void incrementThroughFlow() throws Exception {
+    HTableSettings<Person> incrementSettings = mutationTableSettings(incrementHBaseConverter);
+
+    int id = randomRowId();
+    CompletionStage<Done> f =
+        Source.from(List.of(new Person(id, "inc"), new Person(id, "inc"), new Person(id, "inc")))
+            .via(HTableStage.flow(incrementSettings))
+            .runWith(Sink.ignore(), system);
+    assertEquals(Done.getInstance(), f.toCompletableFuture().get(5, TimeUnit.SECONDS));
+
+    List<Result> results = readRow(incrementSettings, id);
+    assertEquals(1, results.size());
+    assertEquals(
+        3L, Bytes.toLong(results.get(0).getValue(bytes("info"), bytes("numberOfChanges"))));
+  }
+
+  @Test
+  public void deleteThroughFlow() throws Exception {
+    HTableSettings<Person> putSettings = mutationTableSettings(hBaseConverter);
+    int id = randomRowId();
+    CompletionStage<Done> put =
+        Source.single(new Person(id, "to be deleted"))
+            .runWith(HTableStage.sink(putSettings), system);
+    assertEquals(Done.getInstance(), put.toCompletableFuture().get(5, TimeUnit.SECONDS));
+    assertEquals(1, readRow(putSettings, id).size());
+
+    HTableSettings<Person> deleteSettings = mutationTableSettings(deleteHBaseConverter);
+    CompletionStage<Done> delete =
+        Source.single(new Person(id, "to be deleted"))
+            .via(HTableStage.flow(deleteSettings))
+            .runWith(Sink.ignore(), system);
+    assertEquals(Done.getInstance(), delete.toCompletableFuture().get(5, TimeUnit.SECONDS));
+
+    assertEquals(0, readRow(putSettings, id).size());
+  }
+
+  @Test
+  public void complexConverterThroughFlow() throws Exception {
+    HTableSettings<Person> complexSettings = mutationTableSettings(complexHBaseConverter);
+
+    int mixedId = randomRowId();
+    int deletedId = randomRowId();
+    CompletionStage<List<Person>> f =
+        Source.from(
+                List.of(
+                    new Person(0, "skipped"),
+                    new Person(mixedId, "mixed"),
+                    new Person(deletedId, "")))
+            .via(HTableStage.flow(complexSettings))
+            .runWith(Sink.seq(), system);
+    assertEquals(3, f.toCompletableFuture().get(5, TimeUnit.SECONDS).size());
+
+    List<Result> results = readRow(complexSettings, mixedId);
+    assertEquals(1, results.size());
+    assertEquals(
+        "mixed",
+        new String(results.get(0).getValue(bytes("info"), bytes("name")), StandardCharsets.UTF_8));
+    assertEquals(
+        1L, Bytes.toLong(results.get(0).getValue(bytes("info"), bytes("numberOfChanges"))));
+    assertEquals(0, readRow(complexSettings, 0).size());
+    assertEquals(0, readRow(complexSettings, deletedId).size());
+  }
+
+  private static int randomRowId() {
+    return 1000
+        + java.util.concurrent.ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE - 1000);
+  }
+
+  private static byte[] bytes(String s) {
+    return s.getBytes(StandardCharsets.UTF_8);
+  }
+
+  private HTableSettings<Person> mutationTableSettings(Function<Person, List<Mutation>> converter) {
+    return HTableSettings.create(
+        HBaseConfiguration.create(), TableName.valueOf("person3"), List.of("info"), converter);
+  }
+
+  private List<Result> readRow(HTableSettings<Person> tableSettings, int id) throws Exception {
+    Scan scan = new Scan(new Get("id_%d".formatted(id).getBytes(StandardCharsets.UTF_8)));
+    return HTableStage.source(scan, tableSettings)
+        .runWith(Sink.seq(), system)
+        .toCompletableFuture()
+        .get(5, TimeUnit.SECONDS);
   }
 }
 

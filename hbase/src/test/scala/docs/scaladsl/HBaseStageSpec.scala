@@ -30,6 +30,7 @@ import org.scalatest.BeforeAndAfterAll
 import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.language.implicitConversions
+import scala.util.Random
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -59,7 +60,7 @@ class HBaseStageSpec
   val appendHBaseConverter: Person => immutable.Seq[Mutation] = { person =>
     // Append to a cell
     val append = new Append(s"id_${person.id}")
-    append.add("info", "aliases", person.name)
+    append.addColumn("info", "aliases", person.name)
     List(append)
   }
   // #create-converter-append
@@ -145,7 +146,74 @@ class HBaseStageSpec
 
       f.futureValue.size shouldBe 1
     }
+
+    "append to a cell through a flow" in {
+      val appendSettings = tableSettings.withConverter(appendHBaseConverter)
+
+      // unique row per run: the sbt cross-build reruns this suite against the same HBase instance
+      val id = randomRowId()
+      val f = Source(List(Person(id, "-a"), Person(id, "-b")))
+        .via(HTableStage.flow(appendSettings))
+        .runWith(Sink.ignore)
+      f.futureValue shouldBe Done
+
+      val results = readRow(id).futureValue
+      results should have size 1
+      Bytes.toString(results.head.getValue("info", "aliases")) shouldBe "-a-b"
+    }
+
+    "increment a cell through a flow" in {
+      val incrementSettings = tableSettings.withConverter(incrementHBaseConverter)
+
+      val id = randomRowId()
+      val f = Source(List.fill(3)(Person(id, "increment")))
+        .via(HTableStage.flow(incrementSettings))
+        .runWith(Sink.ignore)
+      f.futureValue shouldBe Done
+
+      val results = readRow(id).futureValue
+      results should have size 1
+      Bytes.toLong(results.head.getValue("info", "numberOfChanges")) shouldBe 3L
+    }
+
+    "delete a row through a flow" in {
+      val id = randomRowId()
+      Source.single(Person(id, "to be deleted")).runWith(HTableStage.sink(tableSettings)).futureValue shouldBe Done
+      readRow(id).futureValue should have size 1
+
+      val deleteSettings = tableSettings.withConverter(deleteHBaseConverter)
+      Source
+        .single(Person(id, "to be deleted"))
+        .via(HTableStage.flow(deleteSettings))
+        .runWith(Sink.ignore)
+        .futureValue shouldBe Done
+
+      readRow(id).futureValue shouldBe empty
+    }
+
+    "apply a converter that emits multiple or no mutations" in {
+      val complexSettings = tableSettings.withConverter(mutationsHBaseConverter)
+
+      val mixedId = randomRowId()
+      val deletedId = randomRowId()
+      val f = Source(List(Person(0, "skipped"), Person(mixedId, "mixed"), Person(deletedId, "")))
+        .via(HTableStage.flow(complexSettings))
+        .runWith(Sink.seq)
+      f.futureValue should have size 3
+
+      val results = readRow(mixedId).futureValue
+      results should have size 1
+      Bytes.toString(results.head.getValue("info", "name")) shouldBe "mixed"
+      Bytes.toLong(results.head.getValue("info", "numberOfChanges")) shouldBe 1L
+      readRow(0).futureValue shouldBe empty
+      readRow(deletedId).futureValue shouldBe empty
+    }
   }
+
+  private def randomRowId(): Int = 1000 + Random.nextInt(Int.MaxValue - 1000)
+
+  private def readRow(id: Int) =
+    HTableStage.source(new Scan(new Get(Bytes.toBytes(s"id_$id"))), tableSettings).runWith(Sink.seq)
 
   override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
