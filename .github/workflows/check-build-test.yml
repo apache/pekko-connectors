@@ -121,7 +121,7 @@ jobs:
           - { connector: google-common }
           - { connector: google-fcm }
           - { connector: hbase,                        pre_cmd: './scripts/hbase-server.sh' }
-          - { connector: hdfs,                         pre_cmd: 'file ${HOME}/.cache/coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_2.13/2.0.0/cats-kernel_2.13-2.0.0.jar' }
+          - { connector: hdfs }
           - { connector: huawei-push-kit }
           - { connector: influxdb,                     pre_cmd: 'docker compose up -d influxdb' }
           # ironmq disabled while we resolve https://github.com/apache/pekko-connectors/issues/697
