@@ -14,9 +14,11 @@ services:
     volumes:
     - ./sns/src/test/travis/:/conf/
   amqp:
-    image: rabbitmq:3
+    image: rabbitmq:4
     ports:
       - "5672:5672"
+    volumes:
+      - ./amqp/src/test/travis/rabbitmq.conf:/etc/rabbitmq/conf.d/20-pekko-connectors.conf
   cassandra:
     image: cassandra:4.0
     ports:
