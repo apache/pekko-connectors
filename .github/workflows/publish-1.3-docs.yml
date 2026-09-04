@@ -30,7 +30,7 @@ jobs:
       JAVA_OPTS: -Xms2G -Xmx3G -Xss2M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7.0.1
         with:
           fetch-tags: true
           fetch-depth: 0
@@ -43,7 +43,7 @@ jobs:
           java-version: 8
 
       - name: Install sbt
-        uses: sbt/setup-sbt@6bec67c98f542b9e17369bfca0ec822ac1363194 # v1.1.19
+        uses: sbt/setup-sbt@c7d2d6258b4bd0d3ec5129e6b3453199d3c79729 # v1.5.8
 
       - name: Build Documentation
         run: |-
