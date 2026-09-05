@@ -31,6 +31,7 @@ import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.japi.Pair;
+import org.apache.pekko.stream.connectors.hbase.HBaseMiniCluster;
 import org.apache.pekko.stream.connectors.hbase.HTableSettings;
 import org.apache.pekko.stream.connectors.hbase.javadsl.HTableStage;
 import org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension;
@@ -51,6 +52,7 @@ public class HBaseStageTest {
 
   @BeforeAll
   public static void setup() {
+    HBaseMiniCluster.start();
     system = ActorSystem.create();
   }
 

@@ -324,6 +324,14 @@ object Dependencies {
         ("org.apache.hadoop" % "hadoop-mapreduce-client-core" % HadoopVersion)
           .exclude("ch.qos.reload4j", "reload4j")
           .exclude("org.slf4j", "slf4j-reload4j"),
+        // starts an in-JVM HBase for the tests; the shaded flavour is the one that pairs
+        // with hbase-shaded-client
+        ("org.apache.hbase" % "hbase-shaded-testing-util" % hbaseVersion % Test)
+          .exclude("log4j", "log4j")
+          .exclude("org.slf4j", "slf4j-log4j12")
+          .exclude("org.apache.logging.log4j", "log4j-slf4j-impl")
+          .exclude("ch.qos.reload4j", "reload4j")
+          .exclude("org.slf4j", "slf4j-reload4j"),
         "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
   }
 
