@@ -16,7 +16,7 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.Done
 import pekko.actor.ActorSystem
-import pekko.stream.connectors.hbase.HTableSettings
+import pekko.stream.connectors.hbase.{ HBaseMiniCluster, HTableSettings }
 import pekko.stream.connectors.hbase.scaladsl.HTableStage
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.{ Sink, Source }
@@ -150,7 +150,7 @@ class HBaseStageSpec
     "append to a cell through a flow" in {
       val appendSettings = tableSettings.withConverter(appendHBaseConverter)
 
-      // unique row per run: the sbt cross-build reruns this suite against the same HBase instance
+      // unique row per run, so that the assertions below do not depend on suite ordering
       val id = randomRowId()
       val f = Source(List(Person(id, "-a"), Person(id, "-b")))
         .via(HTableStage.flow(appendSettings))
@@ -214,6 +214,9 @@ class HBaseStageSpec
 
   private def readRow(id: Int) =
     HTableStage.source(new Scan(new Get(Bytes.toBytes(s"id_$id"))), tableSettings).runWith(Sink.seq)
+
+  override def beforeAll(): Unit =
+    HBaseMiniCluster.start()
 
   override def afterAll(): Unit =
     TestKit.shutdownActorSystem(system)
