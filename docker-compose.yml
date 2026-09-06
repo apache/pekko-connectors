@@ -21,7 +21,7 @@ services:
     volumes:
       - ./amqp/src/test/travis/rabbitmq.conf:/etc/rabbitmq/conf.d/20-pekko-connectors.conf
   cassandra:
-    image: cassandra:4.0
+    image: cassandra:5.0
     ports:
       - "9042:9042"
   elasticmq:
