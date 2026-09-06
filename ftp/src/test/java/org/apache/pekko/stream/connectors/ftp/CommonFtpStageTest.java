@@ -68,7 +68,7 @@ interface CommonFtpStageTest extends BaseSupport, PekkoSupport {
     Source<FtpFile, NotUsed> source = getBrowserSource(basePath);
 
     Pair<NotUsed, TestSubscriber.Probe<FtpFile>> pairResult =
-        source.toMat(TestSink.probe(system), Keep.both()).run(system);
+        source.toMat(TestSink.create(system), Keep.both()).run(system);
     TestSubscriber.Probe<FtpFile> probe = pairResult.second();
     probe.request(demand).expectNextN(numFiles);
     probe.expectComplete();
@@ -82,7 +82,7 @@ interface CommonFtpStageTest extends BaseSupport, PekkoSupport {
 
     Source<ByteString, CompletionStage<IOResult>> source = getIOSource(fileName);
     Pair<CompletionStage<IOResult>, TestSubscriber.Probe<ByteString>> pairResult =
-        source.toMat(TestSink.probe(system), Keep.both()).run(system);
+        source.toMat(TestSink.create(system), Keep.both()).run(system);
     TestSubscriber.Probe<ByteString> probe = pairResult.second();
     probe.request(100).expectNextOrComplete();
 
