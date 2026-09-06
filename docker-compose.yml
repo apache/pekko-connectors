@@ -112,15 +112,6 @@ services:
         curl -s --fail -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/simpleTopic"}' http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/subscriptions/simpleSubscription
         curl -s --fail -X PUT http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics/testTopic
         curl -s --fail -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/testTopic"}' http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/subscriptions/testSubscription
-  hbase:
-    image: harisekhon/hbase:2.1
-    hostname: hbase
-    ports:
-      - 2181:2181
-      - 16000:16000
-      - 16010:16010
-      - 16020:16020
-      - 16030:16030
   ibmmq:
     image: icr.io/ibm-messaging/mq:9.4.5.1-r1
     environment:
