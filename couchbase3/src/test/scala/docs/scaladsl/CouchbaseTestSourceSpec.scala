@@ -26,7 +26,7 @@ import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.apache.pekko.stream.scaladsl.Sink
 import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach, Inspectors }
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{ IntegrationPatience, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -36,6 +36,7 @@ class CouchbaseTestSourceSpec extends AnyWordSpec
     with BeforeAndAfterEach
     with Matchers
     with ScalaFutures
+    with IntegrationPatience
     with Inspectors
     with LogCapturing {
 
