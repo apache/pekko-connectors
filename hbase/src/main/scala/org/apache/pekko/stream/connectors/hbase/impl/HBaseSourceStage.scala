@@ -17,7 +17,7 @@ import org.apache.pekko
 import pekko.stream.{ Attributes, Outlet, SourceShape }
 import pekko.stream.connectors.hbase.HTableSettings
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler, StageLogging }
-import org.apache.hadoop.hbase.client.{ Connection, Result, Scan, Table }
+import org.apache.hadoop.hbase.client.{ Connection, Result, ResultScanner, Scan, Table }
 
 import scala.util.control.NonFatal
 
@@ -43,26 +43,32 @@ private[hbase] final class HBaseSourceLogic[A](scan: Scan,
   implicit val connection: Connection = connect(settings.conf)
 
   lazy val table: Table = getOrCreateTable(settings.tableName, settings.columnFamilies).get
+  // `table` is lazy, so postStop must not touch it unless preStart forced it —
+  // referencing it there would create a table only to close it.
+  private var tableOpened = false
+  private var scanner: ResultScanner = null
   private var results: java.util.Iterator[Result] = null
 
   setHandler(out, this)
 
   override def preStart(): Unit =
     try {
-      val scanner = table.getScanner(scan)
+      val t = table
+      tableOpened = true
+      scanner = t.getScanner(scan)
       results = scanner.iterator()
     } catch {
       case NonFatal(exc) =>
         failStage(exc)
     }
 
+  // Every resource is closed independently, so a failure to close one still
+  // releases the rest. Any of them may be unset if preStart failed part way.
   override def postStop(): Unit =
-    try {
-      table.close()
-    } catch {
-      case NonFatal(exc) =>
-        failStage(exc)
-    }
+    HBaseSourceLogic.closeAll(
+      if (scanner ne null) scanner.close(),
+      if (tableOpened) table.close(),
+      connection.close())((what, exc) => log.error(exc, "Problem occurred during {} close", what))
 
   override def onPull(): Unit =
     if (results.hasNext) {
@@ -71,4 +77,27 @@ private[hbase] final class HBaseSourceLogic[A](scan: Scan,
       completeStage()
     }
 
+}
+
+private[impl] object HBaseSourceLogic {
+
+  /**
+   * Close the scanner, table and connection of a source stage. Each is closed
+   * independently so that a failure to close one still releases the others.
+   * Failures are reported to `onError` and not rethrown, matching the
+   * behaviour of `HBaseFlowStage`: the stage has already stopped, so failing
+   * here would only mask the reason it stopped.
+   */
+  def closeAll(closeScanner: => Unit, closeTable: => Unit, closeConnection: => Unit)(
+      onError: (String, Throwable) => Unit): Unit = {
+    def attempt(what: String, close: => Unit): Unit =
+      try close
+      catch {
+        case NonFatal(exc) => onError(what, exc)
+      }
+
+    attempt("scanner", closeScanner)
+    attempt("table", closeTable)
+    attempt("connection", closeConnection)
+  }
 }
