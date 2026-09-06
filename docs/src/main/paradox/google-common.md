@@ -36,6 +36,24 @@ Credentials will be loaded automatically:
 
 Credentials can also be specified manually in your configuration file.
 
+## Project id
+
+The project id used for requests is resolved in this order:
+
+1. The `pekko.connectors.google.project-id` setting, if it is non-empty;
+2. the project id supplied by the configured credentials provider, if it is non-empty;
+3. the `pekko.connectors.google.default-project-id` setting, which reads the `GOOGLE_CLOUD_PROJECT`,
+   `GCLOUD_PROJECT` and `GCP_PROJECT` environment variables by default.
+
+Setting `project-id` explicitly is useful because the project that owns the principal your credentials
+authenticate as need not be the project whose resources you want to access; a service account in one
+project is often granted access to another. The environment variables behind `default-project-id` are
+commonly set for you by GCP runtimes such as App Engine, Cloud Run, Cloud Functions and by GKE
+Workload Identity.
+
+The resolved value is available as `GoogleSettings.projectId` and can still be overridden per stream
+with `withProjectId`.
+
 ## Accessing settings
 
 @apidoc[GoogleSettings$] provides methods to retrieve settings from your configuration and @apidoc[GoogleAttributes$] to access the settings attached to a stream.
