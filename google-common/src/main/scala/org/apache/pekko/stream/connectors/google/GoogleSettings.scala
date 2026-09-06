@@ -44,7 +44,21 @@ object GoogleSettings {
     val credentials = Credentials(c.getConfig("credentials"))
     val requestSettings = RequestSettings(c)
 
-    GoogleSettings(credentials.projectId, credentials, requestSettings)
+    GoogleSettings(resolveProjectId(c, credentials), credentials, requestSettings)
+  }
+
+  /**
+   * The `project-id` setting wins if it is set, otherwise the project id supplied by the credentials
+   * provider, otherwise the `default-project-id` setting, which is read from the environment by default.
+   */
+  private def resolveProjectId(c: Config, credentials: Credentials): String = {
+    def setting(path: String) =
+      if (c.hasPath(path)) Some(c.getString(path)).filter(_.nonEmpty) else None
+
+    setting("project-id")
+      .orElse(Some(credentials.projectId).filter(_.nonEmpty))
+      .orElse(setting("default-project-id"))
+      .getOrElse("")
   }
 
   /**
