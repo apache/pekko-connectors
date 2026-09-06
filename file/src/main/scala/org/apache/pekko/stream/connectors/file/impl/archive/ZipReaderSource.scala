@@ -22,8 +22,9 @@ import pekko.stream.scaladsl.Source
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import pekko.util.ByteString
 
-import java.io.{ File, FileInputStream }
+import java.io.File
 import java.nio.charset.{ Charset, StandardCharsets }
+import java.nio.file.Files
 import java.util.zip.{ ZipEntry, ZipInputStream }
 import scala.util.control.NonFatal
 
@@ -33,11 +34,11 @@ import scala.util.control.NonFatal
    * Opens `f` as a zip stream, closing the underlying file if the zip stream itself cannot be opened.
    */
   def openZip(f: File, fileCharset: Charset): ZipInputStream = {
-    val fis = new FileInputStream(f)
-    try new ZipInputStream(fis, fileCharset)
+    val in = Files.newInputStream(f.toPath)
+    try new ZipInputStream(in, fileCharset)
     catch {
       case NonFatal(e) =>
-        try fis.close()
+        try in.close()
         catch { case NonFatal(suppressed) => e.addSuppressed(suppressed) }
         throw e
     }

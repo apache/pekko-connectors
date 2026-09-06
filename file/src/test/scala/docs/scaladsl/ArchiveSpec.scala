@@ -14,7 +14,7 @@
 package docs.scaladsl
 
 import java.io._
-import java.nio.file.{ Files, Path, Paths }
+import java.nio.file.{ Files, NoSuchFileException, Path, Paths }
 import java.util.zip.Deflater
 import org.apache.pekko
 import pekko.actor.ActorSystem
@@ -187,7 +187,7 @@ class ArchiveSpec
           .zipReader(missing)
           .runWith(Sink.ignore)
           .failed
-          .futureValue shouldBe a[FileNotFoundException]
+          .futureValue shouldBe a[NoSuchFileException]
       }
     }
   }
