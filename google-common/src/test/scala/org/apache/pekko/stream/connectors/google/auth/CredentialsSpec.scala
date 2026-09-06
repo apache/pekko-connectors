@@ -107,7 +107,7 @@ class CredentialsSpec
            |path = "$path"
         """.stripMargin)
 
-      a[Exception] should be thrownBy UserAccessCredentials(config)
+      an[Exception] should be thrownBy UserAccessCredentials(config)
     }
   }
 
