@@ -89,7 +89,7 @@ services:
       - ./geode/scripts/:/scripts/
     command: /scripts/geode.sh
   gcloud-pubsub-emulator:
-    image: google/cloud-sdk:554.0.0
+    image: google/cloud-sdk:583.0.0
     ports:
       - "8538:8538"
     command: gcloud beta emulators pubsub start --project=pekko-connectors --host-port=0.0.0.0:8538
