@@ -1126,7 +1126,8 @@ import scala.util.{ Failure, Success, Try }
       initialUploadState: Option[(String, Int)] = None)(
       parallelism: Int): Flow[ByteString, UploadPartResponse, NotUsed] = {
 
-    def getChunkBuffer(chunkSize: Int, bufferSize: Int, maxRetriesPerChunk: Int)(implicit settings: S3Settings) =
+    def getChunkBuffer(chunkSize: Int, bufferSize: Int, maxRetriesPerChunk: Int)(
+        implicit settings: S3Settings): ChunkBuffer =
       settings.bufferType match {
         case MemoryBufferType =>
           new MemoryBuffer(bufferSize)
@@ -1185,8 +1186,10 @@ import scala.util.{ Failure, Success, Try }
 
         import conf.multipartUploadSettings.retrySettings._
 
+        val chunkBuffer = getChunkBuffer(chunkSize, chunkBufferSize, maxRetries) // creates the chunks
+
         SplitAfterSize(chunkSize, chunkBufferSize)(atLeastOneByteString)
-          .via(getChunkBuffer(chunkSize, chunkBufferSize, maxRetries)) // creates the chunks
+          .via(chunkBuffer)
           .mergeSubstreamsWithParallelism(parallelism)
           .filter(_.size > 0)
           .via(atLeastOne)
@@ -1212,6 +1215,12 @@ import scala.util.{ Failure, Success, Try }
               handleChunkResponse(response, upload, index, conf.multipartUploadSettings.retrySettings)
           }
           .mergeSubstreamsWithParallelism(parallelism)
+          .watchTermination((_, done) => {
+            // a chunk that was emitted and then abandoned - a cancelled or failed upload - is never disposed
+            // of individually, so release whatever is still held once this upload has finished either way
+            done.onComplete(_ => chunkBuffer.cleanUp())(ExecutionContext.parasitic)
+            NotUsed
+          })
       }
       .mapMaterializedValue(_ => NotUsed)
   }

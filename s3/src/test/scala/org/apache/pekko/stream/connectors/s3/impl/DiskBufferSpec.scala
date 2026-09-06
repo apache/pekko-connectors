@@ -114,6 +114,20 @@ class DiskBufferSpec(_system: ActorSystem)
     tmpDir.list().size should be(before)
   }
 
+  it should "delete the temp files of chunks that were never disposed of when it is cleaned up" in {
+    val tmpDir = Files.createTempDirectory("DiskBufferSpec").toFile()
+    val before = tmpDir.list().size
+    val buffer = new DiskBuffer(8, 200, Some(tmpDir.toPath))
+
+    Source(Vector(ByteString(1, 2, 3))).via(buffer).runWith(Sink.seq).futureValue
+
+    // the chunk was emitted and then abandoned, as it would be by a cancelled upload
+    tmpDir.list().size should be(before + 1)
+
+    buffer.cleanUp()
+    tmpDir.list().size should be(before)
+  }
+
   it should "delete its temp file if it fails before emitting a chunk" in {
     val tmpDir = Files.createTempDirectory("DiskBufferSpec").toFile()
     val before = tmpDir.list().size
