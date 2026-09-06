@@ -79,7 +79,7 @@ class CredentialsSpec
 
       // this is the routine case: `gcloud auth application-default login` writes a user access file,
       // and the application-default provider tries the service account parser against it first
-      a[Exception] should be thrownBy ServiceAccountCredentials(config, Set("a-scope"))
+      an[Exception] should be thrownBy ServiceAccountCredentials(config, Set("a-scope"))
     }
   }
 
