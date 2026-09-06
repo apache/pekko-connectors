@@ -42,8 +42,9 @@ private[connectors] object ServiceAccountCredentials {
           c.getString("private-key"))
       } else {
         val src = Source.fromFile(c.getString("path"))
-        val credentials = JsonParser(src.mkString).convertTo[ServiceAccountCredentialsFile]
-        src.close()
+        val credentials =
+          try JsonParser(src.mkString).convertTo[ServiceAccountCredentialsFile]
+          finally src.close()
         (credentials.project_id, credentials.client_email, credentials.private_key)
       }
     }

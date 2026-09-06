@@ -46,8 +46,9 @@ private[connectors] object UserAccessCredentials {
         projectId = c.getString("project-id"))
     } else {
       val src = Source.fromFile(c.getString("path"))
-      val credentials = JsonParser(src.mkString).convertTo[UserAccessCredentialsFile]
-      src.close()
+      val credentials =
+        try JsonParser(src.mkString).convertTo[UserAccessCredentialsFile]
+        finally src.close()
       apply(
         clientId = credentials.client_id,
         clientSecret = credentials.client_secret,
