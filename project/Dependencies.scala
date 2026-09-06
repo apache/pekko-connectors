@@ -402,7 +402,11 @@ object Dependencies {
       "software.amazon.kinesis" % "amazon-kinesis-client" % "3.5.1").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
-        ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
+        ExclusionRule("software.amazon.awssdk", "netty-nio-client"),
+        // software.amazon.glue:schema-registry-serde hardcodes the Scala 2.12 build of this
+        // jar, so it does not follow the Scala version the connector is built for - see #479
+        ExclusionRule("com.kjetland", "mbknor-jackson-jsonschema_2.12"))) ++ Seq(
+      ("com.kjetland" %% "mbknor-jackson-jsonschema" % "1.0.39").cross(CrossVersion.for3Use2_13),
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
 
