@@ -1198,8 +1198,11 @@ import scala.util.{ Failure, Success, Try }
               if (isTransientError(r.status)) {
                 r.entity.discardBytes()
                 Some(chunkAndUploadInfo)
-              } else
+              } else {
+                // the request has been sent and will not be retried, so the buffered chunk is no longer needed
+                chunkAndUploadInfo._1.dispose()
                 None
+              }
             case (chunkAndUploadInfo, (Failure(_), _)) =>
               // Treat any exception as transient.
               Some(chunkAndUploadInfo)

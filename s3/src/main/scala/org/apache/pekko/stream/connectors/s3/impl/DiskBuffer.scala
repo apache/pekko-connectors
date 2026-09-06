@@ -44,7 +44,9 @@ import scala.concurrent.ExecutionContext
  * The stage waits for the incoming stream to complete. After that, it emits a single Chunk item on its output. The Chunk
  * contains a bytestream source that can be materialized multiple times, and the total size of the file.
  *
- * @param maxMaterializations Number of expected materializations for the completed chunk. After this, the temp file is deleted.
+ * @param maxMaterializations Maximum number of materializations the completed chunk may see, which is reached only
+ *                            when every upload retry is used. After this, the temp file is deleted. In the ordinary
+ *                            case the chunk is disposed of as soon as the upload it belongs to is finished with it.
  * @param maxSize Maximum size on disk to buffer
  */
 @InternalApi private[impl] final class DiskBuffer(maxMaterializations: Int, maxSize: Int, tempPath: Option[Path])
@@ -82,6 +84,8 @@ import scala.concurrent.ExecutionContext
         pull(in)
       }
 
+      private var emitted = false
+
       override def onUpstreamFinish(): Unit = {
         if (isAvailable(out)) emit()
         completeStage()
@@ -92,9 +96,14 @@ import scala.concurrent.ExecutionContext
         try {
           pathOut.close()
         } catch { case x: Throwable => () }
+        finally {
+          // nothing downstream can reference the file if the chunk was never emitted
+          if (!emitted) path.delete(): Unit
+        }
 
       private def emit(): Unit = {
         pathOut.close()
+        emitted = true
 
         val deleteCounter = new AtomicInteger(maxMaterializations)
         val src = FileIO.fromPath(path.toPath, 65536).mapMaterializedValue { f =>
@@ -105,7 +114,7 @@ import scala.concurrent.ExecutionContext
             }(ExecutionContext.parasitic)
           NotUsed
         }
-        emit(out, DiskChunk(src, length), () => completeStage())
+        emit(out, DiskChunk(src, length, path), () => completeStage())
       }
       setHandlers(in, out, this)
     }

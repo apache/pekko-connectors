@@ -95,4 +95,38 @@ class DiskBufferSpec(_system: ActorSystem)
     }
 
   }
+
+  it should "delete its temp file when the chunk is disposed" in {
+    val tmpDir = Files.createTempDirectory("DiskBufferSpec").toFile()
+    val before = tmpDir.list().size
+    val chunk = Source(Vector(ByteString(1, 2, 3)))
+      .via(new DiskBuffer(8, 200, Some(tmpDir.toPath)))
+      .runWith(Sink.seq)
+      .futureValue
+      .head
+
+    // a successful upload materializes the chunk far fewer times than the retry budget allows,
+    // so disposal, not the materialization count, is what releases the file
+    chunk.asInstanceOf[DiskChunk].data.runWith(Sink.ignore).futureValue
+    tmpDir.list().size should be(before + 1)
+
+    chunk.dispose()
+    tmpDir.list().size should be(before)
+  }
+
+  it should "delete its temp file if it fails before emitting a chunk" in {
+    val tmpDir = Files.createTempDirectory("DiskBufferSpec").toFile()
+    val before = tmpDir.list().size
+
+    Source
+      .failed(new RuntimeException("boom"))
+      .via(new DiskBuffer(8, 200, Some(tmpDir.toPath)))
+      .runWith(Sink.seq)
+      .failed
+      .futureValue shouldBe a[RuntimeException]
+
+    eventually {
+      tmpDir.list().size should be(before)
+    }
+  }
 }
