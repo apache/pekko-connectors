@@ -59,6 +59,39 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       contentLength shouldBe Some(123L)
     }
 
+    "convert a multi-value header to one header per value" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Accept-Encoding", java.util.Arrays.asList("gzip", "deflate"))
+
+      val (contentTypeHeader, reqHeaders, contentLength) = PekkoHttpClient.convertHeaders(headers)
+
+      contentTypeHeader shouldBe None
+      contentLength shouldBe None
+      reqHeaders.map(h => (h.name(), h.value())) should contain theSameElementsInOrderAs
+      Seq(("Accept-Encoding", "gzip"), ("Accept-Encoding", "deflate"))
+    }
+
+    "reject a Content-Length header with multiple values" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Length", java.util.Arrays.asList("123", "456"))
+
+      an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
+    }
+
+    "reject a Content-Type header with multiple values" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Type", java.util.Arrays.asList("application/xml", "application/json"))
+
+      an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
+    }
+
+    "reject a header with no values" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Accept", Collections.emptyList[String]())
+
+      an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
+    }
+
     "return None content length when Content-Length header is absent" in {
       val headers = new java.util.HashMap[String, java.util.List[String]]
       headers.put("Content-Type", Collections.singletonList("application/xml"))
