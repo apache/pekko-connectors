@@ -107,6 +107,38 @@ class OAuth2CredentialsSpec
       request3.futureValue shouldEqual OAuth2BearerToken("second token")
     }
 
+    "serve queued requests and then stop the token stream when closed" in {
+
+      val accessTokenPromise = Promise[AccessToken]()
+      val credentials = new OAuth2Credentials("dummyProject") {
+        override protected def getAccessToken()(implicit mat: Materializer,
+            settings: RequestSettings,
+            clock: Clock): Future[AccessToken] = accessTokenPromise.future
+      }
+      watch(credentials.tokenStream)
+
+      val request = credentials.get()
+      credentials.close()
+      accessTokenPromise.success(AccessToken("a token", JwtTime.nowSeconds + 120))
+
+      request.futureValue shouldEqual OAuth2BearerToken("a token")
+      expectTerminated(credentials.tokenStream)
+    }
+
+    "fail requests made after close, and tolerate closing twice" in {
+
+      val credentials = new OAuth2Credentials("dummyProject") {
+        override protected def getAccessToken()(implicit mat: Materializer,
+            settings: RequestSettings,
+            clock: Clock): Future[AccessToken] = Promise[AccessToken]().future
+      }
+
+      credentials.close()
+      credentials.close()
+
+      credentials.get().failed.futureValue shouldBe an[IllegalStateException]
+    }
+
   }
 
 }
