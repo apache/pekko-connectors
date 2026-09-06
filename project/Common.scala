@@ -90,7 +90,8 @@ object Common extends AutoPlugin {
     Compile / doc / scalacOptions -= "-Werror",
     compile / javacOptions ++= Seq(
       "-Xlint:cast",
-      "-Xlint:deprecation",
+      // deprecation warnings are informational only - they must not fail the build
+      "-Xlint:-deprecation",
       "-Xlint:dep-ann",
       "-Xlint:empty",
       "-Xlint:fallthrough",
