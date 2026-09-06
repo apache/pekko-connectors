@@ -100,12 +100,45 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       entity.contentLengthOption shouldBe Some(42L)
     }
 
-    "build() should use default ConnectionPoolSettings" in {
+    "build() should apply SDK GLOBAL_HTTP_DEFAULTS by default" in {
       val pekkoClient: PekkoHttpClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
         .build()
         .asInstanceOf[PekkoHttpClient]
 
-      pekkoClient.connectionSettings shouldBe ConnectionPoolSettings(ConfigFactory.load())
+      pekkoClient.connectionSettings.connectionSettings.connectingTimeout shouldBe
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.CONNECTION_TIMEOUT).toScala
+      pekkoClient.connectionSettings.maxConnections shouldBe
+      SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.get(SdkHttpConfigurationOption.MAX_CONNECTIONS).intValue()
+    }
+
+    "buildWithDefaults() should propagate configuration options without explicit opt-in" in {
+      val attributeMap = AttributeMap.builder()
+        .put(SdkHttpConfigurationOption.CONNECTION_TIMEOUT, 1.second.toJava)
+        .put(SdkHttpConfigurationOption.CONNECTION_MAX_IDLE_TIMEOUT, 2.second.toJava)
+        .put(SdkHttpConfigurationOption.MAX_CONNECTIONS, Integer.valueOf(3))
+        .put(SdkHttpConfigurationOption.CONNECTION_TIME_TO_LIVE, 4.second.toJava)
+        .build()
+      val pekkoClient: PekkoHttpClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
+        .buildWithDefaults(attributeMap)
+        .asInstanceOf[PekkoHttpClient]
+
+      pekkoClient.connectionSettings.connectionSettings.connectingTimeout shouldBe 1.second
+      pekkoClient.connectionSettings.connectionSettings.idleTimeout shouldBe 2.seconds
+      pekkoClient.connectionSettings.maxConnections shouldBe 3
+      pekkoClient.connectionSettings.maxConnectionLifetime shouldBe 4.seconds
+    }
+
+    "withConnectionPoolSettings().buildWithDefaults() should use the passed settings untouched" in {
+      val connectionPoolSettings = ConnectionPoolSettings(ConfigFactory.load()).withMaxConnections(7)
+      val attributeMap = AttributeMap.builder()
+        .put(SdkHttpConfigurationOption.MAX_CONNECTIONS, Integer.valueOf(3))
+        .build()
+      val pekkoClient: PekkoHttpClient = new PekkoHttpAsyncHttpService().createAsyncHttpClientFactory()
+        .withConnectionPoolSettings(connectionPoolSettings)
+        .buildWithDefaults(attributeMap)
+        .asInstanceOf[PekkoHttpClient]
+
+      pekkoClient.connectionSettings shouldBe connectionPoolSettings
     }
 
     "withConnectionPoolSettingsBuilderFromAttributeMap().buildWithDefaults() should propagate configuration options" in {

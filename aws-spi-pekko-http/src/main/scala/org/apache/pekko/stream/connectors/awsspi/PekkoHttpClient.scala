@@ -190,11 +190,25 @@ object PekkoHttpClient {
 
   def builder() = PekkoHttpClientBuilder()
 
+  private val keepBaseConnectionPoolSettings: (ConnectionPoolSettings, AttributeMap) => ConnectionPoolSettings =
+    (c, _) => c
+
+  /**
+   * Builds [[PekkoHttpClient]] instances.
+   *
+   * Unless explicit [[pekko.http.scaladsl.settings.ConnectionPoolSettings]] or a custom settings builder are
+   * provided, the SDK's resolved configuration options are applied to the connection pool settings:
+   * `CONNECTION_TIMEOUT`, `CONNECTION_MAX_IDLE_TIMEOUT`, `MAX_CONNECTIONS` and `CONNECTION_TIME_TO_LIVE`
+   * are mapped; `READ_TIMEOUT`, `WRITE_TIMEOUT` and `CONNECTION_ACQUIRE_TIMEOUT` have no Pekko HTTP
+   * equivalent and are ignored. Settings passed via `withConnectionPoolSettings` are used untouched unless
+   * combined with `withConnectionPoolSettingsBuilderFromAttributeMap` or a custom
+   * `withConnectionPoolSettingsBuilder`.
+   */
   case class PekkoHttpClientBuilder(private val actorSystem: Option[ActorSystem] = None,
       private val executionContext: Option[ExecutionContext] = None,
       private val connectionPoolSettings: Option[ConnectionPoolSettings] = None,
       private val connectionPoolSettingsBuilder: (ConnectionPoolSettings, AttributeMap) => ConnectionPoolSettings =
-        (c, _) => c)
+        keepBaseConnectionPoolSettings)
       extends SdkAsyncHttpClient.Builder[PekkoHttpClientBuilder] {
     def buildWithDefaults(serviceDefaults: AttributeMap): SdkAsyncHttpClient = {
       implicit val as = actorSystem.getOrElse(ActorSystem("aws-pekko-http"))
@@ -202,7 +216,15 @@ object PekkoHttpClient {
 
       val resolvedOptions = serviceDefaults.merge(SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS);
 
-      val cps = connectionPoolSettingsBuilder(
+      // Honour the SDK's resolved configuration by default, as the SdkAsyncHttpClient.Builder
+      // contract expects; explicitly provided ConnectionPoolSettings are used untouched unless
+      // the user also opted into an attribute-map-aware settings builder.
+      val cpsBuilder =
+        if ((connectionPoolSettingsBuilder eq keepBaseConnectionPoolSettings) && connectionPoolSettings.isEmpty)
+          buildConnectionPoolSettings _
+        else connectionPoolSettingsBuilder
+
+      val cps = cpsBuilder(
         connectionPoolSettings.getOrElse(ConnectionPoolSettings(as)),
         resolvedOptions
       )
