@@ -179,6 +179,16 @@ class ArchiveSpec
             Files.delete(p))
         }
       }
+
+      "fail the stream when the archive cannot be opened" in {
+        val missing = new File(Files.createTempDirectory("pekko-connectors-zip-").toFile, "no-such-file.zip")
+
+        Archive
+          .zipReader(missing)
+          .runWith(Sink.ignore)
+          .failed
+          .futureValue shouldBe a[FileNotFoundException]
+      }
     }
   }
 
