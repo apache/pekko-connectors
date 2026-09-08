@@ -118,6 +118,18 @@ abstract class Credentials private[auth] () {
   private[google] def projectId: String
 
   /**
+   * Releases any resources held by these credentials, such as the stream that caches and refreshes
+   * OAuth2 access tokens. The credentials must not be used again once closed, and closing more than
+   * once has no further effect.
+   *
+   * Credentials obtained from [[org.apache.pekko.stream.connectors.google.GoogleSettings GoogleSettings]]
+   * via an `ActorSystem` are cached per system and their resources are released when that system
+   * terminates, so only credentials that are built directly, for example one set of credentials per
+   * tenant, need to be closed.
+   */
+  def close(): Unit = ()
+
+  /**
    * Wraps these credentials as a [[com.google.auth.Credentials]] for interop with Google's Java client libraries.
    * @param ec the [[scala.concurrent.ExecutionContext]] to use for blocking requests if credentials are requested synchronously
    * @param settings additional request settings

@@ -36,6 +36,14 @@ Credentials will be loaded automatically:
 
 Credentials can also be specified manually in your configuration file.
 
+Credentials that refresh OAuth2 access tokens keep a stream running to cache and renew the token.
+
+Credentials read from an `ActorSystem` are cached per system and released when it terminates, so
+they need no special handling. If you build @apidoc[GoogleSettings] directly from a
+@javadoc[Config](com.typesafe.config.Config) — one set of credentials per tenant, for example — call
+`close()` on the credentials when you are done with them to release that stream. Credentials must
+not be used after they have been closed.
+
 ## Project id
 
 The project id used for requests is resolved in this order:
