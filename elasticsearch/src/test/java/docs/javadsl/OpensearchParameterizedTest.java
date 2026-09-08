@@ -49,7 +49,7 @@ public class OpensearchParameterizedTest extends ElasticsearchTestBase {
   private void documentation() {
     // #connection-settings
     ElasticsearchConnectionSettings connectionSettings =
-        OpensearchConnectionSettings.create("http://localhost:9200")
+        OpensearchConnectionSettings.create("https://localhost:9200")
             .withCredentials("user", "password");
     // #connection-settings
 

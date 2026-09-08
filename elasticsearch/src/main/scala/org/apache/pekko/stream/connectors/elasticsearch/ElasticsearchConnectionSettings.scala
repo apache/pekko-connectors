@@ -27,7 +27,8 @@ final class ElasticsearchConnectionSettings private (
     val username: Option[String],
     val password: Option[String],
     val headers: List[HttpHeader],
-    val connectionContext: Option[HttpsConnectionContext]) {
+    val connectionContext: Option[HttpsConnectionContext],
+    val allowInsecureCredentialsTransport: Boolean) {
 
   def withBaseUrl(value: String): ElasticsearchConnectionSettings = copy(baseUrl = value)
 
@@ -63,30 +64,52 @@ final class ElasticsearchConnectionSettings private (
 
   def hasConnectionContextDefined: Boolean = connectionContext.isDefined
 
+  /**
+   * Permit sending credentials over a plain HTTP connection. Defaults to `false`,
+   * in which case requests that would send credentials over a non-HTTPS connection
+   * fail instead. Enable only for local development and testing, where the traffic
+   * cannot be observed.
+   *
+   * @since 2.0.0
+   */
+  def withAllowInsecureCredentialsTransport(value: Boolean): ElasticsearchConnectionSettings =
+    copy(allowInsecureCredentialsTransport = value)
+
   private def copy(
       baseUrl: String = baseUrl,
       username: Option[String] = username,
       password: Option[String] = password,
       headers: List[HttpHeader] = headers,
-      connectionContext: Option[HttpsConnectionContext] = connectionContext): ElasticsearchConnectionSettings =
+      connectionContext: Option[HttpsConnectionContext] = connectionContext,
+      allowInsecureCredentialsTransport: Boolean = allowInsecureCredentialsTransport)
+      : ElasticsearchConnectionSettings =
     new ElasticsearchConnectionSettings(baseUrl = baseUrl,
       username = username,
       password = password,
       headers = headers,
-      connectionContext = connectionContext)
+      connectionContext = connectionContext,
+      allowInsecureCredentialsTransport = allowInsecureCredentialsTransport)
 
-  override def toString =
-    s"""ElasticsearchConnectionSettings(baseUrl=$baseUrl,username=$username,password=${password.fold("")(_ =>
-        "***")},headers=${headers.mkString(";")},connectionContext=$connectionContext)"""
+  override def toString = {
+    val maskedPassword = password.fold("")(_ => "***")
+    val renderedHeaders = headers.mkString(";")
+    "ElasticsearchConnectionSettings(" +
+    s"baseUrl=$baseUrl," +
+    s"username=$username," +
+    s"password=$maskedPassword," +
+    s"headers=$renderedHeaders," +
+    s"connectionContext=$connectionContext," +
+    s"allowInsecureCredentialsTransport=$allowInsecureCredentialsTransport)"
+  }
 }
 
 object ElasticsearchConnectionSettings {
 
   /** Scala API */
   def apply(baseUrl: String): ElasticsearchConnectionSettings =
-    new ElasticsearchConnectionSettings(baseUrl, None, None, List.empty, None)
+    new ElasticsearchConnectionSettings(baseUrl, None, None, List.empty, None, false)
 
   /** Java API */
   def create(baseUrl: String): ElasticsearchConnectionSettings =
-    new ElasticsearchConnectionSettings(baseUrl, None, None, List.empty, None)
+    new ElasticsearchConnectionSettings(baseUrl, None, None, List.empty, None, false)
 }
