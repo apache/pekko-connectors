@@ -14,7 +14,7 @@
 package docs.scaladsl
 
 import java.io._
-import java.nio.file.{ Files, Path, Paths }
+import java.nio.file.{ Files, NoSuchFileException, Path, Paths }
 import java.util.zip.Deflater
 import org.apache.pekko
 import pekko.actor.ActorSystem
@@ -178,6 +178,16 @@ class ArchiveSpec
           Files.walk(target).sorted(java.util.Comparator.reverseOrder()).iterator().asScala.foreach(p =>
             Files.delete(p))
         }
+      }
+
+      "fail the stream when the archive cannot be opened" in {
+        val missing = new File(Files.createTempDirectory("pekko-connectors-zip-").toFile, "no-such-file.zip")
+
+        Archive
+          .zipReader(missing)
+          .runWith(Sink.ignore)
+          .failed
+          .futureValue shouldBe a[NoSuchFileException]
       }
     }
   }

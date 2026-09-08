@@ -22,9 +22,28 @@ import pekko.stream.scaladsl.Source
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, OutHandler }
 import pekko.util.ByteString
 
-import java.io.{ File, FileInputStream }
+import java.io.File
 import java.nio.charset.{ Charset, StandardCharsets }
+import java.nio.file.Files
 import java.util.zip.{ ZipEntry, ZipInputStream }
+import scala.util.control.NonFatal
+
+@InternalApi private[archive] object ZipReaderSource {
+
+  /**
+   * Opens `f` as a zip stream, closing the underlying file if the zip stream itself cannot be opened.
+   */
+  def openZip(f: File, fileCharset: Charset): ZipInputStream = {
+    val in = Files.newInputStream(f.toPath)
+    try new ZipInputStream(in, fileCharset)
+    catch {
+      case NonFatal(e) =>
+        try in.close()
+        catch { case NonFatal(suppressed) => e.addSuppressed(suppressed) }
+        throw e
+    }
+  }
+}
 
 @InternalApi class ZipEntrySource(n: ZipArchiveMetadata, f: File, chunkSize: Int, fileCharset: Charset)
     extends GraphStage[SourceShape[ByteString]] {
@@ -34,9 +53,14 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) {
-      val zis = new ZipInputStream(new FileInputStream(f), fileCharset)
+      private var zis: ZipInputStream = _
       var entry: ZipEntry = null
       val data = new Array[Byte](chunkSize)
+
+      override def preStart(): Unit = {
+        super.preStart()
+        zis = ZipReaderSource.openZip(f, fileCharset)
+      }
 
       def seek() = {
         while ({
@@ -69,7 +93,7 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
 
       override def postStop(): Unit = {
         super.postStop()
-        zis.close()
+        if (zis ne null) zis.close()
       }
     }
 }
@@ -82,7 +106,12 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) {
-      val zis = new ZipInputStream(new FileInputStream(f), fileCharset)
+      private var zis: ZipInputStream = _
+
+      override def preStart(): Unit = {
+        super.preStart()
+        zis = ZipReaderSource.openZip(f, fileCharset)
+      }
 
       setHandler(
         out,
@@ -102,7 +131,7 @@ import java.util.zip.{ ZipEntry, ZipInputStream }
 
       override def postStop(): Unit = {
         super.postStop()
-        zis.close()
+        if (zis ne null) zis.close()
       }
     }
 }
