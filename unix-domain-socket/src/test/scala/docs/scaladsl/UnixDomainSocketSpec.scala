@@ -20,6 +20,8 @@ import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.connectors.unixdomainsocket.UnixSocketAddress
 import pekko.stream.connectors.unixdomainsocket.scaladsl.UnixDomainSocket
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, Source }
+import pekko.stream.testkit.TestSubscriber
+import pekko.stream.testkit.scaladsl.TestSink
 import pekko.stream.{ Materializer, OverflowStrategy }
 import pekko.testkit._
 import pekko.util.ByteString
@@ -100,6 +102,52 @@ class UnixDomainSocketSpec
 
         }
       result.futureValue shouldBe sendBytes
+      binding.futureValue.unbind().futureValue should be(())
+    }
+
+    "not deliver received bytes before the consumer asks for them, and resume reading afterwards" in {
+      val path = dir.resolve("sock-backpressure")
+
+      val serverProbe = Promise[TestSubscriber.Probe[ByteString]]()
+
+      // Source.maybe keeps the server side of the connection open, the probe gives us manual demand
+      val binding: Future[UnixDomainSocket.ServerBinding] =
+        UnixDomainSocket()
+          .bind(path)
+          .map { connection =>
+            serverProbe.trySuccess(connection.flow.runWith(Source.maybe[ByteString], TestSink[ByteString]())._2)
+            ()
+          }
+          .to(Sink.ignore)
+          .run()
+
+      binding.futureValue
+
+      // enough separate writes to outlast the stream buffers between the socket and the consumer,
+      // so the connector really has to stop reading and resume, but far short of filling a socket buffer
+      val chunks = (1 to 50).map(i => ByteString(f"chunk-$i%03d-" + "x" * 90)).toList
+      val expected = chunks.reduce(_ ++ _)
+
+      Source(chunks)
+        .throttle(5, 10.millis)
+        .via(UnixDomainSocket().outgoingConnection(path))
+        .runWith(Sink.ignore)
+
+      val server = serverProbe.future.futureValue
+      server.ensureSubscription()
+
+      // the writes have been made, but nothing may be emitted while the consumer has no demand
+      server.expectNoMessage(300.millis)
+
+      // once demand arrives everything that was written is delivered, in order and without loss,
+      // which also means reading from the socket resumed as elements were acknowledged
+      @annotation.tailrec
+      def receiveAtLeast(received: ByteString): ByteString =
+        if (received.size >= expected.size) received else receiveAtLeast(received ++ server.requestNext())
+
+      receiveAtLeast(ByteString.empty) shouldBe expected
+
+      server.cancel()
       binding.futureValue.unbind().futureValue should be(())
     }
 

@@ -25,6 +25,9 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
+import java.nio.charset.StandardCharsets.UTF_8
+import java.nio.file.{ Files, Path }
+
 class CredentialsSpec
     extends TestKit(ActorSystem("CredentialsSpec"))
     with AnyWordSpecLike
@@ -34,6 +37,78 @@ class CredentialsSpec
   override def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
     super.afterAll()
+  }
+
+  private def withJsonFile(contents: String)(test: String => Unit): Unit = {
+    val file = Files.createTempFile("pekko-connectors-credentials", ".json")
+    Files.write(file, contents.getBytes(UTF_8))
+    try test(hoconPath(file))
+    finally Files.deleteIfExists(file): Unit
+  }
+
+  // backslashes are escapes in a HOCON quoted string, and Java accepts forward slashes on Windows too
+  private def hoconPath(file: Path): String = file.toAbsolutePath.toString.replace('\\', '/')
+
+  private val serviceAccountJson =
+    """{"project_id":"a-project","client_email":"a@b.com","private_key":"a-key"}"""
+
+  private val userAccessJson =
+    """{"client_id":"an-id","client_secret":"a-secret","refresh_token":"a-token","quota_project_id":"a-project"}"""
+
+  "ServiceAccountCredentials" should {
+
+    "read a service account file" in withJsonFile(serviceAccountJson) { path =>
+      val config = ConfigFactory.parseString(s"""
+           |project-id = ""
+           |client-email = ""
+           |private-key = ""
+           |path = "$path"
+        """.stripMargin)
+
+      ServiceAccountCredentials(config, Set("a-scope")).projectId shouldBe "a-project"
+    }
+
+    "propagate the failure, having closed the file, when the file is not a service account" in
+    withJsonFile(userAccessJson) { path =>
+      val config = ConfigFactory.parseString(s"""
+           |project-id = ""
+           |client-email = ""
+           |private-key = ""
+           |path = "$path"
+        """.stripMargin)
+
+      // this is the routine case: `gcloud auth application-default login` writes a user access file,
+      // and the application-default provider tries the service account parser against it first
+      an[Exception] should be thrownBy ServiceAccountCredentials(config, Set("a-scope"))
+    }
+  }
+
+  "UserAccessCredentials" should {
+
+    "read a user access file" in withJsonFile(userAccessJson) { path =>
+      val config = ConfigFactory.parseString(s"""
+           |project-id = ""
+           |client-id = ""
+           |client-secret = ""
+           |refresh-token = ""
+           |path = "$path"
+        """.stripMargin)
+
+      UserAccessCredentials(config).projectId shouldBe "a-project"
+    }
+
+    "propagate the failure, having closed the file, when the file is not a user access file" in
+    withJsonFile(serviceAccountJson) { path =>
+      val config = ConfigFactory.parseString(s"""
+           |project-id = ""
+           |client-id = ""
+           |client-secret = ""
+           |refresh-token = ""
+           |path = "$path"
+        """.stripMargin)
+
+      an[Exception] should be thrownBy UserAccessCredentials(config)
+    }
   }
 
   "Credentials" should {

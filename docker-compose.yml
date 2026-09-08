@@ -4,24 +4,24 @@
 
 services:
   amazoneventbridge:
-    image: localstack/localstack:0.10.7
-    environment:
-      - "SERVICES=events"
-      - "DEBUG=true"
+    image: motoserver/moto:5.2.3
     ports:
-      - "4587:4587"
+      - "4587:5000"
   amazonsns:
-    image: pafortin/goaws
+    image: admiralpiett/goaws:v0.5.4
     ports:
       - "4100:4100"
     volumes:
     - ./sns/src/test/travis/:/conf/
+    command: ["-config", "/conf/goaws.yaml"]
   amqp:
-    image: rabbitmq:3
+    image: rabbitmq:4
     ports:
       - "5672:5672"
+    volumes:
+      - ./amqp/src/test/travis/rabbitmq.conf:/etc/rabbitmq/conf.d/20-pekko-connectors.conf
   cassandra:
-    image: cassandra:4.0
+    image: cassandra:5.0
     ports:
       - "9042:9042"
   elasticmq:
@@ -29,7 +29,7 @@ services:
     ports:
       - "9324:9324"
   dynamodb:
-    image: deangiberson/aws-dynamodb-local
+    image: amazon/dynamodb-local:3.3.1
     ports:
       - "8001:8000"
   elasticsearch6:
@@ -89,39 +89,35 @@ services:
       - ./geode/scripts/:/scripts/
     command: /scripts/geode.sh
   gcloud-pubsub-emulator:
-    image: google/cloud-sdk:554.0.0
+    image: google/cloud-sdk:583.0.0
     ports:
       - "8538:8538"
     command: gcloud beta emulators pubsub start --project=pekko-connectors --host-port=0.0.0.0:8538
   gcloud-pubsub-emulator_prep:
-    image: martynas/gcloud-pubsub-client
+    # same image as the emulator itself; creates the topics and subscriptions
+    # the tests expect, via the emulator's REST API
+    image: google/cloud-sdk:554.0.0
     links:
       - "gcloud-pubsub-emulator"
-    environment:
-      - "PUBSUB_PROJECT_ID=pekko-connectors"
-      - "PUBSUB_EMULATOR_HOST=gcloud-pubsub-emulator:8538"
     entrypoint: ""
-    command: >
-      bash -c "
-        python publisher.py pekko-connectors create simpleTopic &&
-        python subscriber.py pekko-connectors create simpleTopic simpleSubscription
-        python publisher.py pekko-connectors create testTopic &&
-        python subscriber.py pekko-connectors create testTopic testSubscription
-      "
-  hbase:
-    image: harisekhon/hbase:1.4
-    hostname: hbase
-    ports:
-      - 2181:2181
-      - 16000:16000
-      - 16010:16010
-      - 16201:16201
-      - 16301:16301
+    command:
+      - bash
+      - -c
+      - |
+        set -ex
+        until curl -s --fail http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics > /dev/null; do
+          sleep 2
+        done
+        curl -s --fail -X PUT http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics/simpleTopic
+        curl -s --fail -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/simpleTopic"}' http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/subscriptions/simpleSubscription
+        curl -s --fail -X PUT http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/topics/testTopic
+        curl -s --fail -X PUT -H "Content-Type: application/json" -d '{"topic": "projects/pekko-connectors/topics/testTopic"}' http://gcloud-pubsub-emulator:8538/v1/projects/pekko-connectors/subscriptions/testSubscription
   ibmmq:
-    image: ibmcom/mq:latest
+    image: icr.io/ibm-messaging/mq:9.4.5.1-r1
     environment:
       LICENSE: accept
       MQ_QMGR_NAME: QM1
+      MQ_APP_PASSWORD: passw0rd
     ports:
       - "1414:1414"
       - "9443:9443"
@@ -138,7 +134,7 @@ services:
     ports:
       - "8080:8080"
   kudu-master:
-    image: apache/kudu:1.17.0
+    image: apache/kudu:1.18.1-ubuntu
     ports:
       - "7051:7051"
     command: [ "master" ]
@@ -151,7 +147,7 @@ services:
         --use_hybrid_clock=false
         --unlock_unsafe_flags=true
   kudu-tserver:
-    image: apache/kudu:1.17.0
+    image: apache/kudu:1.18.1-ubuntu
     links:
       - kudu-master
     ports:
@@ -182,7 +178,7 @@ services:
     volumes:
       - ./mqtt/src/test/travis:/mosquitto/config
   orientdb:
-    image: orientdb:3.2.51
+    image: orientdb:3.2.55
     ports:
       - "2424:2424"
     environment:
@@ -210,27 +206,27 @@ services:
       - 9090:9090
       - 12345:12345
     command: standalone
-  couchbase:
+  couchbase7:
     image: couchbase:community-7.6.1
     ports:
       - "8091-8096:8091-8096"
       - "11210-11211:11210-11211"
-  couchbase_prep:
+  couchbase7_prep:
     image: couchbase:community-7.6.1
     links:
-      - "couchbase"
+      - "couchbase7"
     entrypoint: ""
     # when we drop couchbase2, we don't need to create bucket pekkoquery
     command: >
       bash -c 
       "echo 'waiting until couchbase is up'
       
-      until `curl --output /dev/null --silent --head --fail http://couchbase:8091`; do
+      until `curl --output /dev/null --silent --head --fail http://couchbase7:8091`; do
             printf '.'
             sleep 2
       done
       
-      couchbase-cli cluster-init -c couchbase
+      couchbase-cli cluster-init -c couchbase7
       --cluster-username Administrator
       --cluster-password password
       --cluster-ramsize 300
@@ -239,7 +235,7 @@ services:
       --cluster-query-ramsize 256
       --services data,index,query,fts
       
-      couchbase-cli bucket-create -c couchbase
+      couchbase-cli bucket-create -c couchbase7
       -u Administrator -p password
       --bucket pekko
       --bucket-type couchbase
@@ -247,7 +243,7 @@ services:
       --bucket-replica 1
       --wait
       
-      couchbase-cli bucket-create -c couchbase
+      couchbase-cli bucket-create -c couchbase7
       -u Administrator -p password
       --bucket pekkoquery
       --bucket-type couchbase
@@ -255,6 +251,47 @@ services:
       --bucket-replica 1
       --wait
       
+      sleep 2 # just wait a tiny bit more after creating the bucket
+      "
+  # couchbase8 shares host ports with the couchbase7 service above (the SDK
+  # requires the standard ports), so only one of the two can run at a time
+  couchbase8:
+    image: couchbase:community-8.0.2
+    ports:
+      - "8091-8096:8091-8096"
+      - "11210-11211:11210-11211"
+  couchbase8_prep:
+    image: couchbase:community-8.0.2
+    links:
+      - "couchbase8"
+    entrypoint: ""
+    command: >
+      bash -c
+      "echo 'waiting until couchbase is up'
+
+      until `curl --output /dev/null --silent --head --fail http://couchbase8:8091`; do
+            printf '.'
+            sleep 2
+      done
+
+      couchbase-cli cluster-init -c couchbase8
+      --cluster-username Administrator
+      --cluster-password password
+      --cluster-ramsize 300
+      --cluster-index-ramsize 256
+      --cluster-fts-ramsize 256
+      --cluster-query-ramsize 256
+      --services data,index,query,fts
+
+      couchbase-cli bucket-create -c couchbase8
+      -u Administrator -p password
+      --bucket pekko
+      --bucket-type couchbase
+      --storage-backend couchstore
+      --bucket-ramsize 120
+      --bucket-replica 0
+      --wait
+
       sleep 2 # just wait a tiny bit more after creating the bucket
       "
 

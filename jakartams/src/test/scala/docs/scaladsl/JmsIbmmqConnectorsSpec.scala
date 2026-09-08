@@ -14,6 +14,7 @@
 package docs.scaladsl
 
 import com.ibm.mq.jakarta.jms.{ MQQueueConnectionFactory, MQQueueSession, MQTopicConnectionFactory }
+import com.ibm.msg.client.jakarta.jms.JmsConstants
 import com.ibm.msg.client.jakarta.wmq.common.CommonConstants
 import org.apache.pekko
 import pekko.Done
@@ -35,11 +36,14 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       // Create the IBM MQ MQQueueConnectionFactory
       val connectionFactory = new MQQueueConnectionFactory()
 
-      // align to docker image: ibmcom/mq:9.1.1.0
+      // align to docker image: icr.io/ibm-messaging/mq
       connectionFactory.setHostName("localhost")
       connectionFactory.setPort(1414)
       connectionFactory.setQueueManager("QM1")
       connectionFactory.setChannel("DEV.APP.SVRCONN")
+      // the developer image requires a password for the "app" user since MQ 9.3.4
+      connectionFactory.setStringProperty(JmsConstants.USERID, "app")
+      connectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd")
 
       // #ibmmq-connection-factory
 
@@ -124,6 +128,8 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
       topicConnectionFactory.setPort(1414)
       topicConnectionFactory.setQueueManager("QM1")
       topicConnectionFactory.setChannel("DEV.APP.SVRCONN")
+      topicConnectionFactory.setStringProperty(JmsConstants.USERID, "app")
+      topicConnectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd")
 
       // #ibmmq-topic
       // Connect to IBM MQ over TCP/IP

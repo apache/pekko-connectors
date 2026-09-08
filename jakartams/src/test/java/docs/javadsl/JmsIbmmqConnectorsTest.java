@@ -19,6 +19,7 @@ import com.ibm.mq.jakarta.jms.MQConnectionFactory;
 import com.ibm.mq.jakarta.jms.MQQueueConnectionFactory;
 import com.ibm.mq.jakarta.jms.MQQueueSession;
 import com.ibm.mq.jakarta.jms.MQTopicConnectionFactory;
+import com.ibm.msg.client.jakarta.jms.JmsConstants;
 import com.ibm.msg.client.jakarta.wmq.common.CommonConstants;
 import jakarta.jms.Destination;
 import jakarta.jms.JMSException;
@@ -74,11 +75,14 @@ public class JmsIbmmqConnectorsTest {
   private static MQConnectionFactory initDefaultFactory(MQConnectionFactory connectionFactory)
       throws JMSException {
     // #ibmmq-connection-factory
-    // align to docker image: ibmcom/mq:9.1.1.0
+    // align to docker image: icr.io/ibm-messaging/mq
     connectionFactory.setHostName("localhost");
     connectionFactory.setPort(1414);
     connectionFactory.setQueueManager("QM1");
     connectionFactory.setChannel("DEV.APP.SVRCONN");
+    // the developer image requires a password for the "app" user since MQ 9.3.4
+    connectionFactory.setStringProperty(JmsConstants.USERID, "app");
+    connectionFactory.setStringProperty(JmsConstants.PASSWORD, "passw0rd");
 
     // #ibmmq-connection-factory
     return connectionFactory;

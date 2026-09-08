@@ -16,8 +16,14 @@ package org.apache.pekko.stream.connectors.hbase.impl
 import java.io.Closeable
 
 import org.apache.pekko.stream.stage.StageLogging
-import org.apache.hadoop.hbase.{ HColumnDescriptor, HTableDescriptor, TableName }
-import org.apache.hadoop.hbase.client.{ Connection, ConnectionFactory, Table }
+import org.apache.hadoop.hbase.TableName
+import org.apache.hadoop.hbase.client.{
+  ColumnFamilyDescriptorBuilder,
+  Connection,
+  ConnectionFactory,
+  Table,
+  TableDescriptorBuilder
+}
 import org.apache.hadoop.conf.Configuration
 
 import scala.concurrent.duration.DurationInt
@@ -58,11 +64,11 @@ private[impl] trait HBaseCapabilities { this: StageLogging =>
       if (admin.isTableAvailable(tableName))
         connection.getTable(tableName)
       else {
-        val tableDescriptor: HTableDescriptor = new HTableDescriptor(tableName)
+        val tableDescriptorBuilder = TableDescriptorBuilder.newBuilder(tableName)
         columnFamilies.foreach { cf =>
-          tableDescriptor.addFamily(new HColumnDescriptor(cf))
+          tableDescriptorBuilder.setColumnFamily(ColumnFamilyDescriptorBuilder.of(cf))
         }
-        admin.createTable(tableDescriptor)
+        admin.createTable(tableDescriptorBuilder.build())
         log.info("Table {} created with cfs: {}.", tableName, columnFamilies)
         connection.getTable(tableName)
       }

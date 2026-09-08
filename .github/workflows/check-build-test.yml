@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -77,7 +77,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -105,8 +105,8 @@ jobs:
           - { connector: aws-event-bridge,             pre_cmd: 'docker compose up -d amazoneventbridge' }
           - { connector: azure-storage-queue }
           - { connector: cassandra,                    pre_cmd: 'docker compose up -d cassandra' }
-          - { connector: couchbase,                    pre_cmd: 'docker compose up -d couchbase_prep' }
-          - { connector: couchbase3,                   pre_cmd: 'docker compose up -d couchbase_prep' }
+          - { connector: couchbase,                    pre_cmd: 'docker compose up -d couchbase7_prep' }
+          - { connector: couchbase3,                   pre_cmd: 'docker compose up -d couchbase8_prep' }
           - { connector: csv }
           - { connector: dynamodb,                     pre_cmd: 'docker compose up -d dynamodb' }
           - { connector: elasticsearch,                pre_cmd: 'docker compose up -d elasticsearch6 elasticsearch7 opensearch1' }
@@ -120,9 +120,8 @@ jobs:
           - { connector: google-cloud-storage }
           - { connector: google-common }
           - { connector: google-fcm }
-          # hbase disabled until we resolve why new docker image fails our build: https://github.com/akka/alpakka/issues/2185
-          # - { connector: hbase,                        pre_cmd: 'docker compose up -d hbase' }
-          - { connector: hdfs,                         pre_cmd: 'file ${HOME}/.cache/coursier/v1/https/repo1.maven.org/maven2/org/typelevel/cats-kernel_2.13/2.0.0/cats-kernel_2.13-2.0.0.jar' }
+          - { connector: hbase }
+          - { connector: hdfs }
           - { connector: huawei-push-kit }
           - { connector: influxdb,                     pre_cmd: 'docker compose up -d influxdb' }
           # ironmq disabled while we resolve https://github.com/apache/pekko-connectors/issues/697
@@ -163,7 +162,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
@@ -208,7 +207,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17

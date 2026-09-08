@@ -37,11 +37,30 @@ Credentials will be loaded automatically:
 Credentials can also be specified manually in your configuration file.
 
 Credentials that refresh OAuth2 access tokens keep a stream running to cache and renew the token.
+
 Credentials read from an `ActorSystem` are cached per system and released when it terminates, so
 they need no special handling. If you build @apidoc[GoogleSettings] directly from a
 @javadoc[Config](com.typesafe.config.Config) — one set of credentials per tenant, for example — call
 `close()` on the credentials when you are done with them to release that stream. Credentials must
 not be used after they have been closed.
+
+## Project id
+
+The project id used for requests is resolved in this order:
+
+1. The `pekko.connectors.google.project-id` setting, if it is non-empty;
+2. the project id supplied by the configured credentials provider, if it is non-empty;
+3. the `pekko.connectors.google.default-project-id` setting, which reads the `GOOGLE_CLOUD_PROJECT`,
+   `GCLOUD_PROJECT` and `GCP_PROJECT` environment variables by default.
+
+Setting `project-id` explicitly is useful because the project that owns the principal your credentials
+authenticate as need not be the project whose resources you want to access; a service account in one
+project is often granted access to another. The environment variables behind `default-project-id` are
+commonly set for you by GCP runtimes such as App Engine, Cloud Run, Cloud Functions and by GKE
+Workload Identity.
+
+The resolved value is available as `GoogleSettings.projectId` and can still be overridden per stream
+with `withProjectId`.
 
 ## Accessing settings
 

@@ -3,11 +3,11 @@
 You can use IBM MQ like any other JMS Provider by creating a `QueueConnectionFactory` or a `TopicConnectionFactory`
 and creating a `JmsConsumerSettings` or `JmsProducerSettings` from it.
 The below snippets have been tested with a default IBM MQ docker image which contains queues and topics for testing.
-The following command starts MQ 9 using docker:
+The following command starts MQ using docker:
 
-    docker run --env LICENSE=accept --env MQ_QMGR_NAME=QM1 --publish 1414:1414 --publish 9443:9443 ibmcom/mq:9.1.1.0
+    docker run --env LICENSE=accept --env MQ_QMGR_NAME=QM1 --env MQ_APP_PASSWORD=passw0rd --publish 1414:1414 --publish 9443:9443 icr.io/ibm-messaging/mq:9.4.5.1-r1
 
-MQ settings for this image are shown here: https://github.com/ibm-messaging/mq-docker#mq-developer-defaults
+MQ settings for this image are shown here: https://github.com/ibm-messaging/mq-container/blob/master/docs/developer-config.md
 
 ## Artifacts
 

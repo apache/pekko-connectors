@@ -18,12 +18,12 @@
 package org.apache.pekko.stream.connectors.awsspi.dynamodb
 
 import org.apache.pekko
-import pekko.stream.connectors.awsspi.{ LocalstackBaseAwsClientTest, PekkoHttpAsyncHttpService }
+import pekko.stream.connectors.awsspi.{ DynamoDBLocalBaseAwsClientTest, PekkoHttpAsyncHttpService }
 import software.amazon.awssdk.auth.credentials.{ AwsBasicCredentials, StaticCredentialsProvider }
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import software.amazon.awssdk.services.dynamodb.model._
 
-class TestDynamoDB extends LocalstackBaseAwsClientTest[DynamoDbAsyncClient] {
+class TestDynamoDB extends DynamoDBLocalBaseAwsClientTest[DynamoDbAsyncClient] {
   "DynamoDB" should {
     "create a table" in withClient { implicit client =>
       val attributes = AttributeDefinition.builder.attributeName("film_id").attributeType(ScalarAttributeType.S).build()
@@ -72,7 +72,5 @@ class TestDynamoDB extends LocalstackBaseAwsClientTest[DynamoDbAsyncClient] {
       client.close()
     }
   }
-
-  override val service: String = "dynamodb"
 
 }

@@ -18,7 +18,7 @@ object Dependencies {
 
   val Scala213 = "2.13.18" // update even in link-validator.conf
   val Scala3 = "3.3.8"
-  val Scala3Next = "3.8.4"
+  val Scala3Next = "3.9.0"
   val PublishedScalaVersions = Seq(Scala213, Scala3)
 
   val PekkoVersion = PekkoCoreDependency.version
@@ -28,7 +28,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.2"
 
-  val AwsSdk2Version = "2.54.5"
+  val AwsSdk2Version = "2.54.13"
 
   val NettyVersion = "4.2.17.Final"
 
@@ -40,16 +40,13 @@ object Dependencies {
   val ScalaTestVersion = "3.2.20"
   val TestContainersScalaTestVersion = "0.44.1"
   val mockitoVersion = "5.23.0" // check even https://github.com/scalatest/scalatestplus-mockito/releases
-  val protobufJavaVersion = "4.36.0"
+  val protobufJavaVersion = "4.36.1"
   val hoverflyVersion = "0.20.2"
-  val scalaCheckVersion = "1.19.0"
+  val scalaCheckVersion = "1.20.0"
   val HadoopVersion = "3.4.3"
 
-  // Legacy versions support Slf4J v1 for compatibility with older libs
-  val Slf4jVersion = "2.0.18"
-  val Slf4jLegacyVersion = "1.7.36"
+  val Slf4jVersion = "2.0.19"
   val LogbackVersion = "1.6.3"
-  val LogbackLegacyVersion = "1.2.13"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
@@ -68,7 +65,7 @@ object Dependencies {
   val Couchbase3Version = "3.6.4"
   val CouchbaseVersionForDocs = "2.7"
 
-  val GoogleAuthVersion = "1.51.0"
+  val GoogleAuthVersion = "1.52.0"
   val JwtScalaVersion = "11.0.4"
   val Log4jVersion = "2.26.1"
 
@@ -208,7 +205,7 @@ object Dependencies {
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.18.0",
+      "org.apache.parquet" % "parquet-avro" % "1.18.1",
       "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion % Test)
         .exclude("ch.qos.reload4j", "reload4j")
@@ -269,7 +266,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-bigquerystorage/tree/master/proto-google-cloud-bigquerystorage-v1
-      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.32.0" % "protobuf-src",
+      "com.google.api.grpc" % "proto-google-cloud-bigquerystorage-v1" % "3.33.0" % "protobuf-src",
       "org.apache.avro" % "avro" % AvroVersion % "provided",
       "org.apache.arrow" % "arrow-vector" % ArrowVersion % "provided",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
@@ -293,7 +290,7 @@ object Dependencies {
     // see Pekko gRPC version in plugins.sbt
     libraryDependencies ++= Seq(
       // https://github.com/googleapis/java-pubsub/tree/master/proto-google-cloud-pubsub-v1/
-      "com.google.cloud" % "google-cloud-pubsub" % "1.154.0" % "protobuf-src",
+      "com.google.cloud" % "google-cloud-pubsub" % "1.155.0" % "protobuf-src",
       "io.grpc" % "grpc-auth" % org.apache.pekko.grpc.gen.BuildInfo.grpcVersion,
       "com.google.auth" % "google-auth-library-oauth2-http" % GoogleAuthVersion,
       "com.google.protobuf" % "protobuf-java" % protobufJavaVersion % Runtime,
@@ -312,7 +309,7 @@ object Dependencies {
       "io.specto" % "hoverfly-java" % hoverflyVersion % Test) ++ Mockito)
 
   val HBase = {
-    val hbaseVersion = "1.4.14"
+    val hbaseVersion = "2.6.6"
     Seq(
       libraryDependencies ++= Seq(
         ("org.apache.hbase" % "hbase-shaded-client" % hbaseVersion)
@@ -325,6 +322,14 @@ object Dependencies {
           .exclude("ch.qos.reload4j", "reload4j")
           .exclude("org.slf4j", "slf4j-reload4j"),
         ("org.apache.hadoop" % "hadoop-mapreduce-client-core" % HadoopVersion)
+          .exclude("ch.qos.reload4j", "reload4j")
+          .exclude("org.slf4j", "slf4j-reload4j"),
+        // starts an in-JVM HBase for the tests; the shaded flavour is the one that pairs
+        // with hbase-shaded-client
+        ("org.apache.hbase" % "hbase-shaded-testing-util" % hbaseVersion % Test)
+          .exclude("log4j", "log4j")
+          .exclude("org.slf4j", "slf4j-log4j12")
+          .exclude("org.apache.logging.log4j", "log4j-slf4j-impl")
           .exclude("ch.qos.reload4j", "reload4j")
           .exclude("org.slf4j", "slf4j-reload4j"),
         "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
@@ -394,7 +399,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion,
       "software.amazon.awssdk" % "kinesis" % AwsSdk2Version,
       "software.amazon.awssdk" % "firehose" % AwsSdk2Version,
-      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.5.1").map(
+      "software.amazon.kinesis" % "amazon-kinesis-client" % "3.5.2").map(
       _.excludeAll(
         ExclusionRule("software.amazon.awssdk", "apache-client"),
         ExclusionRule("software.amazon.awssdk", "netty-nio-client"))) ++ Seq(
@@ -429,9 +434,9 @@ object Dependencies {
 
   val OrientDB = Seq(
     libraryDependencies ++= JacksonDatabindDependencies ++ Seq(
-      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.55")
+      ("com.orientechnologies" % "orientdb-graphdb" % "3.2.56")
         .exclude("com.tinkerpop.blueprints", "blueprints-core"),
-      "com.orientechnologies" % "orientdb-object" % "3.2.55"))
+      "com.orientechnologies" % "orientdb-object" % "3.2.56"))
 
   val PravegaVersion = "0.13.0"
   val PravegaVersionForDocs = "latest"
@@ -487,7 +492,7 @@ object Dependencies {
       "com.typesafe.slick" %% "slick" % SlickVersion,
       "com.typesafe.slick" %% "slick-hikaricp" % SlickVersion,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test,
-      "com.h2database" % "h2" % "2.4.240" % Test))
+      "com.h2database" % "h2" % "2.5.250" % Test))
 
   val Eventbridge = Seq(
     libraryDependencies ++= Seq(
@@ -509,12 +514,11 @@ object Dependencies {
   val Solr = Seq(
     libraryDependencies ++= Seq(
       "org.apache.solr" % "solr-solrj" % SolrjVersion,
-      ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test).exclude("org.apache.logging.log4j",
-        "log4j-slf4j-impl"),
-      "org.slf4j" % "log4j-over-slf4j" % Slf4jLegacyVersion % Test),
-    dependencyOverrides ++= Seq(
-      "org.slf4j" % "slf4j-api" % Slf4jLegacyVersion,
-      "ch.qos.logback" % "logback-classic" % LogbackLegacyVersion))
+      ("org.apache.solr" % "solr-test-framework" % SolrjVersion % Test)
+        // exclude the slf4j providers backed by log4j2 so that logback
+        // (used by pekko-connectors-testkit's log capturing) stays the only provider
+        .exclude("org.apache.logging.log4j", "log4j-slf4j-impl")
+        .exclude("org.apache.logging.log4j", "log4j-slf4j2-impl")))
 
   val Sqs = Seq(
     libraryDependencies ++= Seq(

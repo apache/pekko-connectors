@@ -51,6 +51,87 @@ class GoogleSettingsSpec
         """.stripMargin)
         .resolve)
 
+  private def mkSettings(more: String): GoogleSettings =
+    GoogleSettings(
+      ConfigFactory
+        .parseString(more)
+        .withFallback(ConfigFactory.defaultReference().getConfig(GoogleSettings.ConfigPath))
+        .resolve)
+
+  it should "prefer the project-id setting over the one from the credentials provider" in {
+    mkSettings("""
+                 |project-id = "explicit-project"
+                 |default-project-id = "env-project"
+                 |credentials {
+                 |  provider = access-token
+                 |  access-token {
+                 |    project-id = "credentials-project"
+                 |    token = "yyyy.c.an-access-token"
+                 |  }
+                 |}
+      """.stripMargin).projectId shouldEqual "explicit-project"
+  }
+
+  it should "fall back to the project id from the credentials provider" in {
+    mkSettings("""
+                 |project-id = ""
+                 |default-project-id = "env-project"
+                 |credentials {
+                 |  provider = access-token
+                 |  access-token {
+                 |    project-id = "credentials-project"
+                 |    token = "yyyy.c.an-access-token"
+                 |  }
+                 |}
+      """.stripMargin).projectId shouldEqual "credentials-project"
+  }
+
+  it should "fall back to default-project-id when no other project id is available" in {
+    mkSettings("""
+                 |project-id = ""
+                 |default-project-id = "env-project"
+                 |credentials {
+                 |  provider = access-token
+                 |  access-token {
+                 |    project-id = ""
+                 |    token = "yyyy.c.an-access-token"
+                 |  }
+                 |}
+      """.stripMargin).projectId shouldEqual "env-project"
+  }
+
+  it should "leave the project id empty when nothing supplies one" in {
+    mkSettings("""
+                 |project-id = ""
+                 |default-project-id = ""
+                 |credentials {
+                 |  provider = access-token
+                 |  access-token {
+                 |    project-id = ""
+                 |    token = "yyyy.c.an-access-token"
+                 |  }
+                 |}
+      """.stripMargin).projectId shouldEqual ""
+  }
+
+  it should "resolve the project id from a config that predates the project-id settings" in {
+    val legacy = ConfigFactory
+      .parseString("""
+                     |credentials {
+                     |  provider = access-token
+                     |  access-token {
+                     |    project-id = "credentials-project"
+                     |    token = "yyyy.c.an-access-token"
+                     |  }
+                     |}
+        """.stripMargin)
+      .withFallback(ConfigFactory.defaultReference().getConfig(GoogleSettings.ConfigPath))
+      .resolve
+      .withoutPath("project-id")
+      .withoutPath("default-project-id")
+    GoogleSettings(legacy).projectId shouldEqual "credentials-project"
+  }
+
   it should "skip parsing forward-proxy when optional environment overrides exist but aren't set" in {
     @nowarn("msg=possible missing interpolator: detected an interpolated expression")
     val config = """
