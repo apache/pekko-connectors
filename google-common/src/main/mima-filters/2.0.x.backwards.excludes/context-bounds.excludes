@@ -18,7 +18,7 @@
 # Converting context bound [T: FromResponseUnmarshaller] to explicit implicit
 # parameter reorders the implicit parameter list at the bytecode level.
 # This is a binary-incompatible change but does not affect source-level callers
-# using implicit resolution. BigQuery API is @ApiMayChange.
-ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery.singleRequest")
-# MiMa 1.2.0 additionally reports the old signature as missing outright.
-ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.googlecloud.bigquery.scaladsl.BigQuery.singleRequest")
+# (see #1682). MiMa 1.2.0 reports these on the trait and its companion object;
+# earlier MiMa versions only reported the equivalent problem in google-cloud-bigquery.
+ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.google.scaladsl.Google.singleRequest")
+ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.apache.pekko.stream.connectors.google.scaladsl.Google.singleRequest")
