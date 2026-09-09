@@ -421,7 +421,8 @@ abstract class OpensearchSpec(baseUrl: String) extends ElasticsearchSpecBase wit
       // Assert no errors except a missing document for a update request
       val errorMessages = results.flatMap(_.errorReason)
       errorMessages should have size 1
-      errorMessages.head shouldEqual "[_doc][00004]: document missing"
+      // Opensearch 2.x dropped mapping types, so the error reason no longer carries a `[_doc]` prefix
+      errorMessages.head shouldEqual "[00004]: document missing"
       flushAndRefresh(connectionSettings, indexName)
 
       // Assert docs in sink8/_doc

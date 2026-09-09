@@ -32,7 +32,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class OpensearchV1Test extends ElasticsearchTestBase {
+public class Opensearch2Test extends ElasticsearchTestBase {
   @BeforeAll
   public static void setup() throws IOException {
     setupBase();
