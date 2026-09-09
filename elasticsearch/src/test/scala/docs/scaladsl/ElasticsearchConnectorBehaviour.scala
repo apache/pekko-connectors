@@ -544,7 +544,9 @@ trait ElasticsearchConnectorBehaviour {
 
       "allow read and write using configured version type" in {
 
-        val indexName = "book-test-version-type"
+        // distinct from the Java suite's index of the same purpose: both suites share a server,
+        // and the Scala `Book` carries a `price` the Java `Book` cannot deserialize
+        val indexName = "book-test-version-type-scala"
         val typeName = "_doc"
 
         val book = Book("A sample title")
