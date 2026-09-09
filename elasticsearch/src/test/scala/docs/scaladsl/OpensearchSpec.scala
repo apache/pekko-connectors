@@ -35,10 +35,9 @@ import spray.json.jsonReader
 import scala.concurrent.Future
 import spray.json._
 
-class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils {
+abstract class OpensearchSpec(baseUrl: String) extends ElasticsearchSpecBase with ElasticsearchSpecUtils {
 
-  private val connectionSettings: ElasticsearchConnectionSettings = OpensearchConnectionSettings(
-    "http://localhost:9203")
+  private val connectionSettings: ElasticsearchConnectionSettings = OpensearchConnectionSettings(baseUrl)
   private val baseSourceSettings = OpensearchSourceSettings(connectionSettings).withApiVersion(OpensearchApiVersion.V1)
   private val baseWriteSettings = OpensearchWriteSettings(connectionSettings).withApiVersion(OpensearchApiVersion.V1)
 
@@ -527,3 +526,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
     }
   }
 }
+
+class Opensearch2Spec extends OpensearchSpec("http://localhost:9203")
+
+class Opensearch3Spec extends OpensearchSpec("http://localhost:9204")
