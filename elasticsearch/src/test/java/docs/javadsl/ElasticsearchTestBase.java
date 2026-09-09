@@ -157,6 +157,10 @@ public class ElasticsearchTestBase {
       return ElasticsearchParams.V5(indexName, typeName);
     } else if (apiVersion == ApiVersion.V7) {
       return ElasticsearchParams.V7(indexName);
+    } else if (apiVersion == ApiVersion.V8) {
+      return ElasticsearchParams.V8(indexName);
+    } else if (apiVersion == ApiVersion.V9) {
+      return ElasticsearchParams.V9(indexName);
     } else if (apiVersion == OpensearchApiVersion.V1) {
       return OpensearchParams.V1(indexName);
     } else {
