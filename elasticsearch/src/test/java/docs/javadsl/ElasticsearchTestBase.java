@@ -16,10 +16,12 @@ package docs.javadsl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.pekko.actor.ActorSystem;
 import org.apache.pekko.http.javadsl.Http;
 import org.apache.pekko.http.javadsl.model.ContentTypes;
 import org.apache.pekko.http.javadsl.model.HttpRequest;
+import org.apache.pekko.http.javadsl.model.HttpResponse;
 import org.apache.pekko.stream.connectors.elasticsearch.ApiVersion;
 import org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase;
 import org.apache.pekko.stream.connectors.elasticsearch.ElasticsearchConnectionSettings;
@@ -79,9 +81,48 @@ public class ElasticsearchTestBase {
     flushAndRefresh("source");
   }
 
+  /**
+   * Deletes every index the tests created on the server.
+   *
+   * <p>{@code DELETE /_all} is refused from Elasticsearch 8 on, where {@code
+   * action.destructive_requires_name} defaults to true, so the indices are listed and deleted by
+   * explicit name instead. Both responses are checked, so a cleanup that silently stops working
+   * cannot leave documents behind for the next suite to trip over.
+   */
   protected static void cleanIndex() throws IOException {
-    HttpRequest request = HttpRequest.DELETE("%s/_all".formatted(connectionSettings.baseUrl()));
-    http.singleRequest(request).toCompletableFuture().join();
+    HttpRequest listRequest =
+        HttpRequest.GET("%s/_cat/indices?h=index".formatted(connectionSettings.baseUrl()));
+    HttpResponse listResponse = http.singleRequest(listRequest).toCompletableFuture().join();
+    if (!listResponse.status().isSuccess()) {
+      throw new IOException("Failed to list indices: " + listResponse.status());
+    }
+
+    String body =
+        listResponse
+            .entity()
+            .toStrict(5000, system)
+            .toCompletableFuture()
+            .join()
+            .getData()
+            .utf8String();
+
+    List<String> indices =
+        body.lines()
+            .map(String::trim)
+            // leave the server's own bookkeeping indices alone
+            .filter(name -> !name.isEmpty() && !name.startsWith("."))
+            .collect(Collectors.toList());
+
+    if (!indices.isEmpty()) {
+      HttpRequest deleteRequest =
+          HttpRequest.DELETE(
+              "%s/%s".formatted(connectionSettings.baseUrl(), String.join(",", indices)));
+      HttpResponse deleteResponse = http.singleRequest(deleteRequest).toCompletableFuture().join();
+      if (!deleteResponse.status().isSuccess()) {
+        throw new IOException(
+            "Failed to delete indices " + indices + ": " + deleteResponse.status());
+      }
+    }
   }
 
   protected static void flushAndRefresh(String indexName) throws IOException {

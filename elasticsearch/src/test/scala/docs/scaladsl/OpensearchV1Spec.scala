@@ -14,8 +14,6 @@
 package docs.scaladsl
 
 import org.apache.pekko
-import pekko.http.scaladsl.model.Uri.Path
-import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.elasticsearch.{
   ElasticsearchConnectionSettings,
   OpensearchApiVersion,
@@ -48,9 +46,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
   }
 
   override def afterAll() = {
-    val deleteRequest = HttpRequest(HttpMethods.DELETE)
-      .withUri(Uri(connectionSettings.baseUrl).withPath(Path("/_all")))
-    http.singleRequest(deleteRequest).futureValue
+    deleteAllIndices(connectionSettings)
 
     TestKit.shutdownActorSystem(system)
   }
@@ -158,7 +154,7 @@ class OpensearchV1Spec extends ElasticsearchSpecBase with ElasticsearchSpecUtils
     }
 
     "store properly formatted JSON from Strings" in {
-      val indexName = "sink3-0"
+      val indexName = "sink3-0-scala"
 
       // #string
       val write: Future[immutable.Seq[WriteResult[String, NotUsed]]] = Source(
