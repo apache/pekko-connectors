@@ -16,8 +16,6 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.{ Http, HttpExt }
-import pekko.http.scaladsl.model.Uri.Path
-import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.elasticsearch._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit
@@ -45,13 +43,8 @@ class ElasticsearchSpec
     ElasticsearchConnectionSettings("http://localhost:9202")
 
   override def afterAll(): Unit = {
-    val deleteRequestV5 = HttpRequest(HttpMethods.DELETE)
-      .withUri(Uri(clientV5.baseUrl).withPath(Path("/_all")))
-    http.singleRequest(deleteRequestV5).futureValue
-
-    val deleteRequestV7 = HttpRequest(HttpMethods.DELETE)
-      .withUri(Uri(clientV7.baseUrl).withPath(Path("/_all")))
-    http.singleRequest(deleteRequestV7).futureValue
+    deleteAllIndices(clientV5)
+    deleteAllIndices(clientV7)
 
     TestKit.shutdownActorSystem(system)
   }
