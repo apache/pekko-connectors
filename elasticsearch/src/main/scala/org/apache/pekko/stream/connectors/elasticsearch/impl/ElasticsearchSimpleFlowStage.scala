@@ -54,7 +54,7 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
         settings.versionType,
         settings.allowExplicitIndex,
         writer)
-    case ApiVersion.V7 =>
+    case ApiVersion.V7 | ApiVersion.V8 | ApiVersion.V9 =>
       new RestBulkApiV7[T, C](elasticsearchParams.indexName, settings.versionType, settings.allowExplicitIndex, writer)
 
     case elasticsearch.OpensearchApiVersion.V1 =>

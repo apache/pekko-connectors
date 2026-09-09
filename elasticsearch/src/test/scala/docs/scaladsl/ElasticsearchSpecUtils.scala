@@ -99,6 +99,10 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
       ElasticsearchParams.V5(indexName, typeName)
     } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V7) {
       ElasticsearchParams.V7(indexName)
+    } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V8) {
+      ElasticsearchParams.V8(indexName)
+    } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V9) {
+      ElasticsearchParams.V9(indexName)
     } else if (apiVersion == OpensearchApiVersion.V1) {
       OpensearchParams.V1(indexName)
     } else {

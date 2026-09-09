@@ -43,6 +43,10 @@ class ElasticsearchSpec
     ElasticsearchConnectionSettings("http://localhost:9201")
   val clientV7: ElasticsearchConnectionSettings =
     ElasticsearchConnectionSettings("http://localhost:9202")
+  val clientV8: ElasticsearchConnectionSettings =
+    ElasticsearchConnectionSettings("http://localhost:9205")
+  val clientV9: ElasticsearchConnectionSettings =
+    ElasticsearchConnectionSettings("http://localhost:9206")
 
   override def afterAll(): Unit = {
     val deleteRequestV5 = HttpRequest(HttpMethods.DELETE)
@@ -53,6 +57,14 @@ class ElasticsearchSpec
       .withUri(Uri(clientV7.baseUrl).withPath(Path("/_all")))
     http.singleRequest(deleteRequestV7).futureValue
 
+    val deleteRequestV8 = HttpRequest(HttpMethods.DELETE)
+      .withUri(Uri(clientV8.baseUrl).withPath(Path("/_all")))
+    http.singleRequest(deleteRequestV8).futureValue
+
+    val deleteRequestV9 = HttpRequest(HttpMethods.DELETE)
+      .withUri(Uri(clientV9.baseUrl).withPath(Path("/_all")))
+    http.singleRequest(deleteRequestV9).futureValue
+
     TestKit.shutdownActorSystem(system)
   }
 
@@ -62,6 +74,14 @@ class ElasticsearchSpec
 
   "Connector with ApiVersion 7 running against Elasticsearch v7.6.0" should {
     behave.like(elasticsearchConnector(ApiVersion.V7, clientV7))
+  }
+
+  "Connector with ApiVersion 8 running against Elasticsearch v8" should {
+    behave.like(elasticsearchConnector(ApiVersion.V8, clientV8))
+  }
+
+  "Connector with ApiVersion 9 running against Elasticsearch v9" should {
+    behave.like(elasticsearchConnector(ApiVersion.V9, clientV9))
   }
 
 }

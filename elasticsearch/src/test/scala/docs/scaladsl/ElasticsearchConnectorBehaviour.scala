@@ -47,27 +47,32 @@ trait ElasticsearchConnectorBehaviour {
     import spray.json._
     import DefaultJsonProtocol._
 
+    // Elasticsearch 8 removed mapping types along with the `include_type_name` parameter,
+    // so from V8 on the mapping is declared without the enclosing `_doc` type.
+    val typelessMappings = apiVersion == ApiVersion.V8 || apiVersion == ApiVersion.V9
+
     def createStrictMapping(indexName: String): Unit = {
-      val uri = Uri(connectionSettings.baseUrl)
-        .withPath(Path(s"/$indexName"))
-        .withQuery(Uri.Query(Map("include_type_name" -> "true")))
+      val indexUri = Uri(connectionSettings.baseUrl).withPath(Path(s"/$indexName"))
+      val uri =
+        if (typelessMappings) indexUri
+        else indexUri.withQuery(Uri.Query(Map("include_type_name" -> "true")))
+
+      val mapping =
+        """{
+          |  "dynamic": "strict",
+          |  "properties": {
+          |    "title": { "type": "text"},
+          |    "price": { "type": "integer"}
+          |  }
+          |}""".stripMargin
+
+      val mappings = if (typelessMappings) mapping else s"""{ "_doc": $mapping }"""
 
       val request = HttpRequest(HttpMethods.PUT)
         .withUri(uri)
         .withEntity(
           ContentTypes.`application/json`,
-          s"""{
-            |  "mappings": {
-            |    "_doc": {
-            |      "dynamic": "strict",
-            |      "properties": {
-            |        "title": { "type": "text"},
-            |        "price": { "type": "integer"}
-            |      }
-            |    }
-            |  }
-            |}
-         """.stripMargin)
+          s"""{ "mappings": $mappings }""")
 
       http.singleRequest(request).futureValue
     }
@@ -212,8 +217,8 @@ trait ElasticsearchConnectorBehaviour {
         // Assert retired documents
         val failed = writeResults.filter(!_.success).head
         failed.message shouldBe WriteMessage.createIndexMessage("1", JsObject("subject" -> "Akka Concurrency".toJson))
-        failed.errorReason shouldBe Some(
-          "mapping set to strict, dynamic introduction of [subject] within [_doc] is not allowed")
+        failed.errorReason.get should include(
+          "mapping set to strict, dynamic introduction of [subject]")
 
         // Assert retried 5 times by looking duration
         assert(end - start > 5 * 100)
@@ -303,8 +308,8 @@ trait ElasticsearchConnectorBehaviour {
         WriteMessage
           .createIndexMessage("1", JsObject("subject" -> "Akka Concurrency".toJson))
           .withPassThrough(1)
-        failed.errorReason shouldBe Some(
-          "mapping set to strict, dynamic introduction of [subject] within [_doc] is not allowed")
+        failed.errorReason.get should include(
+          "mapping set to strict, dynamic introduction of [subject]")
 
         // Assert retried 5 times by looking duration
         assert(end - start > 5 * 100)
