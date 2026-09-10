@@ -109,7 +109,7 @@ jobs:
           - { connector: couchbase3,                   pre_cmd: 'docker compose up -d couchbase8_prep' }
           - { connector: csv }
           - { connector: dynamodb,                     pre_cmd: 'docker compose up -d dynamodb' }
-          - { connector: elasticsearch,                pre_cmd: 'docker compose up -d elasticsearch6 elasticsearch7 opensearch1' }
+          - { connector: elasticsearch,                pre_cmd: 'docker compose up -d elasticsearch6 elasticsearch7 opensearch2 opensearch3' }
           - { connector: file }
           - { connector: ftp,                          pre_cmd: './scripts/ftp-servers.sh' }
           - { connector: geode,                        pre_cmd: 'docker compose up -d geode' }
