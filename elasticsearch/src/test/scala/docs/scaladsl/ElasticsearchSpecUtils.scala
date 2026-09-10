@@ -18,6 +18,7 @@ import pekko.actor.ActorSystem
 import pekko.http.scaladsl.HttpExt
 import pekko.http.scaladsl.model.Uri.Path
 import pekko.http.scaladsl.model.{ ContentTypes, HttpMethods, HttpRequest, Uri }
+import pekko.http.scaladsl.unmarshalling.Unmarshal
 import pekko.stream.connectors.elasticsearch.scaladsl.ElasticsearchSource
 import pekko.stream.connectors.elasticsearch.{
   ApiVersionBase,
@@ -32,7 +33,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
   implicit def system: ActorSystem
@@ -56,6 +57,43 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
       .withUri(Uri(connectionSettings.baseUrl).withPath(Path(s"/$indexName/_doc")))
       .withEntity(ContentTypes.`application/json`, s"""{"title": "$title", "price": $price}""")
     http.singleRequest(request).futureValue
+  }
+
+  /**
+   * Deletes every index the tests created on the server.
+   *
+   * `DELETE /_all` is refused from Elasticsearch 8 on, where `action.destructive_requires_name`
+   * defaults to true, so the indices are listed and deleted by explicit name instead. Both
+   * responses are checked, so a cleanup that silently stops working cannot leave documents behind
+   * for the next suite to trip over.
+   */
+  def deleteAllIndices(connectionSettings: ElasticsearchConnectionSettings): Unit = {
+    implicit val ec: ExecutionContext = system.dispatcher
+
+    val listRequest = HttpRequest(HttpMethods.GET)
+      .withUri(
+        Uri(connectionSettings.baseUrl)
+          .withPath(Path("/_cat/indices"))
+          .withQuery(Uri.Query("h" -> "index")))
+    val listResponse = http.singleRequest(listRequest).futureValue
+    require(listResponse.status.isSuccess(), s"Failed to list indices: ${listResponse.status}")
+
+    val indices = Unmarshal(listResponse.entity)
+      .to[String]
+      .futureValue
+      .linesIterator
+      .map(_.trim)
+      // leave the server's own bookkeeping indices alone
+      .filter(name => name.nonEmpty && !name.startsWith("."))
+      .toList
+
+    if (indices.nonEmpty) {
+      val deleteRequest = HttpRequest(HttpMethods.DELETE)
+        .withUri(Uri(connectionSettings.baseUrl).withPath(Path("/" + indices.mkString(","))))
+      val deleteResponse = http.singleRequest(deleteRequest).futureValue
+      require(deleteResponse.status.isSuccess(),
+        s"Failed to delete indices ${indices.mkString(", ")}: ${deleteResponse.status}")
+    }
   }
 
   def flushAndRefresh(connectionSettings: ElasticsearchConnectionSettings, indexName: String): Unit = {
@@ -99,6 +137,10 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
       ElasticsearchParams.V5(indexName, typeName)
     } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V7) {
       ElasticsearchParams.V7(indexName)
+    } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V8) {
+      ElasticsearchParams.V8(indexName)
+    } else if (apiVersion == pekko.stream.connectors.elasticsearch.ApiVersion.V9) {
+      ElasticsearchParams.V9(indexName)
     } else if (apiVersion == OpensearchApiVersion.V1) {
       OpensearchParams.V1(indexName)
     } else {
