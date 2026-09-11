@@ -19,6 +19,9 @@ package org.apache.pekko.stream.connectors.awsspi
 
 import java.util.Collections
 import java.nio.ByteBuffer
+import ch.qos.logback.classic.{ Level, Logger => LogbackLogger }
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.read.ListAppender
 import com.typesafe.config.ConfigFactory
 
 import org.apache.pekko
@@ -34,6 +37,7 @@ import software.amazon.awssdk.http.async.SdkHttpContentPublisher
 import software.amazon.awssdk.utils.AttributeMap
 
 import scala.concurrent.duration._
+import scala.jdk.CollectionConverters._
 import scala.jdk.DurationConverters._
 
 class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
@@ -44,6 +48,26 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       val contentTypeStr = "application/xml"
       val contentType = PekkoHttpClient.tryCreateCustomContentType(contentTypeStr)
       contentType.mediaType should be(MediaTypes.`application/xml`)
+    }
+
+    "log the content type it parses with the argument substituted into the message" in {
+      val contentTypeStr = "application/xml"
+      val logbackLogger = PekkoHttpClient.logger.asInstanceOf[LogbackLogger]
+      val appender = new ListAppender[ILoggingEvent]
+      val previousLevel = logbackLogger.getLevel
+      appender.start()
+      logbackLogger.addAppender(appender)
+      logbackLogger.setLevel(Level.DEBUG)
+      try {
+        PekkoHttpClient.tryCreateCustomContentType(contentTypeStr)
+      } finally {
+        logbackLogger.setLevel(previousLevel)
+        logbackLogger.detachAppender(appender)
+        appender.stop()
+      }
+
+      val messages = appender.list.asScala.map(_.getFormattedMessage).toList
+      messages should contain(s"Try to parse content type from $contentTypeStr")
     }
 
     "remove 'ContentType' return 'ContentLength' separate from sdk headers" in {

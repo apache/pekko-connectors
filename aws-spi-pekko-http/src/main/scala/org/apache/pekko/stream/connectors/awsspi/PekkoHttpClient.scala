@@ -167,7 +167,7 @@ object PekkoHttpClient {
   }
 
   private[awsspi] def tryCreateCustomContentType(contentTypeStr: String): ContentType = {
-    logger.debug(s"Try to parse content type from $contentTypeStr")
+    logger.debug("Try to parse content type from {}", contentTypeStr)
     val mainAndsubType = contentTypeStr.split('/')
     if (mainAndsubType.length == 2)
       ContentType(MediaType.customBinary(mainAndsubType(0), mainAndsubType(1), Compressible))
