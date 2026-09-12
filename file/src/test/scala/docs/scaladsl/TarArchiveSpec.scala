@@ -32,7 +32,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 import scala.annotation.nowarn
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
 
@@ -239,7 +238,7 @@ class TarArchiveSpec
       val metadata1 = TarArchiveMetadata(name1, file1.length)
       val metadata2 = TarArchiveMetadata(name2, file2.length)
       val tar = Source(
-        immutable.Seq(
+        Seq(
           metadata1 -> Source.single(file1),
           metadata2 -> Source.single(file2))).via(Archive.tar())
         // emit in short byte strings
@@ -261,7 +260,7 @@ class TarArchiveSpec
       val metadata1 = TarArchiveMetadata("empty.txt", 0)
       val metadata2 = TarArchiveMetadata("file2.txt", tenDigits.length)
       val tarFile = Source(
-        immutable.Seq(
+        Seq(
           metadata1 -> Source.single(ByteString.empty),
           metadata2 -> Source.single(tenDigits))).via(Archive.tar())
         // swallow the whole input as one ByteString
@@ -350,7 +349,7 @@ class TarArchiveSpec
       // Create a TAR archive with 3 files, emitted as a single ByteString
       // This simulates an S3 stream that closes after sending all data at once
       val multiFileArchive = Source(
-        immutable.Seq(
+        Seq(
           metadata1 -> Source.single(file1Content),
           metadata2 -> Source.single(file2Content),
           metadata3 -> Source.single(file3Content)
@@ -486,7 +485,7 @@ class TarArchiveSpec
   private def getPathFromResources(fileName: String): Path =
     Paths.get(getClass.getClassLoader.getResource(fileName).toURI)
 
-  private def generateInputFiles(numberOfFiles: Int, lengthOfFile: Int): immutable.Seq[(String, ByteString)] = {
+  private def generateInputFiles(numberOfFiles: Int, lengthOfFile: Int): Seq[(String, ByteString)] = {
     val r = new scala.util.Random(31)
     (1 to numberOfFiles)
       .map(number => s"file-$number" -> ByteString.fromArray(r.nextString(lengthOfFile).getBytes))

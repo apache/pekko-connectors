@@ -22,7 +22,6 @@ import pekko.stream.connectors.elasticsearch.{ impl, _ }
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, RetryFlow }
 import spray.json._
 
-import scala.collection.immutable
 import scala.concurrent.ExecutionContextExecutor
 
 /**
@@ -50,7 +49,7 @@ object ElasticsearchFlow {
       settings: WriteSettingsBase[?, ?],
       writer: MessageWriter[T]): Flow[WriteMessage[T, NotUsed], WriteResult[T, NotUsed], NotUsed] = {
     Flow[WriteMessage[T, NotUsed]]
-      .batch(settings.bufferSize, immutable.Seq(_)) { case (seq, wm) => seq :+ wm }
+      .batch(settings.bufferSize, Seq(_)) { case (seq, wm) => seq :+ wm }
       .via(stageFlow(elasticsearchParams, settings, writer))
       .mapConcat(identity)
   }
@@ -77,36 +76,36 @@ object ElasticsearchFlow {
       settings: WriteSettingsBase[?, ?],
       writer: MessageWriter[T]): Flow[WriteMessage[T, C], WriteResult[T, C], NotUsed] = {
     Flow[WriteMessage[T, C]]
-      .batch(settings.bufferSize, immutable.Seq(_)) { case (seq, wm) => seq :+ wm }
+      .batch(settings.bufferSize, Seq(_)) { case (seq, wm) => seq :+ wm }
       .via(stageFlow(elasticsearchParams, settings, writer))
       .mapConcat(identity)
   }
 
   /**
    * Create a flow to update Elasticsearch with
-   * `immutable.Seq[WriteMessage]`s containing type `T`
+   * `Seq[WriteMessage]`s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the `immutable.Seq[WriteResult]`
+   * The result status is part of the `Seq[WriteResult]`
    * and must be checked for successful execution.
    *
    * This factory method requires an implicit Spray JSON writer for `T`.
    */
   def createBulk[T, C](elasticsearchParams: ElasticsearchParams, settings: WriteSettingsBase[?, ?])(
       implicit sprayJsonWriter: JsonWriter[T])
-      : Flow[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], NotUsed] =
+      : Flow[Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]], NotUsed] =
     createBulk[T, C](elasticsearchParams, settings, new SprayJsonWriter[T]()(sprayJsonWriter))
 
   /**
    * Create a flow to update Elasticsearch with
-   * `immutable.Seq[WriteMessage]`s containing type `T`
+   * `Seq[WriteMessage]`s containing type `T`
    * with `passThrough` of type `C`.
-   * The result status is part of the `immutable.Seq[WriteResult]`
+   * The result status is part of the `Seq[WriteResult]`
    * and must be checked for successful execution.
    */
   def createBulk[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[?, ?],
-      writer: MessageWriter[T]): Flow[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], NotUsed] = {
+      writer: MessageWriter[T]): Flow[Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]], NotUsed] = {
     stageFlow(elasticsearchParams, settings, writer)
   }
 
@@ -136,7 +135,7 @@ object ElasticsearchFlow {
       settings: WriteSettingsBase[?, ?],
       writer: MessageWriter[T]): FlowWithContext[WriteMessage[T, NotUsed], C, WriteResult[T, C], C, NotUsed] = {
     Flow[WriteMessage[T, C]]
-      .batch(settings.bufferSize, immutable.Seq(_)) { case (seq, wm) => seq :+ wm }
+      .batch(settings.bufferSize, Seq(_)) { case (seq, wm) => seq :+ wm }
       .via(stageFlow(elasticsearchParams, settings, writer))
       .mapConcat(identity)
       .asFlowWithContext[WriteMessage[T, NotUsed], C, C]((res, c) => res.withPassThrough(c))(p => p.message.passThrough)
@@ -146,16 +145,16 @@ object ElasticsearchFlow {
   private def stageFlow[T, C](
       elasticsearchParams: ElasticsearchParams,
       settings: WriteSettingsBase[?, ?],
-      writer: MessageWriter[T]): Flow[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], NotUsed] = {
+      writer: MessageWriter[T]): Flow[Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]], NotUsed] = {
     if (settings.retryLogic == RetryNever) {
       val basicFlow = basicStageFlow[T, C](elasticsearchParams, settings, writer)
-      Flow[immutable.Seq[WriteMessage[T, C]]]
-        .map(messages => messages -> immutable.Seq.empty[WriteResult[T, C]])
+      Flow[Seq[WriteMessage[T, C]]]
+        .map(messages => messages -> Seq.empty[WriteResult[T, C]])
         .via(basicFlow)
     } else {
       def retryLogic(
-          results: immutable.Seq[WriteResult[T, (Int, C)]])
-          : Option[(immutable.Seq[WriteMessage[T, (Int, C)]], immutable.Seq[WriteResult[T, (Int, C)]])] = {
+          results: Seq[WriteResult[T, (Int, C)]])
+          : Option[(Seq[WriteMessage[T, (Int, C)]], Seq[WriteResult[T, (Int, C)]])] = {
         val (successful, failed) = results.partition(_.success)
 
         failed match {
@@ -180,12 +179,12 @@ object ElasticsearchFlow {
   }
 
   @InternalApi
-  private def amendWithIndexFlow[T, C]: Flow[immutable.Seq[WriteMessage[T, C]],
+  private def amendWithIndexFlow[T, C]: Flow[Seq[WriteMessage[T, C]],
     (
-        immutable.Seq[WriteMessage[T,
+        Seq[WriteMessage[T,
           (Int,
-              C)]], immutable.Seq[WriteResult[T, (Int, C)]]), NotUsed] = {
-    Flow[immutable.Seq[WriteMessage[T, C]]].map { messages =>
+              C)]], Seq[WriteResult[T, (Int, C)]]), NotUsed] = {
+    Flow[Seq[WriteMessage[T, C]]].map { messages =>
       val indexedMessages = messages.zipWithIndex.map {
         case (m, idx) =>
           m.withPassThrough(idx -> m.passThrough)
@@ -196,8 +195,8 @@ object ElasticsearchFlow {
 
   @InternalApi
   private def applyOrderingFlow[T, C]
-      : Flow[immutable.Seq[WriteResult[T, (Int, C)]], immutable.Seq[WriteResult[T, C]], NotUsed] = {
-    Flow[immutable.Seq[WriteResult[T, (Int, C)]]].map { results =>
+      : Flow[Seq[WriteResult[T, (Int, C)]], Seq[WriteResult[T, C]], NotUsed] = {
+    Flow[Seq[WriteResult[T, (Int, C)]]].map { results =>
       val orderedResults = results.sortBy(_.message.passThrough._1)
       val finalResults = orderedResults.map { r =>
         new WriteResult(r.message.withPassThrough(r.message.passThrough._2), r.error)

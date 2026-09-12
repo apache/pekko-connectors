@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory
 
 import java.util.concurrent.{ ConcurrentHashMap, LinkedBlockingQueue, TimeUnit }
 import scala.annotation.tailrec
-import scala.collection.{ immutable, mutable }
+import scala.collection.mutable
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future, Promise }
 import scala.util.{ Failure, Success }
@@ -79,7 +79,7 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
             .withAckTimeout(1.second)
             .withQueue(queueName))
 
-        val result: Future[immutable.Seq[jakarta.jms.Message]] =
+        val result: Future[Seq[jakarta.jms.Message]] =
           jmsSource
             .take(msgsIn.size)
             .map { txEnvelope =>

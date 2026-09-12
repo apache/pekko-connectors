@@ -24,8 +24,6 @@ import pekko.stream.connectors.s3.impl.S3Request
 
 import scala.jdk.CollectionConverters._
 
-import scala.collection.immutable.Seq
-
 final class MetaHeaders private (val metaHeaders: Map[String, String]) {
 
   @InternalApi private[s3] def headers: Seq[HttpHeader] =

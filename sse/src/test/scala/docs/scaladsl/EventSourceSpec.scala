@@ -30,7 +30,6 @@ import pekko.testkit.SocketUtil
 import pekko.{ Done, NotUsed }
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ Await, ExecutionContext, Future }
 //#event-source
@@ -168,7 +167,7 @@ final class EventSourceSpec extends AsyncWordSpec with Matchers with BeforeAndAf
       // #event-source
 
       // #consume-events
-      val events: Future[immutable.Seq[ServerSentEvent]] =
+      val events: Future[Seq[ServerSentEvent]] =
         eventSource
           .throttle(elements = 1, per = 500.milliseconds, maximumBurst = 1, ThrottleMode.Shaping)
           .take(nrOfSamples)

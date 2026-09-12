@@ -29,7 +29,6 @@ import net.schmizz.sshj.userauth.password.{ PasswordFinder, PasswordUtils, Resou
 import net.schmizz.sshj.xfer.FilePermission
 import org.apache.commons.net.DefaultSocketFactory
 
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.util.{ Failure, Try }
 
@@ -89,7 +88,7 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
     if (ssh.isConnected) ssh.disconnect()
   }
 
-  def listFiles(basePath: String, handler: Handler): immutable.Seq[FtpFile] = {
+  def listFiles(basePath: String, handler: Handler): Seq[FtpFile] = {
     val path = if (basePath.nonEmpty && basePath.head != '/') s"/$basePath" else basePath
     val entries = handler.ls(path).asScala
     entries.map { file =>
@@ -125,7 +124,7 @@ private[ftp] trait SftpOperations { self: FtpLike[SSHClient, SftpSettings] =>
     }.toSet
   }
 
-  def listFiles(handler: Handler): immutable.Seq[FtpFile] = listFiles(".", handler)
+  def listFiles(handler: Handler): Seq[FtpFile] = listFiles(".", handler)
 
   def retrieveFileInputStream(name: String, handler: Handler): Try[InputStream] =
     retrieveFileInputStream(name, handler, 0L)

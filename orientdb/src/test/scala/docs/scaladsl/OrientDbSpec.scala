@@ -42,7 +42,6 @@ import docs.javadsl.OrientDbTest
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
@@ -170,7 +169,7 @@ class OrientDbSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with
       f1.futureValue shouldBe Done
 
       // #run-odocument
-      val result: Future[immutable.Seq[String]] = OrientDbSource(
+      val result: Future[Seq[String]] = OrientDbSource(
         sink4,
         OrientDbSourceSettings(oDatabase)).map { (message: OrientDbReadResult[ODocument]) =>
         message.oDocument.field[String]("book_title")

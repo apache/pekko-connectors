@@ -18,7 +18,6 @@ import pekko.annotation.ApiMayChange
 import pekko.stream.connectors.reference.{ ReferenceReadResult, ReferenceWriteMessage, ReferenceWriteResult }
 import pekko.util.ByteString
 
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.util.{ Failure, Success, Try }
 
@@ -26,7 +25,7 @@ import scala.util.{ Failure, Success, Try }
 object MessageFactory {
 
   @ApiMayChange
-  def createReadResult(data: immutable.Seq[ByteString], bytesRead: Try[Int]): ReferenceReadResult =
+  def createReadResult(data: Seq[ByteString], bytesRead: Try[Int]): ReferenceReadResult =
     new ReferenceReadResult(data, bytesRead)
 
   /**

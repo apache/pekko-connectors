@@ -23,15 +23,13 @@ import pekko.stream.connectors.s3.impl._
 import software.amazon.awssdk.utils.BinaryUtils
 import software.amazon.awssdk.utils.Md5Utils
 
-import scala.collection.immutable
-
 /**
  * Documentation: http://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html
  */
 sealed abstract class ServerSideEncryption {
-  @InternalApi private[s3] def headers: immutable.Seq[HttpHeader]
+  @InternalApi private[s3] def headers: Seq[HttpHeader]
 
-  @InternalApi private[s3] def headersFor(request: S3Request): immutable.Seq[HttpHeader]
+  @InternalApi private[s3] def headersFor(request: S3Request): Seq[HttpHeader]
 }
 
 object ServerSideEncryption {
@@ -46,10 +44,10 @@ object ServerSideEncryption {
 }
 
 final class AES256 private[headers] () extends ServerSideEncryption {
-  @InternalApi private[s3] override def headers: immutable.Seq[HttpHeader] =
+  @InternalApi private[s3] override def headers: Seq[HttpHeader] =
     RawHeader("x-amz-server-side-encryption", "AES256") :: Nil
 
-  @InternalApi private[s3] override def headersFor(request: S3Request): immutable.Seq[HttpHeader] = request match {
+  @InternalApi private[s3] override def headersFor(request: S3Request): Seq[HttpHeader] = request match {
     case PutObject | InitiateMultipartUpload => headers
     case _                                   => Nil
   }
@@ -75,7 +73,7 @@ final class AES256 private[headers] () extends ServerSideEncryption {
  */
 final class KMS private[headers] (val keyId: String, val context: Option[String]) extends ServerSideEncryption {
 
-  @InternalApi private[s3] override def headers: immutable.Seq[HttpHeader] = {
+  @InternalApi private[s3] override def headers: Seq[HttpHeader] = {
     val baseHeaders = RawHeader("x-amz-server-side-encryption", "aws:kms") ::
       RawHeader("x-amz-server-side-encryption-aws-kms-key-id", keyId) ::
       Nil
@@ -84,7 +82,7 @@ final class KMS private[headers] (val keyId: String, val context: Option[String]
     headers
   }
 
-  @InternalApi private[s3] override def headersFor(request: S3Request): immutable.Seq[HttpHeader] = request match {
+  @InternalApi private[s3] override def headersFor(request: S3Request): Seq[HttpHeader] = request match {
     case PutObject | InitiateMultipartUpload => headers
     case _                                   => Nil
   }
@@ -124,7 +122,7 @@ final class KMS private[headers] (val keyId: String, val context: Option[String]
 final class CustomerKeys private[headers] (val key: String, val md5: Option[String] = None)
     extends ServerSideEncryption {
 
-  @InternalApi private[s3] override def headers: immutable.Seq[HttpHeader] =
+  @InternalApi private[s3] override def headers: Seq[HttpHeader] =
     RawHeader("x-amz-server-side-encryption-customer-algorithm", "AES256") ::
     RawHeader("x-amz-server-side-encryption-customer-key", key) ::
     RawHeader("x-amz-server-side-encryption-customer-key-MD5",
@@ -134,7 +132,7 @@ final class CustomerKeys private[headers] (val key: String, val md5: Option[Stri
         md5
       }) :: Nil
 
-  @InternalApi private[s3] override def headersFor(request: S3Request): immutable.Seq[HttpHeader] = request match {
+  @InternalApi private[s3] override def headersFor(request: S3Request): Seq[HttpHeader] = request match {
     case GetObject | HeadObject | PutObject | InitiateMultipartUpload | UploadPart =>
       headers
     case CopyPart =>

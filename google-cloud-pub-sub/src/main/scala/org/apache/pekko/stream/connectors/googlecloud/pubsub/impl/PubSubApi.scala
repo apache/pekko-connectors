@@ -113,12 +113,12 @@ private[pubsub] trait PubSubApi {
 
   private implicit val pubSubRequestFormat: RootJsonFormat[PublishRequest] = new RootJsonFormat[PublishRequest] {
     def read(json: JsValue): PublishRequest =
-      PublishRequest(json.asJsObject.fields("messages").convertTo[immutable.Seq[PublishMessage]])
+      PublishRequest(json.asJsObject.fields("messages").convertTo[Seq[PublishMessage]])
     def write(pr: PublishRequest): JsValue = JsObject("messages" -> pr.messages.toJson)
   }
   private implicit val gcePubSubResponseFormat: RootJsonFormat[PublishResponse] = new RootJsonFormat[PublishResponse] {
     def read(json: JsValue): PublishResponse =
-      PublishResponse(json.asJsObject.fields("messageIds").convertTo[immutable.Seq[String]])
+      PublishResponse(json.asJsObject.fields("messageIds").convertTo[Seq[String]])
     def write(pr: PublishResponse): JsValue = JsObject("messageIds" -> pr.messageIds.toJson)
   }
 
@@ -131,7 +131,7 @@ private[pubsub] trait PubSubApi {
   }
   private implicit val pubSubPullResponseFormat: RootJsonFormat[PullResponse] = new RootJsonFormat[PullResponse] {
     def read(json: JsValue): PullResponse =
-      PullResponse(json.asJsObject.fields.get("receivedMessages").map(_.convertTo[immutable.Seq[ReceivedMessage]]))
+      PullResponse(json.asJsObject.fields.get("receivedMessages").map(_.convertTo[Seq[ReceivedMessage]]))
     def write(pr: PullResponse): JsValue =
       pr.receivedMessages.map(rm => JsObject("receivedMessages" -> rm.toJson)).getOrElse(JsObject.empty)
   }
@@ -139,7 +139,7 @@ private[pubsub] trait PubSubApi {
   private implicit val acknowledgeRequestFormat: RootJsonFormat[AcknowledgeRequest] =
     new RootJsonFormat[AcknowledgeRequest] {
       def read(json: JsValue): AcknowledgeRequest =
-        AcknowledgeRequest(json.asJsObject.fields("ackIds").convertTo[immutable.Seq[String]]: _*)
+        AcknowledgeRequest(json.asJsObject.fields("ackIds").convertTo[Seq[String]]: _*)
       def write(ar: AcknowledgeRequest): JsValue = JsObject("ackIds" -> ar.ackIds.toJson)
     }
   private implicit val pullRequestFormat: RootJsonFormat[PullRequest] =

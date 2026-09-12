@@ -41,7 +41,6 @@ import software.amazon.awssdk.http.async._
 import software.amazon.awssdk.http.{ SdkHttpConfigurationOption, SdkHttpRequest }
 import software.amazon.awssdk.utils.AttributeMap
 
-import scala.collection.immutable
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, ExecutionContext }
 import scala.jdk.DurationConverters._
@@ -132,7 +131,7 @@ object PekkoHttpClient {
   // This method converts the headers to Pekko-http headers, drops content-length (returning its value separately),
   // and returns content-type separately
   private[awsspi] def convertHeaders(
-      headers: java.util.Map[String, java.util.List[String]]): (Option[HttpHeader], immutable.Seq[HttpHeader],
+      headers: java.util.Map[String, java.util.List[String]]): (Option[HttpHeader], Seq[HttpHeader],
       Option[Long]) = {
     val headersAsScala = {
       val builder = collection.mutable.Map.newBuilder[String, java.util.List[String]]

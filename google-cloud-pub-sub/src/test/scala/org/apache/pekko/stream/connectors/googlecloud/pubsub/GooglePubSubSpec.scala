@@ -31,7 +31,6 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 
-import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 
 class GooglePubSubSpec

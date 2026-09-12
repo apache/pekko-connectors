@@ -24,7 +24,6 @@ import pekko.stream.connectors.googlecloud.pubsub.scaladsl.GooglePubSub
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, RestartFlow, Sink, Source }
 import pekko.{ Done, NotUsed }
 
-import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 import scala.concurrent.{ Future, Promise }
 

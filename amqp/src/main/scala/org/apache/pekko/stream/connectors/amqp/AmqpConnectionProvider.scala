@@ -22,7 +22,6 @@ import pekko.annotation.DoNotInherit
 import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler }
 
 import scala.annotation.tailrec
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 
 /**
@@ -72,7 +71,7 @@ object AmqpUriConnectionProvider {
 }
 
 final class AmqpDetailsConnectionProvider private (
-    val hostAndPortList: immutable.Seq[(String, Int)],
+    val hostAndPortList: Seq[(String, Int)],
     val credentials: Option[AmqpCredentials] = None,
     val virtualHost: Option[String] = None,
     val sslConfiguration: Option[AmqpSSLConfiguration] = None,
@@ -87,9 +86,9 @@ final class AmqpDetailsConnectionProvider private (
     val connectionName: Option[String] = None) extends AmqpConnectionProvider {
 
   def withHostAndPort(host: String, port: Int): AmqpDetailsConnectionProvider =
-    copy(hostAndPortList = immutable.Seq(host -> port))
+    copy(hostAndPortList = Seq(host -> port))
 
-  def withHostsAndPorts(hostAndPorts: immutable.Seq[(String, Int)]): AmqpDetailsConnectionProvider =
+  def withHostsAndPorts(hostAndPorts: Seq[(String, Int)]): AmqpDetailsConnectionProvider =
     copy(hostAndPortList = hostAndPorts)
 
   def withHostsAndPorts(
@@ -162,7 +161,7 @@ final class AmqpDetailsConnectionProvider private (
     factory.newConnection(hostAndPortList.map(hp => new Address(hp._1, hp._2)).asJava, connectionName.orNull)
   }
 
-  private def copy(hostAndPortList: immutable.Seq[(String, Int)] = hostAndPortList,
+  private def copy(hostAndPortList: Seq[(String, Int)] = hostAndPortList,
       credentials: Option[AmqpCredentials] = credentials,
       virtualHost: Option[String] = virtualHost,
       sslConfiguration: Option[AmqpSSLConfiguration] = sslConfiguration,
@@ -211,9 +210,9 @@ final class AmqpDetailsConnectionProvider private (
 object AmqpDetailsConnectionProvider {
 
   def apply(host: String, port: Int): AmqpDetailsConnectionProvider =
-    new AmqpDetailsConnectionProvider(immutable.Seq(host -> port))
+    new AmqpDetailsConnectionProvider(Seq(host -> port))
 
-  def apply(hostAndPorts: immutable.Seq[(String, Int)]): AmqpDetailsConnectionProvider =
+  def apply(hostAndPorts: Seq[(String, Int)]): AmqpDetailsConnectionProvider =
     new AmqpDetailsConnectionProvider(hostAndPorts)
 
   /**
@@ -312,7 +311,7 @@ object AmqpSSLConfiguration {
  *                     If empty, it defaults to the host and port in the underlying factory.
  */
 final class AmqpConnectionFactoryConnectionProvider private (val factory: ConnectionFactory,
-    private val hostAndPorts: immutable.Seq[(String, Int)] =
+    private val hostAndPorts: Seq[(String, Int)] =
       Nil)
     extends AmqpConnectionProvider {
 
@@ -320,16 +319,16 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
    * @return A list of hosts and ports for this AMQP connection factory.
    *         Uses host and port from the underlying factory if hostAndPorts was left out on construction.
    */
-  def hostAndPortList: immutable.Seq[(String, Int)] =
+  def hostAndPortList: Seq[(String, Int)] =
     if (hostAndPorts.isEmpty)
-      immutable.Seq((factory.getHost, factory.getPort))
+      Seq((factory.getHost, factory.getPort))
     else
       hostAndPorts.toList
 
   def withHostAndPort(host: String, port: Int): AmqpConnectionFactoryConnectionProvider =
-    copy(hostAndPorts = immutable.Seq(host -> port))
+    copy(hostAndPorts = Seq(host -> port))
 
-  def withHostsAndPorts(hostAndPorts: immutable.Seq[(String, Int)]): AmqpConnectionFactoryConnectionProvider =
+  def withHostsAndPorts(hostAndPorts: Seq[(String, Int)]): AmqpConnectionFactoryConnectionProvider =
     copy(hostAndPorts = hostAndPorts)
 
   /**
@@ -343,7 +342,7 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
     factory.newConnection(hostAndPortList.map(hp => new Address(hp._1, hp._2)).asJava)
   }
 
-  private def copy(hostAndPorts: immutable.Seq[(String, Int)]) =
+  private def copy(hostAndPorts: Seq[(String, Int)]) =
     new AmqpConnectionFactoryConnectionProvider(factory, hostAndPorts)
 
   override def toString: String =

@@ -29,7 +29,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.collection.immutable
 import scala.concurrent.duration._
 
 trait ElasticsearchConnectorBehaviour {
@@ -133,7 +132,7 @@ trait ElasticsearchConnectorBehaviour {
 
     "ElasticsearchFlow" should {
       "pass through data in `withContext`" in {
-        val books = immutable.Seq(
+        val books = Seq(
           "Akka in Action",
           "Pekko Connectors Patterns")
 
@@ -157,7 +156,7 @@ trait ElasticsearchConnectorBehaviour {
       }
 
       "not post invalid encoded JSON" in {
-        val books = immutable.Seq(
+        val books = Seq(
           "Akka in Action",
           "Akka \u00DF Concurrency")
 
@@ -188,10 +187,9 @@ trait ElasticsearchConnectorBehaviour {
         createStrictMapping(indexName)
 
         val createBooks = Source(
-          immutable
-            .Seq(
-              Book("Akka in Action").toJson,
-              JsObject("subject" -> "Akka Concurrency".toJson))
+          Seq(
+            Book("Akka in Action").toJson,
+            JsObject("subject" -> "Akka Concurrency".toJson))
             .zipWithIndex).map {
           case (book: JsObject, index: Int) =>
             WriteMessage.createIndexMessage(index.toString, book)
@@ -273,11 +271,10 @@ trait ElasticsearchConnectorBehaviour {
         createStrictMapping(indexName)
 
         val createBooks = Source(
-          immutable
-            .Seq(
-              Book("Akka in Action").toJson,
-              JsObject("subject" -> "Akka Concurrency".toJson),
-              Book("Learning Scala").toJson)
+          Seq(
+            Book("Akka in Action").toJson,
+            JsObject("subject" -> "Akka Concurrency".toJson),
+            Book("Learning Scala").toJson)
             .zipWithIndex).map {
           case (book: JsObject, index: Int) =>
             WriteMessage.createIndexMessage(index.toString, book) -> index

@@ -19,7 +19,6 @@ import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.util.ByteString
 
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 import scala.util.{ Success, Try }
@@ -31,7 +30,7 @@ import scala.util.{ Success, Try }
  * [[pekko.stream.connectors.reference.testkit.MessageFactory]].
  */
 final class ReferenceReadResult @InternalApi private[reference] (
-    val data: immutable.Seq[ByteString] = immutable.Seq.empty,
+    val data: Seq[ByteString] = Seq.empty,
     val bytesRead: Try[Int] = Success(0)) {
 
   /**
@@ -72,9 +71,9 @@ final class ReferenceReadResult @InternalApi private[reference] (
  * Use "Write" in message data types to signify that the messages is to be written to outside.
  */
 final class ReferenceWriteMessage private (
-    val data: immutable.Seq[ByteString] = immutable.Seq.empty,
+    val data: Seq[ByteString] = Seq.empty,
     val metrics: Map[String, Long] = Map.empty) {
-  def withData(data: immutable.Seq[ByteString]): ReferenceWriteMessage =
+  def withData(data: Seq[ByteString]): ReferenceWriteMessage =
     copy(data = data)
 
   def withMetrics(metrics: Map[String, Long]): ReferenceWriteMessage =
@@ -117,7 +116,7 @@ final class ReferenceWriteMessage private (
       case (key, value) => key -> java.lang.Long.valueOf(value)
     }.asJava
 
-  private def copy(data: immutable.Seq[ByteString] = data, metrics: Map[String, Long] = metrics) =
+  private def copy(data: Seq[ByteString] = data, metrics: Map[String, Long] = metrics) =
     new ReferenceWriteMessage(data, metrics)
 
   override def toString: String =

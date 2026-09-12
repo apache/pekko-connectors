@@ -111,7 +111,7 @@ Java
 
 ## CSV formatting
 
-To emit CSV files ``immutable.Seq[String]`` can be formatted into ``ByteString`` e.g to be written to file.
+To emit CSV files ``Seq[String]`` can be formatted into ``ByteString`` e.g to be written to file.
 The formatter takes care of quoting and escaping.
 
 Certain CSV readers (e.g. Microsoft Excel) require CSV files to indicate their character encoding with a *Byte

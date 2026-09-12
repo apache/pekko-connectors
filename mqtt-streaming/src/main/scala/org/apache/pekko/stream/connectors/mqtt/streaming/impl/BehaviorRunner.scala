@@ -17,8 +17,6 @@ import org.apache.pekko
 import pekko.actor.typed.scaladsl.{ ActorContext, Behaviors }
 import pekko.actor.typed.{ Behavior, Signal }
 
-import scala.collection.immutable.Seq
-
 object BehaviorRunner {
   sealed trait Interpretable[T]
 

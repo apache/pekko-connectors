@@ -18,7 +18,6 @@ import pekko.actor.{ ActorSystem, ClassicActorSystemProvider, ExtendedActorSyste
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.FutureConverters._
 import scala.util.Failure
@@ -77,7 +76,7 @@ object CqlSessionProvider {
     val className = config.getString("session-provider")
     val dynamicAccess = system.asInstanceOf[ExtendedActorSystem].dynamicAccess
     val clazz = dynamicAccess.getClassFor[CqlSessionProvider](className).get
-    def instantiate(args: immutable.Seq[(Class[?], AnyRef)]) =
+    def instantiate(args: Seq[(Class[?], AnyRef)]) =
       dynamicAccess.createInstanceFor[CqlSessionProvider](clazz, args)
 
     val params = List((classOf[ActorSystem], system), (classOf[Config], config))

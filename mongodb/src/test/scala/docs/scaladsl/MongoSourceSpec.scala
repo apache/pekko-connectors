@@ -28,7 +28,6 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.concurrent.ScalaFutures
 
 import scala.annotation.nowarn
-import scala.collection.immutable.Seq
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._

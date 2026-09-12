@@ -20,8 +20,6 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import pekko.util.ByteString
 
-import scala.collection.immutable
-
 /**
  * Internal API: Converts incoming [[List[ByteString]]] to [[Map[String, ByteString]]].
  *
@@ -32,24 +30,24 @@ import scala.collection.immutable
  * @param customFieldValuePlaceholder placeholder used when there are more data than headers.
  * @param headerPlaceholder placeholder used when there are more headers than data.
  */
-@InternalApi private[csv] abstract class CsvToMapStageBase[V](columnNames: Option[immutable.Seq[String]],
+@InternalApi private[csv] abstract class CsvToMapStageBase[V](columnNames: Option[Seq[String]],
     charset: Charset,
     combineAll: Boolean,
     customFieldValuePlaceholder: Option[V],
     headerPlaceholder: Option[String])
-    extends GraphStage[FlowShape[immutable.Seq[ByteString], Map[String, V]]] {
+    extends GraphStage[FlowShape[Seq[ByteString], Map[String, V]]] {
 
   override protected def initialAttributes: Attributes = Attributes.name("CsvToMap")
 
   private type Headers = Option[Seq[String]]
 
-  private val in = Inlet[immutable.Seq[ByteString]]("CsvToMap.in")
+  private val in = Inlet[Seq[ByteString]]("CsvToMap.in")
   private val out = Outlet[Map[String, V]]("CsvToMap.out")
   override val shape = FlowShape.of(in, out)
 
   val fieldValuePlaceholder: V
 
-  protected def transformElements(elements: immutable.Seq[ByteString]): immutable.Seq[V]
+  protected def transformElements(elements: Seq[ByteString]): Seq[V]
 
   override def createLogic(inheritedAttributes: Attributes): GraphStageLogic =
     new GraphStageLogic(shape) with InHandler with OutHandler {
@@ -66,7 +64,7 @@ import scala.collection.immutable
         }
       }
 
-      private def process(elem: immutable.Seq[ByteString], combine: => Headers => Map[String, V]): Unit = {
+      private def process(elem: Seq[ByteString], combine: => Headers => Map[String, V]): Unit = {
         if (headers.isDefined) {
           push(out, combine(headers))
         } else {
@@ -78,7 +76,7 @@ import scala.collection.immutable
       override def onPull(): Unit = pull(in)
     }
 
-  private def combineUsingPlaceholder(elem: immutable.Seq[ByteString]): Headers => Map[String, V] = headers => {
+  private def combineUsingPlaceholder(elem: Seq[ByteString]): Headers => Map[String, V] = headers => {
     val combined = headers.get
       .zipAll(transformElements(elem),
         headerPlaceholder.getOrElse("MissingHeader"),
@@ -110,7 +108,7 @@ import scala.collection.immutable
 /**
  * Internal API
  */
-@InternalApi private[csv] class CsvToMapStage(columnNames: Option[immutable.Seq[String]],
+@InternalApi private[csv] class CsvToMapStage(columnNames: Option[Seq[String]],
     charset: Charset,
     combineAll: Boolean,
     customFieldValuePlaceholder: Option[ByteString],
@@ -123,14 +121,14 @@ import scala.collection.immutable
 
   override val fieldValuePlaceholder: ByteString = ByteString.empty
 
-  override protected def transformElements(elements: immutable.Seq[ByteString]): immutable.Seq[ByteString] = elements
+  override protected def transformElements(elements: Seq[ByteString]): Seq[ByteString] = elements
 
 }
 
 /**
  * Internal API
  */
-@InternalApi private[csv] class CsvToMapAsStringsStage(columnNames: Option[immutable.Seq[String]],
+@InternalApi private[csv] class CsvToMapAsStringsStage(columnNames: Option[Seq[String]],
     charset: Charset,
     combineAll: Boolean,
     customFieldValuePlaceholder: Option[String],
@@ -140,6 +138,6 @@ import scala.collection.immutable
 
   override val fieldValuePlaceholder: String = ""
 
-  override protected def transformElements(elements: immutable.Seq[ByteString]): immutable.Seq[String] =
+  override protected def transformElements(elements: Seq[ByteString]): Seq[String] =
     elements.map(_.decodeString(charset))
 }

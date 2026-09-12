@@ -23,7 +23,6 @@ import com.couchbase.client.java.env.CouchbaseEnvironment
 import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 import com.typesafe.config.Config
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
@@ -182,7 +181,7 @@ object CouchbaseSessionSettings {
 final class CouchbaseSessionSettings private (
     val username: String,
     val password: String,
-    val nodes: immutable.Seq[String],
+    val nodes: Seq[String],
     val environment: Option[CouchbaseEnvironment],
     val enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings]) {
 
@@ -195,7 +194,7 @@ final class CouchbaseSessionSettings private (
   def withNodes(nodes: String): CouchbaseSessionSettings =
     copy(nodes = nodes :: Nil)
 
-  def withNodes(nodes: immutable.Seq[String]): CouchbaseSessionSettings =
+  def withNodes(nodes: Seq[String]): CouchbaseSessionSettings =
     copy(nodes = nodes)
 
   /** Java API */
@@ -231,7 +230,7 @@ final class CouchbaseSessionSettings private (
   private def copy(
       username: String = username,
       password: String = password,
-      nodes: immutable.Seq[String] = nodes,
+      nodes: Seq[String] = nodes,
       environment: Option[CouchbaseEnvironment] = environment,
       enrichAsync: CouchbaseSessionSettings => Future[CouchbaseSessionSettings] = enrichAsync)
       : CouchbaseSessionSettings =

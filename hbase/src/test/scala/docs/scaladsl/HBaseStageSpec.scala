@@ -27,7 +27,6 @@ import org.apache.hadoop.hbase.{ HBaseConfiguration, TableName }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.language.implicitConversions
 import org.scalatest.matchers.should.Matchers
@@ -48,7 +47,7 @@ class HBaseStageSpec
   implicit def toBytes(string: String): Array[Byte] = Bytes.toBytes(string)
   case class Person(id: Int, name: String)
 
-  val hBaseConverter: Person => immutable.Seq[Mutation] = { person =>
+  val hBaseConverter: Person => Seq[Mutation] = { person =>
     val put = new Put(s"id_${person.id}")
     put.addColumn("info", "name", person.name)
     List(put)
@@ -56,7 +55,7 @@ class HBaseStageSpec
   // #create-converter-put
 
   // #create-converter-append
-  val appendHBaseConverter: Person => immutable.Seq[Mutation] = { person =>
+  val appendHBaseConverter: Person => Seq[Mutation] = { person =>
     // Append to a cell
     val append = new Append(s"id_${person.id}")
     append.add("info", "aliases", person.name)
@@ -65,7 +64,7 @@ class HBaseStageSpec
   // #create-converter-append
 
   // #create-converter-delete
-  val deleteHBaseConverter: Person => immutable.Seq[Mutation] = { person =>
+  val deleteHBaseConverter: Person => Seq[Mutation] = { person =>
     // Delete the specified row
     val delete = new Delete(s"id_${person.id}")
     List(delete)
@@ -73,7 +72,7 @@ class HBaseStageSpec
   // #create-converter-delete
 
   // #create-converter-increment
-  val incrementHBaseConverter: Person => immutable.Seq[Mutation] = { person =>
+  val incrementHBaseConverter: Person => Seq[Mutation] = { person =>
     // Increment a cell value
     val increment = new Increment(s"id_${person.id}")
     increment.addColumn("info", "numberOfChanges", 1)
@@ -82,7 +81,7 @@ class HBaseStageSpec
   // #create-converter-increment
 
   // #create-converter-complex
-  val mutationsHBaseConverter: Person => immutable.Seq[Mutation] = { person =>
+  val mutationsHBaseConverter: Person => Seq[Mutation] = { person =>
     if (person.id != 0) {
       if (person.name.isEmpty) {
         // Delete the specified row
@@ -106,7 +105,7 @@ class HBaseStageSpec
 
   // #create-settings
   val tableSettings =
-    HTableSettings(HBaseConfiguration.create(), TableName.valueOf("person"), immutable.Seq("info"), hBaseConverter)
+    HTableSettings(HBaseConfiguration.create(), TableName.valueOf("person"), Seq("info"), hBaseConverter)
   // #create-settings
 
   "HBase stage" must {

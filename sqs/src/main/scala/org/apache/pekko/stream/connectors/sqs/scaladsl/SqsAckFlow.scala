@@ -27,7 +27,6 @@ import pekko.stream.scaladsl.{ Flow, GraphDSL, Merge, Partition }
 import software.amazon.awssdk.services.sqs.SqsAsyncClient
 import software.amazon.awssdk.services.sqs.model._
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.parasitic
 import scala.jdk.CollectionConverters._
@@ -133,7 +132,7 @@ object SqsAckFlow {
           .build()
       }
       .mapAsync(settings.concurrentRequests) {
-        case (actions: immutable.Seq[Delete], request) =>
+        case (actions: Seq[Delete], request) =>
           sqsClient
             .deleteMessageBatch(request)
             .asScala

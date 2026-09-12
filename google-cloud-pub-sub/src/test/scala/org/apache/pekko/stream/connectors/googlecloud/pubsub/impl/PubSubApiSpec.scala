@@ -31,7 +31,6 @@ import java.security.cert.X509Certificate
 import java.time.Instant
 import java.util.Base64
 import javax.net.ssl.X509TrustManager
-import scala.collection.immutable.Seq
 import scala.concurrent.Await
 import scala.concurrent.duration._
 

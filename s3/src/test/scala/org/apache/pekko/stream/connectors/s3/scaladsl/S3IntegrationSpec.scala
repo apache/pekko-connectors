@@ -715,7 +715,7 @@ trait S3IntegrationSpec
 
   case object AbortException extends Exception("Aborting multipart upload")
 
-  def createSlowSource(data: immutable.Seq[ByteString],
+  def createSlowSource(data: Seq[ByteString],
       killSwitch: Option[SharedKillSwitch]): Source[ByteString, NotUsed] = {
     val base = Source(data)
       .throttle(1, 10.seconds)

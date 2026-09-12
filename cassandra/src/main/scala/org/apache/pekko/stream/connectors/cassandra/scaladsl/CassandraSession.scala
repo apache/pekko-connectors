@@ -26,7 +26,6 @@ import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql._
 import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException
 
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.FutureConverters._
 import scala.util.control.NonFatal
@@ -269,7 +268,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    *
    * The returned `Future` is completed with the found rows.
    */
-  def selectAll(stmt: Statement[?]): Future[immutable.Seq[Row]] = {
+  def selectAll(stmt: Statement[?]): Future[Seq[Row]] = {
     select(stmt)
       .runWith(Sink.seq)
   }
@@ -283,7 +282,7 @@ final class CassandraSession(system: pekko.actor.ActorSystem,
    *
    * The returned `Future` is completed with the found rows.
    */
-  def selectAll(stmt: String, bindValues: AnyRef*): Future[immutable.Seq[Row]] = {
+  def selectAll(stmt: String, bindValues: AnyRef*): Future[Seq[Row]] = {
     bind(stmt, bindValues).flatMap(bs => selectAll(bs))
   }
 

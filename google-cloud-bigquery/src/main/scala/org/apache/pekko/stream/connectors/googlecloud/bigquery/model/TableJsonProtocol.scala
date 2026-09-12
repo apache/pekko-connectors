@@ -23,7 +23,6 @@ import java.util
 
 import scala.annotation.nowarn
 import scala.annotation.varargs
-import scala.collection.immutable.Seq
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 

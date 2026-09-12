@@ -32,7 +32,6 @@ import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, ExecutionContext, Future, Promise }
@@ -129,7 +128,7 @@ class LogRotatorSinkSpec
         LogRotatorSink(fileSizeTriggerCreator)
       // #size
 
-      val fileSizeCompletion = Source(immutable.Seq("test1", "test2", "test3", "test4", "test5", "test6"))
+      val fileSizeCompletion = Source(Seq("test1", "test2", "test3", "test4", "test5", "test6"))
         .map(ByteString(_))
         .runWith(sizeRotatorSink)
 
@@ -162,7 +161,7 @@ class LogRotatorSinkSpec
         LogRotatorSink(timeBasedTriggerCreator)
       // #time
 
-      val timeBaseCompletion = Source(immutable.Seq("test1", "test2", "test3", "test4", "test5", "test6"))
+      val timeBaseCompletion = Source(Seq("test1", "test2", "test3", "test4", "test5", "test6"))
         .map(ByteString(_))
         .runWith(timeBasedSink)
 
@@ -174,7 +173,7 @@ class LogRotatorSinkSpec
        */
       val triggerFunctionCreator: () => ByteString => Option[Path] = timeBasedTriggerCreator
       // #sample
-      val completion = Source(immutable.Seq("test1", "test2", "test3", "test4", "test5", "test6"))
+      val completion = Source(Seq("test1", "test2", "test3", "test4", "test5", "test6"))
         .map(ByteString(_))
         .runWith(LogRotatorSink(triggerFunctionCreator))
       // #sample
@@ -211,7 +210,7 @@ class LogRotatorSinkSpec
       // #stream
 
       val timeBaseCompletion = Source(
-        immutable.Seq(
+        Seq(
           ("stream1", "test1"), ("stream1", "test2"), ("stream1", "test3"), ("stream2", "test4"), ("stream2", "test5"),
           ("stream2", "test6"))).runWith(timeBasedSink)
 

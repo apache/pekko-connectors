@@ -20,8 +20,6 @@ import pekko.NotUsed
 import pekko.stream.ActorAttributes
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Source, StreamConverters }
 
-import scala.collection.immutable
-
 object Directory {
 
   /**
@@ -41,7 +39,7 @@ object Directory {
    */
   def walk(directory: Path,
       maxDepth: Option[Int] = None,
-      fileVisitOptions: immutable.Seq[FileVisitOption] = Nil): Source[Path, NotUsed] = {
+      fileVisitOptions: Seq[FileVisitOption] = Nil): Source[Path, NotUsed] = {
     require(Files.isDirectory(directory), s"Path must be a directory, $directory isn't")
     val factory = maxDepth match {
       case None =>

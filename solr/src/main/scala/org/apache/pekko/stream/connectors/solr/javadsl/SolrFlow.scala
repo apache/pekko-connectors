@@ -23,7 +23,6 @@ import pekko.stream.scaladsl.Flow
 import org.apache.solr.client.solrj.SolrClient
 import org.apache.solr.common.SolrInputDocument
 
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 
 /**
@@ -42,7 +41,7 @@ object SolrFlow {
       WriteResult[SolrInputDocument, NotUsed]], NotUsed] =
     Flow
       .fromFunction[java.util.List[WriteMessage[SolrInputDocument, NotUsed]],
-        immutable.Seq[WriteMessage[SolrInputDocument, NotUsed]]](
+        Seq[WriteMessage[SolrInputDocument, NotUsed]]](
         _.asScala.toIndexedSeq)
       .via(
         scaladsl.SolrFlow
@@ -61,7 +60,7 @@ object SolrFlow {
       clazz: Class[T])
       : javadsl.Flow[java.util.List[WriteMessage[T, NotUsed]], java.util.List[WriteResult[T, NotUsed]], NotUsed] =
     Flow
-      .fromFunction[java.util.List[WriteMessage[T, NotUsed]], immutable.Seq[WriteMessage[T, NotUsed]]](
+      .fromFunction[java.util.List[WriteMessage[T, NotUsed]], Seq[WriteMessage[T, NotUsed]]](
         _.asScala.toIndexedSeq)
       .via(
         scaladsl.SolrFlow
@@ -82,7 +81,7 @@ object SolrFlow {
       clazz: Class[T])
       : javadsl.Flow[java.util.List[WriteMessage[T, NotUsed]], java.util.List[WriteResult[T, NotUsed]], NotUsed] =
     Flow
-      .fromFunction[java.util.List[WriteMessage[T, NotUsed]], immutable.Seq[WriteMessage[T, NotUsed]]](
+      .fromFunction[java.util.List[WriteMessage[T, NotUsed]], Seq[WriteMessage[T, NotUsed]]](
         _.asScala.toIndexedSeq)
       .via(
         scaladsl.SolrFlow
@@ -103,7 +102,7 @@ object SolrFlow {
       SolrInputDocument, PT]], NotUsed] =
     Flow
       .fromFunction[java.util.List[WriteMessage[SolrInputDocument, PT]],
-        immutable.Seq[WriteMessage[SolrInputDocument,
+        Seq[WriteMessage[SolrInputDocument,
           PT]]](
         _.asScala.toIndexedSeq)
       .via(
@@ -124,7 +123,7 @@ object SolrFlow {
       client: SolrClient,
       clazz: Class[T]): javadsl.Flow[java.util.List[WriteMessage[T, PT]], java.util.List[WriteResult[T, PT]], NotUsed] =
     Flow
-      .fromFunction[java.util.List[WriteMessage[T, PT]], immutable.Seq[WriteMessage[T, PT]]](_.asScala.toIndexedSeq)
+      .fromFunction[java.util.List[WriteMessage[T, PT]], Seq[WriteMessage[T, PT]]](_.asScala.toIndexedSeq)
       .via(
         scaladsl.SolrFlow
           .beansWithPassThrough[T, PT](collection, settings)(client))
@@ -144,7 +143,7 @@ object SolrFlow {
       client: SolrClient,
       clazz: Class[T]): javadsl.Flow[java.util.List[WriteMessage[T, PT]], java.util.List[WriteResult[T, PT]], NotUsed] =
     Flow
-      .fromFunction[java.util.List[WriteMessage[T, PT]], immutable.Seq[WriteMessage[T, PT]]](_.asScala.toIndexedSeq)
+      .fromFunction[java.util.List[WriteMessage[T, PT]], Seq[WriteMessage[T, PT]]](_.asScala.toIndexedSeq)
       .via(
         scaladsl.SolrFlow
           .typedsWithPassThrough[T, PT](collection, settings, i => binder.apply(i))(client))

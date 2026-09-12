@@ -27,7 +27,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 /**
@@ -88,17 +87,17 @@ class ReferenceSpec extends AnyWordSpec with BeforeAndAfterAll with ScalaFutures
     "run flow" in {
       val flow = Reference.flow()
       val source = Source(
-        immutable.Seq(
+        Seq(
           ReferenceWriteMessage()
-            .withData(immutable.Seq(ByteString("one")))
+            .withData(Seq(ByteString("one")))
             .withMetrics(Map("rps" -> 20L, "rpm" -> 30L)),
           ReferenceWriteMessage().withData(
-            immutable.Seq(
+            Seq(
               ByteString("two"),
               ByteString("three"),
               ByteString("four"))),
           ReferenceWriteMessage().withData(
-            immutable.Seq(
+            Seq(
               ByteString("five"),
               ByteString("six"),
               ByteString("seven")))))
@@ -119,7 +118,7 @@ class ReferenceSpec extends AnyWordSpec with BeforeAndAfterAll with ScalaFutures
 
     "resolve resource from application config" in {
       val result = Source
-        .single(ReferenceWriteMessage().withData(immutable.Seq(ByteString("one"))))
+        .single(ReferenceWriteMessage().withData(Seq(ByteString("one"))))
         .via(Reference.flowWithResource())
         .runWith(Sink.seq)
 
@@ -130,7 +129,7 @@ class ReferenceSpec extends AnyWordSpec with BeforeAndAfterAll with ScalaFutures
       val resource = Resource(ResourceSettings("attributes msg"))
 
       val result = Source
-        .single(ReferenceWriteMessage().withData(immutable.Seq(ByteString("one"))))
+        .single(ReferenceWriteMessage().withData(Seq(ByteString("one"))))
         .via(Reference.flowWithResource().withAttributes(ReferenceAttributes.resource(resource)))
         .runWith(Sink.seq)
 

@@ -23,7 +23,6 @@ import pekko.stream.{ Materializer, OverflowStrategy, QueueOfferResult }
 import pekko.stream.scaladsl.{ BroadcastHub, Keep, Source, SourceQueueWithComplete }
 import pekko.util.ByteString
 
-import scala.collection.immutable.Seq
 import scala.concurrent.Promise
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NoStackTrace
