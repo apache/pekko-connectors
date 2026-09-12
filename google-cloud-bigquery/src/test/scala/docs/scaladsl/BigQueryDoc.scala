@@ -37,7 +37,6 @@ import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.{ Done, NotUsed }
 
 import scala.annotation.nowarn
-import scala.collection.immutable.Seq
 import scala.concurrent.Future
 //#imports
 

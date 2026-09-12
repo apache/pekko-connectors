@@ -24,7 +24,6 @@ import spray.json.{ JsonFormat, RootJsonFormat, RootJsonReader, RootJsonWriter }
 import java.{ lang, util }
 import scala.annotation.nowarn
 import scala.annotation.unchecked.uncheckedVariance
-import scala.collection.immutable.Seq
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 

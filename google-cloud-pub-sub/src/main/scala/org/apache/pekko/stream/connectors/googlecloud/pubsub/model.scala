@@ -169,7 +169,7 @@ object PubSubMessage {
 
 }
 
-final class PublishRequest private (val messages: immutable.Seq[PublishMessage]) {
+final class PublishRequest private (val messages: Seq[PublishMessage]) {
 
   override def equals(other: Any): Boolean = other match {
     case that: PublishRequest => messages == that.messages
@@ -183,7 +183,7 @@ final class PublishRequest private (val messages: immutable.Seq[PublishMessage])
 
 object PublishRequest {
 
-  def apply(messages: immutable.Seq[PublishMessage]): PublishRequest = new PublishRequest(messages)
+  def apply(messages: Seq[PublishMessage]): PublishRequest = new PublishRequest(messages)
 
   /**
    * Java API
@@ -218,7 +218,7 @@ object ReceivedMessage {
     new ReceivedMessage(ackId, message)
 }
 
-final class AcknowledgeRequest private (val ackIds: immutable.Seq[String]) {
+final class AcknowledgeRequest private (val ackIds: Seq[String]) {
 
   override def equals(other: Any): Boolean = other match {
     case that: AcknowledgeRequest => ackIds == that.ackIds
@@ -242,7 +242,7 @@ object AcknowledgeRequest {
     new AcknowledgeRequest(ackIds.asScala.toList)
 }
 
-private final class PublishResponse private (val messageIds: immutable.Seq[String]) {
+private final class PublishResponse private (val messageIds: Seq[String]) {
 
   override def equals(other: Any): Boolean = other match {
     case that: PublishResponse => messageIds == that.messageIds
@@ -256,7 +256,7 @@ private final class PublishResponse private (val messageIds: immutable.Seq[Strin
 
 object PublishResponse {
 
-  @InternalApi private[pubsub] def apply(messageIds: immutable.Seq[String]): PublishResponse =
+  @InternalApi private[pubsub] def apply(messageIds: Seq[String]): PublishResponse =
     new PublishResponse(messageIds)
 }
 
@@ -264,7 +264,7 @@ object PublishResponse {
 private[pubsub] final case class PullRequest(returnImmediately: Boolean, maxMessages: Int)
 
 @InternalApi
-private final class PullResponse private[pubsub] (val receivedMessages: Option[immutable.Seq[ReceivedMessage]]) {
+private final class PullResponse private[pubsub] (val receivedMessages: Option[Seq[ReceivedMessage]]) {
 
   override def equals(other: Any): Boolean = other match {
     case that: PullResponse => receivedMessages == that.receivedMessages
@@ -278,7 +278,7 @@ private final class PullResponse private[pubsub] (val receivedMessages: Option[i
 
 object PullResponse {
 
-  @InternalApi private[pubsub] def apply(receivedMessages: Option[immutable.Seq[ReceivedMessage]]) =
+  @InternalApi private[pubsub] def apply(receivedMessages: Option[Seq[ReceivedMessage]]) =
     new PullResponse(receivedMessages)
 
 }

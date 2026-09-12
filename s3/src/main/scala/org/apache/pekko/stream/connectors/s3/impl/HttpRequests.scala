@@ -36,7 +36,6 @@ import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
 import software.amazon.awssdk.regions.Region
 
-import scala.collection.immutable.Seq
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.xml.NodeSeq
 

@@ -83,7 +83,7 @@ private[ironmq] final class IronMqClient(settings: IronMqSettings)(implicit acto
    * name prefix.
    */
   def listQueues(prefix: Option[String] = None, from: Option[String] = None, noOfQueues: Int = 50)(
-      implicit ec: ExecutionContext): Future[scala.collection.immutable.Seq[String]] = {
+      implicit ec: ExecutionContext): Future[Seq[String]] = {
 
     def parseQueues(json: Json) = {
 
@@ -99,7 +99,7 @@ private[ironmq] final class IronMqClient(settings: IronMqSettings)(implicit acto
             xs.map(extractName)
           }
         }
-        .as[scala.collection.immutable.Seq[String]]
+        .as[Seq[String]]
     }
 
     val query = List(prefix.map("prefix" -> _), from.map("previous" -> _))

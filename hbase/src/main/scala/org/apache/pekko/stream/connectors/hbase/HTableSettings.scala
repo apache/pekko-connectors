@@ -17,14 +17,13 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.TableName
 import org.apache.hadoop.hbase.client.Mutation
 
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.jdk.FunctionConverters._
 
 final class HTableSettings[T] private (val conf: Configuration,
     val tableName: TableName,
-    val columnFamilies: immutable.Seq[String],
-    val converter: T => immutable.Seq[Mutation]) {
+    val columnFamilies: Seq[String],
+    val converter: T => Seq[Mutation]) {
 
   def withConf(conf: Configuration): HTableSettings[T] =
     copy(conf = conf)
@@ -32,7 +31,7 @@ final class HTableSettings[T] private (val conf: Configuration,
   def withTableName(tableName: TableName): HTableSettings[T] =
     copy(tableName = tableName)
 
-  def withColumnFamilies(columnFamilies: immutable.Seq[String]): HTableSettings[T] =
+  def withColumnFamilies(columnFamilies: Seq[String]): HTableSettings[T] =
     copy(columnFamilies = columnFamilies)
 
   /**
@@ -41,7 +40,7 @@ final class HTableSettings[T] private (val conf: Configuration,
   def withColumnFamilies(columnFamilies: java.util.List[String]): HTableSettings[T] =
     copy(columnFamilies = columnFamilies.asScala.toIndexedSeq)
 
-  def withConverter(converter: T => immutable.Seq[Mutation]): HTableSettings[T] =
+  def withConverter(converter: T => Seq[Mutation]): HTableSettings[T] =
     copy(converter = converter)
 
   /**
@@ -60,8 +59,8 @@ final class HTableSettings[T] private (val conf: Configuration,
 
   private def copy(conf: Configuration = conf,
       tableName: TableName = tableName,
-      columnFamilies: immutable.Seq[String] = columnFamilies,
-      converter: T => immutable.Seq[Mutation] = converter) =
+      columnFamilies: Seq[String] = columnFamilies,
+      converter: T => Seq[Mutation] = converter) =
     new HTableSettings[T](conf, tableName, columnFamilies, converter)
 
 }
@@ -73,8 +72,8 @@ object HTableSettings {
    */
   def apply[T](conf: Configuration,
       tableName: TableName,
-      columnFamilies: immutable.Seq[String],
-      converter: T => immutable.Seq[Mutation]) =
+      columnFamilies: Seq[String],
+      converter: T => Seq[Mutation]) =
     new HTableSettings(conf, tableName, columnFamilies, converter)
 
   /**

@@ -30,7 +30,6 @@ import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.collection.immutable
 
 /**
  * Needs a local running AMQP server on the default port with no password.
@@ -66,7 +65,7 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
       forAll { (reuseByteArray: Boolean) =>
         val connectionProvider =
           AmqpDetailsConnectionProvider("invalid", 5673)
-            .withHostsAndPorts(immutable.Seq("localhost" -> 5672))
+            .withHostsAndPorts(Seq("localhost" -> 5672))
             .withCredentials(AmqpCredentials("guest", "guest1"))
 
         val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
@@ -396,12 +395,12 @@ class AmqpConnectorsSpec extends AmqpSpec with ScalaCheckDrivenPropertyChecks {
         val amqpSink = AmqpSink(
           AmqpWriteSettings(connectionProvider)
             .withExchange(exchangeName)
-            .withDeclarations(immutable.Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
+            .withDeclarations(Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
             .withReuseByteArray(reuseByteArray))
 
         val amqpSource = AmqpSource.atMostOnceSource(
           NamedQueueSourceSettings(connectionProvider, queueName)
-            .withDeclarations(immutable.Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
+            .withDeclarations(Seq(exchangeDeclaration, queueDeclaration, bindingDeclaration))
             .withReuseByteArray(reuseByteArray),
           bufferSize = 10)
 

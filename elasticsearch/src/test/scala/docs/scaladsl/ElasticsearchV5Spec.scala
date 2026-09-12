@@ -32,7 +32,6 @@ import pekko.testkit.TestKit
 import pekko.{ Done, NotUsed }
 import spray.json.jsonReader
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import spray.json._
 
@@ -156,8 +155,8 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
     "store properly formatted JSON from Strings" in {
       val indexName = "sink3-0"
       // #string
-      val write: Future[immutable.Seq[WriteResult[String, NotUsed]]] = Source(
-        immutable.Seq(
+      val write: Future[Seq[WriteResult[String, NotUsed]]] = Source(
+        Seq(
           WriteMessage.createIndexMessage("1", Book("Das Parfum").toJson.compactPrint),
           WriteMessage.createIndexMessage("2", Book("Faust").toJson.compactPrint),
           WriteMessage.createIndexMessage("3", Book("Die unendliche Geschichte").toJson.compactPrint))).via(

@@ -27,7 +27,6 @@ import pekko.stream.connectors.huawei.pushkit.HmsSettings
 import pekko.stream.connectors.huawei.pushkit.models.{ ErrorResponse, PushKitResponse, Response }
 import spray.json.enrichAny
 
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
@@ -49,7 +48,7 @@ private[pushkit] class PushKitSender {
           HttpRequest(
             HttpMethods.POST,
             url,
-            immutable.Seq(Authorization(OAuth2BearerToken(token))),
+            Seq(Authorization(OAuth2BearerToken(token))),
             HttpEntity(ContentTypes.`application/json`, hmsSend.toJson.compactPrint)),
           connectionContext = fp.httpsContext(system),
           settings = fp.poolSettings(system))
@@ -58,7 +57,7 @@ private[pushkit] class PushKitSender {
           HttpRequest(
             HttpMethods.POST,
             url,
-            immutable.Seq(Authorization(OAuth2BearerToken(token))),
+            Seq(Authorization(OAuth2BearerToken(token))),
             HttpEntity(ContentTypes.`application/json`, hmsSend.toJson.compactPrint)))
     }
     parse(response)

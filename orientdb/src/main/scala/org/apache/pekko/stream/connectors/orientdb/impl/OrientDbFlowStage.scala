@@ -25,7 +25,6 @@ import com.orientechnologies.orient.core.record.ORecord
 import com.orientechnologies.orient.core.record.impl.ODocument
 import com.orientechnologies.orient.core.tx.OTransaction
 
-import scala.collection.immutable
 import scala.util.control.NonFatal
 
 /**
@@ -36,12 +35,12 @@ private[orientdb] class OrientDbFlowStage[T, C](
     className: String,
     settings: OrientDbWriteSettings,
     clazz: Option[Class[T]])
-    extends GraphStage[FlowShape[immutable.Seq[OrientDbWriteMessage[T, C]],
-      immutable.Seq[OrientDbWriteMessage[T,
+    extends GraphStage[FlowShape[Seq[OrientDbWriteMessage[T, C]],
+      Seq[OrientDbWriteMessage[T,
         C]]]] {
 
-  private val in = Inlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("in")
-  private val out = Outlet[immutable.Seq[OrientDbWriteMessage[T, C]]]("out")
+  private val in = Inlet[Seq[OrientDbWriteMessage[T, C]]]("in")
+  private val out = Outlet[Seq[OrientDbWriteMessage[T, C]]]("out")
   override val shape = FlowShape(in, out)
   override def initialAttributes: Attributes =
     // see https://orientdb.com/docs/last/Java-Multi-Threading.html
@@ -68,7 +67,7 @@ private[orientdb] class OrientDbFlowStage[T, C](
       client.close()
     }
 
-    protected def write(messages: immutable.Seq[OrientDbWriteMessage[T, C]]): Unit
+    protected def write(messages: Seq[OrientDbWriteMessage[T, C]]): Unit
 
     setHandlers(in, out, this)
 
@@ -102,7 +101,7 @@ private[orientdb] class OrientDbFlowStage[T, C](
       }
     }
 
-    protected def write(messages: immutable.Seq[OrientDbWriteMessage[T, C]]): Unit =
+    protected def write(messages: Seq[OrientDbWriteMessage[T, C]]): Unit =
       messages.foreach {
         case OrientDbWriteMessage(oDocument: ODocument, _) =>
           val document = new ODocument()
@@ -129,7 +128,7 @@ private[orientdb] class OrientDbFlowStage[T, C](
       oObjectClient.getEntityManager.registerEntityClass(clazz)
     }
 
-    protected def write(messages: immutable.Seq[OrientDbWriteMessage[T, C]]): Unit =
+    protected def write(messages: Seq[OrientDbWriteMessage[T, C]]): Unit =
       messages.foreach {
         case OrientDbWriteMessage(typeRecord, _) =>
           oObjectClient.save[Object](typeRecord)

@@ -20,7 +20,6 @@ import pekko.stream.connectors.cassandra.scaladsl.{ CassandraSession, CassandraS
 import pekko.stream.scaladsl.Sink
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSourceSpec")) {
@@ -73,7 +72,7 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
       // #cql
       import org.apache.pekko.stream.connectors.cassandra.scaladsl.CassandraSource
 
-      val ids: Future[immutable.Seq[Int]] =
+      val ids: Future[Seq[Int]] =
         CassandraSource(s"SELECT id FROM $intTable").map(row => row.getInt("id")).runWith(Sink.seq)
 
       // #cql
@@ -95,7 +94,7 @@ class CassandraSourceSpec extends CassandraSpecBase(ActorSystem("CassandraSource
 
       val stmt = SimpleStatement.newInstance(s"SELECT * FROM $intTable").setPageSize(20)
 
-      val rows: Future[immutable.Seq[Row]] = CassandraSource(stmt).runWith(Sink.seq)
+      val rows: Future[Seq[Row]] = CassandraSource(stmt).runWith(Sink.seq)
       // #statement
 
       rows.futureValue.map(_.getInt("id")) must contain theSameElementsAs data

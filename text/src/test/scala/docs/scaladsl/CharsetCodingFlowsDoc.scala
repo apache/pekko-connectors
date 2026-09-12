@@ -27,7 +27,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{ BeforeAndAfterAll, RecoverMethods }
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 class CharsetCodingFlowsDoc
@@ -90,7 +89,7 @@ class CharsetCodingFlowsDoc
           .single(utf16bytes)
       // #decoding
 
-      val result: Future[immutable.Seq[String]] =
+      val result: Future[Seq[String]] =
         byteStringSource
           .via(TextFlow.decoding(StandardCharsets.UTF_16))
           .runWith(Sink.seq)

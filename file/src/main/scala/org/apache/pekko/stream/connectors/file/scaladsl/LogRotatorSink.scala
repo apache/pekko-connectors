@@ -23,7 +23,6 @@ import pekko.stream.scaladsl.{ FileIO, Sink, Source }
 import pekko.stream.stage._
 import pekko.util.ByteString
 
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future, Promise }
 import scala.util.{ Failure, Success }
 
@@ -98,7 +97,7 @@ final private class LogRotatorSink[T, C, R](triggerGeneratorCreator: () => T => 
   private final class Logic(promise: Promise[Done]) extends GraphStageLogic(shape) {
     val triggerGenerator: T => Option[C] = triggerGeneratorCreator()
     var sourceOut: SubSourceOutlet[T] = null
-    var sinkCompletions: immutable.Seq[Future[R]] = immutable.Seq.empty
+    var sinkCompletions: Seq[Future[R]] = Seq.empty
     var isFinishing = false
 
     def failThisStage(ex: Throwable): Unit =

@@ -19,12 +19,10 @@ import pekko.stream.{ Attributes, FlowShape, Inlet, Outlet }
 import pekko.stream.connectors.xml.{ EndElement, ParseEvent, StartElement }
 import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 
-import scala.collection.immutable
-
 /**
  * INTERNAL API
  */
-@InternalApi private[xml] class Subslice(path: immutable.Seq[String])
+@InternalApi private[xml] class Subslice(path: Seq[String])
     extends GraphStage[FlowShape[ParseEvent, ParseEvent]] {
   val in: Inlet[ParseEvent] = Inlet("XMLSubslice.in")
   val out: Outlet[ParseEvent] = Outlet("XMLSubslice.out")

@@ -30,7 +30,6 @@ import pekko.stream.testkit.scaladsl.TestSink
 
 import com.datastax.oss.driver.api.core.cql.Row
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
@@ -58,7 +57,7 @@ final class CassandraSessionSpec extends CassandraSpecBase(ActorSystem("Cassandr
                |)
                |""".stripMargin)
         _ <- executeCql(
-          immutable.Seq(
+          Seq(
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('A', 'a', 1);",
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('A', 'b', 2);",
             s"INSERT INTO $dataTable (partition, key, count) VALUES ('A', 'c', 3);",

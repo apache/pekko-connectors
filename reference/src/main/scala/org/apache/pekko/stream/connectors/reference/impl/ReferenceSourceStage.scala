@@ -22,7 +22,6 @@ import pekko.stream.connectors.reference.{ ReferenceReadResult, SourceSettings }
 import pekko.stream.stage.{ GraphStageLogic, GraphStageWithMaterializedValue, OutHandler }
 import pekko.util.ByteString
 
-import scala.collection.immutable
 import scala.concurrent.{ Future, Promise }
 import scala.util.Success
 
@@ -50,7 +49,7 @@ import scala.util.Success
     new OutHandler {
       override def onPull(): Unit = push(
         out,
-        new ReferenceReadResult(immutable.Seq(ByteString("one")), Success(100)))
+        new ReferenceReadResult(Seq(ByteString("one")), Success(100)))
     })
 
   /**

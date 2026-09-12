@@ -72,7 +72,7 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
     "properly parse simple XML and read it" in {
       // #parser-to-data
       val doc = ByteString("<doc><elem>elem1</elem><elem>elem2</elem></doc>")
-      val result: Future[immutable.Seq[String]] = Source
+      val result: Future[Seq[String]] = Source
         .single(doc)
         .via(XmlParsing.parser)
         .statefulMap(() => new StringBuilder())((textBuffer, parseEvent) => {

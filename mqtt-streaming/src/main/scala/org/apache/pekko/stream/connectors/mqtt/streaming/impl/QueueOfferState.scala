@@ -17,7 +17,6 @@ import org.apache.pekko
 import pekko.actor.typed.Behavior
 import pekko.actor.typed.scaladsl.Behaviors
 import pekko.stream.QueueOfferResult
-import scala.collection.immutable.Seq
 import scala.concurrent.Future
 import scala.util.{ Failure, Success, Try }
 

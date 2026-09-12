@@ -22,8 +22,6 @@ import pekko.stream.connectors.s3.AccessStyle.PathAccessStyle
 import scala.jdk.OptionConverters._
 
 import scala.annotation.nowarn
-import scala.collection.immutable.Seq
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 
 final class MFA private (val serialNumber: String, val tokenCode: String) {
@@ -1292,7 +1290,7 @@ final class ObjectMetadata private (
    * Java Api
    */
   lazy val headers: java.util.List[pekko.http.javadsl.model.HttpHeader] =
-    (metadata: immutable.Seq[pekko.http.javadsl.model.HttpHeader]).asJava
+    (metadata: Seq[pekko.http.javadsl.model.HttpHeader]).asJava
 
   /**
    * Gets the hex encoded 128-bit MD5 digest of the associated object

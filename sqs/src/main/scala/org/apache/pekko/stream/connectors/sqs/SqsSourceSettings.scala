@@ -17,7 +17,6 @@ import java.time.temporal.ChronoUnit
 
 import software.amazon.awssdk.services.sqs.model
 
-import scala.collection.immutable
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.CollectionConverters._
 
@@ -26,8 +25,8 @@ final class SqsSourceSettings private (
     val maxBufferSize: Int,
     val parallelRequests: Int,
     val maxBatchSize: Int,
-    val attributeNames: immutable.Seq[MessageSystemAttributeName],
-    val messageAttributeNames: immutable.Seq[MessageAttributeName],
+    val attributeNames: Seq[MessageSystemAttributeName],
+    val messageAttributeNames: Seq[MessageAttributeName],
     val closeOnEmptyReceive: Boolean,
     val visibilityTimeout: Option[FiniteDuration]) {
   require(maxBatchSize <= maxBufferSize, "maxBatchSize must be lower or equal than maxBufferSize")
@@ -79,8 +78,8 @@ final class SqsSourceSettings private (
   def withMaxBatchSize(maxBatchSize: Int): SqsSourceSettings = copy(maxBatchSize = maxBatchSize)
 
   def withAttribute(attribute: MessageSystemAttributeName): SqsSourceSettings =
-    copy(attributeNames = immutable.Seq(attribute))
-  def withAttributes(attributes: immutable.Seq[MessageSystemAttributeName]): SqsSourceSettings =
+    copy(attributeNames = Seq(attribute))
+  def withAttributes(attributes: Seq[MessageSystemAttributeName]): SqsSourceSettings =
     copy(attributeNames = attributes)
 
   /** Java API */
@@ -88,8 +87,8 @@ final class SqsSourceSettings private (
     copy(attributeNames = attributes.asScala.toList)
 
   def withMessageAttribute(attributes: MessageAttributeName): SqsSourceSettings =
-    copy(messageAttributeNames = immutable.Seq(attributes))
-  def withMessageAttributes(attributes: immutable.Seq[MessageAttributeName]): SqsSourceSettings =
+    copy(messageAttributeNames = Seq(attributes))
+  def withMessageAttributes(attributes: Seq[MessageAttributeName]): SqsSourceSettings =
     copy(messageAttributeNames = attributes)
 
   /** Java API */
@@ -119,8 +118,8 @@ final class SqsSourceSettings private (
       maxBufferSize: Int = maxBufferSize,
       parallelRequests: Int = parallelRequests,
       maxBatchSize: Int = maxBatchSize,
-      attributeNames: immutable.Seq[MessageSystemAttributeName] = attributeNames,
-      messageAttributeNames: immutable.Seq[MessageAttributeName] = messageAttributeNames,
+      attributeNames: Seq[MessageSystemAttributeName] = attributeNames,
+      messageAttributeNames: Seq[MessageAttributeName] = messageAttributeNames,
       closeOnEmptyReceive: Boolean = closeOnEmptyReceive,
       visibilityTimeout: Option[FiniteDuration] = visibilityTimeout): SqsSourceSettings = new SqsSourceSettings(
     waitTimeSeconds,
@@ -151,8 +150,8 @@ object SqsSourceSettings {
     maxBufferSize = 100,
     parallelRequests = 1,
     maxBatchSize = 10,
-    attributeNames = immutable.Seq.empty,
-    messageAttributeNames = immutable.Seq.empty,
+    attributeNames = Seq.empty,
+    messageAttributeNames = Seq.empty,
     closeOnEmptyReceive = false,
     visibilityTimeout = None)
 

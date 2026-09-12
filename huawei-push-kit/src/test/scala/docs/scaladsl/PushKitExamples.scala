@@ -33,7 +33,6 @@ import pekko.stream.connectors.huawei.pushkit.models.Tokens
 import pekko.stream.scaladsl.Source
 import pekko.stream.scaladsl.Sink
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 class PushKitExamples {
@@ -63,7 +62,7 @@ class PushKitExamples {
   // #simple-send
 
   // #asFlow-send
-  val result1: Future[immutable.Seq[Response]] =
+  val result1: Future[Seq[Response]] =
     Source
       .single(notification)
       .via(HmsPushKit.send(config))

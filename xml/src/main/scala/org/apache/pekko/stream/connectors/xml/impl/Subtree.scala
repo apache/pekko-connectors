@@ -21,12 +21,10 @@ import pekko.stream.stage.{ GraphStage, GraphStageLogic, InHandler, OutHandler }
 import javax.xml.parsers.DocumentBuilderFactory
 import org.w3c.dom.Element
 
-import scala.collection.immutable
-
 /**
  * INTERNAL API
  */
-@InternalApi private[xml] class Subtree(path: immutable.Seq[String])
+@InternalApi private[xml] class Subtree(path: Seq[String])
     extends GraphStage[FlowShape[ParseEvent, Element]] {
   val in: Inlet[ParseEvent] = Inlet("XMLSubtree.in")
   val out: Outlet[Element] = Outlet("XMLSubtree.out")
