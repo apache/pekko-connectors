@@ -21,8 +21,6 @@ import pekko.stream.scaladsl.Flow
 import org.influxdb.InfluxDB
 import org.influxdb.dto.Point
 
-import scala.collection.immutable
-
 /**
  * Scala API to create InfluxDB flows.
  *
@@ -32,23 +30,23 @@ import scala.collection.immutable
 object InfluxDbFlow {
 
   def create()(
-      implicit influxDB: InfluxDB): Flow[immutable.Seq[InfluxDbWriteMessage[Point, NotUsed]],
-    immutable.Seq[InfluxDbWriteResult[Point, NotUsed]], NotUsed] =
+      implicit influxDB: InfluxDB): Flow[Seq[InfluxDbWriteMessage[Point, NotUsed]],
+    Seq[InfluxDbWriteResult[Point, NotUsed]], NotUsed] =
     Flow.fromGraph(new impl.InfluxDbFlowStage[NotUsed](influxDB))
 
   def typed[T](clazz: Class[T])(
       implicit influxDB: InfluxDB)
-      : Flow[immutable.Seq[InfluxDbWriteMessage[T, NotUsed]], immutable.Seq[InfluxDbWriteResult[T, NotUsed]], NotUsed] =
+      : Flow[Seq[InfluxDbWriteMessage[T, NotUsed]], Seq[InfluxDbWriteResult[T, NotUsed]], NotUsed] =
     Flow.fromGraph(new impl.InfluxDbMapperFlowStage[T, NotUsed](clazz, influxDB))
 
   def createWithPassThrough[C](
       implicit influxDB: InfluxDB)
-      : Flow[immutable.Seq[InfluxDbWriteMessage[Point, C]], immutable.Seq[InfluxDbWriteResult[Point, C]], NotUsed] =
+      : Flow[Seq[InfluxDbWriteMessage[Point, C]], Seq[InfluxDbWriteResult[Point, C]], NotUsed] =
     Flow.fromGraph(new impl.InfluxDbFlowStage[C](influxDB))
 
   def typedWithPassThrough[T, C](clazz: Class[T])(
       implicit influxDB: InfluxDB)
-      : Flow[immutable.Seq[InfluxDbWriteMessage[T, C]], immutable.Seq[InfluxDbWriteResult[T, C]], NotUsed] =
+      : Flow[Seq[InfluxDbWriteMessage[T, C]], Seq[InfluxDbWriteResult[T, C]], NotUsed] =
     Flow.fromGraph(new impl.InfluxDbMapperFlowStage[T, C](clazz, influxDB))
 
 }

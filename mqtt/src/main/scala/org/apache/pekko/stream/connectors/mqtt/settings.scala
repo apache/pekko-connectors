@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.mqtt
 import org.apache.pekko
 import org.eclipse.paho.client.mqttv3.{ MqttClientPersistence, MqttConnectOptions }
 
-import scala.collection.immutable
 import scala.collection.immutable.Map
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
@@ -166,7 +165,7 @@ final class MqttConnectionSettings private (val broker: String,
     val disconnectTimeout: FiniteDuration,
     val maxInFlight: Int,
     val mqttVersion: Int,
-    val serverUris: immutable.Seq[String],
+    val serverUris: Seq[String],
     val sslHostnameVerifier: Option[javax.net.ssl.HostnameVerifier],
     val sslProperties: Map[String, String],
     val offlinePersistenceSettings: Option[MqttOfflinePersistenceSettings]) {
@@ -223,10 +222,10 @@ final class MqttConnectionSettings private (val broker: String,
   def withMaxInFlight(value: Int): MqttConnectionSettings = copy(maxInFlight = value)
   def withMqttVersion(value: Int): MqttConnectionSettings = copy(mqttVersion = value)
 
-  def withServerUri(value: String): MqttConnectionSettings = copy(serverUris = immutable.Seq(value))
+  def withServerUri(value: String): MqttConnectionSettings = copy(serverUris = Seq(value))
 
   /** Scala API */
-  def withServerUris(values: immutable.Seq[String]): MqttConnectionSettings = copy(serverUris = values)
+  def withServerUris(values: Seq[String]): MqttConnectionSettings = copy(serverUris = values)
 
   /** Java API */
   def withServerUris(values: java.util.List[String]): MqttConnectionSettings = copy(serverUris = values.asScala.toList)
@@ -262,7 +261,7 @@ final class MqttConnectionSettings private (val broker: String,
       disconnectTimeout: FiniteDuration = disconnectTimeout,
       maxInFlight: Int = maxInFlight,
       mqttVersion: Int = mqttVersion,
-      serverUris: immutable.Seq[String] = serverUris,
+      serverUris: Seq[String] = serverUris,
       sslHostnameVerifier: Option[javax.net.ssl.HostnameVerifier] = sslHostnameVerifier,
       sslProperties: Map[String, java.lang.String] = sslProperties,
       offlinePersistenceSettings: Option[MqttOfflinePersistenceSettings] = offlinePersistenceSettings)
@@ -337,7 +336,7 @@ object MqttConnectionSettings {
       disconnectTimeout = 10.seconds,
       maxInFlight = MqttConnectOptions.MAX_INFLIGHT_DEFAULT,
       mqttVersion = MqttConnectOptions.MQTT_VERSION_3_1_1,
-      serverUris = immutable.Seq.empty,
+      serverUris = Seq.empty,
       sslHostnameVerifier = None,
       sslProperties = Map.empty,
       offlinePersistenceSettings = None)

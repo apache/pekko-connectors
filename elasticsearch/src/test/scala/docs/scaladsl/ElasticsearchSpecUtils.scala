@@ -31,7 +31,6 @@ import pekko.stream.scaladsl.Sink
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
@@ -70,7 +69,7 @@ trait ElasticsearchSpecUtils { this: AnyWordSpec with ScalaFutures =>
 
   def readTitlesFrom(apiVersion: ApiVersionBase,
       sourceSettings: SourceSettingsBase[?, ?],
-      indexName: String): Future[immutable.Seq[String]] =
+      indexName: String): Future[Seq[String]] =
     ElasticsearchSource
       .typed[Book](
         constructElasticsearchParams(indexName, "_doc", apiVersion),

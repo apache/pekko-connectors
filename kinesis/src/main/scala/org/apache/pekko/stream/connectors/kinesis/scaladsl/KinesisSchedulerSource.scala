@@ -27,7 +27,6 @@ import software.amazon.kinesis.coordinator.Scheduler
 import software.amazon.kinesis.processor.ShardRecordProcessorFactory
 import software.amazon.kinesis.retrieval.KinesisClientRecord
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 object KinesisSchedulerSource {
@@ -64,7 +63,7 @@ object KinesisSchedulerSource {
       .mergeSubstreams
 
   private val checkpointRecordBatch =
-    Flow[immutable.Seq[CommittableRecord]]
+    Flow[Seq[CommittableRecord]]
       .map(records => {
         records.max(CommittableRecord.orderBySequenceNumber).tryToCheckpoint()
         records

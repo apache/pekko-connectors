@@ -30,7 +30,6 @@ import pekko.util.ByteString
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{ Millis, Seconds, Span }
 
-import scala.collection.immutable
 import scala.concurrent.{ Await, ExecutionContext, ExecutionContextExecutor }
 import scala.concurrent.duration._
 import scala.util.Random
@@ -479,7 +478,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         branchSelector = _ => true,
         emitTraversedDirectories = true).runWith(Sink.seq)
 
-      val listingRes: immutable.Seq[FtpFile] = Await.result(listing, Duration(1, TimeUnit.MINUTES))
+      val listingRes: Seq[FtpFile] = Await.result(listing, Duration(1, TimeUnit.MINUTES))
 
       listingRes.map(_.name) should contain allElementsOf Seq(name)
     }
@@ -507,7 +506,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         branchSelector = _ => true,
         emitTraversedDirectories = true).runWith(Sink.seq)
 
-      val listingRes: immutable.Seq[FtpFile] = Await.result(listing, Duration(1, TimeUnit.MINUTES))
+      val listingRes: Seq[FtpFile] = Await.result(listing, Duration(1, TimeUnit.MINUTES))
 
       listingRes.map(_.name) should contain allElementsOf Seq(name)
 
@@ -516,7 +515,7 @@ trait CommonFtpStageSpec extends BaseSpec with Eventually {
         branchSelector = _ => true,
         emitTraversedDirectories = true).runWith(Sink.seq)
 
-      val listingInnerDirRes: immutable.Seq[FtpFile] =
+      val listingInnerDirRes: Seq[FtpFile] =
         Await.result(listingOnlyInnerDir, Duration(1, TimeUnit.MINUTES))
 
       listingInnerDirRes.map(_.name) should contain allElementsOf Seq(innerDirName)

@@ -19,7 +19,6 @@ import pekko.stream.connectors.orientdb._
 import pekko.stream.connectors.orientdb.impl.OrientDbFlowStage
 import pekko.stream.scaladsl.Flow
 import com.orientechnologies.orient.core.record.impl.ODocument
-import scala.collection.immutable
 
 /**
  * Scala API.
@@ -31,8 +30,8 @@ object OrientDbFlow {
    */
   def create(
       className: String,
-      settings: OrientDbWriteSettings): Flow[immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]],
-    immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]], NotUsed] =
+      settings: OrientDbWriteSettings): Flow[Seq[OrientDbWriteMessage[ODocument, NotUsed]],
+    Seq[OrientDbWriteMessage[ODocument, NotUsed]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[ODocument, NotUsed](
@@ -46,8 +45,8 @@ object OrientDbFlow {
    */
   def createWithPassThrough[C](
       className: String,
-      settings: OrientDbWriteSettings): Flow[immutable.Seq[OrientDbWriteMessage[ODocument, C]],
-    immutable.Seq[OrientDbWriteMessage[ODocument, C]], NotUsed] =
+      settings: OrientDbWriteSettings): Flow[Seq[OrientDbWriteMessage[ODocument, C]],
+    Seq[OrientDbWriteMessage[ODocument, C]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[ODocument, C](
@@ -61,8 +60,8 @@ object OrientDbFlow {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]): Flow[immutable.Seq[OrientDbWriteMessage[T, NotUsed]],
-    immutable.Seq[OrientDbWriteMessage[T,
+      clazz: Class[T]): Flow[Seq[OrientDbWriteMessage[T, NotUsed]],
+    Seq[OrientDbWriteMessage[T,
       NotUsed]], NotUsed] =
     Flow
       .fromGraph(
@@ -79,7 +78,7 @@ object OrientDbFlow {
       className: String,
       settings: OrientDbWriteSettings,
       clazz: Class[T])
-      : Flow[immutable.Seq[OrientDbWriteMessage[T, C]], immutable.Seq[OrientDbWriteMessage[T, C]], NotUsed] =
+      : Flow[Seq[OrientDbWriteMessage[T, C]], Seq[OrientDbWriteMessage[T, C]], NotUsed] =
     Flow
       .fromGraph(
         new OrientDbFlowStage[T, C](

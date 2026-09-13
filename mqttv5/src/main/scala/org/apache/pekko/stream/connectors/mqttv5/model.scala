@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.mqttv5
 
 import org.apache.pekko
 
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 
@@ -63,7 +62,7 @@ final class MqttMessage private (
   def withRetained(value: Boolean): MqttMessage = if (retained == value) this else copy(retained = value)
 
   /** Scala API */
-  def withUserProperties(value: immutable.Seq[MqttUserProperty]): MqttMessage =
+  def withUserProperties(value: Seq[MqttUserProperty]): MqttMessage =
     copy(userProperties = value)
 
   /** Java API */

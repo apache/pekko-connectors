@@ -26,7 +26,6 @@ import org.apache.solr.client.solrj.response.UpdateResponse
 import org.apache.solr.common.SolrInputDocument
 
 import scala.annotation.tailrec
-import scala.collection.immutable
 import scala.jdk.CollectionConverters._
 import scala.util.control.NonFatal
 
@@ -42,10 +41,10 @@ private[solr] final class SolrFlowStage[T, C](
     client: SolrClient,
     settings: SolrUpdateSettings,
     messageBinder: T => SolrInputDocument)
-    extends GraphStage[FlowShape[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]]] {
+    extends GraphStage[FlowShape[Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]]]] {
 
-  private val in = Inlet[immutable.Seq[WriteMessage[T, C]]]("messages")
-  private val out = Outlet[immutable.Seq[WriteResult[T, C]]]("result")
+  private val in = Inlet[Seq[WriteMessage[T, C]]]("messages")
+  private val out = Outlet[Seq[WriteResult[T, C]]]("result")
   override val shape = FlowShape(in, out)
 
   override protected def initialAttributes: Attributes =
@@ -61,9 +60,9 @@ private final class SolrFlowLogic[T, C](
     decider: Supervision.Decider,
     collection: String,
     client: SolrClient,
-    in: Inlet[immutable.Seq[WriteMessage[T, C]]],
-    out: Outlet[immutable.Seq[WriteResult[T, C]]],
-    shape: FlowShape[immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]],
+    in: Inlet[Seq[WriteMessage[T, C]]],
+    out: Outlet[Seq[WriteResult[T, C]]],
+    shape: FlowShape[Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]]],
     settings: SolrUpdateSettings,
     messageBinder: T => SolrInputDocument) extends GraphStageLogic(shape)
     with OutHandler
@@ -94,14 +93,14 @@ private final class SolrFlowLogic[T, C](
       pull(in)
     }
 
-  private def updateBulkToSolr(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {
+  private def updateBulkToSolr(messages: Seq[WriteMessage[T, C]]): UpdateResponse = {
     val docs = messages.flatMap(_.source.map(messageBinder))
 
     if (log.isDebugEnabled) log.debug("Upsert {}", docs)
     client.add(collection, docs.asJava, settings.commitWithin)
   }
 
-  private def atomicUpdateBulkToSolr(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {
+  private def atomicUpdateBulkToSolr(messages: Seq[WriteMessage[T, C]]): UpdateResponse = {
     val docs = messages.map { message =>
       val doc = new SolrInputDocument()
 
@@ -147,7 +146,7 @@ private final class SolrFlowLogic[T, C](
     }
   }
 
-  private def deleteBulkToSolrByIds(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {
+  private def deleteBulkToSolrByIds(messages: Seq[WriteMessage[T, C]]): UpdateResponse = {
     val docsIds = messages
       .filter { message =>
         message.operation == DeleteByIds && message.idFieldValue.isDefined
@@ -159,7 +158,7 @@ private final class SolrFlowLogic[T, C](
     client.deleteById(collection, docsIds.asJava, settings.commitWithin)
   }
 
-  private def deleteEachByQuery(messages: immutable.Seq[WriteMessage[T, C]]): UpdateResponse = {
+  private def deleteEachByQuery(messages: Seq[WriteMessage[T, C]]): UpdateResponse = {
     val responses = messages.map { message =>
       val query = message.query.get
       log.debug("Delete by the query {}", query)
@@ -172,10 +171,10 @@ private final class SolrFlowLogic[T, C](
     responses.find(_.getStatus != 0).getOrElse(responses.head)
   }
 
-  private def sendBulkToSolr(messages: immutable.Seq[WriteMessage[T, C]]): Unit = {
+  private def sendBulkToSolr(messages: Seq[WriteMessage[T, C]]): Unit = {
 
     @tailrec
-    def send(toSend: immutable.Seq[WriteMessage[T, C]]): Option[UpdateResponse] = {
+    def send(toSend: Seq[WriteMessage[T, C]]): Option[UpdateResponse] = {
       val operation = toSend.head.operation
       // Just take a subset of this operation
       val (current, remaining) = toSend.span { m =>

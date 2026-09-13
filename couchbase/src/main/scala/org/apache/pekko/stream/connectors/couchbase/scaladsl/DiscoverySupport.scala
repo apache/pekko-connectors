@@ -21,7 +21,6 @@ import pekko.discovery.Discovery
 import pekko.stream.connectors.couchbase.CouchbaseSessionSettings
 import com.typesafe.config.Config
 
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration.FiniteDuration
 
@@ -39,7 +38,7 @@ sealed class DiscoverySupport private {
    */
   private def readNodes(
       serviceName: String,
-      lookupTimeout: FiniteDuration)(implicit system: ClassicActorSystemProvider): Future[immutable.Seq[String]] = {
+      lookupTimeout: FiniteDuration)(implicit system: ClassicActorSystemProvider): Future[Seq[String]] = {
     implicit val ec: ExecutionContext = system.classicSystem.dispatcher
     val discovery = Discovery(system).discovery
     discovery.lookup(serviceName, lookupTimeout).map { resolved =>
@@ -50,7 +49,7 @@ sealed class DiscoverySupport private {
   /**
    * Expect a `service` section in Config and use Pekko Discovery to read the addresses for `name` within `lookup-timeout`.
    */
-  private def readNodes(config: Config)(implicit system: ClassicActorSystemProvider): Future[immutable.Seq[String]] =
+  private def readNodes(config: Config)(implicit system: ClassicActorSystemProvider): Future[Seq[String]] =
     if (config.hasPath("service")) {
       val serviceName = config.getString("service.name")
       val lookupTimeout = config.getDuration("service.lookup-timeout").toScala

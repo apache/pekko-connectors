@@ -25,7 +25,6 @@ import pekko.{ Done, NotUsed }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
@@ -61,7 +60,7 @@ class IronMqDocsSpec
       val source: Source[Message, NotUsed] =
         IronMqConsumer.atMostOnceSource(queueName, ironMqSettings)
 
-      val receivedMessages: Future[immutable.Seq[Message]] = source
+      val receivedMessages: Future[Seq[Message]] = source
         .take(100)
         .runWith(Sink.seq)
       // #atMostOnce
@@ -89,7 +88,7 @@ class IronMqDocsSpec
       val businessLogic: Flow[CommittableMessage, CommittableMessage, NotUsed] =
         Flow[CommittableMessage] // do something useful with the received messages
 
-      val receivedMessages: Future[immutable.Seq[Message]] = source
+      val receivedMessages: Future[Seq[Message]] = source
         .take(100)
         .via(businessLogic)
         .mapAsync(1)(m => m.commit().map(_ => m.message))
@@ -108,15 +107,15 @@ class IronMqDocsSpec
       // #flow
       import org.apache.pekko.stream.connectors.ironmq.{ Message, PushMessage }
 
-      val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
-      val producedIds: Future[immutable.Seq[Message.Id]] = Source(messages)
+      val messages: Seq[String] = (1 to messageCount).map(i => s"test-$i")
+      val producedIds: Future[Seq[Message.Id]] = Source(messages)
         .map(PushMessage(_))
         .via(IronMqProducer.flow(queueName, ironMqSettings))
         .runWith(Sink.seq)
       // #flow
       producedIds.futureValue.size shouldBe messageCount
 
-      val receivedMessages: Future[immutable.Seq[Message]] = IronMqConsumer
+      val receivedMessages: Future[Seq[Message]] = IronMqConsumer
         .atMostOnceSource(queueName, ironMqSettings)
         .take(messages.size)
         .runWith(Sink.seq)
@@ -129,7 +128,7 @@ class IronMqDocsSpec
       val targetQueue = givenQueue().futureValue
 
       val messageCount = 10
-      val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
+      val messages: Seq[String] = (1 to messageCount).map(i => s"test-$i")
       val produced = Source(messages)
         .map(PushMessage(_))
         .runWith(IronMqProducer.sink(sourceQueue, ironMqSettings))
@@ -143,7 +142,7 @@ class IronMqDocsSpec
       val pushAndCommit: Flow[(PushMessage, Committable), Message.Id, NotUsed] =
         IronMqProducer.atLeastOnceFlow(targetQueue, ironMqSettings)
 
-      val producedIds: Future[immutable.Seq[Message.Id]] = IronMqConsumer
+      val producedIds: Future[Seq[Message.Id]] = IronMqConsumer
         .atLeastOnceSource(sourceQueue, ironMqSettings)
         .take(messages.size)
         .map { committableMessage =>
@@ -154,7 +153,7 @@ class IronMqDocsSpec
       // #atLeastOnceFlow
       producedIds.futureValue.size shouldBe messageCount
 
-      val receivedMessages: Future[immutable.Seq[Message]] = IronMqConsumer
+      val receivedMessages: Future[Seq[Message]] = IronMqConsumer
         .atMostOnceSource(targetQueue, ironMqSettings)
         .take(messages.size)
         .runWith(Sink.seq)
@@ -169,14 +168,14 @@ class IronMqDocsSpec
       // #sink
       import org.apache.pekko.stream.connectors.ironmq.{ Message, PushMessage }
 
-      val messages: immutable.Seq[String] = (1 to messageCount).map(i => s"test-$i")
+      val messages: Seq[String] = (1 to messageCount).map(i => s"test-$i")
       val producedIds: Future[Done] = Source(messages)
         .map(PushMessage(_))
         .runWith(IronMqProducer.sink(queueName, ironMqSettings))
       // #sink
       producedIds.futureValue shouldBe Done
 
-      val receivedMessages: Future[immutable.Seq[Message]] = IronMqConsumer
+      val receivedMessages: Future[Seq[Message]] = IronMqConsumer
         .atMostOnceSource(queueName, ironMqSettings)
         .take(messages.size)
         .runWith(Sink.seq)

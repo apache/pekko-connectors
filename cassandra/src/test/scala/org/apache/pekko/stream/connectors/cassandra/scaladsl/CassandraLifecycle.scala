@@ -22,7 +22,6 @@ import com.datastax.oss.driver.api.core.cql._
 import org.scalatest._
 import org.scalatest.concurrent.{ PatienceConfiguration, ScalaFutures }
 
-import scala.collection.immutable
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.jdk.CollectionConverters._
@@ -32,7 +31,7 @@ import scala.util.control.NonFatal
 trait CassandraLifecycleBase {
   def lifecycleSession: CassandraSession
 
-  def execute(session: CassandraSession, statements: immutable.Seq[BatchableStatement[?]]): Future[Done] = {
+  def execute(session: CassandraSession, statements: Seq[BatchableStatement[?]]): Future[Done] = {
     val batch = new BatchStatementBuilder(BatchType.LOGGED)
     statements.foreach { stmt =>
       batch.addStatement(stmt)
@@ -40,7 +39,7 @@ trait CassandraLifecycleBase {
     session.executeWriteBatch(batch.build())
   }
 
-  def executeCql(session: CassandraSession, statements: immutable.Seq[String]): Future[Done] = {
+  def executeCql(session: CassandraSession, statements: Seq[String]): Future[Done] = {
     execute(session, statements.map(stmt => SimpleStatement.newInstance(stmt)))
   }
 
@@ -62,9 +61,9 @@ trait CassandraLifecycleBase {
 
   def dropKeyspace(name: String): Future[Done] = withSchemaMetadataDisabled(dropKeyspace(lifecycleSession, name))
 
-  def execute(statements: immutable.Seq[BatchableStatement[?]]): Future[Done] = execute(lifecycleSession, statements)
+  def execute(statements: Seq[BatchableStatement[?]]): Future[Done] = execute(lifecycleSession, statements)
 
-  def executeCql(statements: immutable.Seq[String]): Future[Done] = executeCql(lifecycleSession, statements)
+  def executeCql(statements: Seq[String]): Future[Done] = executeCql(lifecycleSession, statements)
 
   def executeCqlList(statements: java.util.List[String]): CompletionStage[Done] =
     executeCql(lifecycleSession, statements.asScala.toList).asJava

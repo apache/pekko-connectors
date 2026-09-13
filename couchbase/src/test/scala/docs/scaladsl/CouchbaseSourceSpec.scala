@@ -25,7 +25,6 @@ import com.couchbase.client.java.document.json.JsonObject
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 import scala.concurrent.Future
 import org.scalatest.matchers.should.Matchers

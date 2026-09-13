@@ -23,7 +23,6 @@ import pekko.annotation.InternalApi
 import pekko.stream.connectors.ftp.FtpFile
 import org.apache.commons.net.ftp.{ FTPClient, FTPFile }
 
-import scala.collection.immutable
 import scala.util.Try
 
 /**
@@ -33,7 +32,7 @@ import scala.util.Try
 private[ftp] trait CommonFtpOperations {
   type Handler = FTPClient
 
-  def listFiles(basePath: String, handler: Handler): immutable.Seq[FtpFile] = {
+  def listFiles(basePath: String, handler: Handler): Seq[FtpFile] = {
     val path = if (basePath.nonEmpty && basePath.head != '/') s"/$basePath" else if (basePath == "/") "" else basePath
     handler
       .listFiles(path)
@@ -70,7 +69,7 @@ private[ftp] trait CommonFtpOperations {
       case (perm, true) => perm
     }.toSet
 
-  def listFiles(handler: Handler): immutable.Seq[FtpFile] = listFiles("", handler)
+  def listFiles(handler: Handler): Seq[FtpFile] = listFiles("", handler)
 
   def retrieveFileInputStream(name: String, handler: Handler): Try[InputStream] =
     retrieveFileInputStream(name, handler, 0L)

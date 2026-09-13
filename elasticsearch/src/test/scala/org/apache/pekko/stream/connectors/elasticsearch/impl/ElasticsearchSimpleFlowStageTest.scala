@@ -26,7 +26,6 @@ import pekko.testkit.TestKit
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import scala.collection.immutable
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ElasticsearchSimpleFlowStageTest
@@ -41,18 +40,18 @@ class ElasticsearchSimpleFlowStageTest
   val writer: StringMessageWriter = StringMessageWriter.getInstance
   val settings: ElasticsearchWriteSettings = ElasticsearchWriteSettings(
     ElasticsearchConnectionSettings("http://localhost:9202"))
-  val dummyMessages: (immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]]) = (
-    immutable.Seq(
+  val dummyMessages: (Seq[WriteMessage[String, NotUsed]], Seq[WriteResult[String, NotUsed]]) = (
+    Seq(
       WriteMessage.createIndexMessage("1", """{"foo": "bar"}"""),
       WriteMessage.createIndexMessage("2", """{"foo2": "bar2"}"""),
       WriteMessage.createIndexMessage("3", """{"foo3": "bar3"}""")),
-    immutable.Seq[WriteResult[String, NotUsed]]())
+    Seq[WriteResult[String, NotUsed]]())
 
   "ElasticsearchSimpleFlowStage" when {
     "stream ends" should {
       "emit element only when downstream requests" in {
         val (upstream, downstream) =
-          TestSource[(immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]])]()
+          TestSource[(Seq[WriteMessage[String, NotUsed]], Seq[WriteResult[String, NotUsed]])]()
             .via(
               new impl.ElasticsearchSimpleFlowStage[String, NotUsed](
                 ElasticsearchParams.V7("es-simple-flow-index"),
@@ -76,7 +75,7 @@ class ElasticsearchSimpleFlowStageTest
     "client cannot connect to ES" should {
       "stop the stream" in {
         val (upstream, downstream) =
-          TestSource[(immutable.Seq[WriteMessage[String, NotUsed]], immutable.Seq[WriteResult[String, NotUsed]])]()
+          TestSource[(Seq[WriteMessage[String, NotUsed]], Seq[WriteResult[String, NotUsed]])]()
             .via(
               new impl.ElasticsearchSimpleFlowStage[String, NotUsed](
                 ElasticsearchParams.V7("es-simple-flow-index"),

@@ -26,7 +26,6 @@ import pekko.stream.connectors.cassandra.scaladsl.{
 import pekko.stream.scaladsl.{ Sink, Source, SourceWithContext }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec")) {
@@ -85,12 +84,12 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       case class Person(id: Int, name: String, city: String)
 
       val persons =
-        immutable.Seq(Person(12, "John", "London"), Person(43, "Umberto", "Roma"), Person(56, "James", "Chicago"))
+        Seq(Person(12, "John", "London"), Person(43, "Umberto", "Roma"), Person(56, "James", "Chicago"))
 
       val statementBinder: (Person, PreparedStatement) => BoundStatement =
         (person, preparedStatement) => preparedStatement.bind(Int.box(person.id), person.name, person.city)
 
-      val written: Future[immutable.Seq[Person]] = Source(persons)
+      val written: Future[Seq[Person]] = Source(persons)
         .via(
           CassandraFlow.create(CassandraWriteSettings.defaults,
             s"INSERT INTO $table(id, name, city) VALUES (?, ?, ?)",
@@ -125,7 +124,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
         def ack(): Future[Done] = Future.successful(Done)
       }
       val persons =
-        immutable.Seq(Person(12, "John", "London") -> AckHandle(12),
+        Seq(Person(12, "John", "London") -> AckHandle(12),
           Person(43, "Umberto", "Roma") -> AckHandle(43),
           Person(56, "James", "Chicago") -> AckHandle(56))
 
@@ -173,7 +172,7 @@ class CassandraFlowSpec extends CassandraSpecBase(ActorSystem("CassandraFlowSpec
       case class Person(id: Int, name: String, city: String)
 
       val persons =
-        immutable.Seq(Person(12, "John", "London"), Person(43, "Umberto", "Roma"), Person(56, "James", "Chicago"))
+        Seq(Person(12, "John", "London"), Person(43, "Umberto", "Roma"), Person(56, "James", "Chicago"))
       val written = Source(persons)
         .via(
           CassandraFlow.createBatch(

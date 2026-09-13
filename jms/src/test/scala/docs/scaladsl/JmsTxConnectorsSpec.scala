@@ -26,7 +26,7 @@ import org.scalatest.Inspectors._
 import org.slf4j.LoggerFactory
 
 import scala.annotation.tailrec
-import scala.collection.{ immutable, mutable }
+import scala.collection.mutable
 import scala.concurrent.{ Await, Future, Promise }
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
@@ -80,7 +80,7 @@ class JmsTxConnectorsSpec extends JmsSharedServerSpec {
             .withAckTimeout(1.second)
             .withQueue(queueName))
 
-        val result: Future[immutable.Seq[javax.jms.Message]] =
+        val result: Future[Seq[javax.jms.Message]] =
           jmsSource
             .take(msgsIn.size)
             .map { txEnvelope =>

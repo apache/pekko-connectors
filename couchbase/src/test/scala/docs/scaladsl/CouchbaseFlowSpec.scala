@@ -37,8 +37,6 @@ import com.couchbase.client.java.{ PersistTo, ReplicateTo }
 import pekko.stream.testkit.scaladsl.StreamTestKit._
 import com.couchbase.client.java.document.{ BinaryDocument, RawJsonDocument, StringDocument }
 
-import scala.collection.immutable
-import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 import scala.concurrent.Future
 
@@ -177,7 +175,7 @@ class CouchbaseFlowSpec
 
       bulkUpsertResult.futureValue
 
-      val resultsAsFuture: Future[immutable.Seq[RawJsonDocument]] =
+      val resultsAsFuture: Future[Seq[RawJsonDocument]] =
         Source(sampleSequence.map(_.id))
           .via(CouchbaseFlow.fromId(sessionSettings, bucketName, classOf[RawJsonDocument]))
           .runWith(Sink.seq)
@@ -195,9 +193,9 @@ class CouchbaseFlowSpec
       bulkUpsertResult.futureValue
 
       // #fromId
-      val ids = immutable.Seq("First", "Second", "Third", "Fourth")
+      val ids = Seq("First", "Second", "Third", "Fourth")
 
-      val futureResult: Future[immutable.Seq[JsonDocument]] =
+      val futureResult: Future[Seq[JsonDocument]] =
         Source(ids)
           .via(
             CouchbaseFlow.fromId(
@@ -220,7 +218,7 @@ class CouchbaseFlowSpec
         .runWith(Sink.ignore)
       bulkUpsertResult.futureValue
 
-      val resultsAsFuture: Future[immutable.Seq[StringDocument]] =
+      val resultsAsFuture: Future[Seq[StringDocument]] =
         Source(sampleSequence.map(_.id))
           .via(
             CouchbaseFlow.fromId(
@@ -243,7 +241,7 @@ class CouchbaseFlowSpec
         .runWith(Sink.ignore)
       bulkUpsertResult.futureValue
 
-      val resultsAsFuture: Future[immutable.Seq[BinaryDocument]] =
+      val resultsAsFuture: Future[Seq[BinaryDocument]] =
         Source(sampleSequence.map(_.id))
           .via(
             CouchbaseFlow.fromId(
@@ -255,7 +253,7 @@ class CouchbaseFlowSpec
     }
 
     "fails stream when ReplicateTo higher then #of nodes" in assertAllStagesStopped {
-      val bulkUpsertResult: Future[immutable.Seq[JsonDocument]] = Source(sampleSequence)
+      val bulkUpsertResult: Future[Seq[JsonDocument]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
           CouchbaseFlow.upsert(sessionSettings,
@@ -430,7 +428,7 @@ class CouchbaseFlowSpec
 
       bulkReplaceResult.futureValue
 
-      val resultsAsFuture: Future[immutable.Seq[JsonDocument]] =
+      val resultsAsFuture: Future[Seq[JsonDocument]] =
         Source(sampleSequence.map(_.id))
           .via(CouchbaseFlow.fromId(sessionSettings, bucketName))
           .runWith(Sink.seq)
@@ -471,7 +469,7 @@ class CouchbaseFlowSpec
 
       upsertSampleData(bucketName)
 
-      val bulkReplaceResult: Future[immutable.Seq[JsonDocument]] = Source(sampleSequence)
+      val bulkReplaceResult: Future[Seq[JsonDocument]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
           CouchbaseFlow.replace(sessionSettings,
@@ -490,7 +488,7 @@ class CouchbaseFlowSpec
     "write documents" in assertAllStagesStopped {
       // #upsertDocWithResult
 
-      val result: Future[immutable.Seq[CouchbaseWriteResult[RawJsonDocument]]] =
+      val result: Future[Seq[CouchbaseWriteResult[RawJsonDocument]]] =
         Source(sampleSequence)
           .map(toRawJsonDocument)
           .via(
@@ -500,7 +498,7 @@ class CouchbaseFlowSpec
               bucketName))
           .runWith(Sink.seq)
 
-      val failedDocs: immutable.Seq[CouchbaseWriteFailure[RawJsonDocument]] = result.futureValue.collect {
+      val failedDocs: Seq[CouchbaseWriteFailure[RawJsonDocument]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[RawJsonDocument] => res
       }
       // #upsertDocWithResult
@@ -512,7 +510,7 @@ class CouchbaseFlowSpec
 
     "expose failures in-stream" in assertAllStagesStopped {
 
-      val result: Future[immutable.Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
+      val result: Future[Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
           CouchbaseFlow.upsertDocWithResult(sessionSettings,
@@ -524,7 +522,7 @@ class CouchbaseFlowSpec
         .runWith(Sink.seq)
 
       result.futureValue should have size sampleSequence.size
-      val failedDocs: immutable.Seq[CouchbaseWriteFailure[JsonDocument]] = result.futureValue.collect {
+      val failedDocs: Seq[CouchbaseWriteFailure[JsonDocument]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[JsonDocument] => res
       }
       failedDocs.head.failure shouldBe a[com.couchbase.client.java.error.DurabilityException]
@@ -573,7 +571,7 @@ class CouchbaseFlowSpec
 
       // #replaceDocWithResult
 
-      val result: Future[immutable.Seq[CouchbaseWriteResult[RawJsonDocument]]] =
+      val result: Future[Seq[CouchbaseWriteResult[RawJsonDocument]]] =
         Source(sampleSequence)
           .map(toRawJsonDocument)
           .via(
@@ -583,7 +581,7 @@ class CouchbaseFlowSpec
               bucketName))
           .runWith(Sink.seq)
 
-      val failedDocs: immutable.Seq[CouchbaseWriteFailure[RawJsonDocument]] = result.futureValue.collect {
+      val failedDocs: Seq[CouchbaseWriteFailure[RawJsonDocument]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[RawJsonDocument] => res
       }
       // #replaceDocWithResult
@@ -597,7 +595,7 @@ class CouchbaseFlowSpec
 
       cleanAllInBucket(bucketName)
 
-      val result: Future[immutable.Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
+      val result: Future[Seq[CouchbaseWriteResult[JsonDocument]]] = Source(sampleSequence)
         .map(toJsonDocument)
         .via(
           CouchbaseFlow.replaceDocWithResult(sessionSettings,
@@ -609,7 +607,7 @@ class CouchbaseFlowSpec
         .runWith(Sink.seq)
 
       result.futureValue should have size sampleSequence.size
-      val failedDocs: immutable.Seq[CouchbaseWriteFailure[JsonDocument]] = result.futureValue.collect {
+      val failedDocs: Seq[CouchbaseWriteFailure[JsonDocument]] = result.futureValue.collect {
         case res: CouchbaseWriteFailure[JsonDocument] => res
       }
       failedDocs.head.failure shouldBe a[com.couchbase.client.java.error.DocumentDoesNotExistException]

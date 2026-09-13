@@ -17,7 +17,6 @@ package impl
 import net.schmizz.sshj.SSHClient
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
 
-import scala.collection.immutable
 import scala.util.Try
 import java.io.{ InputStream, OutputStream }
 
@@ -35,9 +34,9 @@ protected[ftp] trait FtpLike[FtpClient, S <: RemoteFileSettings] {
 
   def disconnect(handler: Handler)(implicit ftpClient: FtpClient): Unit
 
-  def listFiles(basePath: String, handler: Handler): immutable.Seq[FtpFile]
+  def listFiles(basePath: String, handler: Handler): Seq[FtpFile]
 
-  def listFiles(handler: Handler): immutable.Seq[FtpFile]
+  def listFiles(handler: Handler): Seq[FtpFile]
 
   def retrieveFileInputStream(name: String, handler: Handler): Try[InputStream]
 

@@ -32,7 +32,7 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.{ CountDownLatch, LinkedBlockingQueue, ThreadLocalRandom, TimeUnit }
 import scala.annotation.tailrec
-import scala.collection.{ immutable, mutable }
+import scala.collection.mutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
@@ -69,7 +69,7 @@ class JmsConnectorsSpec extends JmsSpec {
       val jmsSource: Source[String, JmsConsumerControl] = JmsConsumer.textSource(
         JmsConsumerSettings(system, connectionFactory).withQueue("test"))
 
-      val result: Future[immutable.Seq[String]] = jmsSource.take(in.size).runWith(Sink.seq)
+      val result: Future[Seq[String]] = jmsSource.take(in.size).runWith(Sink.seq)
       // #text-source
 
       streamCompletion.futureValue shouldEqual Done
@@ -159,7 +159,7 @@ class JmsConnectorsSpec extends JmsSpec {
       val jmsSource: Source[Map[String, Any], JmsConsumerControl] = JmsConsumer.mapSource(
         JmsConsumerSettings(system, connectionFactory).withQueue("test"))
 
-      val result: Future[immutable.Seq[Map[String, Any]]] =
+      val result: Future[Seq[Map[String, Any]]] =
         jmsSource
           .take(1)
           .runWith(Sink.seq)
@@ -202,7 +202,7 @@ class JmsConnectorsSpec extends JmsSpec {
         val jmsSource: Source[jakarta.jms.Message, JmsConsumerControl] = JmsConsumer(
           JmsConsumerSettings(system, connectionFactory).withQueue("numbers"))
 
-        val (control, result): (JmsConsumerControl, Future[immutable.Seq[String]]) =
+        val (control, result): (JmsConsumerControl, Future[Seq[String]]) =
           jmsSource
             .take(msgsIn.size)
             .map {
@@ -226,7 +226,7 @@ class JmsConnectorsSpec extends JmsSpec {
         JmsProducerSettings(producerConfig, connectionFactory).withQueue("numbers"))
 
       val finished: Future[Done] =
-        Source(immutable.Seq("Message A", "Message B"))
+        Source(Seq("Message A", "Message B"))
           .map(JmsTextMessage(_))
           .runWith(jmsSink)
       // #create-jms-sink
@@ -238,7 +238,7 @@ class JmsConnectorsSpec extends JmsSpec {
 
       finished.futureValue shouldBe Done
 
-      result.futureValue.zip(immutable.Seq("Message A", "Message B")).foreach {
+      result.futureValue.zip(Seq("Message A", "Message B")).foreach {
         case (out, in) =>
           out.asInstanceOf[TextMessage].getText shouldEqual in
       }
@@ -292,7 +292,7 @@ class JmsConnectorsSpec extends JmsSpec {
           JmsProducerSettings(producerConfig, connectionFactory)
             .withDestination(CustomDestination("custom", createQueue("custom"))))
 
-        val msgsIn: immutable.Seq[JmsTextMessage] = (1 to 10).toList.map { n =>
+        val msgsIn: Seq[JmsTextMessage] = (1 to 10).toList.map { n =>
           JmsTextMessage(n.toString)
         }
 
@@ -305,7 +305,7 @@ class JmsConnectorsSpec extends JmsSpec {
             .withDestination(CustomDestination("custom", createQueue("custom"))))
         // #custom-destination
 
-        val result: Future[immutable.Seq[jakarta.jms.Message]] = jmsSource.take(msgsIn.size).runWith(Sink.seq)
+        val result: Future[Seq[jakarta.jms.Message]] = jmsSource.take(msgsIn.size).runWith(Sink.seq)
 
         // The sent message and the receiving one should have the same properties
         result.futureValue.zip(msgsIn).foreach {
@@ -752,7 +752,7 @@ class JmsConnectorsSpec extends JmsSpec {
           JmsBrowseSettings(system, connectionFactory)
             .withQueue("test"))
 
-        val result: Future[immutable.Seq[jakarta.jms.Message]] =
+        val result: Future[Seq[jakarta.jms.Message]] =
           browseSource.runWith(Sink.seq)
         // #browse-source
 
@@ -778,7 +778,7 @@ class JmsConnectorsSpec extends JmsSpec {
           JmsProducerSettings(system, connectionFactory)
             .withQueue("test"))
 
-      val input: immutable.Seq[JmsTextMessage] = (1 to 100).map(i => JmsTextMessage(i.toString))
+      val input: Seq[JmsTextMessage] = (1 to 100).map(i => JmsTextMessage(i.toString))
 
       val result: Future[Seq[JmsMessage]] = Source(input)
         .via(flow)
@@ -1085,7 +1085,7 @@ class JmsConnectorsSpec extends JmsSpec {
           JmsProducerSettings(system, connectionFactory).withQueue("test"))
 
       val data = List("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k")
-      val in: immutable.Seq[JmsTextMessagePassThrough[String]] =
+      val in: Seq[JmsTextMessagePassThrough[String]] =
         data.map(t => JmsTextMessage(t).withPassThrough(t))
 
       val result = Source(in)

@@ -22,7 +22,6 @@ import com.ibm.mq.jms.{ MQQueueConnectionFactory, MQQueueSession, MQTopicConnect
 import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.wmq.common.CommonConstants
 import javax.jms.{ Session, TextMessage }
-import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.Future
 
@@ -107,7 +106,7 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
 
       // #ibmmq-custom-destination
 
-      val result: Future[immutable.Seq[String]] = jmsSource.take(in.size).runWith(Sink.seq)
+      val result: Future[Seq[String]] = jmsSource.take(in.size).runWith(Sink.seq)
 
       streamCompletion.futureValue shouldEqual Done
       result.futureValue shouldEqual in
@@ -151,7 +150,7 @@ class JmsIbmmqConnectorsSpec extends JmsSpec {
 
       val in = (0 to 25).map(i => ('a' + i).asInstanceOf[Char].toString)
 
-      val result: Future[immutable.Seq[String]] = jmsTopicSource.take(in.size).runWith(Sink.seq)
+      val result: Future[Seq[String]] = jmsTopicSource.take(in.size).runWith(Sink.seq)
 
       Thread.sleep(500)
 

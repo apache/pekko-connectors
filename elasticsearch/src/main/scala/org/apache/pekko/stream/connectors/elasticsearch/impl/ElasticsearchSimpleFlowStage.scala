@@ -24,7 +24,6 @@ import pekko.stream.stage._
 import pekko.stream._
 import pekko.stream.connectors.elasticsearch
 
-import scala.collection.immutable
 import scala.concurrent.{ ExecutionContext, Future }
 
 /**
@@ -38,13 +37,13 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     settings: WriteSettingsBase[?, ?],
     writer: MessageWriter[T])(implicit http: HttpExt, mat: Materializer, ec: ExecutionContext)
     extends GraphStage[
-      FlowShape[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]]),
-        immutable.Seq[WriteResult[T,
+      FlowShape[(Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]]),
+        Seq[WriteResult[T,
           C]]]] {
 
   private val in =
-    Inlet[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]])]("messagesAndResultPassthrough")
-  private val out = Outlet[immutable.Seq[WriteResult[T, C]]]("result")
+    Inlet[(Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]])]("messagesAndResultPassthrough")
+  private val out = Outlet[Seq[WriteResult[T, C]]]("result")
   override val shape = FlowShape(in, out)
 
   private val restApi: RestBulkApi[T, C] = settings.apiVersion match {
@@ -72,9 +71,9 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     private var inflight = false
 
     private val failureHandler =
-      getAsyncCallback[(immutable.Seq[WriteResult[T, C]], Throwable)](handleFailure)
+      getAsyncCallback[(Seq[WriteResult[T, C]], Throwable)](handleFailure)
     private val responseHandler =
-      getAsyncCallback[(immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], String)](handleResponse)
+      getAsyncCallback[(Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]], String)](handleResponse)
 
     setHandlers(in, out, this)
 
@@ -123,7 +122,7 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     }
 
     private def handleFailure(
-        args: (immutable.Seq[WriteResult[T, C]], Throwable)): Unit = {
+        args: (Seq[WriteResult[T, C]], Throwable)): Unit = {
       inflight = false
       val (resultsPassthrough, exception) = args
 
@@ -134,7 +133,7 @@ private[elasticsearch] final class ElasticsearchSimpleFlowStage[T, C](
     }
 
     private def handleResponse(
-        args: (immutable.Seq[WriteMessage[T, C]], immutable.Seq[WriteResult[T, C]], String)): Unit = {
+        args: (Seq[WriteMessage[T, C]], Seq[WriteResult[T, C]], String)): Unit = {
       inflight = false
       val (messages, resultsPassthrough, response) = args
 

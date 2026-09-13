@@ -26,7 +26,6 @@ import com.google.common.jimfs.{ Configuration, Jimfs }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -97,8 +96,8 @@ class DirectorySpec
 
       val flow: Flow[Path, Path, NotUsed] = Directory.mkdirs()
 
-      val created: Future[immutable.Seq[Path]] =
-        Source(immutable.Seq(dir.resolve("dirA"), dir.resolve("dirB")))
+      val created: Future[Seq[Path]] =
+        Source(Seq(dir.resolve("dirA"), dir.resolve("dirB")))
           .via(flow)
           .runWith(Sink.seq)
       // #mkdirs
@@ -118,8 +117,8 @@ class DirectorySpec
       val flowWithContext: FlowWithContext[Path, SomeContext, Path, SomeContext, NotUsed] =
         Directory.mkdirsWithContext[SomeContext]()
       // #mkdirs
-      val created: Future[immutable.Seq[(Any, Any)]] =
-        Source(immutable.Seq(dir.resolve("dirA"), dir.resolve("dirB")))
+      val created: Future[Seq[(Any, Any)]] =
+        Source(Seq(dir.resolve("dirA"), dir.resolve("dirB")))
           .asSourceWithContext(_ => SomeContext())
           .via(flowWithContext)
           .runWith(Sink.seq)

@@ -25,8 +25,6 @@ import org.w3c.dom.Element
 import javax.xml.stream.XMLInputFactory
 import javax.xml.XMLConstants
 
-import scala.collection.immutable
-
 object XmlParsing {
 
   /**
@@ -88,14 +86,14 @@ object XmlParsing {
    * a certain path in the XML document. Any event that is under the specified path (including subpaths) is passed
    * through.
    */
-  def subslice(path: immutable.Seq[String]): Flow[ParseEvent, ParseEvent, NotUsed] =
+  def subslice(path: Seq[String]): Flow[ParseEvent, ParseEvent, NotUsed] =
     Flow.fromGraph(new impl.Subslice(path))
 
   /**
    * A Flow that transforms a stream of XML ParseEvents. This stage pushes elements of a certain path in
    * the XML document as org.w3c.dom.Element.
    */
-  def subtree(path: immutable.Seq[String]): Flow[ParseEvent, Element, NotUsed] =
+  def subtree(path: Seq[String]): Flow[ParseEvent, Element, NotUsed] =
     Flow.fromGraph(new impl.Subtree(path))
 
 }

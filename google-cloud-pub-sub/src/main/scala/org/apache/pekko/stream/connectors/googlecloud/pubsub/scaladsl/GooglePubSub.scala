@@ -20,7 +20,6 @@ import pekko.stream.connectors.googlecloud.pubsub.impl._
 import pekko.stream.scaladsl.{ Flow, FlowWithContext, Keep, Sink, Source }
 import pekko.{ Done, NotUsed }
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 
@@ -43,7 +42,7 @@ protected[pubsub] trait GooglePubSub {
   def publish(topic: String,
       config: PubSubConfig,
       overrideHost: String,
-      parallelism: Int): Flow[PublishRequest, immutable.Seq[String], NotUsed] =
+      parallelism: Int): Flow[PublishRequest, Seq[String], NotUsed] =
     internalPublish(topic, config, Some(overrideHost), parallelism)
 
   /**
@@ -54,7 +53,7 @@ protected[pubsub] trait GooglePubSub {
    */
   def publish(topic: String,
       config: PubSubConfig,
-      overrideHost: String): Flow[PublishRequest, immutable.Seq[String], NotUsed] =
+      overrideHost: String): Flow[PublishRequest, Seq[String], NotUsed] =
     internalPublish(topic, config, Some(overrideHost), parallelism = 1)
 
   /**
@@ -62,13 +61,13 @@ protected[pubsub] trait GooglePubSub {
    */
   def publish(topic: String,
       config: PubSubConfig,
-      parallelism: Int = 1): Flow[PublishRequest, immutable.Seq[String], NotUsed] =
+      parallelism: Int = 1): Flow[PublishRequest, Seq[String], NotUsed] =
     internalPublish(topic, config, None, parallelism)
 
   private def internalPublish(topic: String,
       config: PubSubConfig,
       overrideHost: Option[String],
-      parallelism: Int): Flow[PublishRequest, immutable.Seq[String], NotUsed] =
+      parallelism: Int): Flow[PublishRequest, Seq[String], NotUsed] =
     Flow[PublishRequest]
       .map((_, ()))
       .via(
@@ -86,7 +85,7 @@ protected[pubsub] trait GooglePubSub {
       topic: String,
       config: PubSubConfig,
       overrideHost: String,
-      parallelism: Int): FlowWithContext[PublishRequest, C, immutable.Seq[String], C, NotUsed] =
+      parallelism: Int): FlowWithContext[PublishRequest, C, Seq[String], C, NotUsed] =
     internalPublishWithContext(topic, config, Some(overrideHost), parallelism)
 
   /**
@@ -99,7 +98,7 @@ protected[pubsub] trait GooglePubSub {
   def publishWithContext[C](
       topic: String,
       config: PubSubConfig,
-      overrideHost: String): FlowWithContext[PublishRequest, C, immutable.Seq[String], C, NotUsed] =
+      overrideHost: String): FlowWithContext[PublishRequest, C, Seq[String], C, NotUsed] =
     internalPublishWithContext(topic, config, Some(overrideHost), parallelism = 1)
 
   /**
@@ -109,14 +108,14 @@ protected[pubsub] trait GooglePubSub {
   def publishWithContext[C](
       topic: String,
       config: PubSubConfig,
-      parallelism: Int = 1): FlowWithContext[PublishRequest, C, immutable.Seq[String], C, NotUsed] =
+      parallelism: Int = 1): FlowWithContext[PublishRequest, C, Seq[String], C, NotUsed] =
     internalPublishWithContext(topic, config, None, parallelism)
 
   private def internalPublishWithContext[C](
       topic: String,
       config: PubSubConfig,
       overrideHost: Option[String],
-      parallelism: Int): FlowWithContext[PublishRequest, C, immutable.Seq[String], C, NotUsed] =
+      parallelism: Int): FlowWithContext[PublishRequest, C, Seq[String], C, NotUsed] =
     // some wrapping back and forth as FlowWithContext doesn't offer `setup`
     // https://github.com/akka/akka/issues/27883
     FlowWithContext

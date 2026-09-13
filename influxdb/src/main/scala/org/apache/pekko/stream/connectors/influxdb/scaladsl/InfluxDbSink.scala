@@ -22,7 +22,6 @@ import org.influxdb.InfluxDB
 import org.influxdb.dto.Point
 
 import scala.concurrent.Future
-import scala.collection.immutable
 
 /**
  * API may change.
@@ -30,12 +29,12 @@ import scala.collection.immutable
 @ApiMayChange
 object InfluxDbSink {
 
-  def create()(implicit influxDB: InfluxDB): Sink[immutable.Seq[InfluxDbWriteMessage[Point, NotUsed]], Future[Done]] =
+  def create()(implicit influxDB: InfluxDB): Sink[Seq[InfluxDbWriteMessage[Point, NotUsed]], Future[Done]] =
     InfluxDbFlow.create().toMat(Sink.ignore)(Keep.right)
 
   def typed[T](
       clazz: Class[T])(
-      implicit influxDB: InfluxDB): Sink[immutable.Seq[InfluxDbWriteMessage[T, NotUsed]], Future[Done]] =
+      implicit influxDB: InfluxDB): Sink[Seq[InfluxDbWriteMessage[T, NotUsed]], Future[Done]] =
     InfluxDbFlow
       .typed(clazz)
       .toMat(Sink.ignore)(Keep.right)

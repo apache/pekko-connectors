@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import scala.collection.immutable.Seq
 import java.time.Instant
 
 import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing

@@ -20,7 +20,6 @@ import pekko.discovery.Discovery
 import com.datastax.oss.driver.api.core.CqlSession
 import com.typesafe.config.{ Config, ConfigFactory }
 
-import scala.collection.immutable
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.jdk.DurationConverters._
@@ -83,7 +82,7 @@ private[cassandra] object PekkoDiscoverySessionProvider {
    * Expect a `service` section in Config and use Pekko Discovery to read the addresses for `name` within `lookup-timeout`.
    */
   private def readNodes(config: Config)(implicit system: ActorSystem,
-      ec: ExecutionContext): Future[immutable.Seq[String]] = {
+      ec: ExecutionContext): Future[Seq[String]] = {
     val serviceConfig = config.getConfig("service-discovery")
     val serviceName = serviceConfig.getString("name")
     val lookupTimeout = serviceConfig.getDuration("lookup-timeout").toScala
@@ -96,7 +95,7 @@ private[cassandra] object PekkoDiscoverySessionProvider {
   private def readNodes(
       serviceName: String,
       lookupTimeout: FiniteDuration)(
-      implicit system: ActorSystem, ec: ExecutionContext): Future[immutable.Seq[String]] = {
+      implicit system: ActorSystem, ec: ExecutionContext): Future[Seq[String]] = {
     Discovery(system).discovery.lookup(serviceName, lookupTimeout).map { resolved =>
       resolved.addresses.map { target =>
         target.host + ":" + target.port.getOrElse {

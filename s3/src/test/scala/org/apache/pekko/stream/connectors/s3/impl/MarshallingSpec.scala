@@ -26,7 +26,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
 
-import scala.collection.immutable.Seq
 import scala.concurrent.ExecutionContext
 
 class MarshallingSpec(_system: ActorSystem)

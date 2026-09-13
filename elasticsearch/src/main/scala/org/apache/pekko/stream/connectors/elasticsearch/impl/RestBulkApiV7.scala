@@ -19,8 +19,6 @@ import pekko.stream.connectors.elasticsearch.Operation._
 import pekko.stream.connectors.elasticsearch.{ MessageWriter, WriteMessage }
 import spray.json._
 
-import scala.collection.immutable
-
 /**
  * Internal API.
  *
@@ -34,7 +32,7 @@ private[impl] final class RestBulkApiV7[T, C](indexName: String,
     messageWriter: MessageWriter[T])
     extends RestBulkApi[T, C] {
 
-  def toJson(messages: immutable.Seq[WriteMessage[T, C]]): String =
+  def toJson(messages: Seq[WriteMessage[T, C]]): String =
     messages
       .map { message =>
         val sharedFields = constructSharedFields(message)

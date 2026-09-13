@@ -38,7 +38,6 @@ import org.scalatestplus.mockito.MockitoSugar
 
 import java.util.Base64
 import scala.concurrent.{ ExecutionContext, Future }
-import scala.collection.immutable.Seq
 import scala.concurrent.duration._
 
 class AuthorizationHeaderSpec extends AnyFlatSpec with BeforeAndAfterAll with ScalaFutures with Matchers

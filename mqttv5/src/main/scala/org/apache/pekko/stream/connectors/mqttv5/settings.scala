@@ -16,7 +16,6 @@ package org.apache.pekko.stream.connectors.mqttv5
 import java.nio.charset.StandardCharsets
 import java.util.Properties
 
-import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 import scala.jdk.DurationConverters._
@@ -375,7 +374,7 @@ final class MqttConnectionSettings private (
     copy(serverUris = Array(value))
 
   /** Scala API */
-  def withServerUris(value: immutable.Seq[String]): MqttConnectionSettings =
+  def withServerUris(value: Seq[String]): MqttConnectionSettings =
     copy(serverUris = value.toArray)
 
   /** Java API */

@@ -23,7 +23,6 @@ import pekko.stream.connectors.google.firebase.fcm.v1.scaladsl.GoogleFcm
 //#imports
 import pekko.stream.scaladsl.{ Sink, Source }
 
-import scala.collection.immutable
 import scala.concurrent.Future
 
 class FcmExamples {
@@ -39,7 +38,7 @@ class FcmExamples {
   // #simple-send
 
   // #asFlow-send
-  val result1: Future[immutable.Seq[FcmResponse]] =
+  val result1: Future[Seq[FcmResponse]] =
     Source
       .single(notification)
       .via(GoogleFcm.send(fcmConfig))
@@ -55,7 +54,7 @@ class FcmExamples {
   // #asFlow-send
 
   // #withData-send
-  val result2: Future[immutable.Seq[(FcmResponse, String)]] =
+  val result2: Future[Seq[(FcmResponse, String)]] =
     Source
       .single((notification, "superData"))
       .via(GoogleFcm.sendWithPassThrough(fcmConfig))

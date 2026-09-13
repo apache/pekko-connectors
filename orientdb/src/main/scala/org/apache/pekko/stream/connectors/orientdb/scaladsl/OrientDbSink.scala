@@ -20,7 +20,6 @@ import pekko.stream.scaladsl.{ Keep, Sink }
 import com.orientechnologies.orient.core.record.impl.ODocument
 
 import scala.concurrent.Future
-import scala.collection.immutable
 
 /**
  * Scala API.
@@ -32,7 +31,7 @@ object OrientDbSink {
    */
   def apply(
       className: String,
-      settings: OrientDbWriteSettings): Sink[immutable.Seq[OrientDbWriteMessage[ODocument, NotUsed]], Future[Done]] =
+      settings: OrientDbWriteSettings): Sink[Seq[OrientDbWriteMessage[ODocument, NotUsed]], Future[Done]] =
     OrientDbFlow.create(className, settings).toMat(Sink.ignore)(Keep.right)
 
   /**
@@ -41,7 +40,7 @@ object OrientDbSink {
   def typed[T](
       className: String,
       settings: OrientDbWriteSettings,
-      clazz: Class[T]): Sink[immutable.Seq[OrientDbWriteMessage[T, NotUsed]], Future[Done]] =
+      clazz: Class[T]): Sink[Seq[OrientDbWriteMessage[T, NotUsed]], Future[Done]] =
     OrientDbFlow
       .typed(className, settings, clazz)
       .toMat(Sink.ignore)(Keep.right)

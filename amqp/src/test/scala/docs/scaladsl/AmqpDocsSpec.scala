@@ -26,7 +26,6 @@ import pekko.util.ByteString
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future, Promise }
-import scala.collection.immutable
 
 /**
  * Needs a local running AMQP server on the default port with no password.
@@ -46,7 +45,7 @@ class AmqpDocsSpec extends AmqpSpec {
       // use a list of host/port pairs where one is normally invalid, but
       // it should still work as expected,
       val connectionProvider =
-        AmqpDetailsConnectionProvider("invalid", 5673).withHostsAndPorts(immutable.Seq("localhost" -> 5672))
+        AmqpDetailsConnectionProvider("invalid", 5673).withHostsAndPorts(Seq("localhost" -> 5672))
 
       // #queue-declaration
       val queueName = "amqp-conn-it-spec-simple-queue-" + System.currentTimeMillis()
@@ -76,7 +75,7 @@ class AmqpDocsSpec extends AmqpSpec {
             .withAckRequired(false),
           bufferSize = 10)
 
-      val result: Future[immutable.Seq[ReadResult]] =
+      val result: Future[Seq[ReadResult]] =
         amqpSource
           .take(input.size)
           .runWith(Sink.seq)
@@ -198,7 +197,7 @@ class AmqpDocsSpec extends AmqpSpec {
           .withDeclaration(queueDeclaration),
         bufferSize = 10)
 
-      val result: Future[immutable.Seq[ReadResult]] = amqpSource
+      val result: Future[Seq[ReadResult]] = amqpSource
         .mapAsync(1)(businessLogic)
         .mapAsync(1)(cm => cm.ack().map(_ => cm.message))
         .take(input.size)
@@ -227,7 +226,7 @@ class AmqpDocsSpec extends AmqpSpec {
 
       // #create-source-withoutautoack
 
-      val nackedResults: Future[immutable.Seq[ReadResult]] = amqpSource
+      val nackedResults: Future[Seq[ReadResult]] = amqpSource
         .mapAsync(1)(businessLogic)
         .take(input.size)
         .mapAsync(1)(cm => cm.nack(multiple = false, requeue = true).map(_ => cm.message))

@@ -61,7 +61,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
   implicit val getUserResult: GetResult[User] = GetResult(r => User(r.nextInt(), r.nextString()))
 
   val users = (1 to 40).map(i => User(i, s"Name$i")).toSet
-  val duplicateUser = scala.collection.immutable.Seq(users.head, users.head)
+  val duplicateUser = Seq(users.head, users.head)
 
   val createTable =
     sqlu"""CREATE TABLE PEKKO_CONNECTORS_SLICK_SCALADSL_TEST_USERS(ID INTEGER PRIMARY KEY, NAME VARCHAR(50))"""
@@ -321,7 +321,7 @@ class SlickWithTryResultSpec extends AnyWordSpec
     }
 
     "produce `Failure[_]` when inserting duplicate record (parallelism = 4)" in {
-      val records = scala.collection.immutable.Seq.empty ++ users :+ users.head
+      val records = Seq.empty ++ users :+ users.head
 
       val inserted = Source(records)
         .runWith(SlickWithTryResult.sinkTry(parallelism = 4, insertUser))

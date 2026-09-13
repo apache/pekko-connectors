@@ -23,7 +23,6 @@ import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.stream.testkit.scaladsl.{ TestSink, TestSource }
 import pekko.util.ByteString
 
-import scala.collection.immutable.Seq
 import scala.concurrent.duration.DurationInt
 
 class CsvParsingSpec extends CsvSpec {

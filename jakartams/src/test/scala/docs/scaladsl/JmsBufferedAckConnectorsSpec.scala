@@ -27,7 +27,7 @@ import org.scalatest.time.Span.convertSpanToDuration
 
 import java.util.concurrent.{ LinkedBlockingQueue, TimeUnit }
 import scala.annotation.tailrec
-import scala.collection.{ immutable, mutable }
+import scala.collection.mutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.util.{ Failure, Success }
@@ -78,7 +78,7 @@ class JmsBufferedAckConnectorsSpec extends JmsSharedServerSpec {
             .withSessionCount(5)
             .withQueue(queueName))
 
-        val result: Future[immutable.Seq[jakarta.jms.Message]] =
+        val result: Future[Seq[jakarta.jms.Message]] =
           jmsSource
             .take(msgsIn.size)
             .map { ackEnvelope =>

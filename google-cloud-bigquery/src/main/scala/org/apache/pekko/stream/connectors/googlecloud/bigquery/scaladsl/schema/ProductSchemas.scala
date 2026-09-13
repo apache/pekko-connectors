@@ -18,7 +18,6 @@ import pekko.stream.connectors.googlecloud.bigquery.model.TableFieldSchemaType.R
 import pekko.stream.connectors.googlecloud.bigquery.model.{ TableFieldSchema, TableFieldSchemaMode, TableSchema }
 import spray.json.{ AdditionalFormats, ProductFormats, StandardFormats }
 
-import scala.collection.immutable.Seq
 import scala.reflect.ClassTag
 
 /**

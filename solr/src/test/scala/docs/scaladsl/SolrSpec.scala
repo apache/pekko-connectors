@@ -37,7 +37,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
 
 import scala.annotation.nowarn
-import scala.collection.immutable
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Future }
 import org.scalatest.matchers.should.Matchers
@@ -277,7 +276,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
       }
 
-      case class CommittableOffsetBatch(offsets: immutable.Seq[CommittableOffset]) {
+      case class CommittableOffsetBatch(offsets: Seq[CommittableOffset]) {
         def commitScaladsl(): Future[Done] = {
           committedOffsets = committedOffsets ++ offsets
           Future.successful(Done)
@@ -644,7 +643,7 @@ class SolrSpec extends AnyWordSpec with Matchers with BeforeAndAfterAll with Sca
         }
       }
 
-      case class CommittableOffsetBatch(offsets: immutable.Seq[CommittableOffset]) {
+      case class CommittableOffsetBatch(offsets: Seq[CommittableOffset]) {
         def commitScaladsl(): Future[Done] = {
           committedOffsets = committedOffsets ++ offsets
           Future.successful(Done)

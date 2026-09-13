@@ -31,7 +31,6 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import java.time.Duration
 import java.util.Collections
-import scala.collection.immutable.Seq
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 import scala.util.Random

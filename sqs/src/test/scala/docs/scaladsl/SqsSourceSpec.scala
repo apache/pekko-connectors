@@ -39,7 +39,6 @@ import software.amazon.awssdk.services.sqs.model.{
   SendMessageRequest
 }
 
-import scala.collection.immutable
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
@@ -203,7 +202,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       .withWaitTime(20.seconds)
       .withMaxBufferSize(100)
       .withMaxBatchSize(10)
-      .withAttributes(immutable.Seq(SenderId, SentTimestamp))
+      .withAttributes(Seq(SenderId, SentTimestamp))
       .withMessageAttribute(MessageAttributeName.create("bar.*"))
       .withCloseOnEmptyReceive(true)
       .withVisibilityTimeout(10.seconds)
@@ -299,7 +298,7 @@ class SqsSourceSpec extends AnyFlatSpec with ScalaFutures with Matchers with Def
       input.foreach(m => sqsClient.sendMessage(m).get(2, TimeUnit.SECONDS))
 
       // #run
-      val messages: Future[immutable.Seq[Message]] =
+      val messages: Future[Seq[Message]] =
         SqsSource(
           queueUrl,
           SqsSourceSettings().withCloseOnEmptyReceive(true).withWaitTime(10.millis)).runWith(Sink.seq)

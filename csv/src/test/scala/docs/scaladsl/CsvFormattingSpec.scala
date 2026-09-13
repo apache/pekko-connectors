@@ -20,8 +20,6 @@ import pekko.stream.scaladsl.{ Flow, Sink, Source }
 import pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import pekko.util.ByteString
 
-import scala.collection.immutable
-
 class CsvFormattingSpec extends CsvSpec {
 
   def documentation(): Unit = {
@@ -36,7 +34,7 @@ class CsvFormattingSpec extends CsvSpec {
     val endOfLine = "\r\n"
     // format: off
     // #flow-type
-    val flow: Flow[immutable.Seq[String], ByteString, _]
+    val flow: Flow[Seq[String], ByteString, _]
       = CsvFormatting.format(delimiter,
                              quoteChar,
                              escapeChar,
