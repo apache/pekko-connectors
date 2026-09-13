@@ -20,13 +20,13 @@ import java.time.Duration
 
 class MinioContainer(accessKey: String, secretKey: String, domain: String)
     extends GenericContainer(
-      "minio/minio:RELEASE.2025-09-07T16-13-09Z",
+      "pgsty/silo:RELEASE.2026-09-03T13-18-01Z",
       exposedPorts = List(9000),
       waitStrategy = Some(Wait.forHttp("/minio/health/ready").forPort(9000).withStartupTimeout(Duration.ofSeconds(10))),
       command = List("server", "/data"),
       env = Map(
-        "MINIO_ACCESS_KEY" -> accessKey,
-        "MINIO_SECRET_KEY" -> secretKey,
+        "MINIO_ROOT_USER" -> accessKey,
+        "MINIO_ROOT_PASSWORD" -> secretKey,
         "MINIO_DOMAIN" -> domain)) {
 
   def getHostAddress: String =
