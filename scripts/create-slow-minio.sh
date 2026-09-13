@@ -23,11 +23,11 @@ docker run -i --rm \
   --name minio \
   --device "$LO_DEV" \
   --device-read-bps "$LO_DEV":1mb --device-write-bps "$LO_DEV":1mb \
-  -e MINIO_ACCESS_KEY=TESTKEY -e MINIO_SECRET_KEY=TESTSECRET -e MINIO_DOMAIN=s3minio.alpakka -e MINIO_FS_OSYNC=true \
+  -e MINIO_ROOT_USER=TESTKEY -e MINIO_ROOT_PASSWORD=TESTSECRET -e MINIO_DOMAIN=s3minio.alpakka -e MINIO_FS_OSYNC=true \
   -e CONFIG_BLK_CGROUP=y -e CONFIG_BLK_DEV_THROTTLING=y \
   --mount "type=volume,source=miniodata,target=/data,volume-driver=local,volume-opt=type=ext4,volume-opt=device=$LO_DEV" \
   -p 9001:9000 \
-  minio/minio \
+  pgsty/silo \
   server /data
 
 # We can verify that the throttling is properly configured by running dd
