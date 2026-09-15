@@ -16,6 +16,7 @@ package docs.javadsl;
 import static org.apache.pekko.util.ByteString.emptyByteString;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.Deflater;
 import org.apache.pekko.Done;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.actor.ActorSystem;
@@ -135,6 +137,54 @@ public class ArchiveTest {
 
     // cleanup
     new File("logo.zip").delete();
+  }
+
+  @Test
+  public void flowShouldCreateZIPArchiveWithCompressionLevel() throws Exception {
+    ByteString fileContent1 = readFileAsByteString(getFileFromResource("pekko.svg"));
+    ByteString fileContent2 = readFileAsByteString(getFileFromResource("foundation.svg"));
+
+    Source<ByteString, NotUsed> source1 = toSource(fileContent1);
+    Source<ByteString, NotUsed> source2 = toSource(fileContent2);
+
+    Pair<ArchiveMetadata, Source<ByteString, NotUsed>> pair1 =
+        Pair.create(ArchiveMetadata.create("pekko.svg"), source1);
+    Pair<ArchiveMetadata, Source<ByteString, NotUsed>> pair2 =
+        Pair.create(ArchiveMetadata.create("foundation.svg"), source2);
+
+    Source<Pair<ArchiveMetadata, Source<ByteString, NotUsed>>, NotUsed> source =
+        Source.from(List.of(pair1, pair2));
+
+    // the compression level is a plain int, so it is callable from Java
+    // without wrapping it in a scala.Option
+    Sink<ByteString, CompletionStage<IOResult>> fileSink =
+        FileIO.toPath(Paths.get("logo-stored.zip"));
+    CompletionStage<IOResult> ioResult =
+        source.via(Archive.zip(Deflater.NO_COMPRESSION)).runWith(fileSink, system);
+
+    ioResult.toCompletableFuture().get(3, TimeUnit.SECONDS);
+
+    Map<String, ByteString> inputFiles =
+        new HashMap<String, ByteString>() {
+          {
+            put("pekko.svg", fileContent1);
+            put("foundation.svg", fileContent2);
+          }
+        };
+
+    ByteString resultFileContent = readFileAsByteString(Paths.get("logo-stored.zip"));
+    Map<String, ByteString> unzip = archiveHelper.unzip(resultFileContent);
+
+    assertThat(inputFiles, is(unzip));
+
+    // cleanup
+    new File("logo-stored.zip").delete();
+  }
+
+  @Test
+  public void zipShouldRejectInvalidCompressionLevel() {
+    assertThrows(IllegalArgumentException.class, () -> Archive.zip(10));
+    assertThrows(IllegalArgumentException.class, () -> Archive.zip(-2));
   }
 
   @Test
