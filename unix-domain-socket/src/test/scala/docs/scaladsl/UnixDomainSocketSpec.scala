@@ -84,7 +84,7 @@ class UnixDomainSocketSpec
       binding.futureValue.unbind().futureValue should be(())
     }
 
-    "send and receive more ten times the size of a buffer" ignore {
+    "send and receive more ten times the size of a buffer" in {
       val BufferSizeBytes = 64 * 1024
 
       val path = dir.resolve("sock2")
