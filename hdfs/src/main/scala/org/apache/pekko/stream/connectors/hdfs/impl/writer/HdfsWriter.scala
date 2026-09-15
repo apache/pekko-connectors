@@ -25,7 +25,17 @@ import org.apache.hadoop.fs.{ FileSystem, Path }
 @InternalApi
 private[hdfs] trait HdfsWriter[W, I] {
 
-  protected lazy val output: W = create(fs, temp)
+  // `outputOpened` records whether the lazy `output` was forced, so `close`
+  // can skip it rather than creating a file only to close it.
+  private var outputOpened = false
+
+  protected lazy val output: W = {
+    outputOpened = true
+    create(fs, temp)
+  }
+
+  /** Whether `output` has been forced. */
+  protected def isOutputOpened: Boolean = outputOpened
 
   protected lazy val temp: Path = tempFromTarget(pathGenerator, target)
 
@@ -44,6 +54,16 @@ private[hdfs] trait HdfsWriter[W, I] {
   def write(input: I, separator: Option[Array[Byte]]): Long
 
   def rotate(rotationCount: Long): HdfsWriter[W, I]
+
+  /**
+   * Release the underlying output without moving anything to the target.
+   *
+   * Called when the stage stops without completing normally, where `rotate` is
+   * never reached and the output would otherwise stay open on an HDFS lease.
+   * Must be safe to call when nothing was ever written: `output` is lazy, so
+   * implementations have to avoid forcing it.
+   */
+  def close(): Unit
 
   protected def target: Path
 
