@@ -15,7 +15,6 @@ package org.apache.pekko.stream.connectors.file.impl;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
-import com.sun.nio.file.SensitivityWatchEventModifier;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayDeque;
@@ -95,13 +94,14 @@ public final class DirectoryChangesSource<T> extends GraphStage<SourceShape<T>> 
       private final Queue<T> buffer = new ArrayDeque<>();
       private final WatchService service = directoryPath.getFileSystem().newWatchService();
 
-      @SuppressWarnings({"deprecation", "removal"})
+      // The com.sun.nio.file.SensitivityWatchEventModifier.HIGH modifier historically passed
+      // here is unnecessary on the JDKs this project supports: since JDK 17 the polling
+      // WatchService used on macOS defaults to the 2s interval that HIGH selected, and JDK 21+
+      // ignores the (terminally deprecated) modifier altogether.
       private final WatchKey watchKey =
           directoryPath.register(
               service,
-              new WatchEvent.Kind<?>[] {ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE, OVERFLOW},
-              // this is com.sun internal, but the service is useless on OSX without it
-              SensitivityWatchEventModifier.HIGH);
+              new WatchEvent.Kind<?>[] {ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE, OVERFLOW});
 
       {
         setHandler(
