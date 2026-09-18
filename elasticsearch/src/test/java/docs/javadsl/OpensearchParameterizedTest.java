@@ -38,7 +38,8 @@ public class OpensearchParameterizedTest extends ElasticsearchTestBase {
   private OpensearchApiVersion apiVersion;
 
   public static Stream<Arguments> data() {
-    return Stream.of(Arguments.of(9203, OpensearchApiVersion.V1));
+    return Stream.of(
+        Arguments.of(9203, OpensearchApiVersion.V1), Arguments.of(9204, OpensearchApiVersion.V1));
   }
 
   @AfterEach

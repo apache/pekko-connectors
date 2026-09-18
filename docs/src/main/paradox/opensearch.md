@@ -74,20 +74,20 @@ Use `ElasticsearchSource.typed` and `ElasticsearchSink.create` to create source 
 @java[The data is converted to and from JSON by Jackson's ObjectMapper.]
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #run-typed }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #run-typed }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #run-typed }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #run-typed }
 
 ### With JSON source
 
 Use `ElasticsearchSource.create` and `ElasticsearchSink.create` to create source and sink.
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #run-jsobject }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #run-jsobject }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #run-jsobject }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #run-jsobject }
 
 
 ### Writing to Opensearch
@@ -103,10 +103,10 @@ In the above examples, `WriteMessage` is used as the input to `ElasticsearchSink
 | WriteMessage.createDeleteMessage  | Delete an existing document. If there is no document with the specified `id`, do nothing.            |
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #multiple-operations }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #multiple-operations }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #multiple-operations }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #multiple-operations }
 
 ### Source configuration
 
@@ -174,7 +174,7 @@ This will be used to:
 1. transform the bulk request into a format understood by the corresponding Opensearch server.
 2. determine whether to include the index type mapping in the API calls. See [removal of types](https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html)
 
-Currently [`V1`](https://opensearch.org/docs/1.3/opensearch/rest-api/document-apis/bulk/) is supported specifically but this parameter does not need to match the server version exactly (for example, `V1` should also work with Opensearch 2.x).
+Currently [`V1`](https://opensearch.org/docs/latest/api-reference/document-apis/bulk/) is supported specifically but this parameter does not need to match the server version exactly (for example, `V1` also works with Opensearch 2.x and 3.x, which the connector is tested against).
 
 ### Allow explicit index
 
@@ -186,10 +186,10 @@ You can also build flow stages with @apidoc[ElasticsearchFlow$].
 The API is similar to creating Sinks.
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #run-flow }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #run-flow }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #run-flow }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #run-flow }
 
 
 ### Storing documents from Strings
@@ -197,10 +197,10 @@ Java
 Opensearch requires the documents to be properly formatted JSON. If your data is available as JSON in Strings, you may use the pre-defined `StringMessageWriter` to avoid any conversions. For any other JSON technologies, implement a @scala[`MessageWriter[T]`]@java[`MessageWriter<T>`].
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #string }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #string }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #string }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #string }
 
 
 
@@ -209,10 +209,10 @@ Java
 When streaming documents from Kafka, you might want to commit to Kafka **AFTER** the document has been written to Opensearch.
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #kafka-example }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #kafka-example }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #kafka-example }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #kafka-example }
 
 
 ### Specifying custom index-name for every document
@@ -221,7 +221,7 @@ When working with index-patterns using wildcards, you might need to specify a cu
 index-name for each document:
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #custom-index-name-example }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #custom-index-name-example }
 
 Java
 : @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchParameterizedTest.java) { #custom-index-name-example }
@@ -245,10 +245,10 @@ The easiest way of using Opensearch-source, is to just specify the query-param. 
 like specifying which fields to return and so on. In such cases you can instead use 'searchParams' instead:
 
 Scala
-: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchV1Spec.scala) { #custom-search-params }
+: @@snip [snip](/elasticsearch/src/test/scala/docs/scaladsl/OpensearchSpec.scala) { #custom-search-params }
 
 Java
-: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/OpensearchV1Test.java) { #custom-search-params }
+: @@snip [snip](/elasticsearch/src/test/java/docs/javadsl/Opensearch2Test.java) { #custom-search-params }
 
 
 #### Routing
