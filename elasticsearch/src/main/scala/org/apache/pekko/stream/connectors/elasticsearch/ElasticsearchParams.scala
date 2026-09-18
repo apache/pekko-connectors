@@ -25,6 +25,16 @@ object ElasticsearchParams {
     new ElasticsearchParams(indexName, None)
   }
 
+  /**
+   * Elasticsearch 8 dropped mapping types, so the params are shaped like the V7 ones.
+   */
+  def V8(indexName: String): ElasticsearchParams = V7(indexName)
+
+  /**
+   * Elasticsearch 9 dropped mapping types, so the params are shaped like the V7 ones.
+   */
+  def V9(indexName: String): ElasticsearchParams = V7(indexName)
+
   def V5(indexName: String, typeName: String): ElasticsearchParams = {
     require(indexName != null, "You must define an index name")
     require(typeName != null && typeName.trim.nonEmpty, "You must define a type name for ElasticSearch API version V5")
