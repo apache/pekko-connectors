@@ -76,7 +76,7 @@ Data sent to Solr is not searchable until it has been committed to the index. Th
 2. Specify **commit-within** in `SolrUpdateSettings` to trigger commits after every write through Apache Pekko Connectors Solr.
 3. Use explicit committing via the `SolrClient.commit` methods on stream completion as most examples show. As `commit` is a blocking operation, choose an appropriate execution context (preferably *not* `system.dispatcher`).
 
-Configuration of Solr committing is described in @extref[UpdateHandlers in SolrConfig](solr:updatehandlers-in-solrconfig.html#commits).
+Configuration of Solr committing is described in @extref[Commits and Transaction Logs](solr:configuration-guide/commits-transaction-logs.html#commits).
 
 
 #### Available settings

@@ -465,9 +465,13 @@ lazy val docs = project
       "javadoc.com.datastax.oss.base_url" ->
       s"https://docs.datastax.com/en/drivers/java/${Dependencies.CassandraDriverVersionInDocs}/",
       // Solr
-      "extref.solr.base_url" -> s"https://solr.apache.org/guide/${Dependencies.SolrVersionForDocs}/%s",
+      "extref.solr.base_url" -> s"https://solr.apache.org/guide/solr/${Dependencies.SolrVersionForDocs}/%s",
       "javadoc.org.apache.solr.base_url" ->
-      s"https://solr.apache.org/docs/${Dependencies.SolrVersionForDocs}_0/solr-solrj/",
+      s"https://solr.apache.org/docs/${Dependencies.SolrjVersion.replace('.', '_')}/solrj/",
+      "javadoc.org.apache.solr.link_style" -> "direct",
+      "javadoc.org.apache.solr.client.solrj.io.stream.base_url" ->
+      s"https://solr.apache.org/docs/${Dependencies.SolrjVersion.replace('.', '_')}/solrj-streaming/",
+      "javadoc.org.apache.solr.client.solrj.io.stream.link_style" -> "direct",
       // Java
       "javadoc.base_url" -> "https://docs.oracle.com/javase/8/docs/api/",
       "javadoc.javax.jms.base_url" -> "https://docs.oracle.com/javaee/7/api/",
