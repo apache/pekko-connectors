@@ -135,6 +135,24 @@ class ArchiveSpec
         archiveHelper.unzip(pekkoZipped.futureValue).asScala shouldBe inputFiles
       }
 
+      "reject an out-of-range compression level" in {
+        an[IllegalArgumentException] should be thrownBy Archive.zip(Some(10))
+        an[IllegalArgumentException] should be thrownBy Archive.zip(Some(-2))
+      }
+
+      "accept the Deflater default compression level" in {
+        val inputFiles = generateInputFiles(5, 100)
+        val inputStream = filesToStream(inputFiles)
+        val zipFlow = Archive.zip(Some(Deflater.DEFAULT_COMPRESSION))
+
+        val pekkoZipped: Future[ByteString] =
+          inputStream
+            .via(zipFlow)
+            .runWith(Sink.fold(ByteString.empty)(_ ++ _))
+
+        archiveHelper.unzip(pekkoZipped.futureValue).asScala shouldBe inputFiles
+      }
+
       "unarchive files" in {
         val inputFiles = generateInputFiles(5, 100)
         val inputStream = filesToStream(inputFiles)
