@@ -374,7 +374,7 @@ object Dependencies {
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
-        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "10.0.0.0" % Test,
+        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "10.0.0.5" % Test,
         "org.apache.artemis" % "artemis-server" % artemisVersion % Test,
         "org.apache.artemis" % "artemis-jakarta-client" % artemisVersion % Test,
         "org.apache.artemis" % "artemis-junit" % artemisVersion % Test,
@@ -384,7 +384,7 @@ object Dependencies {
   val Jms = Seq(
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
-      "com.ibm.mq" % "com.ibm.mq.allclient" % "10.0.0.0" % Test,
+      "com.ibm.mq" % "com.ibm.mq.allclient" % "10.0.0.5" % Test,
       "org.apache.activemq" % "activemq-broker" % "5.19.11" % Test,
       "org.apache.activemq" % "activemq-client" % "5.19.11" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
