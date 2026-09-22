@@ -28,7 +28,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.2"
 
-  val AwsSdk2Version = "2.54.17"
+  val AwsSdk2Version = "2.54.20"
 
   val NettyVersion = "4.2.18.Final"
 
@@ -108,7 +108,7 @@ object Dependencies {
 
   val Amqp = Seq(
     libraryDependencies ++= Seq(
-      "com.rabbitmq" % "amqp-client" % "5.35.0",
+      "com.rabbitmq" % "amqp-client" % "5.36.0",
       "org.junit.jupiter" % "junit-jupiter-params" % JupiterKeys.junitJupiterVersion.value % Test,
       "org.scalatestplus" %% scalaTestScalaCheckArtifact % scalaTestScalaCheckVersion % Test) ++ Mockito)
 
@@ -222,11 +222,11 @@ object Dependencies {
   val Ftp = Seq(
     libraryDependencies ++= Seq(
       "commons-net" % "commons-net" % "3.13.0",
-      "com.hierynomus" % "sshj" % "0.40.0",
+      "com.hierynomus" % "sshj" % "0.41.1",
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
 
-  val GeodeVersion = "2.0.2"
+  val GeodeVersion = "2.0.3"
   val GeodeVersionForDocs = "115"
 
   val Geode = Seq(
@@ -374,7 +374,7 @@ object Dependencies {
     Seq(
       libraryDependencies ++= Seq(
         "jakarta.jms" % "jakarta.jms-api" % "3.1.0" % Provided,
-        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "10.0.0.0" % Test,
+        "com.ibm.mq" % "com.ibm.mq.jakarta.client" % "10.0.0.5" % Test,
         "org.apache.artemis" % "artemis-server" % artemisVersion % Test,
         "org.apache.artemis" % "artemis-jakarta-client" % artemisVersion % Test,
         "org.apache.artemis" % "artemis-junit" % artemisVersion % Test,
@@ -384,7 +384,7 @@ object Dependencies {
   val Jms = Seq(
     libraryDependencies ++= Seq(
       "javax.jms" % "javax.jms-api" % "2.0.1" % Provided,
-      "com.ibm.mq" % "com.ibm.mq.allclient" % "10.0.0.0" % Test,
+      "com.ibm.mq" % "com.ibm.mq.allclient" % "10.0.0.5" % Test,
       "org.apache.activemq" % "activemq-broker" % "5.19.11" % Test,
       "org.apache.activemq" % "activemq-client" % "5.19.11" % Test,
       "io.github.sullis" %% "jms-testkit" % "1.0.4" % Test,
@@ -419,7 +419,7 @@ object Dependencies {
 
   val MongoDb = Seq(
     libraryDependencies ++= Seq(
-      "org.mongodb.scala" %% "mongo-scala-driver" % "5.11.1"))
+      "org.mongodb.scala" %% "mongo-scala-driver" % "5.12.0"))
 
   val Mqtt = Seq(
     libraryDependencies ++= Seq(
@@ -540,7 +540,7 @@ object Dependencies {
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.4.3", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.39.3"))
+      "com.github.jnr" % "jnr-unixsocket" % "0.39.5"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
