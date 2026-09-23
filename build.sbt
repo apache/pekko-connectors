@@ -279,11 +279,14 @@ lazy val googleCloudPubSubGrpc = pekkoConnectorProject(
   Compile / scalacOptions ++= Seq(
     "-Wconf:src=.+/pekko-grpc/main/.+:s",
     "-Wconf:src=.+/pekko-grpc/test/.+:s"),
+  // grpc/reflection/v1alpha/reflection.proto is marked `option deprecated = true` upstream and is
+  // superseded by grpc/reflection/v1, which is still generated. Nothing in this connector uses either,
+  // they are collateral from unpacking the google-cloud-pubsub protobuf-src artifact.
   PB.generate / excludeFilter := {
     val previousFilter = (PB.generate / excludeFilter).value
     new SimpleFileFilter(f =>
       previousFilter.accept(f) ||
-      (Common.isScala3Next.value && f.getAbsolutePath.replace('\\', '/').contains("grpc/reflection/v1alpha")))
+      f.getAbsolutePath.replace('\\', '/').contains("grpc/reflection/v1alpha"))
   },
   Compile / pekkoGrpcCodeGeneratorSettings ++= (
     if (Common.isScala3.value) Seq("scala3_sources") else Seq.empty
