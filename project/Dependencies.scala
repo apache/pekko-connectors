@@ -73,7 +73,8 @@ object Dependencies {
   // CVE issues https://github.com/FasterXML/jackson-databind/issues?utf8=%E2%9C%93&q=+label%3ACVE
   // This should align with the Jackson minor version used in Pekko 1.1.x
   // https://github.com/apache/pekko/blob/main/project/Dependencies.scala
-  val JacksonVersion = "2.22.3.1"
+  val JacksonVersion = "2.22.3"
+  val JacksonModuleScalaVersion = "2.22.3.1"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
@@ -163,7 +164,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
       "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonModuleScalaVersion % Test))
 
   val Couchbase3 = Seq(
     libraryDependencies ++= Seq(
@@ -171,7 +172,7 @@ object Dependencies {
       "org.apache.pekko" %% "pekko-discovery" % PekkoVersion % Provided,
       "org.apache.pekko" %% "pekko-http" % PekkoHttpVersion % Test,
       "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion % Test,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonVersion % Test))
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % JacksonModuleScalaVersion % Test))
 
   val `Doc-examples` = Seq(
     libraryDependencies ++= Seq(
