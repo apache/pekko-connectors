@@ -15,5 +15,7 @@ package org.apache.pekko.stream.connectors.elasticsearch;
 
 public enum ApiVersion implements org.apache.pekko.stream.connectors.elasticsearch.ApiVersionBase {
   V5,
-  V7
+  V7,
+  V8,
+  V9
 }
