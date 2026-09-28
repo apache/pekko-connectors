@@ -697,11 +697,10 @@ object S3Settings {
       k -> (v ++ allowedHeadersBase.getOrElse(k, Set.empty[String]))
     }
 
-    val reservedCharacters = if (c.hasPath("reserved-characters")) {
-      Option(c.getString("reserved-characters"))
-    } else {
-      None
-    }
+    val reservedCharacters =
+      Option.when(c.hasPath("reserved-characters")) {
+        c.getString("reserved-characters")
+      }
 
     new S3Settings(
       bufferType,

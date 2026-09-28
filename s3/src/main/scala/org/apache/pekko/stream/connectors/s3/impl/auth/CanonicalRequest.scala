@@ -14,11 +14,11 @@
 package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.s3.S3Settings
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.Uri.{ Path, Query }
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, `Timeout-Access`, `Tls-Session-Info`, `X-Forwarded-For` }
 import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
+import pekko.stream.connectors.s3.S3Settings
 
 // Documentation: http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 @InternalApi private[impl] final case class CanonicalRequest(
@@ -64,12 +64,11 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
   // Excludes "/" as it is an exception according to spec.
   val reservedCharacters: String = ":?#[]@!$&'()*+,;="
 
-  def isReservedCharacter(c: Char)(implicit conf: S3Settings): Boolean = {
-    if (conf.reservedCharacters.isDefined)
-      conf.getReservedCharacters.get().contains(c)
-    else
-      reservedCharacters.contains(c)
-  }
+  def isReservedCharacter(c: Char)(implicit conf: S3Settings): Boolean =
+    conf.reservedCharacters match {
+      case Some(chars) => chars.contains(c)
+      case None        => reservedCharacters.contains(c)
+    }
 
   def canonicalQueryString(query: Query): String = {
     def uriEncode(s: String): String = s.flatMap {
