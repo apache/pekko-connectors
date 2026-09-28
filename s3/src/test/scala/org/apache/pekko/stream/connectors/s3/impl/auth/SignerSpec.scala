@@ -15,10 +15,10 @@ package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import java.time.{ LocalDateTime, ZoneOffset, ZonedDateTime }
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.s3.S3Settings
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
 import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
+import pekko.stream.connectors.s3.S3Settings
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
