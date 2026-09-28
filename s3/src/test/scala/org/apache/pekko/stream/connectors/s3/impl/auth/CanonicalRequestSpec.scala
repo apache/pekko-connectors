@@ -14,10 +14,10 @@
 package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.s3.{ ApiVersion, BufferType, MemoryBufferType, S3Settings }
 import pekko.http.scaladsl.model.Uri.Query
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers._
+import pekko.stream.connectors.s3.{ ApiVersion, BufferType, MemoryBufferType, S3Settings }
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import software.amazon.awssdk.auth.credentials.{ AnonymousCredentialsProvider, AwsCredentialsProvider }
