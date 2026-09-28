@@ -14,13 +14,31 @@
 package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import org.apache.pekko
+import org.apache.pekko.stream.connectors.s3.{ ApiVersion, BufferType, MemoryBufferType, S3Settings }
 import pekko.http.scaladsl.model.Uri.Query
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers._
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import software.amazon.awssdk.auth.credentials.{ AnonymousCredentialsProvider, AwsCredentialsProvider }
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.regions.providers.AwsRegionProvider
 
 class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
+
+  def getSettings(
+      bufferType: BufferType = MemoryBufferType,
+      awsCredentials: AwsCredentialsProvider = AnonymousCredentialsProvider.create(),
+      s3Region: Region = Region.US_EAST_1,
+      listBucketApiVersion: ApiVersion = ApiVersion.ListBucketVersion2) = {
+    val regionProvider = new AwsRegionProvider {
+      def getRegion = s3Region
+    }
+
+    S3Settings(bufferType, awsCredentials, regionProvider, listBucketApiVersion, Map.empty)
+  }
+
+  implicit val settings: S3Settings = getSettings()
 
   it should "correctly build a canonicalString for eu-central-1" in {
     val req = HttpRequest(
