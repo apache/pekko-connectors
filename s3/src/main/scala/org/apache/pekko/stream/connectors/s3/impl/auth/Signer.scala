@@ -16,8 +16,8 @@ package org.apache.pekko.stream.connectors.s3.impl.auth
 import java.security.MessageDigest
 import java.time.format.DateTimeFormatter
 import java.time.ZonedDateTime
-
 import org.apache.pekko
+import org.apache.pekko.stream.connectors.s3.S3Settings
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.headers.RawHeader
@@ -29,7 +29,7 @@ import pekko.stream.scaladsl.Source
 
   def signedRequest(request: HttpRequest,
       key: SigningKey,
-      signAnonymousRequests: Boolean): Source[HttpRequest, NotUsed] =
+      signAnonymousRequests: Boolean)(implicit conf: S3Settings): Source[HttpRequest, NotUsed] =
     if (!signAnonymousRequests && key.anonymous) Source.single(request)
     else {
       val hashedBody = request.entity.dataBytes.via(digest()).map(hash => encodeHex(hash))
