@@ -29,7 +29,7 @@ import pekko.util.ByteString
  *
  * @param maxSize Maximum size to buffer
  */
-@InternalApi private[impl] final class MemoryBuffer(maxSize: Int) extends GraphStage[FlowShape[ByteString, Chunk]] {
+@InternalApi private[impl] final class MemoryBuffer(maxSize: Int) extends ChunkBuffer {
   val in = Inlet[ByteString]("MemoryBuffer.in")
   val out = Outlet[Chunk]("MemoryBuffer.out")
   override val shape = FlowShape.of(in, out)
