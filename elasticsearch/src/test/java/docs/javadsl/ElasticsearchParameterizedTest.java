@@ -38,7 +38,11 @@ public class ElasticsearchParameterizedTest extends ElasticsearchTestBase {
   private ApiVersion apiVersion;
 
   public static Stream<Arguments> data() {
-    return Stream.of(Arguments.of(9201, ApiVersion.V5), Arguments.of(9202, ApiVersion.V7));
+    return Stream.of(
+        Arguments.of(9201, ApiVersion.V5),
+        Arguments.of(9202, ApiVersion.V7),
+        Arguments.of(9205, ApiVersion.V8),
+        Arguments.of(9206, ApiVersion.V9));
   }
 
   @AfterEach

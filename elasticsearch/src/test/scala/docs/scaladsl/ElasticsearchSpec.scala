@@ -16,8 +16,6 @@ package docs.scaladsl
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.{ Http, HttpExt }
-import pekko.http.scaladsl.model.Uri.Path
-import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.elasticsearch._
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.testkit.TestKit
@@ -43,15 +41,16 @@ class ElasticsearchSpec
     ElasticsearchConnectionSettings("http://localhost:9201")
   val clientV7: ElasticsearchConnectionSettings =
     ElasticsearchConnectionSettings("http://localhost:9202")
+  val clientV8: ElasticsearchConnectionSettings =
+    ElasticsearchConnectionSettings("http://localhost:9205")
+  val clientV9: ElasticsearchConnectionSettings =
+    ElasticsearchConnectionSettings("http://localhost:9206")
 
   override def afterAll(): Unit = {
-    val deleteRequestV5 = HttpRequest(HttpMethods.DELETE)
-      .withUri(Uri(clientV5.baseUrl).withPath(Path("/_all")))
-    http.singleRequest(deleteRequestV5).futureValue
-
-    val deleteRequestV7 = HttpRequest(HttpMethods.DELETE)
-      .withUri(Uri(clientV7.baseUrl).withPath(Path("/_all")))
-    http.singleRequest(deleteRequestV7).futureValue
+    deleteAllIndices(clientV5)
+    deleteAllIndices(clientV7)
+    deleteAllIndices(clientV8)
+    deleteAllIndices(clientV9)
 
     TestKit.shutdownActorSystem(system)
   }
@@ -62,6 +61,14 @@ class ElasticsearchSpec
 
   "Connector with ApiVersion 7 running against Elasticsearch v7.6.0" should {
     behave.like(elasticsearchConnector(ApiVersion.V7, clientV7))
+  }
+
+  "Connector with ApiVersion 8 running against Elasticsearch v8" should {
+    behave.like(elasticsearchConnector(ApiVersion.V8, clientV8))
+  }
+
+  "Connector with ApiVersion 9 running against Elasticsearch v9" should {
+    behave.like(elasticsearchConnector(ApiVersion.V9, clientV9))
   }
 
 }

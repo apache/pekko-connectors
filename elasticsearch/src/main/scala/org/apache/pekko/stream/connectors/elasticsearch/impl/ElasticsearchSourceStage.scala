@@ -170,8 +170,9 @@ private[elasticsearch] final class ElasticsearchSourceLogic[T](
           val searchBody = ElasticsearchSourceStage.buildSearchBody(completeParams)
 
           val endpoint: String = settings.apiVersion match {
-            case ApiVersion.V5           => s"/${elasticsearchParams.indexName}/${elasticsearchParams.typeName.get}/_search"
-            case ApiVersion.V7           => s"/${elasticsearchParams.indexName}/_search"
+            case ApiVersion.V5                                 => s"/${elasticsearchParams.indexName}/${elasticsearchParams.typeName.get}/_search"
+            case ApiVersion.V7 | ApiVersion.V8 | ApiVersion.V9 =>
+              s"/${elasticsearchParams.indexName}/_search"
             case OpensearchApiVersion.V1 => s"/${elasticsearchParams.indexName}/_search"
             case other                   => throw new IllegalArgumentException(s"API version $other is not supported")
           }

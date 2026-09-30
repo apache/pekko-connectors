@@ -124,7 +124,7 @@ Java
 | bufferSize             | 10             | `ElasticsearchSource` retrieves messages from Elasticsearch by scroll scan. This buffer size is used as the scroll size. | 
 | includeDocumentVersion | false          | Tell Elasticsearch to return the documents `_version` property with the search results. See [Version](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-version) and [Optimistic Concurrenct Control](https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html) to know about this property. |
 | scrollDuration         | 5 min          | `ElasticsearchSource`  retrieves messages from Elasticsearch by scroll scan. This parameter is used as a scroll value. See [Time units](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#time-units) for supported units.                |
-| apiVersion             | V7             | Currently supports `V5` and `V7` (see below) |
+| apiVersion             | V7             | Currently supports `V5`, `V7`, `V8` and `V9` (see below) |
 
 ### Sink and flow configuration
 
@@ -142,7 +142,7 @@ Java
 | bufferSize          | 10         | Flow and Sink batch messages to bulk requests when back-pressure applies.                              |
 | versionType         | None       | If set, `ElasticsearchSink` uses the chosen versionType to index documents. See [Version types](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-index_.html#_version_types) for accepted settings. |
 | retryLogic          | No retries | See below |
-| apiVersion          | V7         | Currently supports `V5` and `V7` (see below) |
+| apiVersion          | V7         | Currently supports `V5`, `V7`, `V8` and `V9` (see below) |
 | allowExplicitIndex  | True       | When set to False, the index name will be included in the URL instead of on each document (see below) | 
 
 #### Retry logic
@@ -174,7 +174,9 @@ This will be used to:
 1. transform the bulk request into a format understood by the corresponding Elasticsearch server.
 2. determine whether to include the index type mapping in the API calls. See [removal of types](https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html)
 
-Currently [`V5`](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docs-bulk.html#docs-bulk) and [`V7`](https://www.elastic.co/guide/en/elasticsearch/reference/7.6/docs-bulk.html#docs-bulk) are supported specifically but this parameter does not need to match the server version exactly (for example, either `V5` or `V7` should work with Elasticsearch 6.x).
+Currently [`V5`](https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docs-bulk.html#docs-bulk), [`V7`](https://www.elastic.co/guide/en/elasticsearch/reference/7.6/docs-bulk.html#docs-bulk), `V8` and [`V9`](https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-bulk) are supported specifically but this parameter does not need to match the server version exactly (for example, either `V5` or `V7` should work with Elasticsearch 6.x).
+
+`V8` and `V9` share the type-less request shape that `V7` introduced, so they behave identically today; pick the one matching your server so the setting keeps meaning if the versions diverge. Elasticsearch 8 and 9 removed mapping types outright, so `ElasticsearchParams.V8` and `ElasticsearchParams.V9` take an index name only, like `ElasticsearchParams.V7`.
 
 ### Allow explicit index
 
