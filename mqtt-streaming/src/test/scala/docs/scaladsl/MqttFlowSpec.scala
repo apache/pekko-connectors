@@ -133,7 +133,9 @@ abstract class MqttFlowSpecBase(clientId: String, topic: String, system: ActorSy
               val (queue, source) = Source
                 .queue[Command[Nothing]](3, OverflowStrategy.dropHead)
                 .via(mqttFlow)
-                .toMat(BroadcastHub.sink)(Keep.both)
+                // wait for both consumers (runForeach and the returned source)
+                // so the Connect cannot bypass the handler that sends ConnAck
+                .toMat(BroadcastHub.sink(2, 256))(Keep.both)
                 .run()
 
               val subscribed = Promise[Done]()
