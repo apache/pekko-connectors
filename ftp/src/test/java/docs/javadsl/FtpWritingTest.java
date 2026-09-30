@@ -85,7 +85,7 @@ public class FtpWritingTest extends BaseFtpSupport {
             .runWith(Ftp.toPath("file.txt", ftpSettings), materializer);
     // #storing
 
-    IOResult ioResult = result.toCompletableFuture().get(5, TimeUnit.SECONDS);
+    IOResult ioResult = result.toCompletableFuture().get(10, TimeUnit.SECONDS);
     assertThat(ioResult, is(IOResult.createSuccessful(25)));
     assertTrue(fileExists("file.txt"));
   }
@@ -103,7 +103,7 @@ public class FtpWritingTest extends BaseFtpSupport {
             .runWith(Ftp.toPath("file.txt.gz", ftpSettings), materializer);
     // #storing
 
-    IOResult ioResult = result.toCompletableFuture().get(5, TimeUnit.SECONDS);
+    IOResult ioResult = result.toCompletableFuture().get(10, TimeUnit.SECONDS);
     assertThat(ioResult, is(IOResult.createSuccessful(50)));
     assertTrue(fileExists("file.txt.gz"));
   }

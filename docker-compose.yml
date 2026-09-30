@@ -94,7 +94,7 @@ services:
       # https://docs.docker.com/compose/environment-variables/
       FTP_USER_UID: ${FTP_USER_UID:-2000}
       FTP_USER_GID: ${FTP_USER_GID:-2000}
-      ADDED_FLAGS: "--tls=1"
+      ADDED_FLAGS: "--tls=1 -H"
   geode:
     container_name: geode
     image: raboof/geode:1.15.2
