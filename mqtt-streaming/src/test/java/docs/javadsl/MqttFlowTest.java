@@ -194,7 +194,11 @@ public class MqttFlowTest {
                       run =
                           Source.<Command<Object>>queue(2, OverflowStrategy.dropHead())
                               .via(mqttFlow)
-                              .toMat(BroadcastHub.of(DecodeErrorOrEvent.classOf()), Keep.both())
+                              // wait for both consumers (runForeach and the returned source)
+                              // so the Connect cannot bypass the handler that sends ConnAck
+                              .toMat(
+                                  BroadcastHub.of(DecodeErrorOrEvent.classOf(), 2, 256),
+                                  Keep.both())
                               .run(system);
 
                   SourceQueueWithComplete<Command<Object>> queue = run.first();
