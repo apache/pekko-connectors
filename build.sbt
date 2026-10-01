@@ -384,7 +384,10 @@ lazy val springWeb = pekkoConnectorProject(
 
 lazy val simpleCodecs = pekkoConnectorProject("simple-codecs", "simplecodecs")
 
-lazy val slick = pekkoConnectorProject("slick", "slick", Dependencies.Slick)
+lazy val slick = pekkoConnectorProject("slick", "slick", Dependencies.Slick,
+  // the H2 test database stays open (DB_CLOSE_DELAY=-1) until the JVM exits,
+  // so each Scala version of a cross-build needs its own JVM
+  Test / fork := true)
 
 lazy val eventbridge = pekkoConnectorProject("aws-event-bridge", "aws.eventbridge",
   Dependencies.Eventbridge)
