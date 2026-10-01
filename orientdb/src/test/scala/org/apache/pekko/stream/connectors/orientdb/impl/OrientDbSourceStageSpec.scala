@@ -17,6 +17,8 @@
 
 package org.apache.pekko.stream.connectors.orientdb.impl
 
+import com.orientechnologies.orient.core.db.ODatabasePool
+import org.apache.pekko.stream.connectors.orientdb.OrientDbSourceSettings
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -71,6 +73,40 @@ class OrientDbSourceStageSpec extends AnyWordSpec with Matchers {
     "reject class name with special characters" in {
       assertThrows[IllegalArgumentException] {
         OrientDbSourceStage.validateClassName("Class@name")
+      }
+    }
+  }
+
+  "OrientDbSourceStage" should {
+
+    // the pool is never used: construction fails (or not) before the stage runs
+    def settings: OrientDbSourceSettings =
+      OrientDbSourceSettings(null.asInstanceOf[ODatabasePool])
+
+    "reject an invalid class name when no query is given" in {
+      // the class name is interpolated into "SELECT * FROM $className"
+      assertThrows[IllegalArgumentException] {
+        new OrientDbSourceStage[Nothing]("User; DROP TABLE users; --", None, settings)
+      }
+    }
+
+    "accept a valid class name when no query is given" in {
+      noException should be thrownBy {
+        new OrientDbSourceStage[Nothing]("User", None, settings)
+      }
+    }
+
+    "not validate the class name when an explicit query is given" in {
+      // the class name is unused in query mode, so callers are not required
+      // to supply a meaningful one
+      noException should be thrownBy {
+        new OrientDbSourceStage[Nothing]("", Some("SELECT * FROM User"), settings)
+      }
+      noException should be thrownBy {
+        new OrientDbSourceStage[Nothing](null, Some("SELECT * FROM User"), settings)
+      }
+      noException should be thrownBy {
+        new OrientDbSourceStage[Nothing]("not a valid name", Some("SELECT * FROM User"), settings)
       }
     }
   }
