@@ -333,7 +333,16 @@ object Dependencies {
           .exclude("org.apache.logging.log4j", "log4j-slf4j-impl")
           .exclude("ch.qos.reload4j", "reload4j")
           .exclude("org.slf4j", "slf4j-reload4j"),
-        "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test))
+        "org.slf4j" % "log4j-over-slf4j" % Slf4jVersion % Test),
+      // hbase-shaded-testing-util bundles unshaded JUnit classes from an older release; put the
+      // real JUnit jars ahead of it so the JUnit Platform launcher and engine stay aligned
+      Test / fullClasspath := {
+        val (junit, others) = (Test / fullClasspath).value.partition { entry =>
+          val name = entry.data.getName
+          name.startsWith("junit-") || name.startsWith("opentest4j-")
+        }
+        junit ++ others
+      })
   }
 
   val Hdfs = Seq(
