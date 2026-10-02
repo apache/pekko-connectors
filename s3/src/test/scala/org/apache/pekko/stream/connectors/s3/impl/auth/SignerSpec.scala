@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.s3.impl.auth
 
 import java.time.{ LocalDateTime, ZoneOffset, ZonedDateTime }
+
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }

@@ -30,12 +30,14 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
       bufferType: BufferType = MemoryBufferType,
       awsCredentials: AwsCredentialsProvider = AnonymousCredentialsProvider.create(),
       s3Region: Region = Region.US_EAST_1,
-      listBucketApiVersion: ApiVersion = ApiVersion.ListBucketVersion2) = {
+      listBucketApiVersion: ApiVersion = ApiVersion.ListBucketVersion2,
+      reservedCharacters: Option[String] = None) = {
     val regionProvider = new AwsRegionProvider {
       def getRegion = s3Region
     }
 
-    S3Settings(bufferType, awsCredentials, regionProvider, listBucketApiVersion, Map.empty)
+    val base = S3Settings(bufferType, awsCredentials, regionProvider, listBucketApiVersion, Map.empty)
+    reservedCharacters.fold(base)(base.withReservedCharacters)
   }
 
   implicit val settings: S3Settings = getSettings()
@@ -169,6 +171,49 @@ class CanonicalRequestSpec extends AnyFlatSpec with Matchers {
         }
       }
     }
+  }
+
+  private def pathRequest(path: Uri.Path): HttpRequest =
+    HttpRequest(
+      HttpMethods.GET,
+      Uri(s"https://mytestbucket.s3.us-east-1.amazonaws.com")
+        .withPath(path)).withHeaders(
+      RawHeader("x-amz-content-sha256", "testhash"),
+      `Content-Type`(ContentTypes.`application/json`))
+
+  private def expectedCanonical(encodedPath: String): String =
+    s"""GET
+       |$encodedPath
+       |
+       |content-type:application/json
+       |x-amz-content-sha256:testhash
+       |
+       |content-type;x-amz-content-sha256
+       |testhash""".stripMargin
+
+  it should "encode the default reserved characters when none are configured" in {
+    val req = pathRequest(Uri.Path.Empty / "file-(1)!.txt")
+    CanonicalRequest.from(req).canonicalString should equal(
+      expectedCanonical("/file-%281%29%21.txt")
+    )
+  }
+
+  it should "only encode the configured reserved characters, leaving other default ones unencoded" in {
+    // '(' and ')' are in the default set, but not in the custom one
+    val customSettings = getSettings(reservedCharacters = Some("!"))
+    val req = pathRequest(Uri.Path.Empty / "file-(1)!.txt")
+    val canonicalRequest = CanonicalRequest.from(req)(customSettings)
+    canonicalRequest.canonicalString should equal(expectedCanonical("/file-(1)%21.txt"))
+
+    // sanity check: the same request is encoded differently with the default settings
+    (CanonicalRequest.from(req).canonicalString should not).equal(canonicalRequest.canonicalString)
+  }
+
+  it should "not encode any path characters when reserved character is empty" in {
+    val customSettings = getSettings(reservedCharacters = Some(""))
+    val req = pathRequest(Uri.Path.Empty / "file-(1)!.txt")
+
+    CanonicalRequest.from(req)(customSettings).canonicalString should equal(expectedCanonical("/file-(1)!.txt"))
   }
 
   it should "correctly build a canonicalString when synthetic headers are present" in {
