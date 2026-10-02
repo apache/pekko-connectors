@@ -23,8 +23,8 @@ addSbtPlugin("com.github.sbt" % "sbt-java-formatter" % "0.14.0")
 // docs
 addSbtPlugin("org.apache.pekko" % "pekko-sbt-paradox" % "1.0.1")
 addSbtPlugin("com.github.sbt" % "sbt-site-paradox" % "1.8.0")
-addSbtPlugin("com.lightbend.paradox" % "sbt-paradox-theme" % "0.11.0")
-addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.11.0")
+addSbtPlugin("com.lightbend.paradox" % "sbt-paradox-theme" % "0.11.1")
+addSbtPlugin("com.lightbend.paradox" % "sbt-paradox" % "0.11.1")
 
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.1.0")
