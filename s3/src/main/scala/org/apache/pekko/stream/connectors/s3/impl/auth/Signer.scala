@@ -16,8 +16,9 @@ package org.apache.pekko.stream.connectors.s3.impl.auth
 import java.security.MessageDigest
 import java.time.format.DateTimeFormatter
 import java.time.ZonedDateTime
+
 import org.apache.pekko
-import org.apache.pekko.stream.connectors.s3.S3Settings
+import pekko.stream.connectors.s3.S3Settings
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.headers.RawHeader

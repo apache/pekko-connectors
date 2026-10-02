@@ -431,6 +431,12 @@ final class S3Settings private (
   def withSignAnonymousRequests(value: Boolean): S3Settings =
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
 
+  def withReservedCharacters(value: String): S3Settings =
+    reservedCharacters match {
+      case Some(`value`) => this
+      case _             => copy(reservedCharacters = Option(S3Settings.validateReservedCharacters(value)))
+    }
+
   private[s3] val concreteAllowedHeaders: Map[S3Request, Set[String]] = {
     allowedHeaders.foldLeft(Map.empty[S3Request, Set[String]]) {
       case (acc, (header, value)) =>
@@ -481,16 +487,16 @@ final class S3Settings private (
     s"endpointUrl=$endpointUrl," +
     s"listBucketApiVersion=$listBucketApiVersion," +
     s"forwardProxy=$forwardProxy," +
-    s"validateObjectKey=$validateObjectKey" +
-    s"retrySettings=$retrySettings" +
-    s"multipartUploadSettings=$multipartUploadSettings" +
-    s"signAnonymousRequests=$signAnonymousRequests" +
+    s"validateObjectKey=$validateObjectKey," +
+    s"retrySettings=$retrySettings," +
+    s"multipartUploadSettings=$multipartUploadSettings," +
+    s"signAnonymousRequests=$signAnonymousRequests," +
     s"allowedHeaders=${
         val entries = allowedHeaders.toSeq.sortBy(_._1).map { case (key, values) =>
           s"$key -> Set(${values.mkString(", ")})"
         }.mkString(", ")
         s"Map($entries)"
-      }" +
+      }," +
     s"reservedCharacters=$reservedCharacters" +
     ")"
 
@@ -524,12 +530,22 @@ final class S3Settings private (
       Boolean.box(validateObjectKey),
       retrySettings,
       multipartUploadSettings,
-      Boolean.box(signAnonymousRequests))
+      Boolean.box(signAnonymousRequests),
+      allowedHeaders,
+      reservedCharacters)
 }
 
 object S3Settings {
   private final val log = LoggerFactory.getLogger(getClass)
   val ConfigPath = "pekko.connectors.s3"
+
+  private val PathEncodedCharacterPath = "signing.path-encoded-characters"
+
+  private def validateReservedCharacters(value: String): String = {
+    require(!value.contains("/"),
+      s"'$PathEncodedCharacterPath' must not contains '/': it has to stay literal in the signed path. Got: [$value]")
+    value
+  }
 
   /**
    * Reads from the given config.
@@ -698,8 +714,8 @@ object S3Settings {
     }
 
     val reservedCharacters =
-      Option.when(c.hasPath("reserved-characters")) {
-        c.getString("reserved-characters")
+      Option.when(c.hasPath(PathEncodedCharacterPath)) {
+        validateReservedCharacters(c.getString(PathEncodedCharacterPath))
       }
 
     new S3Settings(
