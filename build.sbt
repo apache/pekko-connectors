@@ -14,8 +14,9 @@ import sbtprotoc.ProtocPlugin.autoImport.PB
 sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
 
-ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
-ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
+sbt.ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
+sbt.ThisBuilduild / resolvers += Resolver.ApacheMavenStagingRepo
+sbt.ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
 
