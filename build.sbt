@@ -15,7 +15,7 @@ sourceDistName := "apache-pekko-connectors"
 sourceDistIncubating := false
 
 sbt.ThisBuild / resolvers += Resolver.ApacheMavenSnapshotsRepo
-sbt.ThisBuilduild / resolvers += Resolver.ApacheMavenStagingRepo
+sbt.ThisBuild / resolvers += Resolver.ApacheMavenStagingRepo
 sbt.ThisBuild / reproducibleBuildsCheckResolver := Resolver.ApacheMavenStagingRepo
 
 ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
