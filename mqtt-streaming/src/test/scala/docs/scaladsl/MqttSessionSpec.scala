@@ -34,6 +34,7 @@ import org.scalatest.BeforeAndAfterAll
 import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.time.{ Millis, Span }
 
+import scala.annotation.nowarn
 import scala.concurrent.{ ExecutionContext, Promise }
 import scala.concurrent.duration._
 import org.scalatest.matchers.should.Matchers
@@ -42,6 +43,8 @@ import org.slf4j.LoggerFactory
 
 import scala.util.Right
 
+// this spec exercises Source.queue with explicit OverflowStrategy buffering semantics
+@nowarn("cat=deprecation")
 class MqttSessionSpec
     extends TestKit(ActorSystem("mqtt-spec"))
     with AnyWordSpecLike
