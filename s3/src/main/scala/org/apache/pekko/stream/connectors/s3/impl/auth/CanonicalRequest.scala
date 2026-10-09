@@ -18,6 +18,7 @@ import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.Uri.{ Path, Query }
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, `Timeout-Access`, `Tls-Session-Info`, `X-Forwarded-For` }
 import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
+import pekko.stream.connectors.s3.S3Settings
 
 // Documentation: http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 @InternalApi private[impl] final case class CanonicalRequest(
@@ -38,7 +39,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
     `Timeout-Access`.lowercaseName,
     `Tls-Session-Info`.lowercaseName)
 
-  def from(request: HttpRequest): CanonicalRequest = {
+  def from(request: HttpRequest)(implicit conf: S3Settings): CanonicalRequest = {
     val hashedBody =
       request.headers
         .collectFirst { case header if header.is("x-amz-content-sha256") => header.value }
@@ -63,8 +64,11 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
   // Excludes "/" as it is an exception according to spec.
   val reservedCharacters: String = ":?#[]@!$&'()*+,;="
 
-  def isReservedCharacter(c: Char): Boolean =
-    reservedCharacters.contains(c)
+  def isReservedCharacter(c: Char)(implicit conf: S3Settings): Boolean =
+    conf.reservedCharacters match {
+      case Some(chars) => chars.contains(c)
+      case None        => reservedCharacters.contains(c)
+    }
 
   def canonicalQueryString(query: Query): String = {
     def uriEncode(s: String): String = s.flatMap {
@@ -96,7 +100,7 @@ import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
   def signedHeadersString(headers: Seq[HttpHeader]): String =
     headers.map(_.lowercaseName).distinct.sorted.mkString(";")
 
-  def pathEncode(path: Path): String =
+  def pathEncode(path: Path)(implicit conf: S3Settings): String =
     if (path.isEmpty) "/"
     else {
       path.toString.flatMap {

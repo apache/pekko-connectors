@@ -365,8 +365,12 @@ final class S3Settings private (
     val retrySettings: RetrySettings,
     val multipartUploadSettings: MultipartUploadSettings,
     val signAnonymousRequests: Boolean,
-    val allowedHeaders: Map[String, Set[String]]
+    val allowedHeaders: Map[String, Set[String]],
+    val reservedCharacters: Option[String]
 ) {
+
+  /** Java API */
+  def getReservedCharacters: java.util.Optional[String] = reservedCharacters.toJava
 
   /** Java API */
   def getBufferType: BufferType = bufferType
@@ -427,6 +431,12 @@ final class S3Settings private (
   def withSignAnonymousRequests(value: Boolean): S3Settings =
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
 
+  def withReservedCharacters(value: String): S3Settings =
+    reservedCharacters match {
+      case Some(`value`) => this
+      case _             => copy(reservedCharacters = Option(S3Settings.validateReservedCharacters(value)))
+    }
+
   private[s3] val concreteAllowedHeaders: Map[S3Request, Set[String]] = {
     allowedHeaders.foldLeft(Map.empty[S3Request, Set[String]]) {
       case (acc, (header, value)) =>
@@ -450,7 +460,8 @@ final class S3Settings private (
       retrySettings: RetrySettings = retrySettings,
       multipartUploadSettings: MultipartUploadSettings = multipartUploadSettings,
       signAnonymousRequests: Boolean = signAnonymousRequests,
-      allowedHeaders: Map[String, Set[String]] = allowedHeaders
+      allowedHeaders: Map[String, Set[String]] = allowedHeaders,
+      reservedCharacters: Option[String] = reservedCharacters
   ): S3Settings = new S3Settings(
     bufferType,
     credentialsProvider,
@@ -463,7 +474,8 @@ final class S3Settings private (
     retrySettings,
     multipartUploadSettings,
     signAnonymousRequests,
-    allowedHeaders
+    allowedHeaders,
+    reservedCharacters
   )
 
   override def toString: String =
@@ -475,16 +487,17 @@ final class S3Settings private (
     s"endpointUrl=$endpointUrl," +
     s"listBucketApiVersion=$listBucketApiVersion," +
     s"forwardProxy=$forwardProxy," +
-    s"validateObjectKey=$validateObjectKey" +
-    s"retrySettings=$retrySettings" +
-    s"multipartUploadSettings=$multipartUploadSettings" +
-    s"signAnonymousRequests=$signAnonymousRequests" +
+    s"validateObjectKey=$validateObjectKey," +
+    s"retrySettings=$retrySettings," +
+    s"multipartUploadSettings=$multipartUploadSettings," +
+    s"signAnonymousRequests=$signAnonymousRequests," +
     s"allowedHeaders=${
         val entries = allowedHeaders.toSeq.sortBy(_._1).map { case (key, values) =>
           s"$key -> Set(${values.mkString(", ")})"
         }.mkString(", ")
         s"Map($entries)"
-      }" +
+      }," +
+    s"reservedCharacters=$reservedCharacters" +
     ")"
 
   override def equals(other: Any): Boolean = other match {
@@ -500,7 +513,8 @@ final class S3Settings private (
       Objects.equals(this.retrySettings, that.retrySettings) &&
       Objects.equals(this.multipartUploadSettings, multipartUploadSettings) &&
       this.signAnonymousRequests == that.signAnonymousRequests &&
-      this.allowedHeaders == that.allowedHeaders
+      this.allowedHeaders == that.allowedHeaders &&
+      Objects.equals(this.reservedCharacters, that.reservedCharacters)
     case _ => false
   }
 
@@ -516,12 +530,22 @@ final class S3Settings private (
       Boolean.box(validateObjectKey),
       retrySettings,
       multipartUploadSettings,
-      Boolean.box(signAnonymousRequests))
+      Boolean.box(signAnonymousRequests),
+      allowedHeaders,
+      reservedCharacters)
 }
 
 object S3Settings {
   private final val log = LoggerFactory.getLogger(getClass)
   val ConfigPath = "pekko.connectors.s3"
+
+  private val PathEncodedCharacterPath = "signing.path-encoded-characters"
+
+  private def validateReservedCharacters(value: String): String = {
+    require(!value.contains("/"),
+      s"'$PathEncodedCharacterPath' must not contains '/': it has to stay literal in the signed path. Got: [$value]")
+    value
+  }
 
   /**
    * Reads from the given config.
@@ -689,6 +713,11 @@ object S3Settings {
       k -> (v ++ allowedHeadersBase.getOrElse(k, Set.empty[String]))
     }
 
+    val reservedCharacters =
+      Option.when(c.hasPath(PathEncodedCharacterPath)) {
+        validateReservedCharacters(c.getString(PathEncodedCharacterPath))
+      }
+
     new S3Settings(
       bufferType,
       credentialsProvider,
@@ -701,7 +730,8 @@ object S3Settings {
       retrySettings,
       multipartUploadSettings,
       signAnonymousRequests,
-      finalAllowedHeaders
+      finalAllowedHeaders,
+      reservedCharacters
     )
   }
 
@@ -743,7 +773,8 @@ object S3Settings {
     RetrySettings.default,
     MultipartUploadSettings(RetrySettings.default),
     signAnonymousRequests = true,
-    allowedHeaders = allowedHeaders
+    allowedHeaders = allowedHeaders,
+    reservedCharacters = None
   )
 
   /** Java API */
