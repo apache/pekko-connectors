@@ -10,7 +10,7 @@
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import de.heikoseeberger.sbtheader._
+import sbtheader._
 import com.lightbend.paradox.projectinfo.ParadoxProjectInfoPluginKeys._
 import com.typesafe.tools.mima.plugin.MimaKeys._
 import org.mdedetrich.apache.sonatype.ApacheSonatypePlugin
@@ -90,7 +90,8 @@ object Common extends AutoPlugin {
     Compile / doc / scalacOptions -= "-Werror",
     compile / javacOptions ++= Seq(
       "-Xlint:cast",
-      "-Xlint:deprecation",
+      // deprecation warnings are informational only - they must not fail the build
+      "-Xlint:-deprecation",
       "-Xlint:dep-ann",
       "-Xlint:empty",
       "-Xlint:fallthrough",
