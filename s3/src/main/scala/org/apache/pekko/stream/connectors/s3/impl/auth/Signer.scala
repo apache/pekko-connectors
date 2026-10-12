@@ -18,11 +18,11 @@ import java.time.format.DateTimeFormatter
 import java.time.ZonedDateTime
 
 import org.apache.pekko
-import pekko.stream.connectors.s3.S3Settings
 import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
+import pekko.stream.connectors.s3.S3Settings
 import pekko.stream.scaladsl.Source
 
 @InternalApi private[impl] object Signer {

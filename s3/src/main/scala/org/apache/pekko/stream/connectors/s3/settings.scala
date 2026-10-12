@@ -543,7 +543,7 @@ object S3Settings {
 
   private def validateReservedCharacters(value: String): String = {
     require(!value.contains("/"),
-      s"'$PathEncodedCharacterPath' must not contains '/': it has to stay literal in the signed path. Got: [$value]")
+      s"'$PathEncodedCharacterPath' must not contain '/': it has to stay literal in the signed path. Got: [$value]")
     value
   }
 

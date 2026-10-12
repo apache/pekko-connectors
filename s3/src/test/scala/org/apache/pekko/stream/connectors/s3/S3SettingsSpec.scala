@@ -351,19 +351,19 @@ class S3SettingsSpec extends S3WireMockBase with S3ClientIntegrationSpec with Op
   }
 
   it should "parse an empty signing.path-encoded-characters value" in {
-    val setttings = mkSettings(
+    val settings = mkSettings(
       """
         |signing.path-encoded-characters = ""
         |""".stripMargin)
-    setttings.reservedCharacters shouldBe Some("")
+    settings.reservedCharacters shouldBe Some("")
   }
 
   it should "reject signing.path-encoded-characters containing '/'" in {
     an[IllegalArgumentException] should be thrownBy
     mkSettings(
       """
-          |signing.path-encoded-characters = "/!"
-          |""".stripMargin)
+        |signing.path-encoded-characters = "/!"
+        |""".stripMargin)
   }
 
 }
