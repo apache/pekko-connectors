@@ -74,7 +74,7 @@ object Dependencies {
   // This should align with the Jackson minor version used in Pekko 1.1.x
   // https://github.com/apache/pekko/blob/main/project/Dependencies.scala
   val JacksonVersion = "2.22.3"
-  val JacksonModuleScalaVersion = "2.22.3.1"
+  val JacksonModuleScalaVersion = "2.22.4"
   val JacksonDatabindDependencies = Seq(
     "com.fasterxml.jackson.core" % "jackson-core" % JacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % JacksonVersion)
