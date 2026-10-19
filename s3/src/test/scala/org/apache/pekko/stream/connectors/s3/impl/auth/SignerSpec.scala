@@ -19,6 +19,7 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
 import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
+import pekko.stream.connectors.s3.S3Settings
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
@@ -44,6 +45,8 @@ class SignerSpec(_system: ActorSystem)
 
   implicit val defaultPatience: PatienceConfig =
     PatienceConfig(timeout = Span(2, Seconds), interval = Span(5, Millis))
+
+  implicit val settings: S3Settings = S3Settings()
 
   val credentials = StaticCredentialsProvider.create(
     AwsBasicCredentials.create("AKIDEXAMPLE", "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY"))

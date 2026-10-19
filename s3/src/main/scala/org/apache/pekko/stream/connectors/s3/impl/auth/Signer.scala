@@ -22,6 +22,7 @@ import pekko.NotUsed
 import pekko.annotation.InternalApi
 import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.http.scaladsl.model.{ HttpHeader, HttpRequest }
+import pekko.stream.connectors.s3.S3Settings
 import pekko.stream.scaladsl.Source
 
 @InternalApi private[impl] object Signer {
@@ -29,7 +30,7 @@ import pekko.stream.scaladsl.Source
 
   def signedRequest(request: HttpRequest,
       key: SigningKey,
-      signAnonymousRequests: Boolean): Source[HttpRequest, NotUsed] =
+      signAnonymousRequests: Boolean)(implicit conf: S3Settings): Source[HttpRequest, NotUsed] =
     if (!signAnonymousRequests && key.anonymous) Source.single(request)
     else {
       val hashedBody = request.entity.dataBytes.via(digest()).map(hash => encodeHex(hash))
