@@ -28,7 +28,7 @@ object Dependencies {
 
   val AvroVersion = "1.12.2"
 
-  val AwsSdk2Version = "2.57.0"
+  val AwsSdk2Version = "2.57.2"
 
   val NettyVersion = "4.2.19.Final"
 
@@ -482,7 +482,7 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "7.0.10"
-    val SpringBootVersion = "4.1.1"
+    val SpringBootVersion = "4.1.2"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
@@ -550,7 +550,7 @@ object Dependencies {
   val UnixDomainSocket = Seq(
     libraryDependencies ++= Seq(
       "com.github.jnr" % "jffi" % "1.4.3", // classifier "complete", // Is the classifier needed anymore?
-      "com.github.jnr" % "jnr-unixsocket" % "0.39.5"))
+      "com.github.jnr" % "jnr-unixsocket" % "0.39.6"))
 
   val Xml = Seq(
     libraryDependencies ++= Seq(
