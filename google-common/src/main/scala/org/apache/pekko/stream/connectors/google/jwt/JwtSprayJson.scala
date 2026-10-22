@@ -82,6 +82,13 @@ private[google] class JwtSprayJson private (defaultClock: Clock)
       jwtId = safeGetField[String](jsObj, "jti"))
   }
 
+  // only used for encoding Google service account tokens, JWK parsing is not needed
+  override def parseJwk(json: String): Jwk =
+    throw new UnsupportedOperationException("parseJwk is not supported")
+
+  override def parseJwkSet(json: String): JwkSet =
+    throw new UnsupportedOperationException("parseJwkSet is not supported")
+
   private def safeRead[A: JsonReader](js: JsValue) =
     safeReader[A].read(js).fold(_ => None, a => Option(a))
 
