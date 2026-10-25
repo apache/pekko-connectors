@@ -27,11 +27,14 @@ import scala.concurrent.Promise
 
 /**
  * Internal API.
+ *
+ * A published message awaiting downstream delivery. Ordered flows store its result here while earlier messages
+ * are still awaiting confirmation.
  */
 @InternalApi private final case class AwaitingMessage[T](
     tag: DeliveryTag,
     passThrough: T,
-    ready: Boolean = false)
+    result: Option[WriteResult] = None)
 
 /**
  * Internal API.
@@ -79,24 +82,23 @@ import scala.concurrent.Promise
 
   private def onConfirmation(tag: DeliveryTag, multiple: Boolean): Unit = {
     log.debug("Received confirmation for deliveryTag {} (multiple={}).", tag, multiple)
-
-    val dequeued: Iterable[AwaitingMessage[T]] = dequeueAwaitingMessages(tag, multiple)
-
-    dequeued.foreach(m => cancelTimer(m.tag))
-
-    pushOrEnqueueResults(
-      dequeued.map(m => (WriteResult.confirmed, m.passThrough)))
+    onResult(tag, multiple, WriteResult.confirmed)
   }
 
   private def onRejection(tag: DeliveryTag, multiple: Boolean): Unit = {
     log.debug("Received rejection for deliveryTag {} (multiple={}).", tag, multiple)
+    onResult(tag, multiple, WriteResult.rejected)
+  }
 
-    val dequeued: Iterable[AwaitingMessage[T]] = dequeueAwaitingMessages(tag, multiple)
+  private def onResult(tag: DeliveryTag, multiple: Boolean, result: WriteResult): Unit = {
+    val dequeued: Iterable[AwaitingMessage[T]] = dequeueAwaitingMessages(tag, multiple, result)
 
+    // Stop the timeout even if this result must wait for earlier messages before it can be emitted.
+    cancelTimer(tag)
     dequeued.foreach(m => cancelTimer(m.tag))
 
     pushOrEnqueueResults(
-      dequeued.map(m => (WriteResult.rejected, m.passThrough)))
+      dequeued.map(m => (m.result.getOrElse(result), m.passThrough)))
   }
 
   private def pushOrEnqueueResults(results: Iterable[(WriteResult, T)]): Unit = {
@@ -121,7 +123,12 @@ import scala.concurrent.Promise
     super.onFailure(ex)
   }
 
-  def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]]
+  /**
+   * Dequeues messages ready for delivery after receiving `result` for `tag`, or all tags up to and including it
+   * when `multiple` is set. Ordered flows retain each message's first result until it can be dequeued. The base
+   * class emits each message with its stored result, or the supplied `result` if none is stored.
+   */
+  def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean, result: WriteResult): Iterable[AwaitingMessage[T]]
 
   def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit
 

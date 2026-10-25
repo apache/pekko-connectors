@@ -28,13 +28,12 @@ import scala.concurrent.{ Future, Promise }
 /**
  * Internal API.
  *
- * AMQP flow that uses asynchronous confirmations but preserves the order in which messages were pulled.
- * Internally messages awaiting confirmation are stored in a ordered buffer. Initially messages have `ready`
- * flag set to `false`. On confirmation flag is changed to `true` and messages from the beginning of the queue
- * are dequeued in sequence until first non-ready message - this means that if confirmed message is not a
- * first element of the buffer then nothing will be dequeued. Flag `multiple` on a confirmation means that
- * broker confirms all messages up to a given delivery tag, which means that so all messages up to (and including)
- * this delivery tag can be safely dequeued.
+ * AMQP flow that emits confirmation results in input order.
+ *
+ * Messages stay in an ordered buffer until they have a result and all earlier messages can be emitted.
+ * Each message keeps its first result, whether it comes from a confirmation, rejection or timeout.
+ * With `multiple` set, a broker confirmation or rejection applies to all delivery tags up to and including
+ * the supplied tag. Results already recorded are preserved.
  */
 @InternalApi private[amqp] final class AmqpAsyncFlowStage[T](
     settings: AmqpWriteSettings)
@@ -57,30 +56,17 @@ import scala.concurrent.{ Future, Promise }
         override def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit =
           buffer += (tag -> AwaitingMessage(tag, passThrough))
 
-        override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
-          if (multiple) {
-            dequeueWhile((t, _) => t <= tag)
-          } else {
-            setReady(tag)
-            if (isAtHead(tag)) {
-              dequeueWhile((_, message) => message.ready)
-            } else {
-              Seq.empty
-            }
+        override def dequeueAwaitingMessages(
+            tag: DeliveryTag, multiple: Boolean, result: WriteResult): Iterable[AwaitingMessage[T]] = {
+          val affectedMessages = if (multiple) buffer.rangeTo(tag).values else buffer.get(tag).toList
+          affectedMessages.foreach { message =>
+            if (message.result.isEmpty) buffer += (message.tag -> message.copy(result = Some(result)))
           }
 
-        private def dequeueWhile(
-            predicate: (DeliveryTag, AwaitingMessage[T]) => Boolean): Iterable[AwaitingMessage[T]] = {
-          val dequeued = buffer.takeWhile { case (k, v) => predicate(k, v) }
+          val dequeued = buffer.takeWhile { case (_, message) => message.result.isDefined }
           buffer --= dequeued.keys
           dequeued.values
         }
-
-        private def isAtHead(tag: DeliveryTag): Boolean =
-          buffer.headOption.exists { case (tag, _) => tag == tag }
-
-        private def setReady(tag: DeliveryTag): Unit =
-          buffer.get(tag).foreach(message => buffer += (tag -> message.copy(ready = true)))
 
         override def messagesAwaitingDelivery: Int = buffer.size
 

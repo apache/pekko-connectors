@@ -147,7 +147,8 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
 
     "preserve upstream order in emitted messages" in assertAllStagesStopped {
       val mockedFlowWithContextAndConfirm =
-        AmqpFlowWithContext.withConfirm[String](mockAmqpWriteSettings)
+        AmqpFlowWithContext.withConfirm[String](
+          mockAmqpWriteSettings.withConfirmationTimeout(patienceConfig.timeout.toMillis.millis))
 
       val deliveryTags = 1L to 7L
       when(channelMock.getNextPublishSeqNo).thenReturn(deliveryTags.head, deliveryTags.tail: _*)
@@ -183,6 +184,52 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
         (WriteResult.rejected, input(6)))
 
       messages should contain theSameElementsInOrderAs expectedResult
+      completion.futureValue shouldBe an[Done]
+    }
+
+    "preserve individual results when confirmations and rejections arrive out of order" in assertAllStagesStopped {
+      val input = Vector("one", "two", "three", "four")
+      val (completion, probe, confirmCallback, rejectCallback) = publishWithOrderedConfirm(input)
+
+      rejectCallback.handle(2L, false)
+      confirmCallback.handle(1L, false)
+      confirmCallback.handle(4L, false)
+      rejectCallback.handle(3L, false)
+
+      val expectedResult = Seq(
+        (WriteResult.confirmed, input(0)), (WriteResult.rejected, input(1)), (WriteResult.rejected, input(2)),
+        (WriteResult.confirmed, input(3)))
+
+      probe.expectNextN(input.size) should contain theSameElementsInOrderAs expectedResult
+      completion.futureValue shouldBe an[Done]
+    }
+
+    "preserve a rejection when a later batch confirmation includes the message" in assertAllStagesStopped {
+      val input = Vector("one", "two", "three", "four")
+      val (completion, probe, confirmCallback, rejectCallback) = publishWithOrderedConfirm(input)
+
+      rejectCallback.handle(2L, false)
+      // Message 4 is outside the batch but should be emitted once the earlier messages have results.
+      confirmCallback.handle(4L, false)
+      confirmCallback.handle(3L, true)
+
+      val expectedResult = Seq(
+        (WriteResult.confirmed, input(0)), (WriteResult.rejected, input(1)), (WriteResult.confirmed, input(2)),
+        (WriteResult.confirmed, input(3)))
+
+      probe.expectNextN(input.size) should contain theSameElementsInOrderAs expectedResult
+      completion.futureValue shouldBe an[Done]
+    }
+
+    "preserve a confirmation when an earlier message times out" in assertAllStagesStopped {
+      val input = Vector("one", "two")
+      val (completion, probe, confirmCallback, _) = publishWithOrderedConfirm(input, confirmationTimeout = 200.millis)
+
+      confirmCallback.handle(2L, false)
+
+      val expectedResult = Seq((WriteResult.rejected, input(0)), (WriteResult.confirmed, input(1)))
+
+      probe.expectNextN(input.size) should contain theSameElementsInOrderAs expectedResult
       completion.futureValue shouldBe an[Done]
     }
   }
@@ -267,6 +314,35 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
       messages should contain theSameElementsInOrderAs expectedResult
       completion.futureValue shouldBe an[Done]
     }
+  }
+
+  /**
+   * Publishes all input through the mocked ordered flow before returning its completion, probe and broker callbacks.
+   * Delivery tags start at 1.
+   */
+  def publishWithOrderedConfirm(
+      input: Vector[String], confirmationTimeout: FiniteDuration = patienceConfig.timeout.toMillis.millis) = {
+    val deliveryTags = 1L to input.size.toLong
+    when(channelMock.getNextPublishSeqNo).thenReturn(deliveryTags.head, deliveryTags.tail: _*)
+    val settings = mockAmqpWriteSettings.withConfirmationTimeout(confirmationTimeout)
+
+    val (completion, probe) =
+      Source(input)
+        .asSourceWithContext(identity)
+        .map(s => WriteMessage(ByteString(s)))
+        .viaMat(AmqpFlowWithContext.withConfirm[String](settings))(Keep.right)
+        .asSource
+        .toMat(TestSink())(Keep.both)
+        .run()
+
+    probe.request(input.size)
+
+    verify(channelMock, Mockito.timeout(patienceConfig.timeout.toMillis).times(input.length))
+      .basicPublish(any[String], any[String], any[Boolean], any[Boolean], any[BasicProperties], any[Array[Byte]])
+
+    val (confirmCallback, rejectCallback) = confirmationCallbacks()
+
+    (completion, probe, confirmCallback, rejectCallback)
   }
 
   def shouldEmitConfirmationForPublishedMessages(flow: Flow[WriteMessage, WriteResult, Future[Done]]) = {
