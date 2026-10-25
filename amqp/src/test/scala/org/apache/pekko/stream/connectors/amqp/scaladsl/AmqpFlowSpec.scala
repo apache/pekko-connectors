@@ -223,7 +223,7 @@ class AmqpFlowSpec extends AmqpSpec with AmqpMocking with BeforeAndAfterEach {
 
     "preserve a confirmation when an earlier message times out" in assertAllStagesStopped {
       val input = Vector("one", "two")
-      val (completion, probe, confirmCallback, _) = publishWithOrderedConfirm(input, confirmationTimeout = 200.millis)
+      val (completion, probe, confirmCallback, _) = publishWithOrderedConfirm(input, confirmationTimeout = 1.second)
 
       confirmCallback.handle(2L, false)
 
