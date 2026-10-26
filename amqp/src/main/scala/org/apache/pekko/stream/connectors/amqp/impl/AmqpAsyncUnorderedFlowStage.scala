@@ -28,10 +28,11 @@ import scala.concurrent.{ Future, Promise }
 /**
  * Internal API.
  *
- * AMQP flow that uses asynchronous confirmations in possibly the most efficient way.
- * Messages are dequeued and pushed downstream as soon as confirmation is received. Flag `ready` on [[AwaitingMessage]]
- * is not used in this case. Flag `multiple` on a confirmation means that broker confirms all messages up to a
- * given delivery tag, which means that so all messages up to (and including) this delivery tag can be safely dequeued.
+ * AMQP flow that emits confirmation results without preserving input order.
+ *
+ * Messages are dequeued as soon as a confirmation, rejection or timeout arrives, so [[AwaitingMessage]] does not
+ * need to store the result. With `multiple` set, all messages up to and including the supplied delivery tag
+ * are dequeued.
  */
 @InternalApi private[amqp] final class AmqpAsyncUnorderedFlowStage[T](
     settings: AmqpWriteSettings)
@@ -54,7 +55,8 @@ import scala.concurrent.{ Future, Promise }
         override def enqueueMessage(tag: DeliveryTag, passThrough: T): Unit =
           buffer += AwaitingMessage(tag, passThrough)
 
-        override def dequeueAwaitingMessages(tag: DeliveryTag, multiple: Boolean): Iterable[AwaitingMessage[T]] =
+        override def dequeueAwaitingMessages(
+            tag: DeliveryTag, multiple: Boolean, result: WriteResult): Iterable[AwaitingMessage[T]] =
           if (multiple)
             buffer.dequeueAll(_.tag <= tag)
           else
