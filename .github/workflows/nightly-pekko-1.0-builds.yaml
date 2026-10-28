@@ -19,8 +19,6 @@ name: Nightly Pekko 1.0 Builds (on 1.4.x branch)
 
 on:
   workflow_dispatch:
-  # TEMPORARY: run on PRs to debug failures; remove before merge
-  pull_request:
 
 permissions: {}
 
