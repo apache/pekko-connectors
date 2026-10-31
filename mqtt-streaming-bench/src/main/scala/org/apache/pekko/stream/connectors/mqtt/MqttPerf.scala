@@ -28,6 +28,7 @@ import org.openjdk.jmh.annotations._
 
 import scala.concurrent.duration._
 import scala.concurrent.Await
+import scala.annotation.nowarn
 
 object MqttPerf {
   /*
@@ -45,6 +46,9 @@ object MqttPerf {
 }
 
 @State(Scope.Benchmark)
+// `Source.queue` with an `OverflowStrategy` is deprecated, but the `BoundedSourceQueue` that
+// `Source.queue(bufferSize)` materializes drops the newest element instead of backpressuring.
+@nowarn("msg=deprecated")
 class MqttPerf {
 
   import streaming.MqttCodec._
