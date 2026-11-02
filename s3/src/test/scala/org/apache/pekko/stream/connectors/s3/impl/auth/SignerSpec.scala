@@ -136,7 +136,7 @@ class SignerSpec(_system: ActorSystem)
       .withHeaders(
         Host("iam.amazonaws.com"),
         RawHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8"),
-        `Raw-Request-URI`("/1 + 2=3"))
+        `Raw-Request-URI`("/1%20%2B%202=3"))
 
     val date = LocalDateTime.of(2015, 8, 30, 12, 36, 0).atZone(ZoneOffset.UTC)
     val srFuture = Signer.signedRequest(req, signingKey(date), signAnonymousRequests = true).runWith(Sink.head)
