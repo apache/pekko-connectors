@@ -21,6 +21,7 @@ import pekko.stream.OverflowStrategy
 import pekko.stream.connectors.jms.scaladsl.JmsConnectorState._
 import pekko.stream.connectors.jms.scaladsl.{ JmsConnectorState, JmsConsumer, JmsProducer, JmsProducerStatus }
 import pekko.stream.scaladsl.{ Flow, Keep, Sink, SinkQueueWithCancel, Source }
+import pekko.stream.testkit.scaladsl.TestSink
 
 import com.github.pjfanning.jmswrapper.WrappedConnectionFactory
 import javax.jms._
@@ -295,6 +296,26 @@ class JmsConnectionStatusSpec extends JmsSpec {
 
       eventually { producerConnected should havePublishedState(Completing) }
       eventually { producerConnected should havePublishedState(Completed) }
+    }
+
+    "complete the connection status stream after publishing the final state" in withConnectionFactory() {
+      connectionFactory =>
+        val jmsSink = textSink(JmsProducerSettings(producerConfig, connectionFactory).withQueue("final-state"))
+        val jmsSource = JmsConsumer.textSource(JmsConsumerSettings(system, connectionFactory).withQueue("final-state"))
+
+        val (consumerControl, messages) = jmsSource.toMat(Sink.queue())(Keep.both).run()
+        // never signal demand before the stage stops, so the final states are still buffered when it does
+        val status = consumerControl.connectorState.runWith(TestSink[JmsConnectorState]())
+        status.ensureSubscription()
+
+        Source.single("text").runWith(jmsSink)
+        messages.pull().futureValue shouldBe Some("text")
+
+        consumerControl.shutdown()
+        messages.pull().futureValue shouldBe None
+        status.expectNoMessage(500.millis)
+
+        status.toStrict(10.seconds).lastOption shouldBe Some(Completed)
     }
 
     "report failure on external stream abort" in withConnectionFactory() { connectionFactory =>
