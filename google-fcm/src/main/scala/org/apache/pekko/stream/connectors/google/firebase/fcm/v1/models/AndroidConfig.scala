@@ -189,6 +189,7 @@ case class LightSettings(
 
   def withLightOnDuration(value: String): LightSettings = this.copy(light_on_duration = Option(value))
 
+  /** @since 2.0.0 */
   def withLightOffDuration(value: String): LightSettings = this.copy(light_off_duration = Option(value))
 
   @deprecated("Use withLightOffDuration", "2.0.0")
