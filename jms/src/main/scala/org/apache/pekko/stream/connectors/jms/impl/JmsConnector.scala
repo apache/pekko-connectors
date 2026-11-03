@@ -17,14 +17,14 @@ import java.util.concurrent.atomic.AtomicReference
 
 import org.apache.pekko
 import pekko.{ Done, NotUsed }
-import pekko.actor.ActorSystem
+import pekko.actor.{ ActorRef, ActorSystem }
 import pekko.annotation.InternalApi
 import pekko.pattern.after
 import pekko.stream.connectors.jms._
 import pekko.stream.connectors.jms.impl.InternalConnectionState._
-import pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source, SourceQueueWithComplete }
+import pekko.stream.scaladsl.{ BroadcastHub, Keep, Sink, Source }
 import pekko.stream.stage.{ AsyncCallback, StageLogging, TimerGraphStageLogic }
-import pekko.stream.{ ActorAttributes, Attributes, OverflowStrategy }
+import pekko.stream.{ ActorAttributes, Attributes, CompletionStrategy, OverflowStrategy }
 import javax.jms
 
 import scala.concurrent.{ ExecutionContext, Future, Promise }
@@ -54,7 +54,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
 
   private val connectionFailedCB = getAsyncCallback[Throwable](connectionFailed)
 
-  private var connectionStateQueue: SourceQueueWithComplete[InternalConnectionState] = null
+  private var connectionStateQueue: ActorRef = null
 
   private val connectionStateSourcePromise = Promise[Source[InternalConnectionState, NotUsed]]()
 
@@ -68,7 +68,11 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     // always drops the old state, and keeps the most current (two) state(s) in the queue.
     val (queue, source) =
       Source
-        .queue[InternalConnectionState](2, OverflowStrategy.dropHead)
+        .actorRef[InternalConnectionState](
+          completionMatcher = { case CompleteConnectionState => CompletionStrategy.draining },
+          failureMatcher = PartialFunction.empty,
+          bufferSize = 2,
+          overflowStrategy = OverflowStrategy.dropHead)
         .toMat(BroadcastHub.sink(1))(Keep.both)
         .run()(graphStageMaterializer)
     connectionStateQueue = queue
@@ -91,7 +95,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     val previous = updateStateWith(update)
     closeConnectionAsync(connection(previous))
     if (isTimerActiveOnGraphStage("connection-status-timeout")) drainConnectionState()
-    connectionStateQueue.complete()
+    connectionStateQueue ! CompleteConnectionState
   }
 
   protected def publishAndFailStage(ex: Throwable): Unit = {
@@ -117,7 +121,7 @@ private[jms] trait JmsConnector[S <: JmsSession] {
     if (last.getClass != connectionState.getClass) {
       if (log.isDebugEnabled)
         log.debug("updateStateWith {} -> {}", last.getClass.getSimpleName, connectionState.getClass.getSimpleName)
-      connectionStateQueue.offer(connectionState)
+      connectionStateQueue ! connectionState
     }
 
     last
@@ -415,6 +419,7 @@ object JmsConnector {
   final case class AttemptConnect(attempt: Int, backoffMaxed: Boolean)
   final case class FlushAcknowledgementsTimerKey(jmsSession: JmsAckSession)
   case object ConnectionStatusTimeout
+  case object CompleteConnectionState
 
   def connection: InternalConnectionState => Future[jms.Connection] = {
     case InternalConnectionState.JmsConnectorInitializing(c, _, _, _) => c
