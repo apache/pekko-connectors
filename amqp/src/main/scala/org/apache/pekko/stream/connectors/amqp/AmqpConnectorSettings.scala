@@ -53,7 +53,7 @@ final class NamedQueueSourceSettings private (
   /**
    * Java API
    */
-  def withDeclarations(declarations: java.util.List[Declaration]): NamedQueueSourceSettings =
+  def withDeclarations(declarations: java.util.List[? <: Declaration]): NamedQueueSourceSettings =
     copy(declarations = declarations.asScala.toIndexedSeq)
 
   def withNoLocal(noLocal: Boolean): NamedQueueSourceSettings =
@@ -157,7 +157,7 @@ final class TemporaryQueueSourceSettings private (
   /**
    * Java API
    */
-  def withDeclarations(declarations: java.util.List[Declaration]): TemporaryQueueSourceSettings =
+  def withDeclarations(declarations: java.util.List[? <: Declaration]): TemporaryQueueSourceSettings =
     copy(declarations = declarations.asScala.toIndexedSeq)
 
   def withRoutingKey(routingKey: String): TemporaryQueueSourceSettings = copy(routingKey = Some(routingKey))
@@ -276,7 +276,7 @@ final class AmqpWriteSettings private (
   /**
    * Java API
    */
-  def withDeclarations(declarations: java.util.List[Declaration]): AmqpWriteSettings =
+  def withDeclarations(declarations: java.util.List[? <: Declaration]): AmqpWriteSettings =
     copy(declarations = declarations.asScala.toIndexedSeq)
 
   def withBufferSize(bufferSize: Int): AmqpWriteSettings =
