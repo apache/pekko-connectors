@@ -375,7 +375,7 @@ import scala.xml.NodeSeq
     }
   }
 
-  private def rawRequestUri(uri: Uri): String = {
+  private[impl] def rawRequestUri(uri: Uri): String = {
     val rawUri = uri.toHttpRequestTargetOriginForm.toString
     val rawPath = uri.path.toString()
 
