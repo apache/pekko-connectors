@@ -135,6 +135,26 @@ public class AmqpJavaApiTest {
   }
 
   @Test
+  public void declarationsAcceptSubtypeLists() {
+    List<QueueDeclaration> queues = Collections.singletonList(QueueDeclaration.create("queue"));
+    assertEquals(
+        queues,
+        NamedQueueSourceSettings.create(AmqpLocalConnectionProvider.getInstance(), "queue")
+            .withDeclarations(queues)
+            .getDeclarations());
+    assertEquals(
+        queues,
+        TemporaryQueueSourceSettings.create(AmqpLocalConnectionProvider.getInstance(), "exchange")
+            .withDeclarations(queues)
+            .getDeclarations());
+    assertEquals(
+        queues,
+        AmqpWriteSettings.create(AmqpLocalConnectionProvider.getInstance())
+            .withDeclarations(queues)
+            .getDeclarations());
+  }
+
+  @Test
   public void writeSettingsGetters() {
     QueueDeclaration queue = QueueDeclaration.create("queue");
     AmqpWriteSettings settings =

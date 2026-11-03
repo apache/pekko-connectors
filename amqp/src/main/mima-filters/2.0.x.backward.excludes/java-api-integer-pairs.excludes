@@ -20,3 +20,8 @@
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.amqp.AmqpConnectionFactoryConnectionProvider.withHostsAndPorts(java.util.List)org.apache.pekko.stream.connectors.amqp.AmqpConnectionFactoryConnectionProvider")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.amqp.AmqpDetailsConnectionProvider.withHostsAndPorts(java.util.List)org.apache.pekko.stream.connectors.amqp.AmqpDetailsConnectionProvider")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.amqp.AmqpDetailsConnectionProvider.create(java.util.List)org.apache.pekko.stream.connectors.amqp.AmqpDetailsConnectionProvider")
+
+# Java withDeclarations accepts a java.util.List of any Declaration subtype; the erased signature is unchanged
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.amqp.NamedQueueSourceSettings.withDeclarations")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.amqp.TemporaryQueueSourceSettings.withDeclarations")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.amqp.AmqpWriteSettings.withDeclarations")
