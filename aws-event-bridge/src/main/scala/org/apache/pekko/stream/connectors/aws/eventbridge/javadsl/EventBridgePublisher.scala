@@ -55,6 +55,7 @@ object EventBridgePublisher {
    *
    * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
+   * @since 2.0.0
    */
   def flowList(settings: EventBridgePublishSettings, eventBridgeClient: EventBridgeAsyncClient)
       : Flow[java.util.List[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
@@ -70,6 +71,7 @@ object EventBridgePublisher {
    * Each incoming list of entries is sent as a single `PutEventsRequest`.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
+   * @since 2.0.0
    */
   def flowList(
       eventBridgeClient: EventBridgeAsyncClient)
