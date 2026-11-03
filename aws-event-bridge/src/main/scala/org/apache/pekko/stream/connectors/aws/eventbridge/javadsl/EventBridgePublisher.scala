@@ -50,22 +50,52 @@ object EventBridgePublisher {
       .asJava
 
   /**
-   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages in batches to an EventBridge.
+   * Each incoming list of entries is sent as a single `PutEventsRequest`.
    *
    * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
    */
+  def flowList(settings: EventBridgePublishSettings, eventBridgeClient: EventBridgeAsyncClient)
+      : Flow[java.util.List[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
+    pekko.stream.scaladsl
+      .Flow[java.util.List[PutEventsRequestEntry]]
+      .map(entries => PutEventsRequest.builder().entries(entries).build())
+      .via(pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.publishFlow(settings)(
+        eventBridgeClient))
+      .asJava
+
+  /**
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages in batches to an EventBridge.
+   * Each incoming list of entries is sent as a single `PutEventsRequest`.
+   *
+   * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
+   */
+  def flowList(
+      eventBridgeClient: EventBridgeAsyncClient)
+      : Flow[java.util.List[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
+    flowList(EventBridgePublishSettings(), eventBridgeClient)
+
+  /**
+   * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
+   *
+   * @param settings [[pekko.stream.connectors.aws.eventbridge.EventBridgePublishSettings]] settings for publishing
+   * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
+   * @deprecated Despite its name this does not batch; it behaves exactly like `flow`. Use `flowList` to publish in batches, or `flow`.
+   */
+  @deprecated("Does not batch; use flowList to publish in batches, or flow", "2.0.0")
   def flowSeq(
       settings: EventBridgePublishSettings,
       eventBridgeClient: EventBridgeAsyncClient): Flow[PutEventsRequestEntry, PutEventsResponse, NotUsed] =
-    pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher.flow(settings)(
-      eventBridgeClient).asJava
+    flow(settings, eventBridgeClient)
 
   /**
    * Creates a [[pekko.stream.javadsl.Flow Flow]] to publish messages to an EventBridge.
    *
    * @param eventBridgeClient [[software.amazon.awssdk.services.eventbridge.EventBridgeAsyncClient EventBridgeAsyncClient]] client for publishing
+   * @deprecated Takes a Scala `Seq`; use `flowList`.
    */
+  @deprecated("Use flowList, which takes a java.util.List", "2.0.0")
   def flowSeq(
       eventBridgeClient: EventBridgeAsyncClient): Flow[Seq[PutEventsRequestEntry], PutEventsResponse, NotUsed] =
     pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
