@@ -158,12 +158,4 @@ class GoogleSettingsSpec
     proxy.getConnectionContext shouldBe theSameInstanceAs(context)
     proxy.getPoolSettings shouldBe theSameInstanceAs(poolSettings)
   }
-
-  it should "reject a plain HttpConnectionContext in the deprecated ForwardProxy.create" in {
-    val context: jh.HttpConnectionContext = jh.ConnectionContext.noEncryption()
-    val poolSettings = jh.settings.ConnectionPoolSettings.create(system)
-    @nowarn("cat=deprecation")
-    val thrown = the[IllegalArgumentException] thrownBy ForwardProxy.create(context, poolSettings)
-    thrown.getMessage should include("HttpsConnectionContext")
-  }
 }

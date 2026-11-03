@@ -296,17 +296,6 @@ object ForwardProxy {
     apply(scheme, host, port, credentials.toScala.asInstanceOf[Option[BasicHttpCredentials]], trustPem.toScala,
       minTlsVersion)(system)
 
-  /**
-   * @deprecated A forward proxy requires an [[pekko.http.javadsl.HttpsConnectionContext]], which is not a subtype of
-   *             [[pekko.http.javadsl.HttpConnectionContext]], so this overload always fails.
-   *             Use the overload that takes an [[pekko.http.javadsl.HttpsConnectionContext]].
-   */
-  @deprecated("Always fails; use create(HttpsConnectionContext, ConnectionPoolSettings)", "2.0.0")
-  def create(connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings)
-      : ForwardProxy =
-    throw new IllegalArgumentException(
-      "ForwardProxy requires an HttpsConnectionContext; use create(HttpsConnectionContext, ConnectionPoolSettings)")
-
   /** @since 2.0.0 */
   def create(connectionContext: jh.HttpsConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings)
       : ForwardProxy =
