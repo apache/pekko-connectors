@@ -19,14 +19,16 @@ import java.util.Optional
 import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
-import pekko.NotUsed
+import pekko.{ Done, NotUsed }
 import pekko.actor.{ ClassicActorSystemProvider, ExtendedActorSystem, Extension, ExtensionId, ExtensionIdProvider }
 import pekko.stream.javadsl.{ Flow, Source }
 import pekko.stream.Materializer
 import pekko.util.ByteString
 import scala.jdk.FutureConverters._
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.Duration
+import scala.jdk.DurationConverters._
 import scala.jdk.OptionConverters._
 
 object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdProvider {
@@ -47,7 +49,7 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
      *
      * The produced [[java.util.concurrent.CompletionStage]] is fulfilled when the unbinding has been completed.
      */
-    def unbind(): CompletionStage[Unit] = delegate.unbind().asJava
+    def unbind(): CompletionStage[Done] = delegate.unbind().map(_ => Done: Done)(ExecutionContext.parasitic).asJava
   }
 
   /**
@@ -183,8 +185,71 @@ final class UnixDomainSocket(system: ExtendedActorSystem) extends pekko.actor.Ex
    *                  therefore it is the default setting.
    *                  If set to false, the connection will immediately closed once the client closes its write side,
    *                  independently whether the server is still attempting to write.
+   * @deprecated Takes a Scala `Duration`; use the overload taking a `java.time.Duration`.
+   */
+  @deprecated("Use the overload taking a java.time.Duration", "2.0.0")
+  def outgoingConnection(remoteAddress: UnixSocketAddress,
+      localAddress: Optional[UnixSocketAddress],
+      halfClose: Boolean,
+      connectTimeout: Duration): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
+    outgoingConnectionWithScalaTimeout(remoteAddress, localAddress, halfClose, connectTimeout)
+
+  /**
+   * Creates an [[UnixDomainSocket.OutgoingConnection]] instance representing a prospective UnixDomainSocket client connection to the given endpoint.
+   *
+   * Note that the ByteString chunk boundaries are not retained across the network,
+   * to achieve application level chunks you have to introduce explicit framing in your streams,
+   * for example using the [[pekko.stream.javadsl.Framing]] stages.
+   *
+   * @param remoteAddress The remote address to connect to
+   * @param localAddress  Optional local address for the connection
+   * @param halfClose     Controls whether the connection is kept open even after writing has been completed,
+   *                      see the overload documentation above
+   * @param connectTimeout How long to wait for the connection to be established
+   * @since 2.0.0
    */
   def outgoingConnection(remoteAddress: UnixSocketAddress,
+      localAddress: Optional[UnixSocketAddress],
+      halfClose: Boolean,
+      connectTimeout: java.time.Duration): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
+    outgoingConnectionWithScalaTimeout(remoteAddress, localAddress, halfClose, connectTimeout.toScala)
+
+  /**
+   * Creates an [[UnixDomainSocket.OutgoingConnection]] to the given endpoint without specifying options.
+   *
+   * @since 2.0.0
+   */
+  def outgoingConnection(
+      remoteAddress: UnixSocketAddress): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
+    Flow.fromGraph(
+      delegate
+        .outgoingConnection(remoteAddress)
+        .mapMaterializedValue(_.map(new OutgoingConnection(_))(parasitic).asJava))
+
+  /**
+   * Creates a server on the given path and handles each incoming connection with the given flow.
+   *
+   * @param handler   handles each incoming connection
+   * @param path      The path to listen on
+   * @param backlog   Controls the size of the connection backlog
+   * @param halfClose Controls whether the connection is kept open even after writing has been completed, see `bind`
+   * @since 2.0.0
+   */
+  def bindAndHandle(handler: Flow[ByteString, ByteString, ?],
+      path: Path,
+      backlog: Int,
+      halfClose: Boolean): CompletionStage[ServerBinding] =
+    delegate.bindAndHandle(handler.asScala, path, backlog, halfClose).map(new ServerBinding(_))(parasitic).asJava
+
+  /**
+   * Creates a server on the given path, with default options, and handles each incoming connection with the given flow.
+   *
+   * @since 2.0.0
+   */
+  def bindAndHandle(handler: Flow[ByteString, ByteString, ?], path: Path): CompletionStage[ServerBinding] =
+    delegate.bindAndHandle(handler.asScala, path).map(new ServerBinding(_))(parasitic).asJava
+
+  private def outgoingConnectionWithScalaTimeout(remoteAddress: UnixSocketAddress,
       localAddress: Optional[UnixSocketAddress],
       halfClose: Boolean,
       connectTimeout: Duration): Flow[ByteString, ByteString, CompletionStage[OutgoingConnection]] =
