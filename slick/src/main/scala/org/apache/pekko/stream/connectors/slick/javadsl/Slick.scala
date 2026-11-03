@@ -631,11 +631,11 @@ object Slick {
   private def toSlick[T](mapper: JFunction[SlickRow, T]): GetResult[T] =
     GetResult(pr => mapper(new SlickRow(pr)))
 
-  private def toDBIO[T](javaDml: JFunction[T, String]): T => DBIO[Int] = { t =>
+  private[javadsl] def toDBIO[T](javaDml: JFunction[T, String]): T => DBIO[Int] = { t =>
     SQLActionBuilder(javaDml.asScala(t), SetParameter.SetUnit).asUpdate
   }
 
-  private def toDBIO[T](javaDml: Function2[T, Connection, PreparedStatement]): T => DBIO[Int] = { t =>
+  private[javadsl] def toDBIO[T](javaDml: Function2[T, Connection, PreparedStatement]): T => DBIO[Int] = { t =>
     SimpleJdbcAction { ctx =>
       javaDml(t, ctx.connection).executeUpdate()
     }
