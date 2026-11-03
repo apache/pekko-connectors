@@ -34,3 +34,7 @@ ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.co
 # javadsl CouchbaseSource takes explicit options and collection/scope parameters instead of Scala default and
 # implicit arguments (the erased signatures are unchanged, only the default argument accessors are removed)
 ProblemFilters.exclude[DirectMissingMethodProblem]("org.apache.pekko.stream.connectors.couchbase3.javadsl.CouchbaseSource.*$default$*")
+# javadsl CouchbaseFlow mutateIn and mutateInDoc accept a java.util.List of any MutateInSpec subtype;
+# the erased signatures are unchanged
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.couchbase3.javadsl.CouchbaseFlow.mutateIn")
+ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.couchbase3.javadsl.CouchbaseFlow.mutateInDoc")

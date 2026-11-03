@@ -27,10 +27,14 @@ import com.couchbase.client.java.kv.ExistsOptions;
 import com.couchbase.client.java.kv.GetOptions;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.InsertOptions;
+import com.couchbase.client.java.kv.MutateInOptions;
+import com.couchbase.client.java.kv.MutateInResult;
 import com.couchbase.client.java.kv.ReplaceOptions;
 import com.couchbase.client.java.kv.RemoveOptions;
+import com.couchbase.client.java.kv.Upsert;
 import com.couchbase.client.java.kv.UpsertOptions;
 import com.couchbase.client.java.query.QueryResult;
+import java.util.List;
 import org.apache.pekko.NotUsed;
 import org.apache.pekko.stream.connectors.couchbase3.MutationBinaryDocument;
 import org.apache.pekko.stream.connectors.couchbase3.MutationDocument;
@@ -71,6 +75,14 @@ public class Couchbase3JavaApiTest {
     Flow<String, Boolean, NotUsed> exists = CouchbaseFlow.exists(id -> id, collection);
     Flow<String, Boolean, NotUsed> existsWithOptions =
         CouchbaseFlow.exists(id -> id, ExistsOptions.existsOptions(), collection);
+  }
+
+  /** Compile-only check: mutateIn accepts lists of MutateInSpec subtypes. */
+  @SuppressWarnings("unused")
+  private static void mutateInCompiles(List<Upsert> specs, AsyncCollection collection) {
+    Flow<String, MutateInResult, NotUsed> mutateIn = CouchbaseFlow.mutateIn(specs, collection);
+    Flow<MutationDocument<JsonObject>, MutationDocument<JsonObject>, NotUsed> mutateInDoc =
+        CouchbaseFlow.mutateInDoc(specs, MutateInOptions.mutateInOptions(), collection);
   }
 
   /** Compile-only check: sources can be created without Scala default or implicit arguments. */

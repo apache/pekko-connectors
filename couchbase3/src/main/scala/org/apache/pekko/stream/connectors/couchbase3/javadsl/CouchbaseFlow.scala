@@ -277,17 +277,17 @@ object CouchbaseFlow {
    * Performs mutations to document fragments with custom options.
    * @see `AsyncCollection#mutateIn`
    */
-  def mutateIn(specs: java.util.List[MutateInSpec], options: MutateInOptions,
+  def mutateIn(specs: java.util.List[? <: MutateInSpec], options: MutateInOptions,
       asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
-    ScalaCouchbaseFlow.mutateIn(specs, options)(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateIn(toInvariant(specs), options)(asyncCollection).asJava
 
   /**
    * Performs mutations to document fragments with custom options.
    * @see `AsyncCollection#mutateIn`
    */
-  def mutateIn(specs: java.util.List[MutateInSpec],
+  def mutateIn(specs: java.util.List[? <: MutateInSpec],
       asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
-    ScalaCouchbaseFlow.mutateIn(specs, MutateInOptions.mutateInOptions())(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateIn(toInvariant(specs), MutateInOptions.mutateInOptions())(asyncCollection).asJava
 
   /**
    * reference to `CouchbaseFlow.mutateIn`
@@ -295,10 +295,10 @@ object CouchbaseFlow {
    * @return
    */
   def mutateInDoc[T](
-      specs: java.util.List[MutateInSpec],
+      specs: java.util.List[? <: MutateInSpec],
       options: MutateInOptions,
       asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
-    ScalaCouchbaseFlow.mutateInDoc[T](specs, options)(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateInDoc[T](toInvariant(specs), options)(asyncCollection).asJava
 
   /**
    * reference to `CouchbaseFlow.mutateIn`
@@ -306,9 +306,9 @@ object CouchbaseFlow {
    * @return
    */
   def mutateInDoc[T](
-      specs: java.util.List[MutateInSpec],
+      specs: java.util.List[? <: MutateInSpec],
       asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
-    ScalaCouchbaseFlow.mutateInDoc[T](specs, MutateInOptions.mutateInOptions())(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateInDoc[T](toInvariant(specs), MutateInOptions.mutateInOptions())(asyncCollection).asJava
 
   /**
    * Checks if the given document ID exists on the active partition with custom options.
@@ -449,4 +449,6 @@ object CouchbaseFlow {
   def decrement(asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =
     ScalaCouchbaseFlow.decrement(DecrementOptions.decrementOptions())(asyncCollection).asJava
 
+  private def toInvariant(specs: java.util.List[? <: MutateInSpec]): java.util.List[MutateInSpec] =
+    new java.util.ArrayList[MutateInSpec](specs)
 }
