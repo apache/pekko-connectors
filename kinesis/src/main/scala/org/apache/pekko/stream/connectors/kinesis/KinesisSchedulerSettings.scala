@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.kinesis
 
 import scala.concurrent.duration._
+import scala.jdk.DurationConverters._
 
 final class KinesisSchedulerSourceSettings private (val bufferSize: Int, val backpressureTimeout: FiniteDuration) {
   require(
@@ -23,6 +24,13 @@ final class KinesisSchedulerSourceSettings private (val bufferSize: Int, val bac
     KinesisSchedulerSourceSettings(size, backpressureTimeout)
   def withBackpressureTimeout(timeout: java.time.Duration): KinesisSchedulerSourceSettings =
     KinesisSchedulerSourceSettings(bufferSize, FiniteDuration.apply(timeout.toMillis, MILLISECONDS))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getBackpressureTimeout: java.time.Duration = backpressureTimeout.toJava
 }
 final class KinesisSchedulerCheckpointSettings private (val maxBatchSize: Int, val maxBatchWait: FiniteDuration) {
   require(
@@ -33,6 +41,13 @@ final class KinesisSchedulerCheckpointSettings private (val maxBatchSize: Int, v
     KinesisSchedulerCheckpointSettings(size, maxBatchWait)
   def withMaxBatchWait(duration: java.time.Duration): KinesisSchedulerCheckpointSettings =
     KinesisSchedulerCheckpointSettings(maxBatchSize, FiniteDuration.apply(duration.toMillis, MILLISECONDS))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMaxBatchWait: java.time.Duration = maxBatchWait.toJava
 }
 
 object KinesisSchedulerSourceSettings {

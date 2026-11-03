@@ -149,7 +149,15 @@ sealed abstract class SqsResult {
   def result: Result
 
   /** Java API */
+  @deprecated("Use getResponseMetadata", "2.0.0")
   def geResponseMetadata: SqsResponseMetadata = responseMetadata
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getResponseMetadata: SqsResponseMetadata = responseMetadata
 
   /** Java API */
   def getResult: Result = result
@@ -167,7 +175,21 @@ final class SqsPublishResult @InternalApi private[sqs] (
     val request: SendMessageRequest,
     response: SendMessageResponse) extends SqsResult {
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRequest: SendMessageRequest = request
+
   override type Result = SendMessageResponse
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  override def getResult: SendMessageResponse = result
 
   override def responseMetadata: SqsResponseMetadata = response.responseMetadata
 
@@ -194,7 +216,21 @@ final class SqsPublishResultEntry @InternalApi private[sqs] (
     override val result: SendMessageBatchResultEntry,
     override val responseMetadata: SqsResponseMetadata) extends SqsResult {
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRequest: SendMessageRequest = request
+
   override type Result = SendMessageBatchResultEntry
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  override def getResult: SendMessageBatchResultEntry = result
 
   override def toString =
     s"""SqsPublishResultEntry(request=$request,result=$result)"""
@@ -233,6 +269,13 @@ object SqsAckResult {
       override val result: DeleteMessageResponse) extends SqsAckResult {
 
     override type Result = DeleteMessageResponse
+
+    /**
+     * Java API
+     *
+     * @since 2.0.0
+     */
+    override def getResult: DeleteMessageResponse = result
 
     override def responseMetadata: SqsResponseMetadata = result.responseMetadata
 
@@ -287,6 +330,13 @@ object SqsAckResult {
 
     override type Result = ChangeMessageVisibilityResponse
 
+    /**
+     * Java API
+     *
+     * @since 2.0.0
+     */
+    override def getResult: ChangeMessageVisibilityResponse = result
+
     override def responseMetadata: SqsResponseMetadata = result.responseMetadata
 
     override def toString: String =
@@ -329,6 +379,13 @@ object SqsAckResultEntry {
       extends SqsAckResultEntry {
 
     override type Result = DeleteMessageBatchResultEntry
+
+    /**
+     * Java API
+     *
+     * @since 2.0.0
+     */
+    override def getResult: DeleteMessageBatchResultEntry = result
 
     override def toString: String =
       s"SqsDeleteResultEntry(messageAction=$messageAction,result=$result)"
@@ -382,6 +439,13 @@ object SqsAckResultEntry {
       extends SqsAckResultEntry {
 
     override type Result = ChangeMessageVisibilityBatchResultEntry
+
+    /**
+     * Java API
+     *
+     * @since 2.0.0
+     */
+    override def getResult: ChangeMessageVisibilityBatchResultEntry = result
 
     override def toString: String =
       s"SqsChangeMessageVisibilityResultEntry(messageAction=$messageAction,result=$result)"

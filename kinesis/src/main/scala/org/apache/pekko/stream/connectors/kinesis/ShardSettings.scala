@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.kinesis.model.ShardIteratorType
 
 import scala.concurrent.duration._
 import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 final class ShardSettings private (
     val streamName: String,
@@ -54,6 +55,27 @@ final class ShardSettings private (
   /** Java API */
   def withRefreshInterval(value: java.time.Duration): ShardSettings = copy(refreshInterval = value.toScala)
   def withLimit(value: Int): ShardSettings = copy(limit = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getStartingSequenceNumber: java.util.Optional[String] = startingSequenceNumber.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAtTimestamp: java.util.Optional[java.time.Instant] = atTimestamp.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRefreshInterval: java.time.Duration = refreshInterval.toJava
 
   private def copy(
       streamName: String = streamName,

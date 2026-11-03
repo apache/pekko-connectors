@@ -31,4 +31,22 @@ object KinesisFirehoseFlow {
       kinesisClient: FirehoseAsyncClient): Flow[Record, PutRecordBatchResponseEntry, NotUsed] =
     scaladsl.KinesisFirehoseFlow.apply(streamName, settings)(kinesisClient).asJava
 
+  /**
+   * Java API: the same as `apply`
+   *
+   * @since 2.0.0
+   */
+  def create(streamName: String,
+      kinesisClient: FirehoseAsyncClient): Flow[Record, PutRecordBatchResponseEntry, NotUsed] =
+    apply(streamName, kinesisClient)
+
+  /**
+   * Java API: the same as `apply`
+   *
+   * @since 2.0.0
+   */
+  def create(streamName: String,
+      settings: KinesisFirehoseFlowSettings,
+      kinesisClient: FirehoseAsyncClient): Flow[Record, PutRecordBatchResponseEntry, NotUsed] =
+    apply(streamName, settings, kinesisClient)
 }

@@ -49,4 +49,54 @@ object KinesisFlow {
       .FlowWithContext[PutRecordsRequestEntry, T]
       .via(scaladsl.KinesisFlow.withContext[T](streamName, settings)(kinesisClient))
       .asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def byPartitionAndData(streamName: String,
+      kinesisClient: KinesisAsyncClient)
+      : Flow[pekko.japi.Pair[String, java.nio.ByteBuffer], PutRecordsResultEntry, NotUsed] =
+    byPartitionAndData(streamName, KinesisFlowSettings.Defaults, kinesisClient)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def byPartitionAndData(streamName: String,
+      settings: KinesisFlowSettings,
+      kinesisClient: KinesisAsyncClient)
+      : Flow[pekko.japi.Pair[String, java.nio.ByteBuffer], PutRecordsResultEntry, NotUsed] =
+    pekko.stream.scaladsl
+      .Flow[pekko.japi.Pair[String, java.nio.ByteBuffer]]
+      .map(_.toScala)
+      .via(scaladsl.KinesisFlow.byPartitionAndData(streamName, settings)(kinesisClient))
+      .asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def byPartitionAndBytes(streamName: String,
+      kinesisClient: KinesisAsyncClient)
+      : Flow[pekko.japi.Pair[String, pekko.util.ByteString], PutRecordsResultEntry, NotUsed] =
+    byPartitionAndBytes(streamName, KinesisFlowSettings.Defaults, kinesisClient)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def byPartitionAndBytes(streamName: String,
+      settings: KinesisFlowSettings,
+      kinesisClient: KinesisAsyncClient)
+      : Flow[pekko.japi.Pair[String, pekko.util.ByteString], PutRecordsResultEntry, NotUsed] =
+    pekko.stream.scaladsl
+      .Flow[pekko.japi.Pair[String, pekko.util.ByteString]]
+      .map(_.toScala)
+      .via(scaladsl.KinesisFlow.byPartitionAndBytes(streamName, settings)(kinesisClient))
+      .asJava
 }

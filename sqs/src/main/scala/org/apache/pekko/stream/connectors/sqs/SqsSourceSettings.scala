@@ -19,6 +19,8 @@ import software.amazon.awssdk.services.sqs.model
 
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.CollectionConverters._
+import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 final class SqsSourceSettings private (
     val waitTimeSeconds: Int,
@@ -112,6 +114,38 @@ final class SqsSourceSettings private (
    */
   def withVisibilityTimeout(timeout: FiniteDuration): SqsSourceSettings =
     copy(visibilityTimeout = Some(timeout))
+
+  /**
+   * Java API: the period of time during which Amazon SQS prevents other consumers
+   * from receiving and processing an already received message (see Amazon SQS doc)
+   *
+   * Default: not set - taken from the SQS queue configuration
+   *
+   * @since 2.0.0
+   */
+  def withVisibilityTimeout(timeout: java.time.Duration): SqsSourceSettings =
+    copy(visibilityTimeout = Some(timeout.toScala))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAttributeNames: java.util.List[MessageSystemAttributeName] = attributeNames.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMessageAttributeNames: java.util.List[MessageAttributeName] = messageAttributeNames.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getVisibilityTimeout: java.util.Optional[java.time.Duration] = visibilityTimeout.map(_.toJava).toJava
 
   private def copy(
       waitTimeSeconds: Int = waitTimeSeconds,
