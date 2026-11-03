@@ -1075,7 +1075,7 @@ object FailedUpload {
    *
    * @since 2.0.0
    */
-  def create(reasons: java.util.List[Throwable]): FailedUpload = FailedUpload(reasons.asScala.toList)
+  def create(reasons: java.util.List[? <: Throwable]): FailedUpload = FailedUpload(reasons.asScala.toList)
 }
 
 final class ListBucketsResultContents private (val creationDate: java.time.Instant, val name: String) {

@@ -126,9 +126,9 @@ public class S3JavaApiTest {
             .withLocation(Uri.create("http://b"));
     assertEquals(Uri.create("http://b"), result.getLocation());
 
-    Throwable reason = new RuntimeException("boom");
-    assertEquals(
-        reason, FailedUpload.create(Collections.singletonList(reason)).getReasons().get(0));
+    RuntimeException reason = new RuntimeException("boom");
+    List<RuntimeException> reasons = Collections.singletonList(reason);
+    assertEquals(reason, FailedUpload.create(reasons).getReasons().get(0));
   }
 
   /** Compile-only check: S3 operations can be called without Scala defaults or implicits. */
