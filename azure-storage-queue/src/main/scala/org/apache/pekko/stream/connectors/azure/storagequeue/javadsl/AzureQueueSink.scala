@@ -32,6 +32,14 @@ object AzureQueueSink {
     fromFunction(AzureQueueSinkFunctions.addMessage(() => cloudQueue.get)(_))
 
   /**
+   * JavaAPI: creates a [[pekko.stream.javadsl.Sink]] which handles each element with the given function.
+   *
+   * @since 2.0.0
+   */
+  def fromConsumer[T](f: java.util.function.Consumer[T]): Sink[T, CompletionStage[Done]] =
+    fromFunction[T](f.accept(_))
+
+  /**
    * Internal API
    */
   private[javadsl] def fromFunction[T](f: T => Unit): Sink[T, CompletionStage[Done]] = {

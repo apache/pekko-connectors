@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.reference
 
 import org.apache.pekko
+import pekko.NotUsed
 import pekko.actor.{
   ActorSystem,
   ClassicActorSystemProvider,
@@ -41,7 +42,14 @@ import com.typesafe.config.Config
  */
 final class Resource private (val settings: ResourceSettings) {
   // a resource that is to be used when creating Pekko Stream operators.
-  val connection = Flow[ByteString].map(_.reverse)
+  val connection: Flow[ByteString, ByteString, NotUsed] = Flow[ByteString].map(_.reverse)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnection: pekko.stream.javadsl.Flow[ByteString, ByteString, NotUsed] = connection.asJava
 
   /**
    * Resource cleanup logic
