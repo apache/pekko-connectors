@@ -155,7 +155,8 @@ public class JmsIbmmqConnectorsTest {
     Sink<String, CompletionStage<Done>> jmsSink =
         JmsProducer.textSink(
             JmsProducerSettings.create(system, queueConnectionFactory)
-                .withDestination(new CustomDestination("custom", createQueue(customQueue))));
+                .withDestination(
+                    CustomDestination.fromFunction("custom", createQueue(customQueue))));
 
     List<String> in = List.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k");
 
@@ -165,7 +166,8 @@ public class JmsIbmmqConnectorsTest {
     Source<String, JmsConsumerControl> jmsSource =
         JmsConsumer.textSource(
             JmsConsumerSettings.create(system, queueConnectionFactory)
-                .withDestination(new CustomDestination("custom", createQueue(customQueue))));
+                .withDestination(
+                    CustomDestination.fromFunction("custom", createQueue(customQueue))));
 
     // #ibmmq-custom-destination
 

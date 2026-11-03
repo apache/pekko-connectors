@@ -69,7 +69,27 @@ final case class Queue(override val name: String) extends Destination {
 final case class CustomDestination(override val name: String, override val create: jms.Session => jms.Destination)
     extends Destination {
 
-  /** Java API */
+  /**
+   * Java API
+   *
+   * @deprecated A Java lambda passed to this constructor is ambiguous with the primary constructor; use
+   *             `CustomDestination.fromFunction`.
+   */
+  @deprecated("Use CustomDestination.fromFunction, a Java lambda passed to this constructor is ambiguous", "2.0.0")
   def this(name: String, create: java.util.function.Function[jms.Session, jms.Destination]) =
     this(name, create.asScala)
+}
+
+// extends AbstractFunction2 like the companion the compiler generates when there is no explicit one
+object CustomDestination
+    extends scala.runtime.AbstractFunction2[String, jms.Session => jms.Destination, CustomDestination] {
+
+  /**
+   * Java API: Create a destination with a function that creates the JMS destination from a session.
+   *
+   * @since 2.0.0
+   */
+  def fromFunction(name: String,
+      create: java.util.function.Function[jms.Session, jms.Destination]): CustomDestination =
+    CustomDestination(name, create.asScala)
 }

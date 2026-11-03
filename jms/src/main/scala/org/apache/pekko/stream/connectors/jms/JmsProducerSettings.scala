@@ -19,6 +19,7 @@ import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsProducer]] and [[pekko.stream.connectors.jms.javadsl.JmsProducer]].
@@ -83,6 +84,38 @@ final class JmsProducerSettings private (
   /** Java API: Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: java.time.Duration): JmsProducerSettings =
     copy(connectionStatusSubscriptionTimeout = value.toScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDestination: java.util.Optional[Destination] = destination.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCredentials: java.util.Optional[Credentials] = credentials.toJava
+
+  /**
+   * Java API: an infinite time to live is returned as `ChronoUnit.FOREVER.getDuration`
+   *
+   * @since 2.0.0
+   */
+  def getTimeToLive: java.util.Optional[java.time.Duration] = timeToLive.map(ttl =>
+    ttl match {
+      case finite: scala.concurrent.duration.FiniteDuration => finite.toJava
+      case _                                                => java.time.temporal.ChronoUnit.FOREVER.getDuration
+    }).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionStatusSubscriptionTimeout: java.time.Duration = connectionStatusSubscriptionTimeout.toJava
 
   private def copy(
       connectionFactory: javax.jms.ConnectionFactory = connectionFactory,
