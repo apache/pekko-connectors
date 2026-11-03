@@ -90,7 +90,7 @@ Java
 
 ## Custom Session creation
 
-Session creation and configuration is controlled via settings in `application.conf`. The @apidoc[org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings] accept a full path to a configuration section which needs to specify a `session-provider` setting. The @apidoc[CassandraSessionRegistry] expects a fully qualified class name to a class implementing @apidoc[CqlSessionProvider].
+Session creation and configuration is controlled via settings in `application.conf`. The @apidoc[org.apache.pekko.stream.connectors.cassandra.CassandraSessionSettings] accept a full path to a configuration section which needs to specify a `session-provider` setting. The @apidoc[CassandraSessionRegistry] expects a fully qualified class name to a class implementing @apidoc[CqlSessionProvider]. Java implementations can extend @apidoc[AbstractCqlSessionProvider], which takes an `Executor` and returns a `CompletionStage`.
 
 Apache Pekko Connectors Cassandra includes a default implementation @apidoc[DefaultSessionProvider], which is referenced in the default configuration `pekko.connectors.cassandra`.
 

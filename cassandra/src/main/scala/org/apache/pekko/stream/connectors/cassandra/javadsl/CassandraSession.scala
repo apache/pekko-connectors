@@ -40,6 +40,24 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement
 import com.datastax.oss.driver.api.core.cql.Row
 import com.datastax.oss.driver.api.core.cql.Statement
 
+object CassandraSession {
+
+  /**
+   * Create a stand-alone `CassandraSession`, using a `java.util.concurrent.Executor` for its callbacks.
+   *
+   * @since 2.0.0
+   */
+  def create(system: ClassicActorSystemProvider,
+      sessionProvider: CqlSessionProvider,
+      executor: Executor,
+      log: LoggingAdapter,
+      metricsCategory: String,
+      init: JFunction[CqlSession, CompletionStage[Done]],
+      onClose: java.lang.Runnable): CassandraSession =
+    new CassandraSession(system, sessionProvider, ExecutionContext.fromExecutor(executor), log, metricsCategory,
+      init, onClose)
+}
+
 /**
  * Data Access Object for Cassandra. The statements are expressed in
  * <a href="https://cassandra.apache.org/doc/latest/cql/">Apache Cassandra Query Language</a>
