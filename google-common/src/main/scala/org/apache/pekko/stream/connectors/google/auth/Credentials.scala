@@ -32,6 +32,14 @@ import scala.util.control.NonFatal
 object Credentials {
 
   /**
+   * Java API: Creates [[Credentials]] to access Google APIs from a given configuration.
+   * Assume that construction is "resource-heavy" (e.g. spawns actors) so prefer to cache and reuse.
+   *
+   * @since 2.0.0
+   */
+  def create(c: Config, system: ClassicActorSystemProvider): Credentials = apply(c)(system)
+
+  /**
    * Creates [[Credentials]] to access Google APIs from a given configuration.
    * Assume that construction is "resource-heavy" (e.g. spawns actors) so prefer to cache and reuse.
    */

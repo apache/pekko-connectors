@@ -63,8 +63,8 @@ final case class QueryRequest private[bigquery] (query: String,
   def getUseLegacySql = useLegacySql.map(lang.Boolean.valueOf).toJava
   def getRequestId = requestId.toJava
   def getLocation = location.toJava
-  def getMaximumBytesBilled = maximumBytesBilled.toJava
-  def getLabels = labels.toJava
+  def getMaximumBytesBilled: util.Optional[lang.Long] = maximumBytesBilled.map(lang.Long.valueOf).toJava
+  def getLabels: util.Optional[util.Map[String, String]] = labels.map(_.asJava).toJava
 
   def withQuery(query: String) =
     copy(query = query)

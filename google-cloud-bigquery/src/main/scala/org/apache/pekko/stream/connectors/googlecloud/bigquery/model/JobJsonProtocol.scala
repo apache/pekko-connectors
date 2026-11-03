@@ -85,7 +85,7 @@ object Job {
 final case class JobConfiguration private[bigquery] (load: Option[JobConfigurationLoad],
     labels: Option[Map[String, String]]) {
   def getLoad = load.toJava
-  def getLabels = labels.toJava
+  def getLabels: util.Optional[util.Map[String, String]] = labels.map(_.asJava).toJava
 
   def withLoad(load: Option[JobConfigurationLoad]) =
     copy(load = load)

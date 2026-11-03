@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 import org.apache.pekko.NotUsed;
+import org.apache.pekko.japi.Pair;
 import org.apache.pekko.actor.ActorSystem;
 // #read-all
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.BigQueryRecord;
@@ -28,7 +29,6 @@ import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.
 import org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.scaladsl.GrpcBigQueryStorageReader;
 import org.apache.pekko.stream.javadsl.Source;
 import org.apache.pekko.util.ByteString;
-import scala.Tuple2;
 import com.google.cloud.bigquery.storage.v1.DataFormat;
 import com.google.cloud.bigquery.storage.v1.ReadSession;
 import com.google.cloud.bigquery.storage.v1.storage.ReadRowsResponse;
@@ -42,12 +42,12 @@ public class ExampleReader {
 
   // #read-all
   Source<
-          Tuple2<
+          Pair<
               com.google.cloud.bigquery.storage.v1.stream.ReadSession.Schema,
               List<Source<ReadRowsResponse.Rows, NotUsed>>>,
           CompletionStage<NotUsed>>
       sourceOfSources =
-          BigQueryStorage.create("projectId", "datasetId", "tableId", DataFormat.AVRO);
+          BigQueryStorage.createAsPair("projectId", "datasetId", "tableId", DataFormat.AVRO);
   // #read-all
 
   // #read-options
@@ -59,12 +59,12 @@ public class ExampleReader {
           .build();
 
   Source<
-          Tuple2<
+          Pair<
               com.google.cloud.bigquery.storage.v1.stream.ReadSession.Schema,
               List<Source<ReadRowsResponse.Rows, NotUsed>>>,
           CompletionStage<NotUsed>>
       sourceOfSourcesFiltered =
-          BigQueryStorage.create(
+          BigQueryStorage.createAsPair(
               "projectId", "datasetId", "tableId", DataFormat.AVRO, readOptions, 1);
   // #read-options
 
@@ -100,12 +100,12 @@ public class ExampleReader {
       GrpcBigQueryStorageReader.apply(BigQueryStorageSettings.apply("localhost", 8000), sys);
 
   Source<
-          Tuple2<
+          Pair<
               com.google.cloud.bigquery.storage.v1.stream.ReadSession.Schema,
               List<Source<ReadRowsResponse.Rows, NotUsed>>>,
           CompletionStage<NotUsed>>
       sourceForReader =
-          BigQueryStorage.create(
+          BigQueryStorage.createAsPair(
                   "projectId", "datasetId", "tableId", DataFormat.AVRO, readOptions, 1)
               .withAttributes(BigQueryStorageAttributes.reader(reader));
   // #attributes

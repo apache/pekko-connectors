@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
 
+import scala.jdk.CollectionConverters._
+
 /**
  * ApnsConfig model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#ApnsConfig
@@ -22,6 +24,14 @@ case class ApnsConfig(
     payload: Option[String] = None,
     fcm_options: Option[FcmOption] = None) {
   def withHeaders(value: Map[String, String]): ApnsConfig = this.copy(headers = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withHeaders(value: java.util.Map[String, String]): ApnsConfig =
+    withHeaders(value.asScala.toMap)
   def withPayload(value: String): ApnsConfig = this.copy(payload = Option(value))
   def withFcmOptions(value: FcmOption): ApnsConfig = this.copy(fcm_options = Option(value))
 }

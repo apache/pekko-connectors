@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage.javadsl
 
 import org.apache.pekko
 import pekko.NotUsed
+import pekko.japi.Pair
 import pekko.http.javadsl.unmarshalling.Unmarshaller
 import pekko.http.scaladsl.unmarshalling.FromByteStringUnmarshaller
 import pekko.stream.connectors.googlecloud.bigquery.storage.ProtobufConverters._
@@ -28,6 +29,7 @@ import com.google.cloud.bigquery.storage.v1.stream.ReadSession
 
 import java.util.concurrent.CompletionStage
 
+import scala.annotation.nowarn
 import scala.jdk.CollectionConverters._
 import scala.jdk.FutureConverters._
 
@@ -44,6 +46,7 @@ object BigQueryStorage {
    * @param tableId    the table to query
    * @param dataFormat the format to Receive the data
    */
+  @deprecated("Use createAsPair, which emits a org.apache.pekko.japi.Pair", "2.0.0")
   def create(
       projectId: String,
       datasetId: String,
@@ -62,6 +65,7 @@ object BigQueryStorage {
    * @param dataFormat  the format to Receive the data
    * @param readOptions TableReadOptions to reduce the amount of data to return, either by column projection or filtering
    */
+  @deprecated("Use createAsPair, which emits a org.apache.pekko.japi.Pair", "2.0.0")
   def create(
       projectId: String,
       datasetId: String,
@@ -83,6 +87,7 @@ object BigQueryStorage {
    *                      Must be non-negative. The number of streams may be lower than the requested number, depending on the amount parallelism that is reasonable for the table.
    *                      Error will be returned if the max count is greater than the current system max limit of 1,000.
    */
+  @deprecated("Use createAsPair, which emits a org.apache.pekko.japi.Pair", "2.0.0")
   def create(
       projectId: String,
       datasetId: String,
@@ -104,6 +109,7 @@ object BigQueryStorage {
    *                      Must be non-negative. The number of streams may be lower than the requested number, depending on the amount parallelism that is reasonable for the table.
    *                      Error will be returned if the max count is greater than the current system max limit of 1,000.
    */
+  @deprecated("Use createAsPair, which emits a org.apache.pekko.japi.Pair", "2.0.0")
   def create(
       projectId: String,
       datasetId: String,
@@ -219,4 +225,46 @@ object BigQueryStorage {
       .asJava
       .mapMaterializedValue(_.asJava)
 
+  /**
+   * The same as `create`, emitting a [[pekko.japi.Pair]] instead of a Scala tuple.
+   *
+   * @since 2.0.0
+   */
+  @nowarn("cat=deprecation")
+  def createAsPair(projectId: String, datasetId: String, tableId: String, dataFormat: DataFormat): Source[Pair[
+      ReadSession.Schema, java.util.List[Source[ReadRowsResponse.Rows, NotUsed]]], CompletionStage[NotUsed]] =
+    create(projectId, datasetId, tableId, dataFormat).map(t => Pair.create(t._1, t._2))
+
+  /**
+   * The same as `create`, emitting a [[pekko.japi.Pair]] instead of a Scala tuple.
+   *
+   * @since 2.0.0
+   */
+  @nowarn("cat=deprecation")
+  def createAsPair(projectId: String, datasetId: String, tableId: String, dataFormat: DataFormat,
+      readOptions: TableReadOptions): Source[Pair[ReadSession.Schema,
+    java.util.List[Source[ReadRowsResponse.Rows, NotUsed]]], CompletionStage[NotUsed]] =
+    create(projectId, datasetId, tableId, dataFormat, readOptions).map(t => Pair.create(t._1, t._2))
+
+  /**
+   * The same as `create`, emitting a [[pekko.japi.Pair]] instead of a Scala tuple.
+   *
+   * @since 2.0.0
+   */
+  @nowarn("cat=deprecation")
+  def createAsPair(projectId: String, datasetId: String, tableId: String, dataFormat: DataFormat,
+      readOptions: TableReadOptions, maxNumStreams: Int): Source[Pair[ReadSession.Schema,
+    java.util.List[Source[ReadRowsResponse.Rows, NotUsed]]], CompletionStage[NotUsed]] =
+    create(projectId, datasetId, tableId, dataFormat, readOptions, maxNumStreams).map(t => Pair.create(t._1, t._2))
+
+  /**
+   * The same as `create`, emitting a [[pekko.japi.Pair]] instead of a Scala tuple.
+   *
+   * @since 2.0.0
+   */
+  @nowarn("cat=deprecation")
+  def createAsPair(projectId: String, datasetId: String, tableId: String, dataFormat: DataFormat, maxNumStreams: Int)
+      : Source[Pair[ReadSession.Schema, java.util.List[Source[ReadRowsResponse.Rows, NotUsed]]],
+        CompletionStage[NotUsed]] =
+    create(projectId, datasetId, tableId, dataFormat, maxNumStreams).map(t => Pair.create(t._1, t._2))
 }
