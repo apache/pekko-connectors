@@ -20,6 +20,7 @@ import scala.collection.immutable.Map
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Quality of Service constants as defined in
@@ -107,6 +108,13 @@ final class MqttSubscriptions private (
   /** Java API */
   def withSubscriptions(subscriptions: java.util.List[pekko.japi.Pair[String, MqttQoS]]): MqttSubscriptions =
     new MqttSubscriptions(subscriptions.asScala.map(_.toScala).toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSubscriptions: java.util.Map[String, MqttQoS] = subscriptions.asJava
 
   /** Add this subscription to the map of subscriptions configured already. */
   def addSubscription(topic: String, qos: MqttQoS): MqttSubscriptions =
@@ -245,6 +253,86 @@ final class MqttConnectionSettings private (val broker: String,
     copy(
       offlinePersistenceSettings =
         Option(MqttOfflinePersistenceSettings(bufferSize, deleteOldestMessage, persistBuffer)))
+
+  /**
+   * Java API: enable offline persistence with the default settings.
+   *
+   * @since 2.0.0
+   */
+  def withOfflinePersistenceSettings(): MqttConnectionSettings =
+    withOfflinePersistenceSettings(5000, false, true)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAuth: java.util.Optional[pekko.japi.Pair[String, String]] = auth.map { case (username, password) =>
+    pekko.japi.Pair.create(username, password)
+  }.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSocketFactory: java.util.Optional[javax.net.ssl.SSLSocketFactory] = socketFactory.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getWill: java.util.Optional[MqttMessage] = will.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKeepAliveInterval: java.time.Duration = keepAliveInterval.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionTimeout: java.time.Duration = connectionTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSslHostnameVerifier: java.util.Optional[javax.net.ssl.HostnameVerifier] = sslHostnameVerifier.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSslProperties: java.util.Map[String, String] = sslProperties.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDisconnectQuiesceTimeout: java.time.Duration = disconnectQuiesceTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDisconnectTimeout: java.time.Duration = disconnectTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getServerUris: java.util.List[String] = serverUris.asJava
 
   private def copy(
       broker: String = broker,
