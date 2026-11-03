@@ -15,11 +15,14 @@ package org.apache.pekko.stream.connectors.google
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
+import pekko.http.{ javadsl => jh }
 import pekko.testkit.TestKit
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.flatspec.AnyFlatSpecLike
 import org.scalatest.matchers.should.Matchers
+
+import javax.net.ssl.SSLContext
 
 import scala.annotation.nowarn
 
@@ -146,5 +149,21 @@ class GoogleSettingsSpec
                 """.stripMargin
     noException should be thrownBy mkRequestSettings(config)
     mkRequestSettings(config).forwardProxy shouldEqual None
+  }
+
+  it should "create a ForwardProxy from a javadsl HttpsConnectionContext" in {
+    val context: jh.HttpsConnectionContext = jh.ConnectionContext.httpsClient(SSLContext.getDefault)
+    val poolSettings = jh.settings.ConnectionPoolSettings.create(system)
+    val proxy = ForwardProxy.create(context, poolSettings)
+    proxy.getConnectionContext shouldBe theSameInstanceAs(context)
+    proxy.getPoolSettings shouldBe theSameInstanceAs(poolSettings)
+  }
+
+  it should "reject a plain HttpConnectionContext in the deprecated ForwardProxy.create" in {
+    val context: jh.HttpConnectionContext = jh.ConnectionContext.noEncryption()
+    val poolSettings = jh.settings.ConnectionPoolSettings.create(system)
+    @nowarn("cat=deprecation")
+    val thrown = the[IllegalArgumentException] thrownBy ForwardProxy.create(context, poolSettings)
+    thrown.getMessage should include("HttpsConnectionContext")
   }
 }
