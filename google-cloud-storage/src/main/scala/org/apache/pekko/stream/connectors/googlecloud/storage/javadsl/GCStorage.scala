@@ -17,7 +17,7 @@ import java.util.Optional
 import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
-import pekko.actor.ActorSystem
+import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import pekko.http.javadsl.model.ContentType
 import pekko.http.scaladsl.model.{ ContentType => ScalaContentType }
 import pekko.stream.connectors.googlecloud.storage.impl.GCStorageStream
@@ -37,6 +37,43 @@ import scala.jdk.OptionConverters._
  * Factory of Google Cloud Storage operations.
  */
 object GCStorage {
+
+  /**
+   * Gets information on a bucket
+   * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/get
+   *
+   * @param bucketName the name of the bucket to look up
+   * @param system actor system to run with
+   * @return a `CompletionStage` containing `Bucket` if it exists
+   * @since 2.0.0
+   */
+  def getBucket(bucketName: String, system: ClassicActorSystemProvider): CompletionStage[Optional[Bucket]] =
+    getBucket(bucketName, system.classicSystem, Attributes())
+
+  /**
+   * Creates a new bucket
+   * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
+   *
+   * @param bucketName the name of the bucket
+   * @param location the region to put the bucket in
+   * @param system actor system to run with
+   * @return a `CompletionStage` of `Bucket` with created bucket
+   * @since 2.0.0
+   */
+  def createBucket(bucketName: String, location: String, system: ClassicActorSystemProvider): CompletionStage[Bucket] =
+    createBucket(bucketName, location, system.classicSystem, Attributes())
+
+  /**
+   * Deletes bucket
+   * @see https://cloud.google.com/storage/docs/json_api/v1/buckets/delete
+   *
+   * @param bucketName the name of the bucket
+   * @param system actor system to run with
+   * @return a `CompletionStage` of `Done` on successful deletion
+   * @since 2.0.0
+   */
+  def deleteBucket(bucketName: String, system: ClassicActorSystemProvider): CompletionStage[Done] =
+    deleteBucket(bucketName, system.classicSystem, Attributes())
 
   /**
    * Gets information on a bucket

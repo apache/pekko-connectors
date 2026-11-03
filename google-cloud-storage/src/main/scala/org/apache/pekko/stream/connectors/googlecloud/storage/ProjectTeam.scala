@@ -13,7 +13,21 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-final class ProjectTeam private (projectNumber: String, team: String) {
+final class ProjectTeam private (val projectNumber: String, val team: String) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProjectNumber: String = projectNumber
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getTeam: String = team
   def withProjectNumber(projectNumber: String): ProjectTeam =
     copy(projectNumber = projectNumber)
   def withTeam(team: String): ProjectTeam = copy(team = team)

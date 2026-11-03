@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
 
+import scala.jdk.CollectionConverters._
+
 /**
  * Firebase Cloud Message model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages
@@ -41,6 +43,14 @@ case class FcmNotification(
   def withBasicNotification(notification: BasicNotification): FcmNotification =
     this.copy(notification = Option(notification))
   def withData(data: Map[String, String]): FcmNotification = this.copy(data = Option(data))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withData(data: java.util.Map[String, String]): FcmNotification =
+    withData(data.asScala.toMap)
   def withApnsConfig(apns: ApnsConfig): FcmNotification = this.copy(apns = Option(apns))
   def withWebPushConfig(webPush: WebPushConfig): FcmNotification = this.copy(webpush = Option(webPush))
   def withAndroidConfig(android: AndroidConfig): FcmNotification = this.copy(android = Option(android))

@@ -27,5 +27,5 @@ object FailedUpload {
   def apply(reasons: Seq[Throwable]) = new FailedUpload(reasons)
 
   /** Java API */
-  def create(reasons: java.util.List[Throwable]) = FailedUpload(reasons.asScala.toList)
+  def create(reasons: java.util.List[? <: Throwable]) = FailedUpload(reasons.asScala.toList)
 }

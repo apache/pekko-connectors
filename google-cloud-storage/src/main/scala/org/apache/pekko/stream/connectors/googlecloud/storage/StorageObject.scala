@@ -103,8 +103,8 @@ final class StorageObject private (
   def getContentDisposition: Optional[String] = contentDisposition.toJava
   def getContentEncoding: Optional[String] = contentEncoding.toJava
   def getContentLanguage: Optional[String] = contentLanguage.toJava
-  def getTemporaryHold: Optional[Boolean] = temporaryHold.toJava
-  def getEventBasedHold: Optional[Boolean] = eventBasedHold.toJava
+  def getTemporaryHold: Optional[java.lang.Boolean] = temporaryHold.map(Boolean.box).toJava
+  def getEventBasedHold: Optional[java.lang.Boolean] = eventBasedHold.map(Boolean.box).toJava
   def getRetentionExpirationTime: Optional[OffsetDateTime] = retentionExpirationTime.toJava
   def getCacheControl: Optional[String] = cacheControl.toJava
   def getMetadata: Optional[java.util.Map[String, String]] = metadata.map(_.asJava).toJava
@@ -151,11 +151,27 @@ final class StorageObject private (
   def withCacheControl(value: String): StorageObject = copy(cacheControl = Option(value))
   def withCustomTime(value: OffsetDateTime): StorageObject = copy(customTime = Option(value))
   def withMetadata(value: Map[String, String]): StorageObject = copy(metadata = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withMetadata(value: java.util.Map[String, String]): StorageObject =
+    withMetadata(value.asScala.toMap)
   def withComponentCount(value: Int): StorageObject = copy(componentCount = Option(value))
   def withKmsKeyName(value: String): StorageObject = copy(kmsKeyName = Option(value))
   def withCustomerEncryption(value: CustomerEncryption): StorageObject = copy(customerEncryption = Option(value))
   def withOwner(value: Owner): StorageObject = copy(owner = Option(value))
   def withAcl(value: List[ObjectAccessControls]): StorageObject = copy(acl = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withAcl(value: java.util.List[ObjectAccessControls]): StorageObject =
+    withAcl(value.asScala.toList)
 
   private def copy(
       kind: String = kind,
@@ -438,18 +454,18 @@ object StorageObject {
       contentEncoding: Optional[String],
       contentLanguage: Optional[String],
       metageneration: Long,
-      temporaryHold: Optional[Boolean],
-      eventBasedHold: Optional[Boolean],
+      temporaryHold: Optional[java.lang.Boolean],
+      eventBasedHold: Optional[java.lang.Boolean],
       retentionExpirationTime: Optional[OffsetDateTime],
       timeStorageClassUpdated: OffsetDateTime,
       cacheControl: Optional[String],
       customTime: Optional[OffsetDateTime],
-      metadata: Optional[Map[String, String]],
-      componentCount: Optional[Int],
+      metadata: Optional[java.util.Map[String, String]],
+      componentCount: Optional[java.lang.Integer],
       kmsKeyName: Optional[String],
       customerEncryption: Optional[CustomerEncryption],
       owner: Optional[Owner],
-      acl: Optional[List[ObjectAccessControls]]): StorageObject = new StorageObject(
+      acl: Optional[java.util.List[ObjectAccessControls]]): StorageObject = new StorageObject(
     kind,
     id,
     name,
@@ -474,16 +490,16 @@ object StorageObject {
     contentEncoding.toScala,
     contentLanguage.toScala,
     metageneration,
-    temporaryHold.toScala,
-    eventBasedHold.toScala,
+    temporaryHold.toScala.map(_.booleanValue),
+    eventBasedHold.toScala.map(_.booleanValue),
     retentionExpirationTime.toScala,
     timeStorageClassUpdated,
     cacheControl.toScala,
     customTime.toScala,
-    metadata.toScala,
-    componentCount.toScala,
+    metadata.toScala.map(_.asScala.toMap),
+    componentCount.toScala.map(_.intValue),
     kmsKeyName.toScala,
     customerEncryption.toScala,
     owner.toScala,
-    acl.toScala)
+    acl.toScala.map(_.asScala.toList))
 }
