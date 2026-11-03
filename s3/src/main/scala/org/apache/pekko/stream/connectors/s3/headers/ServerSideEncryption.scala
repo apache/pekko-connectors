@@ -22,6 +22,7 @@ import pekko.http.scaladsl.model.headers.RawHeader
 import pekko.stream.connectors.s3.impl._
 import software.amazon.awssdk.utils.BinaryUtils
 import software.amazon.awssdk.utils.Md5Utils
+import scala.jdk.OptionConverters._
 
 /**
  * Documentation: http://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html
@@ -90,6 +91,13 @@ final class KMS private[headers] (val keyId: String, val context: Option[String]
   def withKeyId(keyId: String): KMS = copy(keyId = keyId)
   def withContext(context: String): KMS = copy(context = Some(context))
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getContext: java.util.Optional[String] = context.toJava
+
   private def copy(
       keyId: String = keyId,
       context: Option[String] = context): KMS = new KMS(
@@ -152,6 +160,13 @@ final class CustomerKeys private[headers] (val key: String, val md5: Option[Stri
 
   def withKey(key: String): CustomerKeys = copy(key = key)
   def withMd5(md5: String): CustomerKeys = copy(md5 = Some(md5))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMd5: java.util.Optional[String] = md5.toJava
 
   private def copy(
       key: String = key,

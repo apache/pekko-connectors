@@ -133,10 +133,18 @@ final class BucketVersioningResult private (val status: Option[BucketVersioningS
     val mfaDelete: Option[Boolean]) {
 
   /** Java API */
+  @deprecated("Use getStatusOptional, which returns a java.util.Optional", "2.0.0")
   def getStatus: Option[BucketVersioningStatus] = status
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getStatusOptional: java.util.Optional[BucketVersioningStatus] = status.toJava
+
   /** Java API */
-  def getMfaDelete: java.util.Optional[Boolean] = mfaDelete.toJava
+  def getMfaDelete: java.util.Optional[java.lang.Boolean] = mfaDelete.map(Boolean.box).toJava
 
   def withStatus(value: BucketVersioningStatus): BucketVersioningResult =
     copy(status = Some(value))
@@ -184,9 +192,9 @@ object BucketVersioningResult {
   /** Java API */
   def create(): BucketVersioningResult = apply()
 
-  def create(status: java.util.Optional[BucketVersioningStatus], mfaDelete: java.util.Optional[Boolean])
+  def create(status: java.util.Optional[BucketVersioningStatus], mfaDelete: java.util.Optional[java.lang.Boolean])
       : BucketVersioningResult =
-    apply(status.toScala, mfaDelete.toScala)
+    apply(status.toScala, mfaDelete.toScala.map(_.booleanValue))
 
 }
 
@@ -441,6 +449,13 @@ final class MultipartUploadResult private (
   def getVersionId: Optional[String] = versionId.toJava
 
   def withLocation(value: Uri): MultipartUploadResult = copy(location = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withLocation(value: pekko.http.javadsl.model.Uri): MultipartUploadResult = copy(location = value.asScala())
   def withBucket(value: String): MultipartUploadResult = copy(bucket = value)
   def withKey(value: String): MultipartUploadResult = copy(key = value)
   def withETag(value: String): MultipartUploadResult = copy(eTag = value)
@@ -1052,8 +1067,15 @@ object FailedUpload {
 
   def apply(reasons: Seq[Throwable]): FailedUpload = new FailedUpload(reasons)
 
-  /** Java API */
+  /** Scala API */
   def create(reasons: Seq[Throwable]): FailedUpload = FailedUpload(reasons)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(reasons: java.util.List[Throwable]): FailedUpload = FailedUpload(reasons.asScala.toList)
 }
 
 final class ListBucketsResultContents private (val creationDate: java.time.Instant, val name: String) {

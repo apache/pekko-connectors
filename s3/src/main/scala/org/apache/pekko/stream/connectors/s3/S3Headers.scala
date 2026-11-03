@@ -23,6 +23,7 @@ import pekko.stream.connectors.s3.headers.{ CannedAcl, ServerSideEncryption, Sto
 import pekko.stream.connectors.s3.impl.S3Request
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 final class MetaHeaders private (val metaHeaders: Map[String, String]) {
 
@@ -33,6 +34,21 @@ final class MetaHeaders private (val metaHeaders: Map[String, String]) {
 
   def withMetaHeaders(metaHeaders: Map[String, String]) = new MetaHeaders(
     metaHeaders = metaHeaders)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withMetaHeaders(metaHeaders: java.util.Map[String, String]): MetaHeaders =
+    new MetaHeaders(metaHeaders = metaHeaders.asScala.toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMetaHeaders: java.util.Map[String, String] = metaHeaders.asJava
 
   override def toString: String =
     "MetaHeaders(" +
@@ -88,6 +104,57 @@ final class S3Headers private (val cannedAcl: Option[CannedAcl] = None,
     copy(serverSideEncryption = Some(serverSideEncryption))
   def withOptionalServerSideEncryption(serverSideEncryption: Option[ServerSideEncryption]): S3Headers =
     copy(serverSideEncryption = serverSideEncryption)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withCustomHeaders(customHeaders: java.util.Map[String, String]): S3Headers =
+    copy(customHeaders = customHeaders.asScala.toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withOptionalServerSideEncryption(serverSideEncryption: java.util.Optional[ServerSideEncryption]): S3Headers =
+    copy(serverSideEncryption = serverSideEncryption.toScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCannedAcl: java.util.Optional[CannedAcl] = cannedAcl.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMetaHeaders: java.util.Optional[MetaHeaders] = metaHeaders.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getStorageClass: java.util.Optional[StorageClass] = storageClass.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCustomHeaders: java.util.Map[String, String] = customHeaders.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getServerSideEncryption: java.util.Optional[ServerSideEncryption] = serverSideEncryption.toJava
 
   private def copy(
       cannedAcl: Option[CannedAcl] = cannedAcl,
