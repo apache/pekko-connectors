@@ -107,7 +107,8 @@ sealed trait JmsMessage extends JmsEnvelope[NotUsed] with JmsEnvelopeWithPropert
    *
    * @since 2.0.0
    */
-  def withHeaders(newHeaders: java.util.Set[JmsHeader]): JmsMessage = withHeaders(newHeaders.asScala.toSet)
+  def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   def withoutDestination: JmsMessage
 
@@ -255,7 +256,8 @@ final class JmsByteMessage private (bytes: Array[Byte],
    *
    * @since 2.0.0
    */
-  override def withHeaders(newHeaders: java.util.Set[JmsHeader]): JmsByteMessage = withHeaders(newHeaders.asScala.toSet)
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsByteMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
@@ -435,8 +437,8 @@ final class JmsByteStringMessage private (bytes: ByteString,
    *
    * @since 2.0.0
    */
-  override def withHeaders(newHeaders: java.util.Set[JmsHeader]): JmsByteStringMessage =
-    withHeaders(newHeaders.asScala.toSet)
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsByteStringMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
@@ -624,7 +626,8 @@ final class JmsMapMessage(body: Map[String, Any],
    *
    * @since 2.0.0
    */
-  override def withHeaders(newHeaders: java.util.Set[JmsHeader]): JmsMapMessage = withHeaders(newHeaders.asScala.toSet)
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsMapMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
@@ -804,7 +807,8 @@ final class JmsTextMessage private (body: String,
    *
    * @since 2.0.0
    */
-  override def withHeaders(newHeaders: java.util.Set[JmsHeader]): JmsTextMessage = withHeaders(newHeaders.asScala.toSet)
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsTextMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
@@ -983,8 +987,8 @@ final class JmsObjectMessage private (serializable: java.io.Serializable,
    *
    * @since 2.0.0
    */
-  override def withHeaders(newHeaders: java.util.Set[JmsHeader]): JmsObjectMessage =
-    withHeaders(newHeaders.asScala.toSet)
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsObjectMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
