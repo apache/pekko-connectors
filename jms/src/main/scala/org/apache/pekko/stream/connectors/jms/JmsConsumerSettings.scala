@@ -19,6 +19,7 @@ import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsConsumer]] and [[pekko.stream.connectors.jms.javadsl.JmsConsumer]].
@@ -110,6 +111,58 @@ final class JmsConsumerSettings private (
   /** Java API: Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: java.time.Duration): JmsConsumerSettings =
     copy(connectionStatusSubscriptionTimeout = value.toScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDestination: java.util.Optional[Destination] = destination.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCredentials: java.util.Optional[Credentials] = credentials.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSelector: java.util.Optional[String] = selector.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAcknowledgeMode: java.util.Optional[AcknowledgeMode] = acknowledgeMode.toJava
+
+  /**
+   * Java API: an infinite timeout is returned as `ChronoUnit.FOREVER.getDuration`
+   *
+   * @since 2.0.0
+   */
+  def getAckTimeout: java.time.Duration = ackTimeout match {
+    case finite: scala.concurrent.duration.FiniteDuration => finite.toJava
+    case _                                                => java.time.temporal.ChronoUnit.FOREVER.getDuration
+  }
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMaxAckInterval: java.util.Optional[java.time.Duration] = maxAckInterval.map(_.toJava).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionStatusSubscriptionTimeout: java.time.Duration = connectionStatusSubscriptionTimeout.toJava
 
   private def copy(
       connectionFactory: javax.jms.ConnectionFactory = connectionFactory,

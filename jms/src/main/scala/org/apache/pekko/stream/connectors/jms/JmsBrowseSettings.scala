@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.jms
 import org.apache.pekko
 import pekko.actor.{ ActorSystem, ClassicActorSystemProvider }
 import com.typesafe.config.{ Config, ConfigValueType }
+import scala.jdk.OptionConverters._
 
 /**
  * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsConsumer.browse]] and [[pekko.stream.connectors.jms.javadsl.JmsConsumer.browse]].
@@ -53,6 +54,27 @@ final class JmsBrowseSettings private (
 
   /** Set an explicit acknowledge mode. (Consumers have specific defaults.) */
   def withAcknowledgeMode(value: AcknowledgeMode): JmsBrowseSettings = copy(acknowledgeMode = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDestination: java.util.Optional[Destination] = destination.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCredentials: java.util.Optional[Credentials] = credentials.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSelector: java.util.Optional[String] = selector.toJava
 
   private def copy(
       connectionFactory: javax.jms.ConnectionFactory = connectionFactory,

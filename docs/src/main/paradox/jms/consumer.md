@@ -69,7 +69,7 @@ reference.conf
 
 ### Broker specific destinations
 
-To reach out to special features of the JMS broker, destinations can be created as `CustomDestination` which takes a factory method for creating destinations.
+To reach out to special features of the JMS broker, destinations can be created as `CustomDestination` which takes a factory method for creating destinations. From Java, use `CustomDestination.fromFunction`.
 
 Scala
 : @@snip [snip](/jms/src/test/scala/docs/scaladsl/JmsConnectorsSpec.scala) { #custom-destination }
