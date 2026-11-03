@@ -21,6 +21,8 @@ import java.nio.file.attribute.PosixFilePermission
 
 import org.apache.pekko.annotation.{ DoNotInherit, InternalApi }
 import org.apache.commons.net.ftp.{ FTPClient, FTPSClient }
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * FTP remote file descriptor.
@@ -41,6 +43,32 @@ final case class FtpFile(
     lastModified: Long,
     permissions: Set[PosixFilePermission]) {
   val isFile: Boolean = !this.isDirectory
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPermissions: java.util.Set[PosixFilePermission] = permissions.asJava
+}
+
+// extends AbstractFunction6 like the companion the compiler generates when there is no explicit one
+object FtpFile
+    extends scala.runtime.AbstractFunction6[String, String, Boolean, Long, Long, Set[PosixFilePermission], FtpFile] {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(
+      name: String,
+      path: String,
+      isDirectory: Boolean,
+      size: Long,
+      lastModified: Long,
+      permissions: java.util.Set[PosixFilePermission]): FtpFile =
+    FtpFile(name, path, isDirectory, size, lastModified, permissions.asScala.toSet)
 }
 
 /**
@@ -110,6 +138,13 @@ final class FtpSettings private (
   def withConfigureConnectionConsumer(
       configureConnection: java.util.function.Consumer[FTPClient]): FtpSettings =
     copy(configureConnection = configureConnection.accept)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProxy: java.util.Optional[Proxy] = proxy.toJava
 
   private def copy(
       host: java.net.InetAddress = host,
@@ -224,6 +259,27 @@ final class FtpsSettings private (
       configureConnection: java.util.function.Consumer[FTPSClient]): FtpsSettings =
     copy(configureConnection = configureConnection.accept)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProxy: java.util.Optional[Proxy] = proxy.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKeyManager: java.util.Optional[KeyManager] = keyManager.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getTrustManager: java.util.Optional[TrustManager] = trustManager.toJava
+
   private def copy(
       host: java.net.InetAddress = host,
       port: Int = port,
@@ -325,6 +381,27 @@ final class SftpSettings private (
   def withSftpIdentity(value: SftpIdentity): SftpSettings = copy(sftpIdentity = Option(value))
   def withProxy(value: Proxy): SftpSettings = copy(proxy = Some(value))
   def withMaxUnconfirmedReads(value: Int): SftpSettings = copy(maxUnconfirmedReads = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKnownHosts: java.util.Optional[String] = knownHosts.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSftpIdentity: java.util.Optional[SftpIdentity] = sftpIdentity.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProxy: java.util.Optional[Proxy] = proxy.toJava
 
   private def copy(
       host: java.net.InetAddress = host,
@@ -431,6 +508,13 @@ abstract sealed class SftpIdentity {
   type KeyType
   val privateKey: KeyType
   val privateKeyFilePassphrase: Option[Array[Byte]]
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPrivateKeyFilePassphrase: java.util.Optional[Array[Byte]] = privateKeyFilePassphrase.toJava
 }
 
 /**
@@ -510,6 +594,13 @@ final class RawKeySftpIdentity @InternalApi private[ftp] (
 
   def withPublicKey(publicKey: KeyType): RawKeySftpIdentity =
     copy(publicKey = Some(publicKey))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPublicKey: java.util.Optional[Array[Byte]] = publicKey.toJava
 
   private def copy(
       privateKey: Array[Byte] = privateKey,

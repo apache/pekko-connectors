@@ -64,6 +64,13 @@ object Namespace {
   def create(uri: String, prefix: Optional[String]) =
     Namespace(uri, prefix.toScala)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(uri: String): Namespace = Namespace(uri)
+
 }
 
 final case class Attribute(name: String,
@@ -118,6 +125,20 @@ final case class StartElement(localName: String,
 
   def findAttribute(name: String): Option[Attribute] = attributesList.find(_.name == name)
 
+  /**
+   * Java API: the attribute with the given name, if any.
+   *
+   * @since 2.0.0
+   */
+  def getAttribute(name: String): java.util.Optional[Attribute] = findAttribute(name).toJava
+
+  /**
+   * Java API: the attributes including their prefixes and namespaces.
+   *
+   * @since 2.0.0
+   */
+  def getAttributesList(): java.util.List[Attribute] = attributesList.asJava
+
 }
 
 object StartElement {
@@ -127,6 +148,16 @@ object StartElement {
     attributes.toList.map {
       case (name, value) => Attribute(name, value, prefix, namespace)
     }
+
+  /**
+   * Java API: create attributes with the given prefix and namespace from a map of names to values.
+   *
+   * @since 2.0.0
+   */
+  def createAttributeList(attributes: java.util.Map[String, String],
+      prefix: Optional[String],
+      namespace: Optional[String]): java.util.List[Attribute] =
+    fromMapToAttributeList(prefix.toScala, namespace.toScala)(attributes.asScala.toMap).asJava
 
   def apply(localName: String, attributes: Map[String, String]): StartElement = {
     val attributesList = fromMapToAttributeList()(attributes)
