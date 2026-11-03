@@ -30,6 +30,7 @@ import com.couchbase.client.java.query.util.IndexInfo
 import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 import com.couchbase.client.java.{ AsyncBucket, AsyncCluster, Bucket }
 
+import scala.annotation.varargs
 import scala.concurrent.ExecutionContext
 import scala.jdk.FutureConverters._
 
@@ -249,7 +250,7 @@ abstract class CouchbaseSession {
    * @param initial Value to start from if the counter does not exist
    * @return The value of the counter after applying the delta
    */
-  def counter(id: String, delta: Long, initial: Long): CompletionStage[Long]
+  def counter(id: String, delta: Long, initial: Long): CompletionStage[java.lang.Long]
 
   /**
    * Create or increment a counter
@@ -259,7 +260,8 @@ abstract class CouchbaseSession {
    * @param initial Value to start from if the counter does not exist
    * @return The value of the counter after applying the delta
    */
-  def counter(id: String, delta: Long, initial: Long, writeSettings: CouchbaseWriteSettings): CompletionStage[Long]
+  def counter(id: String, delta: Long, initial: Long,
+      writeSettings: CouchbaseWriteSettings): CompletionStage[java.lang.Long]
 
   /**
    * Close the session and release all resources it holds. Subsequent calls to other methods will likely fail.
@@ -277,7 +279,8 @@ abstract class CouchbaseSession {
    *      if the index existed and ignoreIfExist` is true. Completion of the `CompletionStage` does not guarantee the index
    *      is online and ready to be used.
    */
-  def createIndex(indexName: String, ignoreIfExist: Boolean, fields: AnyRef*): CompletionStage[Boolean]
+  @varargs
+  def createIndex(indexName: String, ignoreIfExist: Boolean, fields: AnyRef*): CompletionStage[java.lang.Boolean]
 
   /**
    * List the existing secondary indexes for the bucket
