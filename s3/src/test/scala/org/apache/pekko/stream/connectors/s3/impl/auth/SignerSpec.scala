@@ -18,8 +18,9 @@ import java.time.{ LocalDateTime, ZoneOffset, ZonedDateTime }
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.model.headers.{ `Raw-Request-URI`, Host, RawHeader }
-import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest }
+import pekko.http.scaladsl.model.{ HttpMethods, HttpRequest, Uri }
 import pekko.stream.connectors.s3.S3Settings
+import pekko.stream.connectors.s3.impl.HttpRequests
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Sink
 import pekko.testkit.TestKit
@@ -131,12 +132,15 @@ class SignerSpec(_system: ActorSystem)
   }
 
   it should "correctly sign request with Raw-Request-URI header" in {
+    val rawRequestUri = HttpRequests.rawRequestUri(Uri.Empty.withPath(Uri.Path / "1 + 2=3"))
+    rawRequestUri shouldBe "/1%20%2B%202=3"
+
     val req = HttpRequest(HttpMethods.GET)
       .withUri("https://iam.amazonaws.com/?Action=ListUsers&Version=2010-05-08")
       .withHeaders(
         Host("iam.amazonaws.com"),
         RawHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8"),
-        `Raw-Request-URI`("/1 + 2=3"))
+        `Raw-Request-URI`(rawRequestUri))
 
     val date = LocalDateTime.of(2015, 8, 30, 12, 36, 0).atZone(ZoneOffset.UTC)
     val srFuture = Signer.signedRequest(req, signingKey(date), signAnonymousRequests = true).runWith(Sink.head)
