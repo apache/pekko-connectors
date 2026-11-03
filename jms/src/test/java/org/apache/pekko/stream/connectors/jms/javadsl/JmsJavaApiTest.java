@@ -73,6 +73,13 @@ public class JmsJavaApiTest {
     JmsMessage message = JmsByteMessage.create(new byte[] {1}).withHeaders(headers);
     assertTrue(message.getHeaders().containsAll(headers));
 
+    Set<JmsType> subtypeHeaders = Collections.singleton(JmsType.create("subtype"));
+    assertTrue(
+        JmsTextMessage.create("body")
+            .withHeaders(subtypeHeaders)
+            .getHeaders()
+            .containsAll(subtypeHeaders));
+
     Map<String, Object> properties = Collections.singletonMap("key", "value");
     JmsObjectMessagePassThrough<String> object =
         JmsObjectMessage.create("serializable", "passThrough").withProperties(properties);
