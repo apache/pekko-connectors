@@ -21,6 +21,7 @@ import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import javax.net.ssl.SSLContext
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 final class ElasticsearchConnectionSettings private (
     val baseUrl: String,
@@ -74,6 +75,36 @@ final class ElasticsearchConnectionSettings private (
    */
   def withAllowInsecureCredentialsTransport(value: Boolean): ElasticsearchConnectionSettings =
     copy(allowInsecureCredentialsTransport = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getUsername: java.util.Optional[String] = username.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPassword: java.util.Optional[String] = password.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getHeaders: java.util.List[pekko.http.javadsl.model.HttpHeader] =
+    headers.map(h => h: pekko.http.javadsl.model.HttpHeader).asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionContext: java.util.Optional[pekko.http.javadsl.HttpsConnectionContext] =
+    connectionContext.map(c => c: pekko.http.javadsl.HttpsConnectionContext).toJava
 
   private def copy(
       baseUrl: String = baseUrl,

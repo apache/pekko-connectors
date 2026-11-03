@@ -37,4 +37,18 @@ object ElasticsearchSink {
       .create(elasticsearchParams, settings, objectMapper)
       .toMat(Sink.ignore[WriteResult[T, NotUsed]](), Keep.right[NotUsed, CompletionStage[Done]])
 
+  /**
+   * Create a sink to update Elasticsearch with [[pekko.stream.connectors.elasticsearch.WriteMessage WriteMessage]]s containing type `T`
+   * with `messageWriter` responsible to convert `T` to JSON.
+   *
+   * @since 2.0.0
+   */
+  def create[T](
+      elasticsearchParams: ElasticsearchParams,
+      settings: WriteSettingsBase[?, ?],
+      messageWriter: MessageWriter[T]): pekko.stream.javadsl.Sink[WriteMessage[T, NotUsed], CompletionStage[Done]] =
+    ElasticsearchFlow
+      .create(elasticsearchParams, settings, messageWriter)
+      .toMat(Sink.ignore[WriteResult[T, NotUsed]](), Keep.right[NotUsed, CompletionStage[Done]])
+
 }

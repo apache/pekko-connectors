@@ -58,6 +58,33 @@ object Slick {
   }
 
   /**
+   * Java API: creates a Source that performs the specified parameterised query
+   *           against the specified Slick database and streams the results through
+   *           the specified mapper function to turn database each row
+   *           element into an instance of T.
+   *
+   * @param session The database session to use.
+   * @param query The query string to execute, with `?` placeholders for parameters.
+   * @param setParameters Sets the query parameters on the prepared statement.
+   * @param mapper A function that takes an individual result row and
+   *               transforms it to an instance of T.
+   * @since 2.0.0
+   */
+  def source[T](
+      session: SlickSession,
+      query: String,
+      setParameters: java.util.function.Consumer[PreparedStatement],
+      mapper: JFunction[SlickRow, T]): Source[T, NotUsed] = {
+
+    val setter = SetParameter[Unit]((_, positioned) => setParameters.accept(positioned.ps))
+    val streamingAction = SQLActionBuilder(query, setter).as[T](toSlick(mapper))
+
+    ScalaSlick
+      .source[T](streamingAction)(session)
+      .asJava
+  }
+
+  /**
    * Java API: creates a Flow that takes a stream of elements of
    *           type T, transforms each element to a SQL statement
    *           using the specified function, and then executes

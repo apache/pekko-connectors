@@ -68,6 +68,18 @@ object ElasticsearchSource {
 
   /**
    * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
+   * Using default objectMapper.
+   *
+   * @see the overload taking an `ObjectMapper` for an example of searchParams-usage
+   * @since 2.0.0
+   */
+  def create(elasticsearchParams: ElasticsearchParams,
+      searchParams: java.util.Map[String, String],
+      settings: SourceSettingsBase[?, ?]): Source[ReadResult[java.util.Map[String, Object]], NotUsed] =
+    create(elasticsearchParams, searchParams, settings, new ObjectMapper())
+
+  /**
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of [[java.util.Map]].
    * Using custom objectMapper.
    *
    * Example of searchParams-usage:
@@ -132,6 +144,19 @@ object ElasticsearchSource {
         }
       }
       .mapMaterializedValue(_ => NotUsed)
+
+  /**
+   * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.
+   * Using default objectMapper.
+   *
+   * @see the overload taking an `ObjectMapper` for an example of searchParams-usage
+   * @since 2.0.0
+   */
+  def typed[T](elasticsearchParams: ElasticsearchParams,
+      searchParams: java.util.Map[String, String],
+      settings: SourceSettingsBase[?, ?],
+      clazz: Class[T]): Source[ReadResult[T], NotUsed] =
+    typed[T](elasticsearchParams, searchParams, settings, clazz, new ObjectMapper())
 
   /**
    * Creates a [[pekko.stream.javadsl.Source]] from Elasticsearch that streams [[ReadResult]]s of type `T`.

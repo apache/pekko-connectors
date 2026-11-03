@@ -76,6 +76,41 @@ final class WriteMessage[T, PT] private (val operation: Operation,
   def withCustomMetadata(metadata: java.util.Map[String, String]): WriteMessage[T, PT] =
     this.copy(customMetadata = metadata.asScala.toMap)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getId: java.util.Optional[String] = id.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSource: java.util.Optional[T] = source.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getVersion: java.util.Optional[java.lang.Long] = version.map(Long.box).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getIndexName: java.util.Optional[String] = indexName.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCustomMetadata: java.util.Map[String, java.lang.String] = customMetadata.asJava
+
   private def copy(operation: Operation = operation,
       id: Option[String] = id,
       source: Option[T] = source,
