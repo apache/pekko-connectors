@@ -17,7 +17,8 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1
 
-import org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models.LightSettings
+import org.apache.pekko
+import pekko.stream.connectors.google.firebase.fcm.v1.models.LightSettings
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
