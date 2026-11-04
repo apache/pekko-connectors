@@ -25,7 +25,7 @@ import org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import org.apache.pekko.stream.scaladsl.{ Flow, Sink, Source }
 import org.apache.pekko.stream.testkit.scaladsl.StreamTestKit.assertAllStagesStopped
 import org.scalatest.{ BeforeAndAfterAll, BeforeAndAfterEach, Inspectors }
-import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.concurrent.{ Eventually, ScalaFutures }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -41,6 +41,7 @@ class CouchbaseTestFlowSpec extends AnyWordSpec
     with BeforeAndAfterEach
     with Matchers
     with ScalaFutures
+    with Eventually
     with Inspectors
     with LogCapturing {
 
@@ -109,9 +110,9 @@ class CouchbaseTestFlowSpec extends AnyWordSpec
     existFuture.futureValue shouldBe true
   }
 
-  "touch 1s, wait 2s and check exists" in assertAllStagesStopped {
+  "touch 1s and check the document expires" in assertAllStagesStopped {
     val touchDocument = document.copy(id = document.id + "-touch")
-    // touch 1s, sleep 1s, check exists = false
+    // touch 1s, then poll until exists = false
     val insertFuture = Source.single(touchDocument)
       .runWith(CouchbaseSink.insert[Document](_.id))
     Await.result(insertFuture, 10.seconds)
@@ -120,10 +121,11 @@ class CouchbaseTestFlowSpec extends AnyWordSpec
       .via(touchFlow)
       .runWith(Sink.ignore)
     Await.result(touchFuture, 10.seconds)
-    // wait the doc was deleted by couchbase
-    Thread.sleep(2000)
-    val future = Source.single(touchDocument.id).runWith(CouchbaseSink.exists[String](e => e))
-    future.futureValue shouldBe false
+    // Couchbase does not guarantee the document is gone exactly when the expiry passes
+    eventually(timeout(30.seconds), interval(200.millis)) {
+      val existsFuture = Source.single(touchDocument.id).runWith(CouchbaseSink.exists[String](e => e))
+      Await.result(existsFuture, 10.seconds) shouldBe false
+    }
   }
 
   "mutateIn data: add field to JsonDoc" in assertAllStagesStopped {
