@@ -28,6 +28,19 @@ object AmqpRpcFlow {
    * Java API:
    * Create an [[https://www.rabbitmq.com/tutorials/tutorial-six-java.html RPC style flow]] for processing and communicating
    * over a rabbitmq message bus. This will create a private queue, and add the reply-to header to messages sent out.
+   * One response is expected for each message placed on the queue.
+   *
+   * This stage materializes to a `CompletionStage<String>`, which is the name of the private exclusive queue used for RPC communication.
+   *
+   * @since 2.0.0
+   */
+  def createSimple(settings: AmqpWriteSettings): Flow[ByteString, ByteString, CompletionStage[String]] =
+    createSimple(settings, 1)
+
+  /**
+   * Java API:
+   * Create an [[https://www.rabbitmq.com/tutorials/tutorial-six-java.html RPC style flow]] for processing and communicating
+   * over a rabbitmq message bus. This will create a private queue, and add the reply-to header to messages sent out.
    *
    * This stage materializes to a `CompletionStage<String>`, which is the name of the private exclusive queue used for RPC communication.
    *
@@ -85,5 +98,18 @@ object AmqpRpcFlow {
       .mapMaterializedValue(f => f.asJava)
       .map(cm => new CommittableReadResult(cm))
       .asJava
+
+  /**
+   * Java API:
+   * The `committableFlow` makes it possible to commit (ack/nack) messages to RabbitMQ.
+   * One response is expected for each message placed on the queue.
+   *
+   * See the overload taking `repliesPerMessage` for details.
+   * @since 2.0.0
+   */
+  def committableFlow(
+      settings: AmqpWriteSettings,
+      bufferSize: Int): Flow[WriteMessage, CommittableReadResult, CompletionStage[String]] =
+    committableFlow(settings, bufferSize, 1)
 
 }

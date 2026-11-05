@@ -19,6 +19,7 @@ import pekko.annotation.InternalApi
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Internal API
@@ -52,7 +53,7 @@ final class NamedQueueSourceSettings private (
   /**
    * Java API
    */
-  def withDeclarations(declarations: java.util.List[Declaration]): NamedQueueSourceSettings =
+  def withDeclarations(declarations: java.util.List[? <: Declaration]): NamedQueueSourceSettings =
     copy(declarations = declarations.asScala.toIndexedSeq)
 
   def withNoLocal(noLocal: Boolean): NamedQueueSourceSettings =
@@ -82,6 +83,20 @@ final class NamedQueueSourceSettings private (
 
   def withReuseByteArray(reuseByteArray: Boolean): NamedQueueSourceSettings =
     copy(reuseByteArray = reuseByteArray)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDeclarations: java.util.List[Declaration] = declarations.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getArguments: java.util.Map[String, Object] = arguments.asJava
 
   private def copy(declarations: Seq[Declaration] = declarations,
       noLocal: Boolean = noLocal,
@@ -142,13 +157,27 @@ final class TemporaryQueueSourceSettings private (
   /**
    * Java API
    */
-  def withDeclarations(declarations: java.util.List[Declaration]): TemporaryQueueSourceSettings =
+  def withDeclarations(declarations: java.util.List[? <: Declaration]): TemporaryQueueSourceSettings =
     copy(declarations = declarations.asScala.toIndexedSeq)
 
   def withRoutingKey(routingKey: String): TemporaryQueueSourceSettings = copy(routingKey = Some(routingKey))
 
   def withReuseByteArray(reuseByteArray: Boolean): TemporaryQueueSourceSettings =
     copy(reuseByteArray = reuseByteArray)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDeclarations: java.util.List[Declaration] = declarations.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRoutingKey: java.util.Optional[String] = routingKey.toJava
 
   private def copy(declarations: Seq[Declaration] = declarations,
       routingKey: Option[String] = routingKey,
@@ -188,6 +217,13 @@ final class AmqpReplyToSinkSettings private (
 
   def withReuseByteArray(reuseByteArray: Boolean): AmqpReplyToSinkSettings =
     copy(reuseByteArray = reuseByteArray)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDeclarations: java.util.List[Declaration] = declarations.asJava
 
   private def copy(connectionProvider: AmqpConnectionProvider = connectionProvider,
       failIfReplyToMissing: Boolean = failIfReplyToMissing,
@@ -240,7 +276,7 @@ final class AmqpWriteSettings private (
   /**
    * Java API
    */
-  def withDeclarations(declarations: java.util.List[Declaration]): AmqpWriteSettings =
+  def withDeclarations(declarations: java.util.List[? <: Declaration]): AmqpWriteSettings =
     copy(declarations = declarations.asScala.toIndexedSeq)
 
   def withBufferSize(bufferSize: Int): AmqpWriteSettings =
@@ -254,6 +290,34 @@ final class AmqpWriteSettings private (
    */
   def withConfirmationTimeout(confirmationTimeout: java.time.Duration): AmqpWriteSettings =
     copy(confirmationTimeout = confirmationTimeout.toScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getExchange: java.util.Optional[String] = exchange.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRoutingKey: java.util.Optional[String] = routingKey.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDeclarations: java.util.List[Declaration] = declarations.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConfirmationTimeout: java.time.Duration = confirmationTimeout.toJava
 
   private def copy(connectionProvider: AmqpConnectionProvider = connectionProvider,
       exchange: Option[String] = exchange,
@@ -315,6 +379,13 @@ final class QueueDeclaration private (
   def withArguments(arguments: java.util.Map[String, Object]): QueueDeclaration =
     copy(arguments = arguments.asScala.toMap)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getArguments: java.util.Map[String, Object] = arguments.asJava
+
   private def copy(name: String = name,
       durable: Boolean = durable,
       exclusive: Boolean = exclusive,
@@ -357,6 +428,20 @@ final class BindingDeclaration private (
    */
   def withArguments(arguments: java.util.Map[String, Object]): BindingDeclaration =
     copy(arguments = arguments.asScala.toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRoutingKey: java.util.Optional[String] = routingKey.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getArguments: java.util.Map[String, Object] = arguments.asJava
 
   private def copy(routingKey: Option[String] = routingKey, arguments: Map[String, AnyRef] = arguments) =
     new BindingDeclaration(queue, exchange, routingKey, arguments)
@@ -403,6 +488,13 @@ final class ExchangeDeclaration private (
    */
   def withArguments(arguments: java.util.Map[String, Object]): ExchangeDeclaration =
     copy(arguments = arguments.asScala.toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getArguments: java.util.Map[String, Object] = arguments.asJava
 
   private def copy(durable: Boolean = durable,
       autoDelete: Boolean = autoDelete,
