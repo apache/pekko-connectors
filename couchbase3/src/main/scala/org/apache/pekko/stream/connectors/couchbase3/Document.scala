@@ -17,13 +17,34 @@
 
 package org.apache.pekko.stream.connectors.couchbase3
 
+import java.util.Optional
+
 import com.couchbase.client.java.kv.MutationResult
+
+import scala.jdk.OptionConverters._
 
 case class MutationDocument[T](id: String, doc: T, result: Option[MutationResult] = Option.empty) {
 
   def withResult(mutationResult: MutationResult) = {
     copy(result = Some(mutationResult))
   }
+
+  /**
+   * Java API: the result of the mutation, if it has been applied.
+   *
+   * @since 2.0.0
+   */
+  def getResult: Optional[MutationResult] = result.toJava
+}
+
+object MutationDocument {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create[T](id: String, doc: T): MutationDocument[T] = MutationDocument(id, doc)
 }
 
 case class MutationBinaryDocument(id: String, doc: Array[Byte], result: Option[MutationResult] = Option.empty) {
@@ -31,4 +52,23 @@ case class MutationBinaryDocument(id: String, doc: Array[Byte], result: Option[M
   def withResult(mutationResult: MutationResult) = {
     copy(result = Some(mutationResult))
   }
+
+  /**
+   * Java API: the result of the mutation, if it has been applied.
+   *
+   * @since 2.0.0
+   */
+  def getResult: Optional[MutationResult] = result.toJava
+}
+
+// extends AbstractFunction3 like the companion the compiler generates when there is no explicit one
+object MutationBinaryDocument
+    extends scala.runtime.AbstractFunction3[String, Array[Byte], Option[MutationResult], MutationBinaryDocument] {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(id: String, doc: Array[Byte]): MutationBinaryDocument = MutationBinaryDocument(id, doc)
 }

@@ -31,6 +31,7 @@ import com.couchbase.client.java.document.{ Document, JsonDocument }
 import com.couchbase.client.java.query.util.IndexInfo
 import com.couchbase.client.java.query.{ N1qlQuery, Statement }
 
+import scala.annotation.varargs
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ duration, ExecutionContext, Future }
 import scala.jdk.FutureConverters._
@@ -109,20 +110,22 @@ private[couchbase] final class CouchbaseSessionJavaAdapter(delegate: scaladsl.Co
   override def singleResponseQuery(query: N1qlQuery): CompletionStage[Optional[JsonObject]] =
     futureOptToJava(delegate.singleResponseQuery(query))
 
-  override def counter(id: String, delta: Long, initial: Long): CompletionStage[Long] =
-    delegate.counter(id, delta, initial).asJava
+  override def counter(id: String, delta: Long, initial: Long): CompletionStage[java.lang.Long] =
+    delegate.counter(id, delta, initial).map(Long.box)(ExecutionContext.parasitic).asJava
 
   override def counter(
       id: String,
       delta: Long,
       initial: Long,
-      writeSettings: CouchbaseWriteSettings): CompletionStage[Long] =
-    delegate.counter(id, delta, initial, writeSettings).asJava
+      writeSettings: CouchbaseWriteSettings): CompletionStage[java.lang.Long] =
+    delegate.counter(id, delta, initial, writeSettings).map(Long.box)(ExecutionContext.parasitic).asJava
 
   override def close(): CompletionStage[Done] = delegate.close().asJava
 
-  override def createIndex(indexName: String, ignoreIfExist: Boolean, fields: AnyRef*): CompletionStage[Boolean] =
-    delegate.createIndex(indexName, ignoreIfExist, fields).asJava
+  @varargs
+  override def createIndex(indexName: String, ignoreIfExist: Boolean,
+      fields: AnyRef*): CompletionStage[java.lang.Boolean] =
+    delegate.createIndex(indexName, ignoreIfExist, fields).map(Boolean.box)(ExecutionContext.parasitic).asJava
 
   private def futureOptToJava[T](future: Future[Option[T]]): CompletionStage[Optional[T]] =
     future.map(_.toJava)(ExecutionContext.parasitic).asJava
