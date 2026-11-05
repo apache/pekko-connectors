@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture
 
 import org.apache.pekko
 import pekko.stream.connectors.aws.eventbridge.scaladsl.EventBridgePublisher
+import pekko.stream.connectors.aws.eventbridge.javadsl.{ EventBridgePublisher => JavaEventBridgePublisher }
 import pekko.stream.scaladsl.{ Keep, Sink }
 import pekko.stream.testkit.scaladsl.TestSource
 import org.mockito.ArgumentMatchers.{ any, eq => meq }
@@ -107,6 +108,28 @@ class EventBridgePublishMockSpec extends AnyFlatSpec with DefaultTestContext wit
     val expected = requestDetail(None, "eb-message-1", "eb-message-2", "eb-message-3")
     verify(eventBridgeClient, times(1)).putEvents(meq(expected))
 
+  }
+
+  it should "publish each java.util.List of PutEventsRequestEntry as one request with javadsl flowList" in {
+    val putResult = resultResponse("event-id")
+
+    when(eventBridgeClient.putEvents(any[PutEventsRequest]())).thenReturn(CompletableFuture.completedFuture(putResult))
+
+    val (probe, future) =
+      TestSource[java.util.List[PutEventsRequestEntry]]()
+        .via(JavaEventBridgePublisher.flowList(EventBridgePublishSettings(), eventBridgeClient))
+        .toMat(Sink.seq)(Keep.both)
+        .run()
+    probe
+      .sendNext(java.util.Arrays.asList(entryDetail("eb-message-1"), entryDetail("eb-message-2")))
+      .sendNext(java.util.Collections.singletonList(entryDetail("eb-message-3")))
+      .sendComplete()
+
+    Await.result(future, 1.second) mustBe putResult :: putResult :: Nil
+
+    verify(eventBridgeClient, times(1)).putEvents(meq(requestDetail(None, "eb-message-1", "eb-message-2")))
+    verify(eventBridgeClient, times(1)).putEvents(meq(requestDetail(None, "eb-message-3")))
+    verify(eventBridgeClient, times(2)).putEvents(any[PutEventsRequest]())
   }
 
   it should "fail stage if EventBridgeAsyncClient request failed" in {

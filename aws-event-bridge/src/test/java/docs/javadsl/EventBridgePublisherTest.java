@@ -41,6 +41,7 @@ import software.amazon.awssdk.services.eventbridge.model.PutEventsRequestEntry;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
@@ -148,6 +149,18 @@ public class EventBridgePublisherTest {
             .runWith(Sink.foreach(res -> System.out.println(res)), system);
 
     // #flow-events-request
+    assertThat(completion.toCompletableFuture().get(2, TimeUnit.SECONDS), is(Done.getInstance()));
+  }
+
+  @Test
+  public void flowShouldPutDetailEntriesInBatch() throws Exception {
+    CompletionStage<Done> completion =
+        // #flow-events-list
+        Source.single(Arrays.asList(detailEntry("message1"), detailEntry("message2")))
+            .via(EventBridgePublisher.flowList(eventBridgeClient))
+            .runWith(Sink.foreach(res -> System.out.println(res)), system);
+
+    // #flow-events-list
     assertThat(completion.toCompletableFuture().get(2, TimeUnit.SECONDS), is(Done.getInstance()));
   }
 }

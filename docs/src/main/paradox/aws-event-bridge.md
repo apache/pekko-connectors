@@ -109,9 +109,15 @@ Scala
 Java
 : @@snip [snip](/aws-event-bridge/src/test/java/docs/javadsl/EventBridgePublisherTest.java) { #flow-events-request }
 
-Flow supporting a list of `PutEventEntry` objects.
+Flow supporting a list of `PutEventEntry` objects, each list being published as a single `PutEventsRequest`.
 
-Messages published in a batch using @apidoc[EventBridgePublisher.flowSeq](EventBridgePublisher$) are not published in an "all or nothing" manner. Event Bridge will process each event independently. Retries of the failed messages in the `PutEventsResponse` are not yet implemented.
+Scala
+: @@snip [snip](/aws-event-bridge/src/test/scala/docs/scaladsl/EventBridgePublisherSpec.scala) { #flow-events-seq }
+
+Java
+: @@snip [snip](/aws-event-bridge/src/test/java/docs/javadsl/EventBridgePublisherTest.java) { #flow-events-list }
+
+Messages published in a batch using `flowSeq` (Scala) or `flowList` (Java) are not published in an "all or nothing" manner. Event Bridge will process each event independently. Retries of the failed messages in the `PutEventsResponse` are not yet implemented.
 
 
 ## Integration testing

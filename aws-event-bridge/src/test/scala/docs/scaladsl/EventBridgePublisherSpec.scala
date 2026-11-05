@@ -75,4 +75,18 @@ class EventBridgePublisherSpec extends AnyFlatSpec with Matchers with ScalaFutur
     published.futureValue should be(Done)
   }
 
+  it should "send a batch of PutEventsRequestEntry messages" in {
+    val published: Future[Done] =
+      // #flow-events-seq
+      Source
+        .single(
+          Seq(
+            PutEventsRequestEntry.builder().detail("string1").build(),
+            PutEventsRequestEntry.builder().detail("string2").build()))
+        .via(EventBridgePublisher.flowSeq())
+        .runWith(Sink.foreach(res => println(res)))
+    // #flow-events-seq
+    published.futureValue should be(Done)
+  }
+
 }
