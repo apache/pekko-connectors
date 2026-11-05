@@ -13,6 +13,7 @@
 
 package org.apache.pekko.stream.connectors.cassandra
 
+import java.util.Optional
 import java.util.concurrent.CompletionStage
 
 import org.apache.pekko
@@ -22,6 +23,7 @@ import com.datastax.oss.driver.api.core.CqlSession
 import scala.concurrent.Future
 import scala.jdk.FunctionConverters._
 import scala.jdk.FutureConverters._
+import scala.jdk.OptionConverters._
 
 class CassandraSessionSettings private (val configPath: String,
     _metricsCategory: Option[String] = None,
@@ -38,9 +40,32 @@ class CassandraSessionSettings private (val configPath: String,
    * The `init` function will be performed once when the session is created, i.e.
    * if `CassandraSessionRegistry.sessionFor` is called from multiple places with different `init` it will
    * only execute the first.
+   *
+   * @deprecated A Java lambda passed to this method is ambiguous with the Scala overload; use `withInitCs`.
    */
+  @deprecated("Use withInitCs, a Java lambda passed to withInit is ambiguous with the Scala overload", "2.0.0")
   def withInit(value: java.util.function.Function[CqlSession, CompletionStage[Done]]): CassandraSessionSettings =
+    withInitCs(value)
+
+  /**
+   * Java API:
+   *
+   * The `init` function will be performed once when the session is created, i.e.
+   * if `CassandraSessionRegistry.sessionFor` is called from multiple places with different `init` it will
+   * only execute the first.
+   *
+   * @since 2.0.0
+   */
+  def withInitCs(value: java.util.function.Function[CqlSession, CompletionStage[Done]]): CassandraSessionSettings =
     copy(init = Some(value.asScala.andThen(_.asScala)))
+
+  /**
+   * Java API: the `init` function, if any.
+   *
+   * @since 2.0.0
+   */
+  def getInit: Optional[java.util.function.Function[CqlSession, CompletionStage[Done]]] =
+    init.map(f => ((session: CqlSession) => f(session).asJava).asJava).toJava
 
   /**
    * The `init` function will be performed once when the session is created, i.e.
@@ -77,4 +102,13 @@ object CassandraSessionSettings {
 
   /** Java API */
   def create(configPath: String): CassandraSessionSettings = apply(configPath)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(configPath: String,
+      init: java.util.function.Function[CqlSession, CompletionStage[Done]]): CassandraSessionSettings =
+    apply(configPath).withInitCs(init)
 }

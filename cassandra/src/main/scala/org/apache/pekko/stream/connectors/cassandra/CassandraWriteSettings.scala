@@ -51,6 +51,13 @@ class CassandraWriteSettings private (val parallelism: Int,
   def withBatchType(value: BatchType): CassandraWriteSettings =
     copy(batchType = value)
 
+  /**
+   * Java API: Batch grouping time for `CassandraFlow.createUnloggedBatch`.
+   *
+   * @since 2.0.0
+   */
+  def getMaxBatchWait: java.time.Duration = maxBatchWait.toJava
+
   private def copy(parallelism: Int = parallelism,
       maxBatchSize: Int = maxBatchSize,
       maxBatchWait: FiniteDuration = maxBatchWait,
