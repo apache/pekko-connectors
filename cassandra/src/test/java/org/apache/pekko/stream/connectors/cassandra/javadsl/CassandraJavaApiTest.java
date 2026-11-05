@@ -19,6 +19,7 @@ package org.apache.pekko.stream.connectors.cassandra.javadsl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import org.apache.pekko.Done;
@@ -81,12 +83,46 @@ public class CassandraJavaApiTest {
         };
 
     ExecutionContext ec = ExecutionContext.global();
-    assertSame(
-        null,
+    assertNull(
         FutureConverters.asJava(provider.connect(ec))
             .toCompletableFuture()
             .get(3, TimeUnit.SECONDS));
     assertSame(ec, usedExecutor.get());
+  }
+
+  @Test
+  public void cqlSessionProviderFromJavaWithExecutionContextThatIsNotAnExecutor() throws Exception {
+    AtomicInteger executed = new AtomicInteger();
+    ExecutionContext ec =
+        new ExecutionContext() {
+          @Override
+          public void execute(Runnable runnable) {
+            executed.incrementAndGet();
+            runnable.run();
+          }
+
+          @Override
+          public void reportFailure(Throwable cause) {
+            throw new AssertionError(cause);
+          }
+        };
+    assertFalse(ec instanceof Executor);
+
+    CqlSessionProvider provider =
+        new AbstractCqlSessionProvider() {
+          @Override
+          public CompletionStage<CqlSession> connect(Executor executor) {
+            CompletableFuture<CqlSession> session = new CompletableFuture<>();
+            executor.execute(() -> session.complete(null));
+            return session;
+          }
+        };
+
+    assertNull(
+        FutureConverters.asJava(provider.connect(ec))
+            .toCompletableFuture()
+            .get(3, TimeUnit.SECONDS));
+    assertEquals(1, executed.get());
   }
 
   /**
