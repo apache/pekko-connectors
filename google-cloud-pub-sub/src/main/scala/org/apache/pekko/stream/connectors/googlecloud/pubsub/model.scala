@@ -19,6 +19,7 @@ import pekko.annotation.InternalApi
 
 import scala.collection.immutable
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * @param pullReturnImmediately when pulling messages, if there are non the API will wait or return immediately. Defaults to true.
@@ -49,6 +50,20 @@ final class PublishMessage private (val data: String,
     val attributes: Option[immutable.Map[String, String]],
     val orderingKey: Option[String]) {
   def this(data: String, attributes: Option[immutable.Map[String, String]]) = this(data, attributes, None)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAttributes: java.util.Optional[java.util.Map[String, String]] = attributes.map(_.asJava).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getOrderingKey: java.util.Optional[String] = orderingKey.toJava
 
   override def toString: String =
     "PublishMessage(data=" + data + ",attributes=" + attributes.toString + ",orderingKey=" + orderingKey + ")"
@@ -103,6 +118,27 @@ final class PubSubMessage private (val data: Option[String],
       attributes: Option[immutable.Map[String, String]],
       messageId: String,
       publishTime: Instant) = this(data, attributes, messageId, publishTime, None)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getData: java.util.Optional[String] = data.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAttributes: java.util.Optional[java.util.Map[String, String]] = attributes.map(_.asJava).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getOrderingKey: java.util.Optional[String] = orderingKey.toJava
 
   def withAttributes(attributes: java.util.Map[String, String]): PubSubMessage =
     new PubSubMessage(data, Some(attributes.asScala.toMap), messageId, publishTime, orderingKey)
@@ -171,6 +207,13 @@ object PubSubMessage {
 
 final class PublishRequest private (val messages: Seq[PublishMessage]) {
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMessages: java.util.List[PublishMessage] = messages.asJava
+
   override def equals(other: Any): Boolean = other match {
     case that: PublishRequest => messages == that.messages
     case _                    => false
@@ -219,6 +262,13 @@ object ReceivedMessage {
 }
 
 final class AcknowledgeRequest private (val ackIds: Seq[String]) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAckIds: java.util.List[String] = ackIds.asJava
 
   override def equals(other: Any): Boolean = other match {
     case that: AcknowledgeRequest => ackIds == that.ackIds
