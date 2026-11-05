@@ -23,6 +23,14 @@ final class OrientDbSourceSettings private (
   def withOrientDBCredentials(
       value: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbSourceSettings =
     copy(oDatabasePool = value)
+
+  /**
+   * The database pool to use; same as `withOrientDBCredentials`, with a name matching what it sets.
+   *
+   * @since 2.0.0
+   */
+  def withODatabasePool(value: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbSourceSettings =
+    copy(oDatabasePool = value)
   def withSkip(value: Int): OrientDbSourceSettings = copy(skip = value)
   def withLimit(value: Int): OrientDbSourceSettings = copy(limit = value)
 

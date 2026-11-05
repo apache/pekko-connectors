@@ -50,6 +50,14 @@ private[slick] abstract class SlickSessionFactory {
     DatabaseConfig.forConfig[JdbcProfile](path, config))
   def forConfig(databaseConfig: DatabaseConfig[JdbcProfile]): SlickSession =
     new SlickSessionConfigBackedImpl(databaseConfig)
+
+  /**
+   * Create a session from an existing database and its profile.
+   *
+   * @since 2.0.0
+   */
+  def forDbAndProfile(db: JdbcBackend#Database, profile: JdbcProfile): SlickSession =
+    new SlickSessionDbAndProfileBackedImpl(db, profile)
 }
 
 /**
@@ -70,7 +78,15 @@ final class SlickRow private[javadsl] (delegate: PositionedResult) {
   final def nextBigDecimal(): java.math.BigDecimal = delegate.nextBigDecimal().bigDecimal
   final def nextBlob(): java.sql.Blob = delegate.nextBlob()
   final def nextByte(): java.lang.Byte = delegate.nextByte()
+  @deprecated("Use nextByteArray, which returns a primitive byte array", "2.0.0")
   final def nextBytes(): Array[java.lang.Byte] = delegate.nextBytes().map(Byte.box(_))
+
+  /**
+   * The next column as a primitive `byte[]`.
+   *
+   * @since 2.0.0
+   */
+  final def nextByteArray(): Array[Byte] = delegate.nextBytes()
   final def nextClob(): java.sql.Clob = delegate.nextClob()
   final def nextDate(): java.sql.Date = delegate.nextDate()
   final def nextDouble(): java.lang.Double = delegate.nextDouble()

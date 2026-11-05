@@ -156,6 +156,17 @@ object MongoFlow {
    * A [[pekko.stream.javadsl.Flow Flow]] that will replace document as defined by a [[DocumentReplace]].
    *
    * @param collection the mongo db collection to update.
+   * @since 2.0.0
+   */
+  def replaceOne[T](
+      collection: MongoCollection[T])
+      : Flow[DocumentReplace[T], pekko.japi.Pair[UpdateResult, DocumentReplace[T]], NotUsed] =
+    replaceOne(collection, DefaultReplaceOptions)
+
+  /**
+   * A [[pekko.stream.javadsl.Flow Flow]] that will replace document as defined by a [[DocumentReplace]].
+   *
+   * @param collection the mongo db collection to update.
    * @param options options to apply to the operation
    */
   def replaceOne[T](

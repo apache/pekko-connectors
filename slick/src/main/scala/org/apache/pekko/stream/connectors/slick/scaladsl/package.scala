@@ -13,8 +13,6 @@
 
 package org.apache.pekko.stream.connectors.slick
 
-import slick.jdbc.{ JdbcBackend, JdbcProfile }
-
 package object scaladsl {
 
   /**
@@ -32,8 +30,5 @@ package object scaladsl {
    * closed after creation to avoid leaking database resources like active
    * connection pools, etc.
    */
-  object SlickSession extends javadsl.SlickSessionFactory {
-    def forDbAndProfile(db: JdbcBackend#Database, profile: JdbcProfile): SlickSession =
-      new SlickSessionDbAndProfileBackedImpl(db, profile)
-  }
+  object SlickSession extends javadsl.SlickSessionFactory
 }

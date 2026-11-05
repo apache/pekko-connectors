@@ -26,6 +26,13 @@ object InfluxDbReadSettings {
 
   def apply(): InfluxDbReadSettings = Default
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(): InfluxDbReadSettings = Default
+
 }
 
 /**
