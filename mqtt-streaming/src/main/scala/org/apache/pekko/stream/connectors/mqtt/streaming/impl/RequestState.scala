@@ -41,6 +41,7 @@ import pekko.util.ByteString
 
 import scala.annotation.tailrec
 import scala.concurrent.Promise
+import scala.annotation.nowarn
 import scala.util.control.NoStackTrace
 import scala.util.{ Either, Failure, Success }
 
@@ -107,6 +108,10 @@ import scala.util.{ Either, Failure, Success }
 
   // State event handling
 
+  // `Source.queue` with an `OverflowStrategy` is deprecated, but the `BoundedSourceQueue` that
+  // `Source.queue(bufferSize)` materializes drops the newest element instead of backpressuring.
+  // The offer `Future` is used to backpressure the session, so the deprecated overload is kept here.
+  @nowarn("msg=deprecated")
   def preparePublish(data: Start)(implicit mat: Materializer): Behavior[Event] = Behaviors.setup { context =>
     def requestPacketId(): Unit = {
       val reply = Promise[LocalPacketRouter.Registered]()
