@@ -301,6 +301,20 @@ final class RetrySettings private (val maxRetries: Int,
 object RetrySettings {
   val default: RetrySettings = RetrySettings(3, 200.milliseconds, 10.seconds, 0.0)
 
+  /**
+   * Java API: the same as `default`, which is a Java keyword.
+   *
+   * @since 2.0.0
+   */
+  def defaults: RetrySettings = default
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(config: Config): RetrySettings = apply(config)
+
   /** Scala API */
   def apply(maxRetries: Int,
       minBackoff: FiniteDuration,
@@ -430,6 +444,26 @@ final class S3Settings private (
 
   def withSignAnonymousRequests(value: Boolean): S3Settings =
     if (signAnonymousRequests == value) this else copy(signAnonymousRequests = value)
+
+  /** @since 2.0.0 */
+  def withAllowedHeaders(value: Map[String, Set[String]]): S3Settings = copy(allowedHeaders = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withAllowedHeaders(value: java.util.Map[String, java.util.Set[String]]): S3Settings =
+    copy(allowedHeaders = value.asScala.map { case (request, headers) => request -> headers.asScala.toSet }.toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getAllowedHeaders: java.util.Map[String, java.util.Set[String]] = allowedHeaders.map { case (request, headers) =>
+    request -> headers.asJava
+  }.asJava
 
   def withReservedCharacters(value: String): S3Settings =
     reservedCharacters match {
@@ -784,7 +818,7 @@ object S3Settings {
       credentialsProvider: AwsCredentialsProvider,
       s3RegionProvider: AwsRegionProvider,
       listBucketApiVersion: ApiVersion): S3Settings =
-    create(bufferType, credentialsProvider, s3RegionProvider, listBucketApiVersion, Map.empty)
+    create(bufferType, credentialsProvider, s3RegionProvider, listBucketApiVersion, Map.empty[String, Set[String]])
 
   def create(
       bufferType: BufferType,
@@ -798,6 +832,20 @@ object S3Settings {
     listBucketApiVersion,
     allowedHeaders
   )
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(
+      bufferType: BufferType,
+      credentialsProvider: AwsCredentialsProvider,
+      s3RegionProvider: AwsRegionProvider,
+      listBucketApiVersion: ApiVersion,
+      allowedHeaders: java.util.Map[String, java.util.Set[String]]): S3Settings =
+    create(bufferType, credentialsProvider, s3RegionProvider, listBucketApiVersion,
+      allowedHeaders.asScala.map { case (request, headers) => request -> headers.asScala.toSet }.toMap)
 
   /**
    * Scala API: Creates [[S3Settings]] from the [[com.typesafe.config.Config Config]] attached to an actor system.
