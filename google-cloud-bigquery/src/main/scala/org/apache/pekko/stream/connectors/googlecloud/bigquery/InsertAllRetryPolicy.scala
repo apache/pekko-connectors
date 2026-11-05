@@ -44,7 +44,7 @@ object InsertAllRetryPolicy {
   /**
    * Java API: Retry failed insert requests without deduplication
    */
-  def withoutDeduplication = WithDeduplication
+  def withoutDeduplication = WithoutDeduplication
 
   /**
    * Retry failed insert requests with best-effort deduplication
