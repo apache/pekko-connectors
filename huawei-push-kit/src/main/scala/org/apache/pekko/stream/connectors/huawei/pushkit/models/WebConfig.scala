@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit.models
 
+import scala.jdk.CollectionConverters._
+
 /**
  * WebPushConfig model.
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
@@ -22,6 +24,14 @@ case class WebConfig(hms_options: Option[String] = None,
     notification: Option[WebNotification] = None) {
   def withHmsOptions(options: String): WebConfig = this.copy(hms_options = Option(options))
   def withHeaders(headers: Map[String, String]): WebConfig = this.copy(headers = Option(headers))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withHeaders(headers: java.util.Map[String, String]): WebConfig =
+    withHeaders(headers.asScala.toMap)
   def withNotification(notification: WebNotification): WebConfig =
     this.copy(notification = Option(notification))
 }
@@ -57,11 +67,27 @@ case class WebNotification(title: Option[String] = None,
   def withBadge(value: String): WebNotification = this.copy(badge = Option(value))
   def withDir(value: String): WebNotification = this.copy(dir = Option(value))
   def withVibrate(value: Seq[Int]): WebNotification = this.copy(vibrate = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withVibrate(value: java.util.List[java.lang.Integer]): WebNotification =
+    withVibrate(value.asScala.map(_.intValue).toList)
   def withRenotify(value: Boolean): WebNotification = this.copy(renotify = Option(value))
   def withRequireInteraction(value: Boolean): WebNotification = this.copy(require_interaction = Option(value))
   def withSilent(value: Boolean): WebNotification = this.copy(silent = Option(value))
   def withTimestamp(value: Long): WebNotification = this.copy(timestamp = Option(value))
   def withActions(actions: Seq[WebActions]): WebNotification = this.copy(actions = Option(actions))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withActions(actions: java.util.List[WebActions]): WebNotification =
+    withActions(actions.asScala.toList)
 }
 
 object WebNotification {
