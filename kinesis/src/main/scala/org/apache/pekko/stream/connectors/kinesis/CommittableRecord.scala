@@ -22,6 +22,7 @@ import software.amazon.kinesis.exceptions.ShutdownException
 import software.amazon.kinesis.lifecycle.ShutdownReason
 import software.amazon.kinesis.retrieval.KinesisClientRecord
 import software.amazon.kinesis.retrieval.kpl.ExtendedSequenceNumber
+import scala.jdk.OptionConverters._
 
 abstract class CommittableRecord @InternalApi private[kinesis] (
     val record: KinesisClientRecord,
@@ -37,6 +38,14 @@ abstract class CommittableRecord @InternalApi private[kinesis] (
    * if any.
    */
   def shutdownReason: Option[ShutdownReason]
+
+  /**
+   * Java API: the ShutdownReason of the related
+   * [[software.amazon.kinesis.processor.ShardRecordProcessor]], if any.
+   *
+   * @since 2.0.0
+   */
+  def getShutdownReason: java.util.Optional[ShutdownReason] = shutdownReason.toJava
 
   /**
    * Helper method that tells the caller if it's safe to invoke

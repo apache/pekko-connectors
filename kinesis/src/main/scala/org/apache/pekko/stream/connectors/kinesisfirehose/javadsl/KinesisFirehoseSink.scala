@@ -30,4 +30,22 @@ object KinesisFirehoseSink {
       kinesisClient: FirehoseAsyncClient): Sink[Record, NotUsed] =
     scaladsl.KinesisFirehoseSink.apply(streamName, settings)(kinesisClient).asJava
 
+  /**
+   * Java API: the same as `apply`
+   *
+   * @since 2.0.0
+   */
+  def create(streamName: String, kinesisClient: FirehoseAsyncClient): Sink[Record, NotUsed] =
+    apply(streamName, kinesisClient)
+
+  /**
+   * Java API: the same as `apply`
+   *
+   * @since 2.0.0
+   */
+  def create(streamName: String,
+      settings: KinesisFirehoseFlowSettings,
+      kinesisClient: FirehoseAsyncClient): Sink[Record, NotUsed] =
+    apply(streamName, settings, kinesisClient)
+
 }
