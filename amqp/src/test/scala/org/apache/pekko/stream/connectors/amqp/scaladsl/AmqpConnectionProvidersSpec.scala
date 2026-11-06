@@ -14,11 +14,15 @@
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import java.net.ConnectException
+import java.util.concurrent.{ ConcurrentLinkedQueue, CountDownLatch, ExecutorService }
 
 import org.apache.pekko.stream.connectors.amqp._
-import com.rabbitmq.client.ConnectionFactory
+import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory }
+import org.scalatest.concurrent.Eventually
 
-class AmqpConnectionProvidersSpec extends AmqpSpec {
+import scala.jdk.CollectionConverters._
+
+class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
   "The AMQP Default Connection Providers" should {
     "create a new connection per invocation of LocalAmqpConnection" in {
       val connectionProvider = AmqpLocalConnectionProvider
@@ -146,6 +150,46 @@ class AmqpConnectionProvidersSpec extends AmqpSpec {
       reusableConnectionProvider.release(connection2)
       connection1.isOpen should be(false)
       connection2.isOpen should be(false)
+    }
+
+    "replace a closed connection" in {
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(AmqpLocalConnectionProvider)
+      val closedConnection = reusableConnectionProvider.get
+      closedConnection.close()
+      val connection = reusableConnectionProvider.get
+      (connection should not).equal(closedConnection)
+      reusableConnectionProvider.release(closedConnection)
+      connection.isOpen should be(true)
+      reusableConnectionProvider.release(connection)
+      connection.isOpen should be(false)
+    }
+
+    "block concurrent clients while the connection is being opened" in {
+      val connecting = new CountDownLatch(1)
+      val connect = new CountDownLatch(1)
+      val connectionFactory = new ConnectionFactory() {
+        override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
+          connecting.countDown()
+          connect.await()
+          super.newConnection(es, ar, name)
+        }
+      }
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(
+        AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
+      val connections = new ConcurrentLinkedQueue[Connection]()
+      val first = new Thread(() => connections.add(reusableConnectionProvider.get))
+      val second = new Thread(() => connections.add(reusableConnectionProvider.get))
+      try {
+        first.start()
+        connecting.await()
+        second.start()
+        eventually(second.getState should be(Thread.State.BLOCKED))
+      } finally connect.countDown()
+      first.join()
+      second.join()
+      connections.asScala.toSet should have size 1
+      connections.asScala.foreach(reusableConnectionProvider.release)
+      connections.peek().isOpen should be(false)
     }
   }
 
