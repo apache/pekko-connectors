@@ -13,15 +13,12 @@
 
 package org.apache.pekko.stream.connectors.amqp
 
-import java.util.ConcurrentModificationException
-import java.util.concurrent.atomic.AtomicReference
 import javax.net.ssl.{ SSLContext, TrustManager }
 
 import org.apache.pekko
 import pekko.annotation.DoNotInherit
 import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler }
 
-import scala.annotation.tailrec
 import scala.jdk.CollectionConverters._
 
 /**
@@ -368,62 +365,36 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
     val automaticRelease: Boolean = true)
     extends AmqpConnectionProvider {
 
-  import pekko.stream.connectors.amqp.AmqpCachedConnectionProvider._
-  private val state = new AtomicReference[State](Empty)
+  private val lock = new Object
+  private var cached: Option[Connection] = None
+  private var clients = Map.empty[Connection, Int]
 
   def withAutomaticRelease(automaticRelease: Boolean): AmqpCachedConnectionProvider =
     copy(automaticRelease = automaticRelease)
 
-  override def get: Connection = getRecursive(provider)
-
-  @tailrec
-  private def getRecursive(amqpConnectionProvider: AmqpConnectionProvider): Connection = state.get match {
-    case Empty =>
-      if (state.compareAndSet(Empty, Connecting)) {
-        try {
-          val connection = amqpConnectionProvider.get
-          if (!state.compareAndSet(Connecting, Connected(connection, 1)))
-            throw new ConcurrentModificationException(
-              "Unexpected concurrent modification while creating the connection.")
-          connection
-        } catch {
-          case e: ConcurrentModificationException => throw e
-          case e: Throwable                       =>
-            state.compareAndSet(Connecting, Empty)
-            throw e
-        }
-      } else getRecursive(amqpConnectionProvider)
-    case Connecting                         => getRecursive(amqpConnectionProvider)
-    case c @ Connected(connection, clients) =>
-      if (state.compareAndSet(c, Connected(connection, clients + 1))) connection
-      else getRecursive(amqpConnectionProvider)
-    case Closing => getRecursive(amqpConnectionProvider)
+  override def get: Connection = lock.synchronized {
+    val connection = cached.filter(_.isOpen).getOrElse {
+      val connection = provider.get
+      cached = Some(connection)
+      connection
+    }
+    clients = clients.updated(connection, clients.getOrElse(connection, 0) + 1)
+    connection
   }
 
-  override def release(connection: Connection): Unit = releaseRecursive(provider, connection)
-
-  @tailrec
-  private def releaseRecursive(amqpConnectionProvider: AmqpConnectionProvider, connection: Connection): Unit =
-    state.get match {
-      case Empty                                    => throw new IllegalStateException("There is no connection to release.")
-      case Connecting                               => releaseRecursive(amqpConnectionProvider, connection)
-      case c @ Connected(cachedConnection, clients) =>
-        if (cachedConnection != connection)
-          throw new IllegalArgumentException("Can't release a connection that's not owned by this provider")
-
-        if (clients == 1 || !automaticRelease) {
-          if (state.compareAndSet(c, Closing)) {
-            amqpConnectionProvider.release(connection)
-            if (!state.compareAndSet(Closing, Empty))
-              throw new ConcurrentModificationException(
-                "Unexpected concurrent modification while closing the connection.")
-          }
-        } else {
-          if (!state.compareAndSet(c, Connected(cachedConnection, clients - 1)))
-            releaseRecursive(amqpConnectionProvider, connection)
-        }
-      case Closing => releaseRecursive(amqpConnectionProvider, connection)
+  override def release(connection: Connection): Unit = lock.synchronized {
+    if (clients.isEmpty) throw new IllegalStateException("There is no connection to release.")
+    clients.get(connection) match {
+      case None =>
+        throw new IllegalArgumentException("Can't release a connection that's not owned by this provider")
+      case Some(count) if count == 1 || !automaticRelease =>
+        clients -= connection
+        if (cached.contains(connection)) cached = None
+        provider.release(connection)
+      case Some(count) =>
+        clients = clients.updated(connection, count - 1)
     }
+  }
 
   private def copy(automaticRelease: Boolean): AmqpCachedConnectionProvider =
     new AmqpCachedConnectionProvider(provider, automaticRelease)
@@ -445,10 +416,4 @@ object AmqpCachedConnectionProvider {
    */
   def create(provider: AmqpConnectionProvider): AmqpCachedConnectionProvider =
     AmqpCachedConnectionProvider(provider: AmqpConnectionProvider)
-
-  private sealed trait State
-  private case object Empty extends State
-  private case object Connecting extends State
-  private final case class Connected(connection: Connection, clients: Int) extends State
-  private case object Closing extends State
 }
