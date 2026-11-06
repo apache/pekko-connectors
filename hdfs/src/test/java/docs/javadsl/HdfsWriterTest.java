@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -46,7 +45,6 @@ import org.apache.pekko.testkit.javadsl.TestKit;
 import org.apache.pekko.util.ByteString;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import scala.concurrent.duration.Duration;
 
 @ExtendWith(LogCapturingExtension.class)
 public class HdfsWriterTest {
@@ -185,7 +183,7 @@ public class HdfsWriterTest {
                 HdfsFlow.data(
                     fs,
                     SyncStrategy.none(),
-                    RotationStrategy.time(Duration.create(500, TimeUnit.MILLISECONDS)),
+                    RotationStrategy.time(java.time.Duration.ofMillis(500)),
                     settings))
             .toMat(Sink.seq(), Keep.both())
             .run(system);

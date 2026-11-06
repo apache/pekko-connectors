@@ -45,9 +45,36 @@ final class HTableSettings[T] private (val conf: Configuration,
 
   /**
    * Java Api
+   *
+   * @deprecated A Java lambda passed to this method is ambiguous with the Scala overload; use `withJavaConverter`.
    */
+  @deprecated("Use withJavaConverter, a Java lambda passed to withConverter is ambiguous with the Scala overload",
+    "2.0.0")
   def withConverter(converter: java.util.function.Function[T, java.util.List[Mutation]]): HTableSettings[T] =
+    withJavaConverter(converter)
+
+  /**
+   * Java Api
+   *
+   * @since 2.0.0
+   */
+  def withJavaConverter(converter: java.util.function.Function[T, java.util.List[Mutation]]): HTableSettings[T] =
     copy(converter = converter.asScala(_).asScala.toIndexedSeq)
+
+  /**
+   * Java Api
+   *
+   * @since 2.0.0
+   */
+  def getColumnFamilies: java.util.List[String] = columnFamilies.asJava
+
+  /**
+   * Java Api
+   *
+   * @since 2.0.0
+   */
+  def getConverter: java.util.function.Function[T, java.util.List[Mutation]] =
+    ((t: T) => converter(t).asJava).asJava
 
   override def toString: String =
     "HTableSettings(" +
