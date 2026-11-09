@@ -32,6 +32,51 @@ import scala.jdk.FutureConverters._
 object GooglePubSub {
 
   /**
+   * Creates a flow to that publishes messages to a topic and emits the message ids, using parallelism 1.
+   *
+   * @since 2.0.0
+   */
+  def publish(topic: String, config: PubSubConfig): Flow[PublishRequest, java.util.List[String], NotUsed] =
+    publish(topic, config, 1)
+
+  /**
+   * Creates a flow to that publishes messages to a topic and emits the message ids, using parallelism 1.
+   *
+   * @param overrideHost publish message will be sent to specific host,
+   *                     can be used to send message to specific regional endpoint,
+   *                     which can be important when ordering is enabled
+   * @since 2.0.0
+   */
+  def publish(topic: String,
+      config: PubSubConfig,
+      overrideHost: String): Flow[PublishRequest, java.util.List[String], NotUsed] =
+    publish(topic, config, overrideHost, 1)
+
+  /**
+   * Creates a flow to that publishes messages to a topic and emits the message ids and carries a context
+   * through, using parallelism 1.
+   *
+   * @since 2.0.0
+   */
+  def publishWithContext[C](topic: String,
+      config: PubSubConfig): FlowWithContext[PublishRequest, C, java.util.List[String], C, NotUsed] =
+    publishWithContext[C](topic, config, 1)
+
+  /**
+   * Creates a flow to that publishes messages to a topic and emits the message ids and carries a context
+   * through, using parallelism 1.
+   *
+   * @param overrideHost publish message will be sent to specific host,
+   *                     can be used to send message to specific regional endpoint,
+   *                     which can be important when ordering is enabled
+   * @since 2.0.0
+   */
+  def publishWithContext[C](topic: String,
+      config: PubSubConfig,
+      overrideHost: String): FlowWithContext[PublishRequest, C, java.util.List[String], C, NotUsed] =
+    publishWithContext[C](topic, config, overrideHost, 1)
+
+  /**
    * Creates a flow to that publishes messages to a topic and emits the message ids.
    * @param overrideHost publish message will be sent to specific host,
    *                     can be used to send message to specific regional endpoint,

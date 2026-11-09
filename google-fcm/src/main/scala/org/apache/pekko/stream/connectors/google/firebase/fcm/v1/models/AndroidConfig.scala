@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
 
+import scala.jdk.CollectionConverters._
+
 /**
  * AndroidConfig model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#AndroidConfig
@@ -35,6 +37,14 @@ case class AndroidConfig(
   def withRestrictedPackageName(value: String): AndroidConfig = this.copy(restricted_package_name = Option(value))
 
   def withData(value: Map[String, String]): AndroidConfig = this.copy(data = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withData(value: java.util.Map[String, String]): AndroidConfig =
+    withData(value.asScala.toMap)
 
   def withNotification(value: AndroidNotification): AndroidConfig = this.copy(notification = Option(value))
 
@@ -97,9 +107,25 @@ case class AndroidNotification(
 
   def withBodyLocArgs(value: Seq[String]): AndroidNotification = this.copy(body_loc_args = Option(value))
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withBodyLocArgs(value: java.util.List[String]): AndroidNotification =
+    withBodyLocArgs(value.asScala.toList)
+
   def withTitleLocKey(value: String): AndroidNotification = this.copy(title_loc_key = Option(value))
 
   def withTitleLocArgs(value: Seq[String]): AndroidNotification = this.copy(title_loc_args = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withTitleLocArgs(value: java.util.List[String]): AndroidNotification =
+    withTitleLocArgs(value.asScala.toList)
 
   def withChannelId(value: String): AndroidNotification = this.copy(channel_id = Option(value))
 
@@ -124,6 +150,14 @@ case class AndroidNotification(
 
   def withVibrateTimings(value: Seq[String]): AndroidNotification = this.copy(vibrate_timings = Option(value))
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withVibrateTimings(value: java.util.List[String]): AndroidNotification =
+    withVibrateTimings(value.asScala.toList)
+
   def withVisibility(value: Visibility): AndroidNotification = this.copy(visibility = Option(value))
 
   def withNotificationCount(value: Int): AndroidNotification = this.copy(notification_count = Option(value))
@@ -145,9 +179,25 @@ object AndroidNotification {
  */
 sealed trait AndroidMessagePriority
 
-case object Normal extends AndroidMessagePriority
+case object Normal extends AndroidMessagePriority {
 
-case object High extends AndroidMessagePriority
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: Normal.type = this
+}
+
+case object High extends AndroidMessagePriority {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: High.type = this
+}
 
 /**
  * NotificationPriority model.
@@ -155,15 +205,55 @@ case object High extends AndroidMessagePriority
  */
 sealed trait NotificationPriority
 
-case object PriorityMin extends NotificationPriority
+case object PriorityMin extends NotificationPriority {
 
-case object PriorityLow extends NotificationPriority
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PriorityMin.type = this
+}
 
-case object PriorityDefault extends NotificationPriority
+case object PriorityLow extends NotificationPriority {
 
-case object PriorityHigh extends NotificationPriority
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PriorityLow.type = this
+}
 
-case object PriorityMax extends NotificationPriority
+case object PriorityDefault extends NotificationPriority {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PriorityDefault.type = this
+}
+
+case object PriorityHigh extends NotificationPriority {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PriorityHigh.type = this
+}
+
+case object PriorityMax extends NotificationPriority {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PriorityMax.type = this
+}
 
 /**
  * Visibility model.
@@ -171,11 +261,35 @@ case object PriorityMax extends NotificationPriority
  */
 sealed trait Visibility
 
-case object Private extends Visibility
+case object Private extends Visibility {
 
-case object Public extends Visibility
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: Private.type = this
+}
 
-case object Secret extends Visibility
+case object Public extends Visibility {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: Public.type = this
+}
+
+case object Secret extends Visibility {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: Secret.type = this
+}
 
 /**
  * LightSettings model.

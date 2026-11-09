@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.google.firebase.fcm.v1.models
 
+import scala.jdk.CollectionConverters._
+
 /**
  * WebpushConfig model.
  * @see https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#WebpushConfig
@@ -23,6 +25,22 @@ case class WebPushConfig(headers: Option[Map[String, String]] = None,
     fcm_options: Option[FcmOption] = None) {
   def withHeaders(value: Map[String, String]): WebPushConfig = this.copy(headers = Option(value))
   def withData(value: Map[String, String]): WebPushConfig = this.copy(data = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withHeaders(value: java.util.Map[String, String]): WebPushConfig =
+    withHeaders(value.asScala.toMap)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withData(value: java.util.Map[String, String]): WebPushConfig =
+    withData(value.asScala.toMap)
   def withNotification(value: String): WebPushConfig = this.copy(notification = Option(value))
   def withFcmOptions(value: FcmOption): WebPushConfig = this.copy(fcm_options = Option(value))
 }
