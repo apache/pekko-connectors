@@ -61,6 +61,69 @@ final class MqttSessionSettings private (val maxPacketSize: Int = 4096,
   import scala.jdk.DurationConverters._
 
   /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getReceiveConnectTimeout: Duration = receiveConnectTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getReceiveConnAckTimeout: Duration = receiveConnAckTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProducerPubAckRecTimeout: Duration = producerPubAckRecTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProducerPubCompTimeout: Duration = producerPubCompTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConsumerPubAckRecTimeout: Duration = consumerPubAckRecTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConsumerPubCompTimeout: Duration = consumerPubCompTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConsumerPubRelTimeout: Duration = consumerPubRelTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getReceiveSubAckTimeout: Duration = receiveSubAckTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getReceiveUnsubAckTimeout: Duration = receiveUnsubAckTimeout.toJava
+
+  /**
    * Just for clients - the number of commands that can be buffered while connected to a server. Defaults
    * to 10. Any commands received beyond this will apply backpressure.
    */
