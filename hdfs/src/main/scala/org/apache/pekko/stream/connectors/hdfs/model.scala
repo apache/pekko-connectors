@@ -25,6 +25,7 @@ import pekko.util.ByteString
 import org.apache.hadoop.fs.Path
 
 import scala.concurrent.duration.FiniteDuration
+import scala.jdk.DurationConverters._
 
 final class HdfsWritingSettings private (
     val overwrite: Boolean,
@@ -208,6 +209,16 @@ object RotationStrategy {
    */
   def time(interval: FiniteDuration): RotationStrategy =
     TimeRotationStrategy(interval)
+
+  /**
+   * Java API: Creates a rotation strategy that will trigger a file rotation
+   * after a finite duration.
+   *
+   * @param interval duration to rotate files
+   * @since 2.0.0
+   */
+  def time(interval: java.time.Duration): RotationStrategy =
+    TimeRotationStrategy(interval.toScala)
 
   /**
    * Creates a non-functioning rotation strategy that will not trigger
