@@ -14,7 +14,7 @@
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import java.net.ConnectException
-import java.util.concurrent.{ ConcurrentLinkedQueue, CountDownLatch, ExecutorService }
+import java.util.concurrent.{ ConcurrentLinkedQueue, CountDownLatch, ExecutorService, TimeUnit }
 import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.pekko.stream.connectors.amqp._
@@ -22,10 +22,13 @@ import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, Rec
 import org.mockito.Mockito.{ mock, verify, when }
 import org.scalatest.concurrent.Eventually
 
+import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 import scala.util.Try
 
 class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
+  override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
+
   "The AMQP Default Connection Providers" should {
     "create a new connection per invocation of LocalAmqpConnection" in {
       val connectionProvider = AmqpLocalConnectionProvider
@@ -196,10 +199,13 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
     "block concurrent clients while the connection is being opened" in {
       val connecting = new CountDownLatch(1)
       val connect = new CountDownLatch(1)
+      val secondStarted = new CountDownLatch(1)
+      val attempts = new AtomicInteger()
       val connectionFactory = new ConnectionFactory() {
         override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
+          attempts.incrementAndGet()
           connecting.countDown()
-          connect.await()
+          connect.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
           super.newConnection(es, ar, name)
         }
       }
@@ -207,15 +213,21 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
         AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
       val connections = new ConcurrentLinkedQueue[Connection]()
       val first = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
-      val second = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
+      val second = new Thread(() => {
+        secondStarted.countDown()
+        connections.add(reusableConnectionProvider.get): Unit
+      })
       try {
         first.start()
-        connecting.await()
+        connecting.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
         second.start()
-        eventually(second.getState should be(Thread.State.WAITING))
+        secondStarted.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
+        attempts.get should be(1)
       } finally connect.countDown()
       first.join()
       second.join()
+      attempts.get should be(1)
+      connections should have size 2
       connections.asScala.toSet should have size 1
       connections.asScala.foreach(reusableConnectionProvider.release)
       connections.peek().isOpen should be(false)
@@ -229,7 +241,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
         override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
           attempts.incrementAndGet()
           connecting.countDown()
-          fail.await()
+          fail.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
           throw new ConnectException("Connection refused")
         }
       }
@@ -240,7 +252,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       val second = new Thread(() => Try(reusableConnectionProvider.get).failed.foreach(failures.add))
       try {
         first.start()
-        connecting.await()
+        connecting.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
         second.start()
         eventually(second.getState should be(Thread.State.WAITING))
       } finally fail.countDown()
