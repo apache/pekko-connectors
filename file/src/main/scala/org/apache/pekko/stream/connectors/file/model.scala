@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.file
 import java.time.Instant
 import java.time.temporal.ChronoField
 import java.util.Objects
+import scala.jdk.OptionConverters._
 
 /**
  * INTERNAL API
@@ -84,6 +85,13 @@ final class TarArchiveMetadata private (
     case None         => filePathName
     case Some(prefix) => prefix + "/" + filePathName
   }
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getFilePathPrefix: java.util.Optional[String] = filePathPrefix.toJava
 
   def isDirectory: Boolean =
     linkIndicatorByte == TarArchiveMetadata.linkIndicatorDirectory || filePathName.endsWith("/")
