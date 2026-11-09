@@ -123,8 +123,10 @@ import scala.util.control.NonFatal
    */
   override def postStop(): Unit = {
     log.debug("Closing table {}", tableName)
-    table.close()
-    keyValueTableFactory.close()
+    PravegaTableCleanup.closeTableAndFactory(
+      if (table ne null) table.close(),
+      if (keyValueTableFactory ne null) keyValueTableFactory.close())((what, exc) =>
+      log.error(exc, "Error while closing {} for [{}]", what, tableName))
   }
 
 }
