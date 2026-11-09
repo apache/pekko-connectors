@@ -17,7 +17,7 @@ import javax.net.ssl.{ SSLContext, TrustManager }
 
 import org.apache.pekko
 import pekko.annotation.DoNotInherit
-import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler }
+import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler, Recoverable }
 
 import scala.jdk.CollectionConverters._
 
@@ -373,7 +373,7 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
     copy(automaticRelease = automaticRelease)
 
   override def get: Connection = lock.synchronized {
-    val connection = cached.filter(_.isOpen).getOrElse {
+    val connection = cached.filter(c => c.isOpen || c.isInstanceOf[Recoverable]).getOrElse {
       val connection = provider.get
       cached = Some(connection)
       connection

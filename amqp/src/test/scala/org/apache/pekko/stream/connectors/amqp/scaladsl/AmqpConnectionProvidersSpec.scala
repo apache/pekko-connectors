@@ -17,7 +17,8 @@ import java.net.ConnectException
 import java.util.concurrent.{ ConcurrentLinkedQueue, CountDownLatch, ExecutorService }
 
 import org.apache.pekko.stream.connectors.amqp._
-import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory }
+import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, RecoverableConnection }
+import org.mockito.Mockito.{ mock, verify, when }
 import org.scalatest.concurrent.Eventually
 
 import scala.jdk.CollectionConverters._
@@ -153,7 +154,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
     }
 
     "replace a closed connection" in {
-      val reusableConnectionProvider = AmqpCachedConnectionProvider(AmqpLocalConnectionProvider)
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(AmqpDetailsConnectionProvider("localhost", 5672))
       val closedConnection = reusableConnectionProvider.get
       closedConnection.close()
       val connection = reusableConnectionProvider.get
@@ -162,6 +163,32 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       connection.isOpen should be(true)
       reusableConnectionProvider.release(connection)
       connection.isOpen should be(false)
+    }
+
+    "reuse a recoverable connection while it is closed" in {
+      val connection = mock(classOf[RecoverableConnection])
+      var connectionsCreated = 0
+      val connectionFactory = new ConnectionFactory() {
+        override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
+          connectionsCreated += 1
+          connection
+        }
+      }
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(
+        AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
+
+      when(connection.isOpen).thenReturn(true)
+      (reusableConnectionProvider.get should be).theSameInstanceAs(connection)
+      when(connection.isOpen).thenReturn(false)
+      (reusableConnectionProvider.get should be).theSameInstanceAs(connection)
+      when(connection.isOpen).thenReturn(true)
+      (reusableConnectionProvider.get should be).theSameInstanceAs(connection)
+      connectionsCreated should be(1)
+
+      reusableConnectionProvider.release(connection)
+      reusableConnectionProvider.release(connection)
+      reusableConnectionProvider.release(connection)
+      verify(connection).close()
     }
 
     "block concurrent clients while the connection is being opened" in {
