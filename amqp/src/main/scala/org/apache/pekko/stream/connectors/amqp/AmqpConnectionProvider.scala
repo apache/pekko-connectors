@@ -19,6 +19,9 @@ import org.apache.pekko
 import pekko.annotation.DoNotInherit
 import com.rabbitmq.client.{ Address, Connection, ConnectionFactory, ExceptionHandler, Recoverable }
 
+import scala.annotation.tailrec
+import scala.concurrent.{ Await, Promise }
+import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
 
 /**
@@ -367,33 +370,73 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
 
   private val lock = new Object
   private var cached: Option[Connection] = None
+  private var connecting: Option[Promise[Unit]] = None
   private var clients = Map.empty[Connection, Int]
 
   def withAutomaticRelease(automaticRelease: Boolean): AmqpCachedConnectionProvider =
     copy(automaticRelease = automaticRelease)
 
-  override def get: Connection = lock.synchronized {
-    val connection = cached.filter(c => c.isOpen || c.isInstanceOf[Recoverable]).getOrElse {
-      val connection = provider.get
-      cached = Some(connection)
-      connection
+  override def get: Connection = getConnection
+
+  @tailrec
+  private def getConnection: Connection = {
+    val acquired = lock.synchronized {
+      cached.filter(c => c.isOpen || c.isInstanceOf[Recoverable]) match {
+        case Some(connection) =>
+          clients = clients.updated(connection, clients.getOrElse(connection, 0) + 1)
+          Left(connection)
+        case None =>
+          val create = connecting.isEmpty
+          val attempt = connecting.getOrElse {
+            val attempt = Promise[Unit]()
+            connecting = Some(attempt)
+            attempt
+          }
+          Right((attempt, create))
+      }
     }
-    clients = clients.updated(connection, clients.getOrElse(connection, 0) + 1)
-    connection
+    acquired match {
+      case Left(connection)       => connection
+      case Right((attempt, true)) =>
+        try {
+          val connection = provider.get
+          lock.synchronized {
+            cached = Some(connection)
+            clients = clients.updated(connection, clients.getOrElse(connection, 0) + 1)
+            connecting = None
+          }
+          attempt.success(())
+          connection
+        } catch {
+          case error: Throwable =>
+            lock.synchronized {
+              connecting = None
+            }
+            attempt.failure(error)
+            throw error
+        }
+      case Right((attempt, false)) =>
+        Await.result(attempt.future, Duration.Inf)
+        getConnection
+    }
   }
 
-  override def release(connection: Connection): Unit = lock.synchronized {
-    if (clients.isEmpty) throw new IllegalStateException("There is no connection to release.")
-    clients.get(connection) match {
-      case None =>
-        throw new IllegalArgumentException("Can't release a connection that's not owned by this provider")
-      case Some(count) if count == 1 || !automaticRelease =>
-        clients -= connection
-        if (cached.contains(connection)) cached = None
-        provider.release(connection)
-      case Some(count) =>
-        clients = clients.updated(connection, count - 1)
+  override def release(connection: Connection): Unit = {
+    val close = lock.synchronized {
+      if (clients.isEmpty) throw new IllegalStateException("There is no connection to release.")
+      clients.get(connection) match {
+        case None =>
+          throw new IllegalArgumentException("Can't release a connection that's not owned by this provider")
+        case Some(count) if count == 1 || !automaticRelease =>
+          clients -= connection
+          if (cached.contains(connection)) cached = None
+          true
+        case Some(count) =>
+          clients = clients.updated(connection, count - 1)
+          false
+      }
     }
+    if (close) provider.release(connection)
   }
 
   private def copy(automaticRelease: Boolean): AmqpCachedConnectionProvider =

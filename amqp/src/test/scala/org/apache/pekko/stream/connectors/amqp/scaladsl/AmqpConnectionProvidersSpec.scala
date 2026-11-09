@@ -15,6 +15,7 @@ package org.apache.pekko.stream.connectors.amqp.scaladsl
 
 import java.net.ConnectException
 import java.util.concurrent.{ ConcurrentLinkedQueue, CountDownLatch, ExecutorService }
+import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.pekko.stream.connectors.amqp._
 import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, RecoverableConnection }
@@ -22,6 +23,7 @@ import org.mockito.Mockito.{ mock, verify, when }
 import org.scalatest.concurrent.Eventually
 
 import scala.jdk.CollectionConverters._
+import scala.util.Try
 
 class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
   "The AMQP Default Connection Providers" should {
@@ -210,13 +212,43 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
         first.start()
         connecting.await()
         second.start()
-        eventually(second.getState should be(Thread.State.BLOCKED))
+        eventually(second.getState should be(Thread.State.WAITING))
       } finally connect.countDown()
       first.join()
       second.join()
       connections.asScala.toSet should have size 1
       connections.asScala.foreach(reusableConnectionProvider.release)
       connections.peek().isOpen should be(false)
+    }
+
+    "fail concurrent clients together if opening the connection fails" in {
+      val connecting = new CountDownLatch(1)
+      val fail = new CountDownLatch(1)
+      val attempts = new AtomicInteger()
+      val connectionFactory = new ConnectionFactory() {
+        override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
+          attempts.incrementAndGet()
+          connecting.countDown()
+          fail.await()
+          throw new ConnectException("Connection refused")
+        }
+      }
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(
+        AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
+      val failures = new ConcurrentLinkedQueue[Throwable]()
+      val first = new Thread(() => Try(reusableConnectionProvider.get).failed.foreach(failures.add))
+      val second = new Thread(() => Try(reusableConnectionProvider.get).failed.foreach(failures.add))
+      try {
+        first.start()
+        connecting.await()
+        second.start()
+        eventually(second.getState should be(Thread.State.WAITING))
+      } finally fail.countDown()
+      first.join()
+      second.join()
+      attempts.get should be(1)
+      failures.asScala.toList should have size 2
+      all(failures.asScala.toList) shouldBe a[ConnectException]
     }
   }
 
