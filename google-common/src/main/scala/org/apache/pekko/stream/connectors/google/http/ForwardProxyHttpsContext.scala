@@ -20,7 +20,7 @@ import pekko.http.scaladsl.{ ConnectionContext, HttpsConnectionContext }
 import java.io.FileInputStream
 import java.security.KeyStore
 import java.security.cert.{ CertificateFactory, X509Certificate }
-import javax.net.ssl.{ SSLContext, TrustManagerFactory }
+import javax.net.ssl.{ SSLContext, SSLEngine, TrustManagerFactory }
 
 @InternalApi
 private[google] object ForwardProxyHttpsContext {
@@ -30,6 +30,10 @@ private[google] object ForwardProxyHttpsContext {
     "TLSv1.3" -> Array("TLSv1.3"))
 
   def apply(trustPemPath: String, minTlsVersion: String = "TLSv1.2"): HttpsConnectionContext = {
+    val protocols = TlsVersions.getOrElse(minTlsVersion,
+      throw new IllegalArgumentException(
+        s"Unsupported TLS version: $minTlsVersion. Minimum supported is TLSv1.2. Valid values: ${TlsVersions.keys.mkString(", ")}"))
+
     val certificate = x509Certificate(trustPemPath: String)
     val sslContext = SSLContext.getInstance("TLS")
 
@@ -42,11 +46,25 @@ private[google] object ForwardProxyHttpsContext {
     tmf.init(trustStore)
     val trustManagers = tmf.getTrustManagers
     sslContext.init(null, trustManagers, null)
-    val protocols = TlsVersions.getOrElse(minTlsVersion,
-      throw new IllegalArgumentException(
-        s"Unsupported TLS version: $minTlsVersion. Minimum supported is TLSv1.2. Valid values: ${TlsVersions.keys.mkString(", ")}"))
-    sslContext.getDefaultSSLParameters.setProtocols(protocols)
-    ConnectionContext.httpsClient(sslContext)
+
+    // The enabled protocols have to be set on each SSLEngine. Setting them on the
+    // SSLParameters returned by SSLContext.getDefaultSSLParameters has no effect,
+    // because that method returns a fresh copy on every call.
+    ConnectionContext.httpsClient(createSSLEngine(sslContext, protocols, _, _))
+  }
+
+  private[http] def createSSLEngine(sslContext: SSLContext,
+      protocols: Array[String],
+      host: String,
+      port: Int): SSLEngine = {
+    val engine = sslContext.createSSLEngine(host, port)
+    engine.setUseClientMode(true)
+    val params = engine.getSSLParameters
+    params.setProtocols(protocols)
+    // retain the hostname verification that ConnectionContext.httpsClient(SSLContext) sets up
+    params.setEndpointIdentificationAlgorithm("https")
+    engine.setSSLParameters(params)
+    engine
   }
 
   private def x509Certificate(trustPemPath: String): X509Certificate = {
