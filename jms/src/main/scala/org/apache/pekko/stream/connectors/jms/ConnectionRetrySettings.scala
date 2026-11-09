@@ -67,6 +67,27 @@ final class ConnectionRetrySettings private (
       : FiniteDuration = (initialRetry * Math.pow(retryNumber, backoffFactor)).asInstanceOf[FiniteDuration].min(
     maxBackoff)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectTimeout: java.time.Duration = connectTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInitialRetry: java.time.Duration = initialRetry.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMaxBackoff: java.time.Duration = maxBackoff.toJava
+
   private def copy(
       connectTimeout: scala.concurrent.duration.FiniteDuration = connectTimeout,
       initialRetry: scala.concurrent.duration.FiniteDuration = initialRetry,
