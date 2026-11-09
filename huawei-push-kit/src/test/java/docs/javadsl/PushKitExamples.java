@@ -31,7 +31,6 @@ import org.apache.pekko.stream.connectors.huawei.pushkit.models.Tokens;
 // #imports
 import org.apache.pekko.stream.javadsl.Sink;
 import org.apache.pekko.stream.javadsl.Source;
-import scala.collection.immutable.Set;
 
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -51,7 +50,7 @@ public class PushKitExamples {
                     .withNotification(
                         AndroidNotification.fromJava()
                             .withClickAction(ClickAction.fromJava().withType(3))))
-            .withTarget(new Tokens(new Set.Set1<>("token").toSeq()));
+            .withTarget(Tokens.create(java.util.Collections.singletonList("token")));
 
     Source.single(notification).runWith(HmsPushKit.fireAndForget(config), system);
     // #simple-send
