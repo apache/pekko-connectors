@@ -13,7 +13,16 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch
 
+import scala.jdk.OptionConverters._
+
 final class ElasticsearchParams private (val indexName: String, val typeName: Option[String]) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getTypeName: java.util.Optional[String] = typeName.toJava
   override def toString =
     s"""ElasticsearchParams(indexName=$indexName,typeName=$typeName)"""
 }
