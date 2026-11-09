@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory
  * Requires Logback and configuration like the following the logback-test.xml:
  *
  * {{{
- *     <appender name="CapturingAppender" class="org.apache.pekko.actor.testkit.typed.internal.CapturingAppender" />
+ *     <appender name="CapturingAppender" class="org.apache.pekko.stream.connectors.testkit.CapturingAppender" />
  *
- *     <logger name="org.apache.pekko.actor.testkit.typed.internal.CapturingAppenderDelegate" >
+ *     <logger name="org.apache.pekko.stream.connectors.testkit.CapturingAppenderDelegate" >
  *       <appender-ref ref="STDOUT"/>
  *     </logger>
  *
