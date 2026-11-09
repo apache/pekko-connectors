@@ -177,8 +177,8 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       val reusableConnectionProvider = AmqpCachedConnectionProvider(
         AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
       val connections = new ConcurrentLinkedQueue[Connection]()
-      val first = new Thread(() => connections.add(reusableConnectionProvider.get))
-      val second = new Thread(() => connections.add(reusableConnectionProvider.get))
+      val first = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
+      val second = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
       try {
         first.start()
         connecting.await()
