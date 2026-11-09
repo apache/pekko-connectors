@@ -296,7 +296,9 @@ object ForwardProxy {
     apply(scheme, host, port, credentials.toScala.asInstanceOf[Option[BasicHttpCredentials]], trustPem.toScala,
       minTlsVersion)(system)
 
-  def create(connectionContext: jh.HttpConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings) =
+  /** @since 2.0.0 */
+  def create(connectionContext: jh.HttpsConnectionContext, poolSettings: jh.settings.ConnectionPoolSettings)
+      : ForwardProxy =
     apply(connectionContext.asInstanceOf[HttpsConnectionContext], poolSettings.asInstanceOf[ConnectionPoolSettings])
 }
 
