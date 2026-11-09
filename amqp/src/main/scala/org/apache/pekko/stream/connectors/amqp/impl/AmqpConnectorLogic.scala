@@ -76,14 +76,16 @@ private trait AmqpConnectorLogic { this: GraphStageLogic =>
     }
 
   /** remember to call if overriding! */
-  override def postStop(): Unit = {
-    if ((channel ne null) && channel.isOpen) channel.close()
-    channel = null
+  override def postStop(): Unit =
+    try {
+      if ((channel ne null) && channel.isOpen) channel.close()
+    } finally {
+      channel = null
 
-    if (connection ne null) {
-      connection.removeShutdownListener(shutdownListener)
-      settings.connectionProvider.release(connection)
-      connection = null
+      if (connection ne null) {
+        connection.removeShutdownListener(shutdownListener)
+        settings.connectionProvider.release(connection)
+        connection = null
+      }
     }
-  }
 }
