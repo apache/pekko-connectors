@@ -13,6 +13,7 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
+import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,7 +29,8 @@ import pekko.stream.connectors.amqp.{
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.scaladsl.Source
 import pekko.util.ByteString
-import com.rabbitmq.client.{ AddressResolver, Connection, ConnectionFactory, ShutdownListener }
+import com.rabbitmq.client.{ AddressResolver, Channel, Connection, ConnectionFactory, ShutdownListener }
+import org.mockito.Mockito.{ mock, verify, when }
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
@@ -105,5 +107,26 @@ class AmqpGraphStageLogicConnectionShutdownSpec
 
     shutdownsAdded.get() should equal(input.size)
     shutdownsRemoved.get() should equal(input.size)
+  }
+
+  "releases the connection if closing the channel fails" in {
+    implicit val system: ActorSystem = ActorSystem(this.getClass.getSimpleName + System.currentTimeMillis())
+
+    val channel = mock(classOf[Channel])
+    when(channel.isOpen).thenReturn(true)
+    when(channel.close()).thenThrow(new IOException("close failed"))
+    val connection = mock(classOf[Connection])
+    when(connection.isOpen).thenReturn(true)
+    when(connection.createChannel()).thenReturn(channel)
+    val connectionFactory = new ConnectionFactory() {
+      override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = connection
+    }
+    val amqpSink = AmqpSink.simple(
+      AmqpWriteSettings(AmqpConnectionFactoryConnectionProvider(connectionFactory)).withRoutingKey("queue"))
+
+    try Source.single(ByteString("one")).runWith(amqpSink).futureValue
+    finally system.terminate().futureValue
+
+    verify(connection).close()
   }
 }
