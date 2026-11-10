@@ -23,6 +23,7 @@ import scala.annotation.tailrec
 import scala.concurrent.{ Await, Promise }
 import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
+import scala.util.control.NonFatal
 
 /**
  * Only for internal implementations
@@ -422,21 +423,35 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
   }
 
   override def release(connection: Connection): Unit = {
-    val close = lock.synchronized {
+    val connectionsToClose = lock.synchronized {
       if (clients.isEmpty) throw new IllegalStateException("There is no connection to release.")
       clients.get(connection) match {
         case None =>
           throw new IllegalArgumentException("Can't release a connection that's not owned by this provider")
-        case Some(count) if count == 1 || !automaticRelease =>
+        case Some(_) if !automaticRelease =>
+          val connections = clients.keys.toList
+          clients = Map.empty
+          cached = None
+          connections
+        case Some(1) =>
           clients -= connection
           if (cached.contains(connection)) cached = None
-          true
+          List(connection)
         case Some(count) =>
           clients = clients.updated(connection, count - 1)
-          false
+          Nil
       }
     }
-    if (close) provider.release(connection)
+    var failure: Throwable = null
+    connectionsToClose.foreach { connection =>
+      try provider.release(connection)
+      catch {
+        case NonFatal(error) =>
+          if (failure eq null) failure = error
+          else if (failure ne error) failure.addSuppressed(error)
+      }
+    }
+    if (failure ne null) throw failure
   }
 
   private def copy(automaticRelease: Boolean): AmqpCachedConnectionProvider =

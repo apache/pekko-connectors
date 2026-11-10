@@ -233,6 +233,38 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       connections.peek().isOpen should be(false)
     }
 
+    "not block releases while a connection is being opened" in {
+      val connecting = new CountDownLatch(1)
+      val connect = new CountDownLatch(1)
+      val attempts = new AtomicInteger()
+      val connectionFactory = new ConnectionFactory() {
+        override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
+          if (attempts.incrementAndGet() > 1) {
+            connecting.countDown()
+            connect.await()
+          }
+          super.newConnection(es, ar, name)
+        }
+      }
+      connectionFactory.setAutomaticRecoveryEnabled(false)
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(
+        AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
+      val closedConnection = reusableConnectionProvider.get
+      closedConnection.close()
+      val connections = new ConcurrentLinkedQueue[Connection]()
+      val client = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
+      val releasing = new Thread(() => reusableConnectionProvider.release(closedConnection))
+      try {
+        client.start()
+        connecting.await(5, TimeUnit.SECONDS) should be(true)
+        releasing.start()
+        eventually(releasing.getState should be(Thread.State.TERMINATED))
+      } finally connect.countDown()
+      client.join()
+      reusableConnectionProvider.release(connections.peek())
+      connections.peek().isOpen should be(false)
+    }
+
     "fail concurrent clients together if opening the connection fails" in {
       val connecting = new CountDownLatch(1)
       val fail = new CountDownLatch(1)
@@ -309,6 +341,20 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       reusableConnectionProvider.release(connection1)
       connection1.isOpen should be(false)
       connection2.isOpen should be(false)
+    }
+
+    "release all tracked connections using a replaced connection" in {
+      val reusableConnectionProvider =
+        AmqpCachedConnectionProvider(AmqpDetailsConnectionProvider("localhost", 5672)).withAutomaticRelease(false)
+      val original = reusableConnectionProvider.get
+      original.close()
+      val replacement = reusableConnectionProvider.get
+      try {
+        (replacement should not).equal(original)
+        reusableConnectionProvider.release(original)
+        replacement.isOpen should be(false)
+        intercept[IllegalStateException](reusableConnectionProvider.release(original))
+      } finally if (replacement.isOpen) replacement.close()
     }
 
     "not leave the provider in an invalid state if getting the connection fails" in {
