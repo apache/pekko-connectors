@@ -13,6 +13,7 @@
 
 package org.apache.pekko.stream.connectors.amqp.scaladsl
 
+import java.io.IOException
 import java.net.ConnectException
 import java.util.concurrent.{ ConcurrentLinkedQueue, CountDownLatch, ExecutorService, TimeUnit }
 import java.util.concurrent.atomic.AtomicInteger
@@ -308,8 +309,11 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       } finally fail.countDown()
       join(first, second)
       attempts.get should be(1)
-      failures.asScala.toList should have size 2
-      all(failures.asScala.toList) shouldBe a[ConnectException]
+      val (originals, wrapped) = failures.asScala.toList.partition(_.isInstanceOf[ConnectException])
+      originals should have size 1
+      wrapped should have size 1
+      wrapped.head shouldBe an[IOException]
+      (wrapped.head.getCause should be).theSameInstanceAs(originals.head)
     }
   }
 

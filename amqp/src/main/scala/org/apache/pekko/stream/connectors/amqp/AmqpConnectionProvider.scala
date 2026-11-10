@@ -13,6 +13,7 @@
 
 package org.apache.pekko.stream.connectors.amqp
 
+import java.io.IOException
 import javax.net.ssl.{ SSLContext, TrustManager }
 
 import org.apache.pekko
@@ -419,7 +420,8 @@ final class AmqpCachedConnectionProvider private (val provider: AmqpConnectionPr
             throw error
         }
       case Right((attempt, false)) =>
-        Await.result(attempt.future, Duration.Inf)
+        try Await.result(attempt.future, Duration.Inf)
+        catch { case NonFatal(e) => throw new IOException("Shared connection attempt failed", e) }
         getConnection
     }
   }
