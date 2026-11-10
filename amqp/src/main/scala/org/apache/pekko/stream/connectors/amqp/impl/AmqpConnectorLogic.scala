@@ -84,6 +84,7 @@ private trait AmqpConnectorLogic { this: GraphStageLogic =>
 
       if (connection ne null) {
         connection.removeShutdownListener(shutdownListener)
+        // if this throws, it hides any channel close failure; postStop failures are only logged
         settings.connectionProvider.release(connection)
         connection = null
       }
