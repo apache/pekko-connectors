@@ -31,7 +31,9 @@ import scala.util.control.NonFatal
 @DoNotInherit
 sealed trait AmqpConnectionProvider {
   def get: Connection
-  def release(connection: Connection): Unit = if (connection.isOpen) connection.close()
+  def release(connection: Connection): Unit =
+    if (connection.isOpen) connection.close()
+    else if (connection.isInstanceOf[Recoverable]) connection.abort()
 }
 
 /**

@@ -29,6 +29,11 @@ import scala.util.Try
 class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(10.seconds)
 
+  private def join(threads: Thread*): Unit = threads.foreach { thread =>
+    thread.join(patienceConfig.timeout.toMillis)
+    thread.isAlive should be(false)
+  }
+
   "The AMQP Default Connection Providers" should {
     "create a new connection per invocation of LocalAmqpConnection" in {
       val connectionProvider = AmqpLocalConnectionProvider
@@ -196,10 +201,23 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       verify(connection).close()
     }
 
+    "abort a recoverable connection released while it is recovering" in {
+      val connection = mock(classOf[RecoverableConnection])
+      val connectionFactory = new ConnectionFactory() {
+        override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = connection
+      }
+      val reusableConnectionProvider = AmqpCachedConnectionProvider(
+        AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
+
+      when(connection.isOpen).thenReturn(false)
+      reusableConnectionProvider.get
+      reusableConnectionProvider.release(connection)
+      verify(connection).abort()
+    }
+
     "block concurrent clients while the connection is being opened" in {
       val connecting = new CountDownLatch(1)
       val connect = new CountDownLatch(1)
-      val secondStarted = new CountDownLatch(1)
       val attempts = new AtomicInteger()
       val connectionFactory = new ConnectionFactory() {
         override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
@@ -211,26 +229,23 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
       }
       val reusableConnectionProvider = AmqpCachedConnectionProvider(
         AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
-      val connections = new ConcurrentLinkedQueue[Connection]()
-      val first = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
-      val second = new Thread(() => {
-        secondStarted.countDown()
-        connections.add(reusableConnectionProvider.get): Unit
-      })
+      val results = new ConcurrentLinkedQueue[Try[Connection]]()
+      val first = new Thread(() => results.add(Try(reusableConnectionProvider.get)): Unit)
+      val second = new Thread(() => results.add(Try(reusableConnectionProvider.get)): Unit)
       try {
         first.start()
         connecting.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
         second.start()
-        secondStarted.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
+        eventually(second.getState should be(Thread.State.WAITING))
         attempts.get should be(1)
       } finally connect.countDown()
-      first.join()
-      second.join()
+      join(first, second)
+      val connections = results.asScala.toList.map(_.get)
       attempts.get should be(1)
       connections should have size 2
-      connections.asScala.toSet should have size 1
-      connections.asScala.foreach(reusableConnectionProvider.release)
-      connections.peek().isOpen should be(false)
+      connections.toSet should have size 1
+      connections.foreach(reusableConnectionProvider.release)
+      connections.head.isOpen should be(false)
     }
 
     "not block releases while a connection is being opened" in {
@@ -241,7 +256,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
         override def newConnection(es: ExecutorService, ar: AddressResolver, name: String): Connection = {
           if (attempts.incrementAndGet() > 1) {
             connecting.countDown()
-            connect.await()
+            connect.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
           }
           super.newConnection(es, ar, name)
         }
@@ -251,18 +266,21 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
         AmqpConnectionFactoryConnectionProvider(connectionFactory).withHostAndPort("localhost", 5672))
       val closedConnection = reusableConnectionProvider.get
       closedConnection.close()
-      val connections = new ConcurrentLinkedQueue[Connection]()
-      val client = new Thread(() => connections.add(reusableConnectionProvider.get): Unit)
-      val releasing = new Thread(() => reusableConnectionProvider.release(closedConnection))
+      val results = new ConcurrentLinkedQueue[Try[Connection]]()
+      val releases = new ConcurrentLinkedQueue[Try[Unit]]()
+      val client = new Thread(() => results.add(Try(reusableConnectionProvider.get)): Unit)
+      val releasing = new Thread(() => releases.add(Try(reusableConnectionProvider.release(closedConnection))): Unit)
       try {
         client.start()
-        connecting.await(5, TimeUnit.SECONDS) should be(true)
+        connecting.await(patienceConfig.timeout.toMillis, TimeUnit.MILLISECONDS) should be(true)
         releasing.start()
         eventually(releasing.getState should be(Thread.State.TERMINATED))
       } finally connect.countDown()
-      client.join()
-      reusableConnectionProvider.release(connections.peek())
-      connections.peek().isOpen should be(false)
+      join(client)
+      releases.asScala.foreach(_.get)
+      val connection = results.asScala.head.get
+      reusableConnectionProvider.release(connection)
+      connection.isOpen should be(false)
     }
 
     "fail concurrent clients together if opening the connection fails" in {
@@ -288,8 +306,7 @@ class AmqpConnectionProvidersSpec extends AmqpSpec with Eventually {
         second.start()
         eventually(second.getState should be(Thread.State.WAITING))
       } finally fail.countDown()
-      first.join()
-      second.join()
+      join(first, second)
       attempts.get should be(1)
       failures.asScala.toList should have size 2
       all(failures.asScala.toList) shouldBe a[ConnectException]
