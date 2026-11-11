@@ -206,7 +206,7 @@ object Dependencies {
 
   val AvroParquet = Seq(
     libraryDependencies ++= Seq(
-      "org.apache.parquet" % "parquet-avro" % "1.18.1",
+      "org.apache.parquet" % "parquet-avro" % "1.18.2",
       "org.apache.avro" % "avro" % AvroVersion,
       ("org.apache.hadoop" % "hadoop-client" % HadoopVersion % Test)
         .exclude("ch.qos.reload4j", "reload4j")
