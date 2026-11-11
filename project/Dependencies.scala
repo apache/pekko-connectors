@@ -227,7 +227,7 @@ object Dependencies {
       "org.slf4j" % "slf4j-api" % Slf4jVersion % Test,
       "ch.qos.logback" % "logback-classic" % LogbackVersion % Test) ++ Mockito)
 
-  val GeodeVersion = "2.0.3"
+  val GeodeVersion = "2.0.4"
   val GeodeVersionForDocs = "115"
 
   val Geode = Seq(
