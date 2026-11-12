@@ -587,3 +587,22 @@ Global / onLoad := (Global / onLoad).value.andThen { s =>
       s"Failed to derive version from git tags. Maybe run `git fetch --unshallow` or `git fetch upstream` on a fresh git clone from a fork? Derived version: $v")
   s
 }
+
+// Organize imports semantically before applying the usual source formatting.
+// Include projects intentionally omitted from the root's normal aggregation.
+addCommandAlias(
+  "sortImports",
+  Seq(
+    "scalafixEnable",
+    "scalafixAll OrganizeImports",
+    "testkit/scalafixAll OrganizeImports",
+    "docs/scalafixAll OrganizeImports",
+    "aws-spi-pekko-http-int-tests/scalafixAll OrganizeImports",
+    "csv-bench/scalafixAll OrganizeImports",
+    "mqtt-streaming-bench/scalafixAll OrganizeImports",
+    "scalafmtAll",
+    "testkit/scalafmtAll",
+    "docs/scalafmtAll",
+    "aws-spi-pekko-http-int-tests/scalafmtAll",
+    "csv-bench/scalafmtAll",
+    "mqtt-streaming-bench/scalafmtAll").mkString(";", ";", ""))

@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.csv.impl
 import java.nio.charset.Charset
 import java.util.stream.Collectors
 import java.{ util => ju }
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream._

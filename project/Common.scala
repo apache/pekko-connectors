@@ -151,6 +151,17 @@ object Common extends AutoPlugin {
       val apiVersion = if (isSnapshot.value) "current" else version.value
       Some(url(s"https://pekko.apache.org/api/pekko-connectors/$apiVersion/"))
     },
+    // SemanticDB must retain unused-import diagnostics for OrganizeImports.
+    // Informational diagnostics also work when the normal build treats warnings as errors.
+    scalacOptions ++= {
+      if (!semanticdbEnabled.value) Nil
+      else if (scalaBinaryVersion.value == "2.13")
+        Seq("-Wunused:imports", "-Wconf:cat=unused-imports:i")
+      else if (scalaBinaryVersion.value == "3")
+        Seq("-Wunused:imports", "-Wconf:msg=unused import:i")
+      else Nil
+    },
+
     javafmtSortImports := false,
     // show full stack traces and test case durations
     Test / testOptions += Tests.Argument("-oDF"),

@@ -15,13 +15,13 @@ package org.apache.pekko.stream.connectors.csv.scaladsl
 
 import java.nio.charset.{ Charset, StandardCharsets }
 
+import scala.collection.immutable
+
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.stream.connectors.csv.impl.CsvFormatter
 import pekko.stream.scaladsl.{ Flow, Source }
 import pekko.util.ByteString
-
-import scala.collection.immutable
 
 /**
  * Provides CSV formatting flows that convert a sequence of String into their CSV representation
