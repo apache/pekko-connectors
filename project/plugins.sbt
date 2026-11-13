@@ -11,7 +11,7 @@ addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.8")
 addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.1.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.35")
 addSbtPlugin("com.github.pjfanning" % "sbt-source-dist" % "0.2.0")
-addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.4.7")
+addSbtPlugin("com.github.pjfanning" % "sbt-pekko-build" % "0.5.0")
 addSbtPlugin("com.github.sbt" % "sbt-license-report" % "1.10.0")
 addSbtPlugin("com.lightbend.sbt" % "sbt-bill-of-materials" % "1.1.1")
 // discipline
