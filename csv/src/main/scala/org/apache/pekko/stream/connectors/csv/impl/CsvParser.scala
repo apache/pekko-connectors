@@ -15,13 +15,13 @@ package org.apache.pekko.stream.connectors.csv.impl
 
 import java.nio.charset.UnsupportedCharsetException
 
+import scala.collection.mutable
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.csv.MalformedCsvException
 import pekko.stream.connectors.csv.scaladsl.ByteOrderMark
 import pekko.util.{ ByteIterator, ByteString, ByteStringBuilder }
-
-import scala.collection.mutable
 
 /**
  * INTERNAL API: Use [[pekko.stream.connectors.csv.scaladsl.CsvParsing]] instead.

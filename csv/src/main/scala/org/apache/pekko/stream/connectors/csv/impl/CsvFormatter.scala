@@ -15,12 +15,12 @@ package org.apache.pekko.stream.connectors.csv.impl
 
 import java.nio.charset.{ Charset, StandardCharsets }
 
+import scala.collection.immutable
+
 import org.apache.pekko
 import pekko.annotation.InternalApi
 import pekko.stream.connectors.csv.scaladsl.CsvQuotingStyle
 import pekko.util.ByteString
-
-import scala.collection.immutable
 
 /**
  * Internal API
