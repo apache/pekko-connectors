@@ -214,6 +214,7 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
         .runWith(Sink.ignore)
 
       kafkaToEs.futureValue shouldBe Done
+      // #kafka-example
       flushAndRefresh(connectionSettings, indexName)
 
       // Make sure all messages was committed to kafka
@@ -226,7 +227,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
     "kafka-example - store documents and pass Responses with passThrough in bulk" in {
 
-      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // After we've written them to Elastic in bulk, we want
       // to commit the offset to Kafka
@@ -278,7 +278,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
     "kafka-example - store documents and pass Responses with passThrough skipping some w/ NOP" in {
 
-      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // Of those, only some will be written to Elastic, we want
       // to commit the offset to Kafka
@@ -336,7 +335,6 @@ class ElasticsearchV5Spec extends ElasticsearchSpecBase with ElasticsearchSpecUt
 
     "kafka-example - skip all NOP documents and pass Responses with passThrough" in {
 
-      // #kafka-example
       // We're going to pretend we got messages from kafka.
       // After we skip all NOP docs, we want
       // to commit the offset to Kafka
