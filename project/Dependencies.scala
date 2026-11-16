@@ -33,7 +33,7 @@ object Dependencies {
   val NettyVersion = "4.2.21.Final"
 
   // Sync with plugins.sbt
-  val PekkoGrpcBinaryVersion = "1.1"
+  val PekkoGrpcBinaryVersion = "2.0"
   val PekkoHttpVersion = PekkoHttpDependency.version
   val PekkoStreamsCirceVersion = "2.0.0-M1"
   val PekkoHttpBinaryVersion = PekkoHttpDependency.default.link

@@ -7,6 +7,9 @@
  * This file is part of the Apache Pekko project, which was derived from Akka.
  */
 
+// TODO remove once pekko-grpc 2.0.0 is released
+resolvers += Resolver.ApacheMavenStagingRepo
+
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.8")
 addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.1.1")
 addSbtPlugin("net.bzzt" % "sbt-reproducible-builds" % "0.35")
@@ -30,7 +33,7 @@ addSbtPlugin("com.lightbend.paradox" % "sbt-paradox-dependencies" % "0.2.4")
 addSbtPlugin("com.github.sbt" % "sbt-unidoc" % "0.6.1")
 addSbtPlugin("com.thoughtworks.sbt-api-mappings" % "sbt-api-mappings" % "3.1.0")
 // Pekko gRPC -- sync with PekkoGrpcBinaryVersion in Dependencies.scala
-addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0-M2")
+addSbtPlugin("org.apache.pekko" % "pekko-grpc-sbt-plugin" % "2.0.0")
 // templating
 addSbtPlugin("com.github.sbt" % "sbt-boilerplate" % "0.8.1")
 // Run JUnit 5 tests with sbt
