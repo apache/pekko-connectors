@@ -28,5 +28,5 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Install sbt
-        uses: sbt/setup-sbt@1cad58d595b729a71ca2254cdf5b43dd6f42d4bb # v1.1.18      
-      - uses: scalacenter/sbt-dependency-submission@f43202114d7522a4b233e052f82c2eea8d658134 # v3.2.1
+        uses: sbt/setup-sbt@67d461eba2c4753196c230e02da850757ba4775e # v1.5.14
+      - uses: scalacenter/sbt-dependency-submission@d84eef4c09e633bcf5f113bcad7fd5e9af1baee9 # v3.2.3
