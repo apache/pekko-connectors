@@ -27,7 +27,10 @@ final class GrpcBigQueryStorageReader private[scaladsl] (val settings: BigQueryS
     sys: ClassicActorSystemProvider) {
 
   @ApiMayChange
-  final val client = BigQueryReadClient(PekkoGrpcSettings.fromBigQuerySettings(settings)(sys))(sys)
+  final val client = {
+    implicit val classicSystem: ClassicActorSystemProvider = sys
+    BigQueryReadClient(PekkoGrpcSettings.fromBigQuerySettings(settings))
+  }
 
   sys.classicSystem.registerOnTermination(client.close())
 }
