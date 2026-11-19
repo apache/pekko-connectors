@@ -24,6 +24,7 @@ import com.fasterxml.aalto.{ AsyncByteArrayFeeder, AsyncXMLInputFactory, AsyncXM
 import com.fasterxml.aalto.stax.InputFactoryImpl
 import com.fasterxml.aalto.util.IllegalCharHandler.ReplacingIllegalCharHandler
 
+import javax.xml.stream.XMLStreamException
 import scala.annotation.tailrec
 
 private[xml] object StreamingXmlParser {
@@ -84,17 +85,25 @@ private[xml] object StreamingXmlParser {
         val bs = transform.getByteString(a)
         context = transform.getContext(a)
         val array = bs.toArrayUnsafe()
-        parser.getInputFeeder.feedInput(array, 0, array.length)
-        advanceParser()
+        failOnXmlException {
+          parser.getInputFeeder.feedInput(array, 0, array.length)
+          advanceParser()
+        }
       }
 
-      override def onPull(): Unit = advanceParser()
+      override def onPull(): Unit = failOnXmlException(advanceParser())
 
       override def onUpstreamFinish(): Unit = {
         parser.getInputFeeder.endOfInput()
         if (!parser.hasNext) completeStage()
-        else if (isAvailable(out)) advanceParser()
+        else if (isAvailable(out)) failOnXmlException(advanceParser())
       }
+
+      private def failOnXmlException(body: => Unit): Unit =
+        try body
+        catch {
+          case e: XMLStreamException => failStage(e)
+        }
 
       @tailrec private def advanceParser(): Unit =
         if (parser.hasNext) {

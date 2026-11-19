@@ -15,10 +15,12 @@ package docs.scaladsl
 
 import org.apache.pekko
 import pekko.actor.ActorSystem
+import pekko.event.Logging
 import pekko.stream.connectors.testkit.scaladsl.LogCapturing
 import pekko.stream.connectors.xml._
 import pekko.stream.connectors.xml.scaladsl.XmlParsing
 import pekko.stream.scaladsl.{ Flow, Framing, Keep, Sink, Source }
+import pekko.testkit.TestProbe
 import pekko.util.ByteString
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.BeforeAndAfterAll
@@ -28,6 +30,8 @@ import scala.concurrent.duration._
 import scala.concurrent.{ Await, Future }
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
+import javax.xml.stream.XMLStreamException
 
 import scala.annotation.nowarn
 
@@ -47,6 +51,17 @@ class XmlProcessingSpec extends AnyWordSpec with Matchers with ScalaFutures with
 
     "properly parse empty XML" in {
       Source.single("").runWith(parse).futureValue should ===(Vector())
+    }
+
+    "fail if invalid XML" in {
+      val errorProbe = TestProbe()
+      system.eventStream.subscribe(errorProbe.ref, classOf[Logging.Error])
+      try {
+        val doubleDocType = "<!DOCTYPE><!DOCTYPE>"
+        Source.single(doubleDocType).runWith(parse).failed.futureValue shouldBe an[XMLStreamException]
+        // the parser fails the stage itself rather than throwing, so the interpreter logs no stage error
+        errorProbe.expectNoMessage(200.millis)
+      } finally system.eventStream.unsubscribe(errorProbe.ref)
     }
 
     "properly parse simple XML" in {
