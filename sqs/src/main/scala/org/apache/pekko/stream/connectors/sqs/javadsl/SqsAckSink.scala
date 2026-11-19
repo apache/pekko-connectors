@@ -41,6 +41,17 @@ object SqsAckSink {
 
   /**
    * creates a [[pekko.stream.javadsl.Sink Sink]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
+   * The same as `createGrouped`, named like the other grouped factories.
+   *
+   * @since 2.0.0
+   */
+  def grouped(queueUrl: String,
+      settings: SqsAckGroupedSettings,
+      sqsClient: SqsAsyncClient): Sink[MessageAction, CompletionStage[Done]] =
+    createGrouped(queueUrl, settings, sqsClient)
+
+  /**
+   * creates a [[pekko.stream.javadsl.Sink Sink]] for ack grouped SQS messages using an [[software.amazon.awssdk.services.sqs.SqsAsyncClient]].
    */
   def createGrouped(queueUrl: String,
       settings: SqsAckGroupedSettings,

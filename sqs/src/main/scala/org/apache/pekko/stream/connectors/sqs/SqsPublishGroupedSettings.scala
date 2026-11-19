@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.sqs
 
 import scala.concurrent.duration._
+import scala.jdk.DurationConverters._
 
 final class SqsPublishGroupedSettings private (val maxBatchSize: Int,
     val maxBatchWait: scala.concurrent.duration.FiniteDuration,
@@ -35,6 +36,13 @@ final class SqsPublishGroupedSettings private (val maxBatchSize: Int,
       scala.concurrent.duration.FiniteDuration(value.toMillis, java.util.concurrent.TimeUnit.MILLISECONDS))
 
   def withConcurrentRequests(value: Int): SqsPublishGroupedSettings = copy(concurrentRequests = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMaxBatchWait: java.time.Duration = maxBatchWait.toJava
 
   private def copy(maxBatchSize: Int = maxBatchSize,
       maxBatchWait: scala.concurrent.duration.FiniteDuration = maxBatchWait,
@@ -64,4 +72,12 @@ object SqsPublishGroupedSettings {
 
   /** Java API */
   def create(): SqsPublishGroupedSettings = Defaults
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def create(maxBatchSize: Int, maxBatchWait: java.time.Duration, concurrentRequests: Int): SqsPublishGroupedSettings =
+    new SqsPublishGroupedSettings(maxBatchSize, maxBatchWait.toScala, concurrentRequests)
 }

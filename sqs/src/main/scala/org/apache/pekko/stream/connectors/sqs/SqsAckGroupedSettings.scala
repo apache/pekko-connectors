@@ -38,6 +38,13 @@ final class SqsAckGroupedSettings private (val maxBatchSize: Int,
 
   def withConcurrentRequests(value: Int): SqsAckGroupedSettings = copy(concurrentRequests = value)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMaxBatchWait: java.time.Duration = maxBatchWait.toJava
+
   private def copy(maxBatchSize: Int = maxBatchSize,
       maxBatchWait: scala.concurrent.duration.FiniteDuration = maxBatchWait,
       concurrentRequests: Int = concurrentRequests): SqsAckGroupedSettings =

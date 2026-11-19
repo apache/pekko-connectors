@@ -41,6 +41,32 @@ object KinesisSchedulerSource {
       .asJava
 
   /**
+   * Java API: the same as `create`, with a function to build the scheduler so a lambda can be used.
+   *
+   * @since 2.0.0
+   */
+  def create(
+      schedulerBuilder: java.util.function.Function[ShardRecordProcessorFactory, Scheduler],
+      settings: KinesisSchedulerSourceSettings): Source[CommittableRecord, CompletionStage[Scheduler]] =
+    create(toBuilder(schedulerBuilder), settings)
+
+  /**
+   * Java API: the same as `createSharded`, with a function to build the scheduler so a lambda can be used.
+   *
+   * @since 2.0.0
+   */
+  def createSharded(
+      schedulerBuilder: java.util.function.Function[ShardRecordProcessorFactory, Scheduler],
+      settings: KinesisSchedulerSourceSettings): SubSource[CommittableRecord, CompletionStage[Scheduler]] =
+    createSharded(toBuilder(schedulerBuilder), settings)
+
+  private def toBuilder(
+      schedulerBuilder: java.util.function.Function[ShardRecordProcessorFactory, Scheduler]): SchedulerBuilder =
+    new SchedulerBuilder {
+      override def build(r: ShardRecordProcessorFactory): Scheduler = schedulerBuilder.apply(r)
+    }
+
+  /**
    * This functions return type changed in 2.0.0 to return a SubSource with a CompletionStage instead of a Scala
    * Future, to be more consistent with Java usage.
    * @see {@link #createShardedFuture} which works like this method worked in 1.x.
