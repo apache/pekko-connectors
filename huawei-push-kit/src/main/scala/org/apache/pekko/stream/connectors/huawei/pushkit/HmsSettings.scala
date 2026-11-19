@@ -17,6 +17,7 @@ import org.apache.pekko
 import pekko.actor.ClassicActorSystemProvider
 import pekko.annotation.InternalApi
 import com.typesafe.config.Config
+import scala.jdk.OptionConverters._
 
 object HmsSettings {
 
@@ -155,7 +156,15 @@ final case class HmsSettings @InternalApi private (
   def getAppSecret = appSecret
   def isTest = test
   def getMaxConcurrentConnections = maxConcurrentConnections
+  @deprecated("Use getForwardProxyOptional, which returns a java.util.Optional", "2.0.0")
   def getForwardProxy = forwardProxy
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getForwardProxyOptional: java.util.Optional[ForwardProxy] = forwardProxy.toJava
 
   def withAppId(value: String): HmsSettings = copy(appId = value)
   def withAppSecret(value: String): HmsSettings = copy(appSecret = value)
@@ -206,6 +215,17 @@ object ForwardProxy {
       trustPem: Option[ForwardProxyTrustPem]) =
     apply(host, port, credentials, trustPem)
 
+  /**
+   * Java API.
+   *
+   * @since 2.0.0
+   */
+  def create(host: String,
+      port: Int,
+      credentials: java.util.Optional[ForwardProxyCredentials],
+      trustPem: java.util.Optional[ForwardProxyTrustPem]): ForwardProxy =
+    apply(host, port, credentials.toScala, trustPem.toScala)
+
   def apply(host: String, port: Int) =
     new ForwardProxy(host, port, Option.empty, Option.empty)
 
@@ -233,8 +253,24 @@ final case class ForwardProxy @InternalApi private (host: String,
 
   def getHost = host
   def getPort = port
+  @deprecated("Use getCredentialsOptional, which returns a java.util.Optional", "2.0.0")
   def getCredentials = credentials
+  @deprecated("Use getForwardProxyTrustPemOptional, which returns a java.util.Optional", "2.0.0")
   def getForwardProxyTrustPem = trustPem
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCredentialsOptional: java.util.Optional[ForwardProxyCredentials] = credentials.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getForwardProxyTrustPemOptional: java.util.Optional[ForwardProxyTrustPem] = trustPem.toJava
 
   /** @since 2.0.0 */
   def getMinTlsVersion = minTlsVersion

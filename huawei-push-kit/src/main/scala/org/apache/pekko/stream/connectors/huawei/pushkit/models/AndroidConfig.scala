@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit.models
 
+import scala.jdk.CollectionConverters._
+
 /**
  * AndroidConfig model.
  * @see https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/https-send-api-0000001050986197-V5#EN-US_TOPIC_0000001134031085
@@ -96,8 +98,24 @@ case class AndroidNotification(title: Option[String] = None,
   def withClickAction(clickAction: ClickAction): AndroidNotification = this.copy(click_action = Option(clickAction))
   def withBodyLocKey(value: String): AndroidNotification = this.copy(body_loc_key = Option(value))
   def withBodyLocArgs(values: Seq[String]): AndroidNotification = this.copy(body_loc_args = Option(values))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withBodyLocArgs(values: java.util.List[String]): AndroidNotification =
+    withBodyLocArgs(values.asScala.toList)
   def withTitleLocKey(value: String): AndroidNotification = this.copy(title_loc_key = Option(value))
   def withTitleLocArgs(values: Seq[String]): AndroidNotification = this.copy(title_loc_args = Option(values))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withTitleLocArgs(values: java.util.List[String]): AndroidNotification =
+    withTitleLocArgs(values.asScala.toList)
   def withMultiLangKey(value: String): AndroidNotification = this.copy(multi_lang_key = Option(value))
   def withChannelId(value: String): AndroidNotification = this.copy(channel_id = Option(value))
   def withNotifySummary(value: String): AndroidNotification = this.copy(notify_summary = Option(value))
@@ -115,12 +133,36 @@ case class AndroidNotification(title: Option[String] = None,
   def withUseDefaultVibrate(value: Boolean): AndroidNotification = this.copy(use_default_vibrate = Option(value))
   def withUseDefaultLight(value: Boolean): AndroidNotification = this.copy(use_default_light = Option(value))
   def withVibrateConfig(values: Seq[String]): AndroidNotification = this.copy(vibrate_config = Option(values))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withVibrateConfig(values: java.util.List[String]): AndroidNotification =
+    withVibrateConfig(values.asScala.toList)
   def withVisibility(value: String): AndroidNotification = this.copy(visibility = Option(value))
   def withLightSettings(settings: LightSettings): AndroidNotification = this.copy(light_settings = Option(settings))
   def withForegroundShow(value: Boolean): AndroidNotification = this.copy(foreground_show = Option(value))
   def withProfileId(value: String): AndroidNotification = this.copy(profile_id = Option(value))
   def withInboxContent(value: Seq[String]): AndroidNotification = this.copy(inbox_content = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withInboxContent(value: java.util.List[String]): AndroidNotification =
+    withInboxContent(value.asScala.toList)
   def withButtons(buttons: Seq[Button]): AndroidNotification = this.copy(buttons = Option(buttons))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withButtons(buttons: java.util.List[Button]): AndroidNotification =
+    withButtons(buttons.asScala.toList)
 }
 
 object AndroidNotification {

@@ -23,7 +23,7 @@ object ReferenceAttributes {
   /**
    * Wrap a `Resource` to an attribute so it can be attached to a stream stage.
    */
-  def resource(resource: Resource) = Attributes(new ReferenceResourceValue(resource))
+  def resource(resource: Resource): Attributes = Attributes(new ReferenceResourceValue(resource))
 }
 
 final class ReferenceResourceValue @InternalApi private[reference] (val resource: Resource) extends Attribute
