@@ -60,6 +60,29 @@ object S3 {
    *
    * @param bucket the s3 bucket name
    * @param key the s3 object key
+   * @return a raw HTTP response from S3
+   * @since 2.0.0
+   */
+  def request(bucket: String, key: String): Source[HttpResponse, NotUsed] =
+    request(bucket, key, Optional.empty[String]())
+
+  /**
+   * Use this for a low level access to S3.
+   *
+   * @param bucket the s3 bucket name
+   * @param key the s3 object key
+   * @param versionId optional versionId of source object
+   * @return a raw HTTP response from S3
+   * @since 2.0.0
+   */
+  def request(bucket: String, key: String, versionId: Optional[String]): Source[HttpResponse, NotUsed] =
+    request(bucket, key, versionId, HttpMethods.GET, S3Headers.empty)
+
+  /**
+   * Use this for a low level access to S3.
+   *
+   * @param bucket the s3 bucket name
+   * @param key the s3 object key
    * @param versionId optional versionId of source object
    * @param method the [[pekko.http.javadsl.model.HttpMethod HttpMethod]] to use when making the request
    * @param s3Headers any headers you want to add
@@ -426,6 +449,24 @@ object S3 {
     new Source(S3Stream.getObject(S3Location(bucket, key), None, None, s3Headers).toCompletionStage())
 
   /**
+   * Gets a specific version of a S3 Object
+   *
+   * @param bucket the s3 bucket name
+   * @param key the s3 object key
+   * @param versionId optional version id of the object
+   * @param s3Headers any headers you want to add
+   * @return A [[pekko.stream.javadsl.Source]] containing the objects data as a [[pekko.util.ByteString]] along with a materialized value containing the
+   *         [[pekko.stream.connectors.s3.ObjectMetadata]]
+   * @since 2.0.0
+   */
+  def getObject(
+      bucket: String,
+      key: String,
+      versionId: Optional[String],
+      s3Headers: S3Headers): Source[ByteString, CompletionStage[ObjectMetadata]] =
+    new Source(S3Stream.getObject(S3Location(bucket, key), None, versionId.toScala, s3Headers).toCompletionStage())
+
+  /**
    * Gets a specific byte range of a S3 Object
    *
    * @param bucket the s3 bucket name
@@ -622,6 +663,22 @@ object S3 {
    * @param bucket Which bucket that you list in-progress multipart uploads for
    * @param prefix Prefix of the keys you want to list under passed bucket
    * @param delimiter Delimiter to use for listing only one level of hierarchy
+   * @return [[pekko.stream.scaladsl.Source Source]] of [[pekko.japi.Pair Pair]] of ([[java.util.List List]] of [[pekko.stream.connectors.s3.ListMultipartUploadResultUploads ListMultipartUploadResultUploads]], [[java.util.List List]] of [[pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
+   * @since 2.0.0
+   */
+  def listMultipartUploadAndCommonPrefixes(
+      bucket: String,
+      delimiter: String,
+      prefix: Optional[String]): Source[pekko.japi.Pair[java.util.List[ListMultipartUploadResultUploads],
+    java.util.List[CommonPrefixes]], NotUsed] =
+    listMultipartUploadAndCommonPrefixes(bucket, delimiter, prefix, S3Headers.empty)
+
+  /**
+   * Will return in progress or aborted multipart uploads with optional prefix and delimiter.
+   *
+   * @param bucket Which bucket that you list in-progress multipart uploads for
+   * @param delimiter Delimiter to use for listing only one level of hierarchy
+   * @param prefix Prefix of the keys you want to list under passed bucket
    * @param s3Headers any headers you want to add
    * @return [[pekko.stream.scaladsl.Source Source]] of [[pekko.japi.Pair Pair]] of ([[java.util.List List]] of [[pekko.stream.connectors.s3.ListMultipartUploadResultUploads ListMultipartUploadResultUploads]], [[java.util.List List]] of [[pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
    */
@@ -741,13 +798,27 @@ object S3 {
    * @param s3Headers any headers you want to add
    * @return [[pekko.stream.scaladsl.Source Source]] of [[pekko.japi.tuple.Tuple3 Tuple3]] of ([[java.util.List List]] of [[pekko.stream.connectors.s3.ListObjectVersionsResultVersions ListObjectVersionsResultVersions]], [[java.util.List List]] of [[pekko.stream.connectors.s3.DeleteMarkers DeleteMarkers]], [[java.util.List List]] of [[pekko.stream.connectors.s3.CommonPrefixes CommonPrefixes]])
    */
+  @deprecated("Use the overload taking a java.util.Optional prefix", "2.0.0")
   def listObjectVersionsAndCommonPrefixes(bucket: String,
       delimiter: String,
       prefix: Option[String],
       s3Headers: S3Headers): Source[pekko.japi.tuple.Tuple3[java.util.List[
       ListObjectVersionsResultVersions], java.util.List[DeleteMarkers], java.util.List[CommonPrefixes]], NotUsed] =
+    listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix.toJava, s3Headers)
+
+  /**
+   * List all versioned objects for a bucket with optional prefix and delimiter, including the common prefixes.
+   *
+   * @see the overload taking a Scala `Option` for details of the result
+   * @since 2.0.0
+   */
+  def listObjectVersionsAndCommonPrefixes(bucket: String,
+      delimiter: String,
+      prefix: Optional[String],
+      s3Headers: S3Headers): Source[pekko.japi.tuple.Tuple3[java.util.List[
+      ListObjectVersionsResultVersions], java.util.List[DeleteMarkers], java.util.List[CommonPrefixes]], NotUsed] =
     S3Stream
-      .listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix, s3Headers)
+      .listObjectVersionsAndCommonPrefixes(bucket, delimiter, prefix.toScala, s3Headers)
       .map {
         case (versions, markers, prefixes) =>
           pekko.japi.tuple.Tuple3(versions.asJava, markers.asJava, prefixes.asJava)
@@ -769,6 +840,27 @@ object S3 {
       s3Headers: S3Headers): Sink[ByteString, CompletionStage[MultipartUploadResult]] =
     S3Stream
       .multipartUpload(S3Location(bucket, key), contentType.asInstanceOf[ScalaContentType], s3Headers)
+      .mapMaterializedValue(_.asJava)
+      .asJava
+
+  /**
+   * Uploads a S3 Object by making multiple requests, with the given chunk size and parallelism.
+   *
+   * @param chunkSize the size of the requests sent to S3, minimum `MinChunkSize` (5 MiB)
+   * @param chunkingParallelism the number of parallel requests used for the upload
+   * @see the overload without `chunkSize` and `chunkingParallelism` for the other parameters
+   * @since 2.0.0
+   */
+  def multipartUpload(bucket: String,
+      key: String,
+      contentType: ContentType,
+      s3Headers: S3Headers,
+      chunkSize: Int,
+      chunkingParallelism: Int): Sink[ByteString, CompletionStage[MultipartUploadResult]] =
+    S3Stream
+      .multipartUpload(S3Location(bucket, key), contentType.asInstanceOf[ScalaContentType], s3Headers,
+        chunkSize,
+        chunkingParallelism)
       .mapMaterializedValue(_.asJava)
       .asJava
 
@@ -834,6 +926,39 @@ object S3 {
           .asScala,
         contentType.asInstanceOf[ScalaContentType],
         s3Headers)
+      .contramap[JPair[ByteString, C]](_.toScala)
+      .mapMaterializedValue(_.asJava)
+      .asJava
+
+  /**
+   * Uploads a S3 Object by making multiple requests with a context, with the given chunk size and parallelism.
+   *
+   * @param chunkSize the size of the requests sent to S3, minimum `MinChunkSize` (5 MiB)
+   * @param chunkingParallelism the number of parallel requests used for the upload
+   * @see the overload without `chunkSize` and `chunkingParallelism` for the other parameters
+   * @since 2.0.0
+   */
+  def multipartUploadWithContext[C](
+      bucket: String,
+      key: String,
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?],
+      contentType: ContentType,
+      s3Headers: S3Headers,
+      chunkSize: Int,
+      chunkingParallelism: Int): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] =
+    S3Stream
+      .multipartUploadWithContext[C](
+        S3Location(bucket, key),
+        chunkUploadSink
+          .contramap[(UploadPartResponse, scala.collection.immutable.Iterable[C])] {
+            case (uploadPartResponse, iterable) =>
+              JPair(uploadPartResponse, iterable.asJava)
+          }
+          .asScala,
+        contentType.asInstanceOf[ScalaContentType],
+        s3Headers,
+        chunkSize,
+        chunkingParallelism)
       .contramap[JPair[ByteString, C]](_.toScala)
       .mapMaterializedValue(_.asJava)
       .asJava
@@ -920,6 +1045,34 @@ object S3 {
         previousParts.asScala.toList,
         contentType.asInstanceOf[ScalaContentType],
         s3Headers)
+      .mapMaterializedValue(_.asJava)
+      .asJava
+  }
+
+  /**
+   * Resumes a previously aborted multipart upload, with the given chunk size and parallelism.
+   *
+   * @param chunkSize the size of the requests sent to S3, minimum `MinChunkSize` (5 MiB)
+   * @param chunkingParallelism the number of parallel requests used for the upload
+   * @see the overload without `chunkSize` and `chunkingParallelism` for the other parameters
+   * @since 2.0.0
+   */
+  def resumeMultipartUpload(bucket: String,
+      key: String,
+      uploadId: String,
+      previousParts: java.lang.Iterable[Part],
+      contentType: ContentType,
+      s3Headers: S3Headers,
+      chunkSize: Int,
+      chunkingParallelism: Int): Sink[ByteString, CompletionStage[MultipartUploadResult]] = {
+    S3Stream
+      .resumeMultipartUpload(S3Location(bucket, key),
+        uploadId,
+        previousParts.asScala.toList,
+        contentType.asInstanceOf[ScalaContentType],
+        s3Headers,
+        chunkSize,
+        chunkingParallelism)
       .mapMaterializedValue(_.asJava)
       .asJava
   }
@@ -1014,6 +1167,44 @@ object S3 {
   }
 
   /**
+   * Resumes a previously aborted multipart upload with a context, with the given chunk size and parallelism.
+   *
+   * @param chunkSize the size of the requests sent to S3, minimum `MinChunkSize` (5 MiB)
+   * @param chunkingParallelism the number of parallel requests used for the upload
+   * @see the overload without `chunkSize` and `chunkingParallelism` for the other parameters
+   * @since 2.0.0
+   */
+  def resumeMultipartUploadWithContext[C](
+      bucket: String,
+      key: String,
+      uploadId: String,
+      previousParts: java.lang.Iterable[Part],
+      chunkUploadSink: Sink[JPair[UploadPartResponse, java.lang.Iterable[C]], ?],
+      contentType: ContentType,
+      s3Headers: S3Headers,
+      chunkSize: Int,
+      chunkingParallelism: Int): Sink[JPair[ByteString, C], CompletionStage[MultipartUploadResult]] = {
+    S3Stream
+      .resumeMultipartUploadWithContext[C](
+        S3Location(bucket, key),
+        uploadId,
+        previousParts.asScala.toList,
+        chunkUploadSink
+          .contramap[(UploadPartResponse, scala.collection.immutable.Iterable[C])] {
+            case (uploadPartResponse, iterable) =>
+              JPair(uploadPartResponse, iterable.asJava)
+          }
+          .asScala,
+        contentType.asInstanceOf[ScalaContentType],
+        s3Headers,
+        chunkSize,
+        chunkingParallelism)
+      .contramap[JPair[ByteString, C]](_.toScala)
+      .mapMaterializedValue(_.asJava)
+      .asJava
+  }
+
+  /**
    * Resumes from a previously aborted multipart upload by providing the uploadId and previous upload part identifiers.
    * Unlike `resumeMultipartUpload`, this version allows you to pass in a context (typically from a
    * `SourceWithContext`/`FlowWithContext`) along with a chunkUploadSink that defines how to act whenever a chunk is
@@ -1098,6 +1289,40 @@ object S3 {
    * @param uploadId the upload that you want to complete
    * @param parts A list of all of the parts for the multipart upload
    * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[MultipartUploadResult]]
+   * @since 2.0.0
+   */
+  def completeMultipartUpload(
+      bucket: String,
+      key: String,
+      uploadId: String,
+      parts: java.lang.Iterable[Part],
+      system: ClassicActorSystemProvider): CompletionStage[MultipartUploadResult] =
+    completeMultipartUpload(bucket, key, uploadId, parts, S3Headers.empty, system)
+
+  /**
+   * Complete a multipart upload with an already given list of parts
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
+   * @since 2.0.0
+   */
+  def completeMultipartUpload(
+      bucket: String,
+      key: String,
+      uploadId: String,
+      parts: java.lang.Iterable[Part],
+      s3Headers: S3Headers,
+      system: ClassicActorSystemProvider): CompletionStage[MultipartUploadResult] =
+    completeMultipartUpload(bucket, key, uploadId, parts, s3Headers)(system, Attributes())
+
+  /**
+   * Complete a multipart upload with an already given list of parts
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
+   * @param bucket bucket the s3 bucket name
+   * @param key the s3 object key
+   * @param uploadId the upload that you want to complete
+   * @param parts A list of all of the parts for the multipart upload
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[MultipartUploadResult]]
    */
   def completeMultipartUpload(bucket: String, key: String, uploadId: String, parts: java.lang.Iterable[Part])(
       implicit system: ClassicActorSystemProvider,
@@ -1156,6 +1381,37 @@ object S3 {
             Option(sourceVersionId.orElse(null)),
             contentType.asInstanceOf[ScalaContentType],
             s3Headers)
+      }
+      .mapMaterializedValue(func(_.asJava))
+
+  /**
+   * Copy a S3 Object by making multiple requests, with the given chunk size and parallelism.
+   *
+   * @param chunkSize the size of the requests sent to S3, minimum `MinChunkSize` (5 MiB)
+   * @param chunkingParallelism the number of parallel requests used for the upload
+   * @see the overload without `chunkSize` and `chunkingParallelism` for the other parameters
+   * @since 2.0.0
+   */
+  def multipartCopy(sourceBucket: String,
+      sourceKey: String,
+      targetBucket: String,
+      targetKey: String,
+      sourceVersionId: Optional[String],
+      contentType: ContentType,
+      s3Headers: S3Headers,
+      chunkSize: Int,
+      chunkingParallelism: Int): RunnableGraph[CompletionStage[MultipartUploadResult]] =
+    RunnableGraph
+      .fromGraph {
+        S3Stream
+          .multipartCopy(
+            S3Location(sourceBucket, sourceKey),
+            S3Location(targetBucket, targetKey),
+            Option(sourceVersionId.orElse(null)),
+            contentType.asInstanceOf[ScalaContentType],
+            s3Headers,
+            chunkSize,
+            chunkingParallelism)
       }
       .mapMaterializedValue(func(_.asJava))
 
@@ -1434,6 +1690,35 @@ object S3 {
    * @param key The key for the upload
    * @param uploadId Unique identifier of the upload
    * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[Done]] as API doesn't return any additional information
+   * @since 2.0.0
+   */
+  def deleteUpload(bucketName: String,
+      key: String,
+      uploadId: String,
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
+    deleteUpload(bucketName, key, uploadId, S3Headers.empty, system)
+
+  /**
+   * Delete all existing parts for a specific upload
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html
+   * @since 2.0.0
+   */
+  def deleteUpload(bucketName: String,
+      key: String,
+      uploadId: String,
+      s3Headers: S3Headers,
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
+    deleteUpload(bucketName, key, uploadId, s3Headers)(system, Attributes())
+
+  /**
+   * Delete all existing parts for a specific upload
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_AbortMultipartUpload.html
+   * @param bucketName Which bucket the upload is inside
+   * @param key The key for the upload
+   * @param uploadId Unique identifier of the upload
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[Done]] as API doesn't return any additional information
    */
   def deleteUpload(bucketName: String, key: String, uploadId: String)(
       implicit system: ClassicActorSystemProvider,
@@ -1492,6 +1777,32 @@ object S3 {
   private def func[T, R](f: T => R) = new pekko.japi.function.Function[T, R] {
     override def apply(param: T): R = f(param)
   }
+
+  /**
+   * Sets the versioning state of an existing bucket.
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html
+   * @param bucketName       Bucket name
+   * @param bucketVersioning The state that you want to update
+   * @return [[java.util.concurrent.CompletionStage CompletionStage]] of type [[Done]] as API doesn't return any additional information
+   * @since 2.0.0
+   */
+  def putBucketVersioning(bucketName: String,
+      bucketVersioning: BucketVersioning,
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
+    putBucketVersioning(bucketName, bucketVersioning, S3Headers.empty, system)
+
+  /**
+   * Sets the versioning state of an existing bucket.
+   *
+   * @see https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html
+   * @since 2.0.0
+   */
+  def putBucketVersioning(bucketName: String,
+      bucketVersioning: BucketVersioning,
+      s3Headers: S3Headers,
+      system: ClassicActorSystemProvider): CompletionStage[Done] =
+    putBucketVersioning(bucketName, bucketVersioning, s3Headers)(system, Attributes())
 
   /**
    * Sets the versioning state of an existing bucket.
