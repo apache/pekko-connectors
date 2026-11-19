@@ -30,6 +30,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Promise }
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
+import scala.util.{ Failure, Success }
 
 /**
  * 2.2.1 MQTT Control Packet type
@@ -1120,19 +1121,31 @@ final case class Command[A](command: ControlPacket, completed: Option[Promise[Do
    * Send a command to an MQTT session with optional data to carry through
    * into any related event.
    * @param command The command to send
-   * @param completed A promise that is completed by the session when the command has been processed -
+   * @param completed A [[java.util.concurrent.CompletableFuture]] that is completed by the session when the command
+   *                  has been processed, or completed exceptionally if processing fails -
    *                  useful for synchronizing when activities should occur in relation to a command
    *                  The only commands that support this presently are SubAck, UnsubAck, PubAck, PubRec and PubComp.
    *                 These completions can be used to signal when processing should continue.
    * @param carry The data to carry though
+   * @throws java.lang.IllegalArgumentException if `completed` is not a [[java.util.concurrent.CompletableFuture]] that
+   *                                            can be completed (such as a minimal completion stage), as the session would have
+   *                                            no way to complete it
    */
   def this(command: ControlPacket, completed: Optional[CompletionStage[Done]], carry: Optional[A]) =
     this(
       command,
-      completed.toScala.map { f =>
+      completed.toScala.map { stage =>
+        val f =
+          try stage.toCompletableFuture
+          catch { case _: UnsupportedOperationException => null }
+        if (f ne stage)
+          throw new IllegalArgumentException(
+            s"completed must be a CompletableFuture that can be completed but got ${stage.getClass.getName}")
         val p = Promise[Done]()
-        p.future
-          .foreach(f.toCompletableFuture.complete)(ExecutionContext.fromExecutorService(ForkJoinPool.commonPool()))
+        p.future.onComplete {
+          case Success(done) => f.complete(done)
+          case Failure(ex)   => f.completeExceptionally(ex)
+        }(ExecutionContext.fromExecutorService(ForkJoinPool.commonPool()))
         p
       },
       carry.toScala)
