@@ -232,6 +232,24 @@ object AckDeadlineDistribution {
     apply(initialDeadlineSeconds, minDeadlineSeconds, maxDeadlineSeconds, maxAckExtensionPeriodSeconds, percentile)
 
   /**
+   * Java API: Create a new [[AckDeadlineDistribution]] with `java.time.Duration`s, which are truncated to seconds.
+   *
+   * @since 2.0.0
+   */
+  def create(
+      initialDeadline: java.time.Duration,
+      minDeadline: java.time.Duration,
+      maxDeadline: java.time.Duration,
+      maxAckExtensionPeriod: java.time.Duration,
+      percentile: Double): AckDeadlineDistribution =
+    apply(
+      initialDeadline.getSeconds.toInt,
+      minDeadline.getSeconds.toInt,
+      maxDeadline.getSeconds.toInt,
+      maxAckExtensionPeriod.getSeconds.toInt,
+      percentile)
+
+  /**
    * Java API: Create with defaults matching Google's official client library.
    */
   def create(): AckDeadlineDistribution = apply()

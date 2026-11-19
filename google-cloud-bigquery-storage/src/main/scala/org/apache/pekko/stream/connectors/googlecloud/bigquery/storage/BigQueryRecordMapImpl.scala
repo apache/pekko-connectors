@@ -14,10 +14,18 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.storage
 
 import org.apache.avro.generic.GenericRecord
+import scala.jdk.OptionConverters._
 
 trait BigQueryRecord {
 
   def get(column: String): Option[Object]
+
+  /**
+   * Java API: the value of the given column, if any
+   *
+   * @since 2.0.0
+   */
+  def getOptional(column: String): java.util.Optional[Object] = get(column).toJava
 
 }
 

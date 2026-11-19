@@ -38,6 +38,27 @@ object Condition {
     def &&(condition: ConditionBuilder) = And(this, condition)
     def ||(condition: ConditionBuilder) = Or(this, condition)
     def unary_! = Not(this)
+
+    /**
+     * Java API: same as `&&`
+     *
+     * @since 2.0.0
+     */
+    def and(condition: ConditionBuilder): ConditionBuilder = And(this, condition)
+
+    /**
+     * Java API: same as `||`
+     *
+     * @since 2.0.0
+     */
+    def or(condition: ConditionBuilder): ConditionBuilder = Or(this, condition)
+
+    /**
+     * Java API: same as `unary_!`
+     *
+     * @since 2.0.0
+     */
+    def not(): ConditionBuilder = Not(this)
     def toConditionText: String
   }
   case class Topic(topic: String) extends ConditionBuilder {

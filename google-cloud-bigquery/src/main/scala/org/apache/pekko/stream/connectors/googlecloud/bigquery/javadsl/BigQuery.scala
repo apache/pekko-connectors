@@ -22,7 +22,7 @@ import pekko.http.javadsl.unmarshalling.Unmarshaller
 import pekko.http.scaladsl.{ marshalling, model => sm, unmarshalling }
 import pekko.japi.Pair
 import pekko.stream.connectors.google.GoogleSettings
-import pekko.stream.connectors.google.javadsl.Google
+import pekko.stream.connectors.google.javadsl.GoogleApi
 import pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
 import pekko.stream.connectors.googlecloud.bigquery.model.Dataset
 import pekko.stream.connectors.googlecloud.bigquery.model.{ Job, JobCancelResponse, JobReference }
@@ -43,7 +43,6 @@ import java.time.Duration
 import java.util.concurrent.CompletionStage
 import java.{ lang, util }
 
-import scala.annotation.nowarn
 import scala.concurrent.duration.{ FiniteDuration, MILLISECONDS }
 import scala.jdk.CollectionConverters._
 import scala.jdk.FutureConverters._
@@ -53,7 +52,7 @@ import scala.jdk.OptionConverters._
  * Java API to interface with BigQuery.
  */
 @ApiMayChange(issue = "https://github.com/akka/alpakka/pull/2548")
-object BigQuery extends Google {
+object BigQuery extends GoogleApi {
 
   /**
    * Lists all datasets in the specified project to which the user has been granted the READER dataset role.
@@ -68,6 +67,17 @@ object BigQuery extends Google {
       all: util.Optional[lang.Boolean],
       filter: util.Map[String, String]): Source[Dataset, NotUsed] =
     ScalaBigQuery.datasets(maxResults.toScala, all.toScala.map(_.booleanValue), filter.asScala.toMap).asJava
+
+  /**
+   * Lists all datasets in the specified project to which the user has been granted the READER dataset role.
+   * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets/list BigQuery reference]]
+   *
+   * @return a [[pekko.stream.javadsl.Source]] that emits each [[pekko.stream.connectors.googlecloud.bigquery.model.Dataset]]
+   * @since 2.0.0
+   */
+  def listDatasets(): Source[Dataset, NotUsed] =
+    listDatasets(util.OptionalInt.empty(), util.Optional.empty[lang.Boolean](),
+      util.Collections.emptyMap[String, String]())
 
   /**
    * Returns the specified dataset.
@@ -435,15 +445,15 @@ object BigQuery extends Google {
    * @param job the job to start
    * @param marshaller [[pekko.http.javadsl.marshalling.Marshaller]] for `Job`
    * @param unmarshaller [[pekko.http.javadsl.unmarshalling.Unmarshaller]] for `Job`
-   * @tparam Job the data model for a job
+   * @tparam J the data model for a job
    * @return a [[pekko.stream.javadsl.Sink]] that uploads bytes and materializes a [[java.util.concurrent.CompletionStage]] containing the `Job` when completed
    */
-  def createLoadJob[@nowarn("msg=shadows") Job](
-      job: Job,
-      marshaller: Marshaller[Job, RequestEntity],
-      unmarshaller: Unmarshaller[HttpEntity, Job]): Sink[ByteString, CompletionStage[Job]] = {
-    implicit val m: marshalling.Marshaller[Job, sm.RequestEntity] = marshaller.asScalaCastOutput[sm.RequestEntity]
-    implicit val um: unmarshalling.Unmarshaller[sm.HttpEntity, Job] = unmarshaller.asScalaCastInput[sm.HttpEntity]
+  def createLoadJob[J](
+      job: J,
+      marshaller: Marshaller[J, RequestEntity],
+      unmarshaller: Unmarshaller[HttpEntity, J]): Sink[ByteString, CompletionStage[J]] = {
+    implicit val m: marshalling.Marshaller[J, sm.RequestEntity] = marshaller.asScalaCastOutput[sm.RequestEntity]
+    implicit val um: unmarshalling.Unmarshaller[sm.HttpEntity, J] = unmarshaller.asScalaCastInput[sm.HttpEntity]
     ScalaBigQuery.createLoadJob(job).mapMaterializedValue(_.asJava).asJava[ByteString]
   }
 

@@ -31,9 +31,12 @@ import scala.jdk.FutureConverters._
 /**
  * Java API: Provides methods to interface with Google APIs
  */
-object Google extends Google
+object Google extends GoogleApi
 
-private[connectors] trait Google {
+/**
+ * INTERNAL API: separate from `object Google` so that Java gets static methods on `Google`.
+ */
+private[connectors] trait GoogleApi {
 
   /**
    * Makes a request and returns the unmarshalled response. Authentication is handled automatically.

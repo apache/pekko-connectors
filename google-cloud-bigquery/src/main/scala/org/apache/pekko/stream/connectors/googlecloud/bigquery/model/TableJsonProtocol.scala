@@ -382,6 +382,21 @@ object TableListResponse {
    * @param tables tables in the requested dataset
    * @param totalItems the total number of tables in the dataset
    * @return a [[TableListResponse]]
+   * @since 2.0.0
+   */
+  def create(nextPageToken: util.Optional[String],
+      tables: util.Optional[util.List[Table]],
+      totalItems: util.OptionalInt): TableListResponse =
+    createTableListResponse(nextPageToken, tables, totalItems)
+
+  /**
+   * Java API: TableListResponse model
+   * @see [[https://cloud.google.com/bigquery/docs/reference/rest/v2/tables/list#response-body BigQuery reference]]
+   *
+   * @param nextPageToken a token to request the next page of results
+   * @param tables tables in the requested dataset
+   * @param totalItems the total number of tables in the dataset
+   * @return a [[TableListResponse]]
    */
   def createTableListResponse(nextPageToken: util.Optional[String],
       tables: util.Optional[util.List[Table]],

@@ -14,19 +14,19 @@
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
 final class ObjectAccessControls private (
-    kind: String,
-    id: String,
-    selfLink: String,
-    bucket: String,
-    `object`: String,
-    generation: String,
-    entity: String,
-    role: String,
-    email: String,
-    entityId: String,
-    domain: String,
-    projectTeam: ProjectTeam,
-    etag: String) {
+    val kind: String,
+    val id: String,
+    val selfLink: String,
+    val bucket: String,
+    val `object`: String,
+    val generation: String,
+    val entity: String,
+    val role: String,
+    val email: String,
+    val entityId: String,
+    val domain: String,
+    val projectTeam: ProjectTeam,
+    val etag: String) {
   def withKind(kind: String): ObjectAccessControls = copy(kind = kind)
   def withId(id: String): ObjectAccessControls = copy(id = id)
   def withSelfLink(selfLink: String): ObjectAccessControls = copy(selfLink = selfLink)
@@ -40,6 +40,97 @@ final class ObjectAccessControls private (
   def withDomain(domain: String): ObjectAccessControls = copy(domain = domain)
   def withProjectTeam(projectTeam: ProjectTeam): ObjectAccessControls = copy(projectTeam = projectTeam)
   def withEtag(etag: String): ObjectAccessControls = copy(etag = etag)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKind: String = kind
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getId: String = id
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSelfLink: String = selfLink
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getBucket: String = bucket
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getObject: String = `object`
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getGeneration: String = generation
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getEntity: String = entity
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRole: String = role
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getEmail: String = email
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getEntityId: String = entityId
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDomain: String = domain
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getEtag: String = etag
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProjectTeam: ProjectTeam = projectTeam
 
   private def copy(kind: String = kind,
       id: String = id,
