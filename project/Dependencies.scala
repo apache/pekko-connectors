@@ -46,7 +46,7 @@ object Dependencies {
   val HadoopVersion = "3.4.3"
 
   val Slf4jVersion = "2.0.20"
-  val LogbackVersion = "1.6.7"
+  val LogbackVersion = "1.6.8"
 
   /**
    * Calculates the scalatest version in a format that is used for `org.scalatestplus` scalacheck artifacts
