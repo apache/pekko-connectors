@@ -81,6 +81,17 @@ object XmlParsing {
     xml.scaladsl.XmlParsing.parserWithContext(ignoreInvalidChars, configureFactory.accept(_)).asJava
 
   /**
+   * Parser Flow that takes a stream of ByteStrings and parses them to XML events similar to SAX while keeping
+   * a context attached.
+   *
+   * @since 2.0.0
+   */
+  def parserWithContext[Ctx](
+      configureFactory: Consumer[AsyncXMLInputFactory]
+  ): pekko.stream.javadsl.FlowWithContext[ByteString, Ctx, ParseEvent, Ctx, NotUsed] =
+    parserWithContext(false, configureFactory)
+
+  /**
    * A Flow that transforms a stream of XML ParseEvents. This stage coalesces consecutive CData and Characters
    * events into a single Characters event or fails if the buffered string is larger than the maximum defined.
    */
