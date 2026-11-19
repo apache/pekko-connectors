@@ -13,6 +13,8 @@
 
 package org.apache.pekko.stream.connectors.elasticsearch
 
+import scala.jdk.OptionConverters._
+
 /**
  * Configure Elasticsearch/OpenSearch sinks and flows.
  */
@@ -37,6 +39,13 @@ abstract class WriteSettingsBase[Version <: ApiVersionBase, W <: WriteSettingsBa
     if (apiVersion == value) this else copy(apiVersion = value)
 
   def withAllowExplicitIndex(value: Boolean): W = copy(allowExplicitIndex = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getVersionType: java.util.Optional[String] = versionType.toJava
 
   protected def copy(connection: ElasticsearchConnectionSettings = connection,
       bufferSize: Int = bufferSize,

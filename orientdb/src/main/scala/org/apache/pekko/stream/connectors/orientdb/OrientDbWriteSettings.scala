@@ -22,6 +22,14 @@ final class OrientDbWriteSettings private (
       value: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbWriteSettings =
     copy(oDatabasePool = value)
 
+  /**
+   * The database pool to use; same as `withOrientDBCredentials`, with a name matching what it sets.
+   *
+   * @since 2.0.0
+   */
+  def withODatabasePool(value: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbWriteSettings =
+    copy(oDatabasePool = value)
+
   private def copy(
       oDatabasePool: com.orientechnologies.orient.core.db.ODatabasePool): OrientDbWriteSettings =
     new OrientDbWriteSettings(

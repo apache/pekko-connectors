@@ -96,10 +96,12 @@ class SlickWithTryResultSpec extends AnyWordSpec
 
   "SlickWithTryResult.flowTry(..)" must {
     "insert 40 records into a table (no parallelism)" in {
-      val inserted = Source(users)
+      // #flowTry
+      val result = Source(users)
         .via(SlickWithTryResult.flowTry(insertUser))
         .runWith(Sink.seq)
-        .futureValue
+      // #flowTry
+      val inserted = result.futureValue
 
       inserted must have size users.size
       inserted.toSet mustBe Set(Success(1))

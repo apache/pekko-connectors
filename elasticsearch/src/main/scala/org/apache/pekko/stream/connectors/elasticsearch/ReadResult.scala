@@ -29,7 +29,7 @@ final class ReadResult[T] @InternalApi private[elasticsearch] (val id: String,
     val version: Option[Long]) {
 
   /** Java API */
-  def getVersion: java.util.Optional[Long] = version.toJava
+  def getVersion: java.util.Optional[java.lang.Long] = version.map(Long.box).toJava
 
   override def toString =
     s"""ReadResult(id=$id,source=$source,version=${version.getOrElse("")})"""

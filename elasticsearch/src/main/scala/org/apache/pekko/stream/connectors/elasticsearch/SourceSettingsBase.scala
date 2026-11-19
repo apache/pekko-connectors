@@ -36,6 +36,13 @@ abstract class SourceSettingsBase[Version <: ApiVersionBase, S <: SourceSettings
   def withScrollDuration(value: java.time.Duration): S = copy(scrollDuration = value.toScala)
 
   /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getScrollDuration: java.time.Duration = scrollDuration.toJava
+
+  /**
    * If includeDocumentVersion is true, '_version' is returned with the search-results
    *  * https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-version.html
    *  * https://www.elastic.co/guide/en/elasticsearch/guide/current/optimistic-concurrency-control.html

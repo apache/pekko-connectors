@@ -18,6 +18,7 @@ import pekko.NotUsed
 import pekko.annotation.InternalApi
 
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 object WriteMessage {
   def createUpsertMessage[T](source: T): WriteMessage[T, NotUsed] =
@@ -56,6 +57,12 @@ object WriteMessage {
 
   def createPassThrough[C](passThrough: C): WriteMessage[NotUsed, C] =
     new WriteMessage(PassThrough).withPassThrough(passThrough)
+
+  private[solr] def asJavaUpdates(
+      updates: Map[String, Map[String, Any]]): java.util.Map[String, java.util.Map[String, Object]] =
+    updates.map { case (field, update) =>
+      field -> update.map { case (op, value) => op -> value.asInstanceOf[AnyRef] }.asJava
+    }.asJava
 }
 
 final class WriteMessage[T, C] private (
@@ -87,6 +94,55 @@ final class WriteMessage[T, C] private (
 
   def withPassThrough[PT2](value: PT2): WriteMessage[T, PT2] =
     new WriteMessage(operation, idField, idFieldValue, routingFieldValue, query, source, updates, value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getIdField: java.util.Optional[String] = idField.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getIdFieldValue: java.util.Optional[String] = idFieldValue.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRoutingFieldValue: java.util.Optional[String] = routingFieldValue.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getQuery: java.util.Optional[String] = query.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSource: java.util.Optional[T] = source.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getUpdates: java.util.Map[String, java.util.Map[String, Object]] = WriteMessage.asJavaUpdates(updates)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPassThrough: C = passThrough
 
   private def copy(
       operation: Operation = operation,
@@ -126,11 +182,108 @@ final case class WriteResult[T, C](idField: Option[String],
     source: Option[T],
     updates: Map[String, Map[String, Any]],
     passThrough: C,
-    status: Int)
+    status: Int) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getIdField: java.util.Optional[String] = idField.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getIdFieldValue: java.util.Optional[String] = idFieldValue.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRoutingFieldValue: java.util.Optional[String] = routingFieldValue.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getQuery: java.util.Optional[String] = query.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSource: java.util.Optional[T] = source.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getUpdates: java.util.Map[String, java.util.Map[String, Object]] = WriteMessage.asJavaUpdates(updates)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPassThrough: C = passThrough
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getStatus: Int = status
+}
 
 sealed trait Operation
-object Upsert extends Operation
-object DeleteByIds extends Operation
-object DeleteByQuery extends Operation
-object AtomicUpdate extends Operation
-object PassThrough extends Operation
+object Upsert extends Operation {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: Upsert.type = this
+}
+object DeleteByIds extends Operation {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: DeleteByIds.type = this
+}
+object DeleteByQuery extends Operation {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: DeleteByQuery.type = this
+}
+object AtomicUpdate extends Operation {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: AtomicUpdate.type = this
+}
+object PassThrough extends Operation {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PassThrough.type = this
+}

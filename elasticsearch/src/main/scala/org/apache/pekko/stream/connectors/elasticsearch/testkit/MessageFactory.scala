@@ -42,10 +42,10 @@ object MessageFactory {
   def createReadResult[T](
       id: String,
       source: T,
-      version: java.util.Optional[Long]): ReadResult[T] = new ReadResult(
+      version: java.util.Optional[java.lang.Long]): ReadResult[T] = new ReadResult(
     id,
     source,
-    version.toScala)
+    version.toScala.map(_.longValue))
   @ApiMayChange
   def createWriteResult[T, PT](
       message: WriteMessage[T, PT],

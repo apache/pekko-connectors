@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.influxdb
 import org.apache.pekko
 import pekko.NotUsed
 import pekko.annotation.ApiMayChange
+import scala.jdk.OptionConverters._
 
 /**
  * API may change.
@@ -60,6 +61,20 @@ final class InfluxDbWriteMessage[T, C] private (val point: T,
   def withRetentionPolicy(retentionPolicy: String): InfluxDbWriteMessage[T, C] =
     copy(retentionPolicy = Some(retentionPolicy))
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDatabaseName: java.util.Optional[String] = databaseName.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRetentionPolicy: java.util.Optional[String] = retentionPolicy.toJava
+
   private def copy(
       point: T = point,
       passThrough: C = passThrough,
@@ -83,4 +98,12 @@ final class InfluxDbWriteMessage[T, C] private (val point: T,
  * API may change.
  */
 @ApiMayChange
-final case class InfluxDbWriteResult[T, C](writeMessage: InfluxDbWriteMessage[T, C], error: Option[String])
+final case class InfluxDbWriteResult[T, C](writeMessage: InfluxDbWriteMessage[T, C], error: Option[String]) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getError: java.util.Optional[String] = error.toJava
+}

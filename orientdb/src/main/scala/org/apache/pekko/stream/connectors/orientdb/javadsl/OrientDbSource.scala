@@ -48,6 +48,16 @@ object OrientDbSource {
         settings))
 
   /**
+   * Read elements of `T` from `className`.
+   *
+   * @since 2.0.0
+   */
+  def typed[T](className: String,
+      settings: OrientDbSourceSettings,
+      clazz: Class[T]): Source[OrientDbReadResult[T], NotUsed] =
+    typed(className, settings, clazz, null)
+
+  /**
    * Read elements of `T` from `className` or by `query`.
    */
   def typed[T](className: String,
