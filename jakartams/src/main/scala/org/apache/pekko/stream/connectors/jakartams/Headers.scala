@@ -80,6 +80,13 @@ object JmsTimeToLive {
    * Java API: create [[JmsTimeToLive]]
    */
   def create(timeToLive: Long, unit: TimeUnit) = JmsTimeToLive(unit.toMillis(timeToLive))
+
+  /**
+   * Java API: create [[JmsTimeToLive]]
+   *
+   * @since 2.0.0
+   */
+  def create(timeToLive: java.time.Duration): JmsTimeToLive = JmsTimeToLive(timeToLive.toMillis)
 }
 
 /**

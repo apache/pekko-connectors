@@ -103,6 +103,14 @@ sealed trait JmsMessage extends JmsEnvelope[NotUsed] with JmsEnvelopeWithPropert
 
   def withHeaders(newHeaders: Set[JmsHeader]): JmsMessage
 
+  /**
+   * Java API: Add Jms headers e.g. JMSType
+   *
+   * @since 2.0.0
+   */
+  def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
+
   def withoutDestination: JmsMessage
 
   def withProperty(name: String, value: Any): JmsMessage
@@ -243,6 +251,14 @@ final class JmsByteMessage private (bytes: Array[Byte],
   override def withHeader(jmsHeader: JmsHeader): JmsByteMessage = copy(headers = headers + jmsHeader)
 
   override def withHeaders(newHeaders: Set[JmsHeader]): JmsByteMessage = copy(headers = headers ++ newHeaders)
+
+  /**
+   * Java API: Add Jms headers e.g. JMSType
+   *
+   * @since 2.0.0
+   */
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsByteMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
@@ -418,6 +434,14 @@ final class JmsByteStringMessage private (bytes: ByteString,
   override def withHeaders(newHeaders: Set[JmsHeader]): JmsByteStringMessage = copy(headers = headers ++ newHeaders)
 
   /**
+   * Java API: Add Jms headers e.g. JMSType
+   *
+   * @since 2.0.0
+   */
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsByteStringMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
+
+  /**
    * Add a property
    */
   override def withProperty(name: String, value: Any): JmsByteStringMessage =
@@ -545,6 +569,13 @@ sealed class JmsMapMessagePassThrough[+PassThrough] protected[jms] (val body: Ma
   def withProperties(props: java.util.Map[String, Object]): JmsMapMessagePassThrough[PassThrough] =
     copy(properties = properties ++ props.asScala)
 
+  /**
+   * Java API: the map message body
+   *
+   * @since 2.0.0
+   */
+  def getBody: java.util.Map[String, Any] = body.asJava
+
   def toQueue(name: String): JmsMapMessagePassThrough[PassThrough] = to(Queue(name))
 
   def toTopic(name: String): JmsMapMessagePassThrough[PassThrough] = to(Topic(name))
@@ -590,6 +621,14 @@ final class JmsMapMessage(body: Map[String, Any],
   override def withHeader(jmsHeader: JmsHeader): JmsMapMessage = copy(headers = headers + jmsHeader)
 
   override def withHeaders(newHeaders: Set[JmsHeader]): JmsMapMessage = copy(headers = headers ++ newHeaders)
+
+  /**
+   * Java API: Add Jms headers e.g. JMSType
+   *
+   * @since 2.0.0
+   */
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsMapMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
@@ -765,6 +804,14 @@ final class JmsTextMessage private (body: String,
   override def withHeaders(newHeaders: Set[JmsHeader]): JmsTextMessage = copy(headers = headers ++ newHeaders)
 
   /**
+   * Java API: Add Jms headers e.g. JMSType
+   *
+   * @since 2.0.0
+   */
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsTextMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
+
+  /**
    * Add a property
    */
   override def withProperty(name: String, value: Any): JmsTextMessage = copy(properties = properties + (name -> value))
@@ -865,7 +912,8 @@ sealed class JmsObjectMessagePassThrough[+PassThrough] protected[jms] (val seria
     val properties: Map[String, Any] = Map.empty,
     val destination: Option[Destination] = None,
     val passThrough: PassThrough)
-    extends JmsEnvelope[PassThrough] {
+    extends JmsEnvelope[PassThrough]
+    with JmsEnvelopeWithProperties[PassThrough] {
 
   /**
    * Add a Jms header e.g. JMSType
@@ -880,6 +928,14 @@ sealed class JmsObjectMessagePassThrough[+PassThrough] protected[jms] (val seria
 
   def withProperties(props: Map[String, Any]): JmsObjectMessagePassThrough[PassThrough] =
     copy(properties = properties ++ props)
+
+  /**
+   * Java API: add properties
+   *
+   * @since 2.0.0
+   */
+  def withProperties(props: java.util.Map[String, Object]): JmsObjectMessagePassThrough[PassThrough] =
+    copy(properties = properties ++ props.asScala)
 
   def toQueue(name: String): JmsObjectMessagePassThrough[PassThrough] = to(Queue(name))
 
@@ -926,6 +982,14 @@ final class JmsObjectMessage private (serializable: java.io.Serializable,
   override def withHeader(jmsHeader: JmsHeader): JmsObjectMessage = copy(headers = headers + jmsHeader)
 
   override def withHeaders(newHeaders: Set[JmsHeader]): JmsObjectMessage = copy(headers = headers ++ newHeaders)
+
+  /**
+   * Java API: Add Jms headers e.g. JMSType
+   *
+   * @since 2.0.0
+   */
+  override def withHeaders(newHeaders: java.util.Set[? <: JmsHeader]): JmsObjectMessage =
+    withHeaders(newHeaders.asScala.toSet[JmsHeader])
 
   /**
    * Add a property
