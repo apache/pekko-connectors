@@ -34,8 +34,10 @@ import com.google.pubsub.v1.pubsub.{ PublisherClient => ScalaPublisherClient }
 final class GrpcPublisher private (settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem) {
 
   @ApiMayChange
-  final val client =
-    ScalaPublisherClient(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings)(sys))(sys)
+  final val client = {
+    implicit val system: ActorSystem = sys
+    ScalaPublisherClient(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings))
+  }
 
   sys.registerOnTermination(client.close())
 }

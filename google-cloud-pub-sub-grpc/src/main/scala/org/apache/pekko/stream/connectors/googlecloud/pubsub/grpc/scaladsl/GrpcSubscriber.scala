@@ -39,7 +39,8 @@ object GrpcSubscriber {
     apply(settings, googleSettings, sys.classicSystem)
 
   def apply(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber = {
-    val c = ScalaSubscriberClient(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings)(sys))(sys)
+    implicit val system: ActorSystem = sys
+    val c = ScalaSubscriberClient(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings))
     sys.registerOnTermination(c.close())
     new GrpcSubscriber(c)
   }
