@@ -475,7 +475,7 @@ object Dependencies {
 
   val SpringWeb = {
     val SpringVersion = "7.0.11"
-    val SpringBootVersion = "4.1.2"
+    val SpringBootVersion = "4.1.3"
     Seq(
       libraryDependencies ++= Seq(
         "org.springframework" % "spring-core" % SpringVersion,
