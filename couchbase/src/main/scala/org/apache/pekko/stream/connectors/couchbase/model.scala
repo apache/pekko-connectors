@@ -27,6 +27,7 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.jdk.CollectionConverters._
 import scala.jdk.FutureConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Configure Couchbase writes.
@@ -83,6 +84,13 @@ final class CouchbaseWriteSettings private (val parallelism: Int,
    * Scala API:
    */
   def withTimeout(timeout: FiniteDuration): CouchbaseWriteSettings = copy(timeout = timeout)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getTimeout: java.time.Duration = java.time.Duration.ofNanos(timeout.toNanos)
 
   private def copy(parallelism: Int = parallelism,
       replicateTo: ReplicateTo = replicateTo,
@@ -219,6 +227,20 @@ final class CouchbaseSessionSettings private (
 
   def withEnvironment(environment: CouchbaseEnvironment): CouchbaseSessionSettings =
     copy(environment = Some(environment))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getNodes: java.util.List[String] = nodes.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getEnvironment: java.util.Optional[CouchbaseEnvironment] = environment.toJava
 
   /**
    * Internal API.

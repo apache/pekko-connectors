@@ -168,18 +168,6 @@ object CouchbaseFlow {
     ScalaCouchbaseFlow.insert[T](applyId.apply)(asyncCollection).asJava
 
   /**
-   * Inserts a full document which does not exist yet with custom options.
-   * @param applyId parse id function, which is the document id
-   * @see `AsyncCollection#insert`
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
-   */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def insert[T](applyId: T => String,
-      insertOptions: InsertOptions = InsertOptions.insertOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
-    ScalaCouchbaseFlow.insert[T](applyId, insertOptions).asJava
-
-  /**
    * reference to `CouchbaseFlow.insert` <br>
    * use MutationDocument to wrapper id, document and result(MutationResult)
    */
@@ -214,18 +202,6 @@ object CouchbaseFlow {
     ScalaCouchbaseFlow.replace[T](applyId.apply)(asyncCollection).asJava
 
   /**
-   * Replaces a full document which already exists with custom options.
-   * @param applyId parse id function, which is the document id
-   * @see `AsyncCollection#replace`
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
-   */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def replace[T](applyId: T => String,
-      replaceOptions: ReplaceOptions = ReplaceOptions.replaceOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
-    ScalaCouchbaseFlow.replace[T](applyId, replaceOptions).asJava
-
-  /**
    * reference to `CouchbaseFlow.replace`
    * use MutationDocument to wrapper id, document and result(MutationResult)
    */
@@ -258,18 +234,6 @@ object CouchbaseFlow {
   def upsert[T](applyId: JFunction[T, String],
       asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.upsert[T](applyId.apply)(asyncCollection).asJava
-
-  /**
-   * Upsert a full document which might or might not exist yet with custom options.
-   * @param applyId parse id function, which is the document id
-   * @see `AsyncCollection#upsert`
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
-   */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def upsert[T](applyId: T => String,
-      upsertOptions: UpsertOptions = UpsertOptions.upsertOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
-    ScalaCouchbaseFlow.upsert[T](applyId, upsertOptions).asJava
 
   /**
    * reference to `CouchbaseFlow.upsert`
@@ -310,33 +274,20 @@ object CouchbaseFlow {
     ScalaCouchbaseFlow.remove[T](applyId.apply)(asyncCollection).asJava
 
   /**
-   * Removes a Document from a collection with custom options.
-   * @param applyId parse id function, which is the document id, id streams can use `remove[String](e => e)`
-   * @see `AsyncCollection#remove`
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
+   * Performs mutations to document fragments with custom options.
+   * @see `AsyncCollection#mutateIn`
    */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def remove[T](
-      applyId: T => String,
-      removeOptions: RemoveOptions = RemoveOptions.removeOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
-    ScalaCouchbaseFlow.remove[T](applyId, removeOptions).asJava
+  def mutateIn(specs: java.util.List[? <: MutateInSpec], options: MutateInOptions,
+      asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
+    ScalaCouchbaseFlow.mutateIn(toInvariant(specs), options)(asyncCollection).asJava
 
   /**
    * Performs mutations to document fragments with custom options.
    * @see `AsyncCollection#mutateIn`
    */
-  def mutateIn(specs: java.util.List[MutateInSpec], options: MutateInOptions,
+  def mutateIn(specs: java.util.List[? <: MutateInSpec],
       asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
-    ScalaCouchbaseFlow.mutateIn(specs, options)(asyncCollection).asJava
-
-  /**
-   * Performs mutations to document fragments with custom options.
-   * @see `AsyncCollection#mutateIn`
-   */
-  def mutateIn(specs: java.util.List[MutateInSpec],
-      asyncCollection: AsyncCollection): Flow[String, MutateInResult, NotUsed] =
-    ScalaCouchbaseFlow.mutateIn(specs, MutateInOptions.mutateInOptions())(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateIn(toInvariant(specs), MutateInOptions.mutateInOptions())(asyncCollection).asJava
 
   /**
    * reference to `CouchbaseFlow.mutateIn`
@@ -344,10 +295,10 @@ object CouchbaseFlow {
    * @return
    */
   def mutateInDoc[T](
-      specs: java.util.List[MutateInSpec],
+      specs: java.util.List[? <: MutateInSpec],
       options: MutateInOptions,
       asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
-    ScalaCouchbaseFlow.mutateInDoc[T](specs, options)(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateInDoc[T](toInvariant(specs), options)(asyncCollection).asJava
 
   /**
    * reference to `CouchbaseFlow.mutateIn`
@@ -355,9 +306,9 @@ object CouchbaseFlow {
    * @return
    */
   def mutateInDoc[T](
-      specs: java.util.List[MutateInSpec],
+      specs: java.util.List[? <: MutateInSpec],
       asyncCollection: AsyncCollection): Flow[MutationDocument[T], MutationDocument[T], NotUsed] =
-    ScalaCouchbaseFlow.mutateInDoc[T](specs, MutateInOptions.mutateInOptions())(asyncCollection).asJava
+    ScalaCouchbaseFlow.mutateInDoc[T](toInvariant(specs), MutateInOptions.mutateInOptions())(asyncCollection).asJava
 
   /**
    * Checks if the given document ID exists on the active partition with custom options.
@@ -367,8 +318,8 @@ object CouchbaseFlow {
   def exists[T](
       applyId: JFunction[T, String],
       existsOptions: ExistsOptions,
-      asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
-    ScalaCouchbaseFlow.exists[T](applyId.apply, existsOptions)(asyncCollection).asJava
+      asyncCollection: AsyncCollection): Flow[T, java.lang.Boolean, NotUsed] =
+    ScalaCouchbaseFlow.exists[T](applyId.apply, existsOptions)(asyncCollection).map(Boolean.box).asJava
 
   /**
    * Checks if the given document ID exists on the active partition with custom options.
@@ -377,20 +328,8 @@ object CouchbaseFlow {
    */
   def exists[T](
       applyId: JFunction[T, String],
-      asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
-    ScalaCouchbaseFlow.exists[T](applyId.apply)(asyncCollection).asJava
-
-  /**
-   * Checks if the given document ID exists on the active partition with custom options.
-   * @param applyId parse id function, which is the document id, id streams can use `exists[String](e => e)`
-   * @see `AsyncCollection#exists`
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
-   */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def exists[T](
-      applyId: T => String)(
-      implicit asyncCollection: AsyncCollection): Flow[T, Boolean, NotUsed] =
-    ScalaCouchbaseFlow.exists[T](applyId).asJava
+      asyncCollection: AsyncCollection): Flow[T, java.lang.Boolean, NotUsed] =
+    ScalaCouchbaseFlow.exists[T](applyId.apply)(asyncCollection).map(Boolean.box).asJava
 
   /**
    * Updates the expiry of the document with the given id with custom options.
@@ -431,19 +370,6 @@ object CouchbaseFlow {
 
   /**
    * Updates the expiry of the document with the given id with custom options.
-   * @param applyId parse id function, which is the document id
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
-   */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def touchDuration[T](
-      applyId: T => String,
-      expiry: Duration,
-      touchOptions: TouchOptions = TouchOptions.touchOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
-    ScalaCouchbaseFlow.touchDuration[T](applyId, expiry, touchOptions).asJava
-
-  /**
-   * Updates the expiry of the document with the given id with custom options.
    * @see `AsyncCollection#touch`
    */
   def touchInstant[T](
@@ -462,19 +388,6 @@ object CouchbaseFlow {
       expiry: Instant,
       asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
     ScalaCouchbaseFlow.touchInstant[T](applyId.apply, expiry)(asyncCollection).asJava
-
-  /**
-   * Updates the expiry of the document with the given id with custom options.
-   * @see `AsyncCollection#touch`
-   * @deprecated Use the overloaded method that takes a java.util.function.Function instead (since 2.0.0)
-   */
-  @deprecated("Use the overloaded method that takes a java.util.function.Function instead", since = "2.0.0")
-  def touchInstant[T](
-      applyId: T => String,
-      expiry: Instant,
-      touchOptions: TouchOptions = TouchOptions.touchOptions())(
-      implicit asyncCollection: AsyncCollection): Flow[T, T, NotUsed] =
-    ScalaCouchbaseFlow.touchInstant[T](applyId, expiry, touchOptions).asJava
 
   /**
    * Appends binary content to the document with custom options.
@@ -536,4 +449,6 @@ object CouchbaseFlow {
   def decrement(asyncCollection: AsyncCollection): Flow[String, CounterResult, NotUsed] =
     ScalaCouchbaseFlow.decrement(DecrementOptions.decrementOptions())(asyncCollection).asJava
 
+  private def toInvariant(specs: java.util.List[? <: MutateInSpec]): java.util.List[MutateInSpec] =
+    new java.util.ArrayList[MutateInSpec](specs)
 }
