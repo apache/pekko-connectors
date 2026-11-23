@@ -117,6 +117,6 @@ public class UnixDomainSocketTest {
     sent.toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
     assertEquals(sendBytes, received.get(timeoutSeconds, TimeUnit.SECONDS));
 
-    serverBinding.unbind().toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
+    serverBinding.unbindDone().toCompletableFuture().get(timeoutSeconds, TimeUnit.SECONDS);
   }
 }

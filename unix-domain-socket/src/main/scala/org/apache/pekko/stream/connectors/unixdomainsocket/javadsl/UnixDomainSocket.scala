@@ -48,8 +48,23 @@ object UnixDomainSocket extends ExtensionId[UnixDomainSocket] with ExtensionIdPr
      * [[pekko.stream.javadsl.Source Source]].
      *
      * The produced [[java.util.concurrent.CompletionStage]] is fulfilled when the unbinding has been completed.
+     *
+     * @deprecated The stage completes with a Scala `Unit`, which is awkward to use from Java; use `unbindDone`.
      */
-    def unbind(): CompletionStage[Done] = delegate.unbind().map(_ => Done: Done)(ExecutionContext.parasitic).asJava
+    @deprecated("Use unbindDone, which completes with Done", "2.0.0")
+    def unbind(): CompletionStage[Unit] = delegate.unbind().asJava
+
+    /**
+     * Asynchronously triggers the unbinding of the port that was bound by the materialization of the `connections`
+     * [[pekko.stream.javadsl.Source Source]].
+     *
+     * The produced [[java.util.concurrent.CompletionStage]] is fulfilled with [[pekko.Done Done]] when the unbinding
+     * has been completed.
+     *
+     * @since 2.0.0
+     */
+    def unbindDone(): CompletionStage[Done] =
+      delegate.unbind().map(_ => Done: Done)(ExecutionContext.parasitic).asJava
   }
 
   /**

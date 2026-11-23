@@ -80,7 +80,25 @@ public class UnixDomainSocketJavaApiTest {
         ByteString.fromString("HELLO"),
         response.stream().reduce(ByteString.emptyByteString(), ByteString::concat));
 
-    CompletionStage<Done> unbound = binding.unbind();
+    CompletionStage<Done> unbound = binding.unbindDone();
     assertEquals(Done.getInstance(), unbound.toCompletableFuture().get(5, TimeUnit.SECONDS));
+  }
+
+  @Test
+  @SuppressWarnings("deprecation")
+  public void deprecatedUnbindStillCompletesWithScalaUnit() throws Exception {
+    Path path = Files.createTempDirectory("uds-java-api").resolve("unbind.sock");
+    path.toFile().deleteOnExit();
+
+    UnixDomainSocket uds = UnixDomainSocket.get(system);
+    UnixDomainSocket.ServerBinding binding =
+        uds.bindAndHandle(Flow.<ByteString>create(), path)
+            .toCompletableFuture()
+            .get(5, TimeUnit.SECONDS);
+
+    // callers compiled against the previous signature retrieve the value as a BoxedUnit
+    CompletionStage<scala.runtime.BoxedUnit> unbound = binding.unbind();
+    assertEquals(
+        scala.runtime.BoxedUnit.UNIT, unbound.toCompletableFuture().get(5, TimeUnit.SECONDS));
   }
 }
