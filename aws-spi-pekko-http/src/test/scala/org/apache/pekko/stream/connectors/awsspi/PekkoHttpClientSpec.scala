@@ -118,6 +118,22 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       Seq(("Accept-Encoding", "gzip"), ("Accept-Encoding", "deflate"))
     }
 
+    "preserve the order of the values of each header" in {
+      val headers = new java.util.LinkedHashMap[String, java.util.List[String]]
+      headers.put("X-First", java.util.Arrays.asList("a", "b", "c"))
+      headers.put("X-Second", java.util.Arrays.asList("d"))
+      headers.put("X-Third", java.util.Arrays.asList("e", "f"))
+
+      val (_, reqHeaders, _) = PekkoHttpClient.convertHeaders(headers)
+
+      // convertHeaders does not guarantee the relative order of different header names,
+      // but the values of each header must stay in the order the SDK supplied them
+      reqHeaders.groupBy(_.name()).map { case (name, hs) => name -> hs.map(_.value()) } shouldBe Map(
+        "X-First" -> Seq("a", "b", "c"),
+        "X-Second" -> Seq("d"),
+        "X-Third" -> Seq("e", "f"))
+    }
+
     "reject a Content-Length header with multiple values" in {
       val headers = new java.util.HashMap[String, java.util.List[String]]
       headers.put("Content-Length", java.util.Arrays.asList("123", "456"))

@@ -139,7 +139,9 @@ object PekkoHttpClient {
       builder.result()
     }
 
-    headersAsScala.foldLeft((Option.empty[HttpHeader], List.empty[HttpHeader], Option.empty[Long])) {
+    // the headers are accumulated in reverse (prepend is O(1)) and reversed once at the end
+    val (contentTypeHeader, reversedHeaders, sdkContentLength) = headersAsScala.foldLeft((Option.empty[HttpHeader],
+      List.empty[HttpHeader], Option.empty[Long])) {
       case ((ctHeader, hdrs, contentLength), header) =>
         val (headerName, headerValue) = header
         val values = {
@@ -166,9 +168,10 @@ object PekkoHttpClient {
           (Some(parseHeader(headerName, requireSingleValue())), hdrs, contentLength)
         } else {
           // repeated header fields are valid HTTP; emit one header per value
-          (ctHeader, hdrs ::: values.map(parseHeader(headerName, _)), contentLength)
+          (ctHeader, values.foldLeft(hdrs)((acc, value) => parseHeader(headerName, value) :: acc), contentLength)
         }
     }
+    (contentTypeHeader, reversedHeaders.reverse, sdkContentLength)
   }
 
   private def parseHeader(headerName: String, headerValue: String): HttpHeader =
