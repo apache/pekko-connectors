@@ -40,7 +40,8 @@ public class GoogleJavaApiTest {
       ClassicActorSystemProvider system,
       Config config,
       RequestSettings requestSettings) {
-    CompletionStage<String> result = Google.singleRequest(request, unmarshaller, settings, system);
+    CompletionStage<String> result =
+        GoogleApi.singleRequest(request, unmarshaller, settings, system);
     Credentials credentials = Credentials.create(config, system);
     Optional<ForwardProxy> forwardProxy = requestSettings.getForwardProxyOptional();
   }

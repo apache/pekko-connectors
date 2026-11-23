@@ -22,7 +22,7 @@ import pekko.http.javadsl.unmarshalling.Unmarshaller
 import pekko.http.scaladsl.{ marshalling, model => sm, unmarshalling }
 import pekko.japi.Pair
 import pekko.stream.connectors.google.GoogleSettings
-import pekko.stream.connectors.google.javadsl.GoogleApi
+import pekko.stream.connectors.google.javadsl.Google
 import pekko.stream.connectors.googlecloud.bigquery.InsertAllRetryPolicy
 import pekko.stream.connectors.googlecloud.bigquery.model.Dataset
 import pekko.stream.connectors.googlecloud.bigquery.model.{ Job, JobCancelResponse, JobReference }
@@ -52,7 +52,7 @@ import scala.jdk.OptionConverters._
  * Java API to interface with BigQuery.
  */
 @ApiMayChange(issue = "https://github.com/akka/alpakka/pull/2548")
-object BigQuery extends GoogleApi {
+object BigQuery extends Google {
 
   /**
    * Lists all datasets in the specified project to which the user has been granted the READER dataset role.
