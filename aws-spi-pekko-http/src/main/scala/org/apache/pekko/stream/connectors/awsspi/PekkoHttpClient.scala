@@ -109,12 +109,15 @@ object PekkoHttpClient {
         }
       case Tolerated =>
         // Methods such as GET and DELETE tolerate an entity: attach the SDK's payload when one
-        // is actually present instead of silently dropping it (its hash is part of the SigV4
-        // signature). Without a known positive length the request stays bodiless, as falling
-        // back to a chunked entity would break SigV4 signing.
+        // is present instead of silently dropping it (its hash is part of the SigV4 signature).
+        // The SDK models the length as optional, and an unknown length is not the same as no
+        // body: only a declared length of zero means the request is bodiless (that is what the
+        // SDK reports for requests without a payload). A publisher with an unknown length is
+        // streamed the same way as for methods that expect an entity.
         contentLength match {
           case Some(length) if length > 0 => HttpEntity(contentType, length, dataSource)
-          case _                          => HttpEntity.Empty
+          case Some(_)                    => HttpEntity.Empty
+          case None                       => HttpEntity(contentType, dataSource)
         }
       case _ => HttpEntity.Empty
     }

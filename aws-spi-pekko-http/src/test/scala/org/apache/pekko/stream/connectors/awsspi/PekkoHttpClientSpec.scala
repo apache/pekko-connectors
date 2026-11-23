@@ -169,15 +169,36 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       entity.contentLengthOption shouldBe Some(5L)
     }
 
-    "keep a GET request bodiless when no content is present" in {
-      val publisher = new SdkHttpContentPublisher {
+    "keep a GET request bodiless when the declared content length is zero" in {
+      val emptyPublisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(0L)
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      val unknownLengthPublisher = new SdkHttpContentPublisher {
         override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
         override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
       }
       PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType,
-        publisher) shouldBe HttpEntity.Empty
-      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType, publisher,
-        Some(0L)) shouldBe HttpEntity.Empty
+        emptyPublisher) shouldBe HttpEntity.Empty
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType,
+        unknownLengthPublisher, Some(0L)) shouldBe HttpEntity.Empty
+    }
+
+    "not drop the request body of a GET or DELETE request when the content length is unknown" in {
+      Seq(HttpMethods.GET, HttpMethods.DELETE).foreach { method =>
+        val publisher = new SdkHttpContentPublisher {
+          override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+          override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+        }
+        val entity =
+          PekkoHttpClient.entityForMethodAndContentType(method, ContentTypes.`application/json`, publisher)
+        withClue(s"$method: ") {
+          entity should not be HttpEntity.Empty
+          entity.isKnownEmpty() shouldBe false
+          entity.contentLengthOption shouldBe None
+          entity.contentType shouldBe ContentTypes.`application/json`
+        }
+      }
     }
 
     "never attach a request body for a method that disallows an entity" in {
