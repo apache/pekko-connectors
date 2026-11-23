@@ -207,16 +207,17 @@ object PekkoHttpClient {
         throw new IllegalArgumentException(s"Found invalid header: ${error.errors}.")
     }
 
+  // RFC 9110 defines Content-Length as 1*DIGIT, which is stricter than what String.toLong accepts
+  // (a leading sign, non-ASCII digits), so the form is validated before the conversion.
   private def parseContentLength(headerValue: String): Long = {
-    val length =
-      try headerValue.toLong
-      catch {
-        case _: NumberFormatException =>
-          throw new IllegalArgumentException(s"Found invalid Content-Length header value: '$headerValue'.")
-      }
-    if (length < 0)
+    def invalid() =
       throw new IllegalArgumentException(s"Found invalid Content-Length header value: '$headerValue'.")
-    length
+    if (headerValue.isEmpty || !headerValue.forall(c => c >= '0' && c <= '9')) invalid()
+    try headerValue.toLong
+    catch {
+      // only digits at this point, so the value does not fit in a Long
+      case _: NumberFormatException => invalid()
+    }
   }
 
   private[awsspi] def tryCreateCustomContentType(contentTypeStr: String): ContentType = {
