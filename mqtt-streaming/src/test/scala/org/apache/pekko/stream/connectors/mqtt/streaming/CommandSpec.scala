@@ -17,6 +17,7 @@
 
 package org.apache.pekko.stream.connectors.mqtt.streaming
 
+import java.lang.reflect.{ InvocationHandler, Method, Proxy }
 import java.util.Optional
 import java.util.concurrent.{ CompletableFuture, CompletionStage, ExecutionException, TimeUnit }
 
@@ -28,6 +29,25 @@ import org.scalatest.wordspec.AnyWordSpec
 class CommandSpec extends AnyWordSpec with Matchers {
 
   private val packet = PubAck(PacketId(1))
+
+  /**
+   * A stage that is not a CompletableFuture itself and forwards every call to `delegate`, so that
+   * `toCompletableFuture` returns the live, writable delegate.
+   */
+  private def delegatingStage(
+      delegate: CompletableFuture[Done], supportsToCompletableFuture: Boolean = true): CompletionStage[Done] =
+    Proxy
+      .newProxyInstance(
+        getClass.getClassLoader,
+        Array[Class[?]](classOf[CompletionStage[?]]),
+        new InvocationHandler {
+          override def invoke(proxy: AnyRef, method: Method, args: Array[AnyRef]): AnyRef =
+            if (method.getName == "toCompletableFuture" && !supportsToCompletableFuture)
+              throw new UnsupportedOperationException
+            else if (args eq null) method.invoke(delegate)
+            else method.invoke(delegate, args: _*)
+        })
+      .asInstanceOf[CompletionStage[Done]]
 
   "Command Java API" should {
 
@@ -51,8 +71,37 @@ class CommandSpec extends AnyWordSpec with Matchers {
       thrown.getCause shouldBe theSameInstanceAs(failure)
     }
 
-    "reject a CompletionStage that is not a CompletableFuture" in {
+    "complete a CompletionStage adapter whose toCompletableFuture returns its writable delegate" in {
+      val delegate = new CompletableFuture[Done]()
+      val command =
+        new Command[String](packet, Optional.of(delegatingStage(delegate)), Optional.empty[String]())
+
+      command.completed.get.success(Done)
+
+      delegate.get(3, TimeUnit.SECONDS) shouldBe Done
+    }
+
+    "complete a CompletionStage adapter exceptionally when the session fails the command" in {
+      val delegate = new CompletableFuture[Done]()
+      val command =
+        new Command[String](packet, Optional.of(delegatingStage(delegate)), Optional.empty[String]())
+      val failure = new RuntimeException("cannot route")
+
+      command.completed.get.failure(failure)
+
+      val thrown = the[ExecutionException] thrownBy delegate.get(3, TimeUnit.SECONDS)
+      thrown.getCause shouldBe theSameInstanceAs(failure)
+    }
+
+    "reject a CompletionStage whose toCompletableFuture returns a copy" in {
       val stage: CompletionStage[Done] = new CompletableFuture[Done]().minimalCompletionStage()
+
+      an[IllegalArgumentException] should be thrownBy
+      new Command[String](packet, Optional.of(stage), Optional.empty[String]())
+    }
+
+    "reject a CompletionStage that does not support toCompletableFuture" in {
+      val stage = delegatingStage(new CompletableFuture[Done](), supportsToCompletableFuture = false)
 
       an[IllegalArgumentException] should be thrownBy
       new Command[String](packet, Optional.of(stage), Optional.empty[String]())
