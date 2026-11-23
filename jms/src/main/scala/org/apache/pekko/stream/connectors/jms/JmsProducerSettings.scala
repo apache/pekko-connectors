@@ -75,7 +75,12 @@ final class JmsProducerSettings private (
    * Java API: Time messages should be kept on the JMS broker. This setting can be overridden on
    * individual messages. If not set, messages will never expire.
    */
-  def withTimeToLive(value: java.time.Duration): JmsProducerSettings = copy(timeToLive = Option(value).map(_.toScala))
+  def withTimeToLive(value: java.time.Duration): JmsProducerSettings =
+    copy(timeToLive = Option(value).map { ttl =>
+      // `ChronoUnit.FOREVER.getDuration` is what `getTimeToLive` returns for an infinite time to live
+      if (ttl == java.time.temporal.ChronoUnit.FOREVER.getDuration) scala.concurrent.duration.Duration.Inf
+      else ttl.toScala
+    })
 
   /** Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: FiniteDuration): JmsProducerSettings =
@@ -100,7 +105,8 @@ final class JmsProducerSettings private (
   def getCredentials: java.util.Optional[Credentials] = credentials.toJava
 
   /**
-   * Java API: an infinite time to live is returned as `ChronoUnit.FOREVER.getDuration`
+   * Java API: an infinite time to live is returned as `ChronoUnit.FOREVER.getDuration`,
+   * which `withTimeToLive` accepts to set an infinite time to live
    *
    * @since 2.0.0
    */

@@ -85,7 +85,11 @@ final class JmsConsumerSettings private (
   def withAckTimeout(value: scala.concurrent.duration.Duration): JmsConsumerSettings = copy(ackTimeout = value)
 
   /** Java API: Timeout for acknowledge. (Used by TX consumers.) */
-  def withAckTimeout(value: java.time.Duration): JmsConsumerSettings = copy(ackTimeout = value.toScala)
+  def withAckTimeout(value: java.time.Duration): JmsConsumerSettings =
+    copy(ackTimeout =
+      // `ChronoUnit.FOREVER.getDuration` is what `getAckTimeout` returns for an infinite timeout
+      if (value == java.time.temporal.ChronoUnit.FOREVER.getDuration) scala.concurrent.duration.Duration.Inf
+      else value.toScala)
 
   /** Max interval before sending queued acknowledges back to the broker. (Used by AckSources.) */
   def withMaxAckInterval(value: scala.concurrent.duration.FiniteDuration): JmsConsumerSettings =
@@ -141,7 +145,8 @@ final class JmsConsumerSettings private (
   def getAcknowledgeMode: java.util.Optional[AcknowledgeMode] = acknowledgeMode.toJava
 
   /**
-   * Java API: an infinite timeout is returned as `ChronoUnit.FOREVER.getDuration`
+   * Java API: an infinite timeout is returned as `ChronoUnit.FOREVER.getDuration`,
+   * which `withAckTimeout` accepts to set an infinite timeout
    *
    * @since 2.0.0
    */

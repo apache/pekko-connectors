@@ -119,6 +119,37 @@ public class JakartaJmsJavaApiTest {
   }
 
   @Test
+  public void infiniteAckTimeoutRoundTripsThroughJavaApi() {
+    JmsConsumerSettings settings =
+        JmsConsumerSettings.create(defaultConsumerConfig(), CONNECTION_FACTORY)
+            .withAckTimeout(scala.concurrent.duration.Duration.Inf());
+
+    // read the infinite value with the Java getter and write it back with the Java setter
+    Duration read = settings.getAckTimeout();
+    JmsConsumerSettings written =
+        settings.withAckTimeout(Duration.ofSeconds(1)).withAckTimeout(read);
+
+    assertEquals(scala.concurrent.duration.Duration.Inf(), written.ackTimeout());
+    assertEquals(ChronoUnit.FOREVER.getDuration(), written.getAckTimeout());
+  }
+
+  @Test
+  public void infiniteTimeToLiveRoundTripsThroughJavaApi() {
+    JmsProducerSettings settings =
+        JmsProducerSettings.create(defaultProducerConfig(), CONNECTION_FACTORY)
+            .withTimeToLive(scala.concurrent.duration.Duration.Inf());
+
+    // read the infinite value with the Java getter and write it back with the Java setter
+    Duration read = settings.getTimeToLive().get();
+    JmsProducerSettings written =
+        settings.withTimeToLive(Duration.ofSeconds(1)).withTimeToLive(read);
+
+    assertEquals(
+        scala.Option.apply(scala.concurrent.duration.Duration.Inf()), written.timeToLive());
+    assertEquals(Optional.of(ChronoUnit.FOREVER.getDuration()), written.getTimeToLive());
+  }
+
+  @Test
   public void producerSettingsGetters() {
     JmsProducerSettings settings =
         JmsProducerSettings.create(defaultProducerConfig(), CONNECTION_FACTORY)
