@@ -14,6 +14,7 @@
 package org.apache.pekko.stream.connectors.mqtt
 
 import org.apache.pekko
+import scala.jdk.OptionConverters._
 
 final class MqttMessage private (val topic: String,
     val payload: org.apache.pekko.util.ByteString,
@@ -25,6 +26,13 @@ final class MqttMessage private (val topic: String,
   def withPayload(value: Array[Byte]): MqttMessage = copy(payload = pekko.util.ByteString(value))
   def withQos(value: MqttQoS): MqttMessage = copy(qos = Option(value))
   def withRetained(value: Boolean): MqttMessage = if (retained == value) this else copy(retained = value)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getQos: java.util.Optional[MqttQoS] = qos.toJava
 
   private def copy(topic: String = topic,
       payload: pekko.util.ByteString = payload,

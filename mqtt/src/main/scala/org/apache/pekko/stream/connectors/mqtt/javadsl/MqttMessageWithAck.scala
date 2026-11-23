@@ -55,3 +55,20 @@ private[javadsl] object MqttMessageWithAck {
 }
 
 abstract class MqttMessageWithAckImpl extends MqttMessageWithAck
+
+object MqttMessageWithAckImpl {
+
+  /**
+   * Java API: create a message with an acknowledge function, e.g. to feed `MqttFlow.atLeastOnceWithAck`.
+   *
+   * @since 2.0.0
+   */
+  def create(message: MqttMessage, ack: java.util.function.Supplier[CompletionStage[Done]]): MqttMessageWithAck = {
+    val msg = message
+    val acknowledge = ack
+    new MqttMessageWithAckImpl {
+      override val message: MqttMessage = msg
+      override def ack(): CompletionStage[Done] = acknowledge.get()
+    }
+  }
+}

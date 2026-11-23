@@ -29,6 +29,7 @@ import scala.annotation.tailrec
 import scala.concurrent.duration._
 import scala.concurrent.{ ExecutionContext, Promise }
 import scala.jdk.CollectionConverters._
+import scala.jdk.DurationConverters._
 import scala.jdk.OptionConverters._
 
 /**
@@ -93,6 +94,11 @@ object SubscribeQoSFlags {
   val QoSFailure = ControlPacketFlags(0x80)
 }
 
+/**
+ * Value classes like this one erase to `int` in Java signatures, so Java code passes the flags as plain `int`s
+ * (combined with bitwise operators) to the constructors of the control packets, using constants such as those in
+ * `ControlPacketFlags`, `PublishQoSFlags` and `SubscribeQoSFlags`.
+ */
 @InternalApi
 final case class ControlPacketFlags(underlying: Int) extends AnyVal {
 
@@ -227,6 +233,57 @@ final case class Connect(protocolName: Connect.ProtocolName,
       Some(username),
       Some(password))
 
+  /**
+   * Java API: the keep alive interval
+   *
+   * @since 2.0.0
+   */
+  def withKeepAlive(keepAlive: java.time.Duration): Connect = copy(keepAlive = keepAlive.toScala)
+
+  /**
+   * Java API: the will topic and message. This function will also set the corresponding will flag.
+   *
+   * @since 2.0.0
+   */
+  def withWill(willTopic: String, willMessage: String): Connect =
+    copy(connectFlags = connectFlags | ConnectFlags.WillFlag, willTopic = Some(willTopic),
+      willMessage = Some(willMessage))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKeepAlive: java.time.Duration = keepAlive.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getWillTopic: java.util.Optional[String] = willTopic.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getWillMessage: java.util.Optional[String] = willMessage.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getUsername: java.util.Optional[String] = username.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getPassword: java.util.Optional[String] = password.toJava
+
   override def toString: String =
     s"""Connect(protocolName:$protocolName,protocolLevel:$protocolLevel,clientId:$clientId,connectFlags:$connectFlags,keepAlive:$keepAlive,willTopic:$willTopic,willMessage:$willMessage,username:$username,password:${password
         .map(_ => "********")})"""
@@ -323,6 +380,13 @@ final case class Publish(override val flags: ControlPacketFlags,
   def this(topicName: String, payload: ByteString) =
     this(PublishQoSFlags.QoSAtLeastOnceDelivery, topicName, Some(PacketId(0)), payload)
 
+  /**
+   * Java API: the packet identifier, if the QoS level has one
+   *
+   * @since 2.0.0
+   */
+  def getPacketId: java.util.Optional[Integer] = packetId.map(id => Int.box(id.underlying)).toJava
+
   override def toString: String =
     s"""Publish(flags:$flags,topicName:$topicName,packetId:$packetId,payload:${payload.size}b)"""
 }
@@ -400,6 +464,15 @@ final case class Subscribe @InternalApi private[streaming] (packetId: PacketId,
    */
   def this(topicFilter: String) =
     this(PacketId(0), List(topicFilter -> SubscribeQoSFlags.QoSAtLeastOnceDelivery))
+
+  /**
+   * Java API: the topic filters and their QoS flags
+   *
+   * @since 2.0.0
+   */
+  def getTopicFilters: java.util.List[PekkoPair[String, Integer]] = topicFilters.map { case (topic, flags) =>
+    PekkoPair.create(topic, Int.box(flags.underlying))
+  }.asJava
 }
 
 /**
@@ -417,6 +490,13 @@ final case class SubAck(packetId: PacketId, returnCodes: Seq[ControlPacketFlags]
    */
   def this(packetId: PacketId, returnCodes: java.util.List[Integer]) =
     this(packetId, returnCodes.asScala.toIndexedSeq.map(v => ControlPacketFlags(v)))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getReturnCodes: java.util.List[Integer] = returnCodes.map(code => Int.box(code.underlying)).asJava
 }
 
 object Unsubscribe {
@@ -463,6 +543,13 @@ final case class Unsubscribe @InternalApi private[streaming] (packetId: PacketId
    */
   def this(topicFilter: String) =
     this(PacketId(0), List(topicFilter))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getTopicFilters: java.util.List[String] = topicFilters.asJava
 }
 
 /**
@@ -476,19 +563,43 @@ final case class UnsubAck(packetId: PacketId)
  * 3.12 PINGREQ – PING request
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-case object PingReq extends ControlPacket(ControlPacketType.PINGREQ, ControlPacketFlags.ReservedGeneral)
+case object PingReq extends ControlPacket(ControlPacketType.PINGREQ, ControlPacketFlags.ReservedGeneral) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PingReq.type = this
+}
 
 /**
  * 3.13 PINGRESP – PING response
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-case object PingResp extends ControlPacket(ControlPacketType.PINGRESP, ControlPacketFlags.ReservedGeneral)
+case object PingResp extends ControlPacket(ControlPacketType.PINGRESP, ControlPacketFlags.ReservedGeneral) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: PingResp.type = this
+}
 
 /**
  * 3.14 DISCONNECT – Disconnect notification
  * http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html
  */
-case object Disconnect extends ControlPacket(ControlPacketType.DISCONNECT, ControlPacketFlags.ReservedGeneral)
+case object Disconnect extends ControlPacket(ControlPacketType.DISCONNECT, ControlPacketFlags.ReservedGeneral) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: Disconnect.type = this
+}
 
 /**
  * Provides functions to decode bytes to various MQTT types and vice-versa.
@@ -1210,6 +1321,13 @@ final case class Event[A](event: ControlPacket, carry: Option[A]) {
    */
   def this(event: ControlPacket, carry: A) =
     this(event, Some(carry))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCarry: Optional[A] = carry.toJava
 }
 
 object DecodeErrorOrEvent {

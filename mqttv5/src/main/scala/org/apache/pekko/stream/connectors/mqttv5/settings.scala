@@ -26,6 +26,7 @@ import org.eclipse.paho.mqttv5.client.MqttClientPersistence
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions
 import org.eclipse.paho.mqttv5.common.packet.MqttProperties
 import org.eclipse.paho.mqttv5.common.{ MqttMessage => PahoMqttMessage }
+import scala.jdk.OptionConverters._
 
 /**
  * Quality of Service constants as defined in
@@ -305,7 +306,13 @@ final class MqttConnectionSettings private (
       )
     )
 
-  /** Java API */
+  /**
+   * Java API
+   *
+   * @deprecated A Java lambda passed to this method is ambiguous with the Scala overload, and its Scala `Int`s are
+   *             seen as `Object` by Java; use `withEnhancedAuth`.
+   */
+  @deprecated("Use withEnhancedAuth, a Java lambda passed to withAuth is ambiguous with the Scala overload", "2.0.0")
   def withAuth(
       method: String,
       initialData: Array[Byte],
@@ -316,6 +323,30 @@ final class MqttConnectionSettings private (
       initialData = initialData,
       authPacketHandler = (reasonCode: Int, properties: MqttProperties) =>
         authPacketHandler.apply(reasonCode, properties).toScala
+    )
+
+  /**
+   * Java API: enhanced authentication. The handler is called with the reason code and properties of each
+   * authentication packet, and returns the reason code and properties to respond with.
+   *
+   * @since 2.0.0
+   */
+  def withEnhancedAuth(
+      method: String,
+      initialData: Array[Byte],
+      authPacketHandler: java.util.function.BiFunction[java.lang.Integer, MqttProperties,
+        Pair[java.lang.Integer,
+          MqttProperties]]
+  ): MqttConnectionSettings =
+    copy(
+      auth = AuthSettings.Enhanced(
+        method = method,
+        initialData = initialData,
+        authPacketHandler = (reasonCode: Int, properties: MqttProperties) => {
+          val response = authPacketHandler.apply(Int.box(reasonCode), properties)
+          (response.first.intValue, response.second)
+        }
+      )
     )
 
   def withSocketFactory(value: javax.net.ssl.SSLSocketFactory): MqttConnectionSettings =
@@ -406,6 +437,63 @@ final class MqttConnectionSettings private (
         )
       )
     )
+
+  /**
+   * Java API: enable offline persistence with the default settings.
+   *
+   * @since 2.0.0
+   */
+  def withOfflinePersistenceSettings(): MqttConnectionSettings =
+    withOfflinePersistenceSettings(5000, false, true)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSocketFactory: java.util.Optional[javax.net.ssl.SSLSocketFactory] = socketFactory.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getWill: java.util.Optional[MqttMessage] = will.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKeepAliveInterval: java.time.Duration = keepAliveInterval.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionTimeout: java.time.Duration = connectionTimeout.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSslHostnameVerifier: java.util.Optional[javax.net.ssl.HostnameVerifier] = sslHostnameVerifier.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSslProperties: java.util.Map[String, String] = sslProperties.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getServerUris: java.util.List[String] = serverUris.toList.asJava
 
   private def copy(
       broker: String = broker,
