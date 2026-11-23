@@ -31,28 +31,24 @@ import com.google.pubsub.v1.pubsub.{ SubscriberClient => ScalaSubscriberClient }
 /**
  * Holds the gRPC scala subscriber client instance.
  */
-final class GrpcSubscriber private (settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem) {
-
-  @ApiMayChange
-  final val client =
-    ScalaSubscriberClient(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings)(sys))(sys)
-
-  sys.registerOnTermination(client.close())
-}
+final class GrpcSubscriber private[grpc] (@ApiMayChange final val client: ScalaSubscriberClient)
 
 object GrpcSubscriber {
   def apply(settings: PubSubSettings,
       googleSettings: GoogleSettings)(implicit sys: ClassicActorSystemProvider): GrpcSubscriber =
-    new GrpcSubscriber(settings, googleSettings, sys.classicSystem)
+    apply(settings, googleSettings, sys.classicSystem)
 
-  def apply(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber =
-    new GrpcSubscriber(settings, googleSettings, sys)
+  def apply(settings: PubSubSettings, googleSettings: GoogleSettings, sys: ActorSystem): GrpcSubscriber = {
+    val c = ScalaSubscriberClient(PekkoGrpcSettings.fromPubSubSettings(settings, googleSettings)(sys))(sys)
+    sys.registerOnTermination(c.close())
+    new GrpcSubscriber(c)
+  }
 
   def apply(settings: PubSubSettings)(implicit sys: ClassicActorSystemProvider): GrpcSubscriber =
-    new GrpcSubscriber(settings, GoogleSettings(), sys.classicSystem)
+    apply(settings, GoogleSettings())
 
   def apply(settings: PubSubSettings, sys: ActorSystem): GrpcSubscriber =
-    new GrpcSubscriber(settings, GoogleSettings(sys), sys)
+    apply(settings, GoogleSettings(sys), sys)
 
   def apply()(implicit sys: ClassicActorSystemProvider): GrpcSubscriber =
     apply(PubSubSettings(sys))
