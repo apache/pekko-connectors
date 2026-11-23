@@ -54,17 +54,18 @@ import org.slf4j.LoggerFactory
  *
  * Logging from tests can be silenced by this appender. When there is a test failure
  * the captured logging events are flushed to the appenders defined for the
- * org.apache.pekko.actor.testkit.typed.internal.CapturingAppenderDelegate logger.
+ * org.apache.pekko.stream.connectors.testkit.CapturingAppenderDelegate logger.
  *
- * The flushing on test failure is handled by [[org.apache.pekko.actor.testkit.typed.scaladsl.LogCapturing]]
- * for ScalaTest and [[org.apache.pekko.actor.testkit.typed.javadsl.LogCapturing]] for JUnit.
+ * The flushing on test failure is handled by [[org.apache.pekko.stream.connectors.testkit.scaladsl.LogCapturing]]
+ * for ScalaTest, and by [[org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingExtension]] (JUnit 5)
+ * and [[org.apache.pekko.stream.connectors.testkit.javadsl.LogCapturingJunit4]] (JUnit 4).
  *
  * Use configuration like the following the logback-test.xml:
  *
  * {{{
- *     <appender name="CapturingAppender" class="org.apache.pekko.actor.testkit.typed.internal.CapturingAppender" />
+ *     <appender name="CapturingAppender" class="org.apache.pekko.stream.connectors.testkit.CapturingAppender" />
  *
- *     <logger name="org.apache.pekko.actor.testkit.typed.internal.CapturingAppenderDelegate" >
+ *     <logger name="org.apache.pekko.stream.connectors.testkit.CapturingAppenderDelegate" >
  *       <appender-ref ref="STDOUT"/>
  *     </logger>
  *
