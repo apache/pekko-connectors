@@ -72,6 +72,11 @@ class PekkoHttpClient(
   override def close(): Unit =
     try shutdownHandle()
     catch {
+      case e: InterruptedException =>
+        // NonFatal does not match InterruptedException, which the blocking shutdown can throw.
+        // Keep close() non-throwing but restore the interrupt flag so the caller can still see it.
+        logger.warn("Interrupted while shutting down the PekkoHttpClient", e)
+        Thread.currentThread().interrupt()
       case NonFatal(e) =>
         logger.warn("Failure while shutting down the PekkoHttpClient", e)
     }

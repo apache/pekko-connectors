@@ -275,6 +275,25 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       }
     }
 
+    "not propagate an InterruptedException from the shutdown handle on close() and restore the interrupt flag" in {
+      implicit val system: ActorSystem = ActorSystem("pekko-http-client-close-interrupt-spec")
+      try {
+        val client = new PekkoHttpClient(
+          () => throw new InterruptedException("simulated interrupt"),
+          ConnectionPoolSettings(system),
+          ConnectionContext.httpsClient(SSLContext.getDefault))(system, system.dispatcher)
+        try {
+          noException should be thrownBy client.close()
+          Thread.currentThread().isInterrupted shouldBe true
+        } finally {
+          // clear the flag so it does not leak into the rest of the suite
+          Thread.interrupted()
+        }
+      } finally {
+        Await.result(system.terminate(), 10.seconds)
+      }
+    }
+
     "withConnectionPoolSettings().build() should use passed ConnectionPoolSettings" in {
       val connectionPoolSettings = ConnectionPoolSettings(ConfigFactory.load())
         .withConnectionSettings(
