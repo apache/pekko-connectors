@@ -22,10 +22,30 @@ trait RetryLogic {
   def maxBackoff: scala.concurrent.duration.FiniteDuration
 }
 
+/**
+ * Java API: base class for implementing a [[RetryLogic]] with `java.time.Duration` backoffs.
+ *
+ * @since 2.0.0
+ */
+abstract class AbstractRetryLogic extends RetryLogic {
+  def getMinBackoff: java.time.Duration
+  def getMaxBackoff: java.time.Duration
+
+  final override def minBackoff: scala.concurrent.duration.FiniteDuration = getMinBackoff.toScala
+  final override def maxBackoff: scala.concurrent.duration.FiniteDuration = getMaxBackoff.toScala
+}
+
 object RetryNever extends RetryLogic {
   override def maxRetries: Int = 0
   override def minBackoff: scala.concurrent.duration.FiniteDuration = Duration.Zero
   override def maxBackoff: scala.concurrent.duration.FiniteDuration = Duration.Zero
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInstance: RetryNever.type = this
 }
 
 final class RetryAtFixedRate(_maxRetries: Int, retryInterval: scala.concurrent.duration.FiniteDuration)

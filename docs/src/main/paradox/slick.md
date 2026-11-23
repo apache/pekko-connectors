@@ -181,3 +181,13 @@ Scala
 
 Java
 : @@snip [snip](/slick/src/test/java/docs/javadsl/DocSnippetFlowWithPassThrough.java) { #flowWithPassThrough-example }
+
+## Flow with Try result
+
+`SlickWithTryResult` keeps the stream running when a statement fails, by emitting a `scala.util.Try` for each element instead of failing the stream. It offers `flowTry`, `flowTryWithPassThrough` and `sinkTry`. `sinkTry` materializes the `Try` of the last element only, so failures of earlier elements are not reported.
+
+Scala
+: @@snip [snip](/slick/src/test/scala/docs/scaladsl/SlickWithTryResultSpec.scala) { #flowTry }
+
+Java
+: @@snip [snip](/slick/src/test/java/docs/javadsl/SlickWithTryResultTest.java) { #flowTry }
