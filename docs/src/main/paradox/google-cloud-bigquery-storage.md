@@ -1,3 +1,12 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  license agreements; and to You under the Apache License, version 2.0:
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+  This file is part of the Apache Pekko project, which was derived from Akka.
+-->
+
 # Google Cloud BigQuery Storage
 
 The BigQuery Storage API offers fast access to BigQuery-managed storage using an [rpc-based](https://cloud.google.com/bigquery/docs/reference/storage/rpc) protocol.

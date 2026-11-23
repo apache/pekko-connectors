@@ -1,3 +1,12 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  license agreements; and to You under the Apache License, version 2.0:
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+  This file is part of the Apache Pekko project, which was derived from Akka.
+-->
+
 # Apache Geode
 
 [Apache Geode](https://geode.apache.org) is a distributed datagrid (formerly called ["Gemfire" which used to be Pivotal's packaging of Geode and now is VMware Tanzu](https://tanzu.vmware.com/gemfire)).
