@@ -24,6 +24,7 @@ import scala.annotation.tailrec
 import scala.concurrent.{ Await, Promise }
 import scala.concurrent.duration.Duration
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 import scala.util.control.NonFatal
 
 /**
@@ -95,9 +96,12 @@ final class AmqpDetailsConnectionProvider private (
   def withHostsAndPorts(hostAndPorts: Seq[(String, Int)]): AmqpDetailsConnectionProvider =
     copy(hostAndPortList = hostAndPorts)
 
+  /**
+   * Java API
+   */
   def withHostsAndPorts(
-      hostAndPorts: java.util.List[pekko.japi.Pair[String, Int]]): AmqpDetailsConnectionProvider =
-    copy(hostAndPortList = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
+      hostAndPorts: java.util.List[pekko.japi.Pair[String, java.lang.Integer]]): AmqpDetailsConnectionProvider =
+    copy(hostAndPortList = hostAndPorts.asScala.map(p => (p.first, p.second.intValue)).toIndexedSeq)
 
   def withCredentials(amqpCredentials: AmqpCredentials): AmqpDetailsConnectionProvider =
     copy(credentials = Option(amqpCredentials))
@@ -134,6 +138,84 @@ final class AmqpDetailsConnectionProvider private (
 
   def withConnectionName(name: String): AmqpDetailsConnectionProvider =
     copy(connectionName = Option(name))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getHostAndPortList: java.util.List[pekko.japi.Pair[String, java.lang.Integer]] =
+    hostAndPortList.map { case (host, port) => pekko.japi.Pair.create(host, Int.box(port)) }.asJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCredentials: java.util.Optional[AmqpCredentials] = credentials.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getVirtualHost: java.util.Optional[String] = virtualHost.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getSslConfiguration: java.util.Optional[AmqpSSLConfiguration] = sslConfiguration.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRequestedHeartbeat: java.util.Optional[java.lang.Integer] = requestedHeartbeat.map(Int.box).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionTimeout: java.util.Optional[java.lang.Integer] = connectionTimeout.map(Int.box).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getHandshakeTimeout: java.util.Optional[java.lang.Integer] = handshakeTimeout.map(Int.box).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getShutdownTimeout: java.util.Optional[java.lang.Integer] = shutdownTimeout.map(Int.box).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getNetworkRecoveryInterval: java.util.Optional[java.lang.Integer] = networkRecoveryInterval.map(Int.box).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getExceptionHandler: java.util.Optional[ExceptionHandler] = exceptionHandler.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionName: java.util.Optional[String] = connectionName.toJava
 
   override def get: Connection = {
     val factory = new ConnectionFactory
@@ -225,8 +307,11 @@ object AmqpDetailsConnectionProvider {
   def create(host: String, port: Int): AmqpDetailsConnectionProvider =
     AmqpDetailsConnectionProvider(host, port)
 
-  def create(hostAndPorts: java.util.List[pekko.japi.Pair[String, Int]]): AmqpDetailsConnectionProvider =
-    AmqpDetailsConnectionProvider(hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
+  /**
+   * Java API
+   */
+  def create(hostAndPorts: java.util.List[pekko.japi.Pair[String, java.lang.Integer]]): AmqpDetailsConnectionProvider =
+    AmqpDetailsConnectionProvider(hostAndPorts.asScala.map(p => (p.first, p.second.intValue)).toIndexedSeq)
 }
 
 final class AmqpCredentials private (val username: String, val password: String) {
@@ -258,8 +343,48 @@ final class AmqpSSLConfiguration private (val protocol: Option[String] = None,
   def withProtocolAndTrustManager(protocol: String, trustManager: javax.net.ssl.TrustManager): AmqpSSLConfiguration =
     copy(protocol = Some(protocol), trustManager = Some(trustManager))
 
+  /**
+   * Scala API
+   */
   def withSSLContext(context: Option[javax.net.ssl.SSLContext]): AmqpSSLConfiguration =
     copy(context = context)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withSSLContext(context: javax.net.ssl.SSLContext): AmqpSSLConfiguration =
+    copy(context = Some(context))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withSSLContext(context: java.util.Optional[javax.net.ssl.SSLContext]): AmqpSSLConfiguration =
+    copy(context = context.toScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProtocol: java.util.Optional[String] = protocol.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getTrustManager: java.util.Optional[TrustManager] = trustManager.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getContext: java.util.Optional[SSLContext] = context.toJava
 
   private def copy(protocol: Option[String] = protocol,
       trustManager: Option[TrustManager] = trustManager,
@@ -339,8 +464,17 @@ final class AmqpConnectionFactoryConnectionProvider private (val factory: Connec
    * Java API
    */
   def withHostsAndPorts(
-      hostAndPorts: java.util.List[pekko.japi.Pair[String, Int]]): AmqpConnectionFactoryConnectionProvider =
-    copy(hostAndPorts = hostAndPorts.asScala.map(_.toScala).toIndexedSeq)
+      hostAndPorts: java.util.List[pekko.japi.Pair[String, java.lang.Integer]])
+      : AmqpConnectionFactoryConnectionProvider =
+    copy(hostAndPorts = hostAndPorts.asScala.map(p => (p.first, p.second.intValue)).toIndexedSeq)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getHostAndPortList: java.util.List[pekko.japi.Pair[String, java.lang.Integer]] =
+    hostAndPortList.map { case (host, port) => pekko.japi.Pair.create(host, Int.box(port)) }.asJava
 
   override def get: Connection = {
     factory.newConnection(hostAndPortList.map(hp => new Address(hp._1, hp._2)).asJava)

@@ -13,11 +13,13 @@
 
 package org.apache.pekko.stream.connectors.amqp
 
-import java.util.Objects
+import java.util.{ Objects, Optional }
 
 import org.apache.pekko.util.ByteString
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.Envelope
+
+import scala.jdk.OptionConverters._
 
 final class ReadResult private (
     val bytes: ByteString,
@@ -58,6 +60,20 @@ final class WriteMessage private (
 
   def withRoutingKey(routingKey: String): WriteMessage =
     copy(routingKey = Some(routingKey))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getProperties: Optional[BasicProperties] = properties.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRoutingKey: Optional[String] = routingKey.toJava
 
   private def copy(immediate: Boolean = immediate,
       mandatory: Boolean = mandatory,
