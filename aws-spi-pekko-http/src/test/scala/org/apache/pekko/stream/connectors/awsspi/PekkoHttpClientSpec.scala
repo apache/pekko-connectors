@@ -159,6 +159,52 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
     }
 
+    "reject a non-numeric Content-Length header value with a clear error" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Length", Collections.singletonList("not-a-number"))
+
+      val e = the[IllegalArgumentException] thrownBy PekkoHttpClient.convertHeaders(headers)
+      e.getMessage should include("not-a-number")
+    }
+
+    "reject Content-Length header values that are not of the RFC 9110 1*DIGIT form" in {
+      // all of these are accepted by String.toLong, apart from the empty and blank values
+      Seq("+5", "-0", "\u0661\u0662", "\uff11\uff12", " 5", "5 ", "", " ").foreach { value =>
+        val headers = new java.util.HashMap[String, java.util.List[String]]
+        headers.put("Content-Length", Collections.singletonList(value))
+
+        withClue(s"Content-Length '$value': ") {
+          val e = the[IllegalArgumentException] thrownBy PekkoHttpClient.convertHeaders(headers)
+          e.getMessage should include("Content-Length")
+        }
+      }
+    }
+
+    "accept Content-Length header values of the 1*DIGIT form, including leading zeros" in {
+      Seq("0" -> 0L, "42" -> 42L, "007" -> 7L, Long.MaxValue.toString -> Long.MaxValue).foreach {
+        case (value, expected) =>
+          val headers = new java.util.HashMap[String, java.util.List[String]]
+          headers.put("Content-Length", Collections.singletonList(value))
+
+          PekkoHttpClient.convertHeaders(headers)._3 shouldBe Some(expected)
+      }
+    }
+
+    "reject a Content-Length header value that overflows a Long with a clear error" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Length", Collections.singletonList("9223372036854775808"))
+
+      val e = the[IllegalArgumentException] thrownBy PekkoHttpClient.convertHeaders(headers)
+      e.getMessage should include("9223372036854775808")
+    }
+
+    "reject a negative Content-Length header value" in {
+      val headers = new java.util.HashMap[String, java.util.List[String]]
+      headers.put("Content-Length", Collections.singletonList("-1"))
+
+      an[IllegalArgumentException] should be thrownBy PekkoHttpClient.convertHeaders(headers)
+    }
+
     "return None content length when Content-Length header is absent" in {
       val headers = new java.util.HashMap[String, java.util.List[String]]
       headers.put("Content-Type", Collections.singletonList("application/xml"))
