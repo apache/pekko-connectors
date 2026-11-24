@@ -18,6 +18,7 @@
 package org.apache.pekko.stream.connectors.googlecloud.bigquery.javadsl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.Map;
@@ -51,14 +52,45 @@ public class BigQueryJavaApiTest {
             .withMaximumBytesBilled(java.util.OptionalLong.of(5L));
     Optional<Long> maximumBytesBilled = request.getMaximumBytesBilled();
     assertEquals(Optional.of(5L), maximumBytesBilled);
-    assertEquals(Optional.of(LABELS), request.getLabels());
+    Optional<Map<String, String>> labels = request.getLabelsAsJava();
+    assertEquals(Optional.of(LABELS), labels);
+  }
+
+  /** The deprecated getter still returns a Scala Map, as callers compiled against 1.x expect. */
+  @Test
+  @SuppressWarnings("deprecation")
+  public void queryRequestDeprecatedGetLabelsReturnsScalaMap() {
+    QueryRequest request =
+        QueryRequest.create(
+                "SELECT 1",
+                OptionalInt.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty(),
+                Optional.empty())
+            .withLabels(Optional.of(LABELS));
+    Optional<scala.collection.immutable.Map<String, String>> labels = request.getLabels();
+    assertEquals(scala.Option.apply("v"), labels.get().get("k"));
   }
 
   @Test
   public void jobConfigurationLabels() {
     JobConfiguration configuration =
         JobConfiguration.create(Optional.empty()).withLabels(Optional.of(LABELS));
-    assertEquals(Optional.of(LABELS), configuration.getLabels());
+    Optional<Map<String, String>> labels = configuration.getLabelsAsJava();
+    assertEquals(Optional.of(LABELS), labels);
+    assertThrows(UnsupportedOperationException.class, () -> labels.get().put("x", "y"));
+  }
+
+  /** The deprecated getter still returns a Scala Map, as callers compiled against 1.x expect. */
+  @Test
+  @SuppressWarnings("deprecation")
+  public void jobConfigurationDeprecatedGetLabelsReturnsScalaMap() {
+    JobConfiguration configuration =
+        JobConfiguration.create(Optional.empty()).withLabels(Optional.of(LABELS));
+    Optional<scala.collection.immutable.Map<String, String>> labels = configuration.getLabels();
+    assertEquals(scala.Option.apply("v"), labels.get().get("k"));
   }
 
   @Test

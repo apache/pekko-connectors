@@ -64,7 +64,23 @@ final case class QueryRequest private[bigquery] (query: String,
   def getRequestId = requestId.toJava
   def getLocation = location.toJava
   def getMaximumBytesBilled: util.Optional[lang.Long] = maximumBytesBilled.map(lang.Long.valueOf).toJava
-  def getLabels: util.Optional[util.Map[String, String]] = labels.map(_.asJava).toJava
+
+  /**
+   * Java API
+   *
+   * @deprecated the optional value of this getter is a Scala `Map`, which is awkward to use from Java.
+   *             Use [[getLabelsAsJava]], which returns a `java.util.Map`.
+   */
+  @deprecated("Use getLabelsAsJava, which returns a java.util.Map", "2.0.0")
+  def getLabels: util.Optional[Map[String, String]] = labels.toJava
+
+  /**
+   * Java API: the labels as an unmodifiable `java.util.Map`
+   *
+   * @since 2.0.0
+   */
+  def getLabelsAsJava: util.Optional[util.Map[String, String]] =
+    labels.map(m => util.Collections.unmodifiableMap(m.asJava)).toJava
 
   def withQuery(query: String) =
     copy(query = query)
