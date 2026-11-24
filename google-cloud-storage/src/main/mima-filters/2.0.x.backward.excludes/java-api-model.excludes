@@ -15,10 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# StorageObject Java API uses java.lang.Boolean/Integer and java.util.Map/List instead of Scala Boolean/Int
-# (erased to Object) and Scala Map/List; the erased signatures are unchanged
+# StorageObject Java getters use java.lang.Boolean instead of Scala Boolean (erased to Object);
+# the erased signatures and the values returned at runtime are unchanged
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject.getTemporaryHold")
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject.getEventBasedHold")
-ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.StorageObject.create")
 # FailedUpload.create accepts a java.util.List of any Throwable subtype; the erased signature is unchanged
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.storage.FailedUpload.create")
