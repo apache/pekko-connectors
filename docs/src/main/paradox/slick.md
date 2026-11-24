@@ -1,3 +1,12 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  license agreements; and to You under the Apache License, version 2.0:
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+  This file is part of the Apache Pekko project, which was derived from Akka.
+-->
+
 # Slick (JDBC)
 
 The Slick connector provides Scala and Java DSLs to create a `Source` to stream the results of a SQL database query and a `Flow`/`Sink` to perform SQL actions (like inserts, updates, and deletes) for each element in a stream. It is built on the [Slick](https://scala-slick.org/) library to interact with a long list of @extref[supported relational databases](slick:supported-databases.html).

@@ -1,3 +1,12 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  license agreements; and to You under the Apache License, version 2.0:
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+  This file is part of the Apache Pekko project, which was derived from Akka.
+-->
+
 # Versioning 
 
 Apache Pekko Connectors uses the versioning scheme `major.minor.patch` (just as the rest of the Apache Pekko family of projects). The Apache Pekko family diverges a bit from Semantic Versioning in that new, compatible functionality is added in patch releases.

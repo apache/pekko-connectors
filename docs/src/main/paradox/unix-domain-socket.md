@@ -1,3 +1,12 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  license agreements; and to You under the Apache License, version 2.0:
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+  This file is part of the Apache Pekko project, which was derived from Akka.
+-->
+
 # Unix Domain Socket
 
 [From Wikipedia](https://en.wikipedia.org/wiki/Unix_domain_socket), _A Unix domain socket or IPC socket (inter-process communication socket) is a data communications endpoint for exchanging data between processes executing on the same host operating system._ Unix Domain Sockets leverage files and so operating system level access control can be utilized. This is a security advantage over using TCP/UDP where IPC is required without a more complex [Transport Layer Security (TLS)](https://en.wikipedia.org/wiki/Transport_Layer_Security). Performance also favors Unix Domain Sockets over TCP/UDP given that the Operating System's network stack is bypassed.
