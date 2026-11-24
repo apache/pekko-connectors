@@ -55,6 +55,20 @@ final class SendRetrySettings private (val initialRetry: scala.concurrent.durati
       : FiniteDuration = (initialRetry * Math.pow(retryNumber, backoffFactor)).asInstanceOf[FiniteDuration].min(
     maxBackoff)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getInitialRetry: java.time.Duration = initialRetry.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getMaxBackoff: java.time.Duration = maxBackoff.toJava
+
   private def copy(
       initialRetry: scala.concurrent.duration.FiniteDuration = initialRetry,
       backoffFactor: Double = backoffFactor,

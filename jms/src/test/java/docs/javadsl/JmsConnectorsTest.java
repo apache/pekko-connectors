@@ -419,7 +419,8 @@ public class JmsConnectorsTest {
           Sink<JmsTextMessage, CompletionStage<Done>> jmsSink =
               JmsProducer.sink(
                   JmsProducerSettings.create(producerConfig, connectionFactory)
-                      .withDestination(new CustomDestination("custom", createQueue("custom"))));
+                      .withDestination(
+                          CustomDestination.fromFunction("custom", createQueue("custom"))));
 
           List<JmsTextMessage> msgsIn = createTestMessageList();
 
@@ -429,7 +430,8 @@ public class JmsConnectorsTest {
           Source<Message, JmsConsumerControl> jmsSource =
               JmsConsumer.create(
                   JmsConsumerSettings.create(system, connectionFactory)
-                      .withDestination(new CustomDestination("custom", createQueue("custom"))));
+                      .withDestination(
+                          CustomDestination.fromFunction("custom", createQueue("custom"))));
           // #custom-destination
 
           CompletionStage<List<Message>> result =

@@ -19,6 +19,7 @@ import com.typesafe.config.{ Config, ConfigValueType }
 
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.DurationConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Settings for [[pekko.stream.connectors.jms.scaladsl.JmsProducer]] and [[pekko.stream.connectors.jms.javadsl.JmsProducer]].
@@ -74,7 +75,12 @@ final class JmsProducerSettings private (
    * Java API: Time messages should be kept on the JMS broker. This setting can be overridden on
    * individual messages. If not set, messages will never expire.
    */
-  def withTimeToLive(value: java.time.Duration): JmsProducerSettings = copy(timeToLive = Option(value).map(_.toScala))
+  def withTimeToLive(value: java.time.Duration): JmsProducerSettings =
+    copy(timeToLive = Option(value).map { ttl =>
+      // `ChronoUnit.FOREVER.getDuration` is what `getTimeToLive` returns for an infinite time to live
+      if (ttl == java.time.temporal.ChronoUnit.FOREVER.getDuration) scala.concurrent.duration.Duration.Inf
+      else ttl.toScala
+    })
 
   /** Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: FiniteDuration): JmsProducerSettings =
@@ -83,6 +89,39 @@ final class JmsProducerSettings private (
   /** Java API: Timeout for connection status subscriber */
   def withConnectionStatusSubscriptionTimeout(value: java.time.Duration): JmsProducerSettings =
     copy(connectionStatusSubscriptionTimeout = value.toScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getDestination: java.util.Optional[Destination] = destination.toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getCredentials: java.util.Optional[Credentials] = credentials.toJava
+
+  /**
+   * Java API: an infinite time to live is returned as `ChronoUnit.FOREVER.getDuration`,
+   * which `withTimeToLive` accepts to set an infinite time to live
+   *
+   * @since 2.0.0
+   */
+  def getTimeToLive: java.util.Optional[java.time.Duration] = timeToLive.map(ttl =>
+    ttl match {
+      case finite: scala.concurrent.duration.FiniteDuration => finite.toJava
+      case _                                                => java.time.temporal.ChronoUnit.FOREVER.getDuration
+    }).toJava
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConnectionStatusSubscriptionTimeout: java.time.Duration = connectionStatusSubscriptionTimeout.toJava
 
   private def copy(
       connectionFactory: javax.jms.ConnectionFactory = connectionFactory,

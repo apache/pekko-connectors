@@ -137,8 +137,10 @@ private class JmsMessageProducer(jmsProducer: jms.MessageProducer, jmsSession: J
 private[impl] object JmsMessageProducer {
   def apply(jmsSession: JmsProducerSession, settings: JmsProducerSettings, epoch: Int): JmsMessageProducer = {
     val producer = jmsSession.session.createProducer(null)
-    if (settings.timeToLive.nonEmpty) {
-      producer.setTimeToLive(settings.timeToLive.get.toMillis)
+    settings.timeToLive.foreach {
+      // an infinite duration cannot be converted to millis; JMS uses zero for an unlimited time to live
+      case scala.concurrent.duration.Duration.Inf => producer.setTimeToLive(0L)
+      case timeToLive                             => producer.setTimeToLive(timeToLive.toMillis)
     }
     new JmsMessageProducer(producer, jmsSession, epoch)
   }
