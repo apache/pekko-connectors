@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.mqtt.streaming
 import java.nio.ByteOrder
 import java.nio.charset.StandardCharsets
 import java.util.{ NoSuchElementException, Optional }
-import java.util.concurrent.{ CompletionStage, ForkJoinPool, TimeUnit }
+import java.util.concurrent.{ CompletableFuture, CompletionStage, ForkJoinPool, TimeUnit }
 
 import org.apache.pekko
 import pekko.Done
@@ -1195,6 +1195,33 @@ object MqttCodec {
 object Command {
 
   /**
+   * Runs the completion of the stage given to the Java API constructor, so that the callbacks a caller has
+   * registered on that stage do not run on the session's thread. Shared by all commands.
+   */
+  private val completionExecutionContext: ExecutionContext = ExecutionContext.fromExecutor(ForkJoinPool.commonPool())
+
+  /**
+   * The future through which `stage` can be completed, for the Java API constructor.
+   * A [[java.util.concurrent.CompletableFuture]] returns itself from `toCompletableFuture`, and an adapter may
+   * return the writable future backing it; both are stable across calls. A stage that hands out a new copy on
+   * each call (such as a minimal completion stage) cannot be completed this way, as completing the copy does not
+   * complete the stage.
+   */
+  private def writableFuture(stage: CompletionStage[Done]): CompletableFuture[Done] = {
+    def reject(): Nothing =
+      throw new IllegalArgumentException(
+        "completed must be a CompletableFuture, or a stage whose toCompletableFuture returns the writable " +
+        s"future backing it, but got ${stage.getClass.getName}")
+    val future =
+      try stage.toCompletableFuture
+      catch { case _: UnsupportedOperationException => reject() }
+    // A CompletableFuture returns itself and needs no further check. For any other stage, asking a second
+    // time is deliberate: it is the only way to tell a live backing future from a copy.
+    if ((future eq null) || ((future ne stage) && (future ne stage.toCompletableFuture))) reject()
+    future
+  }
+
+  /**
    * Send a command to an MQTT session
    * @param command The command to send
    * @tparam A The type of data being carried through in general, but not here
@@ -1247,21 +1274,12 @@ final case class Command[A](command: ControlPacket, completed: Option[Promise[Do
     this(
       command,
       completed.toScala.map { stage =>
-        val f =
-          try stage.toCompletableFuture
-          catch { case _: UnsupportedOperationException => null }
-        // A CompletableFuture returns itself, and an adapter may return the writable future backing it; both
-        // are stable across calls. A stage that hands out a new copy on each call (such as a minimal completion
-        // stage) cannot be completed this way, as completing the copy does not complete the stage.
-        if ((f eq null) || ((f ne stage) && (f ne stage.toCompletableFuture)))
-          throw new IllegalArgumentException(
-            "completed must be a CompletableFuture, or a stage whose toCompletableFuture returns the writable " +
-            s"future backing it, but got ${stage.getClass.getName}")
+        val f = Command.writableFuture(stage)
         val p = Promise[Done]()
         p.future.onComplete {
           case Success(done) => f.complete(done)
           case Failure(ex)   => f.completeExceptionally(ex)
-        }(ExecutionContext.fromExecutorService(ForkJoinPool.commonPool()))
+        }(Command.completionExecutionContext)
         p
       },
       carry.toScala)
