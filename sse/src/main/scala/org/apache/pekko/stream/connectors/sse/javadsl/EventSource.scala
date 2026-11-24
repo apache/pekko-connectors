@@ -29,6 +29,7 @@ import pekko.stream.javadsl.Source
 import scala.jdk.FutureConverters
 import scala.jdk.OptionConverters
 import scala.concurrent.Future
+import scala.jdk.DurationConverters._
 
 /**
  * This stream processing stage establishes a continuous source of server-sent events from the given URI.
@@ -87,14 +88,43 @@ object EventSource {
   def create(uri: Uri,
       send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
       lastEventId: Optional[String],
+      system: ClassicActorSystemProvider): Source[ServerSentEvent, NotUsed] =
+    create(uri, send, lastEventId, java.time.Duration.ZERO, system)
+
+  /**
+   * @param uri URI with absolute path, e.g. "http://myserver/events
+   * @param send function to send a HTTP request
+   * @param lastEventId initial value for Last-Evend-ID header, optional
+   * @param retryDelay delay for retrying after completion
+   * @param system actor system (classic or new API)
+   * @return continuous source of server-sent events
+   * @since 2.0.0
+   */
+  def create(uri: Uri,
+      send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
+      lastEventId: Optional[String],
+      retryDelay: java.time.Duration,
       system: ClassicActorSystemProvider): Source[ServerSentEvent, NotUsed] = {
     val eventSource =
       scaladsl
         .EventSource(
           uri.asScala,
           send(_).asScala.asInstanceOf[Future[SHttpResponse]],
-          lastEventId.toScala)(system)
+          lastEventId.toScala,
+          retryDelay.toScala)(system)
         .map(v => v: ServerSentEvent)
     eventSource.asJava
   }
+
+  /**
+   * @param uri URI with absolute path, e.g. "http://myserver/events
+   * @param send function to send a HTTP request
+   * @param system actor system (classic or new API)
+   * @return continuous source of server-sent events
+   * @since 2.0.0
+   */
+  def create(uri: Uri,
+      send: JFunction[HttpRequest, CompletionStage[HttpResponse]],
+      system: ClassicActorSystemProvider): Source[ServerSentEvent, NotUsed] =
+    create(uri, send, Optional.empty[String](), java.time.Duration.ZERO, system)
 }

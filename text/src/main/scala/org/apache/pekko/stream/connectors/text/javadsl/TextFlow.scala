@@ -33,7 +33,7 @@ object TextFlow {
     ScalaTextFlow.decoding(incoming).asJava
 
   /**
-   * Decodes a stream of bytes into a stream of characters, using the supplied charset.
+   * Encodes a stream of characters into a stream of bytes, using the supplied charset.
    */
   def encoding(outgoing: Charset): Flow[String, ByteString, NotUsed] =
     Flow.fromFunction((s: String) => ByteString.fromString(s, outgoing))

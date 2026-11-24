@@ -19,9 +19,9 @@ import org.apache.pekko.util.ByteString
 
 final class Datagram private (val data: ByteString, val remote: InetSocketAddress) {
 
-  def withData(data: ByteString) = copy(data = data)
+  def withData(data: ByteString): Datagram = copy(data = data)
 
-  def withRemote(remote: InetSocketAddress) = copy(remote = remote)
+  def withRemote(remote: InetSocketAddress): Datagram = copy(remote = remote)
 
   /**
    * Java API
@@ -33,7 +33,7 @@ final class Datagram private (val data: ByteString, val remote: InetSocketAddres
    */
   def getRemote(): InetSocketAddress = remote
 
-  private def copy(data: ByteString = data, remote: InetSocketAddress = remote) =
+  private def copy(data: ByteString = data, remote: InetSocketAddress = remote): Datagram =
     new Datagram(data, remote)
 
   override def toString: String =
@@ -44,10 +44,10 @@ final class Datagram private (val data: ByteString, val remote: InetSocketAddres
 }
 
 object Datagram {
-  def apply(data: ByteString, remote: InetSocketAddress) = new Datagram(data, remote)
+  def apply(data: ByteString, remote: InetSocketAddress): Datagram = new Datagram(data, remote)
 
   /**
    * Java API
    */
-  def create(data: ByteString, remote: InetSocketAddress) = Datagram(data, remote)
+  def create(data: ByteString, remote: InetSocketAddress): Datagram = Datagram(data, remote)
 }
