@@ -1196,9 +1196,11 @@ object Command {
 
   /**
    * Runs the completion of the stage given to the Java API constructor, so that the callbacks a caller has
-   * registered on that stage do not run on the session's thread. Shared by all commands.
+   * registered on that stage do not run on the session's thread. Shared by all commands, and lazy as only
+   * commands created through the Java API constructor need it.
    */
-  private val completionExecutionContext: ExecutionContext = ExecutionContext.fromExecutor(ForkJoinPool.commonPool())
+  private lazy val completionExecutionContext: ExecutionContext =
+    ExecutionContext.fromExecutor(ForkJoinPool.commonPool())
 
   /**
    * The future through which `stage` can be completed, for the Java API constructor.
