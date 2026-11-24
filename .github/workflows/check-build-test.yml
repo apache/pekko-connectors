@@ -26,6 +26,60 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  classify-pr:
+    name: Classify root README changes
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+    outputs:
+      docs_only: ${{ steps.classify.outputs.docs_only }}
+    steps:
+      - name: Checkout exact PR merge
+        id: checkout
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          fetch-tags: false
+          persist-credentials: false
+
+      - name: Prove that only the existing root README changed
+        id: classify
+        if: steps.checkout.outcome == 'success'
+        continue-on-error: true
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 -I - <<'PYTHON'
+          import os
+          import re
+          import subprocess
+
+          def git(*args):
+              return subprocess.check_output(("git", *args))
+
+          def readme_only(before, after):
+              # Compare a single NUL-delimited raw record. Adds, deletes, mode
+              # changes and rename pairs must all run the existing jobs.
+              raw = git("diff", "--raw", "-z", "--no-abbrev", "--no-renames", "--no-ext-diff",
+                        "--no-textconv", "--ignore-submodules=none", before, after, "--")
+              return re.fullmatch(rb":100644 100644 [0-9a-f]{40} [0-9a-f]{40} M\x00README\.md\x00", raw)
+
+          base, head, merge = (os.environ[k] for k in ("PR_BASE_SHA", "PR_HEAD_SHA", "GITHUB_SHA"))
+          if all(re.fullmatch(r"[0-9a-f]{40}", sha) for sha in (base, head, merge)):
+              checked_out = git("rev-parse", "HEAD").decode("ascii").strip()
+              parents = git("rev-list", "--parents", "-n", "1", merge).decode("ascii").split()
+              if checked_out == merge and parents == [merge, base, head]:
+                  merge_bases = git("merge-base", "--all", base, head).decode("ascii").split()
+                  # Require both the PR's own delta and its final merge delta.
+                  if len(merge_bases) == 1 and readme_only(merge_bases[0], head) and readme_only(base, merge):
+                      with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+                          output.write("docs_only=true\n")
+          PYTHON
+
   style-compile-mima:
     name: Compile, Code Style, Binary Compatibility
     runs-on: ubuntu-22.04
@@ -90,8 +144,14 @@ jobs:
           sbt docs/paradox unidoc
 
   connectors:
+    needs: classify-pr
+    if: >-
+      ${{ always() && !cancelled() &&
+          github.repository == 'apache/pekko-connectors' &&
+          (github.event_name != 'pull_request' ||
+           needs.classify-pr.result != 'success' ||
+           needs.classify-pr.outputs.docs_only != 'true') }}
     runs-on: ubuntu-22.04
-    if: github.repository == 'apache/pekko-connectors'
 
     strategy:
       fail-fast: false
@@ -184,8 +244,14 @@ jobs:
         run: find . -name "*.log" -exec ./scripts/cat-log.sh {} \;
 
   connectors-windows:
+    needs: classify-pr
+    if: >-
+      ${{ always() && !cancelled() &&
+          github.repository == 'apache/pekko-connectors' &&
+          (github.event_name != 'pull_request' ||
+           needs.classify-pr.result != 'success' ||
+           needs.classify-pr.outputs.docs_only != 'true') }}
     runs-on: windows-latest
-    if: github.repository == 'apache/pekko-connectors'
 
     strategy:
       fail-fast: false
