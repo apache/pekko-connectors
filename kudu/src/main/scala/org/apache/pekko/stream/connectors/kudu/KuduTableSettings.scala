@@ -32,6 +32,22 @@ final class KuduTableSettings[T] private (val tableName: String,
       createTableOptions = createTableOptions,
       converter = value)
 
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withJavaConverter[A](value: java.util.function.Function[A, org.apache.kudu.client.PartialRow])
+      : KuduTableSettings[A] =
+    withConverter(value.asScala)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getConverter: java.util.function.Function[T, org.apache.kudu.client.PartialRow] = converter.asJava
+
   private def copy(
       tableName: String = tableName,
       schema: org.apache.kudu.Schema = schema,
