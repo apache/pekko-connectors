@@ -17,6 +17,10 @@
 
 package org.apache.pekko.stream.connectors.huawei.pushkit
 
+import org.apache.pekko
+import pekko.actor.ActorSystem
+import pekko.http.scaladsl.Http
+import pekko.testkit.TestKit
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -60,6 +64,18 @@ class ForwardProxyHttpsContextSpec extends AnyWordSpec with Matchers {
       val engine =
         ForwardProxyHttpsContext.createSSLEngine(sslContext(), Array("TLSv1.2", "TLSv1.3"), "example.com", 443)
       engine.getSSLParameters.getEndpointIdentificationAlgorithm shouldBe "https"
+    }
+  }
+
+  "ForwardProxy.httpsContext" should {
+
+    "use the default client HTTPS context without a trust pem, whatever the min TLS version" in {
+      import ForwardProxyHttpsContext.ForwardProxyHttpsContext
+      val system = ActorSystem("ForwardProxyHttpsContextSpec")
+      try {
+        val proxy = ForwardProxy("proxy", 8080, None, None, "TLSv1.3")
+        proxy.httpsContext(system) shouldBe theSameInstanceAs(Http()(system).defaultClientHttpsContext)
+      } finally TestKit.shutdownActorSystem(system)
     }
   }
 }

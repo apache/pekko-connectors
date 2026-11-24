@@ -280,7 +280,12 @@ final case class ForwardProxy @InternalApi private (host: String,
   def withCredentials(credentials: ForwardProxyCredentials) = copy(credentials = Option(credentials))
   def withTrustPem(trustPem: ForwardProxyTrustPem) = copy(trustPem = Option(trustPem))
 
-  /** @since 2.0.0 */
+  /**
+   * Sets the minimum TLS version, `TLSv1.2` or `TLSv1.3`. It is only applied when a trust pem is set.
+   * Without a trust pem the default client HTTPS context of Pekko HTTP is used unchanged.
+   *
+   * @since 2.0.0
+   */
   def withMinTlsVersion(minTlsVersion: String) = copy(minTlsVersion = minTlsVersion)
 }
 

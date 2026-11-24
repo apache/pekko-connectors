@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.google
 import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.{ javadsl => jh }
+import pekko.http.scaladsl.Http
 import pekko.testkit.TestKit
 import com.typesafe.config.ConfigFactory
 import org.scalatest.BeforeAndAfterAll
@@ -165,5 +166,11 @@ class GoogleSettingsSpec
     @nowarn("cat=deprecation")
     val thrown = the[IllegalArgumentException] thrownBy ForwardProxy.create(context, poolSettings)
     thrown.getMessage should include("HttpsConnectionContext")
+  }
+
+  it should
+  "use the default client HTTPS context for a ForwardProxy without a trust pem, whatever the min TLS version" in {
+    val proxy = ForwardProxy("https", "proxy", 8080, None, None, "TLSv1.3")
+    proxy.connectionContext shouldBe theSameInstanceAs(Http(system).defaultClientHttpsContext)
   }
 }
