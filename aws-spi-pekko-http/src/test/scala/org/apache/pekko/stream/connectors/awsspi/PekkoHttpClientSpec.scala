@@ -29,7 +29,7 @@ import org.apache.pekko
 import pekko.actor.ActorSystem
 import pekko.http.scaladsl.ConnectionContext
 import pekko.http.scaladsl.model.headers.`Content-Type`
-import pekko.http.scaladsl.model.{ ContentTypes, HttpHeader, HttpMethods, MediaTypes }
+import pekko.http.scaladsl.model.{ ContentTypes, HttpEntity, HttpHeader, HttpMethods, MediaTypes }
 import pekko.http.scaladsl.settings.{ ClientConnectionSettings, ConnectionPoolSettings }
 import org.reactivestreams.Subscriber
 import org.scalatest.OptionValues
@@ -149,6 +149,69 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
         PekkoHttpClient.entityForMethodAndContentType(HttpMethods.PUT, ContentTypes.NoContentType, publisher,
           Some(42L))
       entity.contentLengthOption shouldBe Some(42L)
+    }
+
+    "attach the request body for a DELETE request when the SDK provides content" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(10L)
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.DELETE, ContentTypes.`application/json`, publisher)
+      entity.contentLengthOption shouldBe Some(10L)
+      entity.contentType shouldBe ContentTypes.`application/json`
+    }
+
+    "attach the request body for a GET request when the SDK headers provide a content length" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      val entity =
+        PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType, publisher,
+          Some(5L))
+      entity.contentLengthOption shouldBe Some(5L)
+    }
+
+    "keep a GET request bodiless when the declared content length is zero" in {
+      val emptyPublisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(0L)
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      val unknownLengthPublisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType,
+        emptyPublisher) shouldBe HttpEntity.Empty
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.GET, ContentTypes.NoContentType,
+        unknownLengthPublisher, Some(0L)) shouldBe HttpEntity.Empty
+    }
+
+    "not drop the request body of a GET or DELETE request when the content length is unknown" in {
+      Seq(HttpMethods.GET, HttpMethods.DELETE).foreach { method =>
+        val publisher = new SdkHttpContentPublisher {
+          override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.empty()
+          override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+        }
+        val entity =
+          PekkoHttpClient.entityForMethodAndContentType(method, ContentTypes.`application/json`, publisher)
+        withClue(s"$method: ") {
+          entity should not be HttpEntity.Empty
+          entity.isKnownEmpty() shouldBe false
+          entity.contentLengthOption shouldBe None
+          entity.contentType shouldBe ContentTypes.`application/json`
+        }
+      }
+    }
+
+    "never attach a request body for a method that disallows an entity" in {
+      val publisher = new SdkHttpContentPublisher {
+        override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(10L)
+        override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+      }
+      PekkoHttpClient.entityForMethodAndContentType(HttpMethods.HEAD, ContentTypes.NoContentType,
+        publisher) shouldBe HttpEntity.Empty
     }
 
     "build() should apply SDK GLOBAL_HTTP_DEFAULTS by default" in {

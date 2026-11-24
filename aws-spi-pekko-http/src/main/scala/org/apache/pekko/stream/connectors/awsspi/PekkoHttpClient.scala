@@ -31,7 +31,7 @@ import pekko.http.scaladsl.{ ConnectionContext, Http, HttpsConnectionContext }
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult
 import pekko.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import pekko.http.scaladsl.model.MediaType.Compressible
-import pekko.http.scaladsl.model.RequestEntityAcceptance.Expected
+import pekko.http.scaladsl.model.RequestEntityAcceptance.{ Expected, Tolerated }
 import pekko.http.scaladsl.model._
 import pekko.http.scaladsl.model.headers.{ `Content-Length`, `Content-Type` }
 import pekko.http.scaladsl.settings.ConnectionPoolSettings
@@ -106,22 +106,35 @@ object PekkoHttpClient {
   private[awsspi] def entityForMethodAndContentType(method: HttpMethod,
       contentType: ContentType,
       contentPublisher: SdkHttpContentPublisher,
-      sdkContentLength: Option[Long] = None): RequestEntity =
+      sdkContentLength: Option[Long] = None): RequestEntity = {
+    // Prefer the content length from the SDK request headers over the publisher's value.
+    // This ensures that when the AWS SDK has set a Content-Length (which it always does for
+    // non-chunked-signing requests like UploadPart), Pekko HTTP sends a Content-Length entity
+    // rather than falling back to chunked transfer encoding, which would break AWS SigV4 signing.
+    def contentLength: Option[Long] =
+      sdkContentLength.orElse(contentPublisher.contentLength().toScala.map(_.toLong))
+    def dataSource = Source.fromPublisher(contentPublisher).map(ByteString(_))
     method.requestEntityAcceptance match {
       case Expected =>
-        // Prefer the content length from the SDK request headers over the publisher's value.
-        // This ensures that when the AWS SDK has set a Content-Length (which it always does for
-        // non-chunked-signing requests like UploadPart), Pekko HTTP sends a Content-Length entity
-        // rather than falling back to chunked transfer encoding, which would break AWS SigV4 signing.
-        val contentLength: Option[Long] =
-          sdkContentLength.orElse(contentPublisher.contentLength().toScala.map(_.toLong))
         contentLength match {
-          case Some(length) =>
-            HttpEntity(contentType, length, Source.fromPublisher(contentPublisher).map(ByteString(_)))
-          case None => HttpEntity(contentType, Source.fromPublisher(contentPublisher).map(ByteString(_)))
+          case Some(length) => HttpEntity(contentType, length, dataSource)
+          case None         => HttpEntity(contentType, dataSource)
+        }
+      case Tolerated =>
+        // Methods such as GET and DELETE tolerate an entity: attach the SDK's payload when one
+        // is present instead of silently dropping it (its hash is part of the SigV4 signature).
+        // The SDK models the length as optional, and an unknown length is not the same as no
+        // body: only a declared length of zero means the request is bodiless (that is what the
+        // SDK reports for requests without a payload). A publisher with an unknown length is
+        // streamed the same way as for methods that expect an entity.
+        contentLength match {
+          case Some(length) if length > 0 => HttpEntity(contentType, length, dataSource)
+          case Some(_)                    => HttpEntity.Empty
+          case None                       => HttpEntity(contentType, dataSource)
         }
       case _ => HttpEntity.Empty
     }
+  }
 
   private[awsspi] def convertMethod(method: String): HttpMethod =
     HttpMethods
