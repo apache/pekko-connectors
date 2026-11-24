@@ -126,11 +126,13 @@ object PekkoHttpClient {
         // The SDK models the length as optional, and an unknown length is not the same as no
         // body: only a declared length of zero means the request is bodiless (that is what the
         // SDK reports for requests without a payload). A publisher with an unknown length is
-        // streamed the same way as for methods that expect an entity.
+        // streamed the same way as for methods that expect an entity. A negative length is
+        // invalid and is rejected by HttpEntity, as it is for methods that expect an entity,
+        // rather than being treated as bodiless.
         contentLength match {
-          case Some(length) if length > 0 => HttpEntity(contentType, length, dataSource)
-          case Some(_)                    => HttpEntity.Empty
-          case None                       => HttpEntity(contentType, dataSource)
+          case Some(0L)     => HttpEntity.Empty
+          case Some(length) => HttpEntity(contentType, length, dataSource)
+          case None         => HttpEntity(contentType, dataSource)
         }
       case _ => HttpEntity.Empty
     }
@@ -166,8 +168,8 @@ object PekkoHttpClient {
     }
 
     // the headers are accumulated in reverse (prepend is O(1)) and reversed once at the end
-    val (contentTypeHeader, reversedHeaders, sdkContentLength) = headersAsScala.foldLeft((Option.empty[HttpHeader],
-      List.empty[HttpHeader], Option.empty[Long])) {
+    val noHeaders = (Option.empty[HttpHeader], List.empty[HttpHeader], Option.empty[Long])
+    val (contentTypeHeader, reversedHeaders, sdkContentLength) = headersAsScala.foldLeft(noHeaders) {
       case ((ctHeader, hdrs, contentLength), header) =>
         val (headerName, headerValue) = header
         val values = {
@@ -175,14 +177,13 @@ object PekkoHttpClient {
           headerValue.forEach(v => list += v)
           list.result()
         }
-        def requireSingleValue(): String = {
-          if (values.size != 1) {
-            throw new IllegalArgumentException(s"Found invalid header: key: $headerName, Value: $values.")
-          }
-          values.head
-        }
         if (values.isEmpty) {
           throw new IllegalArgumentException(s"Found invalid header with no values: key: $headerName.")
+        }
+        def requireSingleValue(): String = values match {
+          case value :: Nil => value
+          case _            =>
+            throw new IllegalArgumentException(s"Found invalid header: key: $headerName, Value: $values.")
         }
         val lowercaseName = headerName.toLowerCase(Locale.ROOT)
         // skip content-length as it will be managed by pekko-http in the entity, but capture its value
