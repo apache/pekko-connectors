@@ -210,7 +210,7 @@ object PekkoHttpClient {
   // RFC 9110 defines Content-Length as 1*DIGIT, which is stricter than what String.toLong accepts
   // (a leading sign, non-ASCII digits), so the form is validated before the conversion.
   private def parseContentLength(headerValue: String): Long = {
-    def invalid() =
+    def invalid(): Nothing =
       throw new IllegalArgumentException(s"Found invalid Content-Length header value: '$headerValue'.")
     if (headerValue.isEmpty || !headerValue.forall(c => c >= '0' && c <= '9')) invalid()
     try headerValue.toLong
