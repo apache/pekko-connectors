@@ -90,7 +90,8 @@ import scala.util.control.NonFatal
 
   def handleSentEvent(completableFuture: CompletableFuture[TableEntry]): Unit =
     completableFuture.asScala.onComplete { t =>
-      asyncMessageSendCallback.invokeWithFeedback(t)
+      // a result that arrives after the stage stopped is dropped, postStop reports those
+      asyncMessageSendCallback.invoke(t)
     }
 
   setHandler(
@@ -123,9 +124,11 @@ import scala.util.control.NonFatal
    */
   override def postStop(): Unit = {
     log.debug("Closing table {}", tableName)
-    PravegaTableCleanup.closeTableAndFactory(
-      if (table ne null) table.close(),
-      if (keyValueTableFactory ne null) keyValueTableFactory.close())((what, exc) =>
+    val pending = inFlight
+    if (pending > 0)
+      log.warning("Table [{}] is closed with {} reads in flight, their outcome will not be emitted", tableName,
+        pending)
+    PravegaTableCleanup.closeTableAndFactory(table, keyValueTableFactory)((what, exc) =>
       log.error(exc, "Error while closing {} for [{}]", what, tableName))
   }
 

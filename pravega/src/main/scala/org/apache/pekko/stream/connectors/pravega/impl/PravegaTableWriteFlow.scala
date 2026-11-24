@@ -32,7 +32,7 @@ import io.pravega.client.tables.Version
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.jdk.FutureConverters._
-import scala.util.{ Failure, Success, Try }
+import scala.util.{ Failure, Try }
 import scala.util.control.NonFatal
 
 @InternalApi private final class PravegaTableWriteFlowStageLogic[KVPair, K, V](
@@ -91,7 +91,8 @@ import scala.util.control.NonFatal
 
   def handleSentEvent(completableFuture: CompletableFuture[Version], msg: KVPair): Unit =
     completableFuture.asScala.onComplete { t =>
-      asyncPushback.invokeWithFeedback((t, msg))
+      // a result that arrives after the stage stopped is dropped, postStop reports those
+      asyncPushback.invoke((t, msg))
     }
 
   setHandler(
@@ -132,10 +133,13 @@ import scala.util.control.NonFatal
    */
   override def postStop(): Unit = {
     log.debug("Closing table {}", tableName)
-    PravegaTableCleanup.closeTableAndFactory(
-      if (table ne null) table.close(),
-      if (keyValueTableFactory ne null) keyValueTableFactory.close())((what, exc) =>
+    val pending = onAir.get
+    if (pending > 0)
+      log.warning("Table [{}] is closed with {} updates in flight, their outcome will not be emitted", tableName,
+        pending)
+    val closed = PravegaTableCleanup.closeTableAndFactory(table, keyValueTableFactory)((what, exc) =>
       log.error(exc, "Error while closing {} for [{}]", what, tableName))
+    if (closed) log.debug("Closed table [{}]", tableName)
   }
 
 }

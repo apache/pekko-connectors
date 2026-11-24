@@ -24,13 +24,19 @@ import scala.collection.mutable.ListBuffer
 
 class PravegaTableCleanupSpec extends AnyWordSpec with Matchers {
 
+  private def closeable(body: => Unit): AutoCloseable = new AutoCloseable {
+    override def close(): Unit = body
+  }
+
   "PravegaTableCleanup.closeTableAndFactory" should {
 
     "close the table and then the factory" in {
       val closed = ListBuffer.empty[String]
-      PravegaTableCleanup.closeTableAndFactory(closed += "table", closed += "factory")((_, _) =>
-        fail("no error expected"))
+      val result =
+        PravegaTableCleanup.closeTableAndFactory(closeable(closed += "table"), closeable(closed += "factory"))((_, _) =>
+          fail("no error expected"))
       closed.toList shouldBe List("table", "factory")
+      result shouldBe true
     }
 
     "still close the factory when closing the table fails" in {
@@ -38,35 +44,62 @@ class PravegaTableCleanupSpec extends AnyWordSpec with Matchers {
       // when the table close throws
       val closed = ListBuffer.empty[String]
       val errors = ListBuffer.empty[String]
-      PravegaTableCleanup.closeTableAndFactory(
-        throw new RuntimeException("table boom"),
-        closed += "factory")((what, _) => errors += what)
+      val result = PravegaTableCleanup.closeTableAndFactory(
+        closeable(throw new RuntimeException("table boom")),
+        closeable(closed += "factory"))((what, _) => errors += what)
 
       closed.toList shouldBe List("factory")
       errors.toList shouldBe List("table")
+      result shouldBe false
+    }
+
+    "still close the factory when closing the table fails with an error that is not NonFatal" in {
+      // e.g. the stage is stopped on an interrupted thread
+      val closed = ListBuffer.empty[String]
+      val errors = ListBuffer.empty[String]
+      an[InterruptedException] should be thrownBy {
+        PravegaTableCleanup.closeTableAndFactory(
+          closeable(throw new InterruptedException("table interrupted")),
+          closeable(closed += "factory"))((what, _) => errors += what)
+      }
+
+      closed.toList shouldBe List("factory")
+      errors.toList shouldBe empty
+    }
+
+    "still close the factory when reporting the table failure throws" in {
+      val closed = ListBuffer.empty[String]
+      a[IllegalStateException] should be thrownBy {
+        PravegaTableCleanup.closeTableAndFactory(
+          closeable(throw new RuntimeException("table boom")),
+          closeable(closed += "factory"))((what, _) =>
+          if (what == "table") throw new IllegalStateException("reporting failed"))
+      }
+
+      closed.toList shouldBe List("factory")
     }
 
     "close the factory when the table was never opened" in {
       // preStart creates the factory first: if forKeyValueTable throws, the
       // table field is still null and only the factory needs closing
-      val table: AutoCloseable = null
       val closed = ListBuffer.empty[String]
-      noException should be thrownBy {
-        PravegaTableCleanup.closeTableAndFactory(
-          if (table ne null) table.close(),
-          closed += "factory")((_, _) => fail("no error expected"))
-      }
+      val result = PravegaTableCleanup.closeTableAndFactory(null, closeable(closed += "factory"))((_, _) =>
+        fail("no error expected"))
       closed.toList shouldBe List("factory")
+      result shouldBe true
+    }
+
+    "do nothing when neither the factory nor the table was opened" in {
+      PravegaTableCleanup.closeTableAndFactory(null, null)((_, _) => fail("no error expected")) shouldBe true
     }
 
     "report both failures and not rethrow" in {
       val errors = ListBuffer.empty[String]
-      noException should be thrownBy {
-        PravegaTableCleanup.closeTableAndFactory(
-          throw new RuntimeException("a"),
-          throw new RuntimeException("b"))((what, _) => errors += what)
-      }
+      val result = PravegaTableCleanup.closeTableAndFactory(
+        closeable(throw new RuntimeException("a")),
+        closeable(throw new RuntimeException("b")))((what, _) => errors += what)
       errors.toList shouldBe List("table", "key value table factory")
+      result shouldBe false
     }
   }
 }

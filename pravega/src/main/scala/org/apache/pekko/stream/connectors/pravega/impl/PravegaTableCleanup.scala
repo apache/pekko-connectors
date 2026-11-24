@@ -31,7 +31,7 @@ import scala.util.control.NonFatal
 @InternalApi private[pravega] object PravegaTableCleanup {
 
   /**
-   * Close the table and then the factory.
+   * Close the table and then the factory. Either may be `null`.
    *
    * `preStart` creates the factory first and the table from it, so a failure in
    * between leaves the factory open and the table unset. Both are therefore
@@ -39,18 +39,29 @@ import scala.util.control.NonFatal
    * and has to be released even when closing the table fails or was never
    * needed.
    *
-   * Failures are reported to `onError` and not rethrown; the stage has already
-   * stopped, so failing here would only mask why it stopped.
+   * Non-fatal failures are reported to `onError` and not rethrown; the stage has
+   * already stopped, so failing here would only mask why it stopped. The factory
+   * close is attempted even when the table close, or `onError`, throws something
+   * that is not caught here, such as an `InterruptedException`.
+   *
+   * @return `true` if nothing failed
    */
-  def closeTableAndFactory(closeTable: => Unit, closeFactory: => Unit)(
-      onError: (String, Throwable) => Unit): Unit = {
-    def attempt(what: String, close: => Unit): Unit =
-      try close
-      catch {
-        case NonFatal(exc) => onError(what, exc)
+  def closeTableAndFactory(table: AutoCloseable, factory: AutoCloseable)(
+      onError: (String, Throwable) => Unit): Boolean = {
+    def attempt(what: String, closeable: AutoCloseable): Boolean =
+      try {
+        if (closeable ne null) closeable.close()
+        true
+      } catch {
+        case NonFatal(exc) =>
+          onError(what, exc)
+          false
       }
 
-    attempt("table", closeTable)
-    attempt("key value table factory", closeFactory)
+    var tableClosed = false
+    var factoryClosed = false
+    try tableClosed = attempt("table", table)
+    finally factoryClosed = attempt("key value table factory", factory)
+    tableClosed && factoryClosed
   }
 }

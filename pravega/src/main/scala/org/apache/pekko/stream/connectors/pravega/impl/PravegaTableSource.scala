@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.pravega.impl
 import java.util.function.Consumer
 import org.apache.pekko
 import pekko.stream.stage.{ AsyncCallback, GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
-import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.stream.{ AbruptStageTerminationException, Attributes, Outlet, SourceShape }
 import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.event.Logging
@@ -60,6 +60,9 @@ import io.pravega.common.util.AsyncIterator
 
   private var closing = false
 
+  // set by postStop and read on the Pravega client thread that runs the iteration
+  @volatile private var stopped = false
+
   val logThat: AsyncCallback[String] = getAsyncCallback { message =>
     log.info(message)
   }
@@ -102,15 +105,19 @@ import io.pravega.common.util.AsyncIterator
           if (iteratorItem == null) {
             onFinish.invoke(())
           } else {
-            iteratorItem.getItems.stream().forEach { tableEntry =>
+            val items = iteratorItem.getItems.iterator()
+            while (!stopped && items.hasNext) {
+              val tableEntry = items.next()
               semaphore.acquire()
-
-              val entry = new TableEntry(tableEntry.getKey(),
-                tableEntry.getVersion(),
-                tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
-              onElement.invoke(entry)
+              // postStop releases a permit to wake this thread up, re-check before emitting
+              if (!stopped) {
+                val entry = new TableEntry(tableEntry.getKey(),
+                  tableEntry.getVersion(),
+                  tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
+                onElement.invoke(entry)
+              }
             }
-            nextIteration(iterator)
+            if (!stopped) nextIteration(iterator)
           }
         }
       })
@@ -134,15 +141,20 @@ import io.pravega.common.util.AsyncIterator
     } catch {
       case NonFatal(exception) =>
         log.error(exception.getMessage())
+        startupPromise.tryFailure(exception)
         failStage(exception)
     }
   }
 
   override def postStop(): Unit = {
     log.debug("Stopping reader {}", tableName)
-    PravegaTableCleanup.closeTableAndFactory(
-      if (table ne null) table.close(),
-      if (keyValueTableFactory ne null) keyValueTableFactory.close())((what, exc) =>
+    // the iteration runs one callback at a time on a Pravega client thread, which may be parked
+    // waiting for a permit that no further push is going to release: stop it and wake it up
+    stopped = true
+    semaphore.release()
+    // no-op unless the stage stops before preStart completed the promise
+    startupPromise.tryFailure(new AbruptStageTerminationException(this))
+    PravegaTableCleanup.closeTableAndFactory(table, keyValueTableFactory)((what, exc) =>
       log.error(exc, "Error while closing {} for [{}]", what, tableName))
   }
 
