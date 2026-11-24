@@ -17,6 +17,12 @@
 
 # Release Notes (2.0.x)
 
+## 2.0.0-M2
+
+### Migration Notes
+
+* File: `DirectoryChangesSource` no longer passes the JDK internal `SensitivityWatchEventModifier.HIGH` when it registers the directory to watch ([PR1882](https://github.com/apache/pekko-connectors/pull/1882)). Java 17.0.4 is the minimum Java version that keeps the previous behaviour on platforms where the JDK polls the directory (macOS, for example). With Java 17.0.0 to 17.0.3, changes can take up to 10 seconds to be emitted instead of up to 2 seconds.
+
 ## 2.0.0-M1
 
 This is milestone release and is aimed at testing this new major version by early adopters. This is experimental. This release should not be used in production.

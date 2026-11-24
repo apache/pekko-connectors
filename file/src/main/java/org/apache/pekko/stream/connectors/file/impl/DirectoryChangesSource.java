@@ -95,9 +95,10 @@ public final class DirectoryChangesSource<T> extends GraphStage<SourceShape<T>> 
       private final WatchService service = directoryPath.getFileSystem().newWatchService();
 
       // The com.sun.nio.file.SensitivityWatchEventModifier.HIGH modifier historically passed
-      // here is unnecessary on the JDKs this project supports: since JDK 17 the polling
-      // WatchService used on macOS defaults to the 2s interval that HIGH selected, and JDK 21+
-      // ignores the (terminally deprecated) modifier altogether.
+      // here is no longer used: since JDK 17.0.4 the polling WatchService used on macOS defaults
+      // to the 2s interval that HIGH selected, and JDK 21+ ignores the (terminally deprecated)
+      // modifier altogether. JDK 17.0.0 to 17.0.3 still default to 10s, so 17.0.4 is the minimum
+      // for changes to be detected at the 2s interval on platforms that use the polling service.
       private final WatchKey watchKey =
           directoryPath.register(
               service,

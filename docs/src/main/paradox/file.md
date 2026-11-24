@@ -129,6 +129,14 @@ The `DirectoryChangesSource` will emit elements every time there is a change to 
 in the local filesystem, the emitted change concists of the path that was changed and an enumeration
 describing what kind of change it was.
 
+@@@ note { title="Java version" }
+
+On platforms where the JDK has no native file watcher and polls the directory instead (macOS, for example),
+use Java 17.0.4 or later. With Java 17.0.0 to 17.0.3 the JDK polls every 10 seconds instead of every 2 seconds, so
+changes can take up to 10 seconds to be emitted.
+
+@@@
+
 In this sample we simply print each change to the directory to standard output:
 
 Scala
