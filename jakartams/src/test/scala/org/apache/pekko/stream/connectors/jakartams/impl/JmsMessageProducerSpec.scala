@@ -16,9 +16,11 @@ package org.apache.pekko.stream.connectors.jakartams.impl
 import jakarta.jms.{ Destination => JmsDestination, _ }
 import org.apache.pekko
 import pekko.stream.connectors.jakartams.{ Destination, _ }
-import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt, anyString }
+import org.mockito.ArgumentMatchers.{ any, anyBoolean, anyInt, anyLong, anyString }
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
+
+import scala.concurrent.duration._
 
 class JmsMessageProducerSpec extends JmsSpec with MockitoSugar {
 
@@ -111,6 +113,28 @@ class JmsMessageProducerSpec extends JmsSpec with MockitoSugar {
       val jmsProducer = JmsMessageProducer(jmsSession, settings, 0)
       jmsProducer.populateMessageProperties(textMessage, JmsTextMessage("test").withProperty("object", null))
       verify(textMessage).setObjectProperty("object", null)
+    }
+  }
+
+  "configuring the time to live of the Jms producer" should {
+    "not set a time to live when the settings have none" in new Setup {
+      JmsMessageProducer(jmsSession, settings, 0)
+      verify(producer, never()).setTimeToLive(anyLong())
+    }
+
+    "set a finite time to live in milliseconds" in new Setup {
+      JmsMessageProducer(jmsSession, settings.withTimeToLive(3.seconds), 0)
+      verify(producer).setTimeToLive(3000L)
+    }
+
+    "set an infinite time to live as zero, which is unlimited in JMS" in new Setup {
+      JmsMessageProducer(jmsSession, settings.withTimeToLive(Duration.Inf), 0)
+      verify(producer).setTimeToLive(0L)
+    }
+
+    "set the Java FOREVER time to live as zero, which is unlimited in JMS" in new Setup {
+      JmsMessageProducer(jmsSession, settings.withTimeToLive(java.time.temporal.ChronoUnit.FOREVER.getDuration), 0)
+      verify(producer).setTimeToLive(0L)
     }
   }
 
