@@ -60,11 +60,15 @@ public class UnixDomainSocketJavaApiTest {
     path.toFile().deleteOnExit();
     UnixDomainSocket uds = UnixDomainSocket.get(system);
 
+    // halfClose = true: the client closes its write side right after sending, and the server must
+    // still be able to write the reply rather than tearing the connection down on end of input
     ServerBinding binding =
         uds.bindAndHandle(
                 Flow.of(ByteString.class)
                     .map(bytes -> ByteString.fromString(bytes.utf8String().toUpperCase())),
-                path)
+                path,
+                128,
+                true)
             .toCompletableFuture()
             .get(5, TimeUnit.SECONDS);
 
