@@ -300,6 +300,19 @@ class PekkoHttpClientSpec extends AnyWordSpec with Matchers with OptionValues {
       }
     }
 
+    "reject a negative content length instead of treating the request as bodiless" in {
+      Seq(HttpMethods.GET, HttpMethods.DELETE, HttpMethods.PUT).foreach { method =>
+        val publisher = new SdkHttpContentPublisher {
+          override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(-1L)
+          override def subscribe(s: Subscriber[? >: ByteBuffer]): Unit = {}
+        }
+        withClue(s"$method: ") {
+          an[IllegalArgumentException] should be thrownBy
+          PekkoHttpClient.entityForMethodAndContentType(method, ContentTypes.`application/json`, publisher)
+        }
+      }
+    }
+
     "never attach a request body for a method that disallows an entity" in {
       val publisher = new SdkHttpContentPublisher {
         override def contentLength(): java.util.Optional[java.lang.Long] = java.util.Optional.of(10L)
