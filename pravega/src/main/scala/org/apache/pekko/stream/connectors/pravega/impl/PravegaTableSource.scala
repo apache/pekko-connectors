@@ -44,7 +44,8 @@ import io.pravega.common.util.AsyncIterator
     val scope: String,
     tableName: String,
     tableReaderSettings: TableReaderSettings[K, V],
-    startupPromise: Promise[Done]) extends GraphStageLogic(shape)
+    startupPromise: Promise[Done],
+    newSemaphore: Int => Semaphore) extends GraphStageLogic(shape)
     with StageLogging {
 
   override protected def logSource = classOf[PravegaTableSourceStageLogic[K, V]]
@@ -56,7 +57,7 @@ import io.pravega.common.util.AsyncIterator
 
   private val queue = mutable.Queue.empty[TableEntry[V]]
 
-  private val semaphore = new Semaphore(tableReaderSettings.maximumInflightMessages)
+  private val semaphore = newSemaphore(tableReaderSettings.maximumInflightMessages)
 
   private var closing = false
 
@@ -163,8 +164,12 @@ import io.pravega.common.util.AsyncIterator
 @InternalApi private[pravega] final class PravegaTableSource[K, V](
     scope: String,
     tableName: String,
-    tableReaderSettings: TableReaderSettings[K, V])
+    tableReaderSettings: TableReaderSettings[K, V],
+    newSemaphore: Int => Semaphore)
     extends GraphStageWithMaterializedValue[SourceShape[TableEntry[V]], Future[Done]] {
+
+  def this(scope: String, tableName: String, tableReaderSettings: TableReaderSettings[K, V]) =
+    this(scope, tableName, tableReaderSettings, PravegaTableSource.newSemaphore)
 
   private val out: Outlet[TableEntry[V]] = Outlet(Logging.simpleName(this) + ".out")
 
@@ -182,10 +187,24 @@ import io.pravega.common.util.AsyncIterator
       scope,
       tableName,
       tableReaderSettings,
-      startupPromise)
+      startupPromise,
+      newSemaphore)
 
     (logic, startupPromise.future)
 
   }
 
+}
+
+/**
+ * INTERNAL API
+ */
+@InternalApi private[pravega] object PravegaTableSource {
+
+  /**
+   * Creates the semaphore that bounds the in-flight messages of one materialization, from
+   * `maximumInflightMessages`. It is a parameter of the stage so that a test can observe the
+   * iteration callback of its own materialization waiting for a permit.
+   */
+  val newSemaphore: Int => Semaphore = permits => new Semaphore(permits)
 }
