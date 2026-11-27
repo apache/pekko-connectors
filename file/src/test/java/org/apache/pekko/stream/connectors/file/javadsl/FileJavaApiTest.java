@@ -25,11 +25,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.pekko.Done;
@@ -67,7 +70,9 @@ public class FileJavaApiTest {
   @Test
   public void typedLogRotatorSink() throws Exception {
     AtomicInteger counter = new AtomicInteger();
-    List<List<Integer>> rotated = new java.util.concurrent.CopyOnWriteArrayList<>();
+    // Each rotated sink completes independently, so record its elements by rotation criterion
+    // rather than by completion order.
+    Map<Integer, List<Integer>> rotated = new ConcurrentHashMap<>();
     Sink<Integer, CompletionStage<Done>> sink =
         LogRotatorSink.withTypedSinkFactory(
             () ->
@@ -78,14 +83,17 @@ public class FileJavaApiTest {
                     .mapMaterializedValue(
                         values ->
                             values
-                                .thenApply(v -> rotated.add(v))
+                                .thenApply(v -> rotated.put(criterion, v))
                                 .thenApply(x -> Done.getInstance())));
 
     Source.from(Arrays.asList(0, 1, 2, 3))
         .runWith(sink, system)
         .toCompletableFuture()
         .get(3, TimeUnit.SECONDS);
-    assertEquals(Arrays.asList(Arrays.asList(0, 1), Arrays.asList(2, 3)), rotated);
+    Map<Integer, List<Integer>> expected = new HashMap<>();
+    expected.put(1, Arrays.asList(0, 1));
+    expected.put(2, Arrays.asList(2, 3));
+    assertEquals(expected, rotated);
   }
 
   /** Compile-only check: any OpenOption set can be passed. */
