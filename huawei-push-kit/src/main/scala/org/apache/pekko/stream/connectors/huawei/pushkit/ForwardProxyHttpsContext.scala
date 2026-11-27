@@ -76,11 +76,25 @@ private[pushkit] object ForwardProxyHttpsContext {
     val engine = sslContext.createSSLEngine(host, port)
     engine.setUseClientMode(true)
     val params = engine.getSSLParameters
-    params.setProtocols(protocols)
+    params.setProtocols(restrictProtocols(params.getProtocols, protocols))
     // retain the hostname verification that ConnectionContext.httpsClient(SSLContext) sets up
     params.setEndpointIdentificationAlgorithm("https")
     engine.setSSLParameters(params)
     engine
+  }
+
+  /**
+   * The minimum TLS version narrows the protocols that the JVM enables for client connections, it
+   * never adds to them: a protocol that was disabled, for example with `jdk.tls.client.protocols`
+   * or by the `SSLContext` in use, stays disabled.
+   */
+  private[pushkit] def restrictProtocols(enabled: Array[String], permitted: Array[String]): Array[String] = {
+    val restricted = enabled.filter(permitted.contains)
+    if (restricted.isEmpty)
+      throw new IllegalStateException(
+        s"None of the TLS versions permitted by the minimum TLS version (${permitted.mkString(", ")}) " +
+        s"is enabled for client connections on this JVM (enabled: ${enabled.mkString(", ")})")
+    restricted
   }
 
   private def x509Certificate(trustPem: ForwardProxyTrustPem) = {

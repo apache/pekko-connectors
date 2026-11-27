@@ -30,6 +30,13 @@ class ForwardProxyHttpsContextSpec extends AnyWordSpec with Matchers {
     ctx
   }
 
+  // the client protocols of this context are restricted: TLSv1.3 is supported but not enabled
+  private def tls12OnlyContext(): SSLContext = {
+    val ctx = SSLContext.getInstance("TLSv1.2")
+    ctx.init(null, null, null)
+    ctx
+  }
+
   "ForwardProxyHttpsContext.createSSLEngine" should {
 
     "enable only the requested protocols" in {
@@ -60,6 +67,42 @@ class ForwardProxyHttpsContextSpec extends AnyWordSpec with Matchers {
       val engine =
         ForwardProxyHttpsContext.createSSLEngine(sslContext(), Array("TLSv1.2", "TLSv1.3"), "example.com", 443)
       engine.getSSLParameters.getEndpointIdentificationAlgorithm shouldBe "https"
+    }
+
+    "not enable a permitted protocol that the JVM has not enabled for client connections" in {
+      // a TLSv1.2 context does not enable TLSv1.3 for clients, although it supports it
+      val engine =
+        ForwardProxyHttpsContext.createSSLEngine(tls12OnlyContext(), Array("TLSv1.2", "TLSv1.3"), "example.com", 443)
+      engine.getEnabledProtocols.toSeq shouldBe Seq("TLSv1.2")
+    }
+
+    "fail with a clear error when no permitted protocol is enabled for client connections" in {
+      val ex = the[IllegalStateException] thrownBy {
+        ForwardProxyHttpsContext.createSSLEngine(tls12OnlyContext(), Array("TLSv1.3"), "example.com", 443)
+      }
+      ex.getMessage should include("TLSv1.3")
+      ex.getMessage should include("enabled: ")
+    }
+  }
+
+  "ForwardProxyHttpsContext.restrictProtocols" should {
+
+    "keep the enabled protocols that are permitted" in {
+      ForwardProxyHttpsContext.restrictProtocols(Array("TLSv1.3", "TLSv1.2", "TLSv1.1"),
+        Array("TLSv1.2", "TLSv1.3")).toSeq shouldBe Seq("TLSv1.3", "TLSv1.2")
+    }
+
+    "not add a permitted protocol that is not enabled" in {
+      ForwardProxyHttpsContext.restrictProtocols(Array("TLSv1.2"), Array("TLSv1.2", "TLSv1.3")).toSeq shouldBe Seq(
+        "TLSv1.2")
+    }
+
+    "fail when nothing remains" in {
+      val ex = the[IllegalStateException] thrownBy {
+        ForwardProxyHttpsContext.restrictProtocols(Array("TLSv1.2"), Array("TLSv1.3"))
+      }
+      ex.getMessage should include("TLSv1.3")
+      ex.getMessage should include("enabled: TLSv1.2")
     }
   }
 
