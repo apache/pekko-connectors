@@ -15,8 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# BigQuery extends the renamed private[connectors] javadsl trait GoogleApi
-ProblemFilters.exclude[MissingTypesProblem]("org.apache.pekko.stream.connectors.googlecloud.bigquery.javadsl.BigQuery$")
 # The Java getter uses java.lang.Long instead of Scala Long (erased to Object);
 # the erased signature and the value returned at runtime are unchanged
 ProblemFilters.exclude[IncompatibleSignatureProblem]("org.apache.pekko.stream.connectors.googlecloud.bigquery.model.QueryRequest.getMaximumBytesBilled")
