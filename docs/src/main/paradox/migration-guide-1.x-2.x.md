@@ -143,6 +143,35 @@ The Java DSL of the `couchbase3` connector has been reworked
 
 * The Java accessor `InsertAllRetryPolicy.withoutDeduplication` returned the policy with deduplication by mistake. It
   now returns the policy without deduplication ([PR2044](https://github.com/apache/pekko-connectors/pull/2044)).
+* `QueryRequest.getMaximumBytesBilled` returns an `Optional<java.lang.Long>` instead of an `Optional<Object>` (a
+  `java.util.Optional[Long]` in Scala). Code that assigns the result to the previous type needs the new type. This is
+  binary compatible ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
+* `JobConfiguration.getLabels` and `QueryRequest.getLabels` are deprecated, because the optional value is a Scala
+  `Map`. Use `getLabelsAsJava`, which returns a `java.util.Map` ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
+
+### Google Cloud BigQuery Storage
+
+* The javadsl `BigQueryStorage.create`, and the `read` and `readMerged` methods of `BigQueryArrowStorage` and
+  `BigQueryAvroStorage`, that emit a `scala.Tuple2` are deprecated. Use `createAsPair`, `readAsPair` and
+  `readMergedAsPair`, which emit an `org.apache.pekko.japi.Pair`
+  ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
+
+### Google Common
+
+* `GoogleSettings.getForwardProxy` is deprecated, because it returns a `scala.Option`. Use `getForwardProxyOptional`,
+  which returns a `java.util.Optional` ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
+* Java code that called the request methods through `Google$.MODULE$` can call them statically on the new `GoogleApi`
+  object, such as `GoogleApi.singleRequest(...)` ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
+
+### Google Cloud Storage
+
+* `StorageObject.getTemporaryHold` and `getEventBasedHold` return an `Optional<java.lang.Boolean>` instead of an
+  `Optional<Object>` (a `java.util.Optional[Boolean]` in Scala). Code that assigns the result to the previous type
+  needs the new type. This is binary compatible
+  ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
+* `StorageObject.create` is deprecated, because its optional values are Scala types. Use `createFromJava`, which takes
+  `java.lang.Boolean`, `java.lang.Integer`, `java.util.Map` and `java.util.List`
+  ([PR2061](https://github.com/apache/pekko-connectors/pull/2061)).
 
 ### AWS Kinesis
 

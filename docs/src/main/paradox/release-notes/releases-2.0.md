@@ -95,6 +95,7 @@ parameter types. See [#2043](https://github.com/apache/pekko-connectors/issues/2
 * Elasticsearch, Solr, MongoDB, OrientDB, InfluxDB and Slick ([PR2055](https://github.com/apache/pekko-connectors/pull/2055))
 * File, FTP, Unix Domain Socket, UDP, Server-sent Events, XML and Text ([PR2056](https://github.com/apache/pekko-connectors/pull/2056))
 * Google Common: `ForwardProxy.create` with an `HttpsConnectionContext` ([PR2047](https://github.com/apache/pekko-connectors/pull/2047))
+* Google Common, BigQuery, BigQuery Storage, Pub/Sub, Pub/Sub gRPC, Storage and FCM ([PR2061](https://github.com/apache/pekko-connectors/pull/2061))
 * HBase, HDFS and Kudu: settings and rotation strategy ([PR2054](https://github.com/apache/pekko-connectors/pull/2054))
 * Huawei Push Kit, Azure Storage Queue and Reference ([PR2057](https://github.com/apache/pekko-connectors/pull/2057))
 * JMS and Jakarta Messaging ([PR2053](https://github.com/apache/pekko-connectors/pull/2053))
