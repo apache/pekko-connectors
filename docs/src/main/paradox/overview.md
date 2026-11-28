@@ -30,6 +30,8 @@ See @ref:[Apache Pekko Connectors versioning](other-docs/versioning.md) for more
 
 Release notes are found at @ref:[Release Notes](release-notes/index.md).
 
+If you are upgrading from Apache Pekko Connectors 1.x, see the @ref:[migration guide](migration-guide-1.x-2.x.md).
+
 If you want to try out a connector that has not yet been released, give @ref[snapshots](other-docs/snapshots.md) a spin which are published after every merged PR.
 
 ## Contributing
@@ -48,6 +50,7 @@ Feel free to tag your project with *pekko-connectors* keyword in [Scaladex](http
 * [Self-contained examples](examples/index.md)
 * [Other documentation resources](other-docs/index.md)
 * [Integration Patterns](patterns.md)
+* [Migration Guide 1.x to 2.x](migration-guide-1.x-2.x.md)
 * [Release notes](release-notes/index.md)
 * [License Report](license-report.md)
 
