@@ -16,7 +16,7 @@ package org.apache.pekko.stream.connectors.pravega.impl
 import java.util.function.Consumer
 import org.apache.pekko
 import pekko.stream.stage.{ AsyncCallback, GraphStageLogic, GraphStageWithMaterializedValue, OutHandler, StageLogging }
-import pekko.stream.{ Attributes, Outlet, SourceShape }
+import pekko.stream.{ AbruptStageTerminationException, Attributes, Outlet, SourceShape }
 import pekko.Done
 import pekko.annotation.InternalApi
 import pekko.event.Logging
@@ -44,7 +44,8 @@ import io.pravega.common.util.AsyncIterator
     val scope: String,
     tableName: String,
     tableReaderSettings: TableReaderSettings[K, V],
-    startupPromise: Promise[Done]) extends GraphStageLogic(shape)
+    startupPromise: Promise[Done],
+    newSemaphore: Int => Semaphore) extends GraphStageLogic(shape)
     with StageLogging {
 
   override protected def logSource = classOf[PravegaTableSourceStageLogic[K, V]]
@@ -56,9 +57,12 @@ import io.pravega.common.util.AsyncIterator
 
   private val queue = mutable.Queue.empty[TableEntry[V]]
 
-  private val semaphore = new Semaphore(tableReaderSettings.maximumInflightMessages)
+  private val semaphore = newSemaphore(tableReaderSettings.maximumInflightMessages)
 
   private var closing = false
+
+  // set by postStop and read on the Pravega client thread that runs the iteration
+  @volatile private var stopped = false
 
   val logThat: AsyncCallback[String] = getAsyncCallback { message =>
     log.info(message)
@@ -102,15 +106,19 @@ import io.pravega.common.util.AsyncIterator
           if (iteratorItem == null) {
             onFinish.invoke(())
           } else {
-            iteratorItem.getItems.stream().forEach { tableEntry =>
+            val items = iteratorItem.getItems.iterator()
+            while (!stopped && items.hasNext) {
+              val tableEntry = items.next()
               semaphore.acquire()
-
-              val entry = new TableEntry(tableEntry.getKey(),
-                tableEntry.getVersion(),
-                tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
-              onElement.invoke(entry)
+              // postStop releases a permit to wake this thread up, re-check before emitting
+              if (!stopped) {
+                val entry = new TableEntry(tableEntry.getKey(),
+                  tableEntry.getVersion(),
+                  tableReaderSettings.valueSerializer.deserialize(tableEntry.getValue()))
+                onElement.invoke(entry)
+              }
             }
-            nextIteration(iterator)
+            if (!stopped) nextIteration(iterator)
           }
         }
       })
@@ -134,14 +142,21 @@ import io.pravega.common.util.AsyncIterator
     } catch {
       case NonFatal(exception) =>
         log.error(exception.getMessage())
+        startupPromise.tryFailure(exception)
         failStage(exception)
     }
   }
 
   override def postStop(): Unit = {
     log.debug("Stopping reader {}", tableName)
-    table.close()
-    keyValueTableFactory.close()
+    // the iteration runs one callback at a time on a Pravega client thread, which may be parked
+    // waiting for a permit that no further push is going to release: stop it and wake it up
+    stopped = true
+    semaphore.release()
+    // no-op unless the stage stops before preStart completed the promise
+    startupPromise.tryFailure(new AbruptStageTerminationException(this))
+    PravegaTableCleanup.closeTableAndFactory(table, keyValueTableFactory)((what, exc) =>
+      log.error(exc, "Error while closing {} for [{}]", what, tableName))
   }
 
 }
@@ -149,8 +164,12 @@ import io.pravega.common.util.AsyncIterator
 @InternalApi private[pravega] final class PravegaTableSource[K, V](
     scope: String,
     tableName: String,
-    tableReaderSettings: TableReaderSettings[K, V])
+    tableReaderSettings: TableReaderSettings[K, V],
+    newSemaphore: Int => Semaphore)
     extends GraphStageWithMaterializedValue[SourceShape[TableEntry[V]], Future[Done]] {
+
+  def this(scope: String, tableName: String, tableReaderSettings: TableReaderSettings[K, V]) =
+    this(scope, tableName, tableReaderSettings, PravegaTableSource.newSemaphore)
 
   private val out: Outlet[TableEntry[V]] = Outlet(Logging.simpleName(this) + ".out")
 
@@ -168,10 +187,24 @@ import io.pravega.common.util.AsyncIterator
       scope,
       tableName,
       tableReaderSettings,
-      startupPromise)
+      startupPromise,
+      newSemaphore)
 
     (logic, startupPromise.future)
 
   }
 
+}
+
+/**
+ * INTERNAL API
+ */
+@InternalApi private[pravega] object PravegaTableSource {
+
+  /**
+   * Creates the semaphore that bounds the in-flight messages of one materialization, from
+   * `maximumInflightMessages`. It is a parameter of the stage so that a test can observe the
+   * iteration callback of its own materialization waiting for a permit.
+   */
+  val newSemaphore: Int => Semaphore = permits => new Semaphore(permits)
 }
