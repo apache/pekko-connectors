@@ -17,45 +17,145 @@
 
 # Release Notes (2.0.x)
 
-## 2.0.0-M2
+## 2.0.0
 
-### Migration Notes
+@@@ warning
 
-* File: `DirectoryChangesSource` no longer passes the JDK internal `SensitivityWatchEventModifier.HIGH` when it registers the directory to watch ([PR1882](https://github.com/apache/pekko-connectors/pull/1882)). Java 17.0.4 is the minimum Java version that keeps the previous behaviour on platforms where the JDK polls the directory (macOS, for example). With Java 17.0.0 to 17.0.3, changes can take up to 10 seconds to be emitted instead of up to 2 seconds.
+Pekko Connectors 2.0.0 requires Pekko 2.0.x and Pekko HTTP 2.0.x, which are not binary compatible with their 1.x
+releases. Recompile your code against the 2.x libraries. Libraries built against Pekko Connectors 1.x need to be
+rebuilt and released for Pekko Connectors 2.x.
 
-## 2.0.0-M1
+Some defaults and behaviors have changed, and deprecated APIs have been removed. See the
+@ref:[migration guide](../migration-guide-1.x-2.x.md).
 
-This is milestone release and is aimed at testing this new major version by early adopters. This is experimental. This release should not be used in production.
+@@@
 
-Java 17 is the minimum supported version for Java. Scala 2.12 support has been removed.
+Release notes for Apache Pekko Connectors 2.0.0. This is the first release of a new major version and includes the
+changes from the 2.0.0-M1 milestone release. See the GitHub milestones for
+[2.0.0-M1](https://github.com/apache/pekko-connectors/milestone/4?closed=1) and
+[2.0.0-M2](https://github.com/apache/pekko-connectors/milestone/14?closed=1) for a fuller list of changes.
 
-See the [GitHub Milestone for 2.0.0-M1](https://github.com/apache/pekko-connectors/milestone/4?closed=1) for a fuller list of changes.
+Read the @ref:[migration guide](../migration-guide-1.x-2.x.md) before upgrading. It lists the API, behavior and
+configuration changes, including the changed default values.
 
-It is likely that you will need to recompile your code to use the 2.x libs.
+Changes that were also released in Pekko Connectors 1.3.0 are listed in the @ref:[1.3 release notes](releases-1.3.md).
 
 ### Known Issues
 
-Some connectors are not currently tested due to problems with running the tests. Please get in touch if you use these connectors, especially if you have time to help with fixing the issues.
+With the OrientDB connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you
+use an older version of OrientDB, you may be better off sticking with Pekko Connectors 1.x
+([PR361](https://github.com/apache/pekko-connectors/pull/361)).
 
-The most notable issues are with:
+### Main changes
 
-* HBase ([#61](https://github.com/apache/pekko-connectors/issues/61))
-* IronMQ ([#697](https://github.com/apache/pekko-connectors/issues/697))
+* Pekko 2.0.0, Pekko HTTP 2.0.1 and Pekko gRPC 2.0.0 are the new minimum versions
+* Java 17 is the new minimum Java version
+* Scala 2.12 is no longer supported ([PR1197](https://github.com/apache/pekko-connectors/pull/1197))
+* Deprecated code removed ([PR1164](https://github.com/apache/pekko-connectors/pull/1164), [PR1187](https://github.com/apache/pekko-connectors/pull/1187), [PR1730](https://github.com/apache/pekko-connectors/pull/1730), [PR1731](https://github.com/apache/pekko-connectors/pull/1731), [PR1748](https://github.com/apache/pekko-connectors/pull/1748))
+* The IronMQ connector has been removed, because it could no longer be tested ([PR1898](https://github.com/apache/pekko-connectors/pull/1898))
+* The Java DSLs no longer expose Scala futures and functions in a number of connectors, most notably Couchbase3 ([PR1526](https://github.com/apache/pekko-connectors/pull/1526), [PR1527](https://github.com/apache/pekko-connectors/pull/1527), [PR1528](https://github.com/apache/pekko-connectors/pull/1528))
+* Java DSL APIs use `pekko.japi.function` interfaces instead of the deprecated `pekko.japi` ones ([PR1132](https://github.com/apache/pekko-connectors/pull/1132))
+* The MongoDB connector is available for Scala 3 ([PR1649](https://github.com/apache/pekko-connectors/pull/1649))
+* Solr: the connector uses SolrJ 9 ([PR1813](https://github.com/apache/pekko-connectors/pull/1813))
+* HBase: the connector uses the HBase 2.6 client, and its tests run again ([PR1895](https://github.com/apache/pekko-connectors/pull/1895), [PR1919](https://github.com/apache/pekko-connectors/pull/1919))
+* OrientDB: the connector was rewritten to avoid a number of deprecated classes ([PR1553](https://github.com/apache/pekko-connectors/pull/1553))
+* Elasticsearch: credentials are only sent over `https` by default ([PR1810](https://github.com/apache/pekko-connectors/pull/1810), [PR1871](https://github.com/apache/pekko-connectors/pull/1871))
+* Kudu: the default `encryptionPolicy` is `REQUIRED_REMOTE` ([PR1818](https://github.com/apache/pekko-connectors/pull/1818))
+* AWS SPI Pekko HTTP: the HTTP options of the AWS SDK are applied by default ([PR1909](https://github.com/apache/pekko-connectors/pull/1909))
+* protobuf-java 4.x (up from 3.25.x), with the gRPC code generated by Pekko gRPC 2.0 ([PR1662](https://github.com/apache/pekko-connectors/pull/1662), [PR1759](https://github.com/apache/pekko-connectors/pull/1759), [PR2091](https://github.com/apache/pekko-connectors/pull/2091))
 
-With OrientDB Connector, it appears that the latest OrientDB client only works with OrientDB 3.2 servers. If you use an older version of OrientDB, you may be better off sticking with Pekko Connectors 1.x ([PR361](https://github.com/apache/pekko-connectors/pull/361)).
+### Additions
 
-### Breaking Changes
+* Elasticsearch: `ApiVersion.V8` and `ApiVersion.V9` for Elasticsearch 8 and 9 ([PR1934](https://github.com/apache/pekko-connectors/pull/1934))
+* Opensearch: tested against Opensearch 2.x and 3.x ([PR1933](https://github.com/apache/pekko-connectors/pull/1933))
+* Google Common: `google-application-default` credentials provider, which uses Google's `google-auth-library-java` and supports GKE Workload Identity ([PR1494](https://github.com/apache/pekko-connectors/pull/1494))
+* Google Common: `project-id` and `default-project-id` settings ([PR1926](https://github.com/apache/pekko-connectors/pull/1926))
+* Google Common: `Credentials.close()` to release OAuth2 credentials ([PR1927](https://github.com/apache/pekko-connectors/pull/1927))
+* Google Cloud Pub/Sub gRPC: `subscribe` overloads that reconnect a `StreamingPull` with `RestartSettings`, and flow control ([PR1494](https://github.com/apache/pekko-connectors/pull/1494))
+* Google Cloud BigQuery Storage: `arrowAllocatorBytes` setting ([PR1816](https://github.com/apache/pekko-connectors/pull/1816))
+* S3: `signing.path-encoded-characters` setting for S3-compatible services, such as Huawei OBS and Tencent COS ([PR1971](https://github.com/apache/pekko-connectors/pull/1971))
+* File: zip compression level for `Archive.zip` ([PR1829](https://github.com/apache/pekko-connectors/pull/1829), [PR1873](https://github.com/apache/pekko-connectors/pull/1873))
+* CSV: `mitigateFormulaInjection` option for `CsvFormatting.format` ([PR1820](https://github.com/apache/pekko-connectors/pull/1820))
+* XML: context-aware parser `XmlParsing.parserWithContext` ([PR1595](https://github.com/apache/pekko-connectors/pull/1595))
+* MQTT v5: Java getters for the message and settings classes ([PR1486](https://github.com/apache/pekko-connectors/pull/1486))
+* Google Common and Huawei Push Kit: `min-tls-version` setting for the forward proxy ([PR1808](https://github.com/apache/pekko-connectors/pull/1808), [PR1870](https://github.com/apache/pekko-connectors/pull/1870))
 
-* Some previously deprecated methods have been removed.
-* Java APIs have been reworked for Couchbase3 and Slick. There is also a small change for Kinesis.
+### Java DSL improvements
 
-### Notable Changes
-* OrientDB connector was rewritten to avoid a number of deprecated classes ([PR1553](https://github.com/apache/pekko-connectors/pull/1553)).
+These changes add Java friendly alternatives (`java.util` collections, `Optional`, `java.time.Duration`,
+`CompletionStage` and `java.util.function` interfaces) to APIs that exposed Scala types, and widen the generic
+parameter types. See [#2043](https://github.com/apache/pekko-connectors/issues/2043).
 
-### Dependency Upgrades
+* AMQP: settings, model and RPC flow ([PR2050](https://github.com/apache/pekko-connectors/pull/2050))
+* AWS EventBridge: `EventBridgePublisher.flowList`, deprecating the broken `flowSeq` ([PR2046](https://github.com/apache/pekko-connectors/pull/2046))
+* AWS S3 ([PR2060](https://github.com/apache/pekko-connectors/pull/2060))
+* AWS SQS and Kinesis ([PR2059](https://github.com/apache/pekko-connectors/pull/2059))
+* Cassandra: session settings, session and provider ([PR2051](https://github.com/apache/pekko-connectors/pull/2051))
+* Couchbase and Couchbase3 ([PR2052](https://github.com/apache/pekko-connectors/pull/2052))
+* Elasticsearch, Solr, MongoDB, OrientDB, InfluxDB and Slick ([PR2055](https://github.com/apache/pekko-connectors/pull/2055))
+* File, FTP, Unix Domain Socket, UDP, Server-sent Events, XML and Text ([PR2056](https://github.com/apache/pekko-connectors/pull/2056))
+* Google Common: `ForwardProxy.create` with an `HttpsConnectionContext` ([PR2047](https://github.com/apache/pekko-connectors/pull/2047))
+* Google Common, BigQuery, BigQuery Storage, Pub/Sub, Pub/Sub gRPC, Storage and FCM ([PR2061](https://github.com/apache/pekko-connectors/pull/2061))
+* HBase, HDFS and Kudu: settings and rotation strategy ([PR2054](https://github.com/apache/pekko-connectors/pull/2054))
+* Huawei Push Kit, Azure Storage Queue and Reference ([PR2057](https://github.com/apache/pekko-connectors/pull/2057))
+* JMS and Jakarta Messaging ([PR2053](https://github.com/apache/pekko-connectors/pull/2053))
+* MQTT, MQTT v5 and MQTT Streaming ([PR2058](https://github.com/apache/pekko-connectors/pull/2058))
+* Slick: `flowWithPassThrough` overloads that take a `java.util.concurrent.Executor` ([PR1527](https://github.com/apache/pekko-connectors/pull/1527), [PR1535](https://github.com/apache/pekko-connectors/pull/1535))
 
-Most dependencies have been upgraded to a recent version (April 2026). Pekko 2.x supports Java 17 as a minimum so we've been able to upgrade some dependencies that have dropped Java 8 and 11 support in more recent versions.
-Exceptions include:
+### Bug Fixes
 
-* HBase (see Known Issues above)
-* Solr Client v9 and above are not supported
+* AMQP: preserve each message's result in ordered confirmation flows ([PR2018](https://github.com/apache/pekko-connectors/pull/2018))
+* AMQP: fix busy-wait and closed-connection reuse in `AmqpCachedConnectionProvider` ([PR2063](https://github.com/apache/pekko-connectors/pull/2063))
+* AWS S3: fix multipart upload signature mismatch with recent AWS SDK releases ([PR1544](https://github.com/apache/pekko-connectors/pull/1544))
+* AWS S3: release disk-buffered chunks when the upload is done with them ([PR1930](https://github.com/apache/pekko-connectors/pull/1930))
+* AWS SPI Pekko HTTP: preserve the `Content-Length` of the SDK request, to avoid chunked encoding breaking SigV4 signing ([PR1546](https://github.com/apache/pekko-connectors/pull/1546))
+* AWS SPI Pekko HTTP: preserve content-type parameters ([PR1905](https://github.com/apache/pekko-connectors/pull/1905))
+* AWS SPI Pekko HTTP: accept multi-value request headers instead of throwing ([PR1906](https://github.com/apache/pekko-connectors/pull/1906))
+* AWS SPI Pekko HTTP: send request bodies for GET and DELETE instead of dropping them ([PR1907](https://github.com/apache/pekko-connectors/pull/1907))
+* AWS SPI Pekko HTTP: validate `Content-Length` header values ([PR1908](https://github.com/apache/pekko-connectors/pull/1908), [PR2118](https://github.com/apache/pekko-connectors/pull/2118))
+* AWS SPI Pekko HTTP: make `close()` non-throwing and give auto-created actor systems unique names ([PR1904](https://github.com/apache/pekko-connectors/pull/1904))
+* Elasticsearch: escape names used in JSON requests ([PR1817](https://github.com/apache/pekko-connectors/pull/1817))
+* File: open zip archives in `preStart` rather than the stage constructor ([PR1929](https://github.com/apache/pekko-connectors/pull/1929))
+* File and FTP: reject path traversal in archive entry names and FTP paths ([PR1807](https://github.com/apache/pekko-connectors/pull/1807))
+* Google Cloud BigQuery: fix `InsertAllRetryPolicy.withoutDeduplication` ([PR2044](https://github.com/apache/pekko-connectors/pull/2044))
+* Google Cloud BigQuery Storage: close the row reader in `readRecordsMerged` ([PR1816](https://github.com/apache/pekko-connectors/pull/1816))
+* Google Cloud Pub/Sub gRPC: `subscribe` must not echo initial-only `StreamingPullRequest` fields on keepalive ticks ([PR1625](https://github.com/apache/pekko-connectors/pull/1625))
+* Google Common: close the credentials file when parsing it fails ([PR1928](https://github.com/apache/pekko-connectors/pull/1928))
+* Google FCM: fix the `LightSettings.light_off_duration` setter ([PR2045](https://github.com/apache/pekko-connectors/pull/2045))
+* HBase: close the scanner and connection in the source stage ([PR1876](https://github.com/apache/pekko-connectors/pull/1876))
+* HDFS: close the writer when the stream does not complete normally ([PR1878](https://github.com/apache/pekko-connectors/pull/1878))
+* Huawei Push Kit: use `expires_in` from the token response ([PR1812](https://github.com/apache/pekko-connectors/pull/1812))
+* MQTT Streaming: fix QoS encoding when subscribing and `UNSUBACK` decoding ([PR1594](https://github.com/apache/pekko-connectors/pull/1594))
+* MQTT Streaming: propagate command failures to the Java completion stage ([PR2048](https://github.com/apache/pekko-connectors/pull/2048), [PR2119](https://github.com/apache/pekko-connectors/pull/2119))
+* OrientDB: validate the class name used in queries ([PR1821](https://github.com/apache/pekko-connectors/pull/1821), [PR1874](https://github.com/apache/pekko-connectors/pull/1874))
+* Pravega: release the key value table factory when the table is unset ([PR1877](https://github.com/apache/pekko-connectors/pull/1877))
+* Unix Domain Socket: fix large transfers stalling after lost readiness events ([PR1880](https://github.com/apache/pekko-connectors/pull/1880))
+* XML: fail the parser stage on `XMLStreamException` ([PR2015](https://github.com/apache/pekko-connectors/pull/2015))
+* Mask sensitive values in the `toString` of settings and credentials classes ([PR1809](https://github.com/apache/pekko-connectors/pull/1809))
+* Google Common and Huawei Push Kit: create the forward proxy `SSLContext` with the `TLS` protocol ([PR1808](https://github.com/apache/pekko-connectors/pull/1808))
+
+### Performance
+
+* InfluxDB and HDFS: use `VarHandle` and `MethodHandle` instead of reflection ([PR1752](https://github.com/apache/pekko-connectors/pull/1752))
+* Use placeholder-based logging instead of string interpolation ([PR1653](https://github.com/apache/pekko-connectors/pull/1653), [PR1940](https://github.com/apache/pekko-connectors/pull/1940))
+
+### Dependency Changes
+
+Most dependencies have been upgraded to a recent version (November 2026). Java 17 as the minimum Java version made it
+possible to upgrade dependencies that no longer support Java 8 or 11. Notable upgrades include:
+
+* Pekko 2.0.0
+* Pekko HTTP 2.0.1
+* Pekko gRPC 2.0.0
+* Amazon SDK 2.59.10
+* Apache Arrow 20.0.0
+* Apache Avro 1.12.2
+* Apache Geode 2.0.4
+* Apache Hadoop 3.4.3
+* HBase client 2.6.7
+* Jackson 2.22.3
+* Netty 4.2.21
+* protobuf-java 4.36.2
+* Slick 3.6.1
+* SolrJ 9.11.0
+* Spring Framework 7.1.0 and Spring Boot 4.2.0
