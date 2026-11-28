@@ -266,6 +266,11 @@ object ForwardProxy {
   def create(c: Config, system: ClassicActorSystemProvider) =
     apply(c)(system)
 
+  /**
+   * @param minTlsVersion the minimum TLS version, `TLSv1.2` or `TLSv1.3`. It is only applied when `trustPem` is
+   *                      defined. Without `trustPem` the default client HTTPS context of Pekko HTTP is used
+   *                      unchanged.
+   */
   def apply(scheme: String,
       host: String,
       port: Int,
@@ -285,7 +290,12 @@ object ForwardProxy {
       system: ClassicActorSystemProvider) =
     apply(scheme, host, port, credentials.toScala.asInstanceOf[Option[BasicHttpCredentials]], trustPem.toScala)(system)
 
-  /** @since 2.0.0 */
+  /**
+   * @param minTlsVersion the minimum TLS version, `TLSv1.2` or `TLSv1.3`. It is only applied when `trustPem` is
+   *                      present. Without `trustPem` the default client HTTPS context of Pekko HTTP is used
+   *                      unchanged.
+   * @since 2.0.0
+   */
   def create(scheme: String,
       host: String,
       port: Int,
