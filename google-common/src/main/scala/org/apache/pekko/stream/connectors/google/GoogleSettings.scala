@@ -149,7 +149,6 @@ object RequestSettings {
     apply(userIp.toScala, quotaUser.toScala, prettyPrint, chunkSize, retrySettings, forwardProxy.toScala)
 }
 
-@InternalApi
 final case class RequestSettings(
     userIp: Option[String],
     quotaUser: Option[String],
@@ -167,7 +166,15 @@ final case class RequestSettings(
   def getPrettyPrint = prettyPrint
   def getUploadChunkSize = uploadChunkSize
   def getRetrySettings = retrySettings
+  @deprecated("Use getForwardProxyOptional, which returns a java.util.Optional", "2.0.0")
   def getForwardProxy = forwardProxy
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getForwardProxyOptional: Optional[ForwardProxy] = forwardProxy.toJava
 
   def withUserIp(userIp: Option[String]) =
     copy(userIp = userIp)

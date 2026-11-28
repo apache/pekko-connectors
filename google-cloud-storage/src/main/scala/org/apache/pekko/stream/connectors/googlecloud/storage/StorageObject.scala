@@ -103,8 +103,8 @@ final class StorageObject private (
   def getContentDisposition: Optional[String] = contentDisposition.toJava
   def getContentEncoding: Optional[String] = contentEncoding.toJava
   def getContentLanguage: Optional[String] = contentLanguage.toJava
-  def getTemporaryHold: Optional[Boolean] = temporaryHold.toJava
-  def getEventBasedHold: Optional[Boolean] = eventBasedHold.toJava
+  def getTemporaryHold: Optional[java.lang.Boolean] = temporaryHold.map(Boolean.box).toJava
+  def getEventBasedHold: Optional[java.lang.Boolean] = eventBasedHold.map(Boolean.box).toJava
   def getRetentionExpirationTime: Optional[OffsetDateTime] = retentionExpirationTime.toJava
   def getCacheControl: Optional[String] = cacheControl.toJava
   def getMetadata: Optional[java.util.Map[String, String]] = metadata.map(_.asJava).toJava
@@ -151,11 +151,27 @@ final class StorageObject private (
   def withCacheControl(value: String): StorageObject = copy(cacheControl = Option(value))
   def withCustomTime(value: OffsetDateTime): StorageObject = copy(customTime = Option(value))
   def withMetadata(value: Map[String, String]): StorageObject = copy(metadata = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withMetadata(value: java.util.Map[String, String]): StorageObject =
+    withMetadata(value.asScala.toMap)
   def withComponentCount(value: Int): StorageObject = copy(componentCount = Option(value))
   def withKmsKeyName(value: String): StorageObject = copy(kmsKeyName = Option(value))
   def withCustomerEncryption(value: CustomerEncryption): StorageObject = copy(customerEncryption = Option(value))
   def withOwner(value: Owner): StorageObject = copy(owner = Option(value))
   def withAcl(value: List[ObjectAccessControls]): StorageObject = copy(acl = Option(value))
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def withAcl(value: java.util.List[ObjectAccessControls]): StorageObject =
+    withAcl(value.asScala.toList)
 
   private def copy(
       kind: String = kind,
@@ -416,7 +432,14 @@ object StorageObject {
     owner,
     acl)
 
-  /** Java API */
+  /**
+   * Java API
+   *
+   * @deprecated the optional values of this factory are Scala types (`Boolean`, `Int`, `Map` and `List`), which are
+   *             awkward to supply from Java. Use [[createFromJava]], which takes `java.lang.Boolean`,
+   *             `java.lang.Integer`, `java.util.Map` and `java.util.List`.
+   */
+  @deprecated("Use createFromJava, which takes Java types for the optional values", "2.0.0")
   def create(
       kind: String,
       id: String,
@@ -486,4 +509,80 @@ object StorageObject {
     customerEncryption.toScala,
     owner.toScala,
     acl.toScala)
+
+  /**
+   * Java API: creates a [[StorageObject]] from Java types. Unlike [[create]], the optional values are
+   * `java.lang.Boolean`, `java.lang.Integer`, `java.util.Map` and `java.util.List`.
+   *
+   * @since 2.0.0
+   */
+  def createFromJava(
+      kind: String,
+      id: String,
+      name: String,
+      bucket: String,
+      generation: Long,
+      contentType: pekko.http.javadsl.model.ContentType,
+      size: Long,
+      etag: String,
+      md5Hash: String,
+      crc32c: String,
+      mediaLink: String,
+      selfLink: String,
+      updated: OffsetDateTime,
+      timeCreated: OffsetDateTime,
+      timeDeleted: Optional[OffsetDateTime],
+      storageClass: String,
+      contentDisposition: Optional[String],
+      contentEncoding: Optional[String],
+      contentLanguage: Optional[String],
+      metageneration: Long,
+      temporaryHold: Optional[java.lang.Boolean],
+      eventBasedHold: Optional[java.lang.Boolean],
+      retentionExpirationTime: Optional[OffsetDateTime],
+      timeStorageClassUpdated: OffsetDateTime,
+      cacheControl: Optional[String],
+      customTime: Optional[OffsetDateTime],
+      metadata: Optional[? <: java.util.Map[String, String]],
+      componentCount: Optional[java.lang.Integer],
+      kmsKeyName: Optional[String],
+      customerEncryption: Optional[CustomerEncryption],
+      owner: Optional[Owner],
+      acl: Optional[? <: java.util.List[ObjectAccessControls]]): StorageObject = new StorageObject(
+    kind,
+    id,
+    name,
+    bucket,
+    generation,
+    contentType.asInstanceOf[ContentType],
+    Option(contentType.asInstanceOf[ContentType]),
+    size,
+    etag,
+    md5Hash,
+    Option(md5Hash),
+    crc32c,
+    Option(crc32c),
+    mediaLink,
+    selfLink,
+    updated,
+    timeCreated,
+    timeDeleted.toScala,
+    storageClass,
+    Option(storageClass),
+    contentDisposition.toScala,
+    contentEncoding.toScala,
+    contentLanguage.toScala,
+    metageneration,
+    temporaryHold.toScala.map(_.booleanValue),
+    eventBasedHold.toScala.map(_.booleanValue),
+    retentionExpirationTime.toScala,
+    timeStorageClassUpdated,
+    cacheControl.toScala,
+    customTime.toScala,
+    metadata.toScala.map(_.asScala.toMap),
+    componentCount.toScala.map(_.intValue),
+    kmsKeyName.toScala,
+    customerEncryption.toScala,
+    owner.toScala,
+    acl.toScala.map(_.asScala.toList))
 }

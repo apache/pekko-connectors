@@ -16,6 +16,7 @@ package org.apache.pekko.stream.connectors.googlecloud.pubsub.grpc
 import org.apache.pekko
 import pekko.actor.ClassicActorSystemProvider
 import com.typesafe.config.Config
+import scala.jdk.OptionConverters._
 
 /**
  * Connection settings used to establish Pub/Sub connection.
@@ -42,6 +43,20 @@ final class PubSubSettings private (
    */
   def withRootCa(rootCa: String): PubSubSettings =
     copy(rootCa = Some(rootCa))
+
+  /**
+   * Whether the gRPC connection uses TLS.
+   *
+   * @since 2.0.0
+   */
+  def withUseTls(useTls: Boolean): PubSubSettings = copy(useTls = useTls)
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getRootCa: java.util.Optional[String] = rootCa.toJava
 
   private def copy(host: String = host,
       port: Int = port,

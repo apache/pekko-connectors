@@ -13,7 +13,21 @@
 
 package org.apache.pekko.stream.connectors.googlecloud.storage
 
-final class CustomerEncryption private (encryptionAlgorithm: String, keySha256: String) {
+final class CustomerEncryption private (val encryptionAlgorithm: String, val keySha256: String) {
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getEncryptionAlgorithm: String = encryptionAlgorithm
+
+  /**
+   * Java API
+   *
+   * @since 2.0.0
+   */
+  def getKeySha256: String = keySha256
   def withEncryptionAlgorithm(encryptionAlgorithm: String): CustomerEncryption =
     copy(encryptionAlgorithm = encryptionAlgorithm)
   def withKeySha256(keySha256: String): CustomerEncryption = copy(keySha256 = keySha256)

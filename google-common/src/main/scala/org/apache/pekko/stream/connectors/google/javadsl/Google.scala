@@ -33,6 +33,16 @@ import scala.jdk.FutureConverters._
  */
 object Google extends Google
 
+/**
+ * Java API: Provides methods to interface with Google APIs.
+ *
+ * The same methods as [[Google]], callable from Java as static methods, such as `GoogleApi.singleRequest(...)`.
+ * `Google` is also the name of an interface, so Java cannot call its methods statically.
+ *
+ * @since 2.0.0
+ */
+object GoogleApi extends Google
+
 private[connectors] trait Google {
 
   /**
