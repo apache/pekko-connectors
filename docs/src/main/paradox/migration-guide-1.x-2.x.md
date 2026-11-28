@@ -358,7 +358,8 @@ These changes are source compatible, so recompiling is enough:
   `application-default`.
 * `pekko.connectors.google.forward-proxy.min-tls-version` and
   `pekko.connectors.huawei.pushkit.forward-proxy.min-tls-version`: the minimum TLS version of the forward proxy
-  connection, `TLSv1.2` by default ([PR1808](https://github.com/apache/pekko-connectors/pull/1808))
+  connection, `TLSv1.2` by default
+  ([PR1808](https://github.com/apache/pekko-connectors/pull/1808), [PR1870](https://github.com/apache/pekko-connectors/pull/1870))
 * `pekko.connectors.s3.signing.path-encoded-characters`: the characters that are percent-encoded in the path when a
   request is signed, for S3-compatible services such as Huawei OBS and Tencent COS
   ([PR1971](https://github.com/apache/pekko-connectors/pull/1971))

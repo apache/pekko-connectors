@@ -78,7 +78,7 @@ use an older version of OrientDB, you may be better off sticking with Pekko Conn
 * CSV: `mitigateFormulaInjection` option for `CsvFormatting.format` ([PR1820](https://github.com/apache/pekko-connectors/pull/1820))
 * XML: context-aware parser `XmlParsing.parserWithContext` ([PR1595](https://github.com/apache/pekko-connectors/pull/1595))
 * MQTT v5: Java getters for the message and settings classes ([PR1486](https://github.com/apache/pekko-connectors/pull/1486))
-* Google Common and Huawei Push Kit: `min-tls-version` setting for the forward proxy ([PR1808](https://github.com/apache/pekko-connectors/pull/1808))
+* Google Common and Huawei Push Kit: `min-tls-version` setting for the forward proxy ([PR1808](https://github.com/apache/pekko-connectors/pull/1808), [PR1870](https://github.com/apache/pekko-connectors/pull/1870))
 
 ### Java DSL improvements
 
